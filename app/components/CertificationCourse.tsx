@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { ScopeCategory } from "../course-data";
 import { guideAliases, pendingGuides } from "../course-data";
 import { services } from "../services/page";
+import { assetUrl } from "../../lib/asset-url";
 
 type Props = {
   code: string;
@@ -117,13 +118,13 @@ export default function CertificationCourse({ code, level, title, description, s
             <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
           </div>
           <button className="image-link" onClick={() => setExpanded(true)} aria-label={`Open ${selected.name} EL10 infographic in fitted viewer`}>
-            <img src={selected.file} style={{ width: `${imageScale}%`, maxWidth: "none" }} alt={`${selected.name} EL10 infographic`} />
+            <img src={assetUrl(selected.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = selected.file; }} style={{ width: `${imageScale}%`, maxWidth: "none" }} alt={`${selected.name} EL10 infographic`} />
           </button>
           <div className="image-controls"><span>Drag the corner to resize</span><strong>{Math.round(imageScale)}%</strong></div>
           <div className="resize-handle" role="slider" tabIndex={0} aria-valuemin={60} aria-valuemax={220} aria-valuenow={Math.round(imageScale)} aria-label="Drag to resize infographic" onKeyDown={(event) => { if (event.key === "ArrowRight") setImageScale((value) => Math.min(220, value + 10)); if (event.key === "ArrowLeft") setImageScale((value) => Math.max(60, value - 10)); }} onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setDragStart({ x: event.clientX, scale: imageScale }); setDragging(true); }} />
           <p className="viewer-note">Choose another service on the left to switch pages. Click the image for the full browser view.</p>
         </article>}
-        {expanded && selected && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${selected.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={selected.file} alt={`${selected.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
+        {expanded && selected && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${selected.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(selected.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = selected.file; }} alt={`${selected.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
       </section>
     </main>
   );
