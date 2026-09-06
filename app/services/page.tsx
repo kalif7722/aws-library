@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { assetUrl } from "../../lib/asset-url";
 
 export const services = [
   { name: "AWS Config", file: "/el10/aws-config.webp", accent: "#7c3aed", summary: "Configuration history and continuous compliance" },
@@ -410,13 +411,13 @@ export default function ServicesLibrary() {
             <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
           </div>
             <button className="image-link" onClick={() => setExpanded(true)} aria-label={`Open ${service.name} EL10 infographic in fitted viewer`}>
-            <img src={service.file} style={{ width: `${imageScale}%`, maxWidth: "none" }} alt={`${service.name} EL10 infographic with ten study sections`} />
+            <img src={assetUrl(service.file)} style={{ width: `${imageScale}%`, maxWidth: "none" }} alt={`${service.name} EL10 infographic with ten study sections`} />
           </button>
           <div className="image-controls"><span>Drag the corner to resize</span><strong>{Math.round(imageScale)}%</strong></div>
           <div className="resize-handle" role="slider" aria-label="Drag to resize infographic" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setDragStart({ x: event.clientX, scale: imageScale }); setDragging(true); }} />
           <p className="viewer-note">Select another service node to switch pages. Open full size for readable study view.</p>
         </article>
-        {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={service.file} alt={`${service.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
+        {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} alt={`${service.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
       </section>
       <nav className="map-navigator" aria-label="Horizontal category navigation">
         <button onClick={() => branchesRef.current?.scrollBy({ left: -420, behavior: "smooth" })} disabled={mapScroll <= 1} aria-label="Scroll categories left">←</button>
