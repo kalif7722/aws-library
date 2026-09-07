@@ -419,7 +419,7 @@ export default function ServicesLibrary() {
           </div>
         </div>
 
-        {service ? <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}> style={{ "--service-accent": service.accent } as React.CSSProperties}>
+        {service ? {service && <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}> style={{ "--service-accent": service.accent } as React.CSSProperties}>
           <div className="viewer-head">
             <div><p>Selected EL10 page</p><h2>{service.name}</h2></div>
             <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
