@@ -291,7 +291,7 @@ const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, 
 
 export default function ServicesLibrary() {
   const branchesRef = useRef<HTMLDivElement>(null);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
   const [imageScale, setImageScale] = useState(100);
   const [dragging, setDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, scale: 100 });
@@ -324,7 +324,7 @@ export default function ServicesLibrary() {
     if (row) observer.observe(row);
     return () => { element.removeEventListener("scroll", sync); observer.disconnect(); };
   }, [collapsedBranches]);
-  const service = services[selected];
+  const service = selected === null ? null : services[selected];
   const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);
   const query = normalize(searchQuery);
   const searchResults = query ? services.map((item, index) => {
@@ -419,7 +419,7 @@ export default function ServicesLibrary() {
           </div>
         </div>
 
-        <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}>
+        {service ? <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}> style={{ "--service-accent": service.accent } as React.CSSProperties}>
           <div className="viewer-head">
             <div><p>Selected EL10 page</p><h2>{service.name}</h2></div>
             <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
