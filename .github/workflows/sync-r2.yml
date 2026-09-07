@@ -30,10 +30,20 @@ jobs:
           test -n "${{ secrets.R2_ENDPOINT }}"
           test -n "${{ secrets.R2_BUCKET }}"
 
-      - name: Sync image assets
+      - name: Sync image assets to R2
         run: |
           aws s3 sync assets/ "s3://${{ secrets.R2_BUCKET }}" \
             --endpoint-url "${{ secrets.R2_ENDPOINT }}" \
             --no-progress \
             --only-show-errors \
             --cache-control "public,max-age=31536000,immutable"
+
+      - name: Remove synced EL10 files from runner workspace
+        if: success()
+        run: |
+          # This cleanup happens only after a successful R2 sync.
+          # It does not modify the Git commit or delete objects from R2.
+          if [ -d assets/el10 ]; then
+            find assets/el10 -type f -delete
+            find assets/el10 -depth -type d -empty -delete
+          fi
