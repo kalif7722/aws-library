@@ -233,6 +233,20 @@ export const services = [
   { name: "AWS App Studio", file: "/el10/backlog/app-studio.webp", accent: "#14b8a6", summary: "Build business applications with generative AI" },
   { name: "AWS Supply Chain", file: "/el10/backlog/supply-chain.webp", accent: "#14b8a6", summary: "Unify supply-chain data, planning and insights" },
   { name: "AWS Wickr", file: "/el10/backlog/wickr.webp", accent: "#14b8a6", summary: "End-to-end encrypted enterprise collaboration" },
+  { name: "Amazon Bedrock AgentCore", file: "/el10/ai/bedrock-agentcore.webp", accent: "#a855f7", summary: "Build, deploy, and operate production AI agents" },
+  { name: "Amazon Bedrock Knowledge Bases", file: "/el10/ai/bedrock-knowledge-bases.webp", accent: "#a855f7", summary: "Ground generative AI responses in enterprise data" },
+  { name: "Amazon Bedrock Prompt Management", file: "/el10/ai/bedrock-prompt-management.webp", accent: "#a855f7", summary: "Create, test, version, and reuse prompts" },
+  { name: "Amazon Bedrock Prompt Flows", file: "/el10/ai/bedrock-prompt-flows.webp", accent: "#a855f7", summary: "Visually orchestrate multi-step generative AI workflows" },
+  { name: "Amazon SageMaker Clarify", file: "/el10/ai/sagemaker-clarify.webp", accent: "#a855f7", summary: "Detect bias and explain machine-learning predictions" },
+  { name: "Amazon SageMaker Data Wrangler", file: "/el10/ai/sagemaker-data-wrangler.webp", accent: "#a855f7", summary: "Prepare and transform data for machine learning" },
+  { name: "Amazon SageMaker Ground Truth", file: "/el10/ai/sagemaker-ground-truth.webp", accent: "#a855f7", summary: "Create high-quality labeled datasets" },
+  { name: "Amazon SageMaker JumpStart", file: "/el10/ai/sagemaker-jumpstart.webp", accent: "#a855f7", summary: "Discover and deploy foundation and machine-learning models" },
+  { name: "Amazon SageMaker Model Monitor", file: "/el10/ai/sagemaker-model-monitor.webp", accent: "#a855f7", summary: "Monitor model quality, bias, and data drift" },
+  { name: "Amazon SageMaker Model Registry", file: "/el10/ai/sagemaker-model-registry.webp", accent: "#a855f7", summary: "Catalog, version, and govern machine-learning models" },
+  { name: "Amazon SageMaker Neo", file: "/el10/ai/sagemaker-neo.webp", accent: "#a855f7", summary: "Optimize models to run efficiently on edge devices" },
+  { name: "Amazon SageMaker Processing", file: "/el10/ai/sagemaker-processing.webp", accent: "#a855f7", summary: "Run data processing and evaluation jobs at scale" },
+  { name: "Amazon SageMaker Unified Studio", file: "/el10/ai/sagemaker-unified-studio.webp", accent: "#a855f7", summary: "Unified environment for analytics and AI development" },
+  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
 ];
 
 const branches = [
