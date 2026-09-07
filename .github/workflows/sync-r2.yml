@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   sync-r2:
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Verify R2 configuration
         run: |
@@ -38,12 +40,21 @@ jobs:
             --only-show-errors \
             --cache-control "public,max-age=31536000,immutable"
 
-      - name: Remove synced EL10 files from runner workspace
+      - name: Remove synced EL10 files from repository
         if: success()
         run: |
-          # This cleanup happens only after a successful R2 sync.
-          # It does not modify the Git commit or delete objects from R2.
           if [ -d assets/el10 ]; then
             find assets/el10 -type f -delete
             find assets/el10 -depth -type d -empty -delete
           fi
+
+          if git diff --quiet -- assets/el10; then
+            echo "No tracked EL10 files to remove."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -u assets/el10
+          git commit -m "Remove EL10 files after successful R2 sync"
+          git push origin HEAD:main
