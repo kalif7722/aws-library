@@ -66,6 +66,18 @@ export default function LearningHome() {
         </div>
       </section>
 
+      <section className="learning-intro" aria-labelledby="why-visual">
+        <div>
+          <p className="course-kicker">A clearer way to learn cloud services</p>
+          <h2 id="why-visual">Understand the whole picture at a glance.</h2>
+        </div>
+        <ul>
+          <li><strong>Build the mental model first.</strong><span>See what a service does, where it fits, and how the main building blocks connect.</span></li>
+          <li><strong>Study less, remember more.</strong><span>Short explanations, diagrams, workflows, and examples turn dense documentation into a focused visual review.</span></li>
+          <li><strong>Prepare with confidence.</strong><span>Move from a certification topic to the exact service guide, then return to the learning path without losing context.</span></li>
+        </ul>
+      </section>
+
       <section className="stats-row" aria-label="Library summary">
         {learningStats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
       </section>
