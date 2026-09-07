@@ -347,8 +347,7 @@ export default function ServicesLibrary() {
   return (
     <main className="workspace">
       <nav className="top-nav" aria-label="Primary navigation">
-        <a className="brand-link" href="/">EL10 AWS Learning</a>
-        <div><a href="/courses/aws-solutions-architect-associate">Solutions Architect Associate</a><a className="active" href="/services">Browse all AWS services</a></div>
+        <a className="brand-link" href="/">Visual Learning</a>
       </nav>
       <header className="masthead">
         <div className="site-tools">
@@ -419,7 +418,7 @@ export default function ServicesLibrary() {
           </div>
         </div>
 
-        {service ? {service && <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}> style={{ "--service-accent": service.accent } as React.CSSProperties}>
+        {service ? {service && <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}>
           <div className="viewer-head">
             <div><p>Selected EL10 page</p><h2>{service.name}</h2></div>
             <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
@@ -430,8 +429,8 @@ export default function ServicesLibrary() {
           <div className="image-controls"><span>Drag the corner to resize</span><strong>{Math.round(imageScale)}%</strong></div>
           <div className="resize-handle" role="slider" aria-label="Drag to resize infographic" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setDragStart({ x: event.clientX, scale: imageScale }); setDragging(true); }} />
           <p className="viewer-note">Select another service node to switch pages. Open full size for readable study view.</p>
-        </article>
-        {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
+        </article>}
+        {service && expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
       </section>
       <nav className="map-navigator" aria-label="Horizontal category navigation">
         <button onClick={() => branchesRef.current?.scrollBy({ left: -420, behavior: "smooth" })} disabled={mapScroll <= 1} aria-label="Scroll categories left">←</button>
