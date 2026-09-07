@@ -43,9 +43,8 @@ export default function LearningHome() {
   return (
     <main className="learning-shell">
       <nav className="top-nav" aria-label="Primary navigation">
-        <a className="brand-link" href="/">EL10 Cloud Learning</a>
-        <div><a className="active" href="/">Cloud providers</a><a href="/services">Browse AWS services</a></div>
-      </nav>
+        <a className="brand-link" href="/">Visual Learning</a>
+        <a className="home-button home-button-current" href="/" aria-current="page">Home</a>
 
       <section className="learning-hero">
         <div className="hero-copy">
