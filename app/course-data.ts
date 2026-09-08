@@ -58,6 +58,10 @@ export const aipScope: ScopeCategory[] = [
 ];
 
 export const guideAliases: Record<string, string> = {
+  "Amazon SageMaker": "Amazon SageMaker AI",
+  "AWS SDKs and Tools": "AWS Tools and SDKs",
+  "AWS STS": "AWS Security Token Service",
+  "Amazon Kinesis Data Firehose": "Amazon Data Firehose",
   "Amazon Managed Streaming for Apache Kafka (Amazon MSK)": "Amazon Managed Streaming for Apache Kafka",
   "Amazon QuickSight": "Amazon Quick",
   "Amazon Quick Sight": "Amazon Quick",
@@ -105,8 +109,4 @@ export const guideAliases: Record<string, string> = {
 };
 
 export const pendingGuides = new Set([
-  "Savings Plans", "AWS CLI", "AWS Management Console",
-  "AWS IoT Events",
-  "Amazon CodeGuru", "Amazon Fraud Detector",
-  "AWS AppConfig",
 ]);
