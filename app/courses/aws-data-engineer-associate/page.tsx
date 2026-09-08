@@ -1,0 +1,3 @@
+import CertificationCourse from "../../components/CertificationCourse";
+import { deaScope } from "../../course-data-extra";
+export default function Course(){return <CertificationCourse code="DEA" level="Associate" title="AWS Certified Data Engineer – Associate" description="Study data ingestion, transformation, storage, analytics and governance using the official DEA-C01 service scope." scope={deaScope} sourceUrl="https://docs.aws.amazon.com/aws-certification/latest/data-engineer-associate-01/dea-01-in-scope-services.html" sourceLabel="Aligned to the AWS Certified Data Engineer – Associate DEA-C01 guide"/>;}
