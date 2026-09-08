@@ -3,6 +3,13 @@ import fs from 'node:fs';
 const path = 'app/services/page.tsx';
 let s = fs.readFileSync(path, 'utf8');
 
+// The current catalog already contains the newer uploaded-guide batch. Do not
+// replay the older catalog patch against its updated service-array anchors.
+if (s.includes('file: "/el10/aws-cdk.webp"')) {
+  console.log('Service catalog already contains the current uploaded guide batch.');
+  process.exit(0);
+}
+
 if (!s.includes('file: "/el10/aws-management-console.webp"')) {
   const anchor = '  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },\n];';
   const replacement = `  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
