@@ -1,0 +1,106 @@
+name: Apply uploaded AWS services
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-service-catalog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-catalog:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Patch service catalog safely
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('app/services/page.tsx')
+          s = p.read_text()
+
+          # Idempotency: stop if this exact catalog update is already present.
+          if 'file: "/el10/aws-management-console.webp"' in s:
+              print('Catalog already updated; nothing to do.')
+              raise SystemExit(0)
+
+          anchor = '  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },\n];'
+          replacement = '''  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
+  { name: "AWS Management Console", file: "/el10/aws-management-console.webp", accent: "#2563eb", summary: "Web interface for accessing and managing AWS services" },
+  { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
+  { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
+  { name: "Savings Plans", file: "/el10/svgsavings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
+];'''
+          assert s.count(anchor) == 1, 'services array anchor changed; refusing unsafe patch'
+          s = s.replace(anchor, replacement)
+
+          old = '  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216] },'
+          new = '  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 243, 244, 245] },'
+          assert s.count(old) == 1, 'Management branch anchor changed'
+          s = s.replace(old, new)
+
+          old = '  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180] },'
+          new = '  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 244] },'
+          assert s.count(old) == 1, 'Developer Tools branch anchor changed'
+          s = s.replace(old, new)
+
+          branch_anchor = '  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },\n];'
+          branch_replacement = '''  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
+  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 246] },
+];'''
+          assert s.count(branch_anchor) == 1, 'branch array anchor changed'
+          s = s.replace(branch_anchor, branch_replacement)
+
+          alias_anchor = '  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",\n};'
+          alias_replacement = '''  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",
+  "AWS Management Console": "console browser web interface access AWS services",
+  "AWS CLI": "command line terminal developer tools automation",
+  "AWS AppConfig": "feature flags dynamic configuration deployment systems manager",
+  "Savings Plans": "cost savings commitment pricing cloud financial management",
+};'''
+          assert s.count(alias_anchor) == 1, 'semantic alias anchor changed'
+          s = s.replace(alias_anchor, alias_replacement)
+
+          # The catalog contains each real service exactly once; branch copies are references only.
+          # Keep the counter tied to unique canonical service names as a guard against future duplicates.
+          counter_anchor = '  const service = selected === null ? null : services[selected];\n  const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);'
+          counter_replacement = '''  const service = selected === null ? null : services[selected];
+  const uniqueServiceCount = new Set(services.map((item) => normalize(item.name))).size;
+  const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);'''
+          assert s.count(counter_anchor) == 1, 'counter anchor changed'
+          s = s.replace(counter_anchor, counter_replacement)
+          assert s.count('<strong>{services.length}</strong><span>services mapped</span>') == 1, 'counter markup anchor changed'
+          s = s.replace('<strong>{services.length}</strong><span>services mapped</span>', '<strong>{uniqueServiceCount}</strong><span>services mapped</span>')
+
+          # Safety checks.
+          expected = {
+              'AWS Management Console': '/el10/aws-management-console.webp',
+              'AWS CLI': '/el10/aws-cli.webp',
+              'AWS AppConfig': '/el10/appconfig.webp',
+              'Savings Plans': '/el10/svgsavings-plans.webp',
+          }
+          for name, path in expected.items():
+              assert s.count(f'name: "{name}"') == 1, f'duplicate/missing service: {name}'
+              assert s.count(f'file: "{path}"') == 1, f'duplicate/missing image path: {path}'
+
+          p.write_text(s)
+          PY
+      - name: Commit catalog update
+        run: |
+          if git diff --quiet; then
+            echo "No catalog changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/services/page.tsx
+          git commit -m "Add uploaded services and financial management branch"
+          git push origin HEAD:main
