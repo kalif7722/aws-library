@@ -265,7 +265,7 @@ const branches = [
   { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 250, 252] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [] as number[] },
-  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242] },
+  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249] },
   { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
