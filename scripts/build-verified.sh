@@ -45,6 +45,8 @@ command -v timeout >/dev/null 2>&1 || {
   exit 69
 }
 
+node scripts/apply-service-catalog.mjs
+
 vinext="${project_root}/node_modules/.bin/vinext"
 if [[ ! -f "${vinext}" ]]; then
   echo "vinext is unavailable after npm install." >&2
