@@ -255,17 +255,17 @@ export const services = [
 ];
 
 const branches = [
-  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 251] },
-  { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 253] },
+  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244] },
+  { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246] },
   { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218] },
   { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [] as number[] },
   { title: "Databases", start: 84, end: 96, accent: "#8b5cf6", copies: [] as number[] },
-  { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 254] },
+  { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 247] },
   { title: "Networking & Content Delivery", start: 100, end: 120, accent: "#8b5cf6", copies: [49] },
-  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 250, 252] },
+  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [] as number[] },
-  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249] },
+  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242] },
   { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
@@ -290,6 +290,11 @@ const semanticAliases: Record<string, string> = {
   "Amazon Personalize": "recommendation engine personalization", "AWS IoT Core": "devices MQTT edge internet of things", "AWS IoT Greengrass": "edge devices offline",
   "AWS Cost Explorer": "cost billing spend optimization", "AWS Budgets": "cost alerts budget", "AWS Config": "compliance configuration audit",
   "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",
+  "AWS CDK": "cdk cloud development kit infrastructure as code programming language constructs",
+  "AWS Cost Anomaly Detection": "cost anomaly detection spend unusual billing alert machine learning",
+  "AWS Tools and SDKs": "sdk software development kit aws tools cli powershell cloudshell",
+  "AWS Security Token Service": "sts security token service temporary credentials assume role federation",
+  "AWS Schema Conversion Tool": "sct schema conversion tool database migration oracle aurora dms",
 };
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -413,6 +418,7 @@ export default function ServicesLibrary() {
                 <div className="service-list">
                   {[...Array.from({ length: branch.end - branch.start }, (_, offset) => branch.start + offset), ...(branch.copies || [])].map((index) => {
                     const item = services[index];
+                    if (!item) return null;
                     return <button key={item.name} data-service-index={index} className={`service-node ${selected === index ? "active" : ""}`} style={{ "--service-accent": item.accent } as React.CSSProperties} onClick={() => setSelected(index)} aria-pressed={selected === index}>
                       <span>{item.name}</span><small>{item.summary}</small>
                     </button>;
