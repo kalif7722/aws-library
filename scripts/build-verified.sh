@@ -4,7 +4,10 @@ set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ "${SITES_ENV_READY:-}" != "1" ]]; then
-  exec "${script_dir}/sites-env.sh" -- "$0" "$@"
+  # Invoke through bash instead of executing the helper directly. GitHub's
+  # contents API does not preserve executable bits, and Cloudflare checks out
+  # this helper without +x.
+  exec bash "${script_dir}/sites-env.sh" -- "$0" "$@"
 fi
 
 command -v timeout || {
