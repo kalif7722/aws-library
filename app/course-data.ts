@@ -105,8 +105,7 @@ export const guideAliases: Record<string, string> = {
 };
 
 export const pendingGuides = new Set([
-  "Savings Plans", "AWS CLI", "AWS Management Console", "Amazon Elastic Transcoder",
-  "Amazon Pinpoint", "AWS IoT Things Graph", "AWS IoT 1-Click", "AWS Proton",
+  "Savings Plans", "AWS CLI", "AWS Management Console",
   "AWS IoT Events",
   "Amazon CodeGuru", "Amazon Fraud Detector",
   "AWS AppConfig",

@@ -256,6 +256,11 @@ export const services = [
   { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
   { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
   { name: "Savings Plans", file: "/el10/savings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
+  { name: "Amazon Elastic Transcoder", file: "/el10/amazon-elastic-transcoder.webp", accent: "#8b5cf6", summary: "Legacy cloud media transcoding service; migrate to MediaConvert" },
+  { name: "Amazon Pinpoint", file: "/el10/amazon-pinpoint.webp", accent: "#ec4899", summary: "Customer engagement campaigns, journeys, and messaging analytics" },
+  { name: "AWS IoT Things Graph", file: "/el10/aws-iot-things-graph.webp", accent: "#14b8a6", summary: "Discontinued visual IoT workflow orchestration service" },
+  { name: "AWS IoT 1-Click", file: "/el10/aws-iot-1-click.webp", accent: "#14b8a6", summary: "Legacy button-triggered IoT actions service" },
+  { name: "AWS Proton", file: "/el10/aws-proton.webp", accent: "#f97316", summary: "Managed platform engineering and self-service deployments" },
 ];
 
 const branches = [
@@ -270,8 +275,10 @@ const branches = [
   { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [] as number[] },
+  { title: "Legacy & Specialized Services", start: 0, end: 0, accent: "#64748b", copies: [254, 255] },
   { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242] },
-  { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225] },
+  { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225, 252, 253] },
+  { title: "Platform Engineering", start: 0, end: 0, accent: "#f97316", copies: [256] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
 
