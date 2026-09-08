@@ -7,9 +7,17 @@ const providers = [
     tone: "provider-aws",
     description: "Explore the complete AWS service library or study by official certification scope.",
     links: [
-      ["AWS Solutions Architect Associate", "/courses/aws-solutions-architect-associate"],
-      ["AWS Solutions Architect Professional", "/courses/aws-solutions-architect-professional"],
-      ["AWS Generative AI Developer Professional", "/courses/aws-generative-ai-developer-professional"],
+      ["FOUNDATIONAL · Cloud Practitioner (CLF-C02)", "/courses/aws-cloud-practitioner"],
+      ["FOUNDATIONAL · AI Practitioner (AIF-C01)", "/courses/aws-ai-practitioner"],
+      ["ASSOCIATE · Solutions Architect (SAA-C03)", "/courses/aws-solutions-architect-associate"],
+      ["ASSOCIATE · Developer (DVA-C02)", "/courses/aws-developer-associate"],
+      ["ASSOCIATE · CloudOps Engineer (SOA-C03)", "/courses/aws-cloudops-engineer-associate"],
+      ["ASSOCIATE · Data Engineer (DEA-C01)", "/courses/aws-data-engineer-associate"],
+      ["ASSOCIATE · Machine Learning Engineer (MLA-C01)", "/courses/aws-machine-learning-engineer-associate"],
+      ["PROFESSIONAL · Solutions Architect (SAP-C02)", "/courses/aws-solutions-architect-professional"],
+      ["PROFESSIONAL · DevOps Engineer (DOP-C02)", "/courses/aws-devops-engineer-professional"],
+      ["PROFESSIONAL · Generative AI Developer (AIP-C01)", "/courses/aws-generative-ai-developer-professional"],
+      ["SPECIALTY · Advanced Networking (ANS-C01)", "/courses/aws-advanced-networking-specialty"],
       ["Browse all AWS services", "/services"],
     ],
   },
@@ -35,8 +43,8 @@ const providers = [
 
 const learningStats = [
   ["225+", "visual service guides"],
-  ["3", "AWS certification paths"],
-  ["1", "shared EL10 viewer"],
+  ["11", "AWS certification paths"],
+  ["1", "shared visual viewer"],
 ];
 
 export default function LearningHome() {
@@ -45,6 +53,7 @@ export default function LearningHome() {
       <nav className="top-nav" aria-label="Primary navigation">
         <a className="brand-link" href="/">Visual Learning</a>
         <a className="home-button home-button-current" href="/" aria-current="page">Home</a>
+      </nav>
 
       <section className="learning-hero">
         <div className="hero-copy">
@@ -61,7 +70,7 @@ export default function LearningHome() {
           <i>→</i>
           <div><span>02</span><strong>Choose a course</strong><small>Follow the official in-scope services</small></div>
           <i>→</i>
-          <div><span>03</span><strong>Open EL10 guides</strong><small>Study architecture, use cases and code</small></div>
+          <div><span>03</span><strong>Open visual guides</strong><small>Study architecture, use cases and code</small></div>
         </div>
       </section>
 
@@ -82,7 +91,7 @@ export default function LearningHome() {
       </section>
 
       <section className="provider-section">
-        <div className="section-heading"><div><p className="course-kicker">Cloud provider library</p><h2>Where do you want to study?</h2></div><span>AWS is fully mapped; Azure and GCP are next.</span></div>
+        <div className="section-heading"><div><p className="course-kicker">Cloud provider library</p><h2>Where do you want to study?</h2></div><span>AWS certification paths are mapped to official in-scope services; Azure and GCP are next.</span></div>
         <div className="provider-grid">
           {providers.map((provider) => (
             <article className={`provider-card ${provider.tone}`} key={provider.key}>
