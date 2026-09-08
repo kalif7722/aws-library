@@ -1,0 +1,3 @@
+import CertificationCourse from "../../components/CertificationCourse";
+import { dvaScope } from "../../course-data-extra";
+export default function Course(){return <CertificationCourse code="DVA" level="Associate" title="AWS Certified Developer – Associate" description="Study the AWS development, deployment, integration and security services listed in the official DVA-C02 scope." scope={dvaScope} sourceUrl="https://docs.aws.amazon.com/aws-certification/latest/developer-associate-02/dva-02-in-scope-services.html" sourceLabel="Aligned to the AWS Certified Developer – Associate DVA-C02 guide"/>;}
