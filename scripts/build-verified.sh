@@ -45,10 +45,6 @@ command -v timeout >/dev/null 2>&1 || {
   exit 69
 }
 
-# Keep uploaded guide records and branch mappings deterministic. This patch is
-# idempotent and only changes the build checkout; it does not touch R2 assets.
-python3 scripts/apply-service-catalog.py
-
 vinext="${project_root}/node_modules/.bin/vinext"
 if [[ ! -f "${vinext}" ]]; then
   echo "vinext is unavailable after npm install." >&2
