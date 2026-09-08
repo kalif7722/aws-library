@@ -264,7 +264,7 @@ export const services = [
 ];
 
 const branches = [
-  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244, 248, 250] },
+  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244, 248, 250, 256] },
   { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 251] },
   { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246] },
   { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218] },
@@ -274,11 +274,9 @@ const branches = [
   { title: "Networking & Content Delivery", start: 100, end: 120, accent: "#8b5cf6", copies: [49] },
   { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161] },
-  { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [] as number[] },
-  { title: "Legacy & Specialized Services", start: 0, end: 0, accent: "#64748b", copies: [254, 255] },
+  { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [254, 255] },
   { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242] },
   { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225, 252, 253] },
-  { title: "Platform Engineering", start: 0, end: 0, accent: "#f97316", copies: [256] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
 
