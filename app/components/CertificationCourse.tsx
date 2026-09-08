@@ -25,6 +25,20 @@ const explicitAliases: Record<string, string> = {
   "AWS Security Token Service (AWS STS)": "AWS Security Token Service",
   "AWS Certificate Manager (ACM)": "AWS Certificate Manager",
   "AWS Command Line Interface (AWS CLI)": "AWS CLI",
+  "Amazon Bedrock AgentCore": "Amazon Bedrock AgentCore",
+  "Amazon Bedrock Knowledge Bases": "Amazon Bedrock Knowledge Bases",
+  "Amazon Bedrock Prompt Management": "Amazon Bedrock Prompt Management",
+  "Amazon Bedrock Prompt Flows": "Amazon Bedrock Prompt Flows",
+  "Amazon SageMaker Clarify": "Amazon SageMaker Clarify",
+  "Amazon SageMaker Data Wrangler": "Amazon SageMaker Data Wrangler",
+  "Amazon SageMaker Ground Truth": "Amazon SageMaker Ground Truth",
+  "Amazon SageMaker JumpStart": "Amazon SageMaker JumpStart",
+  "Amazon SageMaker Model Monitor": "Amazon SageMaker Model Monitor",
+  "Amazon SageMaker Model Registry": "Amazon SageMaker Model Registry",
+  "Amazon SageMaker Neo": "Amazon SageMaker Neo",
+  "Amazon SageMaker Processing": "Amazon SageMaker Processing",
+  "Amazon SageMaker Unified Studio": "Amazon SageMaker Unified Studio",
+  "Amazon Titan": "Amazon Titan",
 };
 const guideName = (name: string) => explicitAliases[name] || guideAliases[name] || name;
 const findGuide = (name: string) => {
