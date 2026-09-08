@@ -1,0 +1,91 @@
+name: Add uploaded AWS service guides
+
+on:
+  push:
+    paths:
+      - '.github/workflows/add-uploaded-service-guides.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update service catalog safely
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('app/services/page.tsx')
+          s = p.read_text()
+
+          # Refuse to run twice or against an unexpected catalog shape.
+          if 'name: "AWS Management Console", file: "/el10/aws-management-console.webp"' in s:
+              print('Catalog already updated; nothing to do.')
+              raise SystemExit(0)
+          marker = '  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },\n];'
+          assert s.count(marker) == 1, 'Expected service-array marker not found exactly once'
+          additions = '''  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
+  { name: "AWS Management Console", file: "/el10/aws-management-console.webp", accent: "#2563eb", summary: "Web interface for accessing and managing AWS services" },
+  { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
+  { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
+  { name: "Savings Plans", file: "/el10/svgsavings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
+];'''
+          s = s.replace(marker, additions)
+
+          old = '{ title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216] }'
+          new = '{ title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 243, 244, 245] }'
+          assert s.count(old) == 1
+          s = s.replace(old, new)
+
+          old = '{ title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180] }'
+          new = '{ title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 244] }'
+          assert s.count(old) == 1
+          s = s.replace(old, new)
+
+          anchor = '  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },\n];'
+          replacement = '''  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
+  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 246] },
+];'''
+          assert s.count(anchor) == 1
+          s = s.replace(anchor, replacement)
+
+          alias_anchor = '  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",\n};'
+          alias_replacement = '''  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",
+  "AWS Management Console": "console browser web interface access AWS services",
+  "AWS CLI": "command line terminal developer tools automation",
+  "AWS AppConfig": "feature flags dynamic configuration deployment management governance",
+  "Savings Plans": "cost savings commitment pricing cloud financial management",
+};'''
+          assert s.count(alias_anchor) == 1
+          s = s.replace(alias_anchor, alias_replacement)
+
+          # Count unique service records, not branch memberships/copies.
+          old_counter = '<div className="progress"><strong>{services.length}</strong><span>services mapped</span></div>'
+          new_counter = '<div className="progress"><strong>{new Set(services.map((item) => normalize(item.name))).size}</strong><span>unique services mapped</span></div>'
+          assert s.count(old_counter) == 1
+          s = s.replace(old_counter, new_counter)
+
+          # Validate no duplicate canonical service names and all four R2 paths occur once.
+          import re
+          names = re.findall(r'\{ name: "([^"]+)", file:', s.split('const branches = [', 1)[0])
+          norm = lambda x: re.sub(r'[^a-z0-9]+', ' ', x.lower()).strip()
+          canonical = [norm(x) for x in names]
+          assert len(canonical) == len(set(canonical)), 'Duplicate service records detected'
+          for path in ['/el10/aws-management-console.webp','/el10/aws-cli.webp','/el10/appconfig.webp','/el10/svgsavings-plans.webp']:
+              assert s.count(f'file: "{path}"') == 1, f'Expected exactly one record for {path}'
+
+          p.write_text(s)
+          print(f'Validated {len(names)} unique service records.')
+          PY
+      - name: Commit catalog update
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/services/page.tsx
+          git commit -m "Add uploaded management and financial service guides"
+          git push
