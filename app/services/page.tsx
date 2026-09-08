@@ -252,17 +252,22 @@ export const services = [
   { name: "AWS Tools and SDKs", file: "/el10/aws-tools-sdk.webp", accent: "#f97316", summary: "Build and automate AWS workloads through tools and language SDKs" },
   { name: "AWS Security Token Service", file: "/el10/aws-sts.webp", accent: "#dc2626", summary: "Issue temporary credentials for secure AWS access" },
   { name: "AWS Schema Conversion Tool", file: "/el10/aws-schema-conversion-tool.webp", accent: "#14b8a6", summary: "Assess and convert database schemas and code for migration" },
+  { name: "AWS Management Console", file: "/el10/aws-management-console.webp", accent: "#2563eb", summary: "Web interface for accessing and managing AWS services" },
+  { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
+  { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
+  { name: "Savings Plans", file: "/el10/savings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
 ];
 
 const branches = [
-  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244] },
+  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244, 248, 250] },
+  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 251] },
   { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246] },
   { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218] },
   { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [] as number[] },
   { title: "Databases", start: 84, end: 96, accent: "#8b5cf6", copies: [] as number[] },
   { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 247] },
   { title: "Networking & Content Delivery", start: 100, end: 120, accent: "#8b5cf6", copies: [49] },
-  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245] },
+  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [] as number[] },
   { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242] },
@@ -295,6 +300,10 @@ const semanticAliases: Record<string, string> = {
   "AWS Tools and SDKs": "sdk software development kit aws tools cli powershell cloudshell",
   "AWS Security Token Service": "sts security token service temporary credentials assume role federation",
   "AWS Schema Conversion Tool": "sct schema conversion tool database migration oracle aurora dms",
+  "AWS Management Console": "console browser web interface access aws services",
+  "AWS CLI": "cli command line terminal developer tools automation",
+  "AWS AppConfig": "appconfig feature flags dynamic configuration deployment",
+  "Savings Plans": "savings plans cost savings commitment pricing cloud financial management",
 };
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -335,6 +344,7 @@ export default function ServicesLibrary() {
     return () => { element.removeEventListener("scroll", sync); observer.disconnect(); };
   }, [collapsedBranches]);
   const service = selected === null ? null : services[selected];
+  const uniqueServiceCount = new Set(services.map((item) => normalize(item.name))).size;
   const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);
   const query = normalize(searchQuery);
   const searchResults = query ? services.map((item, index) => {
@@ -384,7 +394,7 @@ export default function ServicesLibrary() {
           <button className="expand-all" onClick={() => setCollapsedBranches(Object.fromEntries(branches.map((branch) => [branch.title, !allCollapsed])))}>
             {allCollapsed ? "Expand all" : "Collapse all"}
           </button>
-          <div className="progress"><strong>{services.length}</strong><span>services mapped</span></div>
+          <div className="progress"><strong>{uniqueServiceCount}</strong><span>services mapped</span></div>
         </div>
       </header>
 
@@ -394,10 +404,6 @@ export default function ServicesLibrary() {
           ref={branchesRef}
           tabIndex={0}
           aria-label="AWS service category branches. Scroll horizontally to view more categories."
-          onWheel={(event) => {
-            if (!branchesRef.current || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-            branchesRef.current.scrollLeft += event.deltaY;
-          }}
         >
           <div className="root-node">AWS Services</div>
           <div className="connector vertical" aria-hidden="true" />
