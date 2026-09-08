@@ -41,7 +41,7 @@ const explicitAliases: Record<string, string> = {
   "Amazon Titan": "Amazon Titan",
 };
 const guideName = (name: string) => explicitAliases[name] || guideAliases[name] || name;
-const findGuide = (name: string) => {
+export const findGuide = (name: string) => {
   const target = guideName(name);
   const exact = services.find((item) => item.name.toLowerCase() === target.toLowerCase());
   if (exact) return exact;
@@ -53,17 +53,11 @@ const findGuide = (name: string) => {
   return undefined;
 };
 
-// R2 is the primary source. Newly-added guides may briefly be absent from R2 even
-// though the repository asset exists. Fall back to the repository copy so a bad
-// or not-yet-synced R2 key never produces a blank course viewer.
 const repoAssetUrl = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path.startsWith("/") ? path : `/${path}`}`;
 const imageFallback = (event: SyntheticEvent<HTMLImageElement>, path: string) => {
   const image = event.currentTarget;
   const repoUrl = repoAssetUrl(path);
-  if (image.src !== repoUrl) {
-    image.src = repoUrl;
-    return;
-  }
+  if (image.src !== repoUrl) { image.src = repoUrl; return; }
   image.onerror = null;
 };
 
