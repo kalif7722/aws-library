@@ -165,7 +165,7 @@ export const services = [
   { name: "AWS IoT TwinMaker", file: "/el10/iot/twinmaker.webp", accent: "#14b8a6", summary: "Build operational digital twins" },
   { name: "AWS Partner Device Catalog", file: "/el10/iot/partner-device-catalog.webp", accent: "#14b8a6", summary: "Find qualified devices compatible with AWS IoT" },
   { name: "FreeRTOS", file: "/el10/iot/freertos.webp", accent: "#14b8a6", summary: "Real-time operating system for microcontrollers" },
-  { name: "Amazon Quick", file: "/el10/ai/amazon-quick-sight.webp", accent: "#a855f7", summary: "Enterprise business intelligence and AI assistance" },
+  { name: "Amazon Quick", file: "/el10/analytics/amazon-quick.webp", accent: "#a855f7", summary: "Enterprise business intelligence and AI assistance" },
   { name: "Amazon Augmented AI", file: "/el10/ai/augmented-ai.webp", accent: "#a855f7", summary: "Human review workflows for machine-learning predictions" },
   { name: "Amazon Bedrock", file: "/el10/ai/bedrock.webp", accent: "#a855f7", summary: "Build generative AI applications with foundation models" },
   { name: "Amazon Nova", file: "/el10/ai/nova.webp", accent: "#a855f7", summary: "AWS foundation models for multimodal generative AI" },
@@ -324,6 +324,7 @@ export const services = [
   { name: "VPC peering", file: "/el10/networking/vpc-peering.webp", accent: "#8b5cf6", summary: "Private point-to-point connectivity between VPCs" },
   { name: "AWS Private Certificate Authority", file: "/el10/aws-private-certificate-authority.webp", accent: "#60a5fa", summary: "Managed private PKI and certificate issuance" },
   { name: "AWS Shield Advanced", file: "/el10/aws-shield-advanced.webp", accent: "#60a5fa", summary: "Advanced managed DDoS protection" },
+  { name: "Amazon Quick Sight", file: "/el10/ai/amazon-quick-sight.webp", accent: "#a855f7", summary: "Cloud business intelligence and data visualization" },
 ];
 
 const branches = [
@@ -338,7 +339,7 @@ const branches = [
   { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249, 257, 268, 263, 264, 281, 298, 309, 129] },
   { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161, 270, 291] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [254, 255, 258] },
-  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 259, 292, 293, 294, 295, 296, 300, 311, 161] },
+  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 259, 292, 293, 294, 295, 296, 300, 311, 161, 320] },
   { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225, 252, 253, 199, 308, 316] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
