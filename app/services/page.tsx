@@ -306,18 +306,18 @@ export const services = [
 ];
 
 const branches = [
-  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 248, 250, 256, 266, 271, 272, 273, 274, 217] },
+  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 248, 250, 256, 266, 271, 272, 273, 274, 217, 283] },
   { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 251] },
-  { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246] },
-  { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218, 264, 265, 207] },
-  { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [] as number[] },
-  { title: "Databases", start: 84, end: 96, accent: "#8b5cf6", copies: [260, 261, 262] },
-  { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 247, 99, 260, 261] },
-  { title: "Networking & Content Delivery", start: 100, end: 120, accent: "#8b5cf6", copies: [49, 267] },
-  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249, 257, 268, 269, 263, 264] },
-  { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161, 262, 270] },
+  { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246, 289] },
+  { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218, 264, 265, 207, 297] },
+  { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [290] as number[] },
+  { title: "Databases", start: 84, end: 96, accent: "#8b5cf6", copies: [260, 261, 262, 282] },
+  { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 247, 99, 280] },
+  { title: "Networking & Content Delivery", start: 100, end: 120, accent: "#8b5cf6", copies: [49, 267, 284, 285, 286, 287, 288] },
+  { title: "Developer Tools", start: 120, end: 132, accent: "#f97316", copies: [180, 243, 245, 249, 257, 268, 263, 264, 281, 298] },
+  { title: "Analytics", start: 132, end: 151, accent: "#ec4899", copies: [161, 270, 291] },
   { title: "Internet of Things", start: 151, end: 161, accent: "#14b8a6", copies: [254, 255, 258] },
-  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 259, 263] },
+  { title: "Machine Learning & AI", start: 161, end: 181, accent: "#a855f7", copies: [33, 130, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 259, 292, 293, 294, 295, 296] },
   { title: "Application Integration & Media", start: 181, end: 196, accent: "#ec4899", copies: [100, 10, 225, 252, 253] },
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
