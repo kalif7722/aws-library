@@ -58,6 +58,15 @@ export const aipScope: ScopeCategory[] = [
 ];
 
 export const guideAliases: Record<string, string> = {
+  "AWS Shield Advanced": "AWS Shield Advanced",
+  "AWS Private Certificate Authority": "AWS Private Certificate Authority",
+  "VPC peering": "VPC peering",
+  "Amazon EKS Distro": "Amazon EKS Distro",
+  "VPC Reachability Analyzer": "VPC Reachability Analyzer",
+  "Network ACLs": "Network ACLs",
+  "AWS CloudTrail Lake": "AWS CloudTrail Lake",
+  "Amazon Q Business Apps": "Amazon Q Business Apps",
+  "Amazon CloudWatch Synthetics": "Amazon CloudWatch Synthetics",
   "AWS Fault Injection Simulator (AWS FIS)": "AWS Fault Injection Service",
   "AWS CloudFormation Guard": "AWS CloudFormation Guard",
   "AWS App Mesh": "AWS App Mesh",
