@@ -268,7 +268,7 @@ export const services = [
   { name: "AWS Snow Family", file: "/el10/migration/aws-snow-family.webp", accent: "#14b8a6", summary: "Physical devices for offline data transfer and edge computing" },
   { name: "AWS Glue DataBrew", file: "/el10/analytics/aws-glue-databrew.webp", accent: "#ec4899", summary: "Visual no-code data preparation" },
   { name: "Amazon Q", file: "/el10/ai/amazon-q.webp", accent: "#a855f7", summary: "Generative AI assistance for work and development" },
-  { name: "Amazon Aurora Serverless", file: "/el10/databases/amazon-aurora-serverless.webp", accent: "#8b5cf6", summary: "On-demand autoscaling Aurora database capacity" },
+  { name: "Amazon Aurora Serverless", file: "/el10/database/amazon-aurora-serverless.webp", accent: "#8b5cf6", summary: "On-demand autoscaling Aurora database capacity" },
   { name: "Amazon AppStream 2.0", file: "/el10/compute/amazon-appstream-2.webp", accent: "#f59e0b", summary: "Stream desktop applications securely to browsers" },
   { name: "Amazon Q Developer in chat applications", file: "/el10/aws-chatbot.webp", accent: "#ec4899", summary: "AWS notifications and CLI actions in chat applications" },
   { name: "Amazon Application Recovery Controller", file: "/el10/networking/amazon-application-recovery-controller.webp", accent: "#8b5cf6", summary: "Controlled recovery and traffic shifting for resilient applications" },
