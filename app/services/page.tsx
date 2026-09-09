@@ -203,7 +203,7 @@ export const services = [
   { name: "AWS AppFabric", file: "/el10/other-services/appfabric.webp", accent: "#14b8a6", summary: "Connect SaaS applications for security insights" },
   { name: "Amazon Chime SDK", file: "/el10/other-services/chime-sdk.webp", accent: "#14b8a6", summary: "Embed real-time voice, video, and messaging" },
   { name: "Amazon Connect Customer", file: "/el10/other-services/connect-customer.webp", accent: "#14b8a6", summary: "Customer engagement capabilities for Amazon Connect" },
-  { name: "Amazon SES", file: "/el10/application-integration/amazon-ses.webp", accent: "#14b8a6", summary: "Scalable transactional and marketing email" },
+  { name: "Amazon SES", file: "/el10/appint-media/amazon-ses.webp", accent: "#14b8a6", summary: "Scalable transactional and marketing email" },
   { name: "Amazon WorkMail", file: "/el10/other-services/workmail.webp", accent: "#14b8a6", summary: "Secure managed business email and calendars" },
   { name: "AWS Managed Services", file: "/el10/other-services/aws-managed-services.webp", accent: "#06b6d4", summary: "Operate AWS environments with managed controls" },
   { name: "AWS re:Post Private", file: "/el10/other-services/aws-repost-private.webp", accent: "#06b6d4", summary: "Private cloud knowledge and collaboration" },
