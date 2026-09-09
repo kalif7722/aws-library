@@ -110,7 +110,7 @@ export const guideAliases: Record<string, string> = {
   "AWS VPN": "AWS Site-to-Site VPN",
   "AWS Resource Access Manager": "AWS Resource Access Manager (RAM)",
   "AWS Certificate Manager": "AWS Certificate Manager",
-  "AWS Lambda@Edge": "AWS Lambda",
+  "AWS Lambda@Edge": "AWS Lambda@Edge",
   "Amazon Connect": "Amazon Connect Customer",
   "Amazon DynamoDB Streams": "Amazon DynamoDB Streams",
   "Amazon Bedrock AgentCore": "Amazon Bedrock",
