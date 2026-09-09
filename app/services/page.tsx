@@ -282,8 +282,8 @@ export const services = [
 ];
 
 const branches = [
-  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 244, 248, 250, 256, 266, 271, 272, 273, 274, 217] },
-  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 249] },
+  { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 248, 250, 256, 266, 271, 272, 273, 274, 217] },
+  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 251] },
   { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246] },
   { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218, 264, 265, 207] },
   { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [] as number[] },
