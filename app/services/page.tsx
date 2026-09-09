@@ -98,7 +98,7 @@ export const services = [
   { name: "Amazon Keyspaces", file: "/el10/database/keyspaces.webp", accent: "#7c3aed", summary: "Serverless Apache Cassandra-compatible database" },
   { name: "Amazon Neptune", file: "/el10/database/neptune.webp", accent: "#7c3aed", summary: "Managed graph database" },
   { name: "Amazon Neptune Analytics", file: "/el10/database/neptune-analytics.webp", accent: "#16a34a", summary: "High-performance graph analytics" },
-  { name: "Amazon Timestream", file: "/el10/database/timestream.webp", accent: "#7c3aed", summary: "Purpose-built time-series databases" },
+  { name: "Amazon Timestream", file: "/el10/database/amazon-timestream.webp", accent: "#7c3aed", summary: "Purpose-built time-series databases" },
   { name: "AWS Database Migration Service", file: "/el10/database/dms.webp", accent: "#2563eb", summary: "Assess, convert, migrate and replicate data" },
   { name: "AWS Transform", file: "/el10/migration/aws-transform.webp", accent: "#7c3aed", summary: "Agentic AI for migration and modernization" },
   { name: "AWS Transform MGN", file: "/el10/migration/transform-mgn.webp", accent: "#ea580c", summary: "Rehost applications to AWS" },
