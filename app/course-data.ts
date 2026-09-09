@@ -58,6 +58,7 @@ export const aipScope: ScopeCategory[] = [
 ];
 
 export const guideAliases: Record<string, string> = {
+  "AWS Fault Injection Simulator (AWS FIS)": "AWS Fault Injection Service",
   "AWS CloudFormation Guard": "AWS CloudFormation Guard",
   "AWS App Mesh": "AWS App Mesh",
   "Amazon EC2 security groups": "Amazon EC2 security groups",
