@@ -58,6 +58,17 @@ export const aipScope: ScopeCategory[] = [
 ];
 
 export const guideAliases: Record<string, string> = {
+  "AWS CloudFormation Guard": "AWS CloudFormation Guard",
+  "AWS App Mesh": "AWS App Mesh",
+  "Amazon EC2 security groups": "Amazon EC2 security groups",
+  "Automated Forensics Orchestrator for Amazon EC2": "Automated Forensics Orchestrator for Amazon EC2",
+  "Egress-only internet gateways": "Egress-only internet gateways",
+  "Internet gateways": "Internet gateways",
+  "NAT gateways": "NAT gateways",
+  "AWS Network Access Analyzer": "AWS Network Access Analyzer",
+  "Amazon MemoryDB for Redis": "Amazon MemoryDB for Redis",
+  "Amazon CodeGuru Security": "Amazon CodeGuru Security",
+  "Amazon Data Lifecycle Manager": "Amazon Data Lifecycle Manager",
   "Red Hat OpenShift Service on AWS (ROSA)": "Red Hat OpenShift Service on AWS (ROSA)",
   "AWS Serverless Application Model (AWS SAM)": "AWS SAM",
   "AWS SAM": "AWS SAM",
