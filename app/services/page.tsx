@@ -76,7 +76,7 @@ export const services = [
   { name: "Amazon EBS", file: "/el10/storage/ebs.webp", accent: "#16a34a", summary: "Persistent block storage for EC2" },
   { name: "Amazon EFS", file: "/el10/storage/efs.webp", accent: "#16a34a", summary: "Serverless shared NFS file storage" },
   { name: "Amazon FSx", file: "/el10/storage/fsx.webp", accent: "#16a34a", summary: "Managed file-system family overview" },
-  { name: "AWS Backup", file: "/el10/storage/backup.webp", accent: "#16a34a", summary: "Centralized policy-based data protection" },
+  { name: "AWS Backup", file: "/el10/storage/aws-backup.webp", accent: "#16a34a", summary: "Centralized policy-based data protection" },
   { name: "Amazon File Cache", file: "/el10/storage/file-cache.webp", accent: "#7c3aed", summary: "High-speed cache for distributed datasets" },
   { name: "Amazon FSx for Lustre", file: "/el10/storage/fsx-lustre.webp", accent: "#7c3aed", summary: "High-performance Lustre file storage" },
   { name: "Amazon FSx for NetApp ONTAP", file: "/el10/storage/fsx-ontap.webp", accent: "#16a34a", summary: "Managed enterprise ONTAP storage" },
