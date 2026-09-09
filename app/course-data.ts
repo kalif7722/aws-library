@@ -106,6 +106,13 @@ export const guideAliases: Record<string, string> = {
   "Amazon S3 Lifecycle policies": "Amazon S3",
   "Amazon S3 Cross-Region Replication": "Amazon S3",
   "Elastic Load Balancing (ELB)": "Elastic Load Balancing",
+  "Service Quotas": "AWS Service Quotas",
+  "AWS OpsWorks": "AWS OpsWorks (Legacy)",
+  "AWS Fault Injection Simulator (AWS FIS)": "AWS Fault Injection Service",
+  "AWS Fault Injection Service (AWS FIS)": "AWS Fault Injection Service",
+  "AWS CodeStar": "AWS CodeStar (Legacy)",
+  "AWS CDK": "AWS Cloud Development Kit (AWS CDK)",
+  "AWS DevOps Agent": "AWS DevOps Agent",
 };
 
 export const pendingGuides = new Set([
