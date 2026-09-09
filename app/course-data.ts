@@ -129,7 +129,7 @@ export const guideAliases: Record<string, string> = {
   "Amazon SageMaker Unified Studio": "Amazon SageMaker AI",
   "Amazon Titan": "Amazon Bedrock",
   "AWS Chatbot": "Amazon Q Developer in chat applications",
-  "Amazon CloudWatch Synthetics": "Amazon CloudWatch",
+  "Amazon CloudWatch Synthetics": "Amazon CloudWatch Synthetics",
   "AWS Encryption SDK": "AWS KMS",
   "IAM": "AWS IAM",
   "IAM Identity Center": "AWS IAM Identity Center",
