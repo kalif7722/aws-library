@@ -248,7 +248,7 @@ export const services = [
   { name: "Amazon SageMaker Unified Studio", file: "/el10/ai/sagemaker-unified-studio.webp", accent: "#a855f7", summary: "Unified environment for analytics and AI development" },
   { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
   { name: "AWS CDK", file: "/el10/aws-cdk.webp", accent: "#f97316", summary: "Define AWS infrastructure using familiar programming languages" },
-  { name: "AWS Cost Anomaly Detection", file: "/el10/aws-cost-anomaly-detection.webp", accent: "#16a34a", summary: "Detect unusual AWS spending with machine learning" },
+  { name: "AWS Cost Anomaly Detection", file: "/el10/Cloud Financial Management/aws-cost-anomaly-detection.webp", accent: "#16a34a", summary: "Detect unusual AWS spending with machine learning" },
   { name: "AWS Tools and SDKs", file: "/el10/aws-tools-sdk.webp", accent: "#f97316", summary: "Build and automate AWS workloads through tools and language SDKs" },
   { name: "AWS Security Token Service", file: "/el10/aws-sts.webp", accent: "#dc2626", summary: "Issue temporary credentials for secure AWS access" },
   { name: "AWS Schema Conversion Tool", file: "/el10/aws-schema-conversion-tool.webp", accent: "#14b8a6", summary: "Assess and convert database schemas and code for migration" },
