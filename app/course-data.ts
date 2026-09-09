@@ -58,6 +58,16 @@ export const aipScope: ScopeCategory[] = [
 ];
 
 export const guideAliases: Record<string, string> = {
+  "Red Hat OpenShift Service on AWS (ROSA)": "Red Hat OpenShift Service on AWS (ROSA)",
+  "AWS Serverless Application Model (AWS SAM)": "AWS SAM",
+  "AWS SAM": "AWS SAM",
+  "Elastic IP addresses": "Elastic IP Addresses",
+  "Amazon VPC IP Address Manager (IPAM)": "Amazon VPC IP Address Manager (IPAM)",
+  "Service control policies (SCPs)": "Service Control Policies",
+  "Amazon Aurora Serverless v2": "Amazon Aurora Serverless v2",
+  "AWS Strands Agents": "Strands Agents",
+  "Migration Evaluator": "Migration Evaluator",
+  "Amazon Simple Email Service (Amazon SES)": "Amazon SES",
   "Amazon SageMaker": "Amazon SageMaker AI",
   "AWS SDKs and Tools": "AWS Tools and SDKs",
   "AWS STS": "AWS Security Token Service",
