@@ -81,7 +81,7 @@ export const guideAliases: Record<string, string> = {
   "AWS Certificate Manager": "AWS Certificate Manager",
   "AWS Lambda@Edge": "AWS Lambda",
   "Amazon Connect": "Amazon Connect Customer",
-  "Amazon DynamoDB Streams": "Amazon DynamoDB",
+  "Amazon DynamoDB Streams": "Amazon DynamoDB Streams",
   "Amazon Bedrock AgentCore": "Amazon Bedrock",
   "Amazon Bedrock Knowledge Bases": "Amazon Bedrock",
   "Amazon Bedrock Prompt Management": "Amazon Bedrock",
@@ -106,6 +106,7 @@ export const guideAliases: Record<string, string> = {
   "Amazon S3 Lifecycle policies": "Amazon S3",
   "Amazon S3 Cross-Region Replication": "Amazon S3",
   "Elastic Load Balancing (ELB)": "Elastic Load Balancing",
+  "AWS CodeStar": "AWS CodeStar (Legacy)",
 };
 
 export const pendingGuides = new Set([
