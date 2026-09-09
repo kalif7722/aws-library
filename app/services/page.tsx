@@ -377,7 +377,7 @@ export default function ServicesLibrary() {
   const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);
   const query = normalize(searchQuery);
   const searchResults = query ? services.map((item, index) => {
-    const branch = branches.find((candidate) => (index >= candidate.start && index < candidate.end) || candidate.copies.includes(index))!;
+    const branch = branches.find((candidate) => (index >= candidate.start && index < candidate.end) || candidate.copies.includes(index)) || { title: "Other Services" };
     const name = normalize(item.name);
     const words = query.split(" ").filter(Boolean);
     const searchable = normalize(`${item.name} ${item.summary} ${branch.title} ${semanticAliases[item.name] || ""}`);
