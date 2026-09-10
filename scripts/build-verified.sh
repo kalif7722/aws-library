@@ -49,6 +49,17 @@ node scripts/apply-service-catalog.mjs
 node scripts/apply-course-viewer-cleanup.mjs
 node scripts/apply-aip-service-alignment.mjs
 
+# Copy the complete AWS Labs architecture icon distribution into public/aws-icons
+# before Vinext builds. The browser then loads icons from this site rather than
+# raw.githubusercontent.com. QuickSight is used as a required sentinel.
+echo "Preparing local AWS architecture icons..."
+timeout 75s node scripts/sync-aws-architecture-icons.mjs main
+
+test -f public/aws-icons/Analytics/QuickSight.png || {
+  echo "Required local AWS icon missing: Analytics/QuickSight.png" >&2
+  exit 69
+}
+
 vinext="${project_root}/node_modules/.bin/vinext"
 if [[ ! -f "${vinext}" ]]; then
   echo "vinext is unavailable after npm install." >&2
