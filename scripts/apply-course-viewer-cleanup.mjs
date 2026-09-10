@@ -15,7 +15,7 @@ source = source.replace(
 );
 
 const oldViewer = /<div className="viewer-head"><div><p>Selected EL10 page<\/p><h2>\{selected\.name\}<\/h2><small>\{selected\.summary\}<\/small><\/div><button onClick=\{\(\)=>setExpanded\(true\)\}>Fit in browser ↗<\/button><\/div><button className="image-link"[\s\S]*?<p className="viewer-note">Choose another service on the left to switch pages\. Click the image for the full browser view\.<\/p>/;
-const newViewer = `<div className="viewer-head clean-viewer-head"><div><h2>{selected.name}</h2><small>{selected.summary}</small></div><button className="visual-toggle" onClick={()=>setVisualVisible(v=>!v)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div>{visualVisible && <button className="image-link clean-image-link" onClick={()=>setExpanded(true)} aria-label={\`Open ${selected.name} visual full screen\`}><img src={assetUrl(selected.file)} onError={e=>imageFallback(e,selected.file)} alt={\`${selected.name} EL10 infographic\`}/></button>}`;
+const newViewer = '<div className="viewer-head clean-viewer-head"><div><h2>{selected.name}</h2><small>{selected.summary}</small></div><button className="visual-toggle" onClick={()=>setVisualVisible(v=>!v)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div>{visualVisible && <button className="image-link clean-image-link" onClick={()=>setExpanded(true)} aria-label={`Open ${selected.name} visual full screen`}><img src={assetUrl(selected.file)} onError={e=>imageFallback(e,selected.file)} alt={`${selected.name} EL10 infographic`}/></button>}';
 
 if (oldViewer.test(source)) source = source.replace(oldViewer, newViewer);
 else if (!source.includes('className="visual-toggle"')) throw new Error('Course viewer markup anchor changed');
