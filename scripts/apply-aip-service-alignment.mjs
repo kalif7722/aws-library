@@ -8,17 +8,23 @@ if (!wrapper.includes('AipServiceLearningDetailsV8')) {
 const rendererPath = 'app/components/AipServiceLearningDetailsV8.tsx';
 let renderer = fs.readFileSync(rendererPath, 'utf8');
 const overrideImport = 'import { getAipArchitectureOverrides } from "./AipArchitectureOverrides";';
+const overrideImport2 = 'import { getAipArchitectureOverrides2 } from "./AipArchitectureOverrides2";';
 if (!renderer.includes(overrideImport)) {
   renderer = renderer.replace(
     'import { aipScope, guideAliases } from "../course-data";',
     'import { aipScope, guideAliases } from "../course-data";\n' + overrideImport
   );
 }
+if (!renderer.includes(overrideImport2)) {
+  renderer = renderer.replace(overrideImport, overrideImport + '\n' + overrideImport2);
+}
 const oldArches = 'const arches=architectures(e.service,e.category);';
-const newArches = 'const arches=getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
+const previousArches = 'const arches=getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
+const newArches = 'const arches=getAipArchitectureOverrides2(e.service,e.category)??getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
 if (!renderer.includes(newArches)) {
-  if (!renderer.includes(oldArches)) throw new Error('AIP V8 architecture selection hook missing');
-  renderer = renderer.replace(oldArches, newArches);
+  if (renderer.includes(previousArches)) renderer = renderer.replace(previousArches, newArches);
+  else if (renderer.includes(oldArches)) renderer = renderer.replace(oldArches, newArches);
+  else throw new Error('AIP V8 architecture selection hook missing');
 }
 fs.writeFileSync(rendererPath, renderer);
 
@@ -37,7 +43,7 @@ if (!renderer.includes('v8-layers') || !renderer.includes('arch.layers.map') || 
 if (!renderer.includes('Reference pattern:')) {
   throw new Error('AIP V8 reference-pattern labels missing');
 }
-if (!renderer.includes('getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category)')) {
+if (!renderer.includes('getAipArchitectureOverrides2(e.service,e.category)??getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category)')) {
   throw new Error('AIP service-specific architecture overrides are not active');
 }
 
@@ -55,10 +61,19 @@ for (const service of requiredOverrides) {
   if (!overrides.includes(`"${service}"`)) throw new Error(`Missing AIP service-specific architecture override: ${service}`);
 }
 
+const overrides2 = fs.readFileSync('app/components/AipArchitectureOverrides2.ts', 'utf8');
+const requiredOverrides2 = [
+  'Amazon Bedrock Prompt Management','Amazon Bedrock Prompt Flows','AWS CodeArtifact','AWS CodeBuild','AWS CodeDeploy','AWS CodePipeline',
+  'AWS CloudFormation','AWS CDK','AWS CLI','AWS Tools and SDKs','Amazon Aurora','Amazon RDS','Amazon DynamoDB Streams','AWS Encryption SDK'
+];
+for (const service of requiredOverrides2) {
+  if (!overrides2.includes(`"${service}"`)) throw new Error(`Missing second-set AIP architecture override: ${service}`);
+}
+
 const course = fs.readFileSync('app/course-data.ts', 'utf8');
 const required = ['AWS CLI','AWS Lambda@Edge','Amazon SQS','Amazon SNS','Amazon EventBridge','AWS Step Functions','Amazon ECR','Amazon ECS','Amazon EKS','AWS Fargate','Amazon Connect','Amazon Aurora','Amazon DynamoDB','Amazon Bedrock','Amazon Bedrock Knowledge Bases','Amazon Q Business','Amazon Q Developer','Amazon SageMaker AI','Amazon SageMaker Neo','Amazon API Gateway','Amazon CloudFront','Amazon VPC','AWS KMS','AWS Secrets Manager','AWS WAF','Amazon S3'];
 for (const service of required) {
   if (!course.includes(`"${service}"`)) throw new Error(`AIP scope changed or service missing: ${service}`);
 }
 
-console.log('Verified AIP V8 layered architecture renderer, service-specific overrides, and course scope.');
+console.log('Verified AIP V8 layered architecture renderer, both service-specific override sets, and course scope.');
