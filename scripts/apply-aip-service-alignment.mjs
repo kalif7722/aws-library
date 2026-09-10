@@ -15,8 +15,11 @@ if (!renderer.includes('v8-layers') || !renderer.includes('arch.layers.map')) {
 if (!renderer.includes('Reference pattern:')) {
   throw new Error('AIP V8 reference-pattern labels missing');
 }
-if (renderer.includes('source → service → destination')) {
-  throw new Error('AIP V8 must not regress to the retired three-box pipeline');
+// Validate the actual layered data/rendering shape rather than matching explanatory prose.
+// The UI intentionally mentions the retired source/service/destination model to explain
+// that V8 no longer uses it, so checking for those words produces a false positive.
+if (!renderer.includes('layers:[') || !renderer.includes('layer.nodes.map')) {
+  throw new Error('AIP V8 architecture data is not using layered node groups');
 }
 
 const course = fs.readFileSync('app/course-data.ts', 'utf8');
