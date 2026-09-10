@@ -7,7 +7,7 @@ const patchFile = (path, replacements) => {
 };
 
 patchFile('app/components/AipServiceLearningDetailsV3.tsx', [
-  ['[pub("ai","Trained model","Framework artifact"),aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")])', '[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")]'],
+  ['[pub("ai","Trained model","Framework artifact"),aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")])', '[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")])'],
   ['aws("AWS Cloud","Amplify build + hosting")', 'aws("AWS Amplify","Build + hosting")'],
   ['aws("AWS Cloud","Amplify hosted app")', 'aws("AWS Amplify","Hosted web application")'],
   ['aws("AWS Cloud","Amazon Kendra index")', 'aws("Amazon Kendra","Enterprise search index")'],
