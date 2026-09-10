@@ -48,6 +48,7 @@ command -v timeout >/dev/null 2>&1 || {
 node scripts/apply-service-catalog.mjs
 node scripts/apply-course-viewer-cleanup.mjs
 node scripts/apply-aip-service-alignment.mjs
+node scripts/apply-service-memory-and-scope-identity.mjs
 
 # AWS architecture icons are synchronized to Cloudflare R2 by the dedicated
 # GitHub Actions workflow. Do not download the icon distribution during each
