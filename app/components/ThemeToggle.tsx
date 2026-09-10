@@ -31,5 +31,6 @@ export default function ThemeToggle(){
     window.localStorage.setItem("visual-learning-theme",next);
     reveal();
   };
-  return <button className={`site-theme-toggle ${visible?"visible":"hidden"}`} onClick={toggle} onFocus={reveal} onMouseEnter={reveal} aria-label={`Switch to ${theme==="dark"?"light":"dark"} mode`} title={`Switch to ${theme==="dark"?"light":"dark"} mode`}><span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span><b>{theme==="dark"?"Light":"Dark"}</b></button>;
+  const target=theme==="dark"?"light":"dark";
+  return <button className={`site-theme-toggle ${visible?"visible":"hidden"}`} onClick={toggle} onFocus={reveal} onMouseEnter={reveal} aria-label={`Switch to ${target} mode`} title={`Switch to ${target} mode`}><span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span></button>;
 }
