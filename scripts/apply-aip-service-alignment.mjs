@@ -7,7 +7,6 @@ const patchFile = (path, replacements) => {
 };
 
 patchFile('app/components/AipServiceLearningDetailsV3.tsx', [
-  ['[pub("ai","Trained model","Framework artifact"),aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")])', '[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")])'],
   ['aws("AWS Cloud","Amplify build + hosting")', 'aws("AWS Amplify","Build + hosting")'],
   ['aws("AWS Cloud","Amplify hosted app")', 'aws("AWS Amplify","Hosted web application")'],
   ['aws("AWS Cloud","Amazon Kendra index")', 'aws("Amazon Kendra","Enterprise search index")'],
@@ -20,6 +19,21 @@ patchFile('app/components/AipServiceLearningDetailsV3.tsx', [
   ['aws("AWS Cloud","Amazon Transcribe")', 'aws("Amazon Transcribe","Speech-to-text")'],
   ['aws("AWS Cloud",service)', 'aws(service,"Service control plane")']
 ]);
+
+// Deterministically replace the entire malformed SageMaker Neo line instead of relying
+// on a fragile substring match. Keep this before the Vinext compile.
+{
+  const path = 'app/components/AipServiceLearningDetailsV3.tsx';
+  let source = fs.readFileSync(path, 'utf8');
+  const neoLine = '  if(capability==="Neo")return[A("Model optimization for target hardware","Neo compiles trained models for efficient execution on supported edge/cloud hardware.",[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")]),A("Deployment optimization","Compilation is a post-training optimization step, not a training service.",[pub("ai","Approved model","Input")],aws("Amazon SageMaker AI","Neo"),[pub("monitor","Benchmark","Latency/size"),pub("app","Deployment target","Optimized runtime")])];';
+  const neoPattern = /^\s*if\(capability==="Neo"\).*$/m;
+  if (!neoPattern.test(source)) throw new Error('SageMaker Neo architecture line not found');
+  source = source.replace(neoPattern, neoLine);
+  if (!source.includes('[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific")')) {
+    throw new Error('SageMaker Neo architecture repair verification failed');
+  }
+  fs.writeFileSync(path, source);
+}
 
 patchFile('app/components/AipServiceLearningDetailsV4.tsx', [
   ['n("AWS Auto Scaling","Scaling policy","monitor","awsCloud")', 'n("AWS Auto Scaling","Scaling policy","monitor","autoScaling")'],
