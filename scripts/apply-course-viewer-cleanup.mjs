@@ -23,10 +23,16 @@ if (!source.includes('const [visualVisible, setVisualVisible] = useState(true);'
   if (!source.includes(stateAnchor)) throw new Error('Course viewer state anchor changed');
   source = source.replace(stateAnchor, `${stateAnchor} const [visualVisible, setVisualVisible] = useState(true);`);
 }
-if (!source.includes('const hasStructuredDetails = !!selected;')) {
-  source = source.replace('const isAthena = selected?.name.toLowerCase().includes("athena");','const isAthena = selected?.name.toLowerCase().includes("athena");\n  const hasStructuredDetails = !!selected && (isAthena || analyticsDetailServices.has(selected.name) || hasAipLearningDetails(selected.name));');
-  source = source.replace('const hasStructuredDetails = !!selected && (isAthena || analyticsDetailServices.has(selected.name));','const hasStructuredDetails = !!selected && (isAthena || analyticsDetailServices.has(selected.name) || hasAipLearningDetails(selected.name));');
-}
+
+// Normalize this generated declaration on every run. Older revisions used a narrower
+// AIP-only expression, while the cross-course rollout intentionally enables details
+// for every selected service. Removing any existing declaration first keeps this
+// transform idempotent and prevents duplicate-identifier build failures.
+source = source.replace(/\n\s*const hasStructuredDetails = !!selected(?:\s*&&[^;]*)?;/g, '');
+const isAthenaAnchor = 'const isAthena = selected?.name.toLowerCase().includes("athena");';
+if (!source.includes(isAthenaAnchor)) throw new Error('Course structured-details anchor changed');
+source = source.replace(isAthenaAnchor, `${isAthenaAnchor}\n  const hasStructuredDetails = !!selected;`);
+
 source = source.replace('className={`viewer course-viewer ${isAthena ? "has-knowledge" : ""}`}','className={`viewer course-viewer ${hasStructuredDetails ? "has-knowledge" : ""}`}');
 source = source.replace('const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedName(match.name); setImageScale(100); };','const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedName(match.name); setImageScale(100); setVisualVisible(true); };');
 
@@ -53,6 +59,10 @@ if (!source.includes('<CrossCourseLearningDetails serviceName={selected.name}'))
   }
   source=source.replace(aipAnchor,`${aipAnchor} {!isAthena && !analyticsDetailServices.has(selected.name) && !hasAipLearningDetails(selected.name) && <CrossCourseLearningDetails serviceName={selected.name} category={selectedCategory} summary={selected.summary}/>} `);
 }
+
+// Build safety: exactly one generated declaration must remain.
+const structuredMatches = source.match(/const hasStructuredDetails =/g) || [];
+if (structuredMatches.length !== 1) throw new Error(`Expected exactly one hasStructuredDetails declaration, found ${structuredMatches.length}`);
 fs.writeFileSync(componentPath,source);
 
 const analyticsPath='app/components/AnalyticsLearningDetails.tsx';
