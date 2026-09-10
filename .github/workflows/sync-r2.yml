@@ -1,10 +1,11 @@
-name: Sync EL10 assets to Cloudflare R2
+name: Sync EL10 assets and AWS icons to Cloudflare R2
 
 on:
   push:
     branches: [main]
     paths:
       - "assets/**"
+      - "scripts/sync-aws-architecture-icons.mjs"
       - ".github/workflows/sync-r2.yml"
   workflow_dispatch:
 
@@ -32,12 +33,28 @@ jobs:
           test -n "${{ secrets.R2_ENDPOINT }}"
           test -n "${{ secrets.R2_BUCKET }}"
 
-      - name: Sync image assets to R2
+      - name: Sync EL10 image assets to R2
+        if: hashFiles('assets/**') != ''
         run: |
           aws s3 sync assets/ "s3://${{ secrets.R2_BUCKET }}" \
             --endpoint-url "${{ secrets.R2_ENDPOINT }}" \
             --no-progress \
             --only-show-errors \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Prepare AWS architecture icons
+        env:
+          FORCE_AWS_ICON_SYNC: "1"
+        run: node scripts/sync-aws-architecture-icons.mjs main
+
+      - name: Sync AWS architecture icons to R2
+        run: |
+          test -f public/aws-icons/Analytics/QuickSight.png
+          aws s3 sync public/aws-icons/ "s3://${{ secrets.R2_BUCKET }}/aws-icons/" \
+            --endpoint-url "${{ secrets.R2_ENDPOINT }}" \
+            --no-progress \
+            --only-show-errors \
+            --delete \
             --cache-control "public,max-age=31536000,immutable"
 
       - name: Remove synced EL10 files from repository
