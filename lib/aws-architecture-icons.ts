@@ -4,7 +4,7 @@ export const AWS_ICON_FALLBACK_ROOT = AWS_ICON_ROOT;
 export type AwsArchitectureIcon={id:string;name:string;category:string;file:string;aliases?:string[]};
 const icon=(id:string,name:string,category:string,file:string,aliases:string[]=[]):AwsArchitectureIcon=>({id,name,category,file,aliases});
 export const awsArchitectureIcons:Record<string,AwsArchitectureIcon>={
-awsCloud:icon("aws-cloud","AWS Cloud","General","General/AWSCloud.png",["AWS","AWS service","cloud"]),
+awsCloud:icon("aws-cloud","AWS Cloud","Groups","Groups/AWSCloud.png",["AWS","AWS service","cloud"]),
 user:icon("user","User","General","General/User.png",["analyst","customer","client","producer","consumer"]),
 athena:icon("athena","Amazon Athena","Analytics","Analytics/Athena.png",["Athena"]),
 glueDataCatalog:icon("glue-data-catalog","AWS Glue Data Catalog","Analytics","Analytics/GlueDataCatalog.png",["Glue Catalog","Data Catalog"]),
@@ -12,7 +12,7 @@ glue:icon("glue","AWS Glue","Analytics","Analytics/Glue.png",["Glue","ETL"]),
 emr:icon("emr","Amazon EMR","Analytics","Analytics/EMR.png",["EMR"]),
 kinesis:icon("kinesis","Amazon Kinesis Data Streams","Analytics","Analytics/KinesisDataStreams.png",["Amazon Kinesis","Kinesis","KDS"]),
 opensearch:icon("opensearch","Amazon OpenSearch Service","Analytics","Analytics/OpenSearchService.png",["OpenSearch"]),
-quicksight:icon("quicksight","Amazon QuickSight","Analytics","Analytics/QuickSight.png",["Amazon Quick Sight","QuickSight"]),
+quicksight:icon("quicksight","Amazon Quick","BusinessApplications","BusinessApplications/Quick.png",["Amazon QuickSight","Amazon Quick Sight","QuickSight","Amazon Quick"]),
 msk:icon("msk","Amazon Managed Streaming for Apache Kafka","Analytics","Analytics/ManagedStreamingForApacheKafka.png",["Amazon MSK","MSK","Amazon Managed Streaming for Apache Kafka (Amazon MSK)"]),
 lambda:icon("lambda","AWS Lambda","Compute","Compute/Lambda.png",["Lambda","AWS Lambda@Edge","Lambda@Edge"]),
 ec2:icon("ec2","Amazon EC2","Compute","Compute/EC2.png",["EC2"]),
@@ -92,5 +92,5 @@ iamAccessAnalyzer:icon("iam-access-analyzer","IAM Access Analyzer","SecurityIden
 macie:icon("macie","Amazon Macie","SecurityIdentityCompliance","SecurityIdentityCompliance/Macie.png")
 };
 export const awsIconSrc=(icon:AwsArchitectureIcon)=>`${AWS_ICON_ROOT}/${icon.file}`;
-export const awsIconFallbackSrc=(_icon:AwsArchitectureIcon)=>`${AWS_ICON_FALLBACK_ROOT}/General/AWSCloud.png`;
+export const awsIconFallbackSrc=(_icon:AwsArchitectureIcon)=>`${AWS_ICON_FALLBACK_ROOT}/Groups/AWSCloud.png`;
 export function findAwsArchitectureIcon(value:string){const q=value.trim().toLowerCase();return Object.values(awsArchitectureIcons).find(icon=>icon.id===q||icon.name.toLowerCase()===q||icon.aliases?.some(alias=>alias.toLowerCase()===q));}
