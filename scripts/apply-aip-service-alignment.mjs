@@ -1,19 +1,22 @@
 import fs from 'node:fs';
 
 const wrapper = fs.readFileSync('app/components/AipServiceLearningDetails.tsx', 'utf8');
-if (!wrapper.includes('AipServiceLearningDetailsV7')) {
-  throw new Error('AIP renderer is not pointing at V7');
+if (!wrapper.includes('AipServiceLearningDetailsV8')) {
+  throw new Error('AIP renderer is not pointing at V8');
 }
 
-const renderer = fs.readFileSync('app/components/AipServiceLearningDetailsV7.tsx', 'utf8');
+const renderer = fs.readFileSync('app/components/AipServiceLearningDetailsV8.tsx', 'utf8');
 if (!renderer.includes('function architectures(service:string,category:string):Arch[]')) {
-  throw new Error('AIP V7 architecture builder missing');
+  throw new Error('AIP V8 architecture builder missing');
 }
-if (!renderer.includes('fallbackByCategory')) {
-  throw new Error('AIP V7 must guarantee architecture coverage for uncatalogued services');
+if (!renderer.includes('v8-layers') || !renderer.includes('arch.layers.map')) {
+  throw new Error('AIP V8 layered architecture renderer missing');
 }
-if (!renderer.includes('{arches.map((a,i)=><Architecture')) {
-  throw new Error('AIP V7 architecture sections are not rendered');
+if (!renderer.includes('Reference pattern:')) {
+  throw new Error('AIP V8 reference-pattern labels missing');
+}
+if (renderer.includes('source → service → destination')) {
+  throw new Error('AIP V8 must not regress to the retired three-box pipeline');
 }
 
 const course = fs.readFileSync('app/course-data.ts', 'utf8');
@@ -22,4 +25,4 @@ for (const service of required) {
   if (!course.includes(`"${service}"`)) throw new Error(`AIP scope changed or service missing: ${service}`);
 }
 
-console.log('Verified AIP V7 renderer: every AIP service resolves to at least two architecture patterns.');
+console.log('Verified AIP V8 layered architecture renderer and course scope.');
