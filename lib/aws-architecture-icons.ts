@@ -3,6 +3,7 @@ export const AWS_ICON_FALLBACK_ROOT = "https://raw.githubusercontent.com/awslabs
 
 export type AwsArchitectureIcon = { id:string; name:string; category:string; file:string; aliases?:string[] };
 export const awsArchitectureIcons: Record<string,AwsArchitectureIcon> = {
+ awsCloud:{id:"aws-cloud",name:"AWS Cloud",category:"General",file:"General/AWSCloud.png",aliases:["AWS","AWS service","cloud"]},
  user:{id:"user",name:"User",category:"General",file:"General/User.png",aliases:["analyst","customer","client","producer","consumer"]},
  athena:{id:"athena",name:"Amazon Athena",category:"Analytics",file:"Analytics/Athena.png",aliases:["Athena","federated query"]},
  glueDataCatalog:{id:"glue-data-catalog",name:"AWS Glue Data Catalog",category:"Analytics",file:"Analytics/GlueDataCatalog.png",aliases:["Glue Catalog","Data Catalog"]},
