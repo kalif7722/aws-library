@@ -1,52 +1,14 @@
 import fs from 'node:fs';
 
-const patchFile = (path, replacements) => {
-  let source = fs.readFileSync(path, 'utf8');
-  for (const [from, to] of replacements) source = source.split(from).join(to);
-  fs.writeFileSync(path, source);
-};
-
-patchFile('app/components/AipServiceLearningDetailsV3.tsx', [
-  ['aws("AWS Cloud","Amplify build + hosting")', 'aws("AWS Amplify","Build + hosting")'],
-  ['aws("AWS Cloud","Amplify hosted app")', 'aws("AWS Amplify","Hosted web application")'],
-  ['aws("AWS Cloud","Amazon Kendra index")', 'aws("Amazon Kendra","Enterprise search index")'],
-  ['aws("AWS Cloud","Amazon Kendra retrieval")', 'aws("Amazon Kendra","Permission-aware retrieval")'],
-  ['aws("AWS Cloud","Amazon Lex bot")', 'aws("Amazon Lex","Bot + intent recognition")'],
-  ['aws("AWS Cloud","Amazon Lex","Intent/slots")', 'aws("Amazon Lex","Intent / slots")'],
-  ['aws("AWS Cloud","Amazon Personalize")', 'aws("Amazon Personalize","Recommendation engine")'],
-  ['aws("AWS Cloud","Amazon Polly")', 'aws("Amazon Polly","Text-to-speech")'],
-  ['aws("AWS Cloud","Amazon Rekognition")', 'aws("Amazon Rekognition","Image/video analysis")'],
-  ['aws("AWS Cloud","Amazon Transcribe")', 'aws("Amazon Transcribe","Speech-to-text")'],
-  ['aws("AWS Cloud",service)', 'aws(service,"Service control plane")']
-]);
-
-// Deterministically replace the entire malformed SageMaker Neo line instead of relying
-// on a fragile substring match. Keep this before the Vinext compile.
-{
-  const path = 'app/components/AipServiceLearningDetailsV3.tsx';
-  let source = fs.readFileSync(path, 'utf8');
-  const neoLine = '  if(capability==="Neo")return[A("Model optimization for target hardware","Neo compiles trained models for efficient execution on supported edge/cloud hardware.",[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific"),pub("app","Edge/cloud runtime","Inference")]),A("Deployment optimization","Compilation is a post-training optimization step, not a training service.",[pub("ai","Approved model","Input")],aws("Amazon SageMaker AI","Neo"),[pub("monitor","Benchmark","Latency/size"),pub("app","Deployment target","Optimized runtime")])];';
-  const neoPattern = /^\s*if\(capability==="Neo"\).*$/m;
-  if (!neoPattern.test(source)) throw new Error('SageMaker Neo architecture line not found');
-  source = source.replace(neoPattern, neoLine);
-  if (!source.includes('[pub("ai","Trained model","Framework artifact")],aws("Amazon SageMaker AI","Neo compiler"),[pub("file","Optimized artifact","Target-specific")')) {
-    throw new Error('SageMaker Neo architecture repair verification failed');
-  }
-  fs.writeFileSync(path, source);
-}
-
-patchFile('app/components/AipServiceLearningDetailsV4.tsx', [
-  ['n("AWS Auto Scaling","Scaling policy","monitor","awsCloud")', 'n("AWS Auto Scaling","Scaling policy","monitor","autoScaling")'],
-  ['n("AWS Auto Scaling","Predictive / scheduled action","monitor","awsCloud")', 'n("AWS Auto Scaling","Predictive / scheduled action","monitor","autoScaling")'],
-  ['n("AWS Chatbot","Chat integration","message","awsCloud")', 'n("AWS Chatbot","Chat integration","message","chatbot")'],
-  ['n("AWS Chatbot","Authorized command","message","awsCloud")', 'n("AWS Chatbot","Authorized command","message","chatbot")']
-]);
-
 const wrapper = fs.readFileSync('app/components/AipServiceLearningDetails.tsx', 'utf8');
-if (!wrapper.includes('AipServiceLearningDetailsV4')) throw new Error('AIP renderer is not pointing at V4');
+if (!wrapper.includes('AipServiceLearningDetailsV5')) {
+  throw new Error('AIP renderer is not pointing at stable V5');
+}
 
 const course = fs.readFileSync('app/course-data.ts', 'utf8');
 const required = ['AWS CLI','AWS Lambda@Edge','Amazon SQS','Amazon SNS','Amazon EventBridge','AWS Step Functions','Amazon ECR','Amazon ECS','Amazon EKS','AWS Fargate','Amazon Bedrock','Amazon Q Business','Amazon Q Developer','Amazon SageMaker AI','Amazon API Gateway','Amazon CloudFront','Amazon VPC','AWS KMS','AWS Secrets Manager','AWS WAF','Amazon S3'];
-for (const service of required) if (!course.includes(`"${service}"`)) throw new Error(`AIP scope changed or service missing: ${service}`);
+for (const service of required) {
+  if (!course.includes(`"${service}"`)) throw new Error(`AIP scope changed or service missing: ${service}`);
+}
 
-console.log('Applied AIP service-specific architecture and icon alignment.');
+console.log('Verified stable AIP service learning renderer and course scope.');
