@@ -1,5 +1,6 @@
-export const AWS_ICON_ROOT = "/aws-icons";
-export const AWS_ICON_FALLBACK_ROOT = "/aws-icons";
+const R2_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL?.trim().replace(/\/$/, "");
+export const AWS_ICON_ROOT = R2_PUBLIC_BASE_URL ? `${R2_PUBLIC_BASE_URL}/aws-icons` : "/aws-icons";
+export const AWS_ICON_FALLBACK_ROOT = AWS_ICON_ROOT;
 export type AwsArchitectureIcon={id:string;name:string;category:string;file:string;aliases?:string[]};
 const icon=(id:string,name:string,category:string,file:string,aliases:string[]=[]):AwsArchitectureIcon=>({id,name,category,file,aliases});
 export const awsArchitectureIcons:Record<string,AwsArchitectureIcon>={
@@ -91,7 +92,5 @@ iamAccessAnalyzer:icon("iam-access-analyzer","IAM Access Analyzer","SecurityIden
 macie:icon("macie","Amazon Macie","SecurityIdentityCompliance","SecurityIdentityCompliance/Macie.png")
 };
 export const awsIconSrc=(icon:AwsArchitectureIcon)=>`${AWS_ICON_ROOT}/${icon.file}`;
-// Keep fallback traffic on this site as well. A missing/misnamed icon falls back to
-// the locally vendored AWS Cloud symbol instead of making a browser request to GitHub.
 export const awsIconFallbackSrc=(_icon:AwsArchitectureIcon)=>`${AWS_ICON_FALLBACK_ROOT}/General/AWSCloud.png`;
 export function findAwsArchitectureIcon(value:string){const q=value.trim().toLowerCase();return Object.values(awsArchitectureIcons).find(icon=>icon.id===q||icon.name.toLowerCase()===q||icon.aliases?.some(alias=>alias.toLowerCase()===q));}
