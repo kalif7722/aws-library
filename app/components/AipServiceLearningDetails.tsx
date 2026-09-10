@@ -1,1 +1,1 @@
-export { default, aipDetailServices, hasAipLearningDetails, getAipLearningMeta } from "./AipServiceLearningDetailsV2";
+export { default, aipDetailServices, hasAipLearningDetails, getAipLearningMeta } from "./AipServiceLearningDetailsV3";
