@@ -9,17 +9,17 @@ const renderer = fs.readFileSync('app/components/AipServiceLearningDetailsV8.tsx
 if (!renderer.includes('function architectures(service:string,category:string):Arch[]')) {
   throw new Error('AIP V8 architecture builder missing');
 }
-if (!renderer.includes('v8-layers') || !renderer.includes('arch.layers.map')) {
+if (!renderer.includes('type Layer={title:string;nodes:Node[]}') || !renderer.includes('type Arch={title:string;note:string;layers:Layer[];reference:string}')) {
+  throw new Error('AIP V8 layered architecture types missing');
+}
+if (!renderer.includes('const L=(title:string,...nodes:Node[]):Layer=>({title,nodes})') || !renderer.includes('const A=(title:string,note:string,reference:string,...layers:Layer[]):Arch=>({title,note,reference,layers})')) {
+  throw new Error('AIP V8 layered architecture constructors missing');
+}
+if (!renderer.includes('v8-layers') || !renderer.includes('arch.layers.map') || !renderer.includes('layer.nodes.map')) {
   throw new Error('AIP V8 layered architecture renderer missing');
 }
 if (!renderer.includes('Reference pattern:')) {
   throw new Error('AIP V8 reference-pattern labels missing');
-}
-// Validate the actual layered data/rendering shape rather than matching explanatory prose.
-// The UI intentionally mentions the retired source/service/destination model to explain
-// that V8 no longer uses it, so checking for those words produces a false positive.
-if (!renderer.includes('layers:[') || !renderer.includes('layer.nodes.map')) {
-  throw new Error('AIP V8 architecture data is not using layered node groups');
 }
 
 const course = fs.readFileSync('app/course-data.ts', 'utf8');
