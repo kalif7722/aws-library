@@ -1,4 +1,5 @@
 import "./AthenaLearningDetails.css";
+import "./AthenaAwsIcons.css";
 
 const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
 
