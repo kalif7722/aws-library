@@ -46,6 +46,7 @@ command -v timeout >/dev/null 2>&1 || {
 }
 
 node scripts/apply-service-catalog.mjs
+node scripts/apply-course-viewer-cleanup.mjs
 
 vinext="${project_root}/node_modules/.bin/vinext"
 if [[ ! -f "${vinext}" ]]; then
