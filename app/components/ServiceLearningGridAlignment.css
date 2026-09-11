@@ -1,0 +1,151 @@
+/* Keep every service-learning grid aligned to the width of its parent viewer.
+   This file intentionally overrides older max-width and centered-grid rules so
+   the layout scales cleanly from wide desktop screens down to phones. */
+
+.course-page .course-viewer.has-knowledge > .service-knowledge,
+.course-page .service-knowledge,
+.course-page .aip-shared-learning,
+.course-page .aip-v8{
+  width:100%;
+  max-width:none;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+.course-page .service-knowledge > *,
+.course-page .aip-shared-learning > *,
+.course-page .aip-v8 > *{
+  min-width:0;
+  max-width:none;
+  box-sizing:border-box;
+}
+
+.course-page .knowledge-intro,
+.course-page .knowledge-jumps,
+.course-page .knowledge-grid,
+.course-page .architecture-stage,
+.course-page .v8-architecture,
+.course-page .compare-board,
+.course-page .exam-strip,
+.course-page .service-showcase,
+.course-page .service-walkthrough-section,
+.course-page .service-insight-grid,
+.course-page .service-cost-board{
+  width:100%;
+  max-width:none !important;
+  min-width:0;
+  margin-left:0;
+  margin-right:0;
+  box-sizing:border-box;
+}
+
+/* The showcase is rendered inside the terminal two-column knowledge grid.
+   It is a full learning block and must span both columns rather than being
+   constrained to the first grid track. */
+.aip-v8 > .knowledge-grid:last-of-type > .service-showcase{
+  grid-column:1 / -1;
+  width:100%;
+  min-width:0;
+}
+
+/* Make paired cards fill their tracks consistently without introducing
+   artificial blank space or different widths. */
+.course-page .knowledge-grid{
+  align-items:stretch;
+}
+.course-page .knowledge-grid > .knowledge-card,
+.course-page .knowledge-grid > .aip-decision-card,
+.course-page .service-insight-grid > .service-insight-panel,
+.course-page .service-walk-grid > .service-walk-card,
+.course-page .service-cost-grid > article{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+/* Intro sections keep equal parent alignment while allowing the content-heavy
+   column to take slightly more room. */
+.course-page .aip-intro-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+
+/* Architecture walkthroughs use all available width. On large screens three
+   examples fit naturally; two-example services split the parent evenly. */
+.course-page .service-walk-grid{
+  width:100%;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.course-page .service-walk-grid.count-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.course-page .service-walk-grid.count-1{
+  grid-template-columns:minmax(0,1fr);
+}
+
+.course-page .service-insight-grid,
+.course-page .service-cost-grid{
+  width:100%;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+/* Prevent long labels/architecture steps from forcing a grid wider than its parent. */
+.course-page .service-walk-card,
+.course-page .service-walk-step,
+.course-page .service-insight-panel,
+.course-page .service-insight-list > div,
+.course-page .service-cost-grid article,
+.course-page .knowledge-card,
+.course-page .concept-stack p{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+
+@media (max-width:1400px){
+  .course-page .service-walk-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .course-page .service-walk-grid > article:last-child:nth-child(odd){
+    grid-column:1 / -1;
+  }
+  .course-page .service-insight-grid,
+  .course-page .service-cost-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .course-page .service-insight-grid > .service-insight-panel:last-child:nth-child(odd),
+  .course-page .service-cost-grid > article:last-child:nth-child(odd){
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:1000px){
+  .course-page .knowledge-grid,
+  .course-page .aip-intro-grid,
+  .course-page .service-walk-grid,
+  .course-page .service-walk-grid.count-2,
+  .course-page .service-insight-grid,
+  .course-page .service-cost-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .course-page .service-walk-grid > article:last-child:nth-child(odd),
+  .course-page .service-insight-grid > .service-insight-panel:last-child:nth-child(odd),
+  .course-page .service-cost-grid > article:last-child:nth-child(odd){
+    grid-column:auto;
+  }
+  .aip-v8 > .knowledge-grid:last-of-type > .service-showcase{
+    grid-column:1;
+  }
+}
+
+@media (max-width:600px){
+  .course-page .knowledge-intro,
+  .course-page .knowledge-card,
+  .course-page .architecture-stage,
+  .course-page .v8-architecture,
+  .course-page .compare-board,
+  .course-page .exam-strip,
+  .course-page .service-walkthrough-section,
+  .course-page .service-insight-panel,
+  .course-page .service-cost-board{
+    border-radius:16px;
+  }
+}
