@@ -31,7 +31,25 @@ export const findGuide = (name: string) => {
   const normalized = normalize(target); const byNormalized = services.find((item) => normalize(item.name) === normalized); if (byNormalized) return byNormalized;
   const short = acronym(name); if (short) return services.find((item) => item.name.toLowerCase().split(/\s+/).includes(short) || item.name.toLowerCase().endsWith(` ${short}`)); return undefined;
 };
-const certificationBadgeUrl = (title: string) => { const name = title.replace(/^AWS\s+/i, "").replace(/\s[–-]\s.*$/, "").replace(/\s+/g, "-"); return `https://d1.awsstatic.com/training-and-certification/certification-badges/AWS-Certified-${name}_badge.png`; };
+const certificationBadgeUrl = (title: string) => {
+  const normalized = title.toLowerCase();
+  const filename = normalized.includes("generative ai developer") ? "generative-ai-developer-professional.png"
+    : normalized.includes("solutions architect") && normalized.includes("professional") ? "solutions-architect-professional.png"
+    : normalized.includes("solutions architect") ? "solutions-architect-associate.png"
+    : normalized.includes("cloud practitioner") ? "cloud-practitioner.png"
+    : normalized.includes("developer") ? "developer-associate.png"
+    : normalized.includes("sysops") ? "sysops-administrator-associate.png"
+    : normalized.includes("devops") ? "devops-engineer-professional.png"
+    : normalized.includes("advanced networking") ? "advanced-networking-specialty.png"
+    : normalized.includes("data analytics") ? "data-analytics-specialty.png"
+    : normalized.includes("data engineer") ? "data-engineer-associate.png"
+    : normalized.includes("machine learning engineer") ? "machine-learning-engineer.png"
+    : normalized.includes("machine learning") ? "machine-learning-specialty.png"
+    : normalized.includes("security") ? "security-specialty.png"
+    : normalized.includes("ai practitioner") ? "ai-practitioner.png"
+    : "cloud-practitioner.png";
+  return `https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-badges/${filename}`;
+};
 const repoAssetUrl = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path.startsWith("/") ? path : `/${path}`}`;
 const imageFallback = (event: SyntheticEvent<HTMLImageElement>, path: string) => { const image = event.currentTarget; const repoUrl = repoAssetUrl(path); if (image.src !== repoUrl) { image.src = repoUrl; return; } image.onerror = null; };
 
