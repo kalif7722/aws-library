@@ -4,6 +4,7 @@ import "./components/ThemeToggle.css";
 import "./components/ServiceLearningReadability.css";
 import "./components/ServiceLearningGridAlignment.css";
 import "./components/AthenaThemePolish.css";
+import "./components/ServiceTypographyPolish.css";
 import ThemeToggle from "./components/ThemeToggle";
 
 export const metadata: Metadata = {
