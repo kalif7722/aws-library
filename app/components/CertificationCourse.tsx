@@ -31,7 +31,8 @@ export const findGuide = (name: string) => {
   const normalized = normalize(target); const byNormalized = services.find((item) => normalize(item.name) === normalized); if (byNormalized) return byNormalized;
   const short = acronym(name); if (short) return services.find((item) => item.name.toLowerCase().split(/\s+/).includes(short) || item.name.toLowerCase().endsWith(` ${short}`)); return undefined;
 };
-const certificationBadgeUrl = (title: string) => { const name = title.replace(/^AWS\s+/i, "").replace(/\s[–-]\s.*$/, "").replace(/\s+/g, "-"); return `https://d1.awsstatic.com/training-and-certification/certification-badges/AWS-Certified-${name}_badge.png`; };\nconst repoAssetUrl = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path.startsWith("/") ? path : `/${path}`}`;
+const certificationBadgeUrl = (title: string) => { const name = title.replace(/^AWS\s+/i, "").replace(/\s[–-]\s.*$/, "").replace(/\s+/g, "-"); return `https://d1.awsstatic.com/training-and-certification/certification-badges/AWS-Certified-${name}_badge.png`; };
+const repoAssetUrl = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path.startsWith("/") ? path : `/${path}`}`;
 const imageFallback = (event: SyntheticEvent<HTMLImageElement>, path: string) => { const image = event.currentTarget; const repoUrl = repoAssetUrl(path); if (image.src !== repoUrl) { image.src = repoUrl; return; } image.onerror = null; };
 
 export default function CertificationCourse({ code, level, title, description, scope, sourceUrl, sourceLabel }: Props) {
