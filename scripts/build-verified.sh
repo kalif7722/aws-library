@@ -49,6 +49,7 @@ node scripts/apply-service-catalog.mjs
 node scripts/apply-course-viewer-cleanup.mjs
 node scripts/apply-aip-service-alignment.mjs
 node scripts/apply-service-memory-and-scope-identity.mjs
+node scripts/apply-showcase-anchor-fix.mjs
 node scripts/apply-analytics-cost-models.mjs
 
 # AWS architecture icons are synchronized to Cloudflare R2 by the dedicated
