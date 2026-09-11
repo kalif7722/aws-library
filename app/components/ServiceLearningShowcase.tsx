@@ -42,9 +42,17 @@ function InsightPanel({title,icon,items,id}:{title:string;icon:string;items:stri
   </section>;
 }
 
+export function ServiceCostBoard({cost,costId="cost-models"}:{cost:string[];costId?:string}){
+  const costItems=clamp3(cost);
+  return <section className="service-cost-board" id={costId}>
+    <div className="service-section-cap"><div><p>COST MODEL</p><h3>How the bill behaves</h3></div><span>Learn the pricing shape and architecture drivers, not a price that goes stale.</span></div>
+    <div className="service-cost-grid">{costItems.map((item,i)=><article className={i===0?"recommended":""} key={i}><b>{String(i+1).padStart(2,"0")}</b><p>{item}</p></article>)}</div>
+    <div className="service-cost-rule"><b>Cost decision rule</b><span>Start with the workload shape and dominant charge driver, then optimize architecture before comparing unit prices.</span></div>
+  </section>;
+}
+
 export default function ServiceLearningShowcase({serviceName,architectures,security,optimization,cost,watchPoints,securityId="security",costId="cost-models"}:Props){
   const walks=architectures.slice(0,3);
-  const costItems=clamp3(cost);
   return <div className="service-showcase" data-service-showcase={serviceName}>
     <section className="service-walkthrough-section">
       <div className="service-section-cap"><div><p>REAL-WORLD EXAMPLES</p><h3>Architecture walk-throughs</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
@@ -57,10 +65,6 @@ export default function ServiceLearningShowcase({serviceName,architectures,secur
       <InsightPanel title="Service-specific watch points" icon="!" items={watchPoints}/>
     </div>
 
-    <section className="service-cost-board" id={costId}>
-      <div className="service-section-cap"><div><p>COST MODEL</p><h3>How the bill behaves</h3></div><span>Learn the pricing shape and architecture drivers, not a price that goes stale.</span></div>
-      <div className="service-cost-grid">{costItems.map((item,i)=><article className={i===0?"recommended":""} key={i}><b>{String(i+1).padStart(2,"0")}</b><p>{item}</p></article>)}</div>
-      <div className="service-cost-rule"><b>Cost decision rule</b><span>Start with the workload shape and dominant charge driver, then optimize architecture before comparing unit prices.</span></div>
-    </section>
+    <ServiceCostBoard cost={cost} costId={costId}/>
   </div>;
 }
