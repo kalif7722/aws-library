@@ -45,6 +45,8 @@ appconfig:icon("appconfig","AWS AppConfig","ManagementGovernance","ManagementGov
 autoScaling:icon("auto-scaling","AWS Auto Scaling","ManagementGovernance","ManagementGovernance/AutoScaling.png",["Auto Scaling"]),
 chatbot:icon("chatbot","AWS Chatbot","ManagementGovernance","ManagementGovernance/Chatbot.png",["Amazon Q Developer in chat applications"]),
 bedrock:icon("bedrock","Amazon Bedrock","ArtificialIntelligence","ArtificialIntelligence/Bedrock.png",["Bedrock","Amazon Titan"]),
+bedrockKnowledgeBases:icon("bedrock-knowledge-bases","Amazon Bedrock Knowledge Bases","ArtificialIntelligence","ArtificialIntelligence/BedrockKnowledgeBases.png",["Bedrock Knowledge Bases"]),
+bedrockPromptFlows:icon("bedrock-prompt-flows","Amazon Bedrock Prompt Flows","ArtificialIntelligence","ArtificialIntelligence/BedrockPromptFlows.png",["Bedrock Prompt Flows"]),
 bedrockAgentCore:icon("bedrock-agentcore","Amazon Bedrock AgentCore","ArtificialIntelligence","ArtificialIntelligence/BedrockAgentCore.png",["AgentCore"]),
 q:icon("amazon-q","Amazon Q","ArtificialIntelligence","ArtificialIntelligence/Q.png",["Amazon Q Business","Amazon Q Business Apps","Amazon Q Developer"]),
 nova:icon("amazon-nova","Amazon Nova","ArtificialIntelligence","ArtificialIntelligence/Nova.png",["Nova"]),
@@ -95,7 +97,7 @@ partyRock:icon("party-rock","Amazon PartyRock","ArtificialIntelligence","Artific
 costAnomalyDetection:icon("cost-anomaly-detection","AWS Cost Anomaly Detection","CloudFinancialManagement","CloudFinancialManagement/CostAnomalyDetection.png",["Cost Anomaly Detection"]),
 costExplorer:icon("cost-explorer","AWS Cost Explorer","CloudFinancialManagement","CloudFinancialManagement/CostExplorer.png",["Cost Explorer"]),
 managedGrafana:icon("managed-grafana","Amazon Managed Grafana","Analytics","Analytics/ManagedGrafana.png",["Managed Grafana"]),
-msk:icon("msk","Amazon Managed Streaming for Apache Kafka","Analytics","Analytics/ManagedStreamingForApacheKafka.png",["Amazon MSK","MSK","Amazon Managed Streaming for Apache Kafka (Amazon MSK)"]),
+
 
 macie:icon("macie","Amazon Macie","SecurityIdentityCompliance","SecurityIdentityCompliance/Macie.png")
 };
