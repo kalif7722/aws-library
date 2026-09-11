@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./components/ThemeToggle.css";
 import "./components/ServiceLearningReadability.css";
+import "./components/AthenaThemePolish.css";
 import ThemeToggle from "./components/ThemeToggle";
 
 export const metadata: Metadata = {
