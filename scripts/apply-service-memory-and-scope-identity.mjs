@@ -12,6 +12,12 @@ function ensureImport(source,anchor,line,label){
   return source.replace(anchor,`${anchor}\n${line}`);
 }
 
+function placeWatchPoints(source,designMarkup,watchMarkup,label){
+  source=source.replace(/<Cards(?: id="watch-points")? title="Service-specific watch points" items=\{insights\.watchPoints\}\/>/g,'');
+  if(!source.includes(designMarkup))throw new Error(`${label} design section anchor changed`);
+  return source.replace(designMarkup,`${designMarkup}${watchMarkup}`);
+}
+
 // Preserve the exact certification-scope service as page identity even when its visual guide is reused.
 const coursePath='app/components/CertificationCourse.tsx';
 let course=fs.readFileSync(coursePath,'utf8');
@@ -65,10 +71,10 @@ if(cross.includes(oldCrossMemory))cross=cross.replace(oldCrossMemory,'<Cards id=
 cross=cross.replace(/<Cards id="cross-security" title="Security & governance" items=\{\[[\s\S]*?\]\}\/>/,'<Cards id="cross-security" title="Security & governance" items={insights.security}/>');
 cross=cross.replace(/<Cards title="Design & optimization" items=\{\[[\s\S]*?\]\}\/>/,'<Cards title="Design & optimization" items={insights.optimization}/>');
 cross=cross.replace(/<Cards id="cross-cost" title="Cost model & drivers" items=\{\[[\s\S]*?\]\}\/>/,'<Cards id="cross-cost" title="Cost model & drivers" items={insights.cost}/>');
-if(!cross.includes('title="Service-specific watch points"')){
-  cross=cross.replace('<Cards id="memory-hook" title="Certification memory hook" items={memoryHook}/>','<Cards title="Service-specific watch points" items={insights.watchPoints}/><Cards id="memory-hook" title="Certification memory hook" items={memoryHook}/>');
-}
-if(!cross.includes('items={insights.security}')||!cross.includes('items={insights.optimization}')||!cross.includes('items={insights.cost}')||!cross.includes('items={insights.watchPoints}'))throw new Error('Cross-course service-specific insights migration incomplete');
+const crossDesign='<Cards title="Design & optimization" items={insights.optimization}/>';
+const watch='<Cards id="watch-points" title="Service-specific watch points" items={insights.watchPoints}/>';
+cross=placeWatchPoints(cross,crossDesign,watch,'Cross-course');
+if(!cross.includes('items={insights.security}')||!cross.includes('items={insights.optimization}')||!cross.includes('items={insights.cost}')||!cross.includes('id="watch-points" title="Service-specific watch points" items={insights.watchPoints}'))throw new Error('Cross-course service-specific insights migration incomplete');
 if(!cross.includes('title="Certification memory hook" items={memoryHook}'))throw new Error('Cross-course memory hook migration incomplete');
 fs.writeFileSync(crossPath,cross);
 
@@ -93,11 +99,10 @@ if(aipMemoryRegex.test(aip))aip=aip.replace(aipMemoryRegex,'<Cards id="memory-ho
 aip=aip.replace(/<Cards id="security" title="Security & governance" items=\{\[[\s\S]*?\]\}\/>/,'<Cards id="security" title="Security & governance" items={insights.security}/>');
 aip=aip.replace(/<Cards title="Design & optimization" items=\{\[[\s\S]*?\]\}\/>/,'<Cards title="Design & optimization" items={insights.optimization}/>');
 aip=aip.replace(/<Cards id="cost-models" title="Cost model & drivers" items=\{\[[\s\S]*?\]\}\/>/,'<Cards id="cost-models" title="Cost model & drivers" items={insights.cost}/>');
-if(!aip.includes('title="Service-specific watch points"')){
-  aip=aip.replace('<Cards id="memory-hook" title="Certification memory hook" items={memoryHook}/>','<Cards title="Service-specific watch points" items={insights.watchPoints}/><Cards id="memory-hook" title="Certification memory hook" items={memoryHook}/>');
-}
-if(!aip.includes('items={insights.security}')||!aip.includes('items={insights.optimization}')||!aip.includes('items={insights.cost}')||!aip.includes('items={insights.watchPoints}'))throw new Error('AIP service-specific insights migration incomplete');
+const aipDesign='<Cards title="Design & optimization" items={insights.optimization}/>';
+aip=placeWatchPoints(aip,aipDesign,watch,'AIP');
+if(!aip.includes('items={insights.security}')||!aip.includes('items={insights.optimization}')||!aip.includes('items={insights.cost}')||!aip.includes('id="watch-points" title="Service-specific watch points" items={insights.watchPoints}'))throw new Error('AIP service-specific insights migration incomplete');
 if(!aip.includes('title="Certification memory hook" items={memoryHook}'))throw new Error('AIP memory hook migration incomplete');
 fs.writeFileSync(aipPath,aip);
 
-console.log('Applied exact course-service identity, service-specific insights, watch points, and certification memory hooks.');
+console.log('Applied exact course-service identity, paired service-specific insights, watch points, and certification memory hooks.');
