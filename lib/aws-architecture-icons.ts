@@ -89,6 +89,14 @@ cognito:icon("cognito","Amazon Cognito","SecurityIdentityCompliance","SecurityId
 iam:icon("iam","AWS IAM","SecurityIdentityCompliance","SecurityIdentityCompliance/IdentityAndAccessManagement.png",["IAM"]),
 iamIdentityCenter:icon("iam-identity-center","AWS IAM Identity Center","SecurityIdentityCompliance","SecurityIdentityCompliance/IAMIdentityCenter.png",["IAM Identity Center"]),
 iamAccessAnalyzer:icon("iam-access-analyzer","IAM Access Analyzer","SecurityIdentityCompliance","SecurityIdentityCompliance/IdentityAccessManagementIAMAccessAnalyzer.png",["AWS IAM Access Analyzer"]),
+wellArchitected:icon("well-architected","AWS Well-Architected Tool","ManagementGovernance","ManagementGovernance/WellArchitectedTool.png",["AWS Well-Architected Tool"]),
+outposts:icon("outposts","AWS Outposts","Compute","Compute/Outposts.png",["AWS Outposts"]),
+partyRock:icon("party-rock","Amazon PartyRock","ArtificialIntelligence","ArtificialIntelligence/PartyRock.png",["PartyRock"]),
+costAnomalyDetection:icon("cost-anomaly-detection","AWS Cost Anomaly Detection","CloudFinancialManagement","CloudFinancialManagement/CostAnomalyDetection.png",["Cost Anomaly Detection"]),
+costExplorer:icon("cost-explorer","AWS Cost Explorer","CloudFinancialManagement","CloudFinancialManagement/CostExplorer.png",["Cost Explorer"]),
+managedGrafana:icon("managed-grafana","Amazon Managed Grafana","Analytics","Analytics/ManagedGrafana.png",["Managed Grafana"]),
+msk:icon("msk","Amazon Managed Streaming for Apache Kafka","Analytics","Analytics/ManagedStreamingForApacheKafka.png",["Amazon MSK","MSK","Amazon Managed Streaming for Apache Kafka (Amazon MSK)"]),
+
 macie:icon("macie","Amazon Macie","SecurityIdentityCompliance","SecurityIdentityCompliance/Macie.png")
 };
 export const awsIconSrc=(icon:AwsArchitectureIcon)=>`${AWS_ICON_ROOT}/${icon.file}`;
