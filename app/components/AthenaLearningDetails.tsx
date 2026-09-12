@@ -22,6 +22,11 @@ function AthenaPracticalDemo() {
   return <WalkthroughDemo image={demoAsset.image} alt={demoAsset.alt} label="Amazon Athena" />;
 }
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
+  "AWS Data Exchange": { image: "/assets/demos/aws-data-exchange.webp", alt: "AWS Data Exchange practical dataset subscription workflow" },
+  "Amazon Data Firehose": { image: "/assets/demos/amazon-data-firehose.webp", alt: "Amazon Data Firehose practical streaming delivery workflow" },
+  "Amazon Kinesis Data Streams": { image: "/assets/demos/amazon-kinesis-data-streams.webp", alt: "Amazon Kinesis Data Streams practical real-time streaming workflow" },
+  "AWS Lake Formation": { image: "/assets/demos/aws-lake-formation.webp", alt: "AWS Lake Formation practical governed data lake workflow" },
+  "Amazon Managed Service for Apache Flink": { image: "/assets/demos/amazon-managed-service-for-apache-flink.webp", alt: "Amazon Managed Service for Apache Flink practical streaming analytics workflow" },
   "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo-v3.webp", alt: "Amazon EMR practical log analytics workflow" },
   "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo-v3.webp", alt: "AWS Glue practical sales ETL workflow" },
   "Amazon Kinesis": { image: "/assets/demos/amazon-kinesis-practical-demo-v3.webp", alt: "Amazon Kinesis practical clickstream workflow" },
