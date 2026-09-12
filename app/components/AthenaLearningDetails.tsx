@@ -29,10 +29,10 @@ function AthenaPracticalDemo() {
 
 
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
-  "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo.png", alt: "Amazon EMR practical log analytics workflow" },
-  "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo.png", alt: "AWS Glue practical sales ETL workflow" },
-  "Amazon Kinesis": { image: "/assets/demos/amazon-kinesis-practical-demo.png", alt: "Amazon Kinesis practical clickstream workflow" },
-  "Amazon OpenSearch Service": { image: "/assets/demos/amazon-opensearch-service-practical-demo.png", alt: "Amazon OpenSearch Service practical observability workflow" },
+  "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo-v3.webp", alt: "Amazon EMR practical log analytics workflow" },
+  "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo-v3.webp", alt: "AWS Glue practical sales ETL workflow" },
+  "Amazon Kinesis": { image: "/assets/demos/amazon-kinesis-practical-demo-v3.webp", alt: "Amazon Kinesis practical clickstream workflow" },
+  "Amazon OpenSearch Service": { image: "/assets/demos/amazon-opensearch-service-practical-demo-v3.webp", alt: "Amazon OpenSearch Service practical observability workflow" },
 };
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
   const asset = serviceDemoAssets[serviceName];
