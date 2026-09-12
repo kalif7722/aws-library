@@ -1,7 +1,28 @@
+"use client";
+
+import { useState } from "react";
 import "./AthenaLearningDetails.css";
 import "./AthenaAwsIcons.css";
 import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
 
+
+const demoSteps = [
+  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step1" },
+  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step2" },
+  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step3" },
+  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step4" },
+];
+function AthenaPracticalDemo() {
+  const [step, setStep] = useState(0);
+  const current = demoSteps[step];
+  return <section className="athena-demo-card athena-demo-card--manual" aria-labelledby="athena-demo-title">
+    <div className="athena-demo-visual">
+      <div className="athena-demo-frame"><img key={current.image} src={current.image} alt={`Athena walkthrough step ${step + 1}: ${current.title}`} loading="lazy" /></div>
+      <div className="athena-demo-controls"><button type="button" onClick={() => setStep((step + demoSteps.length - 1) % demoSteps.length)} aria-label="Previous Athena demo step">‹ Previous</button><span>Step {step + 1} of {demoSteps.length}</span><button type="button" onClick={() => setStep((step + 1) % demoSteps.length)} aria-label="Next Athena demo step">Next ›</button></div>
+    </div>
+    <div className="athena-demo-copy"><p className="knowledge-kicker">PRACTICAL DEMO</p><h3 id="athena-demo-title">Query S3 data with Amazon Athena</h3><p><strong>{current.title}</strong> — {current.detail}</p></div>
+  </section>;
+}
 const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
 const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => <div className={`arch-node ${tone}`}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>;
 const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => <div className="aws-arch-node"><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${label || icon.name} AWS architecture icon`} loading="lazy" /></div><strong>{label || icon.name}</strong>{sub && <small>{sub}</small>}</div>;
@@ -11,7 +32,7 @@ export default function AthenaLearningDetails() {
   const icons = awsArchitectureIcons;
   return <div className="service-knowledge" id="athena-learning-details">
     <div className="knowledge-intro"><div><p className="knowledge-kicker">VISUAL DEEP DIVE • AMAZON ATHENA</p><h2>Query data where it lives.</h2><p>Athena is a serverless interactive analytics service. For its classic SQL use case, your data stays in Amazon S3, metadata describes it in the AWS Glue Data Catalog, and Athena reads only the data needed by your SQL query.</p></div><div className="knowledge-facts"><span><b>01</b>Serverless</span><span><b>02</b>Standard SQL</span><span><b>03</b>S3 data lake</span><span><b>04</b>Pay per query</span></div></div>
-    <section className="athena-demo-card" aria-labelledby="athena-demo-title"><div><p className="knowledge-kicker">PRACTICAL DEMO</p><h3 id="athena-demo-title">Query S3 data with Amazon Athena</h3><p>Follow the compact walkthrough: select a data source, write SQL, run the query, and inspect the results.</p></div><details><summary>▶ See it in action</summary><div className="athena-demo-frame"><img src="https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=bbae73d" alt="Animated walkthrough of selecting S3 data, writing an Athena SQL query, running it, and viewing results" loading="lazy" /></div></details></section>
+    <AthenaPracticalDemo />
     <nav className="knowledge-jumps" aria-label="Athena learning sections"><a href="#athena-flow">Architecture</a><a href="#athena-concepts">Core concepts</a><a href="#athena-examples">Examples</a><a href="#athena-security">Security</a><a href="#athena-cost">Cost</a><a href="#athena-compare">Compare</a></nav>
     <div className="knowledge-grid" id="athena-concepts">
       <Box icon="⌁" title="The mental model"><div className="mini-flow"><span>DATA</span><i>→</i><span>SCHEMA</span><i>→</i><span>SQL</span><i>→</i><span>RESULT</span></div><p><b>S3</b> holds the files. <b>Glue Data Catalog</b> holds table/schema metadata. <b>Athena</b> executes SQL. Results can be written to a customer S3 location or managed by Athena.</p></Box>
