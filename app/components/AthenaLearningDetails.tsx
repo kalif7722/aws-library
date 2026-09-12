@@ -27,7 +27,23 @@ function AthenaPracticalDemo() {
   </section>;
 }
 
-const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
+
+export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
+  "Amazon EMR": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-emr-practical-demo-v2.png", alt: "Amazon EMR practical log analytics workflow" },
+  "AWS Glue": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/aws-glue-practical-demo-v2.png", alt: "AWS Glue practical sales ETL workflow" },
+  "Amazon Kinesis": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-kinesis-practical-demo-v2.png", alt: "Amazon Kinesis practical clickstream workflow" },
+  "Amazon OpenSearch Service": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-opensearch-service-practical-demo-v2.png", alt: "Amazon OpenSearch Service practical observability workflow" },
+};
+export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
+  const asset = serviceDemoAssets[serviceName];
+  const [open, setOpen] = useState(false);
+  if (!asset) return null;
+  return <section className="athena-demo-card athena-demo-card--manual service-practical-demo" aria-label={`${serviceName} practical demo`}>
+    <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open}>{open ? "Hide" : "Show"} it in action</button>
+    {open && <div className="athena-demo-panel"><div className="athena-demo-visual"><div className="athena-demo-frame"><img src={asset.image} alt={asset.alt} loading="lazy" /></div></div></div>}
+  </section>;
+}
+\nconst Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
 const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => <div className={`arch-node ${tone}`}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>;
 const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => <div className="aws-arch-node"><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${label || icon.name} AWS architecture icon`} loading="lazy" /></div><strong>{label || icon.name}</strong>{sub && <small>{sub}</small>}</div>;
 const Arrow = ({ label }: { label?: string }) => <div className="arch-arrow"><span>→</span>{label && <small>{label}</small>}</div>;
