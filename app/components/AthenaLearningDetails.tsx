@@ -6,28 +6,21 @@ import "./AthenaAwsIcons.css";
 import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
 
 
-const demoSteps = [
-  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "/assets/demos/athena-step-1.png" },
-  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "/assets/demos/athena-step-2.png" },
-  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "/assets/demos/athena-step-3.png" },
-  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "/assets/demos/athena-step-4.png" },
-];
-function AthenaPracticalDemo() {
-  const [step, setStep] = useState(0);
+const demoAsset = { image: "/assets/demos/amazon-athena-practical-demo.webp", alt: "Amazon Athena practical four-step walkthrough" };
+function WalkthroughDemo({ image, alt, label }: { image: string; alt: string; label: string }) {
   const [open, setOpen] = useState(false);
-  const current = demoSteps[step];
-  return <section className="athena-demo-card athena-demo-card--manual" aria-labelledby="athena-demo-title">
-    <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="athena-demo-panel">{open ? "Hide" : "Show"} it in action</button>
-    {open && <div id="athena-demo-panel" className="athena-demo-panel">
-      <div className="athena-demo-visual">
-        <div className="athena-demo-frame"><img key={current.image} src={current.image} alt={`Athena walkthrough step ${step + 1}: ${current.title}`} loading="lazy" /></div>
-        <div className="athena-demo-controls"><button type="button" onClick={() => setStep(value => Math.max(0, value - 1))} disabled={step === 0} aria-label="Previous Athena demo step">‹ Previous</button><span>Step {step + 1} of {demoSteps.length}</span><button type="button" onClick={() => setStep(value => Math.min(demoSteps.length - 1, value + 1))} disabled={step === demoSteps.length - 1} aria-label="Next Athena demo step">Next ›</button></div>
-      </div>
+  const [expanded, setExpanded] = useState(false);
+  return <section className="athena-demo-card service-practical-demo" aria-label={`${label} practical demo`}>
+    <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open}>{open ? "Hide" : "View"} walkthrough</button>
+    {open && <div className="athena-demo-panel">
+      <button type="button" className="athena-demo-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${label} walkthrough full page`}><img src={image} alt={alt} loading="lazy" /></button>
     </div>}
+    {expanded && <div className="athena-demo-modal" role="dialog" aria-modal="true" aria-label={`${label} walkthrough`} onClick={() => setExpanded(false)}><button type="button" className="athena-demo-modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={image} alt={alt} onClick={event => event.stopPropagation()} /></div>}
   </section>;
 }
-
-
+function AthenaPracticalDemo() {
+  return <WalkthroughDemo image={demoAsset.image} alt={demoAsset.alt} label="Amazon Athena" />;
+}
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
   "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo-v3.webp", alt: "Amazon EMR practical log analytics workflow" },
   "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo-v3.webp", alt: "AWS Glue practical sales ETL workflow" },
@@ -36,12 +29,8 @@ export const serviceDemoAssets: Record<string, { image: string; alt: string }> =
 };
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
   const asset = serviceDemoAssets[serviceName];
-  const [open, setOpen] = useState(false);
   if (!asset) return null;
-  return <section className="athena-demo-card athena-demo-card--manual service-practical-demo" aria-label={`${serviceName} practical demo`}>
-    <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open}>{open ? "Hide" : "Show"} it in action</button>
-    {open && <div className="athena-demo-panel"><div className="athena-demo-visual"><div className="athena-demo-frame"><img src={asset.image} alt={asset.alt} loading="lazy" /></div></div></div>}
-  </section>;
+  return <WalkthroughDemo image={asset.image} alt={asset.alt} label={serviceName} />;
 }
 
 const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
