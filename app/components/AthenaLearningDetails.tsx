@@ -22,6 +22,11 @@ function AthenaPracticalDemo() {
   return <WalkthroughDemo image={demoAsset.image} alt={demoAsset.alt} label="Amazon Athena" />;
 }
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
+  "Amazon Managed Streaming for Apache Kafka (Amazon MSK)": { image: "/assets/demos/amazon-msk.webp", alt: "Amazon MSK practical Kafka workflow" },
+  "Amazon QuickSight": { image: "/assets/demos/amazon-quicksight.webp", alt: "Amazon QuickSight practical dashboard workflow" },
+  "Amazon AppFlow": { image: "/assets/demos/amazon-appflow.webp", alt: "Amazon AppFlow practical integration workflow" },
+  "AWS AppSync": { image: "/assets/demos/aws-appsync.webp", alt: "AWS AppSync practical GraphQL workflow" },
+  "Amazon EventBridge": { image: "/assets/demos/amazon-eventbridge.webp", alt: "Amazon EventBridge practical event-routing workflow" },
   "AWS Data Exchange": { image: "/assets/demos/aws-data-exchange.webp", alt: "AWS Data Exchange practical dataset subscription workflow" },
   "Amazon Data Firehose": { image: "/assets/demos/amazon-data-firehose.webp", alt: "Amazon Data Firehose practical streaming delivery workflow" },
   "Amazon Kinesis Data Streams": { image: "/assets/demos/amazon-kinesis-data-streams.webp", alt: "Amazon Kinesis Data Streams practical real-time streaming workflow" },
