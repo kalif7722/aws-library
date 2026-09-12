@@ -7,10 +7,10 @@ import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitect
 
 
 const demoSteps = [
-  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-1.png" },
-  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-2.png" },
-  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-3.png" },
-  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-4.png" },
+  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "/assets/demos/athena-step-1.png" },
+  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "/assets/demos/athena-step-2.png" },
+  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "/assets/demos/athena-step-3.png" },
+  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "/assets/demos/athena-step-4.png" },
 ];
 function AthenaPracticalDemo() {
   const [step, setStep] = useState(0);
@@ -29,10 +29,10 @@ function AthenaPracticalDemo() {
 
 
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
-  "Amazon EMR": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-emr-practical-demo-v2.png", alt: "Amazon EMR practical log analytics workflow" },
-  "AWS Glue": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/aws-glue-practical-demo-v2.png", alt: "AWS Glue practical sales ETL workflow" },
-  "Amazon Kinesis": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-kinesis-practical-demo-v2.png", alt: "Amazon Kinesis practical clickstream workflow" },
-  "Amazon OpenSearch Service": { image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/amazon-opensearch-service-practical-demo-v2.png", alt: "Amazon OpenSearch Service practical observability workflow" },
+  "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo.png", alt: "Amazon EMR practical log analytics workflow" },
+  "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo.png", alt: "AWS Glue practical sales ETL workflow" },
+  "Amazon Kinesis": { image: "/assets/demos/amazon-kinesis-practical-demo.png", alt: "Amazon Kinesis practical clickstream workflow" },
+  "Amazon OpenSearch Service": { image: "/assets/demos/amazon-opensearch-service-practical-demo.png", alt: "Amazon OpenSearch Service practical observability workflow" },
 };
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
   const asset = serviceDemoAssets[serviceName];
