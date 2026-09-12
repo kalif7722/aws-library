@@ -7,13 +7,14 @@ import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitect
 
 
 const demoAsset = { image: "/assets/demos/amazon-athena-practical-demo.webp", alt: "Amazon Athena practical four-step walkthrough" };
+const demoRepoFallback = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path}`;
 function WalkthroughDemo({ image, alt, label }: { image: string; alt: string; label: string }) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   return <section className="athena-demo-card service-practical-demo" aria-label={`${label} practical demo`}>
     <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open}>{open ? "Hide" : "View"} walkthrough</button>
     {open && <div className="athena-demo-panel">
-      <button type="button" className="athena-demo-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${label} walkthrough full page`}><img src={image} alt={alt} loading="lazy" /></button>
+      <button type="button" className="athena-demo-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${label} walkthrough full page`}><img src={image} alt={alt} loading="lazy" onError={(event) => { const img = event.currentTarget; const fallback = demoRepoFallback(image); if (img.src !== fallback) img.src = fallback; else img.onerror = null; }} /></button>
     </div>}
     {expanded && <div className="athena-demo-modal" role="dialog" aria-modal="true" aria-label={`${label} walkthrough`} onClick={() => setExpanded(false)}><button type="button" className="athena-demo-modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={image} alt={alt} onClick={event => event.stopPropagation()} /></div>}
   </section>;
