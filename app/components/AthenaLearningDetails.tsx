@@ -7,10 +7,10 @@ import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitect
 
 
 const demoSteps = [
-  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step1" },
-  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step2" },
-  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step3" },
-  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-query-demo.gif?v=step4" },
+  { title: "Select an S3 data source", detail: "Choose the S3 location that contains the data you want to query.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-1.png" },
+  { title: "Write the SQL query", detail: "Use standard SQL in the Athena query editor.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-2.png" },
+  { title: "Run the query", detail: "Submit the query and let Athena scan only the data it needs.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-3.png" },
+  { title: "Inspect the results", detail: "Review the returned rows and use the result for analysis or reporting.", image: "https://raw.githubusercontent.com/kalif7722/aws-library/main/assets/demos/athena-step-4.png" },
 ];
 function AthenaPracticalDemo() {
   const [step, setStep] = useState(0);
