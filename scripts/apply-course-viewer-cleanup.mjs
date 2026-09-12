@@ -29,7 +29,7 @@ if (!source.includes('const [visualVisible, setVisualVisible] = useState(true);'
 // for every selected service. Removing any existing declaration first keeps this
 // transform idempotent and prevents duplicate-identifier build failures.
 source = source.replace(/\n\s*const hasStructuredDetails = !!selected(?:\s*&&[^;]*)?;/g, '');
-const isAthenaAnchor = 'const isAthena = selectedScopeName.toLowerCase().includes("athena");';
+const isAthenaAnchor = 'const isAthena = selected?.name.toLowerCase().includes("athena");';
 if (!source.includes(isAthenaAnchor)) throw new Error('Course structured-details anchor changed');
 source = source.replace(isAthenaAnchor, `${isAthenaAnchor}\n  const hasStructuredDetails = !!selected;`);
 
