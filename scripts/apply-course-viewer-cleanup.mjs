@@ -74,9 +74,9 @@ if(!analytics.includes(enhancementImport)){
   analytics=analytics.replace(anchor,`${anchor}\n${enhancementImport}`);
 }
 if(!analytics.includes('<AnalyticsArchitectureEnhancement serviceName={serviceName}/>')){
-  const anchor='</div><div className="callout"><b>Remember</b><span>{d.memory}</span></div></section><div className="knowledge-grid three"';
+  const anchor='</div><div className="callout"><b>Remember</b><span>{d.memory}</span></div></section><ServicePracticalDemo serviceName={serviceName}/><div className="knowledge-grid three"';
   if(!analytics.includes(anchor))throw new Error('Analytics architecture placement anchor changed');
-  analytics=analytics.replace(anchor,'</div><div className="callout"><b>Remember</b><span>{d.memory}</span></div></section><AnalyticsArchitectureEnhancement serviceName={serviceName}/><div className="knowledge-grid three"');
+  analytics=analytics.replace(anchor,'</div><div className="callout"><b>Remember</b><span>{d.memory}</span></div></section><AnalyticsArchitectureEnhancement serviceName={serviceName}/><ServicePracticalDemo serviceName={serviceName}/><div className="knowledge-grid three"');
 }
 if(!analytics.includes('<AnalyticsCostEnhancement serviceName={serviceName}/>')){
   const anchor='</section></div><section className="compare-board" id={`${slug}-compare`}>';
@@ -93,9 +93,9 @@ if(!athena.includes(enhancementImport)){
   athena=athena.replace(anchor,`${anchor}\n${enhancementImport}`);
 }
 if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')){
-  const anchor='</div></section>\n    <div className="knowledge-grid three">';
+  const anchor='</div></section>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">';
   if(!athena.includes(anchor))throw new Error('Athena architecture placement anchor changed');
-  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <div className="knowledge-grid three">');
+  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">');
 }
 if(!athena.includes('<AnalyticsCostEnhancement serviceName="Amazon Athena"/>')){
   const anchor='</Box></div>\n    <section className="compare-board" id="athena-compare">';
