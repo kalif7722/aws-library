@@ -7,11 +7,11 @@ const costImport='import { ServiceCostBoard } from "./ServiceLearningShowcase";'
 if(!src.includes(insightImport)) src=src.replace('import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";', 'import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";\n'+insightImport+'\n'+costImport);
 else if(!src.includes(costImport)) src=src.replace(insightImport,insightImport+'\n'+costImport);
 
-const fnAnchor='export default function AnalyticsLearningDetails({serviceName}:{serviceName:string}){const d=data[serviceName as ServiceKey];if(!d)return null;const slug=serviceName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");return';
-const fnReplacement='export default function AnalyticsLearningDetails({serviceName}:{serviceName:string}){const d=data[serviceName as ServiceKey];if(!d)return null;const slug=serviceName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");const insights=getServiceLearningInsights(serviceName,"Analytics");return';
+const fnPattern=/export default function AnalyticsLearningDetails\(\{serviceName\}:\{serviceName:string\}\)\{const d=data\[serviceName as ServiceKey\](?: \|\| \(serviceName === "Amazon Quick Sight" \? data\["Amazon QuickSight"\] : undefined\))?;if\(!d\)return null;const slug=serviceName\.toLowerCase\(\)\.replace\(\/\[\^a-z0-9\]\+\/g,"-"\)\.replace\(\/\^-\|-\$\/g,""\);return/;
+const fnReplacement='export default function AnalyticsLearningDetails({serviceName}:{serviceName:string}){const d=data[serviceName as ServiceKey] || (serviceName === "Amazon Quick Sight" ? data["Amazon QuickSight"] : undefined);if(!d)return null;const slug=serviceName.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");const insights=getServiceLearningInsights(serviceName,"Analytics");return';
 if(!src.includes('const insights=getServiceLearningInsights(serviceName,"Analytics")')){
-  if(!src.includes(fnAnchor)) throw new Error('Analytics learning function anchor changed');
-  src=src.replace(fnAnchor,fnReplacement);
+  if(!fnPattern.test(src)) throw new Error('Analytics learning function anchor changed');
+  src=src.replace(fnPattern,fnReplacement);
 }
 
 if(!src.includes('Cost model</a>')){
