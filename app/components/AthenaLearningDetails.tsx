@@ -24,7 +24,7 @@ function AthenaPracticalDemo() {
 }
 export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
   "Amazon Managed Streaming for Apache Kafka (Amazon MSK)": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-msk.webp", alt: "Amazon MSK practical Kafka workflow" },
-  "Amazon QuickSight": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-quicksight.webp", alt: "Amazon QuickSight practical dashboard workflow" },
+  "Amazon Quick Sight": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-quicksight.webp", alt: "Amazon QuickSight practical dashboard workflow" },
   "Amazon AppFlow": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-appflow.webp", alt: "Amazon AppFlow practical integration workflow" },
   "AWS AppSync": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-appsync.webp", alt: "AWS AppSync practical GraphQL workflow" },
   "Amazon EventBridge": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-eventbridge.webp", alt: "Amazon EventBridge practical event-routing workflow" },
