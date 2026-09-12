@@ -58,7 +58,11 @@ node scripts/apply-analytics-cost-models.mjs
 
 vinext="${project_root}/node_modules/.bin/vinext"
 if [[ ! -f "${vinext}" ]]; then
-  echo "vinext is unavailable after npm install." >&2
+  echo "vinext is missing after npm install; installing the pinned build runtime..." >&2
+  (cd "${project_root}" && npm install --no-save --ignore-scripts vinext@0.0.50 --progress=false)
+fi
+if [[ ! -f "${vinext}" ]]; then
+  echo "vinext is unavailable after the recovery install." >&2
   exit 69
 fi
 
