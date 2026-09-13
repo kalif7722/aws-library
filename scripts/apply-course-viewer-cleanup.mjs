@@ -2,6 +2,8 @@ import fs from 'node:fs';
 
 const componentPath = 'app/components/CertificationCourse.tsx';
 let source = fs.readFileSync(componentPath, 'utf8');
+source = source.replace(/\nimport SharedServiceWalkthrough from "\.\/SharedServiceWalkthrough";/g, '');
+source = source.replace(/\s*<SharedServiceWalkthrough serviceName=\{selectedScopeName\}\/>&?/g, '');
 
 // Older generated revisions appended the structured-details branches repeatedly.
 // Normalize those branches before any other transform so every service gets one
@@ -33,8 +35,6 @@ if (!source.includes('CrossCourseLearningDetails')) {
   if (!source.includes(importAnchor)) throw new Error('Cross-course details import anchor changed');
   source = source.replace(importAnchor, `${importAnchor}\nimport CrossCourseLearningDetails from "./CrossCourseLearningDetails";`);
 }
-const sharedWalkthroughImport = 'import SharedServiceWalkthrough from "./SharedServiceWalkthrough";';
-if (!source.includes(sharedWalkthroughImport)) source = source.replace('import CrossCourseLearningDetails from "./CrossCourseLearningDetails";', 'import CrossCourseLearningDetails from "./CrossCourseLearningDetails";\n' + sharedWalkthroughImport);
 if (!source.includes('const [visualVisible, setVisualVisible] = useState(true);')) {
   const stateAnchor = 'const [allOpen, setAllOpen] = useState(false); const [sidebarCollapsed, setSidebarCollapsed] = useState(false);';
   if (!source.includes(stateAnchor)) throw new Error('Course viewer state anchor changed');
@@ -88,9 +88,6 @@ for (const render of [aipRender, crossRender]) {
     kept = true;
     return render + part;
   }).join('');
-}
-if (!source.includes('<SharedServiceWalkthrough serviceName={selectedScopeName}/>')) {
-  source = source.replace(crossRender, `${crossRender} <SharedServiceWalkthrough serviceName={selectedScopeName}/>`);
 }
 
 // Build safety: exactly one generated declaration must remain.
