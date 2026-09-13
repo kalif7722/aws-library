@@ -1,82 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import "./AthenaLearningDetails.css";
 import "./AthenaAwsIcons.css";
 import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
 import { AnalyticsArchitectureEnhancement, AnalyticsCostEnhancement } from "./AnalyticsMiddleEnhancements";
+import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
 
 
-const demoAsset = { image: "/assets/demos/amazon-athena-practical-demo.webp", alt: "Amazon Athena practical four-step walkthrough" };
-const demoRepoFallback = (path: string) => `https://raw.githubusercontent.com/kalif7722/aws-library/main${path}`;
-const walkthroughBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/";
-const walkthroughFilename = (serviceName: string) => {
-  const aliases: Record<string, string> = {
-    "Amazon Quick Sight": "amazon-quicksight",
-    "Amazon Managed Streaming for Apache Kafka (Amazon MSK)": "amazon-msk",
-    "Amazon Managed Service for Apache Flink": "amazon-managed-service-for-apache-flink",
-    "AWS Cost and Usage Report": "aws-cost-and-usage-report",
-    "Amazon EC2 Auto Scaling": "amazon-ec2-auto-scaling",
-  };
-  return (aliases[serviceName] || serviceName).toLowerCase()
-    .replace(/[()]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".webp";
-};
-function WalkthroughDemo({ image, alt, label }: { image: string; alt: string; label: string }) {
-  const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-  return <section className="athena-demo-card service-practical-demo" aria-label={`${label} practical demo`}>
-    <button type="button" className="athena-demo-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open}>{open ? "Hide" : "View"} walkthrough</button>
-    {open && <div className="athena-demo-panel">
-      <button type="button" className="athena-demo-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${label} walkthrough full page`}><img src={image} alt={alt} loading="lazy" onError={(event) => { const img = event.currentTarget; const fallback = demoRepoFallback(image); if (img.src !== fallback) img.src = fallback; else img.onerror = null; }} /></button>
-    </div>}
-    {expanded && <div className="athena-demo-modal" role="dialog" aria-modal="true" aria-label={`${label} walkthrough`} onClick={() => setExpanded(false)}><button type="button" className="athena-demo-modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={image} alt={alt} onClick={event => event.stopPropagation()} /></div>}
-  </section>;
-}
-function AthenaPracticalDemo() {
-  return <WalkthroughDemo image={demoAsset.image} alt={demoAsset.alt} label="Amazon Athena" />;
-}
-export const serviceDemoAssets: Record<string, { image: string; alt: string }> = {
-  "Amazon Managed Streaming for Apache Kafka (Amazon MSK)": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-msk.webp", alt: "Amazon MSK practical Kafka workflow" },
-  "Amazon Quick Sight": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-quicksight.webp", alt: "Amazon QuickSight practical dashboard workflow" },
-  "Amazon AppFlow": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-appflow.webp", alt: "Amazon AppFlow practical integration workflow" },
-  "AWS AppSync": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-appsync.webp", alt: "AWS AppSync practical GraphQL workflow" },
-  "Amazon EventBridge": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-eventbridge.webp", alt: "Amazon EventBridge practical event-routing workflow" },
-  "AWS Data Exchange": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-data-exchange.webp", alt: "AWS Data Exchange practical dataset subscription workflow" },
-  "Amazon Data Firehose": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-data-firehose.webp", alt: "Amazon Data Firehose practical streaming delivery workflow" },
-  "Amazon Kinesis Data Streams": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-kinesis-data-streams.webp", alt: "Amazon Kinesis Data Streams practical real-time streaming workflow" },
-  "AWS Lake Formation": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-lake-formation.webp", alt: "AWS Lake Formation practical governed data lake workflow" },
-  "Amazon Managed Service for Apache Flink": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-managed-service-for-apache-flink.webp", alt: "Amazon Managed Service for Apache Flink practical streaming analytics workflow" },
-  "Amazon EMR": { image: "/assets/demos/amazon-emr-practical-demo-v3.webp", alt: "Amazon EMR practical log analytics workflow" },
-  "AWS Glue": { image: "/assets/demos/aws-glue-practical-demo-v3.webp", alt: "AWS Glue practical sales ETL workflow" },
-  "Amazon Kinesis": { image: "/assets/demos/amazon-kinesis-practical-demo-v3.webp", alt: "Amazon Kinesis practical clickstream workflow" },
-  "Amazon OpenSearch Service": { image: "/assets/demos/amazon-opensearch-service-practical-demo-v3.webp", alt: "Amazon OpenSearch Service practical observability workflow" },
-  "Amazon MQ": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-mq.webp", alt: "Amazon MQ practical message-broker workflow" },
-  "Amazon SNS": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-sns.webp", alt: "Amazon SNS practical publish-subscribe workflow" },
-  "Amazon SQS": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-sqs.webp", alt: "Amazon SQS practical queue-processing workflow" },
-  "AWS Step Functions": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-step-functions.webp", alt: "AWS Step Functions practical orchestration workflow" },
-  "Amazon Managed Blockchain": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-managed-blockchain.webp", alt: "Amazon Managed Blockchain practical network workflow" },
-  "Amazon SES": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-ses.webp", alt: "Amazon SES practical email-delivery workflow" },
-  "AWS Budgets": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-budgets.webp", alt: "AWS Budgets practical cost-alert workflow" },
-  "AWS Cost and Usage Report": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-cost-and-usage-report.webp", alt: "AWS Cost and Usage Report practical billing-data workflow" },
-  "AWS Cost Explorer": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-cost-explorer.webp", alt: "AWS Cost Explorer practical cost-analysis workflow" },
-  "Savings Plans": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/savings-plans.webp", alt: "Savings Plans practical commitment-analysis workflow" },
-  "AWS App Runner": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-app-runner.webp", alt: "AWS App Runner practical application-deployment workflow" },
-  "AWS Auto Scaling": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-auto-scaling.webp", alt: "AWS Auto Scaling practical capacity-management workflow" },
-  "AWS Batch": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-batch.webp", alt: "AWS Batch practical batch-compute workflow" },
-  "AWS Elastic Beanstalk": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-elastic-beanstalk.webp", alt: "AWS Elastic Beanstalk practical web-application deployment workflow" },
-  "Amazon EC2": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-ec2.webp", alt: "Amazon EC2 practical virtual-server workflow" },
-  "Amazon EC2 Auto Scaling": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-ec2-auto-scaling.webp", alt: "Amazon EC2 Auto Scaling practical resilient-web-tier workflow" },
-  "AWS Fargate": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-fargate.webp", alt: "AWS Fargate practical serverless-container workflow" },
-  "AWS Lambda": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-lambda.webp", alt: "AWS Lambda practical event-driven workflow" },
-  "Amazon Lightsail": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/amazon-lightsail.webp", alt: "Amazon Lightsail practical simple-application workflow" },
-  "AWS Outposts": { image: "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/aws-outposts.webp", alt: "AWS Outposts practical hybrid-workload workflow" },
-};
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
-  const asset = serviceDemoAssets[serviceName] || {
-    image: walkthroughBase + walkthroughFilename(serviceName),
-    alt: `${serviceName} practical AWS Console walkthrough`,
-  };
-  return <WalkthroughDemo image={asset.image} alt={asset.alt} label={serviceName} />;
+  return <SharedServiceWalkthrough serviceName={serviceName} />;
 }
 
 const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
@@ -96,15 +28,18 @@ export default function AthenaLearningDetails() {
       <Box icon="◎" title="Workgroups = control plane"><div className="workgroup-visual"><div><b>TEAM A</b><span>Encrypted results</span></div><div><b>TEAM B</b><span>Usage controls</span></div><div><b>BI</b><span>Dedicated settings</span></div></div><p>Use workgroups to isolate users/queries, enforce settings, configure result locations and encryption, publish metrics, and apply query data-usage controls.</p></Box>
     </div>
     <section className="architecture-stage" id="athena-flow"><div className="section-cap"><div><p>ARCHITECTURE 01</p><h3>Serverless S3 analytics flow</h3></div><span>Official AWS architecture icons • follow the arrows</span></div><div className="architecture-row icon-architecture"><AwsNode icon={icons.user} label="Analyst / BI" sub="Console • JDBC • ODBC"/><Arrow label="SQL"/><AwsNode icon={icons.athena} sub="Serverless query engine"/><Arrow label="schema"/><AwsNode icon={icons.glueDataCatalog} sub="Tables • columns • partitions"/><Arrow label="reads"/><AwsNode icon={icons.s3} sub="CSV • JSON • Parquet • ORC"/></div><div className="architecture-return"><span>Query result</span><b>←</b><span>Athena processes the query</span><b>←</b><span>Only relevant source data is read</span></div><div className="callout"><b>Remember</b><span>Athena does not require you to load S3 data into a database first. The table definition tells Athena where the source data is and how to interpret it.</span></div></section>
-    <section className="architecture-stage federated" id="athena-examples"><div className="section-cap"><div><p>ARCHITECTURE 02</p><h3>Federated query: one SQL layer, multiple sources</h3></div><span>Official service icons make the architecture easier to recognize</span></div><div className="federated-layout icon-federated"><div className="source-stack icon-source-stack"><AwsNode icon={icons.s3} sub="Data lake"/><AwsNode icon={icons.rds} sub="Relational source via connector"/><AwsNode icon={icons.dynamodb} sub="NoSQL source via connector"/></div><div className="big-arrow">→</div><AwsNode icon={icons.athena} label="Athena Federated Query" sub="Connectors read supported sources"/><div className="big-arrow">→</div><Node label="Unified SQL result" sub="Analyze • report • persist" tone="pink"/></div></section>
-    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/><AthenaPracticalDemo />
+    <section className="architecture-stage federated" id="athena-examples"><div className="section-cap"><div><p>ARCHITECTURE 02</p><h3>Federated query: one SQL layer, multiple sources</h3></div><span>Official service icons make the architecture easier to recognize</span></div><div className="federated-layout icon-federated"><div className="source-stack icon-source-stack"><AwsNode icon={icons.s3} sub="Data lake"/><AwsNode icon={icons.rds} sub="Relational source via connector"/><AwsNode icon={icons.dynamodb} sub="NoSQL source via connector"/></div><div className="big-arrow">→</div><AwsNode icon={icons.athena} label="Athena Federated Query" sub="Connectors read supported sources • predicate pushdown where supported"/><div className="big-arrow">→</div><Node label="Unified SQL result" sub="Analyze • report • persist" tone="pink"/></div></section>
+    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>
+    <SharedServiceWalkthrough serviceName="Amazon Athena" />
     <div className="knowledge-grid three"><Box icon="1" title="Example: investigate web logs"><div className="scenario"><span>ALB / CloudFront logs</span><b>↓</b><span>S3</span><b>↓</b><span>Athena SQL</span><b>↓</b><span>Top errors / IPs / latency</span></div><pre>{`SELECT status, count(*) AS hits
 FROM access_logs
 WHERE day = DATE '2026-09-10'
 GROUP BY status
-ORDER BY hits DESC;`}</pre></Box><Box icon="2" title="Example: optimize a data lake"><div className="before-after"><div><b>BEFORE</b><span>CSV</span><span>Many files</span><span>Broad scans</span></div><i>→</i><div><b>BETTER</b><span>Parquet</span><span>Compressed</span><span>Partitioned</span></div></div><p>Design storage for the queries you run. Selecting only required columns and pruning partitions reduces scanned data.</p></Box><Box icon="3" title="Example: BI reporting"><div className="scenario horizontal"><span>S3 lake</span><b>→</b><span>Athena</span><b>→</b><span>BI / SQL client</span></div><p>Use Athena as the SQL query layer for reporting and exploration.</p></Box></div>
-    <div className="knowledge-grid" id="athena-security"><Box icon="◆" title="Security layers"><div className="security-rings"><div>IAM<br/><small>Who can call Athena?</small></div><div>S3<br/><small>Can they read source/results?</small></div><div>KMS<br/><small>Can they use encryption keys?</small></div><div>Catalog / governance<br/><small>What metadata is exposed?</small></div></div><p>Authorization is layered. Athena permission alone does not automatically grant access to S3 objects or encryption keys.</p></Box><Box icon="$" title="Cost & performance"><div className="cost-equation"><span>LESS DATA SCANNED</span><b>=</b><span>LOWER COST + FASTER QUERIES</span></div><ol className="rank-list"><li><b>Partition</b> on useful filter dimensions.</li><li><b>Prefer columnar</b> Parquet/ORC.</li><li><b>Compress</b> source data.</li><li><b>Select columns</b> instead of SELECT *.</li><li><b>Use workgroups</b> for governance.</li></ol></Box></div>
-    <AnalyticsCostEnhancement serviceName="Amazon Athena"/><section className="compare-board" id="athena-compare"><div className="section-cap"><div><p>CHOOSE THE RIGHT TOOL</p><h3>Athena vs Redshift vs EMR</h3></div></div><div className="compare-columns"><div className="recommended"><b>ATHENA</b><strong>Interactive serverless SQL</strong><span>Ad-hoc S3 analysis</span><span>No cluster to manage</span></div><div><b>REDSHIFT</b><strong>Data warehouse</strong><span>Repeated BI workloads</span></div><div><b>EMR</b><strong>Big-data frameworks</strong><span>Spark / Hadoop control</span></div></div></section>
-    <section className="exam-strip"><div><p>MEMORY HOOK</p><h3>S3 = data • Glue = schema • Athena = query</h3></div><div className="exam-tips"><span><b>01</b>No infrastructure to provision.</span><span><b>02</b>Partition + columnar format reduces scans.</span><span><b>03</b>Workgroups add governance and usage controls.</span><span><b>04</b>Federated Query reaches supported sources.</span></div></section><p className="knowledge-reviewed">Structured learning content • September 2026</p>
+ORDER BY hits DESC;`}</pre></Box><Box icon="2" title="Example: optimize a data lake"><div className="before-after"><div><b>BEFORE</b><span>CSV</span><span>Many files</span><span>Broad scans</span></div><i>→</i><div><b>BETTER</b><span>Parquet</span><span>Compressed</span><span>Partitioned</span></div></div><p>Design storage for the queries you run. Selecting only required columns and pruning partitions can substantially reduce scanned data.</p></Box><Box icon="3" title="Example: BI reporting"><div className="scenario horizontal"><span>S3 lake</span><b>→</b><span>Athena</span><b>→</b><span>BI / SQL client</span></div><p>Use Athena as the SQL query layer for reporting and exploration. JDBC and ODBC connectivity let compatible analytics clients query Athena.</p></Box></div>
+    <div className="knowledge-grid" id="athena-security"><Box icon="◆" title="Security layers"><div className="security-rings"><div>IAM<br/><small>Who can call Athena?</small></div><div>S3<br/><small>Can they read the source/results?</small></div><div>KMS<br/><small>Can they use encryption keys?</small></div><div>Catalog / governance<br/><small>What metadata/data is exposed?</small></div></div><p>Authorization is layered. Athena permission alone does not automatically grant access to the underlying S3 objects or encryption keys.</p></Box><Box icon="$" title="Cost & performance"><div className="cost-equation"><span>LESS DATA SCANNED</span><b>=</b><span>LOWER COST + FASTER QUERIES</span></div><ol className="rank-list"><li><b>Partition</b> on useful filter dimensions.</li><li><b>Prefer columnar</b> Parquet/ORC for analytics.</li><li><b>Compress</b> source data where appropriate.</li><li><b>Select columns</b> instead of unnecessary SELECT *.</li><li><b>Use workgroups</b> for governance and usage controls.</li></ol></Box></div>
+    <AnalyticsCostEnhancement serviceName="Amazon Athena"/>
+    <section className="compare-board" id="athena-compare"><div className="section-cap"><div><p>CHOOSE THE RIGHT TOOL</p><h3>Athena vs Redshift vs EMR</h3></div></div><div className="compare-columns"><div className="recommended"><b>ATHENA</b><strong>Interactive serverless SQL</strong><span>Ad-hoc S3 analysis</span><span>Data lake exploration</span><span>No cluster to manage</span></div><div><b>REDSHIFT</b><strong>Data warehouse</strong><span>Warehouse workloads</span><span>Repeated BI / analytics</span><span>Managed warehouse capabilities</span></div><div><b>EMR</b><strong>Big-data frameworks</strong><span>Spark / Hadoop ecosystem</span><span>Complex processing</span><span>Fine-grained framework control</span></div></div></section>
+    <section className="exam-strip"><div><p>MEMORY HOOK</p><h3>S3 = data • Glue = schema • Athena = query</h3></div><div className="exam-tips"><span><b>01</b>No infrastructure to provision for Athena SQL.</span><span><b>02</b>Partition + columnar format = common optimization pattern.</span><span><b>03</b>Workgroups help separate teams, settings and usage controls.</span><span><b>04</b>Federated Query reaches supported sources outside S3 through connectors.</span></div></section>
+    <p className="knowledge-reviewed">Prototype structured learning content • Reviewed against AWS Athena documentation • September 2026</p>
   </div>;
 }
