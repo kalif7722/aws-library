@@ -325,13 +325,14 @@ export const services = [
   { name: "AWS Private Certificate Authority", file: "/el10/aws-private-certificate-authority.webp", accent: "#60a5fa", summary: "Managed private PKI and certificate issuance" },
   { name: "AWS Shield Advanced", file: "/el10/aws-shield-advanced.webp", accent: "#60a5fa", summary: "Advanced managed DDoS protection" },
   { name: "Amazon Quick Sight", file: "/el10/ai/amazon-quick-sight.webp", accent: "#a855f7", summary: "Cloud business intelligence and data visualization" },
+  { name: "Amazon EC2 Auto Scaling", file: "/el10/compute/amazon-ec2-auto-scaling.webp", accent: "#f59e0b", summary: "Automatically maintain EC2 capacity for application demand" },
 ];
 
 const branches = [
   { title: "Management & Governance", start: 0, end: 34, accent: "#f05aa6", copies: [215, 216, 248, 250, 256, 266, 271, 272, 273, 274, 217, 283, 310, 312] },
   { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 244, 251] },
   { title: "Security, Identity & Compliance", start: 34, end: 51, accent: "#60a5fa", copies: [2, 3, 15, 22, 219, 220, 221, 222, 223, 224, 246, 289, 306, 318, 319] },
-  { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218, 264, 265, 207, 297, 315] },
+  { title: "Compute & Containers", start: 51, end: 68, accent: "#f59e0b", copies: [217, 218, 264, 265, 207, 297, 315, 321] },
   { title: "Storage", start: 68, end: 84, accent: "#22c55e", copies: [290, 299, 72] as number[] },
   { title: "Databases", start: 84, end: 96, accent: "#8b5cf6", copies: [260, 261, 262, 282, 301] },
   { title: "Migration & Transfer", start: 96, end: 100, accent: "#14b8a6", copies: [95, 81, 83, 82, 247, 99, 280] },
