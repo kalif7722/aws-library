@@ -1,6 +1,7 @@
 "use client";
 
 import "./ServiceLearningShowcase.css";
+import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
 
 type WalkNode={label:string;sub?:string};
 type WalkLayer={title:string;nodes:WalkNode[]};
@@ -59,6 +60,7 @@ export default function ServiceLearningShowcase({serviceName,architectures,secur
       <div className="service-section-cap"><div><p>ARCHITECTURE PATTERNS</p><h3>Architecture examples</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
       <div className={`service-walk-grid count-${Math.max(1,walks.length)}`}>{walks.map((a,i)=><WalkthroughCard architecture={a} index={i+1} key={`${a.title}-${i}`}/>)}</div>
     </section>
+    <SharedServiceWalkthrough serviceName={serviceName}/>
 
     <div className="service-insight-grid">
       <InsightPanel id={securityId} title="Security & governance" icon="◆" items={security}/>
