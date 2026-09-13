@@ -2,8 +2,6 @@ import fs from 'node:fs';
 
 const componentPath = 'app/components/CertificationCourse.tsx';
 let source = fs.readFileSync(componentPath, 'utf8');
-source = source.replace(/\nimport SharedServiceWalkthrough from "\.\/SharedServiceWalkthrough";/g, '');
-source = source.replace(/\s*<SharedServiceWalkthrough serviceName=\{selectedScopeName\}\/>&?/g, '');
 
 // Older generated revisions appended the structured-details branches repeatedly.
 // Normalize those branches before any other transform so every service gets one
