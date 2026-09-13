@@ -29,9 +29,11 @@ if (!source.includes('const [visualVisible, setVisualVisible] = useState(true);'
 // for every selected service. Removing any existing declaration first keeps this
 // transform idempotent and prevents duplicate-identifier build failures.
 source = source.replace(/\n\s*const hasStructuredDetails = !!selected(?:\s*&&[^;]*)?;/g, '');
-const isAthenaAnchor = 'const isAthena = selected?.name.toLowerCase().includes("athena");';
+const isAthenaAnchor = source.includes('const isAthena = selectedScopeName.toLowerCase().includes("athena");')
+  ? 'const isAthena = selectedScopeName.toLowerCase().includes("athena");'
+  : 'const isAthena = selected?.name.toLowerCase().includes("athena");';
 if (!source.includes(isAthenaAnchor)) throw new Error('Course structured-details anchor changed');
-source = source.replace(isAthenaAnchor, `${isAthenaAnchor}\n  const hasStructuredDetails = !!selected;`);
+if (!source.includes('const hasStructuredDetails =')) source = source.replace(isAthenaAnchor, `${isAthenaAnchor}\n  const hasStructuredDetails = !!selected;`);
 
 source = source.replace('className={`viewer course-viewer ${isAthena ? "has-knowledge" : ""}`}','className={`viewer course-viewer ${hasStructuredDetails ? "has-knowledge" : ""}`}');
 source = source.replace('const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedName(match.name); setImageScale(100); };','const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedName(match.name); setImageScale(100); setVisualVisible(true); };');
