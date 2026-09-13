@@ -4,6 +4,7 @@ import "./AthenaLearningDetails.css";
 import "./AthenaAwsIcons.css";
 import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
 import { AnalyticsArchitectureEnhancement, AnalyticsCostEnhancement } from "./AnalyticsMiddleEnhancements";
+import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
 
 
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
