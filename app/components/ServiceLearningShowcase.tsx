@@ -57,7 +57,7 @@ export default function ServiceLearningShowcase({serviceName,architectures,secur
   const walks=architectures.slice(0,3);
   return <div className="service-showcase" data-service-showcase={serviceName}>
     <section className="service-walkthrough-section" id={examplesId}>
-      <div className="service-section-cap"><div><p>REAL-WORLD EXAMPLES</p><h3>Architecture walk-throughs</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
+      <div className="service-section-cap"><div><p>ARCHITECTURE PATTERNS</p><h3>Architecture examples</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
       <div className={`service-walk-grid count-${Math.max(1,walks.length)}`}>{walks.map((a,i)=><WalkthroughCard architecture={a} index={i+1} key={`${a.title}-${i}`}/>)}</div>
     </section>
     <SharedServiceWalkthrough serviceName={serviceName}/>
