@@ -97,13 +97,14 @@ if(!athena.includes(enhancementImport)){
 if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')){
   const anchor='</div></section>\n    <ServicePracticalDemo serviceName="Amazon Athena" />\n    <div className="knowledge-grid three">';
   if(!athena.includes(anchor))throw new Error('Athena architecture placement anchor changed');
-  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">');
+  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <ServicePracticalDemo serviceName="Amazon Athena" />\n    <div className="knowledge-grid three">');
 }
 if(!athena.includes('<AnalyticsCostEnhancement serviceName="Amazon Athena"/>')){
   const anchor='</Box></div>\n    <section className="compare-board" id="athena-compare">';
   if(!athena.includes(anchor))throw new Error('Athena cost placement anchor changed');
   athena=athena.replace(anchor,'</Box></div>\n    <AnalyticsCostEnhancement serviceName="Amazon Athena"/>\n    <section className="compare-board" id="athena-compare">');
 }
+athena=athena.replaceAll('<AthenaPracticalDemo />','<ServicePracticalDemo serviceName="Amazon Athena" />');
 fs.writeFileSync(athenaPath,athena);
 
 const cssPath='app/globals.css';let css=fs.readFileSync(cssPath,'utf8');
