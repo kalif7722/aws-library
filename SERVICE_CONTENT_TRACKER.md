@@ -145,3 +145,40 @@ These official scope names are retained in course navigation, but currently reus
 - Amazon SageMaker family entries → Amazon SageMaker AI
 
 The course sidebar now labels these as **View related guide**. A dedicated guide can be added later without changing the official course scope names.
+
+## AIP Machine Learning and AI — core concepts and application fit
+
+All 32 AIP Machine Learning services now have explicit service-specific content in `ServiceLearningContent.ts`; none use the category fallback for these two panels:
+
+- Amazon Augmented AI — completed
+- Amazon Bedrock — completed
+- Amazon Bedrock AgentCore — completed
+- Amazon Bedrock Knowledge Bases — completed
+- Amazon Bedrock Prompt Management — completed
+- Amazon Bedrock Prompt Flows — completed
+- Amazon Comprehend — completed
+- Amazon Comprehend Medical — completed
+- Amazon Kendra — completed
+- Amazon Lex — completed
+- Amazon Nova — completed
+- Amazon PartyRock — completed
+- Amazon Personalize — completed
+- Amazon Polly — completed
+- Amazon Q Business — completed
+- Amazon Q Business Apps — completed
+- Amazon Q Developer — completed
+- Amazon Quick — completed
+- Amazon Rekognition — completed
+- Amazon SageMaker AI — completed
+- Amazon SageMaker Clarify — completed
+- Amazon SageMaker Data Wrangler — completed
+- Amazon SageMaker Ground Truth — completed
+- Amazon SageMaker JumpStart — completed
+- Amazon SageMaker Model Monitor — completed
+- Amazon SageMaker Model Registry — completed
+- Amazon SageMaker Neo — completed
+- Amazon SageMaker Processing — completed
+- Amazon SageMaker Unified Studio — completed
+- Amazon Textract — completed
+- Amazon Titan — completed
+- Amazon Transcribe — completed
