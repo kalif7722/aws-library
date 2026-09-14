@@ -129,3 +129,19 @@ Status means the shared renderer has explicit service-specific Core service conc
 2. Finish IoT, AI and Media pending items.
 3. Finish Security and Migration pending items.
 4. Run a cross-course comparison to confirm every course uses this same map.
+
+## Cross-course guide reuse audit
+
+These official scope names are retained in course navigation, but currently reuse a related library guide because the library does not have a separate infographic for the scoped sub-service or naming variant. They must not be presented as duplicate service content:
+
+- Amazon S3 Intelligent-Tiering → Amazon S3
+- Amazon S3 Lifecycle policies → Amazon S3
+- Amazon S3 Cross-Region Replication → Amazon S3
+- AWS Chatbot → Amazon Q Developer in chat applications
+- Amazon CloudWatch Logs → Amazon CloudWatch
+- AWS Systems Manager → Systems Manager
+- AWS Resource Access Manager → AWS Resource Access Manager (RAM)
+- AWS Managed Service for Prometheus → Amazon Managed Service for Prometheus
+- Amazon SageMaker family entries → Amazon SageMaker AI
+
+The course sidebar now labels these as **View related guide**. A dedicated guide can be added later without changing the official course scope names.
