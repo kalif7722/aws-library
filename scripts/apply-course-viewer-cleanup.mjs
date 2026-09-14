@@ -41,17 +41,18 @@ const oldViewer=/<div className="viewer-head"><div><p>Selected EL10 page<\/p><h2
 const newViewer='<div className="viewer-head clean-viewer-head"><div><h2>{selected.name}</h2><small>{selected.summary}</small></div><button className="visual-toggle" onClick={()=>setVisualVisible(v=>!v)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div>{visualVisible && <button className="image-link clean-image-link" onClick={()=>setExpanded(true)} aria-label={`Open ${selected.name} visual full screen`}><img src={assetUrl(selected.file)} onError={e=>imageFallback(e,selected.file)} alt={`${selected.name} EL10 infographic`}/></button>}';
 if(oldViewer.test(source))source=source.replace(oldViewer,newViewer);else if(!source.includes('className="visual-toggle"'))throw new Error('Course viewer markup anchor changed');
 
-if (!source.includes('analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails')) {
+if (!source.includes('sharedContentCategories.has(selectedCategory) ?') && !source.includes('analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails')) {
   const detailsAnchor='{isAthena && <AthenaLearningDetails/>}';
-  if(!source.includes(detailsAnchor))throw new Error('Structured details render anchor changed');
+  if(!source.includes(detailsAnchor) && !source.includes('{isAthena ? <AthenaLearningDetails/>'))throw new Error('Structured details render anchor changed');
+  if(!source.includes(detailsAnchor)) { source=source.replace('{isAthena ? <AthenaLearningDetails/> :', detailsAnchor+' :'); }
   source=source.replace(detailsAnchor,'{isAthena && <AthenaLearningDetails/>}{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}');
 }
-if (!source.includes('hasAipLearningDetails(selected.name) && <AipServiceLearningDetails')) {
+if (!source.includes('sharedContentCategories.has(selectedCategory) ?') && !source.includes('hasAipLearningDetails(selected.name) && <AipServiceLearningDetails')) {
   const anchor='{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}';
   if(!source.includes(anchor))throw new Error('AIP service details render anchor changed');
   source=source.replace(anchor,`${anchor}{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selected.name) && <AipServiceLearningDetails serviceName={selected.name} summary={selected.summary}/>} `);
 }
-if (!source.includes('<CrossCourseLearningDetails serviceName={selected.name}')) {
+if (!source.includes('sharedContentCategories.has(selectedCategory) ?') && !source.includes('<CrossCourseLearningDetails serviceName={selected.name}')) {
   const aipAnchor='{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selected.name) && <AipServiceLearningDetails serviceName={selected.name} summary={selected.summary}/>}';
   if(!source.includes(aipAnchor)) throw new Error('Cross-course learning render anchor changed');
   if(!source.includes('const selectedCategory =')) {
