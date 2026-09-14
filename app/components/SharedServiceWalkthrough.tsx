@@ -8,10 +8,10 @@ const aliases: Record<string,string> = {
   "Amazon QuickSight":"amazon-quick-sight", "Amazon Quick Sight":"amazon-quick-sight", "Amazon Quick":"amazon-quick",
   "Amazon Kinesis":"amazon-kinesis", "Amazon Kinesis Data Streams":"amazon-kinesis-data-streams", "Amazon Data Firehose":"amazon-data-firehose",
   "Amazon Managed Streaming for Apache Kafka (Amazon MSK)":"amazon-managed-streaming-for-apache-kafka", "Amazon Managed Streaming for Apache Kafka":"amazon-managed-streaming-for-apache-kafka",
-  "AWS Marketplace":"aws-marketplace", "AWS Cost and Usage Reports":"aws-cost-and-usage-reports", "AWS Cost and Usage Report":"aws-cost-and-usage-report", "AWS Support":"aws-support", "AWS Audit Manager":"aws-audit-manager",
+  "AWS Marketplace":"aws-marketplace", "AWS Cost and Usage Reports":"aws-cost-and-usage-reports", "AWS Cost and Usage Report":"aws-cost-and-usage-report", "AWS Support":"aws-support", "AWS Audit Manager":"aws-audit-manager", "Audit Manager":"aws-audit-manager",
   "Amazon WorkSpaces Secure Browser":"amazon-workspaces-secure-browser", "Amazon Q":"amazon-q", "Service Quotas":"aws-service-quotas", "Migration Evaluator":"migration-evaluator", "AWS VPN":"aws-vpn",
   "AWS Identity and Access Management (IAM)":"iam", "AWS IAM":"iam", "IAM":"iam", "AWS IAM Identity Center":"aws-iam-identity-center", "IAM Identity Center":"aws-iam-identity-center",
-  "AWS Key Management Service (AWS KMS)":"kms", "AWS KMS":"kms", "AWS Global Accelerator":"global-accelerator", "Amazon Route 53":"route-53",
+  "AWS Key Management Service (AWS KMS)":"kms", "AWS KMS":"kms", "AWS Global Accelerator":"global-accelerator", "AWS Auto Scaling":"aws-auto-scaling", "Amazon EC2 Auto Scaling":"aws-auto-scaling", "Amazon Route 53":"route-53", "Route 53":"route-53",
   "AWS Serverless Application Repository":"aws-serverless-application-repository", "VMware Cloud on AWS":"vmware-cloud-on-aws", "AWS DMS":"aws-dms", "AWS Client VPN":"aws-client-vpn", "AWS Snow Family":"aws-snow-family",
   "Amazon SageMaker AI":"amazon-sagemaker-ai", "Amazon Elastic Container Registry (Amazon ECR)":"amazon-ecr", "Amazon Elastic Container Service (Amazon ECS)":"amazon-ecs", "Amazon Elastic Kubernetes Service (Amazon EKS)":"amazon-eks", "Amazon Elastic Block Store (Amazon EBS)":"amazon-ebs", "Amazon Elastic File System (Amazon EFS)":"amazon-efs"
 };
