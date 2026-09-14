@@ -52,14 +52,14 @@ Status means the shared renderer has explicit service-specific Core service conc
 - AWS Systems Manager — completed
 - AWS Service Catalog — completed
 - AWS Service Quotas — completed
-- AWS CLI — pending
-- AWS Control Tower — pending
-- AWS Compute Optimizer — pending
-- AWS Cost Anomaly Detection — pending
-- AWS Health Dashboard — pending
-- AWS License Manager — pending
-- AWS Trusted Advisor — pending
-- AWS Well-Architected Tool — pending
+- AWS CLI — completed
+- AWS Control Tower — completed
+- AWS Compute Optimizer — completed
+- AWS Cost Anomaly Detection — completed
+- AWS Health Dashboard — completed
+- AWS License Manager — completed
+- AWS Trusted Advisor — completed
+- AWS Well-Architected Tool — completed
 
 ## IoT, AI and Media
 
@@ -74,10 +74,10 @@ Status means the shared renderer has explicit service-specific Core service conc
 - Amazon Textract — completed
 - Amazon Transcribe — completed
 - Amazon Polly — completed
-- Amazon Nova — pending
-- Amazon PartyRock — pending
-- Amazon Fraud Detector — pending
-- Amazon Kendra — pending
+- Amazon Nova — completed
+- Amazon PartyRock — completed
+- Amazon Fraud Detector — completed
+- Amazon Kendra — completed
 - Amazon Elastic Transcoder — pending
 - Amazon Kinesis Video Streams — pending
 
@@ -92,8 +92,8 @@ Status means the shared renderer has explicit service-specific Core service conc
 - AWS Direct Connect — completed
 - AWS Transit Gateway — completed
 - AWS VPN — completed
-- AWS Network Firewall — pending
-- AWS App Mesh — pending
+- AWS Network Firewall — completed
+- AWS App Mesh — completed
 
 ## Security and Identity
 
@@ -104,13 +104,13 @@ Status means the shared renderer has explicit service-specific Core service conc
 - Amazon GuardDuty — completed
 - AWS Artifact — completed
 - AWS Audit Manager — completed
-- AWS CloudHSM — pending
-- AWS Directory Service — pending
-- Amazon Detective — pending
-- Amazon Inspector — pending
-- AWS Firewall Manager — pending
-- AWS Shield — pending
-- AWS Certificate Manager — pending
+- AWS CloudHSM — completed
+- AWS Directory Service — completed
+- Amazon Detective — completed
+- Amazon Inspector — completed
+- AWS Firewall Manager — completed
+- AWS Shield — completed
+- AWS Certificate Manager — completed
 
 ## Migration and Transfer
 
