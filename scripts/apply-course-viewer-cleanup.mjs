@@ -32,7 +32,6 @@ source = source.replace(/\n\s*const hasStructuredDetails = !!selected(?:\s*&&[^;
 const isAthenaAnchor = source.includes('const isAthena = selectedScopeName.toLowerCase().includes("athena");')
   ? 'const isAthena = selectedScopeName.toLowerCase().includes("athena");'
   : 'const isAthena = selected?.name.toLowerCase().includes("athena");';
-if (!source.includes(isAthenaAnchor)) throw new Error('Course structured-details anchor changed');
 if (!source.includes('const hasStructuredDetails =')) source = source.replace(isAthenaAnchor, `${isAthenaAnchor}\n  const hasStructuredDetails = !!selected;`);
 
 source = source.replace('className={`viewer course-viewer ${isAthena ? "has-knowledge" : ""}`}','className={`viewer course-viewer ${hasStructuredDetails ? "has-knowledge" : ""}`}');
@@ -47,7 +46,7 @@ if (!source.includes('analyticsDetailServices.has(selected.name) && <AnalyticsLe
   if(!source.includes(detailsAnchor))throw new Error('Structured details render anchor changed');
   source=source.replace(detailsAnchor,'{isAthena && <AthenaLearningDetails/>}{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}');
 }
-if (!source.includes('hasAipLearningDetails(selected.name) && <AipServiceLearningDetails') && !source.includes('hasAipLearningDetails(selectedScopeName) && <AipServiceLearningDetails')) {
+if (!source.includes('hasAipLearningDetails(selected.name) && <AipServiceLearningDetails')) {
   const anchor='{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}';
   if(!source.includes(anchor))throw new Error('AIP service details render anchor changed');
   source=source.replace(anchor,`${anchor}{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selected.name) && <AipServiceLearningDetails serviceName={selected.name} summary={selected.summary}/>} `);
@@ -95,16 +94,15 @@ if(!athena.includes(enhancementImport)){
   athena=athena.replace(anchor,`${anchor}\n${enhancementImport}`);
 }
 if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')){
-  const anchor='</div></section>\n    <ServicePracticalDemo serviceName="Amazon Athena" />\n    <div className="knowledge-grid three">';
+  const anchor='</div></section>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">';
   if(!athena.includes(anchor))throw new Error('Athena architecture placement anchor changed');
-  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <ServicePracticalDemo serviceName="Amazon Athena" />\n    <div className="knowledge-grid three">');
+  athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">');
 }
 if(!athena.includes('<AnalyticsCostEnhancement serviceName="Amazon Athena"/>')){
   const anchor='</Box></div>\n    <section className="compare-board" id="athena-compare">';
   if(!athena.includes(anchor))throw new Error('Athena cost placement anchor changed');
   athena=athena.replace(anchor,'</Box></div>\n    <AnalyticsCostEnhancement serviceName="Amazon Athena"/>\n    <section className="compare-board" id="athena-compare">');
 }
-athena=athena.replaceAll('<AthenaPracticalDemo />','<ServicePracticalDemo serviceName="Amazon Athena" />');
 fs.writeFileSync(athenaPath,athena);
 
 const cssPath='app/globals.css';let css=fs.readFileSync(cssPath,'utf8');
