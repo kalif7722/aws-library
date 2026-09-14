@@ -32,7 +32,7 @@ const explicitAliases: Record<string, string> = {
   "Amazon SageMaker Neo": "Amazon SageMaker Neo", "Amazon SageMaker Processing": "Amazon SageMaker Processing", "Amazon SageMaker Unified Studio": "Amazon SageMaker Unified Studio", "Amazon Titan": "Amazon Titan",
 };
 const guideName = (name: string) => explicitAliases[name] || guideAliases[name] || name;
-const sharedDetailServices = new Set(["AWS IAM", "AWS KMS", "Amazon EBS", "Amazon EFS", "Amazon SNS", "Amazon SQS", "Amazon ECR", "Amazon ECS", "Amazon EKS", "Amazon EC2 Auto Scaling", "Amazon EKS Distro"]);
+const sharedDetailServices = new Set(["AWS IAM", "AWS KMS", "Amazon EBS", "Amazon EFS", "Amazon SNS", "Amazon SQS", "Amazon ECR", "Amazon ECS", "Amazon EKS", "AWS Auto Scaling", "Amazon EC2 Auto Scaling", "Amazon EKS Distro"]);
 export const findGuide = (name: string) => {
   const target = guideName(name); const exact = services.find((item) => item.name.toLowerCase() === target.toLowerCase()); if (exact) return exact;
   const normalized = normalize(target); const byNormalized = services.find((item) => normalize(item.name) === normalized); if (byNormalized) return byNormalized;
