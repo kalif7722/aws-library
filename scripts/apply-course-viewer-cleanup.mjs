@@ -3,21 +3,6 @@ import fs from 'node:fs';
 const componentPath = 'app/components/CertificationCourse.tsx';
 let source = fs.readFileSync(componentPath, 'utf8');
 
-// Older generated revisions appended the structured-details branches repeatedly.
-// Normalize those branches before any other transform so every service gets one
-// and only one details renderer.
-const aipRender = '{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selectedScopeName) && <AipServiceLearningDetails serviceName={selectedScopeName} summary={selected.summary}/>}';
-const crossRender = '{!isAthena && !analyticsDetailServices.has(selected.name) && !hasAipLearningDetails(selectedScopeName) && <CrossCourseLearningDetails serviceName={selectedScopeName} category={selectedCategory} summary={selected.summary}/>}';
-for (const render of [aipRender, crossRender]) {
-  let kept = false;
-  source = source.split(render).map((part, index) => {
-    if (index === 0) return part;
-    if (kept) return part;
-    kept = true;
-    return render + part;
-  }).join('');
-}
-
 if (!source.includes('AnalyticsLearningDetails')) {
   const importAnchor = 'import AthenaLearningDetails from "./AthenaLearningDetails";';
   if (!source.includes(importAnchor)) throw new Error('Athena import anchor changed');
@@ -62,12 +47,12 @@ if (!source.includes('analyticsDetailServices.has(selected.name) && <AnalyticsLe
   if(!source.includes(detailsAnchor))throw new Error('Structured details render anchor changed');
   source=source.replace(detailsAnchor,'{isAthena && <AthenaLearningDetails/>}{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}');
 }
-if (!source.includes('hasAipLearningDetails(selectedScopeName) && <AipServiceLearningDetails')) {
+if (!source.includes('hasAipLearningDetails(selected.name) && <AipServiceLearningDetails') && !source.includes('hasAipLearningDetails(selectedScopeName) && <AipServiceLearningDetails')) {
   const anchor='{!isAthena && analyticsDetailServices.has(selected.name) && <AnalyticsLearningDetails serviceName={selected.name}/>}';
   if(!source.includes(anchor))throw new Error('AIP service details render anchor changed');
   source=source.replace(anchor,`${anchor}{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selected.name) && <AipServiceLearningDetails serviceName={selected.name} summary={selected.summary}/>} `);
 }
-if (!source.includes('<CrossCourseLearningDetails serviceName={selectedScopeName}')) {
+if (!source.includes('<CrossCourseLearningDetails serviceName={selected.name}')) {
   const aipAnchor='{!isAthena && !analyticsDetailServices.has(selected.name) && hasAipLearningDetails(selected.name) && <AipServiceLearningDetails serviceName={selected.name} summary={selected.summary}/>}';
   if(!source.includes(aipAnchor)) throw new Error('Cross-course learning render anchor changed');
   if(!source.includes('const selectedCategory =')) {
@@ -75,17 +60,6 @@ if (!source.includes('<CrossCourseLearningDetails serviceName={selectedScopeName
     source=source.replace(selectedAnchor,`${selectedAnchor}\n  const selectedCategory = selected ? (scope.find(category => category.services.some(service => findGuide(service)?.name === selected.name))?.title || "AWS Services") : "AWS Services";`);
   }
   source=source.replace(aipAnchor,`${aipAnchor} {!isAthena && !analyticsDetailServices.has(selected.name) && !hasAipLearningDetails(selected.name) && <CrossCourseLearningDetails serviceName={selected.name} category={selectedCategory} summary={selected.summary}/>} `);
-}
-
-// Final render normalization: exactly one branch per service type.
-for (const render of [aipRender, crossRender]) {
-  let kept = false;
-  source = source.split(render).map((part, index) => {
-    if (index === 0) return part;
-    if (kept) return part;
-    kept = true;
-    return render + part;
-  }).join('');
 }
 
 // Build safety: exactly one generated declaration must remain.
@@ -121,7 +95,7 @@ if(!athena.includes(enhancementImport)){
   athena=athena.replace(anchor,`${anchor}\n${enhancementImport}`);
 }
 if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')){
-  const anchor='</div></section>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">';
+  const anchor='</div></section>\n    <ServicePracticalDemo serviceName="Amazon Athena" />\n    <div className="knowledge-grid three">';
   if(!athena.includes(anchor))throw new Error('Athena architecture placement anchor changed');
   athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">');
 }
