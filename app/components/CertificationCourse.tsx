@@ -22,6 +22,7 @@ const explicitAliases: Record<string, string> = {
   "Amazon Simple Notification Service (Amazon SNS)": "Amazon SNS", "Amazon Simple Queue Service (Amazon SQS)": "Amazon SQS",
   "AWS Audit Manager": "Audit Manager", "AWS Global Accelerator": "AWS Global Accelerator",
   "Amazon EC2 Auto Scaling": "AWS Auto Scaling", "EC2 Auto Scaling": "AWS Auto Scaling", "AWS EC2 Auto Scaling": "AWS Auto Scaling",
+  "Amazon EKS Distro": "Amazon EKS Distro", "EKS Distro": "Amazon EKS Distro",
   "Amazon Simple Notification Service (Amazon SNS)": "Amazon SNS", "Amazon Simple Queue Service (Amazon SQS)": "Amazon SQS", "Amazon Simple Storage Service (Amazon S3)": "Amazon S3",
   "Amazon Elastic Block Store (Amazon EBS)": "Amazon EBS", "Amazon Elastic File System (Amazon EFS)": "Amazon EFS", "AWS Identity and Access Management (IAM)": "AWS IAM",
   "AWS Resource Access Manager (AWS RAM)": "AWS Resource Access Manager (RAM)", "AWS Key Management Service (AWS KMS)": "AWS KMS", "AWS Security Token Service (AWS STS)": "AWS Security Token Service",
