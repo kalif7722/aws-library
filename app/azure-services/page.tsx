@@ -5,7 +5,21 @@ import { assetUrl } from "../../lib/asset-url";
 import { azureBranches, azureBranchAccents, azureUniqueServices, type AzureService } from "../azure-data";
 
 const ready = (service: AzureService) => service.status.toLowerCase().startsWith("completed");
-const assetPath = (service: AzureService) => "/azure/" + service.folder + "/" + service.slug + ".webp";
+const filenameOverrides: Record<string, string> = {
+  "sql-server-on-azure-virtual-machines": "sql-server-on-azure-virtual-machines.webp",
+  "virtual-machines": "virtual-machines.webp",
+  "windows-server": "windows-server.webp",
+  "data-lake-analytics": "data-lake-analytics.webp",
+  "power-bi": "power-bi.webp",
+  "power-bi-embedded": "power-bi-embedded.webp",
+  "devops-tool-integrations": "devops-tool-integrations.webp",
+  "api-management": "api-management.webp",
+};
+const noAzurePrefix = new Set(["ai-anomaly-detector", "data-science-virtual-machines", "foundry-agent-service", "foundry-control-plane", "foundry-iq", "foundry-models", "health-bot", "observability-in-foundry-control-plane", "phi-open-models", "sdks"]);
+const assetPath = (service: AzureService) => {
+  const filename = filenameOverrides[service.slug] || (noAzurePrefix.has(service.slug) ? service.slug : "azure-" + service.slug) + ".webp";
+  return "/azure/" + service.folder + "/" + filename;
+};
 
 export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
