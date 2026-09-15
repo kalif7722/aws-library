@@ -214,12 +214,12 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Service | Central insight status |
 |---|---|
 | Amazon Athena | Rebuilt — exact unique service record |
-| AWS Data Exchange | Completed — exact central record |
+| AWS Data Exchange | Rebuilt — exact unique service record |
 | Amazon Data Firehose | Rebuilt — exact unique service record |
-| Amazon EMR | Completed — exact central record |
+| Amazon EMR | Rebuilt — exact unique service record |
 | AWS Glue | Rebuilt — exact unique service record |
 | Amazon Kinesis Data Streams | Rebuilt — exact unique service record |
-| AWS Lake Formation | Completed — exact central record |
+| AWS Lake Formation | Rebuilt — exact unique service record |
 | Amazon Managed Service for Apache Flink | Rebuilt — exact unique service record |
 | Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rebuilt — exact unique service record |
 | Amazon OpenSearch Service | Rebuilt — exact unique service record |
@@ -229,10 +229,10 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppFlow | Completed — exact central record |
+| Amazon AppFlow | Rebuilt — exact unique service record |
 | AWS AppSync | Rebuilt — exact unique service record |
 | Amazon EventBridge | Rebuilt — exact unique service record |
-| Amazon MQ | Completed — exact central record |
+| Amazon MQ | Rebuilt — exact unique service record |
 | Amazon SNS | Rebuilt — exact unique service record |
 | Amazon SQS | Rebuilt — exact unique service record |
 | AWS Step Functions | Rebuilt — exact unique service record |
@@ -253,10 +253,10 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS Budgets | Completed — exact central record |
-| AWS Cost and Usage Report | Completed — exact central record |
-| AWS Cost Explorer | Completed — exact central record |
-| Savings Plans | Completed — exact central record |
+| AWS Budgets | Rebuilt — exact unique service record |
+| AWS Cost and Usage Report | Rebuilt — exact unique service record |
+| AWS Cost Explorer | Rebuilt — exact unique service record |
+| Savings Plans | Rebuilt — exact unique service record |
 
 #### 06 Compute (11)
 
@@ -271,8 +271,8 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | AWS Fargate | Rebuilt — exact unique service record |
 | AWS Lambda | Rebuilt — exact unique service record |
 | Amazon Lightsail | Rebuilt — exact unique service record |
-| AWS Outposts | Completed — exact central record |
-| AWS Wavelength | Completed — exact central record |
+| AWS Outposts | Rebuilt — exact unique service record |
+| AWS Wavelength | Rebuilt — exact unique service record |
 
 #### 07 Containers (6)
 
@@ -291,11 +291,11 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 |---|---|
 | Amazon Aurora | Rebuilt — exact unique service record |
 | Amazon Aurora Serverless | Rebuilt — exact unique service record |
-| Amazon DocumentDB | Completed — exact central record |
+| Amazon DocumentDB | Rebuilt — exact unique service record |
 | Amazon DynamoDB | Rebuilt — exact unique service record |
-| Amazon ElastiCache | Completed — exact central record |
-| Amazon Keyspaces | Completed — exact central record |
-| Amazon Neptune | Completed — exact central record |
+| Amazon ElastiCache | Rebuilt — exact unique service record |
+| Amazon Keyspaces | Rebuilt — exact unique service record |
+| Amazon Neptune | Rebuilt — exact unique service record |
 | Amazon RDS | Rebuilt — exact unique service record |
 | Amazon Redshift | Rebuilt — exact unique service record |
 | Amazon Timestream | Rebuilt — exact unique service record |
@@ -308,26 +308,26 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | AWS CodeArtifact | Rebuilt — exact unique service record |
 | AWS CodeBuild | Rebuilt — exact unique service record |
 | AWS CodeDeploy | Rebuilt — exact unique service record |
-| Amazon CodeGuru | Completed — exact central record |
+| Amazon CodeGuru | Rebuilt — exact unique service record |
 | AWS CodePipeline | Rebuilt — exact unique service record |
 | AWS Tools and SDKs | Rebuilt — exact unique service record |
-| AWS X-Ray | Completed — exact central record |
+| AWS X-Ray | Rebuilt — exact unique service record |
 
 #### 10 End User Computing (2)
 
 | Service | Central insight status |
 |---|---|
 | Amazon AppStream 2.0 | Rebuilt — exact unique service record |
-| Amazon WorkSpaces | Completed — exact central record |
+| Amazon WorkSpaces | Rebuilt — exact unique service record |
 
 #### 11 Frontend Web and Mobile (4)
 
 | Service | Central insight status |
 |---|---|
-| AWS Amplify | Completed — exact central record |
+| AWS Amplify | Rebuilt — exact unique service record |
 | Amazon API Gateway | Rebuilt — exact unique service record |
-| AWS Device Farm | Completed — exact central record |
-| Amazon Pinpoint | Completed — exact central record |
+| AWS Device Farm | Rebuilt — exact unique service record |
+| Amazon Pinpoint | Rebuilt — exact unique service record |
 
 #### 12 Internet of Things (IoT) (8)
 
@@ -349,11 +349,11 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Amazon Augmented AI | Rebuilt — exact unique service record |
 | Amazon Comprehend | Rebuilt — exact unique service record |
 | Amazon Comprehend Medical | Rebuilt — exact unique service record |
-| Amazon Fraud Detector | Completed — exact central record |
+| Amazon Fraud Detector | Rebuilt — exact unique service record |
 | Amazon Kendra | Rebuilt — exact unique service record |
 | Amazon Lex | Rebuilt — exact unique service record |
-| Amazon Nova | Completed — exact central record |
-| Amazon PartyRock | Completed — exact central record |
+| Amazon Nova | Rebuilt — exact unique service record |
+| Amazon PartyRock | Rebuilt — exact unique service record |
 | Amazon Personalize | Rebuilt — exact unique service record |
 | Amazon Polly | Rebuilt — exact unique service record |
 | Amazon Rekognition | Rebuilt — exact unique service record |
@@ -366,7 +366,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Elastic Transcoder | Completed — exact central record |
+| Amazon Elastic Transcoder | Rebuilt — exact unique service record |
 | Amazon Kinesis Video Streams | Rebuilt — exact unique service record |
 
 #### 15 Management and Governance (21)
@@ -381,16 +381,16 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | AWS Compute Optimizer | Rebuilt — exact unique service record |
 | AWS Config | Rebuilt — exact unique service record |
 | AWS Control Tower | Rebuilt — exact unique service record |
-| AWS Cost Anomaly Detection | Completed — exact central record |
-| AWS Health Dashboard | Completed — exact central record |
-| AWS License Manager | Completed — exact central record |
-| Amazon Managed Grafana | Completed — exact central record |
-| Amazon Managed Service for Prometheus | Completed — exact central record |
+| AWS Cost Anomaly Detection | Rebuilt — exact unique service record |
+| AWS Health Dashboard | Rebuilt — exact unique service record |
+| AWS License Manager | Rebuilt — exact unique service record |
+| Amazon Managed Grafana | Rebuilt — exact unique service record |
+| Amazon Managed Service for Prometheus | Rebuilt — exact unique service record |
 | AWS Management Console | Rebuilt — exact unique service record |
 | AWS Organizations | Rebuilt — exact unique service record |
-| AWS Proton | Completed — exact central record |
+| AWS Proton | Rebuilt — exact unique service record |
 | AWS Service Catalog | Rebuilt — exact unique service record |
-| AWS Service Quotas | Completed — exact central record |
+| AWS Service Quotas | Rebuilt — exact unique service record |
 | AWS Systems Manager | Rebuilt — exact unique service record |
 | AWS Trusted Advisor | Rebuilt — exact unique service record |
 | AWS Well-Architected Tool | Rebuilt — exact unique service record |
@@ -399,12 +399,12 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS Application Discovery Service | Completed — exact central record |
+| AWS Application Discovery Service | Rebuilt — exact unique service record |
 | AWS Application Migration Service | Rebuilt — exact unique service record |
 | AWS DMS | Rebuilt — exact unique service record |
 | AWS DataSync | Rebuilt — exact unique service record |
 | AWS Migration Hub | Rebuilt — exact unique service record |
-| AWS Schema Conversion Tool | Completed — exact central record |
+| AWS Schema Conversion Tool | Rebuilt — exact unique service record |
 | AWS Snow Family | Rebuilt — exact unique service record |
 | AWS Transfer Family | Rebuilt — exact unique service record |
 
@@ -426,13 +426,13 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS Artifact | Completed — exact central record |
-| AWS Audit Manager | Completed — exact central record |
+| AWS Artifact | Rebuilt — exact unique service record |
+| AWS Audit Manager | Rebuilt — exact unique service record |
 | AWS Certificate Manager | Rebuilt — exact unique service record |
 | AWS CloudHSM | Rebuilt — exact unique service record |
-| Amazon Cognito | Completed — exact central record |
+| Amazon Cognito | Rebuilt — exact unique service record |
 | Amazon Detective | Rebuilt — exact unique service record |
-| AWS Directory Service | Completed — exact central record |
+| AWS Directory Service | Rebuilt — exact unique service record |
 | AWS Firewall Manager | Rebuilt — exact unique service record |
 | Amazon GuardDuty | Rebuilt — exact unique service record |
 | AWS IAM Identity Center | Rebuilt — exact unique service record |
@@ -441,7 +441,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | AWS KMS | Rebuilt — exact unique service record |
 | Amazon Macie | Rebuilt — exact unique service record |
 | AWS Network Firewall | Rebuilt — exact unique service record |
-| AWS Resource Access Manager | Completed — exact central record |
+| AWS Resource Access Manager | Rebuilt — exact unique service record |
 | AWS Secrets Manager | Rebuilt — exact unique service record |
 | AWS Security Hub | Rebuilt — exact unique service record |
 | AWS Security Token Service | Rebuilt — exact unique service record |
@@ -452,14 +452,14 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS Backup | Completed — exact central record |
+| AWS Backup | Rebuilt — exact unique service record |
 | Amazon EBS | Rebuilt — exact unique service record |
-| AWS Elastic Disaster Recovery | Completed — exact central record |
+| AWS Elastic Disaster Recovery | Rebuilt — exact unique service record |
 | Amazon EFS | Rebuilt — exact unique service record |
-| Amazon FSx | Completed — exact central record |
+| Amazon FSx | Rebuilt — exact unique service record |
 | Amazon S3 | Rebuilt — exact unique service record |
 | Amazon S3 Glacier | Rebuilt — exact unique service record |
-| AWS Storage Gateway | Completed — exact central record |
+| AWS Storage Gateway | Rebuilt — exact unique service record |
 
 
 ### AIP-C01
@@ -469,7 +469,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Service | Central insight status |
 |---|---|
 | Amazon Athena | Rebuilt — exact unique service record |
-| Amazon EMR | Completed — exact central record |
+| Amazon EMR | Rebuilt — exact unique service record |
 | AWS Glue | Rebuilt — exact unique service record |
 | Amazon Kinesis | Rebuilt — exact unique service record |
 | Amazon OpenSearch Service | Rebuilt — exact unique service record |
@@ -480,7 +480,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppFlow | Completed — exact central record |
+| Amazon AppFlow | Rebuilt — exact unique service record |
 | AWS AppConfig | Rebuilt — exact unique service record |
 | Amazon EventBridge | Rebuilt — exact unique service record |
 | Amazon SNS | Rebuilt — exact unique service record |
@@ -495,8 +495,8 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Amazon EC2 | Rebuilt — exact unique service record |
 | AWS Lambda | Rebuilt — exact unique service record |
 | AWS Lambda@Edge | Rebuilt — exact unique service record |
-| AWS Outposts | Completed — exact central record |
-| AWS Wavelength | Completed — exact central record |
+| AWS Outposts | Rebuilt — exact unique service record |
+| AWS Wavelength | Rebuilt — exact unique service record |
 
 #### 04 Containers (4)
 
@@ -518,18 +518,18 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Service | Central insight status |
 |---|---|
 | Amazon Aurora | Rebuilt — exact unique service record |
-| Amazon DocumentDB | Completed — exact central record |
+| Amazon DocumentDB | Rebuilt — exact unique service record |
 | Amazon DynamoDB | Rebuilt — exact unique service record |
 | Amazon DynamoDB Streams | Rebuilt — exact unique service record |
-| Amazon ElastiCache | Completed — exact central record |
-| Amazon Neptune | Completed — exact central record |
+| Amazon ElastiCache | Rebuilt — exact unique service record |
+| Amazon Neptune | Rebuilt — exact unique service record |
 | Amazon RDS | Rebuilt — exact unique service record |
 
 #### 07 Developer Tools (11)
 
 | Service | Central insight status |
 |---|---|
-| AWS Amplify | Completed — exact central record |
+| AWS Amplify | Rebuilt — exact unique service record |
 | AWS CDK | Rebuilt — exact unique service record |
 | AWS CLI | Rebuilt — exact unique service record |
 | AWS CloudFormation | Rebuilt — exact unique service record |
@@ -537,9 +537,9 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | AWS CodeBuild | Rebuilt — exact unique service record |
 | AWS CodeDeploy | Rebuilt — exact unique service record |
 | AWS CodePipeline | Rebuilt — exact unique service record |
-| Kiro | Completed — exact central record |
+| Kiro | Rebuilt — exact unique service record |
 | AWS Tools and SDKs | Rebuilt — exact unique service record |
-| AWS X-Ray | Completed — exact central record |
+| AWS X-Ray | Rebuilt — exact unique service record |
 
 #### 08 Machine Learning (32)
 
@@ -555,8 +555,8 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Amazon Comprehend Medical | Rebuilt — exact unique service record |
 | Amazon Kendra | Rebuilt — exact unique service record |
 | Amazon Lex | Rebuilt — exact unique service record |
-| Amazon Nova | Completed — exact central record |
-| Amazon PartyRock | Completed — exact central record |
+| Amazon Nova | Rebuilt — exact unique service record |
+| Amazon PartyRock | Rebuilt — exact unique service record |
 | Amazon Personalize | Rebuilt — exact unique service record |
 | Amazon Polly | Rebuilt — exact unique service record |
 | Amazon Q Business | Rebuilt — exact unique service record |
@@ -575,7 +575,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Amazon SageMaker Processing | Rebuilt — exact unique service record |
 | Amazon SageMaker Unified Studio | Rebuilt — exact unique service record |
 | Amazon Textract | Rebuilt — exact unique service record |
-| Amazon Titan | Completed — exact central record |
+| Amazon Titan | Rebuilt — exact unique service record |
 | Amazon Transcribe | Rebuilt — exact unique service record |
 
 #### 09 Management and Governance (12)
@@ -583,14 +583,14 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Service | Central insight status |
 |---|---|
 | AWS Auto Scaling | Rebuilt — exact unique service record |
-| AWS Chatbot | Completed — exact central record |
+| AWS Chatbot | Rebuilt — exact unique service record |
 | AWS CloudTrail | Rebuilt — exact unique service record |
 | Amazon CloudWatch | Rebuilt — exact unique service record |
 | Amazon CloudWatch Logs | Rebuilt — exact unique service record |
 | Amazon CloudWatch Synthetics | Rebuilt — exact unique service record |
-| AWS Cost Anomaly Detection | Completed — exact central record |
-| AWS Cost Explorer | Completed — exact central record |
-| Amazon Managed Grafana | Completed — exact central record |
+| AWS Cost Anomaly Detection | Rebuilt — exact unique service record |
+| AWS Cost Explorer | Rebuilt — exact unique service record |
+| Amazon Managed Grafana | Rebuilt — exact unique service record |
 | AWS Service Catalog | Rebuilt — exact unique service record |
 | AWS Systems Manager | Rebuilt — exact unique service record |
 | AWS Well-Architected Tool | Rebuilt — exact unique service record |
@@ -619,7 +619,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Cognito | Completed — exact central record |
+| Amazon Cognito | Rebuilt — exact unique service record |
 | AWS Encryption SDK | Rebuilt — exact unique service record |
 | IAM | Rebuilt — exact unique service record |
 | IAM Access Analyzer | Rebuilt — exact unique service record |
