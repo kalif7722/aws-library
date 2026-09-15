@@ -16,9 +16,9 @@ const filenameOverrides: Record<string, string> = {
   "api-management": "api-management.webp",
 };
 const noAzurePrefix = new Set(["ai-anomaly-detector", "data-science-virtual-machines", "foundry-agent-service", "foundry-control-plane", "foundry-iq", "foundry-models", "health-bot", "observability-in-foundry-control-plane", "phi-open-models", "sdks"]);
-const assetPath = (service: AzureService) => {
+const folderOverrides: Record<string, string> = { "api-management": "internet-of-things", "azure-iot-edge": "internet-of-things", "azure-database-migration-service": "migration", "azure-confidential-ledger": "security" };\nconst assetPath = (service: AzureService) => {
   const filename = filenameOverrides[service.slug] || (noAzurePrefix.has(service.slug) ? service.slug : "azure-" + service.slug) + ".webp";
-  return "/azure/" + service.folder + "/" + filename;
+  return "/azure/" + (folderOverrides[service.slug] || service.folder) + "/" + filename;
 };
 
 export default function AzureServicesPage() {
