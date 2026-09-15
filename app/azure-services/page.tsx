@@ -59,18 +59,18 @@ type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: nu
 
 export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
+  const [selectedBranchIndex, setSelectedBranchIndex] = useState(0);
   const [query, setQuery] = useState("");
   const [assetAttempt, setAssetAttempt] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
 
   const selected = azureUniqueServices.find((service) => service.slug === selectedSlug) || azureUniqueServices[0];
-
+  const branch = azureBranches[selectedBranchIndex] || azureBranches[0];
   const searchEntries = useMemo<SearchEntry[]>(
-    () => azureBranches.flatMap((branch, branchIndex) => branch.services.map((service) => ({ service, branchTitle: branch.title, branchIndex }))),
+    () => azureBranches.flatMap((item, branchIndex) => item.services.map((service) => ({ service, branchTitle: item.title, branchIndex }))),
     [],
   );
-
   const searchResults = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
@@ -78,7 +78,6 @@ export default function AzureServicesPage() {
       .filter(({ service, branchTitle }) => (service.name + " " + branchTitle + " " + service.slug + " " + service.status).toLowerCase().includes(q))
       .slice(0, 16);
   }, [query, searchEntries]);
-
   const paths = selected ? imagePathCandidates(selected) : [];
   const imageSources = paths.flatMap((path) => imageUrlCandidates(path));
   const currentImage = imageSources[assetAttempt];
@@ -97,17 +96,14 @@ export default function AzureServicesPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const choose = (service: AzureService) => {
+  const choose = (service: AzureService, branchIndex = selectedBranchIndex) => {
     setSelectedSlug(service.slug);
+    setSelectedBranchIndex(branchIndex);
     setQuery("");
+    setExpanded(false);
   };
 
-  const chooseBranch = (branchIndex: number) => {
-    const service = azureBranches[branchIndex]?.services[0];
-    if (service) choose(service);
-  };
-
-  const chooseSearchResult = (entry: SearchEntry) => choose(entry.service);
+  const chooseSearchResult = (entry: SearchEntry) => choose(entry.service, entry.branchIndex);
 
   return <main className="workspace azure-workspace">
     <nav className="top-nav" aria-label="Primary navigation">
@@ -115,47 +111,38 @@ export default function AzureServicesPage() {
       <div><a className="home-button" href="/">Home</a><a className="active" href="/azure-services">Azure services</a><a href="/services">AWS services</a></div>
     </nav>
 
-    <header className="masthead">
-      <div className="site-tools azure-tools">
-        <div className={"azure-branch-menu" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
-          <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
-          {azureBranches.map((branch, branchIndex) => <div className="azure-branch-menu-item" key={branch.title}>
-            <button type="button" className="azure-branch-trigger" onClick={() => chooseBranch(branchIndex)} aria-haspopup="true">
-              <span>{branch.title}</span><small>{branch.services.length}</small>
-            </button>
-            <div className="azure-branch-dropdown" role="menu">
-              {branch.services.map((service) => <button type="button" role="menuitem" key={branch.title + "-" + service.slug} onClick={() => choose(service)}>
-                <span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small>
-              </button>)}
-            </div>
-          </div>)}
-        </div>
+    <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
+      <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
+        <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
+        {!menuCollapsed && azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title}>
+          <button type="button" className="azure-branch-trigger" onClick={() => choose(item.services[0], branchIndex)} aria-haspopup="true"><span>{item.title}</span><small>{item.services.length}</small></button>
+          <div className="azure-branch-dropdown" role="menu">
+            <div className="azure-dropdown-title">{item.title}</div>
+            {item.services.map((service) => <button type="button" role="menuitem" key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small></button>)}
+          </div>
+        </div>)}
+      </aside>
 
-        <div className="service-search azure-search">
-          <span>Search all Azure services</span>
-          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search service or branch…" aria-label="Search all Azure services and branches" />
-          {searchResults.length > 0 && <div className="search-results" role="listbox" aria-label="Azure search results">
-            {searchResults.map((entry) => <button type="button" key={entry.branchTitle + "-" + entry.service.slug} onClick={() => chooseSearchResult(entry)} role="option">
-              <span>{entry.service.name}</span><small>{entry.branchTitle} · {ready(entry.service) ? "Visual available" : "Visual pending"}</small>
-            </button>)}
-          </div>}
-        </div>
-        <div className="progress"><strong>{azureUniqueServices.length}</strong><span>unique services mapped</span></div>
-      </div>
-      <div className="azure-navigation-hint">Hover any branch to open its service menu. Select a service to view its visual guide.</div>
-    </header>
+      <section className="azure-main-pane">
+        <header className="azure-toolbar">
+          <div className="service-search azure-search">
+            <span>Search all Azure services</span>
+            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search service or branch…" aria-label="Search all Azure services and branches" />
+            {searchResults.length > 0 && <div className="search-results" role="listbox" aria-label="Azure search results">
+              {searchResults.map((entry) => <button type="button" key={entry.branchTitle + "-" + entry.service.slug} onClick={() => chooseSearchResult(entry)} role="option"><span>{entry.service.name}</span><small>{entry.branchTitle} · {ready(entry.service) ? "Visual available" : "Visual pending"}</small></button>)}
+            </div>}
+          </div>
+          <div className="progress"><strong>{azureUniqueServices.length}</strong><span>unique services mapped</span></div>
+        </header>
 
-    {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
-      <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{ready(selected) && hasImage ? "Visual available" : "Visual pending"}</span></div>
-      {hasImage
-        ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} onError={() => setAssetAttempt((attempt) => attempt + 1)} alt={selected.name + " Azure study visual"} /></button>
-        : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
-      <p className="viewer-note">Use the branch menus or global search to change services. Click the visual for full view; press Escape or Close to return.</p>
-    </article>}
+        {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
+          <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2><small className="azure-branch-context">{branch?.title}</small></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{ready(selected) && hasImage ? "Visual available" : "Visual pending"}</span></div>
+          {hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} onError={() => setAssetAttempt((attempt) => attempt + 1)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
+          <p className="viewer-note">Choose any branch from the left rail or search globally. Click the visual for full view; press Escape or Close to return.</p>
+        </article>}
+      </section>
+    </div>
 
-    {selected && expanded && hasImage && <div className="image-modal" role="dialog" aria-modal="true" aria-label={selected.name + " full view"} onClick={() => setExpanded(false)}>
-      <button type="button" className="modal-close" onClick={() => setExpanded(false)} aria-label="Close full view">Close ×</button>
-      <img src={currentImage} alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} />
-    </div>}
+    {selected && expanded && hasImage && <div className="image-modal" role="dialog" aria-modal="true" aria-label={selected.name + " full view"} onClick={() => setExpanded(false)}><button type="button" className="modal-close" onClick={() => setExpanded(false)} aria-label="Close full view">Close ×</button><img src={currentImage} alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} /></div>}
   </main>;
 }
