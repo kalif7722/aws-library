@@ -1,6 +1,7 @@
 "use client";
 
 import { Activity, BrainCircuit, Cloud, Database, FileText, Globe2, HardDrive, Laptop, Network, Server, Shield, Sparkles, Users } from "lucide-react";
+import { assetUrl } from "../../lib/asset-url";
 import "./AzureServiceLearning.css";
 import "./AipServiceLearningDetails.css";
 import "./AipServiceLearningDetailsV8.css";
@@ -355,8 +356,41 @@ const D:Record<string,Detail>={
 D["Azure AI Bot Service"]=D["Azure AI Bot Service"];
 export const azureAiServiceNames=Object.keys(D);
 export const hasAzureAiLearningDetails=(name:string)=>Boolean(D[name]);
+const azureIconFiles:Record<string,string>={
+  "Microsoft Foundry":"microsoft-foundry.svg",
+  "Azure AI Bot Service":"azure-ai-bot-service.svg",
+  "Azure AI Search":"azure-ai-search.svg",
+  "Azure Databricks":"azure-databricks.svg",
+  "Azure Machine Learning":"azure-machine-learning.svg",
+  "Azure Open Datasets":"azure-open-datasets.svg",
+  "Foundry Tools":"foundry-tools.svg",
+  "Azure AI Video Indexer":"azure-ai-video-indexer.svg",
+  "Azure AI Custom Vision":"azure-ai-custom-vision.svg",
+  "Data Science Virtual Machines":"data-science-virtual-machines.svg",
+  "Azure Language in Foundry Tools":"azure-language-in-foundry-tools.svg",
+  "Azure Translator in Foundry Tools":"azure-translator-in-foundry-tools.svg",
+  "Azure OpenAI in Foundry Models":"azure-openai-in-foundry-models.svg",
+  "Content Safety in Foundry Control Plane":"content-safety-in-foundry-control-plane.svg",
+  "Health Bot":"health-bot.svg",
+  "Azure Document Intelligence in Foundry Tools":"azure-document-intelligence-in-foundry-tools.svg",
+  "AI Anomaly Detector":"ai-anomaly-detector.svg",
+  "Foundry Models":"foundry-models.svg",
+  "Microsoft Security Copilot":"microsoft-security-copilot.svg",
+  "Azure AI Immersive Reader":"azure-ai-immersive-reader.svg",
+  "Phi open models":"phi-open-models.svg",
+  "Azure Content Understanding in Foundry Tools":"azure-content-understanding-in-foundry-tools.svg",
+  "Azure Speech in Foundry Tools":"azure-speech-in-foundry-tools.svg",
+  "Microsoft Planetary Computer Pro":"microsoft-planetary-computer-pro.svg",
+  "Foundry Agent Service":"foundry-agent-service.svg",
+  "Azure SRE Agent":"azure-sre-agent.svg",
+  "Observability in Foundry Control Plane":"observability-in-foundry-control-plane.svg",
+  "Azure Vision in Foundry Tools":"azure-vision-in-foundry-tools.svg",
+  "Foundry IQ":"foundry-iq.svg",
+  "Foundry Control Plane":"foundry-control-plane.svg"
+};
+const iconFileFor=(label:string)=>azureIconFiles[label];
 function Icon({kind}:{kind:Kind}){const C=kind==="user"?Users:kind==="data"?Database:kind==="security"?Shield:kind==="network"?Network:kind==="storage"?HardDrive:kind==="ai"?BrainCircuit:kind==="monitor"?Activity:kind==="app"?Laptop:kind==="compute"?Server:kind==="file"?FileText:kind==="internet"?Globe2:Cloud;return <div className={"azure-node-icon azure-node-"+kind}><C size={28}/></div>}
-function NodeView({node}:{node:Node}){return <div className={"v8-node "+(node.kind?"public":"aws")}>{node.kind?<Icon kind={node.kind}/>:<div className="azure-node-icon azure-node-ai"><Sparkles size={28}/></div>}<strong>{node.label}</strong><small>{node.sub}</small></div>}
+function NodeView({node}:{node:Node}){const iconFile=iconFileFor(node.label);return <div className={"v8-node "+(node.kind?"public":"aws")}>{iconFile?<div className="azure-node-icon azure-node-ai"><img src={assetUrl("/azure-icons/"+iconFile)} alt="" onError={(event)=>{event.currentTarget.style.display="none"}} /></div>:node.kind?<Icon kind={node.kind}/>:<div className="azure-node-icon azure-node-ai"><Sparkles size={28}/></div>}<strong>{node.label}</strong><small>{node.sub}</small></div>}
 function ArchitectureView({arch,index}:{arch:Architecture;index:number}){return <section className="v8-architecture azure-architecture" id={"azure-architecture-"+index}><div className="section-cap"><div><p>ARCHITECTURE {String(index).padStart(2,"0")}</p><h3>{arch.title}</h3></div><span>{arch.note}</span></div><div className="v8-reference">Reference pattern: {arch.reference}</div><div className="v8-layers">{arch.layers.map((layer,i)=><div className="v8-layer-wrap" key={layer.title}><div className="v8-layer"><b className="v8-layer-title">{layer.title}</b><div className="v8-layer-nodes">{layer.nodes.map((node,j)=><NodeView key={j} node={node}/>)}</div></div>{i<arch.layers.length-1&&<div className="v8-connector" aria-hidden="true">→</div>}</div>)}</div></section>}
 function Cards({title,items,id}:{title:string;items:string[];id?:string}){return <section className="knowledge-card" id={id}><div className="knowledge-card-title"><span>◆</span><h3>{title}</h3></div><div className="knowledge-card-body"><div className="concept-stack">{items.map((item,i)=><p key={i}><b>{String(i+1).padStart(2,"0")}</b>{item}</p>)}</div></div></section>}
 function Insight({title,icon,items}:{title:string;icon:string;items:string[]}){return <section className="service-insight-panel"><div className="service-panel-title"><span>{icon}</span><h3>{title}</h3></div><div className="service-insight-list">{items.map((item,i)=><div key={i}><b>{String(i+1).padStart(2,"0")}</b><p>{item}</p></div>)}</div></section>}
