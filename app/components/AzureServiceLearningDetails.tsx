@@ -421,7 +421,20 @@ const azureIconFiles:Record<string,string>={
   "Data Lake Analytics":"data-lake-analytics.svg",
   "Event Hubs":"event-hubs.svg",
   "Power BI Embedded":"power-bi-embedded.svg",
-  "Azure Chaos Studio":"azure-chaos-studio.svg"
+  "Azure Chaos Studio":"azure-chaos-studio.svg",
+  // Architecture labels use shorter product/component names than the branch catalog.
+  "Databricks jobs":"azure-databricks.svg",
+  "Databricks":"azure-databricks.svg",
+  "ADLS Gen2":"azure-data-lake-storage.svg",
+  "ADLS":"azure-data-lake-storage.svg",
+  "Delta Lake":"azure-databricks.svg",
+  "Delta tables":"azure-databricks.svg",
+  "Unity Catalog":"azure-databricks.svg",
+  "Structured Streaming":"azure-databricks.svg",
+  "Feature store":"azure-databricks.svg",
+  "Power BI":"power-bi-embedded.svg",
+  "Azure ML":"azure-machine-learning.svg",
+  "Azure Machine Learning":"azure-machine-learning.svg"
 };
 const iconFileFor=(label:string)=>azureIconFiles[label];
 const azureIconUrl=(file:string)=>{const path="/azure-icons/"+file;const configured=assetUrl(path);return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured};
