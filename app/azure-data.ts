@@ -1822,6 +1822,35 @@ export const azureBranches: AzureBranch[] = [
   }
 ];
 
+const azureFilenameOverrides: Record<string, string> = {
+  "azure-ai-search": "azure-ai-search.webp",
+  "azure-machine-learning": "azure-machine-learning.webp",
+  "foundry-tools": "foundry-tools.webp",
+  "azure-language-in-foundry-tools": "azure-language-in-foundry-tools.webp",
+  "azure-translator-in-foundry-tools": "azure-translator-in-foundry-tools.webp",
+  "azure-openai-in-foundry-models": "azure-openai-in-foundry-models.webp",
+  "content-safety-in-foundry-control-plane": "content-safety-in-foundry-control-plane.webp",
+  "microsoft-security-copilot": "microsoft-security-copilot.webp",
+  "microsoft-planetary-computer-pro": "microsoft-planetary-computer-pro.webp",
+  "azure-sre-agent": "azure-sre-agent.webp",
+  "observability-in-foundry-control-plane": "observability-in-foundry-control-plane.webp",
+  "sql-server-on-azure-virtual-machines": "sql-server-on-azure-virtual-machines.webp",
+  "virtual-machines": "virtual-machines.webp",
+  "windows-server": "windows-server.webp",
+  "data-lake-analytics": "data-lake-analytics.webp",
+  "power-bi": "power-bi.webp",
+  "power-bi-embedded": "power-bi-embedded.webp",
+  "devops-tool-integrations": "devops-tool-integrations.webp",
+  "api-management": "api-management.webp",
+  "app-configuration": "app-configuration.webp",
+};
+
+export const azureAssetPath = (service: AzureService) => {
+  const filename = azureFilenameOverrides[service.slug]
+    || ((service.slug.startsWith("azure-") ? service.slug : "azure-" + service.slug) + ".webp");
+  return "/azure/" + service.folder + "/" + filename;
+};
+
 export const azureUniqueServices = (() => {
   const unique = new Map<string, AzureService>();
   for (const branch of azureBranches) {

@@ -3,56 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { assetUrl } from "../../lib/asset-url";
 import "../components/AzureLibrary.css";
-import { azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
+import { azureAssetPath, azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
 
 const ready = (service: AzureService) => service.status.toLowerCase().startsWith("completed");
 const azureR2Base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
 
-const filenameOverrides: Record<string, string> = {
-  "azure-ai-search": "azure-ai-search.webp",
-  "azure-machine-learning": "azure-machine-learning.webp",
-  "foundry-tools": "foundry-tools.webp",
-  "azure-language-in-foundry-tools": "azure-language-in-foundry-tools.webp",
-  "azure-translator-in-foundry-tools": "azure-translator-in-foundry-tools.webp",
-  "azure-openai-in-foundry-models": "azure-openai-in-foundry-models.webp",
-  "content-safety-in-foundry-control-plane": "content-safety-in-foundry-control-plane.webp",
-  "microsoft-security-copilot": "microsoft-security-copilot.webp",
-  "microsoft-planetary-computer-pro": "microsoft-planetary-computer-pro.webp",
-  "azure-sre-agent": "azure-sre-agent.webp",
-  "observability-in-foundry-control-plane": "observability-in-foundry-control-plane.webp",
-  "sql-server-on-azure-virtual-machines": "sql-server-on-azure-virtual-machines.webp",
-  "virtual-machines": "virtual-machines.webp",
-  "windows-server": "windows-server.webp",
-  "data-lake-analytics": "data-lake-analytics.webp",
-  "power-bi": "power-bi.webp",
-  "power-bi-embedded": "power-bi-embedded.webp",
-  "devops-tool-integrations": "devops-tool-integrations.webp",
-  "api-management": "api-management.webp",
-};
-
-const folderOverrides: Record<string, string> = {
-  "api-management": "internet-of-things",
-  "azure-container-apps": "containers",
-  "azure-container-instances": "containers",
-  "azure-databricks": "analytics",
-  "azure-database-migration-service": "migration",
-  "azure-functions": "containers",
-  "azure-iot-edge": "internet-of-things",
-  "azure-kubernetes-service": "containers",
-  "azure-kubernetes-fleet-manager": "containers",
-  "azure-confidential-ledger": "security",
-};
-
-const imagePathCandidates = (service: AzureService) => {
-  const primary = filenameOverrides[service.slug] || (service.slug.startsWith("azure-") ? service.slug : "azure-" + service.slug) + ".webp";
-  const names = [...new Set([primary, service.slug + ".webp", "azure-" + service.slug + ".webp"])];
-  const folders = [...new Set([folderOverrides[service.slug] || service.folder, "ai-machine-learning"])];
-  return folders.flatMap((folder) => names.map((name) => "/azure/" + folder + "/" + name));
-};
-
-const imageUrlCandidates = (path: string) => {
+const azureAssetUrl = (path: string) => {
   const configured = assetUrl(path);
-  return [...new Set([configured === path ? "" : configured, azureR2Base + path, azureR2Base + "/aws-el10-images" + path].filter(Boolean))];
+  return configured === path ? azureR2Base + path : configured;
 };
 
 type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: number };
@@ -61,7 +19,7 @@ export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
   const [selectedBranchIndex, setSelectedBranchIndex] = useState(0);
   const [query, setQuery] = useState("");
-  const [assetAttempt, setAssetAttempt] = useState(0);
+  const [imageError, setImageError] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
 
@@ -78,13 +36,12 @@ export default function AzureServicesPage() {
       .filter(({ service, branchTitle }) => (service.name + " " + branchTitle + " " + service.slug + " " + service.status).toLowerCase().includes(q))
       .slice(0, 16);
   }, [query, searchEntries]);
-  const paths = selected ? imagePathCandidates(selected) : [];
-  const imageSources = paths.flatMap((path) => imageUrlCandidates(path));
-  const currentImage = imageSources[assetAttempt];
-  const hasImage = Boolean(selected && ready(selected) && currentImage);
+  const imagePath = selected ? azureAssetPath(selected) : "";
+  const currentImage = selected ? azureAssetUrl(imagePath) : "";
+  const hasImage = Boolean(selected && ready(selected) && currentImage && !imageError);
 
   useEffect(() => {
-    setAssetAttempt(0);
+    setImageError(false);
     setExpanded(false);
   }, [selectedSlug]);
 
@@ -137,12 +94,12 @@ export default function AzureServicesPage() {
 
         {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
           <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2><small className="azure-branch-context">{branch?.title}</small></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{ready(selected) && hasImage ? "Visual available" : "Visual pending"}</span></div>
-          {hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} onError={() => setAssetAttempt((attempt) => attempt + 1)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
+          {hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} loading="eager" decoding="async" fetchPriority="high" onError={() => setImageError(true)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
           <p className="viewer-note">Choose any branch from the left rail or search globally. Click the visual for full view; press Escape or Close to return.</p>
         </article>}
       </section>
     </div>
 
-    {selected && expanded && hasImage && <div className="image-modal" role="dialog" aria-modal="true" aria-label={selected.name + " full view"} onClick={() => setExpanded(false)}><button type="button" className="modal-close" onClick={() => setExpanded(false)} aria-label="Close full view">Close ×</button><img src={currentImage} alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} /></div>}
+    {selected && expanded && hasImage && <div className="image-modal" role="dialog" aria-modal="true" aria-label={selected.name + " full view"} onClick={() => setExpanded(false)}><button type="button" className="modal-close" onClick={() => setExpanded(false)} aria-label="Close full view">Close ×</button><img src={currentImage} loading="eager" decoding="async" fetchPriority="high" alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} /></div>}
   </main>;
 }
