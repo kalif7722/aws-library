@@ -57,7 +57,8 @@ export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
   const [query, setQuery] = useState("");
   const [assetAttempt, setAssetAttempt] = useState(0);
-  const [expanded, setExpanded] = useState(false);\n  const [menuCollapsed, setMenuCollapsed] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [menuCollapsed, setMenuCollapsed] = useState(false);
 
   const selected = azureUniqueServices.find((service) => service.slug === selectedSlug) || azureUniqueServices[0];
 
@@ -111,7 +112,8 @@ export default function AzureServicesPage() {
 
     <header className="masthead">
       <div className="site-tools azure-tools">
-        <div className="azure-branch-menu" aria-label="Azure service branches">
+        <div className={"azure-branch-menu" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
+          <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
           {azureBranches.map((branch, branchIndex) => <div className="azure-branch-menu-item" key={branch.title}>
             <button type="button" className="azure-branch-trigger" onClick={() => chooseBranch(branchIndex)} aria-haspopup="true">
               <span>{branch.title}</span><small>{branch.services.length}</small>
