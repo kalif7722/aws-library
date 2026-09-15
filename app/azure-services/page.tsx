@@ -38,7 +38,7 @@ export default function AzureServicesPage() {
   }, [query, searchEntries]);
   const imagePath = selected ? azureAssetPath(selected) : "";
   const currentImage = selected ? azureAssetUrl(imagePath) : "";
-  const hasImage = Boolean(selected && ready(selected) && currentImage && !imageError);
+  const hasImage = Boolean(selected && currentImage && !imageError);
 
   useEffect(() => {
     setImageError(false);
@@ -93,7 +93,7 @@ export default function AzureServicesPage() {
         </header>
 
         {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
-          <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2><small className="azure-branch-context">{branch?.title}</small></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{ready(selected) && hasImage ? "Visual available" : "Visual pending"}</span></div>
+          <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2><small className="azure-branch-context">{branch?.title}</small></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{hasImage ? "Visual available" : "Visual pending"}</span></div>
           {hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} loading="eager" decoding="async" fetchPriority="high" onError={() => setImageError(true)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
           <p className="viewer-note">Choose any branch from the left rail or search globally. Click the visual for full view; press Escape or Close to return.</p>
         </article>}

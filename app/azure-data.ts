@@ -1823,6 +1823,18 @@ export const azureBranches: AzureBranch[] = [
 ];
 
 const azureFilenameOverrides: Record<string, string> = {
+  "ai-anomaly-detector": "ai-anomaly-detector.webp",
+  "data-science-virtual-machines": "data-science-virtual-machines.webp",
+  "foundry-agent-service": "foundry-agent-service.webp",
+  "foundry-control-plane": "foundry-control-plane.webp",
+  "foundry-iq": "foundry-iq.webp",
+  "foundry-models": "foundry-models.webp",
+  "health-bot": "health-bot.webp",
+  "microsoft-foundry": "microsoft-foundry.webp",
+  "microsoft-planetary-computer-pro": "microsoft-planetary-computer-pro.webp",
+  "microsoft-security-copilot": "microsoft-security-copilot.webp",
+  "observability-in-foundry-control-plane": "observability-in-foundry-control-plane.webp",
+  "phi-open-models": "phi-open-models.webp",
   "azure-ai-search": "azure-ai-search.webp",
   "azure-machine-learning": "azure-machine-learning.webp",
   "foundry-tools": "foundry-tools.webp",
