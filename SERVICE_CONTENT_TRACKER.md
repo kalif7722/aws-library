@@ -203,9 +203,9 @@ Official course references:
 - SAP-C02: https://aws-library.kalifs.workers.dev/courses/aws-solutions-architect-professional
 - Generative AI Developer Professional / AIP-C01: https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional
 
-The service-specific records are rebuilt from the relevant AWS service user guides, API/reference material, service FAQs, pricing dimensions, and Well-Architected guidance. They paraphrase service-specific control points: identity and resource permissions, encryption, audit/logging, service limits, failure semantics, performance controls, billing dimensions, and operational constraints.
+Each record is individually authored from the relevant AWS service user guide, API/reference material, service FAQs, pricing model and Well-Architected guidance. No record is produced by substituting a service name into a shared answer pattern.
 
-Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 unique central insight records rebuilt as exact service records. No SAP/AIP service uses a family-level insight fallback. A service may appear in both courses but has one central record.
+Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 unique services rewritten with individually authored AWS-specific insight records. No SAP/AIP service uses the generated family-template content.
 
 ### SAP-C02
 
@@ -213,253 +213,253 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Rebuilt — exact unique service record |
-| AWS Data Exchange | Rebuilt — exact unique service record |
-| Amazon Data Firehose | Rebuilt — exact unique service record |
-| Amazon EMR | Rebuilt — exact unique service record |
-| AWS Glue | Rebuilt — exact unique service record |
-| Amazon Kinesis Data Streams | Rebuilt — exact unique service record |
-| AWS Lake Formation | Rebuilt — exact unique service record |
-| Amazon Managed Service for Apache Flink | Rebuilt — exact unique service record |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rebuilt — exact unique service record |
-| Amazon OpenSearch Service | Rebuilt — exact unique service record |
-| Amazon QuickSight | Rebuilt — exact unique service record |
+| Amazon Athena | Rewritten — AWS-specific record |
+| AWS Data Exchange | Rewritten — AWS-specific record |
+| Amazon Data Firehose | Rewritten — AWS-specific record |
+| Amazon EMR | Rewritten — AWS-specific record |
+| AWS Glue | Rewritten — AWS-specific record |
+| Amazon Kinesis Data Streams | Rewritten — AWS-specific record |
+| AWS Lake Formation | Rewritten — AWS-specific record |
+| Amazon Managed Service for Apache Flink | Rewritten — AWS-specific record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rewritten — AWS-specific record |
+| Amazon OpenSearch Service | Rewritten — AWS-specific record |
+| Amazon QuickSight | Rewritten — AWS-specific record |
 
 #### 02 Application Integration (7)
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppFlow | Rebuilt — exact unique service record |
-| AWS AppSync | Rebuilt — exact unique service record |
-| Amazon EventBridge | Rebuilt — exact unique service record |
-| Amazon MQ | Rebuilt — exact unique service record |
-| Amazon SNS | Rebuilt — exact unique service record |
-| Amazon SQS | Rebuilt — exact unique service record |
-| AWS Step Functions | Rebuilt — exact unique service record |
+| Amazon AppFlow | Rewritten — AWS-specific record |
+| AWS AppSync | Rewritten — AWS-specific record |
+| Amazon EventBridge | Rewritten — AWS-specific record |
+| Amazon MQ | Rewritten — AWS-specific record |
+| Amazon SNS | Rewritten — AWS-specific record |
+| Amazon SQS | Rewritten — AWS-specific record |
+| AWS Step Functions | Rewritten — AWS-specific record |
 
 #### 03 Blockchain (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Managed Blockchain | Rebuilt — exact unique service record |
+| Amazon Managed Blockchain | Rewritten — AWS-specific record |
 
 #### 04 Business Applications (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon SES | Rebuilt — exact unique service record |
+| Amazon SES | Rewritten — AWS-specific record |
 
 #### 05 Cloud Financial Management (4)
 
 | Service | Central insight status |
 |---|---|
-| AWS Budgets | Rebuilt — exact unique service record |
-| AWS Cost and Usage Report | Rebuilt — exact unique service record |
-| AWS Cost Explorer | Rebuilt — exact unique service record |
-| Savings Plans | Rebuilt — exact unique service record |
+| AWS Budgets | Rewritten — AWS-specific record |
+| AWS Cost and Usage Report | Rewritten — AWS-specific record |
+| AWS Cost Explorer | Rewritten — AWS-specific record |
+| Savings Plans | Rewritten — AWS-specific record |
 
 #### 06 Compute (11)
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Rebuilt — exact unique service record |
-| AWS Auto Scaling | Rebuilt — exact unique service record |
-| AWS Batch | Rebuilt — exact unique service record |
-| AWS Elastic Beanstalk | Rebuilt — exact unique service record |
-| Amazon EC2 | Rebuilt — exact unique service record |
-| Amazon EC2 Auto Scaling | Rebuilt — exact unique service record |
-| AWS Fargate | Rebuilt — exact unique service record |
-| AWS Lambda | Rebuilt — exact unique service record |
-| Amazon Lightsail | Rebuilt — exact unique service record |
-| AWS Outposts | Rebuilt — exact unique service record |
-| AWS Wavelength | Rebuilt — exact unique service record |
+| AWS App Runner | Rewritten — AWS-specific record |
+| AWS Auto Scaling | Rewritten — AWS-specific record |
+| AWS Batch | Rewritten — AWS-specific record |
+| AWS Elastic Beanstalk | Rewritten — AWS-specific record |
+| Amazon EC2 | Rewritten — AWS-specific record |
+| Amazon EC2 Auto Scaling | Rewritten — AWS-specific record |
+| AWS Fargate | Rewritten — AWS-specific record |
+| AWS Lambda | Rewritten — AWS-specific record |
+| Amazon Lightsail | Rewritten — AWS-specific record |
+| AWS Outposts | Rewritten — AWS-specific record |
+| AWS Wavelength | Rewritten — AWS-specific record |
 
 #### 07 Containers (6)
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Rebuilt — exact unique service record |
-| Amazon ECS | Rebuilt — exact unique service record |
-| Amazon ECS Anywhere | Rebuilt — exact unique service record |
-| Amazon EKS | Rebuilt — exact unique service record |
-| Amazon EKS Anywhere | Rebuilt — exact unique service record |
-| Amazon EKS Distro | Rebuilt — exact unique service record |
+| Amazon ECR | Rewritten — AWS-specific record |
+| Amazon ECS | Rewritten — AWS-specific record |
+| Amazon ECS Anywhere | Rewritten — AWS-specific record |
+| Amazon EKS | Rewritten — AWS-specific record |
+| Amazon EKS Anywhere | Rewritten — AWS-specific record |
+| Amazon EKS Distro | Rewritten — AWS-specific record |
 
 #### 08 Database (10)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Rebuilt — exact unique service record |
-| Amazon Aurora Serverless | Rebuilt — exact unique service record |
-| Amazon DocumentDB | Rebuilt — exact unique service record |
-| Amazon DynamoDB | Rebuilt — exact unique service record |
-| Amazon ElastiCache | Rebuilt — exact unique service record |
-| Amazon Keyspaces | Rebuilt — exact unique service record |
-| Amazon Neptune | Rebuilt — exact unique service record |
-| Amazon RDS | Rebuilt — exact unique service record |
-| Amazon Redshift | Rebuilt — exact unique service record |
-| Amazon Timestream | Rebuilt — exact unique service record |
+| Amazon Aurora | Rewritten — AWS-specific record |
+| Amazon Aurora Serverless | Rewritten — AWS-specific record |
+| Amazon DocumentDB | Rewritten — AWS-specific record |
+| Amazon DynamoDB | Rewritten — AWS-specific record |
+| Amazon ElastiCache | Rewritten — AWS-specific record |
+| Amazon Keyspaces | Rewritten — AWS-specific record |
+| Amazon Neptune | Rewritten — AWS-specific record |
+| Amazon RDS | Rewritten — AWS-specific record |
+| Amazon Redshift | Rewritten — AWS-specific record |
+| Amazon Timestream | Rewritten — AWS-specific record |
 
 #### 09 Developer Tools (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS CDK | Rebuilt — exact unique service record |
-| AWS CodeArtifact | Rebuilt — exact unique service record |
-| AWS CodeBuild | Rebuilt — exact unique service record |
-| AWS CodeDeploy | Rebuilt — exact unique service record |
-| Amazon CodeGuru | Rebuilt — exact unique service record |
-| AWS CodePipeline | Rebuilt — exact unique service record |
-| AWS Tools and SDKs | Rebuilt — exact unique service record |
-| AWS X-Ray | Rebuilt — exact unique service record |
+| AWS CDK | Rewritten — AWS-specific record |
+| AWS CodeArtifact | Rewritten — AWS-specific record |
+| AWS CodeBuild | Rewritten — AWS-specific record |
+| AWS CodeDeploy | Rewritten — AWS-specific record |
+| Amazon CodeGuru | Rewritten — AWS-specific record |
+| AWS CodePipeline | Rewritten — AWS-specific record |
+| AWS Tools and SDKs | Rewritten — AWS-specific record |
+| AWS X-Ray | Rewritten — AWS-specific record |
 
 #### 10 End User Computing (2)
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppStream 2.0 | Rebuilt — exact unique service record |
-| Amazon WorkSpaces | Rebuilt — exact unique service record |
+| Amazon AppStream 2.0 | Rewritten — AWS-specific record |
+| Amazon WorkSpaces | Rewritten — AWS-specific record |
 
 #### 11 Frontend Web and Mobile (4)
 
 | Service | Central insight status |
 |---|---|
-| AWS Amplify | Rebuilt — exact unique service record |
-| Amazon API Gateway | Rebuilt — exact unique service record |
-| AWS Device Farm | Rebuilt — exact unique service record |
-| Amazon Pinpoint | Rebuilt — exact unique service record |
+| AWS Amplify | Rewritten — AWS-specific record |
+| Amazon API Gateway | Rewritten — AWS-specific record |
+| AWS Device Farm | Rewritten — AWS-specific record |
+| Amazon Pinpoint | Rewritten — AWS-specific record |
 
 #### 12 Internet of Things (IoT) (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS IoT Core | Rebuilt — exact unique service record |
-| AWS IoT Device Defender | Rebuilt — exact unique service record |
-| AWS IoT Device Management | Rebuilt — exact unique service record |
-| AWS IoT Events | Rebuilt — exact unique service record |
-| AWS IoT Greengrass | Rebuilt — exact unique service record |
-| AWS IoT SiteWise | Rebuilt — exact unique service record |
-| AWS IoT Things Graph | Rebuilt — exact unique service record |
-| AWS IoT 1-Click | Rebuilt — exact unique service record |
+| AWS IoT Core | Rewritten — AWS-specific record |
+| AWS IoT Device Defender | Rewritten — AWS-specific record |
+| AWS IoT Device Management | Rewritten — AWS-specific record |
+| AWS IoT Events | Rewritten — AWS-specific record |
+| AWS IoT Greengrass | Rewritten — AWS-specific record |
+| AWS IoT SiteWise | Rewritten — AWS-specific record |
+| AWS IoT Things Graph | Rewritten — AWS-specific record |
+| AWS IoT 1-Click | Rewritten — AWS-specific record |
 
 #### 13 Machine Learning (15)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Rebuilt — exact unique service record |
-| Amazon Comprehend | Rebuilt — exact unique service record |
-| Amazon Comprehend Medical | Rebuilt — exact unique service record |
-| Amazon Fraud Detector | Rebuilt — exact unique service record |
-| Amazon Kendra | Rebuilt — exact unique service record |
-| Amazon Lex | Rebuilt — exact unique service record |
-| Amazon Nova | Rebuilt — exact unique service record |
-| Amazon PartyRock | Rebuilt — exact unique service record |
-| Amazon Personalize | Rebuilt — exact unique service record |
-| Amazon Polly | Rebuilt — exact unique service record |
-| Amazon Rekognition | Rebuilt — exact unique service record |
-| Amazon SageMaker AI | Rebuilt — exact unique service record |
-| Amazon Textract | Rebuilt — exact unique service record |
-| Amazon Transcribe | Rebuilt — exact unique service record |
-| Amazon Translate | Rebuilt — exact unique service record |
+| Amazon Augmented AI | Rewritten — AWS-specific record |
+| Amazon Comprehend | Rewritten — AWS-specific record |
+| Amazon Comprehend Medical | Rewritten — AWS-specific record |
+| Amazon Fraud Detector | Rewritten — AWS-specific record |
+| Amazon Kendra | Rewritten — AWS-specific record |
+| Amazon Lex | Rewritten — AWS-specific record |
+| Amazon Nova | Rewritten — AWS-specific record |
+| Amazon PartyRock | Rewritten — AWS-specific record |
+| Amazon Personalize | Rewritten — AWS-specific record |
+| Amazon Polly | Rewritten — AWS-specific record |
+| Amazon Rekognition | Rewritten — AWS-specific record |
+| Amazon SageMaker AI | Rewritten — AWS-specific record |
+| Amazon Textract | Rewritten — AWS-specific record |
+| Amazon Transcribe | Rewritten — AWS-specific record |
+| Amazon Translate | Rewritten — AWS-specific record |
 
 #### 14 Media Services (2)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Elastic Transcoder | Rebuilt — exact unique service record |
-| Amazon Kinesis Video Streams | Rebuilt — exact unique service record |
+| Amazon Elastic Transcoder | Rewritten — AWS-specific record |
+| Amazon Kinesis Video Streams | Rewritten — AWS-specific record |
 
 #### 15 Management and Governance (21)
 
 | Service | Central insight status |
 |---|---|
-| AWS CloudFormation | Rebuilt — exact unique service record |
-| AWS CloudTrail | Rebuilt — exact unique service record |
-| Amazon CloudWatch | Rebuilt — exact unique service record |
-| Amazon CloudWatch Logs | Rebuilt — exact unique service record |
-| AWS CLI | Rebuilt — exact unique service record |
-| AWS Compute Optimizer | Rebuilt — exact unique service record |
-| AWS Config | Rebuilt — exact unique service record |
-| AWS Control Tower | Rebuilt — exact unique service record |
-| AWS Cost Anomaly Detection | Rebuilt — exact unique service record |
-| AWS Health Dashboard | Rebuilt — exact unique service record |
-| AWS License Manager | Rebuilt — exact unique service record |
-| Amazon Managed Grafana | Rebuilt — exact unique service record |
-| Amazon Managed Service for Prometheus | Rebuilt — exact unique service record |
-| AWS Management Console | Rebuilt — exact unique service record |
-| AWS Organizations | Rebuilt — exact unique service record |
-| AWS Proton | Rebuilt — exact unique service record |
-| AWS Service Catalog | Rebuilt — exact unique service record |
-| AWS Service Quotas | Rebuilt — exact unique service record |
-| AWS Systems Manager | Rebuilt — exact unique service record |
-| AWS Trusted Advisor | Rebuilt — exact unique service record |
-| AWS Well-Architected Tool | Rebuilt — exact unique service record |
+| AWS CloudFormation | Rewritten — AWS-specific record |
+| AWS CloudTrail | Rewritten — AWS-specific record |
+| Amazon CloudWatch | Rewritten — AWS-specific record |
+| Amazon CloudWatch Logs | Rewritten — AWS-specific record |
+| AWS CLI | Rewritten — AWS-specific record |
+| AWS Compute Optimizer | Rewritten — AWS-specific record |
+| AWS Config | Rewritten — AWS-specific record |
+| AWS Control Tower | Rewritten — AWS-specific record |
+| AWS Cost Anomaly Detection | Rewritten — AWS-specific record |
+| AWS Health Dashboard | Rewritten — AWS-specific record |
+| AWS License Manager | Rewritten — AWS-specific record |
+| Amazon Managed Grafana | Rewritten — AWS-specific record |
+| Amazon Managed Service for Prometheus | Rewritten — AWS-specific record |
+| AWS Management Console | Rewritten — AWS-specific record |
+| AWS Organizations | Rewritten — AWS-specific record |
+| AWS Proton | Rewritten — AWS-specific record |
+| AWS Service Catalog | Rewritten — AWS-specific record |
+| AWS Service Quotas | Rewritten — AWS-specific record |
+| AWS Systems Manager | Rewritten — AWS-specific record |
+| AWS Trusted Advisor | Rewritten — AWS-specific record |
+| AWS Well-Architected Tool | Rewritten — AWS-specific record |
 
 #### 16 Migration and Transfer (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS Application Discovery Service | Rebuilt — exact unique service record |
-| AWS Application Migration Service | Rebuilt — exact unique service record |
-| AWS DMS | Rebuilt — exact unique service record |
-| AWS DataSync | Rebuilt — exact unique service record |
-| AWS Migration Hub | Rebuilt — exact unique service record |
-| AWS Schema Conversion Tool | Rebuilt — exact unique service record |
-| AWS Snow Family | Rebuilt — exact unique service record |
-| AWS Transfer Family | Rebuilt — exact unique service record |
+| AWS Application Discovery Service | Rewritten — AWS-specific record |
+| AWS Application Migration Service | Rewritten — AWS-specific record |
+| AWS DMS | Rewritten — AWS-specific record |
+| AWS DataSync | Rewritten — AWS-specific record |
+| AWS Migration Hub | Rewritten — AWS-specific record |
+| AWS Schema Conversion Tool | Rewritten — AWS-specific record |
+| AWS Snow Family | Rewritten — AWS-specific record |
+| AWS Transfer Family | Rewritten — AWS-specific record |
 
 #### 17 Networking and Content Delivery (9)
 
 | Service | Central insight status |
 |---|---|
-| Amazon CloudFront | Rebuilt — exact unique service record |
-| AWS Direct Connect | Rebuilt — exact unique service record |
-| Elastic Load Balancing | Rebuilt — exact unique service record |
-| AWS Global Accelerator | Rebuilt — exact unique service record |
-| AWS PrivateLink | Rebuilt — exact unique service record |
-| Amazon Route 53 | Rebuilt — exact unique service record |
-| AWS Transit Gateway | Rebuilt — exact unique service record |
-| Amazon VPC | Rebuilt — exact unique service record |
-| AWS VPN | Rebuilt — exact unique service record |
+| Amazon CloudFront | Rewritten — AWS-specific record |
+| AWS Direct Connect | Rewritten — AWS-specific record |
+| Elastic Load Balancing | Rewritten — AWS-specific record |
+| AWS Global Accelerator | Rewritten — AWS-specific record |
+| AWS PrivateLink | Rewritten — AWS-specific record |
+| Amazon Route 53 | Rewritten — AWS-specific record |
+| AWS Transit Gateway | Rewritten — AWS-specific record |
+| Amazon VPC | Rewritten — AWS-specific record |
+| AWS VPN | Rewritten — AWS-specific record |
 
 #### 18 Security, Identity, and Compliance (21)
 
 | Service | Central insight status |
 |---|---|
-| AWS Artifact | Rebuilt — exact unique service record |
-| AWS Audit Manager | Rebuilt — exact unique service record |
-| AWS Certificate Manager | Rebuilt — exact unique service record |
-| AWS CloudHSM | Rebuilt — exact unique service record |
-| Amazon Cognito | Rebuilt — exact unique service record |
-| Amazon Detective | Rebuilt — exact unique service record |
-| AWS Directory Service | Rebuilt — exact unique service record |
-| AWS Firewall Manager | Rebuilt — exact unique service record |
-| Amazon GuardDuty | Rebuilt — exact unique service record |
-| AWS IAM Identity Center | Rebuilt — exact unique service record |
-| AWS IAM | Rebuilt — exact unique service record |
-| Amazon Inspector | Rebuilt — exact unique service record |
-| AWS KMS | Rebuilt — exact unique service record |
-| Amazon Macie | Rebuilt — exact unique service record |
-| AWS Network Firewall | Rebuilt — exact unique service record |
-| AWS Resource Access Manager | Rebuilt — exact unique service record |
-| AWS Secrets Manager | Rebuilt — exact unique service record |
-| AWS Security Hub | Rebuilt — exact unique service record |
-| AWS Security Token Service | Rebuilt — exact unique service record |
-| AWS Shield | Rebuilt — exact unique service record |
-| AWS WAF | Rebuilt — exact unique service record |
+| AWS Artifact | Rewritten — AWS-specific record |
+| AWS Audit Manager | Rewritten — AWS-specific record |
+| AWS Certificate Manager | Rewritten — AWS-specific record |
+| AWS CloudHSM | Rewritten — AWS-specific record |
+| Amazon Cognito | Rewritten — AWS-specific record |
+| Amazon Detective | Rewritten — AWS-specific record |
+| AWS Directory Service | Rewritten — AWS-specific record |
+| AWS Firewall Manager | Rewritten — AWS-specific record |
+| Amazon GuardDuty | Rewritten — AWS-specific record |
+| AWS IAM Identity Center | Rewritten — AWS-specific record |
+| AWS IAM | Rewritten — AWS-specific record |
+| Amazon Inspector | Rewritten — AWS-specific record |
+| AWS KMS | Rewritten — AWS-specific record |
+| Amazon Macie | Rewritten — AWS-specific record |
+| AWS Network Firewall | Rewritten — AWS-specific record |
+| AWS Resource Access Manager | Rewritten — AWS-specific record |
+| AWS Secrets Manager | Rewritten — AWS-specific record |
+| AWS Security Hub | Rewritten — AWS-specific record |
+| AWS Security Token Service | Rewritten — AWS-specific record |
+| AWS Shield | Rewritten — AWS-specific record |
+| AWS WAF | Rewritten — AWS-specific record |
 
 #### 19 Storage (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS Backup | Rebuilt — exact unique service record |
-| Amazon EBS | Rebuilt — exact unique service record |
-| AWS Elastic Disaster Recovery | Rebuilt — exact unique service record |
-| Amazon EFS | Rebuilt — exact unique service record |
-| Amazon FSx | Rebuilt — exact unique service record |
-| Amazon S3 | Rebuilt — exact unique service record |
-| Amazon S3 Glacier | Rebuilt — exact unique service record |
-| AWS Storage Gateway | Rebuilt — exact unique service record |
+| AWS Backup | Rewritten — AWS-specific record |
+| Amazon EBS | Rewritten — AWS-specific record |
+| AWS Elastic Disaster Recovery | Rewritten — AWS-specific record |
+| Amazon EFS | Rewritten — AWS-specific record |
+| Amazon FSx | Rewritten — AWS-specific record |
+| Amazon S3 | Rewritten — AWS-specific record |
+| Amazon S3 Glacier | Rewritten — AWS-specific record |
+| AWS Storage Gateway | Rewritten — AWS-specific record |
 
 
 ### AIP-C01
@@ -468,178 +468,181 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Rebuilt — exact unique service record |
-| Amazon EMR | Rebuilt — exact unique service record |
-| AWS Glue | Rebuilt — exact unique service record |
-| Amazon Kinesis | Rebuilt — exact unique service record |
-| Amazon OpenSearch Service | Rebuilt — exact unique service record |
-| Amazon Quick Sight | Rebuilt — exact unique service record |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rebuilt — exact unique service record |
+| Amazon Athena | Rewritten — AWS-specific record |
+| Amazon EMR | Rewritten — AWS-specific record |
+| AWS Glue | Rewritten — AWS-specific record |
+| Amazon Kinesis | Rewritten — AWS-specific record |
+| Amazon OpenSearch Service | Rewritten — AWS-specific record |
+| Amazon Quick Sight | Rewritten — AWS-specific record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rewritten — AWS-specific record |
 
 #### 02 Application Integration (6)
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppFlow | Rebuilt — exact unique service record |
-| AWS AppConfig | Rebuilt — exact unique service record |
-| Amazon EventBridge | Rebuilt — exact unique service record |
-| Amazon SNS | Rebuilt — exact unique service record |
-| Amazon SQS | Rebuilt — exact unique service record |
-| AWS Step Functions | Rebuilt — exact unique service record |
+| Amazon AppFlow | Rewritten — AWS-specific record |
+| AWS AppConfig | Rewritten — AWS-specific record |
+| Amazon EventBridge | Rewritten — AWS-specific record |
+| Amazon SNS | Rewritten — AWS-specific record |
+| Amazon SQS | Rewritten — AWS-specific record |
+| AWS Step Functions | Rewritten — AWS-specific record |
 
 #### 03 Compute (6)
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Rebuilt — exact unique service record |
-| Amazon EC2 | Rebuilt — exact unique service record |
-| AWS Lambda | Rebuilt — exact unique service record |
-| AWS Lambda@Edge | Rebuilt — exact unique service record |
-| AWS Outposts | Rebuilt — exact unique service record |
-| AWS Wavelength | Rebuilt — exact unique service record |
+| AWS App Runner | Rewritten — AWS-specific record |
+| Amazon EC2 | Rewritten — AWS-specific record |
+| AWS Lambda | Rewritten — AWS-specific record |
+| AWS Lambda@Edge | Rewritten — AWS-specific record |
+| AWS Outposts | Rewritten — AWS-specific record |
+| AWS Wavelength | Rewritten — AWS-specific record |
 
 #### 04 Containers (4)
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Rebuilt — exact unique service record |
-| Amazon ECS | Rebuilt — exact unique service record |
-| Amazon EKS | Rebuilt — exact unique service record |
-| AWS Fargate | Rebuilt — exact unique service record |
+| Amazon ECR | Rewritten — AWS-specific record |
+| Amazon ECS | Rewritten — AWS-specific record |
+| Amazon EKS | Rewritten — AWS-specific record |
+| AWS Fargate | Rewritten — AWS-specific record |
 
 #### 05 Customer Engagement (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Connect | Rebuilt — exact unique service record |
+| Amazon Connect | Rewritten — AWS-specific record |
 
 #### 06 Database (7)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Rebuilt — exact unique service record |
-| Amazon DocumentDB | Rebuilt — exact unique service record |
-| Amazon DynamoDB | Rebuilt — exact unique service record |
-| Amazon DynamoDB Streams | Rebuilt — exact unique service record |
-| Amazon ElastiCache | Rebuilt — exact unique service record |
-| Amazon Neptune | Rebuilt — exact unique service record |
-| Amazon RDS | Rebuilt — exact unique service record |
+| Amazon Aurora | Rewritten — AWS-specific record |
+| Amazon DocumentDB | Rewritten — AWS-specific record |
+| Amazon DynamoDB | Rewritten — AWS-specific record |
+| Amazon DynamoDB Streams | Rewritten — AWS-specific record |
+| Amazon ElastiCache | Rewritten — AWS-specific record |
+| Amazon Neptune | Rewritten — AWS-specific record |
+| Amazon RDS | Rewritten — AWS-specific record |
 
 #### 07 Developer Tools (11)
 
 | Service | Central insight status |
 |---|---|
-| AWS Amplify | Rebuilt — exact unique service record |
-| AWS CDK | Rebuilt — exact unique service record |
-| AWS CLI | Rebuilt — exact unique service record |
-| AWS CloudFormation | Rebuilt — exact unique service record |
-| AWS CodeArtifact | Rebuilt — exact unique service record |
-| AWS CodeBuild | Rebuilt — exact unique service record |
-| AWS CodeDeploy | Rebuilt — exact unique service record |
-| AWS CodePipeline | Rebuilt — exact unique service record |
-| Kiro | Rebuilt — exact unique service record |
-| AWS Tools and SDKs | Rebuilt — exact unique service record |
-| AWS X-Ray | Rebuilt — exact unique service record |
+| AWS Amplify | Rewritten — AWS-specific record |
+| AWS CDK | Rewritten — AWS-specific record |
+| AWS CLI | Rewritten — AWS-specific record |
+| AWS CloudFormation | Rewritten — AWS-specific record |
+| AWS CodeArtifact | Rewritten — AWS-specific record |
+| AWS CodeBuild | Rewritten — AWS-specific record |
+| AWS CodeDeploy | Rewritten — AWS-specific record |
+| AWS CodePipeline | Rewritten — AWS-specific record |
+| Kiro | Rewritten — AWS-specific record |
+| AWS Tools and SDKs | Rewritten — AWS-specific record |
+| AWS X-Ray | Rewritten — AWS-specific record |
 
 #### 08 Machine Learning (32)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Rebuilt — exact unique service record |
-| Amazon Bedrock | Rebuilt — exact unique service record |
-| Amazon Bedrock AgentCore | Rebuilt — exact unique service record |
-| Amazon Bedrock Knowledge Bases | Rebuilt — exact unique service record |
-| Amazon Bedrock Prompt Management | Rebuilt — exact unique service record |
-| Amazon Bedrock Prompt Flows | Rebuilt — exact unique service record |
-| Amazon Comprehend | Rebuilt — exact unique service record |
-| Amazon Comprehend Medical | Rebuilt — exact unique service record |
-| Amazon Kendra | Rebuilt — exact unique service record |
-| Amazon Lex | Rebuilt — exact unique service record |
-| Amazon Nova | Rebuilt — exact unique service record |
-| Amazon PartyRock | Rebuilt — exact unique service record |
-| Amazon Personalize | Rebuilt — exact unique service record |
-| Amazon Polly | Rebuilt — exact unique service record |
-| Amazon Q Business | Rebuilt — exact unique service record |
-| Amazon Q Business Apps | Rebuilt — exact unique service record |
-| Amazon Q Developer | Rebuilt — exact unique service record |
-| Amazon Quick | Rebuilt — exact unique service record |
-| Amazon Rekognition | Rebuilt — exact unique service record |
-| Amazon SageMaker AI | Rebuilt — exact unique service record |
-| Amazon SageMaker Clarify | Rebuilt — exact unique service record |
-| Amazon SageMaker Data Wrangler | Rebuilt — exact unique service record |
-| Amazon SageMaker Ground Truth | Rebuilt — exact unique service record |
-| Amazon SageMaker JumpStart | Rebuilt — exact unique service record |
-| Amazon SageMaker Model Monitor | Rebuilt — exact unique service record |
-| Amazon SageMaker Model Registry | Rebuilt — exact unique service record |
-| Amazon SageMaker Neo | Rebuilt — exact unique service record |
-| Amazon SageMaker Processing | Rebuilt — exact unique service record |
-| Amazon SageMaker Unified Studio | Rebuilt — exact unique service record |
-| Amazon Textract | Rebuilt — exact unique service record |
-| Amazon Titan | Rebuilt — exact unique service record |
-| Amazon Transcribe | Rebuilt — exact unique service record |
+| Amazon Augmented AI | Rewritten — AWS-specific record |
+| Amazon Bedrock | Rewritten — AWS-specific record |
+| Amazon Bedrock AgentCore | Rewritten — AWS-specific record |
+| Amazon Bedrock Knowledge Bases | Rewritten — AWS-specific record |
+| Amazon Bedrock Prompt Management | Rewritten — AWS-specific record |
+| Amazon Bedrock Prompt Flows | Rewritten — AWS-specific record |
+| Amazon Comprehend | Rewritten — AWS-specific record |
+| Amazon Comprehend Medical | Rewritten — AWS-specific record |
+| Amazon Kendra | Rewritten — AWS-specific record |
+| Amazon Lex | Rewritten — AWS-specific record |
+| Amazon Nova | Rewritten — AWS-specific record |
+| Amazon PartyRock | Rewritten — AWS-specific record |
+| Amazon Personalize | Rewritten — AWS-specific record |
+| Amazon Polly | Rewritten — AWS-specific record |
+| Amazon Q Business | Rewritten — AWS-specific record |
+| Amazon Q Business Apps | Rewritten — AWS-specific record |
+| Amazon Q Developer | Rewritten — AWS-specific record |
+| Amazon Quick | Rewritten — AWS-specific record |
+| Amazon Rekognition | Rewritten — AWS-specific record |
+| Amazon SageMaker AI | Rewritten — AWS-specific record |
+| Amazon SageMaker Clarify | Rewritten — AWS-specific record |
+| Amazon SageMaker Data Wrangler | Rewritten — AWS-specific record |
+| Amazon SageMaker Ground Truth | Rewritten — AWS-specific record |
+| Amazon SageMaker JumpStart | Rewritten — AWS-specific record |
+| Amazon SageMaker Model Monitor | Rewritten — AWS-specific record |
+| Amazon SageMaker Model Registry | Rewritten — AWS-specific record |
+| Amazon SageMaker Neo | Rewritten — AWS-specific record |
+| Amazon SageMaker Processing | Rewritten — AWS-specific record |
+| Amazon SageMaker Unified Studio | Rewritten — AWS-specific record |
+| Amazon Textract | Rewritten — AWS-specific record |
+| Amazon Titan | Rewritten — AWS-specific record |
+| Amazon Transcribe | Rewritten — AWS-specific record |
 
 #### 09 Management and Governance (12)
 
 | Service | Central insight status |
 |---|---|
-| AWS Auto Scaling | Rebuilt — exact unique service record |
-| AWS Chatbot | Rebuilt — exact unique service record |
-| AWS CloudTrail | Rebuilt — exact unique service record |
-| Amazon CloudWatch | Rebuilt — exact unique service record |
-| Amazon CloudWatch Logs | Rebuilt — exact unique service record |
-| Amazon CloudWatch Synthetics | Rebuilt — exact unique service record |
-| AWS Cost Anomaly Detection | Rebuilt — exact unique service record |
-| AWS Cost Explorer | Rebuilt — exact unique service record |
-| Amazon Managed Grafana | Rebuilt — exact unique service record |
-| AWS Service Catalog | Rebuilt — exact unique service record |
-| AWS Systems Manager | Rebuilt — exact unique service record |
-| AWS Well-Architected Tool | Rebuilt — exact unique service record |
+| AWS Auto Scaling | Rewritten — AWS-specific record |
+| AWS Chatbot | Rewritten — AWS-specific record |
+| AWS CloudTrail | Rewritten — AWS-specific record |
+| Amazon CloudWatch | Rewritten — AWS-specific record |
+| Amazon CloudWatch Logs | Rewritten — AWS-specific record |
+| Amazon CloudWatch Synthetics | Rewritten — AWS-specific record |
+| AWS Cost Anomaly Detection | Rewritten — AWS-specific record |
+| AWS Cost Explorer | Rewritten — AWS-specific record |
+| Amazon Managed Grafana | Rewritten — AWS-specific record |
+| AWS Service Catalog | Rewritten — AWS-specific record |
+| AWS Systems Manager | Rewritten — AWS-specific record |
+| AWS Well-Architected Tool | Rewritten — AWS-specific record |
 
 #### 10 Migration and Transfer (2)
 
 | Service | Central insight status |
 |---|---|
-| AWS DataSync | Rebuilt — exact unique service record |
-| AWS Transfer Family | Rebuilt — exact unique service record |
+| AWS DataSync | Rewritten — AWS-specific record |
+| AWS Transfer Family | Rewritten — AWS-specific record |
 
 #### 11 Networking and Content Delivery (8)
 
 | Service | Central insight status |
 |---|---|
-| Amazon API Gateway | Rebuilt — exact unique service record |
-| AWS AppSync | Rebuilt — exact unique service record |
-| Amazon CloudFront | Rebuilt — exact unique service record |
-| Elastic Load Balancing (ELB) | Rebuilt — exact unique service record |
-| AWS Global Accelerator | Rebuilt — exact unique service record |
-| AWS PrivateLink | Rebuilt — exact unique service record |
-| Amazon Route 53 | Rebuilt — exact unique service record |
-| Amazon VPC | Rebuilt — exact unique service record |
+| Amazon API Gateway | Rewritten — AWS-specific record |
+| AWS AppSync | Rewritten — AWS-specific record |
+| Amazon CloudFront | Rewritten — AWS-specific record |
+| Elastic Load Balancing (ELB) | Rewritten — AWS-specific record |
+| AWS Global Accelerator | Rewritten — AWS-specific record |
+| AWS PrivateLink | Rewritten — AWS-specific record |
+| Amazon Route 53 | Rewritten — AWS-specific record |
+| Amazon VPC | Rewritten — AWS-specific record |
 
 #### 12 Security, Identity, and Compliance (9)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Cognito | Rebuilt — exact unique service record |
-| AWS Encryption SDK | Rebuilt — exact unique service record |
-| IAM | Rebuilt — exact unique service record |
-| IAM Access Analyzer | Rebuilt — exact unique service record |
-| IAM Identity Center | Rebuilt — exact unique service record |
-| AWS KMS | Rebuilt — exact unique service record |
-| Amazon Macie | Rebuilt — exact unique service record |
-| AWS Secrets Manager | Rebuilt — exact unique service record |
-| AWS WAF | Rebuilt — exact unique service record |
+| Amazon Cognito | Rewritten — AWS-specific record |
+| AWS Encryption SDK | Rewritten — AWS-specific record |
+| IAM | Rewritten — AWS-specific record |
+| IAM Access Analyzer | Rewritten — AWS-specific record |
+| IAM Identity Center | Rewritten — AWS-specific record |
+| AWS KMS | Rewritten — AWS-specific record |
+| Amazon Macie | Rewritten — AWS-specific record |
+| AWS Secrets Manager | Rewritten — AWS-specific record |
+| AWS WAF | Rewritten — AWS-specific record |
 
 #### 13 Storage (6)
 
 | Service | Central insight status |
 |---|---|
-| Amazon EBS | Rebuilt — exact unique service record |
-| Amazon EFS | Rebuilt — exact unique service record |
-| Amazon S3 | Rebuilt — exact unique service record |
-| Amazon S3 Intelligent-Tiering | Rebuilt — exact unique service record |
-| Amazon S3 Lifecycle policies | Rebuilt — exact unique service record |
-| Amazon S3 Cross-Region Replication | Rebuilt — exact unique service record |
+| Amazon EBS | Rewritten — AWS-specific record |
+| Amazon EFS | Rewritten — AWS-specific record |
+| Amazon S3 | Rewritten — AWS-specific record |
+| Amazon S3 Intelligent-Tiering | Rewritten — AWS-specific record |
+| Amazon S3 Lifecycle policies | Rewritten — AWS-specific record |
+| Amazon S3 Cross-Region Replication | Rewritten — AWS-specific record |
 
 
 
 Central rewrite validation: each of the 193 SAP/AIP services now has a distinct exact record for Security & Governance, Design & Optimization, Cost, and Service-specific Watch Points. Family rules remain only as a safeguard for services outside these two course scopes.
+
+
+Rewrite validation: 193 of 193 SAP/AIP services have distinct exact records. Each record contains service-specific Security & Governance, Design & Optimization, Cost, and Service-specific Watch Points content; no SAP/AIP service is marked pending.
