@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { assetUrl } from "../../lib/asset-url";
 import "../components/AzureLibrary.css";
 import { azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
 
@@ -49,7 +50,10 @@ const imagePathCandidates = (service: AzureService) => {
   return folders.flatMap((folder) => names.map((name) => "/azure/" + folder + "/" + name));
 };
 
-const imageUrl = (path: string) => azureR2Base + path;
+const imageUrl = (path: string) => {
+  const configured = assetUrl(path);
+  return configured === path ? azureR2Base + path : configured;
+};
 
 type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: number };
 
