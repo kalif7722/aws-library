@@ -377,13 +377,11 @@ const serviceSpecificInsights:Record<string,ServiceLearningInsights>={
 };
 
 export function getServiceLearningInsights(service:string,category:string):ServiceLearningInsights{
-  const specific=serviceSpecificInsights[service];
+  const insightAliases:Record<string,string>={\n    "Audit Manager":"AWS Audit Manager",\n    "AWS Resource Access Manager (RAM)":"AWS Resource Access Manager",\n    "AWS Cost and Usage Reports":"AWS Cost and Usage Report",\n  };\n  const specific=serviceSpecificInsights[service] || serviceSpecificInsights[insightAliases[service] || ""];
   if(specific)return specific;
   const rule=rules.find(x=>x.match.test(service));
   if(rule)return {security:rule.security,optimization:rule.optimization,cost:rule.cost,watchPoints:rule.watchPoints};
-  const fallback=categoryFallback[category];
-  if(fallback)return fallback;
-  return {
+  // Course categories are contextual only; unmatched services use the safe fallback below.\nreturn {
     security:[`Identify the exact ${service} control-plane and data-plane permissions rather than granting broad category-level access.`,`Protect the data, credentials and integration points that pass through ${service}; use encryption and managed identities where the service supports them.`,`Collect the service-native audit/health signals that explain configuration changes, failed operations and downstream impact.`],
     optimization:[`Tune ${service} from its native throughput, concurrency, storage, connection or request model—not from a generic “scale everything” rule.`,`Use the architecture examples above to keep state, asynchronous work and failure isolation in the services designed to own them.`,`Measure the service-specific bottleneck before changing capacity, caching, batching or retry behavior.`],
     cost:[`Start with ${service}'s documented billing unit, then map how architecture volume turns into that unit.`,`Add the resources ${service} causes to run—storage, transfer, logs, encryption, compute and downstream API calls—so the estimate reflects the whole path.`,`Optimize the dominant measured driver first; removing unnecessary work usually matters more than small unit-price differences.`],

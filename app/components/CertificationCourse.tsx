@@ -17,7 +17,7 @@ const acronym = (value: string) => { const match = value.match(/\((?:Amazon |AWS
 const explicitAliases: Record<string, string> = {
   "Amazon Elastic Container Registry (Amazon ECR)": "Amazon ECR", "Amazon Elastic Container Service (Amazon ECS)": "Amazon ECS", "Amazon Elastic Kubernetes Service (Amazon EKS)": "Amazon EKS",
   "Amazon Simple Notification Service (Amazon SNS)": "Amazon SNS", "Amazon Simple Queue Service (Amazon SQS)": "Amazon SQS", "Amazon Simple Storage Service (Amazon S3)": "Amazon S3",
-  "Amazon Elastic Block Store (Amazon EBS)": "Amazon EBS", "Amazon Elastic File System (Amazon EFS)": "Amazon EFS", "AWS Identity and Access Management (IAM)": "AWS IAM",
+  "Amazon Elastic Block Store (Amazon EBS)": "Amazon EBS", "Amazon Elastic File System (Amazon EFS)": "Amazon EFS", "AWS Identity and Access Management (IAM)": "AWS IAM",\n  "AWS Cost and Usage Report": "AWS Cost and Usage Reports", "AWS Audit Manager": "Audit Manager", "AWS Resource Access Manager": "AWS Resource Access Manager (RAM)",
   "AWS Resource Access Manager (AWS RAM)": "AWS Resource Access Manager (RAM)", "AWS Key Management Service (AWS KMS)": "AWS KMS", "AWS Security Token Service (AWS STS)": "AWS Security Token Service",
   "AWS Certificate Manager (ACM)": "AWS Certificate Manager", "AWS Command Line Interface (AWS CLI)": "AWS CLI", "Amazon Bedrock AgentCore": "Amazon Bedrock AgentCore",
   "Amazon Bedrock Knowledge Bases": "Amazon Bedrock Knowledge Bases", "Amazon Bedrock Prompt Management": "Amazon Bedrock Prompt Management", "Amazon Bedrock Prompt Flows": "Amazon Bedrock Prompt Flows",
