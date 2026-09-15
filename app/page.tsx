@@ -18,7 +18,7 @@ const providers = [
       ["Browse all AWS services", "/services"],
     ],
   },
-  { key: "azure", name: "Microsoft Azure", short: "Azure", status: "Next platform", tone: "provider-azure", description: "Azure service visuals and certification paths will follow the AWS foundation.", links: [] },
+  { key: "azure", name: "Microsoft Azure", short: "Azure", status: "Next platform", tone: "provider-azure", description: "Explore the growing Azure service library with the same visual branch navigation as AWS.", links: [["Browse all Azure services", "/azure-services"]] },
   { key: "gcp", name: "Google Cloud", short: "GCP", status: "Next platform", tone: "provider-gcp", description: "A matching GCP service library and course workspace is planned next.", links: [] },
 ];
 const learningStats = [["225+", "visual service guides"], ["12", "AWS certification paths"], ["1", "shared visual viewer"]];
