@@ -5,7 +5,7 @@ import { assetUrl } from "../../lib/asset-url";
 import { azureBranches, azureBranchAccents, azureUniqueServices, type AzureService } from "../azure-data";
 
 const ready = (service: AzureService) => service.status.toLowerCase().startsWith("completed");
-const assetPath = (service: AzureService) => "/azure/" + service.slug + ".webp";
+const assetPath = (service: AzureService) => "/azure/" + service.folder + "/" + service.slug + ".webp";
 
 export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
