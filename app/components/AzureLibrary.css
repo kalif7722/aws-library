@@ -1,20 +1,7 @@
-.azure-workspace .masthead { margin: 0 28px 22px; }
-.azure-tools { display: grid !important; grid-template-columns: 228px minmax(300px, 420px) 1fr; align-items: start; gap: 18px; }
-.azure-branch-menu {
-  position: sticky;
-  top: 88px;
-  z-index: 20;
-  display: grid;
-  gap: 5px;
-  width: 228px;
-  max-height: none;
-  padding: 10px;
-  background: #0e1525;
-  border: 1px solid #344568;
-  border-left: 3px solid #0078d4;
-  border-radius: 18px;
-  box-shadow: 0 14px 34px #0008, inset 0 1px #ffffff0d;
-}
+.azure-workspace { padding-left: 0; }
+.azure-workspace .masthead { margin: 0 28px 22px 0; }
+.azure-tools { display: grid !important; grid-template-columns: 228px minmax(300px, 520px) 1fr; align-items: start; gap: 18px; }
+.azure-branch-menu { position: sticky; top: 0; z-index: 20; display: grid; gap: 5px; width: 228px; max-height: none; padding: 10px; background: #0e1525; border: 1px solid #344568; border-left: 3px solid #0078d4; border-radius: 0 16px 16px 0; box-shadow: 0 14px 34px #0008, inset 0 1px #ffffff0d; }
 .azure-menu-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px 8px 8px; color: #8da4cc; font-size: .64rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
 .azure-menu-heading button { display: grid; place-items: center; width: 25px; height: 25px; color: #dbe7ff; background: #243556; border: 1px solid #506589; border-radius: 7px; cursor: pointer; font-size: 1.1rem; line-height: 1; }
 .azure-menu-heading button:hover, .azure-menu-heading button:focus-visible { color: #fff; background: #2d5d91; border-color: #71b9ff; outline: none; }
@@ -31,29 +18,35 @@
 .azure-branch-dropdown button:hover, .azure-branch-dropdown button:focus-visible { background: #243b61; border-color: #4e8cff; outline: none; }
 .azure-branch-dropdown button span { font-size: .82rem; font-weight: 650; line-height: 1.25; }
 .azure-branch-dropdown button small { flex: 0 0 auto; color: #9fc1ff; font-size: .68rem; white-space: nowrap; }
-.azure-menu-heading button { position: relative; z-index: 1020; }
-.azure-search { position: relative; width: min(420px, 100%); margin-top: 4px; }
+.azure-search { position: relative; justify-self: center; width: min(520px, 100%); margin-top: 4px; }
 .azure-search input { width: 100%; }
 .azure-search .search-results { top: calc(100% + 8px); left: 0; right: 0; z-index: 1100; }
 .azure-search .search-results button { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .azure-search .search-results button small { color: #9fa9c1; }
+.azure-tools .progress { align-self: center; justify-self: end; }
 .azure-viewer { max-width: 1400px; margin: 0 auto; }
 .azure-status { padding: 8px 11px; border: 1px solid #3a4563; border-radius: 10px; color: #9fc1ff; font-size: .76rem; white-space: nowrap; }
 .azure-status.pending { color: #ffc857; border-color: #8b6b25; }
 .azure-pending-card { min-height: 220px; display: grid; align-content: center; gap: 8px; padding: 28px; background: #151b2b; border: 1px dashed #53617f; border-radius: 16px; }
 .azure-pending-card strong { font-size: 1.1rem; }
 .azure-pending-card p { margin: 0; color: #b2bdd3; line-height: 1.6; }
+.azure-branch-menu.collapsed { width: 64px; display: block; padding: 8px 7px; }
+.azure-branch-menu.collapsed .azure-menu-heading { justify-content: center; padding: 0; }
+.azure-branch-menu.collapsed .azure-menu-heading span, .azure-branch-menu.collapsed .azure-branch-menu-item { display: none; }
+.azure-branch-menu.collapsed .azure-menu-heading button { width: 100%; height: 30px; }
 @media (max-width: 1000px) {
-  .azure-workspace .masthead { margin-left: 16px; margin-right: 16px; }
+  .azure-workspace .masthead { margin-right: 16px; }
   .azure-tools { grid-template-columns: 200px minmax(260px, 1fr); }
   .azure-branch-menu { width: 200px; }
   .azure-branch-dropdown { width: min(350px, calc(100vw - 225px)); }
-  .azure-tools .progress { grid-column: 2; }
+  .azure-tools .progress { grid-column: 2; justify-self: start; }
+  .azure-branch-menu.collapsed { width: 58px; }
 }
 @media (max-width: 650px) {
   .azure-workspace .masthead { margin: 0 12px 18px; }
   .azure-tools { display: block !important; }
-  .azure-branch-menu { position: relative; top: auto; width: 100%; margin-bottom: 16px; }
+  .azure-branch-menu { position: relative; top: auto; width: 100%; margin-bottom: 16px; border-radius: 0 14px 14px 0; }
+  .azure-branch-menu.collapsed { width: 64px; }
   .azure-branch-dropdown { position: absolute; left: calc(100% + 8px); width: min(330px, calc(100vw - 34px)); max-height: 70vh; }
   .azure-search { width: 100%; }
 }

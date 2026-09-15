@@ -50,9 +50,9 @@ const imagePathCandidates = (service: AzureService) => {
   return folders.flatMap((folder) => names.map((name) => "/azure/" + folder + "/" + name));
 };
 
-const imageUrl = (path: string) => {
+const imageUrlCandidates = (path: string) => {
   const configured = assetUrl(path);
-  return configured === path ? azureR2Base + path : configured;
+  return [...new Set([configured === path ? "" : configured, azureR2Base + path, azureR2Base + "/aws-el10-images" + path].filter(Boolean))];
 };
 
 type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: number };
@@ -79,8 +79,9 @@ export default function AzureServicesPage() {
       .slice(0, 16);
   }, [query, searchEntries]);
 
-  const candidates = selected ? imagePathCandidates(selected) : [];
-  const currentImage = candidates[assetAttempt];
+  const paths = selected ? imagePathCandidates(selected) : [];
+  const imageSources = paths.flatMap((path) => imageUrlCandidates(path));
+  const currentImage = imageSources[assetAttempt];
   const hasImage = Boolean(selected && ready(selected) && currentImage);
 
   useEffect(() => {
@@ -147,14 +148,14 @@ export default function AzureServicesPage() {
     {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
       <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2></div><span className={"azure-status " + (ready(selected) && hasImage ? "ready" : "pending")}>{ready(selected) && hasImage ? "Visual available" : "Visual pending"}</span></div>
       {hasImage
-        ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={imageUrl(currentImage)} onError={() => setAssetAttempt((attempt) => attempt + 1)} alt={selected.name + " Azure study visual"} /></button>
+        ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} onError={() => setAssetAttempt((attempt) => attempt + 1)} alt={selected.name + " Azure study visual"} /></button>
         : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>}
       <p className="viewer-note">Use the branch menus or global search to change services. Click the visual for full view; press Escape or Close to return.</p>
     </article>}
 
     {selected && expanded && hasImage && <div className="image-modal" role="dialog" aria-modal="true" aria-label={selected.name + " full view"} onClick={() => setExpanded(false)}>
       <button type="button" className="modal-close" onClick={() => setExpanded(false)} aria-label="Close full view">Close ×</button>
-      <img src={imageUrl(currentImage)} alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} />
+      <img src={currentImage} alt={selected.name + " Azure study visual full view"} onClick={(event) => event.stopPropagation()} />
     </div>}
   </main>;
 }
