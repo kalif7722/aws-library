@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Activity, BrainCircuit, Cloud, Database, FileText, Globe2, HardDrive, Laptop, Network, Server, Shield, Sparkles, Users } from "lucide-react";
 import { assetUrl } from "../../lib/asset-url";
 import "./AzureServiceLearning.css";
@@ -377,6 +378,25 @@ concepts:["Jobs express distributed processing over lake data, with compute sepa
 "Power BI":{category:"Analytics",summary:"A business-intelligence platform for semantic models, reports, dashboards, sharing and self-service analytics.",concepts:["Datasets/semantic models, reports, dashboards, workspaces and gateways are different objects with different ownership and refresh behavior.","Import, DirectQuery and composite models trade refresh latency, source load and interactive performance differently."],fit:["Use it for governed organizational BI and self-service reporting with semantic models and collaboration.","Choose Power BI Embedded when reports must be delivered inside a customer application."],architectures:[A("Governed enterprise BI","Data pipelines curate sources, a semantic model applies measures and security, and reports are distributed through workspaces/apps.","Power BI enterprise analytics pattern",L("Sources",N("Synapse / ADLS","Curated data","data"),N("On-prem SQL","Private source","data")),L("Refresh",N("Data Factory","Load/trigger","compute"),N("Gateway","Hybrid connection","security")),L("Model",N("Power BI semantic model","Measures/RLS","ai")),L("Governance",N("Workspace/app","Audience sharing","user"),N("Purview/Entra","Lineage/access","security")),L("Consume",N("Reports","Business decisions","user"),N("Monitor","Refresh/query health","monitor")))],security:["Use workspace/app permissions, row-level security, sensitivity labels and governed sharing; report filters are not security.","Protect gateway credentials and restrict export/download for sensitive datasets."],optimization:["Choose import, DirectQuery or composite mode from freshness and source-load needs; optimize model relationships and measures.","Use incremental refresh and aggregations for large fact tables."],watch:["A successful refresh does not prove row-level security or business definition correctness.","Self-service copies can escape the governed semantic model unless tenant/workspace policies control them."],cost:["Licensing/capacity, refresh, gateway, source compute, storage and embedded sharing drive cost."],choices:[{name:"Power BI",when:"Organizational BI, semantic models and report collaboration."},{name:"Power BI Embedded",when:"Customer-facing analytics inside an application."},{name:"Analysis Services",when:"Dedicated reusable semantic model serving many tools."}],hook:["Power BI is the BI consumption and modeling experience; data pipelines and sources remain separate.","Exam clue: reports, dashboards, semantic models, workspaces and RLS point to Power BI."]}
 };
 Object.assign(D,analyticsDetails);
+
+// Keep every AI and Analytics service useful as a learning page while its
+// second visual is being authored. The center node remains the actual service.
+Object.entries(D).forEach(([serviceName,detail])=>{
+  if((detail.category||"AI + MACHINE LEARNING").toLowerCase().includes("ai")||detail.category==="Analytics"){
+    if(detail.architectures.length<2){
+      detail.architectures.push(A(
+        serviceName+" operational integration",
+        "A production path showing the service boundary, application and data dependencies, governance controls, and operational evidence.",
+        "Azure Architecture Center workload design patterns",
+        L("Users",N("Application users","Request or business task","user")),
+        L("Application",N(serviceName,"Primary service capability","ai"),N("Application/API","Validation and orchestration","app")),
+        L("Dependencies",N("Azure Storage","Durable source or output","storage"),N("Azure Monitor","Metrics and diagnostics","monitor")),
+        L("Governance",N("Microsoft Entra ID","Identity and access","security"),N("Azure Policy","Configuration guardrails","security")),
+        L("Operations",N("Recovery path","Retry, replay or reprocessing","compute"),N("Audit evidence","Traceable decisions","file"))
+      ));
+    }
+  }
+});
 export const azureAiServiceNames=Object.keys(D);
 export const hasAzureAiLearningDetails=(name:string)=>Boolean(D[name]);
 const azureIconFiles:Record<string,string>={
@@ -423,6 +443,28 @@ const azureIconFiles:Record<string,string>={
   "Power BI Embedded":"power-bi-embedded.svg",
   "Azure Chaos Studio":"azure-chaos-studio.svg",
   // Architecture labels use shorter product/component names than the branch catalog.
+  "Analysis Services":"azure-analysis-services.svg",
+  "Data Explorer":"azure-data-explorer.svg",
+  "Data Share":"azure-data-share.svg",
+  "Data Shares":"azure-data-share.svg",
+  "Stream Analytics":"azure-stream-analytics.svg",
+  "Synapse":"azure-synapse-analytics.svg",
+  "Power BI":"power-bi-embedded.svg",
+  "Security Copilot":"microsoft-security-copilot.svg",
+  "Azure OpenAI":"azure-openai-in-foundry-models.svg",
+  "Content Safety":"content-safety-in-foundry-control-plane.svg",
+  "Document Intelligence":"azure-document-intelligence-in-foundry-tools.svg",
+  "Custom Vision":"azure-ai-custom-vision.svg",
+  "Video Indexer":"azure-ai-video-indexer.svg",
+  "Azure Language":"azure-language-in-foundry-tools.svg",
+  "Azure Translator":"azure-translator-in-foundry-tools.svg",
+  "Azure Speech":"azure-speech-in-foundry-tools.svg",
+  "Azure Vision":"azure-vision-in-foundry-tools.svg",
+  "Foundry":"microsoft-foundry.svg",
+  "Foundry Agent":"foundry-agent-service.svg",
+  "SRE Agent":"azure-sre-agent.svg",
+  "Observability":"observability-in-foundry-control-plane.svg",
+  "Planetary Computer Pro":"microsoft-planetary-computer-pro.svg",
   "Databricks jobs":"azure-databricks.svg",
   "Databricks":"azure-databricks.svg",
   "ADLS Gen2":"azure-data-lake-storage.svg",
@@ -437,6 +479,13 @@ const azureIconFiles:Record<string,string>={
   "Azure Machine Learning":"azure-machine-learning.svg"
 };
 const iconFileFor=(label:string)=>azureIconFiles[label];
+const azureWalkthroughUrl=(service:string)=>{
+  const slug=service.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  const path="/azure-certification-walkthroughs/"+slug+".webp";
+  const configured=assetUrl(path);
+  return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured;
+};
+
 const azureIconUrl=(file:string)=>{const path="/azure-icons/"+file;const configured=assetUrl(path);return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured};
 function Icon({kind}:{kind:Kind}){const C=kind==="user"?Users:kind==="data"?Database:kind==="security"?Shield:kind==="network"?Network:kind==="storage"?HardDrive:kind==="ai"?BrainCircuit:kind==="monitor"?Activity:kind==="app"?Laptop:kind==="compute"?Server:kind==="file"?FileText:kind==="internet"?Globe2:Cloud;return <div className={"azure-node-icon azure-node-"+kind}><C size={28}/></div>}
 function NodeView({node}:{node:Node}){const iconFile=iconFileFor(node.label);return <div className={"v8-node "+(node.kind?"public":"aws")}>{iconFile?<div className="azure-node-icon azure-node-ai"><img src={azureIconUrl(iconFile)} alt="" onError={(event)=>{event.currentTarget.style.display="none";const fallback=event.currentTarget.nextElementSibling as HTMLElement|null;if(fallback)fallback.style.display="block"}} /><Sparkles className="azure-icon-fallback" size={28}/></div>:node.kind?<Icon kind={node.kind}/>:<div className="azure-node-icon azure-node-ai"><Sparkles size={28}/></div>}<strong>{node.label}</strong><small>{node.sub}</small></div>}
@@ -444,5 +493,14 @@ function ArchitectureView({arch,index}:{arch:Architecture;index:number}){return 
 function Cards({title,items,id}:{title:string;items:string[];id?:string}){return <section className="knowledge-card" id={id}><div className="knowledge-card-title"><span>◆</span><h3>{title}</h3></div><div className="knowledge-card-body"><div className="concept-stack">{items.map((item,i)=><p key={i}><b>{String(i+1).padStart(2,"0")}</b>{item}</p>)}</div></div></section>}
 function Insight({title,icon,items}:{title:string;icon:string;items:string[]}){return <section className="service-insight-panel"><div className="service-panel-title"><span>{icon}</span><h3>{title}</h3></div><div className="service-insight-list">{items.map((item,i)=><div key={i}><b>{String(i+1).padStart(2,"0")}</b><p>{item}</p></div>)}</div></section>}
 function CostBoard({items}:{items:string[]}){return <section className="service-cost-board"><div className="service-cost-cap"><div><p>COST MODEL</p><h3>How the bill behaves</h3></div><span>Estimate the service path, not only the central API.</span></div><div className="service-cost-grid">{items.map((item,i)=><article className={i===0?"recommended":""} key={i}><b>{String(i+1).padStart(2,"0")}</b><p>{item}</p></article>)}</div><div className="service-cost-rule"><b>Cost decision rule</b><span>Start with the documented billing unit, then include the resources and operations that make the workload possible.</span></div></section>}
-function WalkthroughPlaceholder({service}:{service:string}){return <section className="azure-walkthrough-placeholder" id="azure-service-walkthrough"><div><p>SERVICE WALKTHROUGH</p><h3>{service} console / portal walkthrough</h3><span>The service walkthrough image will be connected here when the matching R2 asset is uploaded.</span></div><a href="#azure-service-walkthrough">Walkthrough coming soon</a></section>}
+function WalkthroughPlaceholder({service}:{service:string}){
+  const [available,setAvailable]=useState(true);
+  const [expanded,setExpanded]=useState(false);
+  const src=azureWalkthroughUrl(service);
+  return <section className="azure-walkthrough-placeholder" id="azure-service-walkthrough">
+    <div className="azure-walkthrough-copy"><p>SERVICE WALKTHROUGH</p><h3>{service} console / portal walkthrough</h3><span>{available?"Open the step-by-step walkthrough in the page or full view.":"Upload the matching walkthrough image to azure-certification-walkthroughs to connect it automatically."}</span></div>
+    {available?<button type="button" className="azure-walkthrough-preview" onClick={()=>setExpanded(true)}><img src={src} loading="lazy" decoding="async" alt={service+" console walkthrough"} onError={()=>setAvailable(false)}/><span>Open full view</span></button>:<a href="#azure-service-walkthrough">Walkthrough coming soon</a>}
+    {expanded&&available&&<div className="azure-walkthrough-modal" role="dialog" aria-modal="true" aria-label={service+" walkthrough full view"} onClick={()=>setExpanded(false)}><button type="button" className="azure-walkthrough-close" onClick={()=>setExpanded(false)}>Close ×</button><img src={src} alt={service+" console walkthrough full view"} onClick={event=>event.stopPropagation()}/></div>}
+  </section>
+}
 export default function AzureServiceLearningDetails({serviceName}:{serviceName:string}){const detail=D[serviceName];if(!detail)return null;return <div className="service-knowledge aip-shared-learning aip-v8 azure-service-learning" data-service={serviceName}><div className="knowledge-intro"><div><p className="knowledge-kicker">VISUAL DEEP DIVE • {(detail.category||"AI + MACHINE LEARNING").toUpperCase()}</p><h2>{serviceName}</h2><p><b>What it is:</b> {detail.summary}</p></div><div className="knowledge-facts"><span><b>01</b>Purpose</span><span><b>02</b>Architecture</span><span><b>03</b>Operations</span><span><b>04</b>Exam fit</span></div></div><nav className="knowledge-jumps"><a href="#azure-concepts">Concepts</a><a href="#azure-architecture-1">Architectures</a><a href="#azure-service-walkthrough">Walkthrough</a><a href="#azure-security">Security</a><a href="#azure-cost">Cost</a><a href="#azure-hook">Exam hook</a></nav><div className="knowledge-grid aip-intro-grid" id="azure-concepts"><Cards title="Core service concepts" items={detail.concepts}/><Cards title="Application fit" items={detail.fit}/></div>{detail.architectures.map((arch,i)=><ArchitectureView key={i} arch={arch} index={i+1}/>)}<WalkthroughPlaceholder service={serviceName}/><div className="service-insight-grid" id="azure-security"><Insight title="Security & governance" icon="◆" items={detail.security}/><Insight title="Design & optimization" icon="◇" items={detail.optimization}/><Insight title="Service-specific watch points" icon="!" items={detail.watch}/></div><div className="knowledge-grid azure-lower-grid"><CostBoard items={detail.cost}/><section className="knowledge-card aip-decision-card"><div className="knowledge-card-title"><span>◆</span><h3>Choose the right service</h3></div><p className="aip-decision-headline">Use the service whose native boundary matches the workload.</p><div className="aip-choice-grid">{detail.choices.map((choice,i)=><div className={"aip-choice "+(i===0?"current":"")} key={choice.name}><b>{choice.name}</b><span>{choice.when}</span></div>)}</div></section><Cards id="azure-hook" title="Certification memory hook" items={detail.hook}/></div></div>}
