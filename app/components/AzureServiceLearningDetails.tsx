@@ -409,7 +409,19 @@ const azureIconFiles:Record<string,string>={
   "Observability in Foundry Control Plane":"observability-in-foundry-control-plane.svg",
   "Azure Vision in Foundry Tools":"azure-vision-in-foundry-tools.svg",
   "Foundry IQ":"foundry-iq.svg",
-  "Foundry Control Plane":"foundry-control-plane.svg"
+  "Foundry Control Plane":"foundry-control-plane.svg",
+  "Azure Analysis Services":"azure-analysis-services.svg",
+  "Azure Data Explorer":"azure-data-explorer.svg",
+  "Azure Data Lake Storage":"azure-data-lake-storage.svg",
+  "Azure Data Share":"azure-data-share.svg",
+  "Azure Databricks":"azure-databricks.svg",
+  "Azure Stream Analytics":"azure-stream-analytics.svg",
+  "Azure Synapse Analytics":"azure-synapse-analytics.svg",
+  "Data Catalog":"data-catalog.svg",
+  "Data Lake Analytics":"data-lake-analytics.svg",
+  "Event Hubs":"event-hubs.svg",
+  "Power BI Embedded":"power-bi-embedded.svg",
+  "Azure Chaos Studio":"azure-chaos-studio.svg"
 };
 const iconFileFor=(label:string)=>azureIconFiles[label];
 function Icon({kind}:{kind:Kind}){const C=kind==="user"?Users:kind==="data"?Database:kind==="security"?Shield:kind==="network"?Network:kind==="storage"?HardDrive:kind==="ai"?BrainCircuit:kind==="monitor"?Activity:kind==="app"?Laptop:kind==="compute"?Server:kind==="file"?FileText:kind==="internet"?Globe2:Cloud;return <div className={"azure-node-icon azure-node-"+kind}><C size={28}/></div>}
