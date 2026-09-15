@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import "../components/AzureLibrary.css";
-import { azureBranches, azureBranchAccents, azureUniqueServices, type AzureService } from "../azure-data";
+import { azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
 
 const ready = (service: AzureService) => service.status.toLowerCase().startsWith("completed");
 const azureR2Base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
@@ -57,7 +57,7 @@ export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
   const [query, setQuery] = useState("");
   const [assetAttempt, setAssetAttempt] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);\n  const [menuCollapsed, setMenuCollapsed] = useState(false);
 
   const selected = azureUniqueServices.find((service) => service.slug === selectedSlug) || azureUniqueServices[0];
 
