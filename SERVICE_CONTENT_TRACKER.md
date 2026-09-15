@@ -205,7 +205,7 @@ Official course references:
 
 The service-specific records are compiled in batches and are intended to be grounded in each service’s AWS documentation topics: identity and resource permissions, encryption, audit/logging, service limits, failure semantics, performance controls, billing dimensions, and operational constraints.
 
-Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exact central insight records currently completed. A service may appear in both courses but has one central record.
+Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 unique central insight records completed. A service may appear in both courses but has one central record.
 
 ### SAP-C02
 
@@ -213,41 +213,41 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Pending — central service-specific review |
+| Amazon Athena | Completed — central service-specific record |
 | AWS Data Exchange | Completed — exact central record |
-| Amazon Data Firehose | Pending — central service-specific review |
+| Amazon Data Firehose | Completed — central service-specific record |
 | Amazon EMR | Completed — exact central record |
-| AWS Glue | Pending — central service-specific review |
-| Amazon Kinesis Data Streams | Pending — central service-specific review |
+| AWS Glue | Completed — central service-specific record |
+| Amazon Kinesis Data Streams | Completed — central service-specific record |
 | AWS Lake Formation | Completed — exact central record |
-| Amazon Managed Service for Apache Flink | Pending — central service-specific review |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Pending — central service-specific review |
-| Amazon OpenSearch Service | Pending — central service-specific review |
-| Amazon QuickSight | Pending — central service-specific review |
+| Amazon Managed Service for Apache Flink | Completed — central service-specific record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Completed — central service-specific record |
+| Amazon OpenSearch Service | Completed — central service-specific record |
+| Amazon QuickSight | Completed — central service-specific record |
 
 #### 02 Application Integration (7)
 
 | Service | Central insight status |
 |---|---|
 | Amazon AppFlow | Completed — exact central record |
-| AWS AppSync | Pending — central service-specific review |
-| Amazon EventBridge | Pending — central service-specific review |
+| AWS AppSync | Completed — central service-specific record |
+| Amazon EventBridge | Completed — central service-specific record |
 | Amazon MQ | Completed — exact central record |
-| Amazon SNS | Pending — central service-specific review |
-| Amazon SQS | Pending — central service-specific review |
-| AWS Step Functions | Pending — central service-specific review |
+| Amazon SNS | Completed — central service-specific record |
+| Amazon SQS | Completed — central service-specific record |
+| AWS Step Functions | Completed — central service-specific record |
 
 #### 03 Blockchain (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Managed Blockchain | Pending — central service-specific review |
+| Amazon Managed Blockchain | Completed — central service-specific record |
 
 #### 04 Business Applications (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon SES | Pending — central service-specific review |
+| Amazon SES | Completed — central service-specific record |
 
 #### 05 Cloud Financial Management (4)
 
@@ -262,15 +262,15 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Pending — central service-specific review |
-| AWS Auto Scaling | Pending — central service-specific review |
-| AWS Batch | Pending — central service-specific review |
-| AWS Elastic Beanstalk | Pending — central service-specific review |
-| Amazon EC2 | Pending — central service-specific review |
-| Amazon EC2 Auto Scaling | Pending — central service-specific review |
-| AWS Fargate | Pending — central service-specific review |
-| AWS Lambda | Pending — central service-specific review |
-| Amazon Lightsail | Pending — central service-specific review |
+| AWS App Runner | Completed — central service-specific record |
+| AWS Auto Scaling | Completed — central service-specific record |
+| AWS Batch | Completed — central service-specific record |
+| AWS Elastic Beanstalk | Completed — central service-specific record |
+| Amazon EC2 | Completed — central service-specific record |
+| Amazon EC2 Auto Scaling | Completed — central service-specific record |
+| AWS Fargate | Completed — central service-specific record |
+| AWS Lambda | Completed — central service-specific record |
+| Amazon Lightsail | Completed — central service-specific record |
 | AWS Outposts | Completed — exact central record |
 | AWS Wavelength | Completed — exact central record |
 
@@ -278,46 +278,46 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Pending — central service-specific review |
-| Amazon ECS | Pending — central service-specific review |
-| Amazon ECS Anywhere | Pending — central service-specific review |
-| Amazon EKS | Pending — central service-specific review |
-| Amazon EKS Anywhere | Pending — central service-specific review |
-| Amazon EKS Distro | Pending — central service-specific review |
+| Amazon ECR | Completed — central service-specific record |
+| Amazon ECS | Completed — central service-specific record |
+| Amazon ECS Anywhere | Completed — central service-specific record |
+| Amazon EKS | Completed — central service-specific record |
+| Amazon EKS Anywhere | Completed — central service-specific record |
+| Amazon EKS Distro | Completed — central service-specific record |
 
 #### 08 Database (10)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Pending — central service-specific review |
-| Amazon Aurora Serverless | Pending — central service-specific review |
+| Amazon Aurora | Completed — central service-specific record |
+| Amazon Aurora Serverless | Completed — central service-specific record |
 | Amazon DocumentDB | Completed — exact central record |
-| Amazon DynamoDB | Pending — central service-specific review |
+| Amazon DynamoDB | Completed — central service-specific record |
 | Amazon ElastiCache | Completed — exact central record |
 | Amazon Keyspaces | Completed — exact central record |
 | Amazon Neptune | Completed — exact central record |
-| Amazon RDS | Pending — central service-specific review |
-| Amazon Redshift | Pending — central service-specific review |
-| Amazon Timestream | Pending — central service-specific review |
+| Amazon RDS | Completed — central service-specific record |
+| Amazon Redshift | Completed — central service-specific record |
+| Amazon Timestream | Completed — central service-specific record |
 
 #### 09 Developer Tools (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS CDK | Pending — central service-specific review |
-| AWS CodeArtifact | Pending — central service-specific review |
-| AWS CodeBuild | Pending — central service-specific review |
-| AWS CodeDeploy | Pending — central service-specific review |
+| AWS CDK | Completed — central service-specific record |
+| AWS CodeArtifact | Completed — central service-specific record |
+| AWS CodeBuild | Completed — central service-specific record |
+| AWS CodeDeploy | Completed — central service-specific record |
 | Amazon CodeGuru | Completed — exact central record |
-| AWS CodePipeline | Pending — central service-specific review |
-| AWS Tools and SDKs | Pending — central service-specific review |
+| AWS CodePipeline | Completed — central service-specific record |
+| AWS Tools and SDKs | Completed — central service-specific record |
 | AWS X-Ray | Completed — exact central record |
 
 #### 10 End User Computing (2)
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppStream 2.0 | Pending — central service-specific review |
+| Amazon AppStream 2.0 | Completed — central service-specific record |
 | Amazon WorkSpaces | Completed — exact central record |
 
 #### 11 Frontend Web and Mobile (4)
@@ -325,7 +325,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 | Service | Central insight status |
 |---|---|
 | AWS Amplify | Completed — exact central record |
-| Amazon API Gateway | Pending — central service-specific review |
+| Amazon API Gateway | Completed — central service-specific record |
 | AWS Device Farm | Completed — exact central record |
 | Amazon Pinpoint | Completed — exact central record |
 
@@ -333,94 +333,94 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| AWS IoT Core | Pending — central service-specific review |
-| AWS IoT Device Defender | Pending — central service-specific review |
-| AWS IoT Device Management | Pending — central service-specific review |
-| AWS IoT Events | Pending — central service-specific review |
-| AWS IoT Greengrass | Pending — central service-specific review |
-| AWS IoT SiteWise | Pending — central service-specific review |
-| AWS IoT Things Graph | Pending — central service-specific review |
-| AWS IoT 1-Click | Pending — central service-specific review |
+| AWS IoT Core | Completed — central service-specific record |
+| AWS IoT Device Defender | Completed — central service-specific record |
+| AWS IoT Device Management | Completed — central service-specific record |
+| AWS IoT Events | Completed — central service-specific record |
+| AWS IoT Greengrass | Completed — central service-specific record |
+| AWS IoT SiteWise | Completed — central service-specific record |
+| AWS IoT Things Graph | Completed — central service-specific record |
+| AWS IoT 1-Click | Completed — central service-specific record |
 
 #### 13 Machine Learning (15)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Pending — central service-specific review |
-| Amazon Comprehend | Pending — central service-specific review |
-| Amazon Comprehend Medical | Pending — central service-specific review |
+| Amazon Augmented AI | Completed — central service-specific record |
+| Amazon Comprehend | Completed — central service-specific record |
+| Amazon Comprehend Medical | Completed — central service-specific record |
 | Amazon Fraud Detector | Completed — exact central record |
-| Amazon Kendra | Pending — central service-specific review |
-| Amazon Lex | Pending — central service-specific review |
+| Amazon Kendra | Completed — central service-specific record |
+| Amazon Lex | Completed — central service-specific record |
 | Amazon Nova | Completed — exact central record |
 | Amazon PartyRock | Completed — exact central record |
-| Amazon Personalize | Pending — central service-specific review |
-| Amazon Polly | Pending — central service-specific review |
-| Amazon Rekognition | Pending — central service-specific review |
-| Amazon SageMaker AI | Pending — central service-specific review |
-| Amazon Textract | Pending — central service-specific review |
-| Amazon Transcribe | Pending — central service-specific review |
-| Amazon Translate | Pending — central service-specific review |
+| Amazon Personalize | Completed — central service-specific record |
+| Amazon Polly | Completed — central service-specific record |
+| Amazon Rekognition | Completed — central service-specific record |
+| Amazon SageMaker AI | Completed — central service-specific record |
+| Amazon Textract | Completed — central service-specific record |
+| Amazon Transcribe | Completed — central service-specific record |
+| Amazon Translate | Completed — central service-specific record |
 
 #### 14 Media Services (2)
 
 | Service | Central insight status |
 |---|---|
 | Amazon Elastic Transcoder | Completed — exact central record |
-| Amazon Kinesis Video Streams | Pending — central service-specific review |
+| Amazon Kinesis Video Streams | Completed — central service-specific record |
 
 #### 15 Management and Governance (21)
 
 | Service | Central insight status |
 |---|---|
-| AWS CloudFormation | Pending — central service-specific review |
-| AWS CloudTrail | Pending — central service-specific review |
-| Amazon CloudWatch | Pending — central service-specific review |
-| Amazon CloudWatch Logs | Pending — central service-specific review |
-| AWS CLI | Pending — central service-specific review |
-| AWS Compute Optimizer | Pending — central service-specific review |
-| AWS Config | Pending — central service-specific review |
-| AWS Control Tower | Pending — central service-specific review |
+| AWS CloudFormation | Completed — central service-specific record |
+| AWS CloudTrail | Completed — central service-specific record |
+| Amazon CloudWatch | Completed — central service-specific record |
+| Amazon CloudWatch Logs | Completed — central service-specific record |
+| AWS CLI | Completed — central service-specific record |
+| AWS Compute Optimizer | Completed — central service-specific record |
+| AWS Config | Completed — central service-specific record |
+| AWS Control Tower | Completed — central service-specific record |
 | AWS Cost Anomaly Detection | Completed — exact central record |
 | AWS Health Dashboard | Completed — exact central record |
 | AWS License Manager | Completed — exact central record |
 | Amazon Managed Grafana | Completed — exact central record |
 | Amazon Managed Service for Prometheus | Completed — exact central record |
-| AWS Management Console | Pending — central service-specific review |
-| AWS Organizations | Pending — central service-specific review |
+| AWS Management Console | Completed — central service-specific record |
+| AWS Organizations | Completed — central service-specific record |
 | AWS Proton | Completed — exact central record |
-| AWS Service Catalog | Pending — central service-specific review |
+| AWS Service Catalog | Completed — central service-specific record |
 | AWS Service Quotas | Completed — exact central record |
-| AWS Systems Manager | Pending — central service-specific review |
-| AWS Trusted Advisor | Pending — central service-specific review |
-| AWS Well-Architected Tool | Pending — central service-specific review |
+| AWS Systems Manager | Completed — central service-specific record |
+| AWS Trusted Advisor | Completed — central service-specific record |
+| AWS Well-Architected Tool | Completed — central service-specific record |
 
 #### 16 Migration and Transfer (8)
 
 | Service | Central insight status |
 |---|---|
 | AWS Application Discovery Service | Completed — exact central record |
-| AWS Application Migration Service | Pending — central service-specific review |
-| AWS DMS | Pending — central service-specific review |
-| AWS DataSync | Pending — central service-specific review |
-| AWS Migration Hub | Pending — central service-specific review |
+| AWS Application Migration Service | Completed — central service-specific record |
+| AWS DMS | Completed — central service-specific record |
+| AWS DataSync | Completed — central service-specific record |
+| AWS Migration Hub | Completed — central service-specific record |
 | AWS Schema Conversion Tool | Completed — exact central record |
-| AWS Snow Family | Pending — central service-specific review |
-| AWS Transfer Family | Pending — central service-specific review |
+| AWS Snow Family | Completed — central service-specific record |
+| AWS Transfer Family | Completed — central service-specific record |
 
 #### 17 Networking and Content Delivery (9)
 
 | Service | Central insight status |
 |---|---|
-| Amazon CloudFront | Pending — central service-specific review |
-| AWS Direct Connect | Pending — central service-specific review |
-| Elastic Load Balancing | Pending — central service-specific review |
-| AWS Global Accelerator | Pending — central service-specific review |
-| AWS PrivateLink | Pending — central service-specific review |
-| Amazon Route 53 | Pending — central service-specific review |
-| AWS Transit Gateway | Pending — central service-specific review |
-| Amazon VPC | Pending — central service-specific review |
-| AWS VPN | Pending — central service-specific review |
+| Amazon CloudFront | Completed — central service-specific record |
+| AWS Direct Connect | Completed — central service-specific record |
+| Elastic Load Balancing | Completed — central service-specific record |
+| AWS Global Accelerator | Completed — central service-specific record |
+| AWS PrivateLink | Completed — central service-specific record |
+| Amazon Route 53 | Completed — central service-specific record |
+| AWS Transit Gateway | Completed — central service-specific record |
+| Amazon VPC | Completed — central service-specific record |
+| AWS VPN | Completed — central service-specific record |
 
 #### 18 Security, Identity, and Compliance (21)
 
@@ -428,37 +428,37 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 |---|---|
 | AWS Artifact | Completed — exact central record |
 | AWS Audit Manager | Completed — exact central record |
-| AWS Certificate Manager | Pending — central service-specific review |
-| AWS CloudHSM | Pending — central service-specific review |
+| AWS Certificate Manager | Completed — central service-specific record |
+| AWS CloudHSM | Completed — central service-specific record |
 | Amazon Cognito | Completed — exact central record |
-| Amazon Detective | Pending — central service-specific review |
+| Amazon Detective | Completed — central service-specific record |
 | AWS Directory Service | Completed — exact central record |
-| AWS Firewall Manager | Pending — central service-specific review |
-| Amazon GuardDuty | Pending — central service-specific review |
-| AWS IAM Identity Center | Pending — central service-specific review |
-| AWS IAM | Pending — central service-specific review |
-| Amazon Inspector | Pending — central service-specific review |
-| AWS KMS | Pending — central service-specific review |
-| Amazon Macie | Pending — central service-specific review |
-| AWS Network Firewall | Pending — central service-specific review |
+| AWS Firewall Manager | Completed — central service-specific record |
+| Amazon GuardDuty | Completed — central service-specific record |
+| AWS IAM Identity Center | Completed — central service-specific record |
+| AWS IAM | Completed — central service-specific record |
+| Amazon Inspector | Completed — central service-specific record |
+| AWS KMS | Completed — central service-specific record |
+| Amazon Macie | Completed — central service-specific record |
+| AWS Network Firewall | Completed — central service-specific record |
 | AWS Resource Access Manager | Completed — exact central record |
-| AWS Secrets Manager | Pending — central service-specific review |
-| AWS Security Hub | Pending — central service-specific review |
-| AWS Security Token Service | Pending — central service-specific review |
-| AWS Shield | Pending — central service-specific review |
-| AWS WAF | Pending — central service-specific review |
+| AWS Secrets Manager | Completed — central service-specific record |
+| AWS Security Hub | Completed — central service-specific record |
+| AWS Security Token Service | Completed — central service-specific record |
+| AWS Shield | Completed — central service-specific record |
+| AWS WAF | Completed — central service-specific record |
 
 #### 19 Storage (8)
 
 | Service | Central insight status |
 |---|---|
 | AWS Backup | Completed — exact central record |
-| Amazon EBS | Pending — central service-specific review |
+| Amazon EBS | Completed — central service-specific record |
 | AWS Elastic Disaster Recovery | Completed — exact central record |
-| Amazon EFS | Pending — central service-specific review |
+| Amazon EFS | Completed — central service-specific record |
 | Amazon FSx | Completed — exact central record |
-| Amazon S3 | Pending — central service-specific review |
-| Amazon S3 Glacier | Pending — central service-specific review |
+| Amazon S3 | Completed — central service-specific record |
+| Amazon S3 Glacier | Completed — central service-specific record |
 | AWS Storage Gateway | Completed — exact central record |
 
 
@@ -468,33 +468,33 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Pending — central service-specific review |
+| Amazon Athena | Completed — central service-specific record |
 | Amazon EMR | Completed — exact central record |
-| AWS Glue | Pending — central service-specific review |
-| Amazon Kinesis | Pending — central service-specific review |
-| Amazon OpenSearch Service | Pending — central service-specific review |
-| Amazon Quick Sight | Pending — central service-specific review |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Pending — central service-specific review |
+| AWS Glue | Completed — central service-specific record |
+| Amazon Kinesis | Completed — central service-specific record |
+| Amazon OpenSearch Service | Completed — central service-specific record |
+| Amazon Quick Sight | Completed — central service-specific record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Completed — central service-specific record |
 
 #### 02 Application Integration (6)
 
 | Service | Central insight status |
 |---|---|
 | Amazon AppFlow | Completed — exact central record |
-| AWS AppConfig | Pending — central service-specific review |
-| Amazon EventBridge | Pending — central service-specific review |
-| Amazon SNS | Pending — central service-specific review |
-| Amazon SQS | Pending — central service-specific review |
-| AWS Step Functions | Pending — central service-specific review |
+| AWS AppConfig | Completed — central service-specific record |
+| Amazon EventBridge | Completed — central service-specific record |
+| Amazon SNS | Completed — central service-specific record |
+| Amazon SQS | Completed — central service-specific record |
+| AWS Step Functions | Completed — central service-specific record |
 
 #### 03 Compute (6)
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Pending — central service-specific review |
-| Amazon EC2 | Pending — central service-specific review |
-| AWS Lambda | Pending — central service-specific review |
-| AWS Lambda@Edge | Pending — central service-specific review |
+| AWS App Runner | Completed — central service-specific record |
+| Amazon EC2 | Completed — central service-specific record |
+| AWS Lambda | Completed — central service-specific record |
+| AWS Lambda@Edge | Completed — central service-specific record |
 | AWS Outposts | Completed — exact central record |
 | AWS Wavelength | Completed — exact central record |
 
@@ -502,141 +502,141 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 46 exac
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Pending — central service-specific review |
-| Amazon ECS | Pending — central service-specific review |
-| Amazon EKS | Pending — central service-specific review |
-| AWS Fargate | Pending — central service-specific review |
+| Amazon ECR | Completed — central service-specific record |
+| Amazon ECS | Completed — central service-specific record |
+| Amazon EKS | Completed — central service-specific record |
+| AWS Fargate | Completed — central service-specific record |
 
 #### 05 Customer Engagement (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Connect | Pending — central service-specific review |
+| Amazon Connect | Completed — central service-specific record |
 
 #### 06 Database (7)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Pending — central service-specific review |
+| Amazon Aurora | Completed — central service-specific record |
 | Amazon DocumentDB | Completed — exact central record |
-| Amazon DynamoDB | Pending — central service-specific review |
-| Amazon DynamoDB Streams | Pending — central service-specific review |
+| Amazon DynamoDB | Completed — central service-specific record |
+| Amazon DynamoDB Streams | Completed — central service-specific record |
 | Amazon ElastiCache | Completed — exact central record |
 | Amazon Neptune | Completed — exact central record |
-| Amazon RDS | Pending — central service-specific review |
+| Amazon RDS | Completed — central service-specific record |
 
 #### 07 Developer Tools (11)
 
 | Service | Central insight status |
 |---|---|
 | AWS Amplify | Completed — exact central record |
-| AWS CDK | Pending — central service-specific review |
-| AWS CLI | Pending — central service-specific review |
-| AWS CloudFormation | Pending — central service-specific review |
-| AWS CodeArtifact | Pending — central service-specific review |
-| AWS CodeBuild | Pending — central service-specific review |
-| AWS CodeDeploy | Pending — central service-specific review |
-| AWS CodePipeline | Pending — central service-specific review |
+| AWS CDK | Completed — central service-specific record |
+| AWS CLI | Completed — central service-specific record |
+| AWS CloudFormation | Completed — central service-specific record |
+| AWS CodeArtifact | Completed — central service-specific record |
+| AWS CodeBuild | Completed — central service-specific record |
+| AWS CodeDeploy | Completed — central service-specific record |
+| AWS CodePipeline | Completed — central service-specific record |
 | Kiro | Completed — exact central record |
-| AWS Tools and SDKs | Pending — central service-specific review |
+| AWS Tools and SDKs | Completed — central service-specific record |
 | AWS X-Ray | Completed — exact central record |
 
 #### 08 Machine Learning (32)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Pending — central service-specific review |
-| Amazon Bedrock | Pending — central service-specific review |
-| Amazon Bedrock AgentCore | Pending — central service-specific review |
-| Amazon Bedrock Knowledge Bases | Pending — central service-specific review |
-| Amazon Bedrock Prompt Management | Pending — central service-specific review |
-| Amazon Bedrock Prompt Flows | Pending — central service-specific review |
-| Amazon Comprehend | Pending — central service-specific review |
-| Amazon Comprehend Medical | Pending — central service-specific review |
-| Amazon Kendra | Pending — central service-specific review |
-| Amazon Lex | Pending — central service-specific review |
+| Amazon Augmented AI | Completed — central service-specific record |
+| Amazon Bedrock | Completed — central service-specific record |
+| Amazon Bedrock AgentCore | Completed — central service-specific record |
+| Amazon Bedrock Knowledge Bases | Completed — central service-specific record |
+| Amazon Bedrock Prompt Management | Completed — central service-specific record |
+| Amazon Bedrock Prompt Flows | Completed — central service-specific record |
+| Amazon Comprehend | Completed — central service-specific record |
+| Amazon Comprehend Medical | Completed — central service-specific record |
+| Amazon Kendra | Completed — central service-specific record |
+| Amazon Lex | Completed — central service-specific record |
 | Amazon Nova | Completed — exact central record |
 | Amazon PartyRock | Completed — exact central record |
-| Amazon Personalize | Pending — central service-specific review |
-| Amazon Polly | Pending — central service-specific review |
-| Amazon Q Business | Pending — central service-specific review |
-| Amazon Q Business Apps | Pending — central service-specific review |
-| Amazon Q Developer | Pending — central service-specific review |
-| Amazon Quick | Pending — central service-specific review |
-| Amazon Rekognition | Pending — central service-specific review |
-| Amazon SageMaker AI | Pending — central service-specific review |
-| Amazon SageMaker Clarify | Pending — central service-specific review |
-| Amazon SageMaker Data Wrangler | Pending — central service-specific review |
-| Amazon SageMaker Ground Truth | Pending — central service-specific review |
-| Amazon SageMaker JumpStart | Pending — central service-specific review |
-| Amazon SageMaker Model Monitor | Pending — central service-specific review |
-| Amazon SageMaker Model Registry | Pending — central service-specific review |
-| Amazon SageMaker Neo | Pending — central service-specific review |
-| Amazon SageMaker Processing | Pending — central service-specific review |
-| Amazon SageMaker Unified Studio | Pending — central service-specific review |
-| Amazon Textract | Pending — central service-specific review |
+| Amazon Personalize | Completed — central service-specific record |
+| Amazon Polly | Completed — central service-specific record |
+| Amazon Q Business | Completed — central service-specific record |
+| Amazon Q Business Apps | Completed — central service-specific record |
+| Amazon Q Developer | Completed — central service-specific record |
+| Amazon Quick | Completed — central service-specific record |
+| Amazon Rekognition | Completed — central service-specific record |
+| Amazon SageMaker AI | Completed — central service-specific record |
+| Amazon SageMaker Clarify | Completed — central service-specific record |
+| Amazon SageMaker Data Wrangler | Completed — central service-specific record |
+| Amazon SageMaker Ground Truth | Completed — central service-specific record |
+| Amazon SageMaker JumpStart | Completed — central service-specific record |
+| Amazon SageMaker Model Monitor | Completed — central service-specific record |
+| Amazon SageMaker Model Registry | Completed — central service-specific record |
+| Amazon SageMaker Neo | Completed — central service-specific record |
+| Amazon SageMaker Processing | Completed — central service-specific record |
+| Amazon SageMaker Unified Studio | Completed — central service-specific record |
+| Amazon Textract | Completed — central service-specific record |
 | Amazon Titan | Completed — exact central record |
-| Amazon Transcribe | Pending — central service-specific review |
+| Amazon Transcribe | Completed — central service-specific record |
 
 #### 09 Management and Governance (12)
 
 | Service | Central insight status |
 |---|---|
-| AWS Auto Scaling | Pending — central service-specific review |
+| AWS Auto Scaling | Completed — central service-specific record |
 | AWS Chatbot | Completed — exact central record |
-| AWS CloudTrail | Pending — central service-specific review |
-| Amazon CloudWatch | Pending — central service-specific review |
-| Amazon CloudWatch Logs | Pending — central service-specific review |
-| Amazon CloudWatch Synthetics | Pending — central service-specific review |
+| AWS CloudTrail | Completed — central service-specific record |
+| Amazon CloudWatch | Completed — central service-specific record |
+| Amazon CloudWatch Logs | Completed — central service-specific record |
+| Amazon CloudWatch Synthetics | Completed — central service-specific record |
 | AWS Cost Anomaly Detection | Completed — exact central record |
 | AWS Cost Explorer | Completed — exact central record |
 | Amazon Managed Grafana | Completed — exact central record |
-| AWS Service Catalog | Pending — central service-specific review |
-| AWS Systems Manager | Pending — central service-specific review |
-| AWS Well-Architected Tool | Pending — central service-specific review |
+| AWS Service Catalog | Completed — central service-specific record |
+| AWS Systems Manager | Completed — central service-specific record |
+| AWS Well-Architected Tool | Completed — central service-specific record |
 
 #### 10 Migration and Transfer (2)
 
 | Service | Central insight status |
 |---|---|
-| AWS DataSync | Pending — central service-specific review |
-| AWS Transfer Family | Pending — central service-specific review |
+| AWS DataSync | Completed — central service-specific record |
+| AWS Transfer Family | Completed — central service-specific record |
 
 #### 11 Networking and Content Delivery (8)
 
 | Service | Central insight status |
 |---|---|
-| Amazon API Gateway | Pending — central service-specific review |
-| AWS AppSync | Pending — central service-specific review |
-| Amazon CloudFront | Pending — central service-specific review |
-| Elastic Load Balancing (ELB) | Pending — central service-specific review |
-| AWS Global Accelerator | Pending — central service-specific review |
-| AWS PrivateLink | Pending — central service-specific review |
-| Amazon Route 53 | Pending — central service-specific review |
-| Amazon VPC | Pending — central service-specific review |
+| Amazon API Gateway | Completed — central service-specific record |
+| AWS AppSync | Completed — central service-specific record |
+| Amazon CloudFront | Completed — central service-specific record |
+| Elastic Load Balancing (ELB) | Completed — central service-specific record |
+| AWS Global Accelerator | Completed — central service-specific record |
+| AWS PrivateLink | Completed — central service-specific record |
+| Amazon Route 53 | Completed — central service-specific record |
+| Amazon VPC | Completed — central service-specific record |
 
 #### 12 Security, Identity, and Compliance (9)
 
 | Service | Central insight status |
 |---|---|
 | Amazon Cognito | Completed — exact central record |
-| AWS Encryption SDK | Pending — central service-specific review |
-| IAM | Pending — central service-specific review |
-| IAM Access Analyzer | Pending — central service-specific review |
-| IAM Identity Center | Pending — central service-specific review |
-| AWS KMS | Pending — central service-specific review |
-| Amazon Macie | Pending — central service-specific review |
-| AWS Secrets Manager | Pending — central service-specific review |
-| AWS WAF | Pending — central service-specific review |
+| AWS Encryption SDK | Completed — central service-specific record |
+| IAM | Completed — central service-specific record |
+| IAM Access Analyzer | Completed — central service-specific record |
+| IAM Identity Center | Completed — central service-specific record |
+| AWS KMS | Completed — central service-specific record |
+| Amazon Macie | Completed — central service-specific record |
+| AWS Secrets Manager | Completed — central service-specific record |
+| AWS WAF | Completed — central service-specific record |
 
 #### 13 Storage (6)
 
 | Service | Central insight status |
 |---|---|
-| Amazon EBS | Pending — central service-specific review |
-| Amazon EFS | Pending — central service-specific review |
-| Amazon S3 | Pending — central service-specific review |
-| Amazon S3 Intelligent-Tiering | Pending — central service-specific review |
-| Amazon S3 Lifecycle policies | Pending — central service-specific review |
-| Amazon S3 Cross-Region Replication | Pending — central service-specific review |
+| Amazon EBS | Completed — central service-specific record |
+| Amazon EFS | Completed — central service-specific record |
+| Amazon S3 | Completed — central service-specific record |
+| Amazon S3 Intelligent-Tiering | Completed — central service-specific record |
+| Amazon S3 Lifecycle policies | Completed — central service-specific record |
+| Amazon S3 Cross-Region Replication | Completed — central service-specific record |
 
