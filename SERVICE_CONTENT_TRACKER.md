@@ -203,9 +203,9 @@ Official course references:
 - SAP-C02: https://aws-library.kalifs.workers.dev/courses/aws-solutions-architect-professional
 - Generative AI Developer Professional / AIP-C01: https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional
 
-The service-specific records are compiled in batches and are intended to be grounded in each service’s AWS documentation topics: identity and resource permissions, encryption, audit/logging, service limits, failure semantics, performance controls, billing dimensions, and operational constraints.
+The service-specific records are rebuilt from the relevant AWS service user guides, API/reference material, service FAQs, pricing dimensions, and Well-Architected guidance. They paraphrase service-specific control points: identity and resource permissions, encryption, audit/logging, service limits, failure semantics, performance controls, billing dimensions, and operational constraints.
 
-Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 unique central insight records completed. A service may appear in both courses but has one central record.
+Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 unique central insight records rebuilt as exact service records. No SAP/AIP service uses a family-level insight fallback. A service may appear in both courses but has one central record.
 
 ### SAP-C02
 
@@ -213,41 +213,41 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Completed — central service-specific record |
+| Amazon Athena | Rebuilt — exact unique service record |
 | AWS Data Exchange | Completed — exact central record |
-| Amazon Data Firehose | Completed — central service-specific record |
+| Amazon Data Firehose | Rebuilt — exact unique service record |
 | Amazon EMR | Completed — exact central record |
-| AWS Glue | Completed — central service-specific record |
-| Amazon Kinesis Data Streams | Completed — central service-specific record |
+| AWS Glue | Rebuilt — exact unique service record |
+| Amazon Kinesis Data Streams | Rebuilt — exact unique service record |
 | AWS Lake Formation | Completed — exact central record |
-| Amazon Managed Service for Apache Flink | Completed — central service-specific record |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Completed — central service-specific record |
-| Amazon OpenSearch Service | Completed — central service-specific record |
-| Amazon QuickSight | Completed — central service-specific record |
+| Amazon Managed Service for Apache Flink | Rebuilt — exact unique service record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rebuilt — exact unique service record |
+| Amazon OpenSearch Service | Rebuilt — exact unique service record |
+| Amazon QuickSight | Rebuilt — exact unique service record |
 
 #### 02 Application Integration (7)
 
 | Service | Central insight status |
 |---|---|
 | Amazon AppFlow | Completed — exact central record |
-| AWS AppSync | Completed — central service-specific record |
-| Amazon EventBridge | Completed — central service-specific record |
+| AWS AppSync | Rebuilt — exact unique service record |
+| Amazon EventBridge | Rebuilt — exact unique service record |
 | Amazon MQ | Completed — exact central record |
-| Amazon SNS | Completed — central service-specific record |
-| Amazon SQS | Completed — central service-specific record |
-| AWS Step Functions | Completed — central service-specific record |
+| Amazon SNS | Rebuilt — exact unique service record |
+| Amazon SQS | Rebuilt — exact unique service record |
+| AWS Step Functions | Rebuilt — exact unique service record |
 
 #### 03 Blockchain (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Managed Blockchain | Completed — central service-specific record |
+| Amazon Managed Blockchain | Rebuilt — exact unique service record |
 
 #### 04 Business Applications (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon SES | Completed — central service-specific record |
+| Amazon SES | Rebuilt — exact unique service record |
 
 #### 05 Cloud Financial Management (4)
 
@@ -262,15 +262,15 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Completed — central service-specific record |
-| AWS Auto Scaling | Completed — central service-specific record |
-| AWS Batch | Completed — central service-specific record |
-| AWS Elastic Beanstalk | Completed — central service-specific record |
-| Amazon EC2 | Completed — central service-specific record |
-| Amazon EC2 Auto Scaling | Completed — central service-specific record |
-| AWS Fargate | Completed — central service-specific record |
-| AWS Lambda | Completed — central service-specific record |
-| Amazon Lightsail | Completed — central service-specific record |
+| AWS App Runner | Rebuilt — exact unique service record |
+| AWS Auto Scaling | Rebuilt — exact unique service record |
+| AWS Batch | Rebuilt — exact unique service record |
+| AWS Elastic Beanstalk | Rebuilt — exact unique service record |
+| Amazon EC2 | Rebuilt — exact unique service record |
+| Amazon EC2 Auto Scaling | Rebuilt — exact unique service record |
+| AWS Fargate | Rebuilt — exact unique service record |
+| AWS Lambda | Rebuilt — exact unique service record |
+| Amazon Lightsail | Rebuilt — exact unique service record |
 | AWS Outposts | Completed — exact central record |
 | AWS Wavelength | Completed — exact central record |
 
@@ -278,46 +278,46 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Completed — central service-specific record |
-| Amazon ECS | Completed — central service-specific record |
-| Amazon ECS Anywhere | Completed — central service-specific record |
-| Amazon EKS | Completed — central service-specific record |
-| Amazon EKS Anywhere | Completed — central service-specific record |
-| Amazon EKS Distro | Completed — central service-specific record |
+| Amazon ECR | Rebuilt — exact unique service record |
+| Amazon ECS | Rebuilt — exact unique service record |
+| Amazon ECS Anywhere | Rebuilt — exact unique service record |
+| Amazon EKS | Rebuilt — exact unique service record |
+| Amazon EKS Anywhere | Rebuilt — exact unique service record |
+| Amazon EKS Distro | Rebuilt — exact unique service record |
 
 #### 08 Database (10)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Completed — central service-specific record |
-| Amazon Aurora Serverless | Completed — central service-specific record |
+| Amazon Aurora | Rebuilt — exact unique service record |
+| Amazon Aurora Serverless | Rebuilt — exact unique service record |
 | Amazon DocumentDB | Completed — exact central record |
-| Amazon DynamoDB | Completed — central service-specific record |
+| Amazon DynamoDB | Rebuilt — exact unique service record |
 | Amazon ElastiCache | Completed — exact central record |
 | Amazon Keyspaces | Completed — exact central record |
 | Amazon Neptune | Completed — exact central record |
-| Amazon RDS | Completed — central service-specific record |
-| Amazon Redshift | Completed — central service-specific record |
-| Amazon Timestream | Completed — central service-specific record |
+| Amazon RDS | Rebuilt — exact unique service record |
+| Amazon Redshift | Rebuilt — exact unique service record |
+| Amazon Timestream | Rebuilt — exact unique service record |
 
 #### 09 Developer Tools (8)
 
 | Service | Central insight status |
 |---|---|
-| AWS CDK | Completed — central service-specific record |
-| AWS CodeArtifact | Completed — central service-specific record |
-| AWS CodeBuild | Completed — central service-specific record |
-| AWS CodeDeploy | Completed — central service-specific record |
+| AWS CDK | Rebuilt — exact unique service record |
+| AWS CodeArtifact | Rebuilt — exact unique service record |
+| AWS CodeBuild | Rebuilt — exact unique service record |
+| AWS CodeDeploy | Rebuilt — exact unique service record |
 | Amazon CodeGuru | Completed — exact central record |
-| AWS CodePipeline | Completed — central service-specific record |
-| AWS Tools and SDKs | Completed — central service-specific record |
+| AWS CodePipeline | Rebuilt — exact unique service record |
+| AWS Tools and SDKs | Rebuilt — exact unique service record |
 | AWS X-Ray | Completed — exact central record |
 
 #### 10 End User Computing (2)
 
 | Service | Central insight status |
 |---|---|
-| Amazon AppStream 2.0 | Completed — central service-specific record |
+| Amazon AppStream 2.0 | Rebuilt — exact unique service record |
 | Amazon WorkSpaces | Completed — exact central record |
 
 #### 11 Frontend Web and Mobile (4)
@@ -325,7 +325,7 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 | Service | Central insight status |
 |---|---|
 | AWS Amplify | Completed — exact central record |
-| Amazon API Gateway | Completed — central service-specific record |
+| Amazon API Gateway | Rebuilt — exact unique service record |
 | AWS Device Farm | Completed — exact central record |
 | Amazon Pinpoint | Completed — exact central record |
 
@@ -333,94 +333,94 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| AWS IoT Core | Completed — central service-specific record |
-| AWS IoT Device Defender | Completed — central service-specific record |
-| AWS IoT Device Management | Completed — central service-specific record |
-| AWS IoT Events | Completed — central service-specific record |
-| AWS IoT Greengrass | Completed — central service-specific record |
-| AWS IoT SiteWise | Completed — central service-specific record |
-| AWS IoT Things Graph | Completed — central service-specific record |
-| AWS IoT 1-Click | Completed — central service-specific record |
+| AWS IoT Core | Rebuilt — exact unique service record |
+| AWS IoT Device Defender | Rebuilt — exact unique service record |
+| AWS IoT Device Management | Rebuilt — exact unique service record |
+| AWS IoT Events | Rebuilt — exact unique service record |
+| AWS IoT Greengrass | Rebuilt — exact unique service record |
+| AWS IoT SiteWise | Rebuilt — exact unique service record |
+| AWS IoT Things Graph | Rebuilt — exact unique service record |
+| AWS IoT 1-Click | Rebuilt — exact unique service record |
 
 #### 13 Machine Learning (15)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Completed — central service-specific record |
-| Amazon Comprehend | Completed — central service-specific record |
-| Amazon Comprehend Medical | Completed — central service-specific record |
+| Amazon Augmented AI | Rebuilt — exact unique service record |
+| Amazon Comprehend | Rebuilt — exact unique service record |
+| Amazon Comprehend Medical | Rebuilt — exact unique service record |
 | Amazon Fraud Detector | Completed — exact central record |
-| Amazon Kendra | Completed — central service-specific record |
-| Amazon Lex | Completed — central service-specific record |
+| Amazon Kendra | Rebuilt — exact unique service record |
+| Amazon Lex | Rebuilt — exact unique service record |
 | Amazon Nova | Completed — exact central record |
 | Amazon PartyRock | Completed — exact central record |
-| Amazon Personalize | Completed — central service-specific record |
-| Amazon Polly | Completed — central service-specific record |
-| Amazon Rekognition | Completed — central service-specific record |
-| Amazon SageMaker AI | Completed — central service-specific record |
-| Amazon Textract | Completed — central service-specific record |
-| Amazon Transcribe | Completed — central service-specific record |
-| Amazon Translate | Completed — central service-specific record |
+| Amazon Personalize | Rebuilt — exact unique service record |
+| Amazon Polly | Rebuilt — exact unique service record |
+| Amazon Rekognition | Rebuilt — exact unique service record |
+| Amazon SageMaker AI | Rebuilt — exact unique service record |
+| Amazon Textract | Rebuilt — exact unique service record |
+| Amazon Transcribe | Rebuilt — exact unique service record |
+| Amazon Translate | Rebuilt — exact unique service record |
 
 #### 14 Media Services (2)
 
 | Service | Central insight status |
 |---|---|
 | Amazon Elastic Transcoder | Completed — exact central record |
-| Amazon Kinesis Video Streams | Completed — central service-specific record |
+| Amazon Kinesis Video Streams | Rebuilt — exact unique service record |
 
 #### 15 Management and Governance (21)
 
 | Service | Central insight status |
 |---|---|
-| AWS CloudFormation | Completed — central service-specific record |
-| AWS CloudTrail | Completed — central service-specific record |
-| Amazon CloudWatch | Completed — central service-specific record |
-| Amazon CloudWatch Logs | Completed — central service-specific record |
-| AWS CLI | Completed — central service-specific record |
-| AWS Compute Optimizer | Completed — central service-specific record |
-| AWS Config | Completed — central service-specific record |
-| AWS Control Tower | Completed — central service-specific record |
+| AWS CloudFormation | Rebuilt — exact unique service record |
+| AWS CloudTrail | Rebuilt — exact unique service record |
+| Amazon CloudWatch | Rebuilt — exact unique service record |
+| Amazon CloudWatch Logs | Rebuilt — exact unique service record |
+| AWS CLI | Rebuilt — exact unique service record |
+| AWS Compute Optimizer | Rebuilt — exact unique service record |
+| AWS Config | Rebuilt — exact unique service record |
+| AWS Control Tower | Rebuilt — exact unique service record |
 | AWS Cost Anomaly Detection | Completed — exact central record |
 | AWS Health Dashboard | Completed — exact central record |
 | AWS License Manager | Completed — exact central record |
 | Amazon Managed Grafana | Completed — exact central record |
 | Amazon Managed Service for Prometheus | Completed — exact central record |
-| AWS Management Console | Completed — central service-specific record |
-| AWS Organizations | Completed — central service-specific record |
+| AWS Management Console | Rebuilt — exact unique service record |
+| AWS Organizations | Rebuilt — exact unique service record |
 | AWS Proton | Completed — exact central record |
-| AWS Service Catalog | Completed — central service-specific record |
+| AWS Service Catalog | Rebuilt — exact unique service record |
 | AWS Service Quotas | Completed — exact central record |
-| AWS Systems Manager | Completed — central service-specific record |
-| AWS Trusted Advisor | Completed — central service-specific record |
-| AWS Well-Architected Tool | Completed — central service-specific record |
+| AWS Systems Manager | Rebuilt — exact unique service record |
+| AWS Trusted Advisor | Rebuilt — exact unique service record |
+| AWS Well-Architected Tool | Rebuilt — exact unique service record |
 
 #### 16 Migration and Transfer (8)
 
 | Service | Central insight status |
 |---|---|
 | AWS Application Discovery Service | Completed — exact central record |
-| AWS Application Migration Service | Completed — central service-specific record |
-| AWS DMS | Completed — central service-specific record |
-| AWS DataSync | Completed — central service-specific record |
-| AWS Migration Hub | Completed — central service-specific record |
+| AWS Application Migration Service | Rebuilt — exact unique service record |
+| AWS DMS | Rebuilt — exact unique service record |
+| AWS DataSync | Rebuilt — exact unique service record |
+| AWS Migration Hub | Rebuilt — exact unique service record |
 | AWS Schema Conversion Tool | Completed — exact central record |
-| AWS Snow Family | Completed — central service-specific record |
-| AWS Transfer Family | Completed — central service-specific record |
+| AWS Snow Family | Rebuilt — exact unique service record |
+| AWS Transfer Family | Rebuilt — exact unique service record |
 
 #### 17 Networking and Content Delivery (9)
 
 | Service | Central insight status |
 |---|---|
-| Amazon CloudFront | Completed — central service-specific record |
-| AWS Direct Connect | Completed — central service-specific record |
-| Elastic Load Balancing | Completed — central service-specific record |
-| AWS Global Accelerator | Completed — central service-specific record |
-| AWS PrivateLink | Completed — central service-specific record |
-| Amazon Route 53 | Completed — central service-specific record |
-| AWS Transit Gateway | Completed — central service-specific record |
-| Amazon VPC | Completed — central service-specific record |
-| AWS VPN | Completed — central service-specific record |
+| Amazon CloudFront | Rebuilt — exact unique service record |
+| AWS Direct Connect | Rebuilt — exact unique service record |
+| Elastic Load Balancing | Rebuilt — exact unique service record |
+| AWS Global Accelerator | Rebuilt — exact unique service record |
+| AWS PrivateLink | Rebuilt — exact unique service record |
+| Amazon Route 53 | Rebuilt — exact unique service record |
+| AWS Transit Gateway | Rebuilt — exact unique service record |
+| Amazon VPC | Rebuilt — exact unique service record |
+| AWS VPN | Rebuilt — exact unique service record |
 
 #### 18 Security, Identity, and Compliance (21)
 
@@ -428,37 +428,37 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 |---|---|
 | AWS Artifact | Completed — exact central record |
 | AWS Audit Manager | Completed — exact central record |
-| AWS Certificate Manager | Completed — central service-specific record |
-| AWS CloudHSM | Completed — central service-specific record |
+| AWS Certificate Manager | Rebuilt — exact unique service record |
+| AWS CloudHSM | Rebuilt — exact unique service record |
 | Amazon Cognito | Completed — exact central record |
-| Amazon Detective | Completed — central service-specific record |
+| Amazon Detective | Rebuilt — exact unique service record |
 | AWS Directory Service | Completed — exact central record |
-| AWS Firewall Manager | Completed — central service-specific record |
-| Amazon GuardDuty | Completed — central service-specific record |
-| AWS IAM Identity Center | Completed — central service-specific record |
-| AWS IAM | Completed — central service-specific record |
-| Amazon Inspector | Completed — central service-specific record |
-| AWS KMS | Completed — central service-specific record |
-| Amazon Macie | Completed — central service-specific record |
-| AWS Network Firewall | Completed — central service-specific record |
+| AWS Firewall Manager | Rebuilt — exact unique service record |
+| Amazon GuardDuty | Rebuilt — exact unique service record |
+| AWS IAM Identity Center | Rebuilt — exact unique service record |
+| AWS IAM | Rebuilt — exact unique service record |
+| Amazon Inspector | Rebuilt — exact unique service record |
+| AWS KMS | Rebuilt — exact unique service record |
+| Amazon Macie | Rebuilt — exact unique service record |
+| AWS Network Firewall | Rebuilt — exact unique service record |
 | AWS Resource Access Manager | Completed — exact central record |
-| AWS Secrets Manager | Completed — central service-specific record |
-| AWS Security Hub | Completed — central service-specific record |
-| AWS Security Token Service | Completed — central service-specific record |
-| AWS Shield | Completed — central service-specific record |
-| AWS WAF | Completed — central service-specific record |
+| AWS Secrets Manager | Rebuilt — exact unique service record |
+| AWS Security Hub | Rebuilt — exact unique service record |
+| AWS Security Token Service | Rebuilt — exact unique service record |
+| AWS Shield | Rebuilt — exact unique service record |
+| AWS WAF | Rebuilt — exact unique service record |
 
 #### 19 Storage (8)
 
 | Service | Central insight status |
 |---|---|
 | AWS Backup | Completed — exact central record |
-| Amazon EBS | Completed — central service-specific record |
+| Amazon EBS | Rebuilt — exact unique service record |
 | AWS Elastic Disaster Recovery | Completed — exact central record |
-| Amazon EFS | Completed — central service-specific record |
+| Amazon EFS | Rebuilt — exact unique service record |
 | Amazon FSx | Completed — exact central record |
-| Amazon S3 | Completed — central service-specific record |
-| Amazon S3 Glacier | Completed — central service-specific record |
+| Amazon S3 | Rebuilt — exact unique service record |
+| Amazon S3 Glacier | Rebuilt — exact unique service record |
 | AWS Storage Gateway | Completed — exact central record |
 
 
@@ -468,33 +468,33 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon Athena | Completed — central service-specific record |
+| Amazon Athena | Rebuilt — exact unique service record |
 | Amazon EMR | Completed — exact central record |
-| AWS Glue | Completed — central service-specific record |
-| Amazon Kinesis | Completed — central service-specific record |
-| Amazon OpenSearch Service | Completed — central service-specific record |
-| Amazon Quick Sight | Completed — central service-specific record |
-| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Completed — central service-specific record |
+| AWS Glue | Rebuilt — exact unique service record |
+| Amazon Kinesis | Rebuilt — exact unique service record |
+| Amazon OpenSearch Service | Rebuilt — exact unique service record |
+| Amazon Quick Sight | Rebuilt — exact unique service record |
+| Amazon Managed Streaming for Apache Kafka (Amazon MSK) | Rebuilt — exact unique service record |
 
 #### 02 Application Integration (6)
 
 | Service | Central insight status |
 |---|---|
 | Amazon AppFlow | Completed — exact central record |
-| AWS AppConfig | Completed — central service-specific record |
-| Amazon EventBridge | Completed — central service-specific record |
-| Amazon SNS | Completed — central service-specific record |
-| Amazon SQS | Completed — central service-specific record |
-| AWS Step Functions | Completed — central service-specific record |
+| AWS AppConfig | Rebuilt — exact unique service record |
+| Amazon EventBridge | Rebuilt — exact unique service record |
+| Amazon SNS | Rebuilt — exact unique service record |
+| Amazon SQS | Rebuilt — exact unique service record |
+| AWS Step Functions | Rebuilt — exact unique service record |
 
 #### 03 Compute (6)
 
 | Service | Central insight status |
 |---|---|
-| AWS App Runner | Completed — central service-specific record |
-| Amazon EC2 | Completed — central service-specific record |
-| AWS Lambda | Completed — central service-specific record |
-| AWS Lambda@Edge | Completed — central service-specific record |
+| AWS App Runner | Rebuilt — exact unique service record |
+| Amazon EC2 | Rebuilt — exact unique service record |
+| AWS Lambda | Rebuilt — exact unique service record |
+| AWS Lambda@Edge | Rebuilt — exact unique service record |
 | AWS Outposts | Completed — exact central record |
 | AWS Wavelength | Completed — exact central record |
 
@@ -502,141 +502,144 @@ Summary: SAP 19 sections / 157 services; AIP 13 sections / 111 services; 193 uni
 
 | Service | Central insight status |
 |---|---|
-| Amazon ECR | Completed — central service-specific record |
-| Amazon ECS | Completed — central service-specific record |
-| Amazon EKS | Completed — central service-specific record |
-| AWS Fargate | Completed — central service-specific record |
+| Amazon ECR | Rebuilt — exact unique service record |
+| Amazon ECS | Rebuilt — exact unique service record |
+| Amazon EKS | Rebuilt — exact unique service record |
+| AWS Fargate | Rebuilt — exact unique service record |
 
 #### 05 Customer Engagement (1)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Connect | Completed — central service-specific record |
+| Amazon Connect | Rebuilt — exact unique service record |
 
 #### 06 Database (7)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Aurora | Completed — central service-specific record |
+| Amazon Aurora | Rebuilt — exact unique service record |
 | Amazon DocumentDB | Completed — exact central record |
-| Amazon DynamoDB | Completed — central service-specific record |
-| Amazon DynamoDB Streams | Completed — central service-specific record |
+| Amazon DynamoDB | Rebuilt — exact unique service record |
+| Amazon DynamoDB Streams | Rebuilt — exact unique service record |
 | Amazon ElastiCache | Completed — exact central record |
 | Amazon Neptune | Completed — exact central record |
-| Amazon RDS | Completed — central service-specific record |
+| Amazon RDS | Rebuilt — exact unique service record |
 
 #### 07 Developer Tools (11)
 
 | Service | Central insight status |
 |---|---|
 | AWS Amplify | Completed — exact central record |
-| AWS CDK | Completed — central service-specific record |
-| AWS CLI | Completed — central service-specific record |
-| AWS CloudFormation | Completed — central service-specific record |
-| AWS CodeArtifact | Completed — central service-specific record |
-| AWS CodeBuild | Completed — central service-specific record |
-| AWS CodeDeploy | Completed — central service-specific record |
-| AWS CodePipeline | Completed — central service-specific record |
+| AWS CDK | Rebuilt — exact unique service record |
+| AWS CLI | Rebuilt — exact unique service record |
+| AWS CloudFormation | Rebuilt — exact unique service record |
+| AWS CodeArtifact | Rebuilt — exact unique service record |
+| AWS CodeBuild | Rebuilt — exact unique service record |
+| AWS CodeDeploy | Rebuilt — exact unique service record |
+| AWS CodePipeline | Rebuilt — exact unique service record |
 | Kiro | Completed — exact central record |
-| AWS Tools and SDKs | Completed — central service-specific record |
+| AWS Tools and SDKs | Rebuilt — exact unique service record |
 | AWS X-Ray | Completed — exact central record |
 
 #### 08 Machine Learning (32)
 
 | Service | Central insight status |
 |---|---|
-| Amazon Augmented AI | Completed — central service-specific record |
-| Amazon Bedrock | Completed — central service-specific record |
-| Amazon Bedrock AgentCore | Completed — central service-specific record |
-| Amazon Bedrock Knowledge Bases | Completed — central service-specific record |
-| Amazon Bedrock Prompt Management | Completed — central service-specific record |
-| Amazon Bedrock Prompt Flows | Completed — central service-specific record |
-| Amazon Comprehend | Completed — central service-specific record |
-| Amazon Comprehend Medical | Completed — central service-specific record |
-| Amazon Kendra | Completed — central service-specific record |
-| Amazon Lex | Completed — central service-specific record |
+| Amazon Augmented AI | Rebuilt — exact unique service record |
+| Amazon Bedrock | Rebuilt — exact unique service record |
+| Amazon Bedrock AgentCore | Rebuilt — exact unique service record |
+| Amazon Bedrock Knowledge Bases | Rebuilt — exact unique service record |
+| Amazon Bedrock Prompt Management | Rebuilt — exact unique service record |
+| Amazon Bedrock Prompt Flows | Rebuilt — exact unique service record |
+| Amazon Comprehend | Rebuilt — exact unique service record |
+| Amazon Comprehend Medical | Rebuilt — exact unique service record |
+| Amazon Kendra | Rebuilt — exact unique service record |
+| Amazon Lex | Rebuilt — exact unique service record |
 | Amazon Nova | Completed — exact central record |
 | Amazon PartyRock | Completed — exact central record |
-| Amazon Personalize | Completed — central service-specific record |
-| Amazon Polly | Completed — central service-specific record |
-| Amazon Q Business | Completed — central service-specific record |
-| Amazon Q Business Apps | Completed — central service-specific record |
-| Amazon Q Developer | Completed — central service-specific record |
-| Amazon Quick | Completed — central service-specific record |
-| Amazon Rekognition | Completed — central service-specific record |
-| Amazon SageMaker AI | Completed — central service-specific record |
-| Amazon SageMaker Clarify | Completed — central service-specific record |
-| Amazon SageMaker Data Wrangler | Completed — central service-specific record |
-| Amazon SageMaker Ground Truth | Completed — central service-specific record |
-| Amazon SageMaker JumpStart | Completed — central service-specific record |
-| Amazon SageMaker Model Monitor | Completed — central service-specific record |
-| Amazon SageMaker Model Registry | Completed — central service-specific record |
-| Amazon SageMaker Neo | Completed — central service-specific record |
-| Amazon SageMaker Processing | Completed — central service-specific record |
-| Amazon SageMaker Unified Studio | Completed — central service-specific record |
-| Amazon Textract | Completed — central service-specific record |
+| Amazon Personalize | Rebuilt — exact unique service record |
+| Amazon Polly | Rebuilt — exact unique service record |
+| Amazon Q Business | Rebuilt — exact unique service record |
+| Amazon Q Business Apps | Rebuilt — exact unique service record |
+| Amazon Q Developer | Rebuilt — exact unique service record |
+| Amazon Quick | Rebuilt — exact unique service record |
+| Amazon Rekognition | Rebuilt — exact unique service record |
+| Amazon SageMaker AI | Rebuilt — exact unique service record |
+| Amazon SageMaker Clarify | Rebuilt — exact unique service record |
+| Amazon SageMaker Data Wrangler | Rebuilt — exact unique service record |
+| Amazon SageMaker Ground Truth | Rebuilt — exact unique service record |
+| Amazon SageMaker JumpStart | Rebuilt — exact unique service record |
+| Amazon SageMaker Model Monitor | Rebuilt — exact unique service record |
+| Amazon SageMaker Model Registry | Rebuilt — exact unique service record |
+| Amazon SageMaker Neo | Rebuilt — exact unique service record |
+| Amazon SageMaker Processing | Rebuilt — exact unique service record |
+| Amazon SageMaker Unified Studio | Rebuilt — exact unique service record |
+| Amazon Textract | Rebuilt — exact unique service record |
 | Amazon Titan | Completed — exact central record |
-| Amazon Transcribe | Completed — central service-specific record |
+| Amazon Transcribe | Rebuilt — exact unique service record |
 
 #### 09 Management and Governance (12)
 
 | Service | Central insight status |
 |---|---|
-| AWS Auto Scaling | Completed — central service-specific record |
+| AWS Auto Scaling | Rebuilt — exact unique service record |
 | AWS Chatbot | Completed — exact central record |
-| AWS CloudTrail | Completed — central service-specific record |
-| Amazon CloudWatch | Completed — central service-specific record |
-| Amazon CloudWatch Logs | Completed — central service-specific record |
-| Amazon CloudWatch Synthetics | Completed — central service-specific record |
+| AWS CloudTrail | Rebuilt — exact unique service record |
+| Amazon CloudWatch | Rebuilt — exact unique service record |
+| Amazon CloudWatch Logs | Rebuilt — exact unique service record |
+| Amazon CloudWatch Synthetics | Rebuilt — exact unique service record |
 | AWS Cost Anomaly Detection | Completed — exact central record |
 | AWS Cost Explorer | Completed — exact central record |
 | Amazon Managed Grafana | Completed — exact central record |
-| AWS Service Catalog | Completed — central service-specific record |
-| AWS Systems Manager | Completed — central service-specific record |
-| AWS Well-Architected Tool | Completed — central service-specific record |
+| AWS Service Catalog | Rebuilt — exact unique service record |
+| AWS Systems Manager | Rebuilt — exact unique service record |
+| AWS Well-Architected Tool | Rebuilt — exact unique service record |
 
 #### 10 Migration and Transfer (2)
 
 | Service | Central insight status |
 |---|---|
-| AWS DataSync | Completed — central service-specific record |
-| AWS Transfer Family | Completed — central service-specific record |
+| AWS DataSync | Rebuilt — exact unique service record |
+| AWS Transfer Family | Rebuilt — exact unique service record |
 
 #### 11 Networking and Content Delivery (8)
 
 | Service | Central insight status |
 |---|---|
-| Amazon API Gateway | Completed — central service-specific record |
-| AWS AppSync | Completed — central service-specific record |
-| Amazon CloudFront | Completed — central service-specific record |
-| Elastic Load Balancing (ELB) | Completed — central service-specific record |
-| AWS Global Accelerator | Completed — central service-specific record |
-| AWS PrivateLink | Completed — central service-specific record |
-| Amazon Route 53 | Completed — central service-specific record |
-| Amazon VPC | Completed — central service-specific record |
+| Amazon API Gateway | Rebuilt — exact unique service record |
+| AWS AppSync | Rebuilt — exact unique service record |
+| Amazon CloudFront | Rebuilt — exact unique service record |
+| Elastic Load Balancing (ELB) | Rebuilt — exact unique service record |
+| AWS Global Accelerator | Rebuilt — exact unique service record |
+| AWS PrivateLink | Rebuilt — exact unique service record |
+| Amazon Route 53 | Rebuilt — exact unique service record |
+| Amazon VPC | Rebuilt — exact unique service record |
 
 #### 12 Security, Identity, and Compliance (9)
 
 | Service | Central insight status |
 |---|---|
 | Amazon Cognito | Completed — exact central record |
-| AWS Encryption SDK | Completed — central service-specific record |
-| IAM | Completed — central service-specific record |
-| IAM Access Analyzer | Completed — central service-specific record |
-| IAM Identity Center | Completed — central service-specific record |
-| AWS KMS | Completed — central service-specific record |
-| Amazon Macie | Completed — central service-specific record |
-| AWS Secrets Manager | Completed — central service-specific record |
-| AWS WAF | Completed — central service-specific record |
+| AWS Encryption SDK | Rebuilt — exact unique service record |
+| IAM | Rebuilt — exact unique service record |
+| IAM Access Analyzer | Rebuilt — exact unique service record |
+| IAM Identity Center | Rebuilt — exact unique service record |
+| AWS KMS | Rebuilt — exact unique service record |
+| Amazon Macie | Rebuilt — exact unique service record |
+| AWS Secrets Manager | Rebuilt — exact unique service record |
+| AWS WAF | Rebuilt — exact unique service record |
 
 #### 13 Storage (6)
 
 | Service | Central insight status |
 |---|---|
-| Amazon EBS | Completed — central service-specific record |
-| Amazon EFS | Completed — central service-specific record |
-| Amazon S3 | Completed — central service-specific record |
-| Amazon S3 Intelligent-Tiering | Completed — central service-specific record |
-| Amazon S3 Lifecycle policies | Completed — central service-specific record |
-| Amazon S3 Cross-Region Replication | Completed — central service-specific record |
+| Amazon EBS | Rebuilt — exact unique service record |
+| Amazon EFS | Rebuilt — exact unique service record |
+| Amazon S3 | Rebuilt — exact unique service record |
+| Amazon S3 Intelligent-Tiering | Rebuilt — exact unique service record |
+| Amazon S3 Lifecycle policies | Rebuilt — exact unique service record |
+| Amazon S3 Cross-Region Replication | Rebuilt — exact unique service record |
 
+
+
+Central rewrite validation: each of the 193 SAP/AIP services now has a distinct exact record for Security & Governance, Design & Optimization, Cost, and Service-specific Watch Points. Family rules remain only as a safeguard for services outside these two course scopes.
