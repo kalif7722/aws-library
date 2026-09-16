@@ -555,11 +555,22 @@ const azureIconFiles:Record<string,string>={
   "Azure Machine Learning":"azure-machine-learning.svg"
 };
 const iconFileFor=(label:string)=>azureIconFiles[label];
-const azureWalkthroughUrl=(service:string)=>{
+const azureWalkthroughFilenameOverrides:Record<string,string[]>={
+  "Data Catalog":["azure-data-catalog.webp","data-catalog.webp"],
+  "HDInsight":["azure-hdinsight.webp","hdinsight.webp"],
+  "Data Lake Analytics":["azure-data-lake-analytics.webp","data-lake-analytics.webp"],
+  "Event Hubs":["azure-event-hubs.webp","event-hubs.webp"],
+  "App Service":["azure-app-service.webp","app-service.webp"],
+  "Azure Container Apps":["azure-container-apps.webp","container-apps.webp"],
+  "Nutanix Cloud Clusters":["azure-nutanix-cloud-clusters.webp","nutanix-cloud-clusters.webp"],
+};
+const azureWalkthroughUrls=(service:string)=>{
   const slug=service.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-  const path="/azure-certification-walkthroughs/"+slug+".webp";
-  const configured=assetUrl(path);
-  return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured;
+  return (azureWalkthroughFilenameOverrides[service]||[slug+".webp"]).map(filename=>{
+    const path="/azure-certification-walkthroughs/"+filename;
+    const configured=assetUrl(path);
+    return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured;
+  });
 };
 
 const azureIconUrl=(file:string)=>{const path="/azure-icons/"+file;const configured=assetUrl(path);return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured};
@@ -572,10 +583,13 @@ function CostBoard({items}:{items:string[]}){return <section className="service-
 function WalkthroughPlaceholder({service}:{service:string}){
   const [available,setAvailable]=useState(true);
   const [expanded,setExpanded]=useState(false);
-  const src=azureWalkthroughUrl(service);
+  const [sourceIndex,setSourceIndex]=useState(0);
+  const sources=azureWalkthroughUrls(service);
+  const src=sources[sourceIndex];
+  const handleSourceError=()=>{if(sourceIndex<sources.length-1)setSourceIndex(index=>index+1);else setAvailable(false)};
   return <section className="azure-walkthrough-placeholder" id="azure-service-walkthrough">
     <div className="azure-walkthrough-copy"><p>SERVICE WALKTHROUGH</p><h3>{service} console / portal walkthrough</h3><span>{available?"Open the step-by-step walkthrough in the page or full view.":"Upload the matching walkthrough image to azure-certification-walkthroughs to connect it automatically."}</span></div>
-    {available?<button type="button" className="azure-walkthrough-preview" onClick={()=>setExpanded(true)}><img key={src} src={src} loading="lazy" decoding="async" alt={service+" console walkthrough"} onError={()=>setAvailable(false)}/><span>Open full view</span></button>:<a href="#azure-service-walkthrough">Walkthrough coming soon</a>}
+    {available?<button type="button" className="azure-walkthrough-preview" onClick={()=>setExpanded(true)}><img key={src} src={src} loading="lazy" decoding="async" alt={service+" console walkthrough"} onError={handleSourceError}/><span>Open full view</span></button>:<a href="#azure-service-walkthrough">Walkthrough coming soon</a>}
     {expanded&&available&&<div className="azure-walkthrough-modal" role="dialog" aria-modal="true" aria-label={service+" walkthrough full view"} onClick={()=>setExpanded(false)}><button type="button" className="azure-walkthrough-close" onClick={()=>setExpanded(false)}>Close ×</button><img src={src} alt={service+" console walkthrough full view"} onClick={event=>event.stopPropagation()}/></div>}
   </section>
 }
