@@ -74,13 +74,13 @@ export default function AzureServicesPage() {
     <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
         <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
-        {!menuCollapsed && azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title}>
+        {!menuCollapsed && <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title}>
           <button type="button" className="azure-branch-trigger" onClick={() => choose(item.services[0], branchIndex)} aria-haspopup="true"><span>{item.title}</span><small>{item.services.length}</small></button>
           <div className="azure-branch-dropdown" role="menu">
             <div className="azure-dropdown-title">{item.title}</div>
             {item.services.map((service) => <button type="button" role="menuitem" key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small></button>)}
           </div>
-        </div>)}
+        </div>)}</div>}
       </aside>
 
       <section className="azure-main-pane">
