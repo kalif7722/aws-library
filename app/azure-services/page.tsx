@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { assetUrl } from "../../lib/asset-url";
 import "../components/AzureLibrary.css";
 import AzureServiceLearningDetails from "../components/AzureServiceLearningDetails";
@@ -17,6 +18,7 @@ const azureAssetUrl = (path: string) => {
 type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: number };
 
 export default function AzureServicesPage() {
+  const searchParams = useSearchParams();
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
   const [selectedBranchIndex, setSelectedBranchIndex] = useState(0);
   const [query, setQuery] = useState("");
@@ -24,6 +26,7 @@ export default function AzureServicesPage() {
   const [expanded, setExpanded] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
   const [visualVisible, setVisualVisible] = useState(true);
+  const [openBranch, setOpenBranch] = useState<{ index: number; top: number } | null>(null);
 
   const selected = azureUniqueServices.find((service) => service.slug === selectedSlug) || azureUniqueServices[0];
   const branch = azureBranches[selectedBranchIndex] || azureBranches[0];
@@ -41,6 +44,16 @@ export default function AzureServicesPage() {
   const imagePath = selected ? azureAssetPath(selected) : "";
   const currentImage = selected ? azureAssetUrl(imagePath) : "";
   const hasImage = Boolean(selected && currentImage && imageErrorPath !== imagePath);
+
+  useEffect(() => {
+    const requestedSlug = searchParams.get("service");
+    if (!requestedSlug) return;
+    const requested = azureUniqueServices.find((service) => service.slug === requestedSlug);
+    if (!requested) return;
+    setSelectedSlug(requested.slug);
+    const requestedBranch = azureBranches.findIndex((item) => item.services.some((service) => service.slug === requested.slug));
+    if (requestedBranch >= 0) setSelectedBranchIndex(requestedBranch);
+  }, [searchParams]);
 
   useEffect(() => {
     setImageErrorPath("");
@@ -61,6 +74,7 @@ export default function AzureServicesPage() {
     setSelectedBranchIndex(branchIndex);
     setQuery("");
     setExpanded(false);
+    setOpenBranch(null);
   };
 
   const chooseSearchResult = (entry: SearchEntry) => choose(entry.service, entry.branchIndex);
@@ -74,13 +88,15 @@ export default function AzureServicesPage() {
     <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
         <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
-        {!menuCollapsed && <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title}>
-          <button type="button" className="azure-branch-trigger" onClick={() => choose(item.services[0], branchIndex)} aria-haspopup="true"><span>{item.title}</span><small>{item.services.length}</small></button>
-          <div className="azure-branch-dropdown" role="menu">
-            <div className="azure-dropdown-title">{item.title}</div>
-            {item.services.map((service) => <button type="button" role="menuitem" key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small></button>)}
-          </div>
-        </div>)}</div>}
+        {!menuCollapsed && <>
+          <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title} onMouseEnter={(event) => { const maxHeight = Math.min(window.innerHeight * .76, 680); const rowTop = event.currentTarget.getBoundingClientRect().top; setOpenBranch({ index: branchIndex, top: Math.max(12, Math.min(rowTop, window.innerHeight - maxHeight - 12)) }); }} onFocus={() => setOpenBranch((current) => current || { index: branchIndex, top: 96 })}>
+            <button type="button" className="azure-branch-trigger" onClick={() => choose(item.services[0], branchIndex)} aria-haspopup="true"><span>{item.title}</span><small>{item.services.length}</small></button>
+          </div>)}</div>
+          {openBranch && <div className="azure-branch-popover" style={{ top: openBranch.top }} role="menu" onMouseLeave={() => setOpenBranch(null)}>
+            <div className="azure-dropdown-title">{azureBranches[openBranch.index]?.title}</div>
+            {azureBranches[openBranch.index]?.services.map((service) => <button type="button" role="menuitem" key={azureBranches[openBranch.index].title + "-" + service.slug} onClick={() => choose(service, openBranch.index)}><span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small></button>)}
+          </div>}
+        </>}
       </aside>
 
       <section className="azure-main-pane">
