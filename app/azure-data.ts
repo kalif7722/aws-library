@@ -1855,6 +1855,14 @@ const azureFilenameOverrides: Record<string, string> = {
   "devops-tool-integrations": "devops-tool-integrations.webp",
   "api-management": "api-management.webp",
   "app-configuration": "app-configuration.webp",
+  "azure-kubernetes-service": "azure-kubernetes-service-aks.webp",
+  "azure-container-registry": "azure-container-registry.webp",
+  "azure-container-apps": "azure-container-apps.webp",
+  "azure-container-instances": "azure-container-instances.webp",
+  "azure-container-storage": "azure-container-storage.webp",
+  "azure-red-hat-openshift": "azure-red-hat-openshift.webp",
+  "azure-service-fabric": "azure-service-fabric.webp",
+  "azure-kubernetes-fleet-manager": "azure-kubernetes-fleet-manager.webp",
 };
 
 export const azureAssetPath = (service: AzureService) => {
