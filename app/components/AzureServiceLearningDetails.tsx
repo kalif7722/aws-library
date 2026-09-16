@@ -467,6 +467,8 @@ const azureIconFiles:Record<string,string>={
   "Planetary Computer Pro":"microsoft-planetary-computer-pro.svg",
   "Databricks jobs":"azure-databricks.svg",
   "Databricks":"azure-databricks.svg",
+  "Synapse / Databricks":"azure-databricks.svg",
+  "Databricks / Synapse":"azure-databricks.svg",
   "ADLS Gen2":"azure-data-lake-storage.svg",
   "ADLS":"azure-data-lake-storage.svg",
   "Delta Lake":"azure-databricks.svg",
