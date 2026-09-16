@@ -20,7 +20,7 @@ export default function AzureServicesPage() {
   const [selectedSlug, setSelectedSlug] = useState(azureUniqueServices[0]?.slug || "");
   const [selectedBranchIndex, setSelectedBranchIndex] = useState(0);
   const [query, setQuery] = useState("");
-  const [imageError, setImageError] = useState(false);
+  const [imageErrorPath, setImageErrorPath] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
   const [visualVisible, setVisualVisible] = useState(true);
@@ -40,13 +40,13 @@ export default function AzureServicesPage() {
   }, [query, searchEntries]);
   const imagePath = selected ? azureAssetPath(selected) : "";
   const currentImage = selected ? azureAssetUrl(imagePath) : "";
-  const hasImage = Boolean(selected && currentImage && !imageError);
+  const hasImage = Boolean(selected && currentImage && imageErrorPath !== imagePath);
 
   useEffect(() => {
-    setImageError(false);
+    setImageErrorPath("");
     setExpanded(false);
     setVisualVisible(true);
-  }, [selectedSlug]);
+  }, [imagePath]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -97,7 +97,7 @@ export default function AzureServicesPage() {
 
         {selected && <article className="viewer azure-viewer" style={{ "--service-accent": "#0078d4" } as React.CSSProperties}>
           <div className="viewer-head"><div><p>Selected Azure service</p><h2>{selected.name}</h2><small className="azure-branch-context">{branch?.title}</small></div><div className="azure-viewer-actions"><span className={"azure-status " + (hasImage ? "ready" : "pending")}>{hasImage ? "Visual available" : "Visual pending"}</span><button type="button" className="visual-toggle" onClick={() => { setVisualVisible((visible) => { if (visible) setExpanded(false); return !visible; }); }}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div></div>
-          <section className="azure-el10-section" aria-label={selected.name + " visual"}><div className="azure-el10-heading"><div><p>EL10 SERVICE VISUAL</p><span>Click the visual to open a full-screen study view.</span></div></div>{visualVisible && (hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img src={currentImage} loading="eager" decoding="async" fetchPriority="high" onError={() => setImageError(true)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>)}</section>
+          <section className="azure-el10-section" aria-label={selected.name + " visual"}><div className="azure-el10-heading"><div><p>EL10 SERVICE VISUAL</p><span>Click the visual to open a full-screen study view.</span></div></div>{visualVisible && (hasImage ? <button type="button" className="image-link" onClick={() => setExpanded(true)} aria-label={"Open " + selected.name + " visual in full view"}><img key={imagePath} src={currentImage} loading="eager" decoding="async" fetchPriority="high" onError={() => setImageErrorPath(imagePath)} alt={selected.name + " Azure study visual"} /></button> : <div className="azure-pending-card"><strong>{ready(selected) ? "Visual is being connected" : "Visual not ready yet"}</strong><p>This service remains available in the branch menu. Its guide will appear as soon as a matching R2 image is available.</p></div>)}</section>
           <p className="viewer-note">Choose any branch from the left rail or search globally. Click the visual for full view; press Escape or Close to return.</p>
         <AzureServiceLearningDetails serviceName={selected.name} /></article>}
       </section>
