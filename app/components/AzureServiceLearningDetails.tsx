@@ -749,6 +749,7 @@ const azureWalkthroughFilenameOverrides:Record<string,string[]>={
   "Data Catalog":["azure-data-catalog.webp","data-catalog.webp"],
   "Entra ID":["microsoft-entra-id.webp","entra-id.webp"],
   "Microsoft Entra ID":["microsoft-entra-id.webp","entra-id.webp"],
+  "Microsoft Entra ID (formerly Azure AD)":["microsoft-entra-id.webp","entra-id.webp"],
   "HDInsight":["azure-hdinsight.webp","hdinsight.webp"],
   "Data Lake Analytics":["azure-data-lake-analytics.webp","data-lake-analytics.webp"],
   "Event Hubs":["azure-event-hubs.webp","event-hubs.webp"],
