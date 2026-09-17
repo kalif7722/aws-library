@@ -746,9 +746,17 @@ const azureWalkthroughFilenameOverrides:Record<string,string[]>={
   "Azure Container Apps":["azure-container-apps.webp","container-apps.webp"],
   "Nutanix Cloud Clusters":["azure-nutanix-cloud-clusters.webp","nutanix-cloud-clusters.webp"],
 };
+const walkthroughFilenameVariants=(filename:string)=>{
+  const normalized=filename.endsWith(".webp")?filename:filename+".webp";
+  const alternate=normalized.startsWith("azure-")?normalized.slice("azure-".length):"azure-"+normalized;
+  return [normalized,alternate];
+};
 const azureWalkthroughUrls=(service:string)=>{
   const slug=service.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-  return (azureWalkthroughFilenameOverrides[service]||[slug+".webp"]).map(filename=>{
+  const filenames=[...(azureWalkthroughFilenameOverrides[service]||[]),slug+".webp"]
+    .flatMap(walkthroughFilenameVariants)
+    .filter((filename,index,all)=>all.indexOf(filename)===index);
+  return filenames.map(filename=>{
     const path="/azure-certification-walkthroughs/"+filename;
     const configured=assetUrl(path);
     return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured;

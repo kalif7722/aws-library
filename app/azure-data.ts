@@ -1871,11 +1871,25 @@ const azureFilenameOverrides: Record<string, string> = {
   "azure-kubernetes-fleet-manager": "azure-kubernetes-fleet-manager.webp",
 };
 
-export const azureAssetPath = (service: AzureService) => {
-  const filename = azureFilenameOverrides[service.slug]
-    || ((service.slug.startsWith("azure-") ? service.slug : "azure-" + service.slug) + ".webp");
-  return "/azure/" + service.folder + "/" + filename;
+const filenameVariants = (filename: string) => {
+  const normalized = filename.endsWith(".webp") ? filename : filename + ".webp";
+  const alternate = normalized.startsWith("azure-")
+    ? normalized.slice("azure-".length)
+    : "azure-" + normalized;
+  return [normalized, alternate];
 };
+
+/** Return accepted R2 candidates without requiring an azure- filename prefix. */
+export const azureAssetPaths = (service: AzureService) => {
+  const mapped = azureFilenameOverrides[service.slug]
+    || ((service.slug.startsWith("azure-") ? service.slug : "azure-" + service.slug) + ".webp");
+  const slugFilename = service.slug + ".webp";
+  const prefixedSlugFilename = (service.slug.startsWith("azure-") ? service.slug : "azure-" + service.slug) + ".webp";
+  const filenames = [...filenameVariants(mapped), ...filenameVariants(slugFilename), ...filenameVariants(prefixedSlugFilename)];
+  return Array.from(new Set(filenames)).map((filename) => "/azure/" + service.folder + "/" + filename);
+};
+
+export const azureAssetPath = (service: AzureService) => azureAssetPaths(service)[0];
 
 export const azureUniqueServices = (() => {
   const unique = new Map<string, AzureService>();
