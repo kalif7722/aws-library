@@ -15,7 +15,9 @@ const aliases: Record<string,string> = {
   "AWS Serverless Application Repository":"aws-serverless-application-repository", "VMware Cloud on AWS":"vmware-cloud-on-aws", "AWS DMS":"aws-dms", "AWS Client VPN":"aws-client-vpn", "AWS Snow Family":"aws-snow-family",
   "Amazon SageMaker AI":"amazon-sagemaker-ai", "Amazon Elastic Container Registry (Amazon ECR)":"amazon-ecr", "Amazon Elastic Container Service (Amazon ECS)":"amazon-ecs", "Amazon Elastic Kubernetes Service (Amazon EKS)":"amazon-eks", "Amazon Elastic Block Store (Amazon EBS)":"amazon-ebs", "Amazon Elastic File System (Amazon EFS)":"amazon-efs"
 };
-const slug = (name:string) => aliases[name] || name.toLowerCase().replace(/\([^)]*\)/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const normalized = (name:string) => name.toLowerCase().replace(/\([^)]*\)/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const normalizedAliases: Record<string,string> = Object.fromEntries(Object.entries(aliases).map(([key,value]) => [normalized(key),value]));
+const slug = (name:string) => aliases[name] || normalizedAliases[normalized(name)] || normalized(name).replace(/\s+/g, "-");
 export const sharedWalkthroughPath = (name:string) => `/aws-certification-walkthroughs/${slug(name)}.webp`;
 
 export default function SharedServiceWalkthrough({serviceName}:{serviceName:string}) {

@@ -46,7 +46,7 @@ autoScaling:icon("auto-scaling","AWS Auto Scaling","ManagementGovernance","Manag
 chatbot:icon("chatbot","AWS Chatbot","ManagementGovernance","ManagementGovernance/Chatbot.png",["Amazon Q Developer in chat applications"]),
 bedrock:icon("bedrock","Amazon Bedrock","ArtificialIntelligence","ArtificialIntelligence/Bedrock.png",["Bedrock","Amazon Titan"]),
 bedrockKnowledgeBases:icon("bedrock-knowledge-bases","Amazon Bedrock Knowledge Bases","ArtificialIntelligence","ArtificialIntelligence/BedrockKnowledgeBases.png",["Bedrock Knowledge Bases"]),
-bedrockPromptFlows:icon("bedrock-prompt-flows","Amazon Bedrock Prompt Flows","ArtificialIntelligence","ArtificialIntelligence/BedrockPromptFlows.png",["Bedrock Prompt Flows"]),
+bedrockPromptFlows:icon("bedrock-prompt-flows","Amazon Bedrock Prompt Flows","ArtificialIntelligence","ArtificialIntelligence/BedrockPromptFlows.png",["Bedrock Prompt Flows","Amazon Bedrock Prompt Management","Bedrock Prompt Management"]),
 bedrockAgentCore:icon("bedrock-agentcore","Amazon Bedrock AgentCore","ArtificialIntelligence","ArtificialIntelligence/BedrockAgentCore.png",["AgentCore"]),
 q:icon("amazon-q","Amazon Q","ArtificialIntelligence","ArtificialIntelligence/Q.png",["Amazon Q Business","Amazon Q Business Apps","Amazon Q Developer"]),
 nova:icon("amazon-nova","Amazon Nova","ArtificialIntelligence","ArtificialIntelligence/Nova.png",["Nova"]),
@@ -73,18 +73,22 @@ amplify:icon("amplify","AWS Amplify","FrontEndWebMobile","FrontEndWebMobile/Ampl
 cloudFormation:icon("cloudformation","AWS CloudFormation","ManagementGovernance","ManagementGovernance/CloudFormation.png"),
 cloudTrail:icon("cloudtrail","AWS CloudTrail","ManagementGovernance","ManagementGovernance/CloudTrail.png"),
 cloudWatch:icon("cloudwatch","Amazon CloudWatch","ManagementGovernance","ManagementGovernance/CloudWatch.png",["Amazon CloudWatch Logs","Amazon CloudWatch Synthetics"]),
+config:icon("config","AWS Config","ManagementGovernance","ManagementGovernance/Config.png",["Config","AWS Config Service"]),
 systemsManager:icon("systems-manager","AWS Systems Manager","ManagementGovernance","ManagementGovernance/SystemsManager.png"),
 serviceCatalog:icon("service-catalog","AWS Service Catalog","ManagementGovernance","ManagementGovernance/ServiceCatalog.png"),
 cli:icon("cli","AWS CLI","DeveloperTools","DeveloperTools/CommandLineInterface.png",["Command Line Interface"]),
+toolsAndSdks:icon("tools-and-sdks","AWS Tools and SDKs","DeveloperTools","DeveloperTools/ToolsandSDKs.png",["Tools and SDKs","AWS SDK","AWS SDKs"]),
 cdk:icon("cdk","AWS CDK","DeveloperTools","DeveloperTools/CloudDevelopmentKit.png"),
 codeArtifact:icon("codeartifact","AWS CodeArtifact","DeveloperTools","DeveloperTools/CodeArtifact.png"),
 codeBuild:icon("codebuild","AWS CodeBuild","DeveloperTools","DeveloperTools/CodeBuild.png"),
 codeDeploy:icon("codedeploy","AWS CodeDeploy","DeveloperTools","DeveloperTools/CodeDeploy.png"),
 codePipeline:icon("codepipeline","AWS CodePipeline","DeveloperTools","DeveloperTools/CodePipeline.png"),
 xray:icon("xray","AWS X-Ray","DeveloperTools","DeveloperTools/XRay.png"),
+dataFirehose:icon("data-firehose","Amazon Data Firehose","Analytics","Analytics/DataFirehose.png",["Kinesis Data Firehose","Amazon Kinesis Data Firehose","Firehose"]),
 dataSync:icon("datasync","AWS DataSync","MigrationModernization","MigrationModernization/DataSync.png"),
 transferFamily:icon("transfer-family","AWS Transfer Family","MigrationModernization","MigrationModernization/TransferFamily.png"),
 waf:icon("waf","AWS WAF","SecurityIdentityCompliance","SecurityIdentityCompliance/WAF.png",["WAF"]),
+networkFirewall:icon("network-firewall","AWS Network Firewall","SecurityIdentityCompliance","SecurityIdentityCompliance/NetworkFirewall.png",["Network Firewall"]),
 kms:icon("kms","AWS KMS","SecurityIdentityCompliance","SecurityIdentityCompliance/KeyManagementService.png",["KMS","AWS Encryption SDK"]),
 secrets:icon("secrets","AWS Secrets Manager","SecurityIdentityCompliance","SecurityIdentityCompliance/SecretsManager.png",["Secrets Manager"]),
 cognito:icon("cognito","Amazon Cognito","SecurityIdentityCompliance","SecurityIdentityCompliance/Cognito.png",["Cognito"]),
@@ -103,4 +107,9 @@ macie:icon("macie","Amazon Macie","SecurityIdentityCompliance","SecurityIdentity
 };
 export const awsIconSrc=(icon:AwsArchitectureIcon)=>`${AWS_ICON_ROOT}/${icon.file}`;
 export const awsIconFallbackSrc=(_icon:AwsArchitectureIcon)=>`${AWS_ICON_FALLBACK_ROOT}/Groups/AWSCloud.png`;
-export function findAwsArchitectureIcon(value:string){const q=value.trim().toLowerCase();return Object.values(awsArchitectureIcons).find(icon=>icon.id===q||icon.name.toLowerCase()===q||icon.aliases?.some(alias=>alias.toLowerCase()===q));}
+const normalizeIconLookup=(value:string)=>value.trim().toLowerCase().replace(/[()]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+export function findAwsArchitectureIcon(value:string){
+  const q=value.trim().toLowerCase();
+  const normalized=normalizeIconLookup(value);
+  return Object.values(awsArchitectureIcons).find(icon=>icon.id===q||icon.name.toLowerCase()===q||normalizeIconLookup(icon.name)===normalized||icon.aliases?.some(alias=>alias.toLowerCase()===q||normalizeIconLookup(alias)===normalized));
+}
