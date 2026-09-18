@@ -142,7 +142,10 @@ const domains: Domain[] = [
 ];
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
-const azureTaskScreenshotBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az104-tasks";
+const azureTaskScreenshotBases = [
+  "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az104-tasks",
+  "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs",
+];
 const taskScreenshotFiles: Record<string, string> = {
   "Create users and groups": "create-users-and-groups",
   "Manage user and group properties": "manage-user-and-group-properties",
@@ -162,18 +165,19 @@ const taskScreenshotFiles: Record<string, string> = {
 };
 const taskScreenshotUrls = (task: Task) => {
   const slug = taskScreenshotFiles[task.title] || task.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return [`${azureTaskScreenshotBase}/${slug}.webp`, `${azureTaskScreenshotBase}/${slug}/walkthrough.webp`];
+  return azureTaskScreenshotBases.flatMap((base) => [`${base}/${slug}.webp`, `${base}/${slug}/walkthrough.webp`]);
 };
 
 function TaskWalkthroughImage({ task }: { task: Task }) {
   const [open, setOpen] = useState(false);
   const [sourceIndex, setSourceIndex] = useState(0);
+  const [failed, setFailed] = useState(false);
   const sources = taskScreenshotUrls(task);
-  const src = sources[sourceIndex];
+  const src = failed ? undefined : sources[sourceIndex];
   const available = Boolean(src);
   return <div className="az104-task-image-walkthrough" aria-label={`${task.title} console screenshot walkthrough`}>
     <p>CONSOLE SCREENSHOT WALKTHROUGH</p>
-    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => setSourceIndex((index) => index + 1)} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Task-specific console screenshots will appear here</strong><span>No unrelated service image is shown. Follow the numbered instructions below until the capture is added.</span></div>}
+    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => { if (sourceIndex < sources.length - 1) setSourceIndex((index) => index + 1); else setFailed(true); }} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Task-specific console screenshots will appear here</strong><span>Upload the matching WebP under <code>azure-certification-walkthroughs/az104-tasks/</code> to show it here.</span></div>}
     {open && <div className="az104-task-image-modal" role="dialog" aria-modal="true" aria-label={`${task.title} console walkthrough full view`} onClick={() => setOpen(false)}><button type="button" onClick={() => setOpen(false)}>Close ×</button><img src={src} alt={`${task.title} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}
   </div>;
 }
@@ -192,6 +196,7 @@ function TaskTabs({ tasks }: { tasks: Task[] }) {
 
 export default function Az104CourseGuide() {
   const [selectedDomainIndex, setSelectedDomainIndex] = useState(0);
+  const selectedDomain = domains[selectedDomainIndex] ?? domains[0];
   return <section className="az104-guide" aria-labelledby="az104-guide-title">
     <div className="az104-guide-hero">
       <div className="az104-guide-hero-copy"><p className="az104-eyebrow">AZ-104 · VISUAL ADMINISTRATOR PATH</p><h2 id="az104-guide-title">Learn Azure administration as one connected environment.</h2><p>Move through identity, storage, compute, networking, and operations in the order an administrator actually designs and runs Azure. Every step connects the exam objective to a visual guide, architecture pattern, and practical walkthrough.</p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104" target="_blank" rel="noreferrer">Compare with the official Microsoft study guide ↗</a></div>
@@ -199,12 +204,13 @@ export default function Az104CourseGuide() {
     </div>
     <div className="az104-study-loop" aria-label="Recommended study loop">{studyLoop.map((step, index) => <div key={step}><b>{String(index + 1).padStart(2, "0")}</b><span>{step}</span>{index < studyLoop.length - 1 && <i>→</i>}</div>)}</div>
     <div className="az104-domain-roadmap" role="tablist" aria-label="AZ-104 exam domains">{domains.map((domain, index) => <button type="button" role="tab" aria-selected={selectedDomainIndex === index} className={selectedDomainIndex === index ? "is-selected" : ""} key={domain.number} onClick={() => setSelectedDomainIndex(index)} style={{ "--domain-accent": domain.accent } as CSSProperties}><b>{domain.number}</b><span>{domain.title}</span><small>{domain.weight}</small></button>)}</div>
-    <div className="az104-domain-list">{[domains[selectedDomainIndex]].map((domain) => <article className="az104-domain" id={`az104-domain-${domain.number}`} key={domain.number} style={{ "--domain-accent": domain.accent } as CSSProperties}>
+    <div className="az104-domain-list"><article className="az104-domain" id={`az104-domain-${selectedDomain.number}`} key={selectedDomain.number} style={{ "--domain-accent": selectedDomain.accent } as CSSProperties}>
+      {(() => { const domain = selectedDomain; return <>
       <div className="az104-domain-head"><div className="az104-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></div>
       <div className="az104-flow" aria-label={`${domain.title} architecture flow`}>{domain.flow.map((node, index) => <div key={node}><strong>{node}</strong>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
       <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Console path → action → verify</span></div><TaskTabs tasks={lesson.tasks} /></section> : null}</details>)}</div>
       <div className="az104-exam-hook"><b>EXAM MEMORY HOOK</b><span>{domain.examHook}</span></div>
-    </article>)}</div>
+      </>; })()}</article></div>
     <div className="az104-final-check"><div><p className="az104-eyebrow">BEFORE YOU BOOK</p><h3>Can you explain the whole path without opening the portal?</h3></div><span>Use the five domain cards, then revisit every service link where your answer depends on a setting, scope, route, or recovery decision.</span></div>
   </section>;
 }
