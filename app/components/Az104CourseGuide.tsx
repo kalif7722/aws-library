@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import "./Az104CourseGuide.css";
 
 type Lesson = {
@@ -6,6 +6,14 @@ type Lesson = {
   topics: string[];
   visual: string;
   services: { label: string; slug: string }[];
+  tasks?: Task[];
+};
+
+type Task = {
+  title: string;
+  service: { label: string; slug: string };
+  steps: string[];
+  examCue: string;
 };
 
 type Domain = {
@@ -19,6 +27,24 @@ type Domain = {
   examHook: string;
 };
 
+const identityTasks: Task[] = [
+  { title: "Create users and groups", service: { label: "Microsoft Entra ID", slug: "microsoft-entra-id" }, steps: ["Open Entra ID → Users or Groups.", "Create the identity and set the required properties.", "Assign group membership and verify the resulting object."], examCue: "Know when a group assignment is inherited and when a user has a direct assignment." },
+  { title: "Manage user and group properties", service: { label: "Microsoft Entra ID", slug: "microsoft-entra-id" }, steps: ["Open the user or group overview.", "Change properties such as ownership, membership, usage location, or group type.", "Re-check licenses and access after the change."], examCue: "A property change can affect licensing, membership, or access without changing an Azure RBAC role." },
+  { title: "Manage Microsoft Entra licenses", service: { label: "Microsoft Entra ID", slug: "microsoft-entra-id" }, steps: ["Select the license and assignment method.", "Assign directly or through a group.", "Review assignment state and resolve conflicts or usage-location requirements."], examCue: "Group-based licensing is different from assigning a license to one user." },
+  { title: "Manage external users", service: { label: "Microsoft Entra ID", slug: "microsoft-entra-id" }, steps: ["Invite the external identity to the tenant.", "Set the required invitation and directory properties.", "Grant only the resource access required for collaboration."], examCue: "An external identity is still governed by tenant policies and resource-scope permissions." },
+  { title: "Configure self-service password reset", service: { label: "Microsoft Entra ID", slug: "microsoft-entra-id" }, steps: ["Enable SSPR for the selected users or group.", "Configure authentication methods and registration requirements.", "Test the reset flow and review audit evidence."], examCue: "Separate who is enabled for SSPR from which authentication methods are allowed." },
+  { title: "Use built-in Azure roles", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Identify the required action rather than the product name.", "Choose the least-privileged built-in role.", "Confirm the role does not grant unrelated control-plane actions."], examCue: "Owner, Contributor, and Reader differ mainly by management permissions; data-plane access may need separate roles." },
+  { title: "Assign roles at different scopes", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Select the principal and role.", "Choose management group, subscription, resource group, or resource scope.", "Review inherited access before creating another assignment."], examCue: "A higher-scope assignment flows down; a lower-scope assignment cannot grant access above its scope." },
+  { title: "Interpret access assignments", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Open Access control (IAM) and inspect role assignments.", "Trace direct, group, inherited, and deny assignments.", "Compare effective access with the task the identity must perform."], examCue: "Do not assume a visible role assignment is the only path to effective access." },
+  { title: "Manage resource groups and subscriptions", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Create the management boundary and name it consistently.", "Place resources with a shared lifecycle together.", "Move or delete resources only after checking dependencies and locks."], examCue: "Resource groups are lifecycle boundaries; subscriptions are billing, quota, and isolation boundaries." },
+  { title: "Configure management groups", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Create the management-group hierarchy.", "Place subscriptions under the correct group.", "Apply governance at the highest safe scope and verify inheritance."], examCue: "Management groups organize subscriptions and allow policy/RBAC inheritance across them." },
+  { title: "Create and interpret Azure Policy assignments", service: { label: "Azure Policy", slug: "azure-policy" }, steps: ["Choose a built-in definition or create a policy initiative.", "Assign it at the required scope with parameters.", "Review compliance results and remediation behavior."], examCue: "Policy evaluates resource state; it is not the same as a user permission or a network firewall." },
+  { title: "Configure resource locks", service: { label: "Azure Resource Manager", slug: "azure-resource-manager" }, steps: ["Choose ReadOnly or CanNotDelete.", "Apply the lock at the narrowest safe scope.", "Test the management operation and remove the lock only through an approved change."], examCue: "A lock can block deletion or updates even when the user has a powerful RBAC role." },
+  { title: "Apply and manage resource tags", service: { label: "Azure Policy", slug: "azure-policy" }, steps: ["Define a consistent tag schema.", "Apply tags to resources or resource groups.", "Use policy to require, inherit, or remediate tags."], examCue: "Tags support organization and cost reporting; they do not provide authorization." },
+  { title: "Manage cost alerts and budgets", service: { label: "Microsoft Cost Management", slug: "microsoft-cost-management" }, steps: ["Choose the billing scope and budget period.", "Set thresholds and notification recipients.", "Review actual versus forecast cost and connect the result to action."], examCue: "A budget or alert helps detect spend; it does not automatically stop every resource." },
+  { title: "Use Azure Advisor recommendations", service: { label: "Azure Advisor", slug: "azure-advisor" }, steps: ["Filter recommendations by category and subscription.", "Validate the recommendation against workload requirements.", "Apply, defer, or dismiss it with an auditable reason."], examCue: "Advisor recommends improvements; it does not replace architecture, security, or change review." },
+];
+
 const domains: Domain[] = [
   {
     number: "01",
@@ -29,9 +55,9 @@ const domains: Domain[] = [
     flow: ["Entra identity", "RBAC scope", "Policy + locks", "Cost guardrails"],
     examHook: "Separate authentication from authorization, then evaluate the scope where the role, policy, tag, lock, or budget is applied.",
     lessons: [
-      { title: "01 · Users, groups, licenses, and external identities", topics: ["Create users and groups", "Manage user and group properties", "Assign and manage Microsoft Entra licenses", "Manage external users", "Configure self-service password reset (SSPR)"], visual: "Identity lifecycle", services: [{ label: "Microsoft Entra ID", slug: "microsoft-entra-id-formerly-azure-ad" }] },
-      { title: "02 · Azure RBAC and access scope", topics: ["Use built-in Azure roles", "Assign roles at management-group, subscription, resource-group, and resource scopes", "Interpret inherited and direct access assignments", "Distinguish Entra roles from Azure resource roles"], visual: "Scope inheritance", services: [{ label: "Microsoft Entra ID", slug: "microsoft-entra-id-formerly-azure-ad" }, { label: "Azure Resource Manager", slug: "azure-resource-manager" }] },
-      { title: "03 · Subscriptions, policy, locks, tags, and cost", topics: ["Manage resource groups and subscriptions", "Configure management groups", "Apply tags and resource locks", "Create and interpret Azure Policy assignments", "Use cost alerts, budgets, and Azure Advisor recommendations"], visual: "Governance hierarchy", services: [{ label: "Azure Policy", slug: "azure-policy" }, { label: "Azure Advisor", slug: "azure-advisor" }, { label: "Microsoft Cost Management", slug: "microsoft-cost-management" }] },
+      { title: "01 · Users, groups, licenses, and external identities", topics: ["Create users and groups", "Manage user and group properties", "Assign and manage Microsoft Entra licenses", "Manage external users", "Configure self-service password reset (SSPR)"], visual: "Identity lifecycle", services: [{ label: "Microsoft Entra ID", slug: "microsoft-entra-id-formerly-azure-ad" }], tasks: identityTasks.slice(0, 5) },
+      { title: "02 · Azure RBAC and access scope", topics: ["Use built-in Azure roles", "Assign roles at management-group, subscription, resource-group, and resource scopes", "Interpret inherited and direct access assignments", "Distinguish Entra roles from Azure resource roles"], visual: "Scope inheritance", services: [{ label: "Microsoft Entra ID", slug: "microsoft-entra-id-formerly-azure-ad" }, { label: "Azure Resource Manager", slug: "azure-resource-manager" }], tasks: identityTasks.slice(5, 8) },
+      { title: "03 · Subscriptions, policy, locks, tags, and cost", topics: ["Manage resource groups and subscriptions", "Configure management groups", "Apply tags and resource locks", "Create and interpret Azure Policy assignments", "Use cost alerts, budgets, and Azure Advisor recommendations"], visual: "Governance hierarchy", services: [{ label: "Azure Policy", slug: "azure-policy" }, { label: "Azure Advisor", slug: "azure-advisor" }, { label: "Microsoft Cost Management", slug: "microsoft-cost-management" }], tasks: identityTasks.slice(8) },
     ],
   },
   {
@@ -96,6 +122,16 @@ const domains: Domain[] = [
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
 
 export default function Az104CourseGuide() {
+  const [expandedTask, setExpandedTask] = useState<Task | null>(null);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setExpandedTask(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return <section className="az104-guide" aria-labelledby="az104-guide-title">
     <div className="az104-guide-hero">
       <div className="az104-guide-hero-copy"><p className="az104-eyebrow">AZ-104 · VISUAL ADMINISTRATOR PATH</p><h2 id="az104-guide-title">Learn Azure administration as one connected environment.</h2><p>Move through identity, storage, compute, networking, and operations in the order an administrator actually designs and runs Azure. Every step connects the exam objective to a visual guide, architecture pattern, and practical walkthrough.</p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104" target="_blank" rel="noreferrer">Compare with the official Microsoft study guide ↗</a></div>
@@ -106,9 +142,10 @@ export default function Az104CourseGuide() {
     <div className="az104-domain-list">{domains.map((domain) => <article className="az104-domain" id={`az104-domain-${domain.number}`} key={domain.number} style={{ "--domain-accent": domain.accent } as CSSProperties}>
       <div className="az104-domain-head"><div className="az104-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></div>
       <div className="az104-flow" aria-label={`${domain.title} architecture flow`}>{domain.flow.map((node, index) => <div key={node}><strong>{node}</strong>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
-      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div></details>)}</div>
+      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Visual preview → open full task flow</span></div><div className="az104-task-grid">{lesson.tasks.map((task) => <article className="az104-task-card" key={task.title}><div className="az104-task-card-top"><span>WALKTHROUGH TASK</span><small>{task.service.label}</small></div><h5>{task.title}</h5><button type="button" className="az104-task-preview" onClick={() => setExpandedTask(task)} aria-label={`Open visual task flow for ${task.title}`}><span className="az104-task-preview-label">VISUAL STEPS</span><div className="az104-task-preview-flow">{task.steps.map((step, index) => <span key={step}><b>{String(index + 1).padStart(2, "0")}</b>{step.split(".")[0]}{index < task.steps.length - 1 && <i>→</i>}</span>)}</div><em>Open full-screen task flow ↗</em></button><p className="az104-task-cue"><b>Exam cue</b>{task.examCue}</p><a className="az104-task-service-link" href={`/azure-services?service=${task.service.slug}`}>Open {task.service.label} visual →</a></article>)}</div></section> : null}</details>)}</div>
       <div className="az104-exam-hook"><b>EXAM MEMORY HOOK</b><span>{domain.examHook}</span></div>
     </article>)}</div>
     <div className="az104-final-check"><div><p className="az104-eyebrow">BEFORE YOU BOOK</p><h3>Can you explain the whole path without opening the portal?</h3></div><span>Use the five domain cards, then revisit every service link where your answer depends on a setting, scope, route, or recovery decision.</span></div>
+    {expandedTask && <div className="az104-task-modal" role="dialog" aria-modal="true" aria-label={`${expandedTask.title} task walkthrough`} onClick={() => setExpandedTask(null)}><div className="az104-task-modal-panel" onClick={(event) => event.stopPropagation()}><button type="button" className="az104-task-modal-close" onClick={() => setExpandedTask(null)}>Close ×</button><p className="az104-eyebrow">ADMIN TASK WALKTHROUGH · {expandedTask.service.label}</p><h3>{expandedTask.title}</h3><div className="az104-task-modal-flow">{expandedTask.steps.map((step, index) => <div key={step}><b>{String(index + 1).padStart(2, "0")}</b><span>{step}</span></div>)}</div><div className="az104-task-modal-cue"><b>Certification cue</b><span>{expandedTask.examCue}</span></div><a href={`/azure-services?service=${expandedTask.service.slug}`}>Open the full {expandedTask.service.label} visual library →</a></div></div>}
   </section>;
 }
