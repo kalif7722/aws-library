@@ -1,5 +1,6 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import "./Az104CourseGuide.css";
+import { azureWalkthroughUrls } from "./AzureServiceLearningDetails";
 
 type Lesson = {
   title: string;
@@ -143,17 +144,20 @@ const domains: Domain[] = [
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
 
+function TaskWalkthroughImage({ task }: { task: Task }) {
+  const [open, setOpen] = useState(false);
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const sources = azureWalkthroughUrls(task.service.label);
+  const src = sources[sourceIndex];
+  const available = Boolean(src);
+  return <div className="az104-task-image-walkthrough" aria-label={`${task.title} console screenshot walkthrough`}>
+    <p>CONSOLE SCREENSHOT WALKTHROUGH</p>
+    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => setSourceIndex((index) => index + 1)} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Console steps</strong><span>Follow the numbered instructions below.</span></div>}
+    {open && <div className="az104-task-image-modal" role="dialog" aria-modal="true" aria-label={`${task.title} console walkthrough full view`} onClick={() => setOpen(false)}><button type="button" onClick={() => setOpen(false)}>Close ×</button><img src={src} alt={`${task.title} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}
+  </div>;
+}
+
 export default function Az104CourseGuide() {
-  const [expandedTask, setExpandedTask] = useState<Task | null>(null);
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setExpandedTask(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   return <section className="az104-guide" aria-labelledby="az104-guide-title">
     <div className="az104-guide-hero">
       <div className="az104-guide-hero-copy"><p className="az104-eyebrow">AZ-104 · VISUAL ADMINISTRATOR PATH</p><h2 id="az104-guide-title">Learn Azure administration as one connected environment.</h2><p>Move through identity, storage, compute, networking, and operations in the order an administrator actually designs and runs Azure. Every step connects the exam objective to a visual guide, architecture pattern, and practical walkthrough.</p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104" target="_blank" rel="noreferrer">Compare with the official Microsoft study guide ↗</a></div>
@@ -164,10 +168,9 @@ export default function Az104CourseGuide() {
     <div className="az104-domain-list">{domains.map((domain) => <article className="az104-domain" id={`az104-domain-${domain.number}`} key={domain.number} style={{ "--domain-accent": domain.accent } as CSSProperties}>
       <div className="az104-domain-head"><div className="az104-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></div>
       <div className="az104-flow" aria-label={`${domain.title} architecture flow`}>{domain.flow.map((node, index) => <div key={node}><strong>{node}</strong>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
-      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Console path → action → verify</span></div><div className="az104-task-grid">{lesson.tasks.map((task) => <article className="az104-task-card" key={task.title}><div className="az104-task-card-top"><span>CONSOLE WALKTHROUGH</span><small>{task.service.label}</small></div><h5>{task.title}</h5><p className="az104-task-path"><b>Portal path</b>{task.consolePath}</p><button type="button" className="az104-task-preview" onClick={() => setExpandedTask(task)} aria-label={`Open console walkthrough for ${task.title}`}><span className="az104-task-preview-label">VISUAL STEPS</span><div className="az104-task-preview-flow">{task.steps.map((step, index) => <span key={step}><b>{String(index + 1).padStart(2, "0")}</b>{step.split(".")[0]}{index < task.steps.length - 1 && <i>→</i>}</span>)}</div><em>Open full console walkthrough ↗</em></button><p className="az104-task-cue"><b>Exam cue</b>{task.examCue}</p><a className="az104-task-service-link" href={`/azure-services?service=${task.service.slug}`}>Open {task.service.label} visual →</a></article>)}</div></section> : null}</details>)}</div>
+      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Console path → action → verify</span></div><div className="az104-task-grid">{lesson.tasks.map((task) => <article className="az104-task-card" key={task.title}><div className="az104-task-card-top"><span>CONSOLE WALKTHROUGH</span><small>{task.service.label}</small></div><h5>{task.title}</h5><p className="az104-task-path"><b>Portal path</b>{task.consolePath}</p><TaskWalkthroughImage task={task} /><p className="az104-task-cue"><b>Exam cue</b>{task.examCue}</p><a className="az104-task-service-link" href={`/azure-services?service=${task.service.slug}`}>Open {task.service.label} visual →</a></article>)}</div></section> : null}</details>)}</div>
       <div className="az104-exam-hook"><b>EXAM MEMORY HOOK</b><span>{domain.examHook}</span></div>
     </article>)}</div>
     <div className="az104-final-check"><div><p className="az104-eyebrow">BEFORE YOU BOOK</p><h3>Can you explain the whole path without opening the portal?</h3></div><span>Use the five domain cards, then revisit every service link where your answer depends on a setting, scope, route, or recovery decision.</span></div>
-    {expandedTask && <div className="az104-task-modal" role="dialog" aria-modal="true" aria-label={`${expandedTask.title} console walkthrough`} onClick={() => setExpandedTask(null)}><div className="az104-task-modal-panel" onClick={(event) => event.stopPropagation()}><button type="button" className="az104-task-modal-close" onClick={() => setExpandedTask(null)}>Close ×</button><p className="az104-eyebrow">CONSOLE WALKTHROUGH · {expandedTask.service.label}</p><h3>{expandedTask.title}</h3><div className="az104-task-console-path"><b>Azure portal path</b><span>{expandedTask.consolePath}</span></div><div className="az104-console-gallery">{expandedTask.steps.map((step, index) => <div className="az104-console-gallery-step" key={step}><div className="az104-gallery-label"><b>SCREEN {String(index + 1).padStart(2, "0")}</b><span>{index === 0 ? "Open the service" : index === expandedTask.steps.length - 1 ? "Verify the result" : "Configure the setting"}</span></div><div className="az104-console-frame"><div className="az104-console-topbar"><b>Microsoft Azure</b><span>Portal</span><i>⌕　?　◎</i></div><div className="az104-console-main"><aside><span>Home</span><span className="is-active">{expandedTask.service.label}</span><span>Resource groups</span><span>Subscriptions</span><span>Monitor</span></aside><div className="az104-console-content"><small>{expandedTask.consolePath?.split(" → ").slice(-1)[0]}</small><strong>{expandedTask.title}</strong><div className="az104-console-tabs"><span className="is-selected">Overview</span><span>Properties</span><span>Access control (IAM)</span></div><div className="az104-console-highlight"><b>Action {String(index + 1).padStart(2, "0")}</b><span>{step}</span></div><div className="az104-console-fields"><i></i><i></i><i></i></div></div></div></div><p className="az104-gallery-caption"><b>{String(index + 1).padStart(2, "0")}</b>{step}</p></div>)}</div><div className="az104-task-modal-cue"><b>Verify in the portal</b><span>{expandedTask.verify}</span></div><div className="az104-task-modal-cue"><b>Certification cue</b><span>{expandedTask.examCue}</span></div><a href={`/azure-services?service=${expandedTask.service.slug}`}>Open the full {expandedTask.service.label} visual library →</a></div></div>}
   </section>;
 }
