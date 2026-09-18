@@ -157,6 +157,18 @@ function TaskWalkthroughImage({ task }: { task: Task }) {
   </div>;
 }
 
+function TaskTabs({ tasks }: { tasks: Task[] }) {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const task = tasks[selectedIndex];
+  return <div className="az104-task-tabs-shell">
+    <div className="az104-task-tabs" role="tablist" aria-label="Certification task walkthroughs">{tasks.map((item, index) => <button type="button" role="tab" aria-selected={selectedIndex === index} className={selectedIndex === index ? "is-selected" : ""} key={item.title} onClick={() => setSelectedIndex(index)}><b>{String(index + 1).padStart(2, "0")}</b><span>{item.title}</span></button>)}</div>
+    <div className="az104-task-selected" role="tabpanel">
+      <div className="az104-task-selected-head"><div><p>SELECTED CONSOLE WALKTHROUGH</p><h5>{task.title}</h5><span>{task.service.label}</span></div><a href={`/azure-services?service=${task.service.slug}`}>Open service page ↗</a></div>
+      <div className="az104-task-selected-body"><TaskWalkthroughImage task={task} /><div className="az104-task-selected-instructions"><p className="az104-task-path"><b>Portal path</b>{task.consolePath}</p><ol>{task.steps.map((step) => <li key={step}>{step}</li>)}</ol><p className="az104-task-cue"><b>Exam cue</b>{task.examCue}</p><p className="az104-task-verify"><b>Verify</b>{task.verify}</p></div></div>
+    </div>
+  </div>;
+}
+
 export default function Az104CourseGuide() {
   return <section className="az104-guide" aria-labelledby="az104-guide-title">
     <div className="az104-guide-hero">
@@ -168,7 +180,7 @@ export default function Az104CourseGuide() {
     <div className="az104-domain-list">{domains.map((domain) => <article className="az104-domain" id={`az104-domain-${domain.number}`} key={domain.number} style={{ "--domain-accent": domain.accent } as CSSProperties}>
       <div className="az104-domain-head"><div className="az104-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></div>
       <div className="az104-flow" aria-label={`${domain.title} architecture flow`}>{domain.flow.map((node, index) => <div key={node}><strong>{node}</strong>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
-      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Console path → action → verify</span></div><div className="az104-task-grid">{lesson.tasks.map((task) => <article className="az104-task-card" key={task.title}><div className="az104-task-card-top"><span>CONSOLE WALKTHROUGH</span><small>{task.service.label}</small></div><h5>{task.title}</h5><p className="az104-task-path"><b>Portal path</b>{task.consolePath}</p><TaskWalkthroughImage task={task} /><p className="az104-task-cue"><b>Exam cue</b>{task.examCue}</p><a className="az104-task-service-link" href={`/azure-services?service=${task.service.slug}`}>Open {task.service.label} visual →</a></article>)}</div></section> : null}</details>)}</div>
+      <div className="az104-lessons">{domain.lessons.map((lesson) => <details className="az104-lesson" key={lesson.title}><summary><span>{lesson.title}</span><b>Open step +</b></summary><div className="az104-lesson-body"><div className="az104-objectives"><p>What you must be able to do</p><ul>{lesson.topics.map((topic) => <li key={topic}>{topic}</li>)}</ul></div><div className="az104-lesson-visual"><p>VISUAL ROUTE</p><strong>{lesson.visual}</strong><div className="az104-mini-architecture"><span>Concept</span><i>→</i><span>Configure</span><i>→</i><span>Verify</span></div><div className="az104-service-links">{lesson.services.map((service) => <a key={service.slug} href={`/azure-services?service=${service.slug}`}>{service.label} <span>↗</span></a>)}</div></div></div>{lesson.tasks?.length ? <section className="az104-task-lab" aria-label={`${lesson.title} task walkthroughs`}><div className="az104-task-lab-head"><div><p>ADMIN TASK LAB</p><h4>Practise the exact exam actions</h4></div><span>Console path → action → verify</span></div><TaskTabs tasks={lesson.tasks} /></section> : null}</details>)}</div>
       <div className="az104-exam-hook"><b>EXAM MEMORY HOOK</b><span>{domain.examHook}</span></div>
     </article>)}</div>
     <div className="az104-final-check"><div><p className="az104-eyebrow">BEFORE YOU BOOK</p><h3>Can you explain the whole path without opening the portal?</h3></div><span>Use the five domain cards, then revisit every service link where your answer depends on a setting, scope, route, or recovery decision.</span></div>
