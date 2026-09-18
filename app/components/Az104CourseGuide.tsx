@@ -1,6 +1,5 @@
 import { useState, type CSSProperties } from "react";
 import "./Az104CourseGuide.css";
-import { azureWalkthroughUrls } from "./AzureServiceLearningDetails";
 
 type Lesson = {
   title: string;
@@ -143,16 +142,21 @@ const domains: Domain[] = [
 ];
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
+const azureTaskScreenshotBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az104-tasks";
+const taskScreenshotUrls = (task: Task) => {
+  const slug = task.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return [`${azureTaskScreenshotBase}/${slug}.webp`, `${azureTaskScreenshotBase}/${slug}/walkthrough.webp`];
+};
 
 function TaskWalkthroughImage({ task }: { task: Task }) {
   const [open, setOpen] = useState(false);
   const [sourceIndex, setSourceIndex] = useState(0);
-  const sources = azureWalkthroughUrls(task.service.label);
+  const sources = taskScreenshotUrls(task);
   const src = sources[sourceIndex];
   const available = Boolean(src);
   return <div className="az104-task-image-walkthrough" aria-label={`${task.title} console screenshot walkthrough`}>
     <p>CONSOLE SCREENSHOT WALKTHROUGH</p>
-    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => setSourceIndex((index) => index + 1)} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Console steps</strong><span>Follow the numbered instructions below.</span></div>}
+    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => setSourceIndex((index) => index + 1)} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Task-specific console screenshots will appear here</strong><span>No unrelated service image is shown. Follow the numbered instructions below until the capture is added.</span></div>}
     {open && <div className="az104-task-image-modal" role="dialog" aria-modal="true" aria-label={`${task.title} console walkthrough full view`} onClick={() => setOpen(false)}><button type="button" onClick={() => setOpen(false)}>Close ×</button><img src={src} alt={`${task.title} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}
   </div>;
 }
