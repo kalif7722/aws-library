@@ -60,3 +60,68 @@
 .azure-branch-list::-webkit-scrollbar-thumb { background: #405a85; border-radius: 999px; }
 .azure-branch-list::-webkit-scrollbar-track { background: #101a2d; border-radius: 999px; }
 @media (max-width: 650px) { .azure-branch-list { max-height: 52vh; overflow-y: auto; } }
+
+/* Branch popovers and search results must keep their own readable surface;
+   they should never inherit text colors from the page behind them. */
+.azure-branch-popover {
+  z-index: 70;
+  color: #eef4ff;
+  background: #111b30;
+  opacity: 1;
+  isolation: isolate;
+}
+.azure-dropdown-title { color: #9fc1ff; }
+.azure-branch-popover button { color: #eef4ff; background: #17243c; }
+.azure-branch-popover button + button { margin-top: 3px; }
+.azure-branch-popover button span { color: #f7faff; overflow-wrap: anywhere; }
+.azure-branch-popover button small { color: #9fc1ff; }
+.azure-branch-popover button:hover,.azure-branch-popover button:focus-visible { color: #fff; background: #285083; }
+.azure-search .search-results {
+  color: #eef4ff;
+  background: #111b30;
+  border-color: #48618e;
+  box-shadow: 0 24px 70px #000d;
+}
+.azure-search .search-results button { color: #eef4ff; background: #17243c; }
+.azure-search .search-results button:hover,.azure-search .search-results button:focus-visible { background: #285083; color: #fff; }
+.azure-search .search-results button small { color: #9fc1ff; }
+
+html[data-theme="light"] .azure-branch-rail {
+  color: #172033;
+  background: #fff;
+  border-color: #c4d1e4;
+  box-shadow: 0 14px 34px #22314d18;
+}
+html[data-theme="light"] .azure-menu-heading { color: #53627d; }
+html[data-theme="light"] .azure-menu-heading button { color: #243149; background: #edf3fb; border-color: #b8c7dc; }
+html[data-theme="light"] .azure-branch-trigger { color: #243149; }
+html[data-theme="light"] .azure-branch-trigger small { color: #34445e; background: #edf3fb; border-color: #b8c7dc; }
+html[data-theme="light"] .azure-branch-menu-item:hover .azure-branch-trigger,html[data-theme="light"] .azure-branch-menu-item:focus-within .azure-branch-trigger { color: #fff; }
+html[data-theme="light"] .azure-branch-popover,html[data-theme="light"] .azure-search .search-results {
+  color: #172033;
+  background: #fff;
+  border-color: #b8c7dc;
+  box-shadow: 0 24px 70px #22314d2b;
+}
+html[data-theme="light"] .azure-dropdown-title { color: #53627d; }
+html[data-theme="light"] .azure-branch-popover button,html[data-theme="light"] .azure-search .search-results button { color: #243149; background: #f5f8fc; }
+html[data-theme="light"] .azure-branch-popover button span,html[data-theme="light"] .azure-search .search-results button span { color: #172033; }
+html[data-theme="light"] .azure-branch-popover button small,html[data-theme="light"] .azure-search .search-results button small { color: #35679e; }
+html[data-theme="light"] .azure-branch-popover button:hover,html[data-theme="light"] .azure-branch-popover button:focus-visible,html[data-theme="light"] .azure-search .search-results button:hover,html[data-theme="light"] .azure-search .search-results button:focus-visible { color: #172033; background: #e7f0fc; }
+
+/* Full-screen EL10 media always sits above menus, including a hovered popover. */
+.azure-workspace:has(.image-modal) .azure-branch-popover,.azure-workspace:has(.image-modal) .azure-search .search-results { display: none; }
+
+@media (max-width: 650px) {
+  .azure-branch-popover {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-height: min(68svh, 560px);
+    padding: 10px;
+    border-radius: 14px;
+  }
+  .azure-branch-popover button { min-height: 48px; align-items: center; padding: 10px 11px; gap: 10px; }
+  .azure-branch-popover button span { font-size: .84rem; line-height: 1.3; }
+  .azure-branch-popover button small { font-size: .7rem; }
+}
