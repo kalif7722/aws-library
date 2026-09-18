@@ -804,14 +804,147 @@ const azureIconFiles:Record<string,string>={
   "Speech batch":"azure-speech-in-foundry-tools.svg",
   "Speech or Vision":"azure-speech-in-foundry-tools.svg",
   "SRE":"azure-sre-agent.svg",
-  "SRE team":"azure-sre-agent.svg"
+  "SRE team":"azure-sre-agent.svg",
+  // Normalized service names and aliases used by the remaining architecture
+  // branches. Keep these explicit where a filename is not a literal product
+  // name, so every diagram node resolves to the uploaded normalized SVG.
+  "Microsoft Entra ID (formerly Azure AD)":"microsoft-entra-id.svg",
+  "Entra ID (formerly Azure AD)":"microsoft-entra-id.svg",
+  "Azure Active Directory":"microsoft-entra-id.svg",
+  "Azure AD":"microsoft-entra-id.svg",
+  "Azure Storage":"azure-storage.svg",
+  "Storage":"azure-storage.svg",
+  "Azure Blob Storage":"azure-blob-storage.svg",
+  "Azure Table Storage":"table.svg",
+  "Azure Cache for Redis":"azure-managed-redis.svg",
+  "Cache for Redis":"azure-managed-redis.svg",
+  "Azure Database for PostgreSQL flexible Server":"azure-database-postgresql-server.svg",
+  "Azure Database for PostgreSQL Flexible Server":"azure-database-postgresql-server.svg",
+  "PostgreSQL Flexible Server":"azure-database-postgresql-server.svg",
+  "Azure Database for MySQL flexible Server":"azure-database-mysql-server.svg",
+  "Azure Database for MySQL Flexible Server":"azure-database-mysql-server.svg",
+  "MySQL Flexible Server":"azure-database-mysql-server.svg",
+  "Azure Database for MariaDB":"azure-database-mariadb-server.svg",
+  "Azure Confidential Ledger":"azure-confidential-ledger.svg",
+  "Confidential Ledger":"azure-confidential-ledger.svg",
+  "Azure Linux":"azure-linux.svg",
+  "Virtual Machine Scale Sets":"azure-vm-scale-sets.svg",
+  "Azure VM Scale Sets":"azure-vm-scale-sets.svg",
+  "Prompt flow":"microsoft-foundry.svg",
+  "Model deployment":"azure-machine-learning.svg",
+  "Model endpoint":"azure-machine-learning.svg",
+  "Managed online endpoint":"azure-machine-learning.svg",
+  "Compute cluster":"azure-machine-learning.svg",
+  "Pipeline":"azure-machine-learning.svg",
+  "Model registry":"azure-machine-learning.svg",
+  "ML registry":"azure-machine-learning.svg",
+  "Responsible AI":"azure-machine-learning.svg",
+  "Open Datasets":"azure-open-datasets.svg",
+  "Open dataset":"azure-open-datasets.svg",
+  "Semantic ranker":"azure-ai-search.svg",
+  "Indexers":"azure-ai-search.svg",
+  "Search API":"azure-ai-search.svg",
+  "Resource Graph":"resource-graph-explorer.svg",
+  "Log Analytics":"log-analytics-workspaces-monitor.svg",
+  "Microsoft 365":"microsoft-365.svg",
+  "Graph Data Connect":"microsoft-365.svg",
+  "Event Grid":"event-grid.svg",
+  "Logic App":"azure-logic-apps.svg",
+  "Functions / APIs":"azure-functions.svg",
+  "Bot / Functions":"azure-functions.svg",
+  "Spark":"azure-databricks.svg",
+  "HDInsight Spark":"hd-insight-clusters.svg",
+  "Fabric lakehouse":"azure-synapse-analytics.svg",
+  "Data Factory/Fabric pipelines":"azure-data-factory.svg",
+  "Synapse / SQL":"azure-synapse-analytics.svg",
+  "Serverless SQL":"azure-synapse-analytics.svg",
+  "Dedicated SQL pool":"azure-synapse-analytics.svg",
+  "Analysis Services":"azure-analysis-services.svg",
+  "Data Lake Analytics":"data-lake-analytics.svg",
+  "ADLS Gen1/legacy lake":"data-lake-storage-gen1.svg",
+  "Phi deployment":"phi-open-models.svg",
+  "Phi model":"phi-open-models.svg",
+  "Content Understanding":"azure-content-understanding-in-foundry-tools.svg",
+  "Azure Vision":"azure-vision-in-foundry-tools.svg",
+  "Application Insights":"application-insights-monitor.svg",
+  "Dashboard":"azure-monitor-dashboard.svg",
+  "Alerts":"azure-monitor.svg",
+  "Metric / alert":"azure-monitor.svg",
+  "Monitor":"azure-monitor.svg",
+  "Azure Monitor":"azure-monitor.svg",
+  "Microsoft Defender for Cloud":"microsoft-defender-for-cloud.svg",
+  "Microsoft Sentinel":"microsoft-sentinel.svg",
+  "Defender":"microsoft-defender-for-cloud.svg",
+  "Azure Policy":"azure-policy.svg",
+  "Policy":"azure-policy.svg",
+  "Managed identity":"microsoft-entra-id.svg",
+  "Entra/PIM":"microsoft-entra-id.svg",
+  "Entra ID / policy":"microsoft-entra-id.svg",
+  "Entra / Policy":"microsoft-entra-id.svg",
+  "Entra / VNet":"microsoft-entra-id.svg",
+  "Entra RBAC + ACLs":"microsoft-entra-id.svg",
+  "Entra/service principal":"microsoft-entra-id.svg",
+  "Purview/Entra":"microsoft-purview.svg",
+  "Purview / Entra":"microsoft-purview.svg",
+  "Microsoft IoT Hub":"azure-iot-hub.svg",
+  "IoT Hub":"azure-iot-hub.svg",
+  "Azure Maps":"azure-maps.svg",
+  "Azure Maps accounts":"azure-maps-accounts.svg",
+  "Anomaly Detector":"ai-anomaly-detector.svg",
+  "Automation":"automation.svg",
+  "Bastion / VPN":"azure-bastion.svg",
+  "FHIR service":"fhir-service.svg",
+  "Azure API for FHIR":"azure-api-for-fhir.svg",
+  "Gateway":"on-premises-data-gateways.svg",
+  "On-prem SQL":"azure-sql.svg",
+  "Microsoft Teams":"users.svg",
+  "Teams":"users.svg",
+  "Application":"foundry-application.svg",
+  "Web app":"app-service.svg",
+  "Browser":"browser.svg",
+  "Azure Virtual Network":"azure-virtual-network.svg",
+  "VPN Gateway":"azure-vpn-gateway.svg",
+  "IoT devices":"azure-iot-hub.svg",
+  "Event streams":"event-hubs-iot.svg",
+  "SQL / SAP":"azure-sql.svg",
+  "Managed compute":"azure-machine-learning.svg",
+  "Managed endpoint":"azure-machine-learning.svg",
+  "MLflow / AML":"azure-machine-learning.svg",
+  "Feature store":"azure-machine-learning.svg",
+  "Ground truth":"azure-machine-learning.svg",
+  "Notebooks":"azure-databricks.svg",
+  "Warehouse":"azure-synapse-analytics.svg",
+  "Semantic model":"power-bi-embedded.svg",
+  "Reports":"power-bi-embedded.svg",
+  "Workspace/app":"power-bi-embedded.svg"
 };
 // Architecture labels intentionally include both canonical service names and
 // short names used inside diagrams. Keep one normalized lookup path so small
 // naming differences do not turn a real Azure service into a generic fallback.
-const normalizeAzureLabel=(label:string)=>label.toLowerCase().replace(/\([^)]*\)/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const normalizeAzureLabel=(label:string)=>label.toLowerCase().replace(/\([^)]*\)/g, "").replace(/&/g, " and ").replace(/[^a-z0-9]+/g, " ").replace(/\b(formerly|legacy)\b/g, "").replace(/\s+/g, " ").trim();
 const normalizedAzureIconFiles:Record<string,string>=Object.fromEntries(Object.entries(azureIconFiles).map(([label,file])=>[normalizeAzureLabel(label),file]));
-const iconFileFor=(label:string)=>azureIconFiles[label]||normalizedAzureIconFiles[normalizeAzureLabel(label)];
+const iconFileFor=(label:string)=>{
+  const exact=azureIconFiles[label]||normalizedAzureIconFiles[normalizeAzureLabel(label)];
+  if(exact)return exact;
+  const normalized=normalizeAzureLabel(label);
+  // Composite architecture labels still resolve to the service that owns the
+  // boundary instead of falling back to the generic decorative icon.
+  if(/entra|active directory|azure ad/.test(normalized))return "microsoft-entra-id.svg";
+  if(/search|semantic ranker|indexer/.test(normalized))return "azure-ai-search.svg";
+  if(/foundry|prompt flow|agent service|model deployment|evaluation/.test(normalized))return "microsoft-foundry.svg";
+  if(/machine learning|\baml\b|model endpoint|managed endpoint|model registry|pipeline|feature store|ground truth|mlflow/.test(normalized))return "azure-machine-learning.svg";
+  if(/databricks|synapse|spark|delta|unity catalog|lakehouse/.test(normalized))return "azure-databricks.svg";
+  if(/storage|blob|adls|data lake|queue|table/.test(normalized))return "azure-storage.svg";
+  if(/monitor|log analytics|application insights|metric|alert|dashboard/.test(normalized))return "azure-monitor.svg";
+  if(/purview/.test(normalized))return "microsoft-purview.svg";
+  if(/policy|governance/.test(normalized))return "azure-policy.svg";
+  if(/sentinel|defender|security copilot/.test(normalized))return "microsoft-defender-for-cloud.svg";
+  if(/function|logic app|api management/.test(normalized))return "azure-functions.svg";
+  if(/event grid/.test(normalized))return "event-grid.svg";
+  if(/service bus/.test(normalized))return "azure-service-bus.svg";
+  if(/iot hub/.test(normalized))return "azure-iot-hub.svg";
+  return undefined;
+};
 const azureWalkthroughFilenameOverrides:Record<string,string[]>={
   "Data Catalog":["azure-data-catalog.webp","data-catalog.webp"],
   "Entra ID":["microsoft-entra-id.webp","entra-id.webp"],
