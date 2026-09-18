@@ -91,8 +91,8 @@ const domains: Domain[] = [
     flow: ["Account", "Access", "Blob / Files", "Lifecycle + recovery"],
     examHook: "Know the difference between keys, SAS, Entra authorization, firewall rules, redundancy, access tiers, and data-protection features.",
     lessons: [
-      { title: "01 · Storage access and network protection", topics: ["Configure storage firewalls and virtual networks", "Create and use SAS tokens", "Configure stored access policies", "Manage access keys", "Configure identity-based access for Azure Files"], visual: "Layered storage access", services: [{ label: "Azure Storage", slug: "azure-storage" }, { label: "Azure Files", slug: "azure-files" }] },
-      { title: "02 · Storage accounts and data movement", topics: ["Create and configure storage accounts", "Select redundancy options", "Configure object replication", "Configure encryption", "Move and manage data with Storage Explorer and AzCopy"], visual: "Durability choices", services: [{ label: "Azure Storage", slug: "azure-storage" }, { label: "Azure Blob Storage", slug: "azure-blob-storage" }] },
+      { title: "01 · Storage access and network protection", topics: ["Configure storage firewalls and virtual networks", "Create and use SAS tokens", "Configure stored access policies", "Manage access keys", "Configure identity-based access for Azure Files"], visual: "Layered storage access", services: [{ label: "Storage accounts", slug: "storage-accounts" }, { label: "Azure Files", slug: "azure-files" }] },
+      { title: "02 · Storage accounts and data movement", topics: ["Create and configure storage accounts", "Select redundancy options", "Configure object replication", "Configure encryption", "Move and manage data with Storage Explorer and AzCopy"], visual: "Durability choices", services: [{ label: "Storage accounts", slug: "storage-accounts" }, { label: "Azure Blob Storage", slug: "azure-blob-storage" }] },
       { title: "03 · Azure Files and Blob Storage", topics: ["Create and configure file shares", "Create and configure blob containers", "Configure storage tiers", "Configure blob and container soft delete", "Configure Azure Files snapshots and soft delete", "Configure lifecycle management and blob versioning"], visual: "Hot-to-archive lifecycle", services: [{ label: "Azure Files", slug: "azure-files" }, { label: "Azure Blob Storage", slug: "azure-blob-storage" }] },
     ],
   },
@@ -140,6 +140,32 @@ const domains: Domain[] = [
     ],
   },
 ];
+
+const taskService = (topic: string, services: { label: string; slug: string }[]) => {
+  const normalized = topic.toLowerCase();
+  const match = services.find((service) => normalized.includes(service.label.toLowerCase().replace(/^azure /, "")) || service.label.toLowerCase().includes(normalized.split(" ")[0]));
+  return match || services[0];
+};
+
+const topicTask = (topic: string, services: { label: string; slug: string }[]): Task => {
+  const service = taskService(topic, services);
+  return {
+    title: topic,
+    service,
+    steps: [`Open Azure portal → ${service.label}.`, `Configure the setting required for “${topic}”.`, "Review the result, effective configuration, and related monitoring or security controls."],
+    consolePath: `Azure portal → ${service.label}`,
+    verify: `The ${topic.toLowerCase()} configuration is visible and the expected operational result is confirmed.`,
+    examCue: `Identify the service boundary, configuration choice, scope, and verification signal for ${topic.toLowerCase()}.`,
+  };
+};
+
+const courseDomains = domains.map((domain) => ({
+  ...domain,
+  lessons: domain.lessons.map((lesson) => ({
+    ...lesson,
+    tasks: lesson.tasks?.length ? lesson.tasks : lesson.topics.map((topic) => topicTask(topic, lesson.services)),
+  })),
+}));
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
 const azureTaskScreenshotBases = [
@@ -196,14 +222,14 @@ function TaskTabs({ tasks }: { tasks: Task[] }) {
 
 export default function Az104CourseGuide() {
   const [selectedDomainIndex, setSelectedDomainIndex] = useState(0);
-  const selectedDomain = domains[selectedDomainIndex] ?? domains[0];
+  const selectedDomain = courseDomains[selectedDomainIndex] ?? courseDomains[0];
   return <section className="az104-guide" aria-labelledby="az104-guide-title">
     <div className="az104-guide-hero">
       <div className="az104-guide-hero-copy"><p className="az104-eyebrow">AZ-104 · VISUAL ADMINISTRATOR PATH</p><h2 id="az104-guide-title">Learn Azure administration as one connected environment.</h2><p>Move through identity, storage, compute, networking, and operations in the order an administrator actually designs and runs Azure. Every step connects the exam objective to a visual guide, architecture pattern, and practical walkthrough.</p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104" target="_blank" rel="noreferrer">Compare with the official Microsoft study guide ↗</a></div>
       <div className="az104-guide-stats"><div><strong>05</strong><span>exam domains</span></div><div><strong>100</strong><span>minutes</span></div><div><strong>700+</strong><span>passing score</span></div></div>
     </div>
     <div className="az104-study-loop" aria-label="Recommended study loop">{studyLoop.map((step, index) => <div key={step}><b>{String(index + 1).padStart(2, "0")}</b><span>{step}</span>{index < studyLoop.length - 1 && <i>→</i>}</div>)}</div>
-    <div className="az104-domain-roadmap" role="tablist" aria-label="AZ-104 exam domains">{domains.map((domain, index) => <button type="button" role="tab" aria-selected={selectedDomainIndex === index} className={selectedDomainIndex === index ? "is-selected" : ""} key={domain.number} onClick={() => setSelectedDomainIndex(index)} style={{ "--domain-accent": domain.accent } as CSSProperties}><b>{domain.number}</b><span>{domain.title}</span><small>{domain.weight}</small></button>)}</div>
+    <div className="az104-domain-roadmap" role="tablist" aria-label="AZ-104 exam domains">{courseDomains.map((domain, index) => <button type="button" role="tab" aria-selected={selectedDomainIndex === index} className={selectedDomainIndex === index ? "is-selected" : ""} key={domain.number} onClick={() => setSelectedDomainIndex(index)} style={{ "--domain-accent": domain.accent } as CSSProperties}><b>{domain.number}</b><span>{domain.title}</span><small>{domain.weight}</small></button>)}</div>
     <div className="az104-domain-list"><article className="az104-domain" id={`az104-domain-${selectedDomain.number}`} key={selectedDomain.number} style={{ "--domain-accent": selectedDomain.accent } as CSSProperties}>
       {(() => { const domain = selectedDomain; return <>
       <div className="az104-domain-head"><div className="az104-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></div>
