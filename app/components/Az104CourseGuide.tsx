@@ -143,8 +143,25 @@ const domains: Domain[] = [
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
 const azureTaskScreenshotBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az104-tasks";
+const taskScreenshotFiles: Record<string, string> = {
+  "Create users and groups": "create-users-and-groups",
+  "Manage user and group properties": "manage-user-and-group-properties",
+  "Manage Microsoft Entra licenses": "manage-microsoft-entra-licenses",
+  "Manage external users": "manage-external-users",
+  "Configure self-service password reset": "configure-self-service-password-reset",
+  "Use built-in Azure roles": "use-built-in-azure-roles",
+  "Assign roles at different scopes": "assign-roles-at-different-scopes",
+  "Interpret access assignments": "interpret-access-assignments",
+  "Manage resource groups and subscriptions": "manage-resource-groups-and-subscriptions",
+  "Configure management groups": "configure-management-groups",
+  "Create and interpret Azure Policy assignments": "create-and-interpret-azure-policy-assignments",
+  "Configure resource locks": "configure-resource-locks",
+  "Apply and manage resource tags": "apply-and-manage-resource-tags",
+  "Manage cost alerts and budgets": "manage-cost-alerts-and-budgets",
+  "Use Azure Advisor recommendations": "use-azure-advisor-recommendations",
+};
 const taskScreenshotUrls = (task: Task) => {
-  const slug = task.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const slug = taskScreenshotFiles[task.title] || task.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return [`${azureTaskScreenshotBase}/${slug}.webp`, `${azureTaskScreenshotBase}/${slug}/walkthrough.webp`];
 };
 
