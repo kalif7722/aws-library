@@ -169,6 +169,7 @@ const courseDomains = domains.map((domain) => ({
 
 const studyLoop = ["Learn the boundary", "Open the EL10 visual", "Trace the architecture", "Follow the walkthrough", "Answer the exam cue"];
 const azureTaskScreenshotBases = [
+  "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az-104",
   "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs/az104-tasks",
   "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs",
 ];
@@ -203,7 +204,7 @@ function TaskWalkthroughImage({ task }: { task: Task }) {
   const available = Boolean(src);
   return <div className="az104-task-image-walkthrough" aria-label={`${task.title} console screenshot walkthrough`}>
     <p>CONSOLE SCREENSHOT WALKTHROUGH</p>
-    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => { if (sourceIndex < sources.length - 1) setSourceIndex((index) => index + 1); else setFailed(true); }} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Task-specific console screenshots will appear here</strong><span>Upload the matching WebP under <code>azure-certification-walkthroughs/az104-tasks/</code> to show it here.</span></div>}
+    {available ? <button type="button" className="az104-task-image-button" onClick={() => setOpen(true)} aria-label={`Open ${task.title} console screenshot full view`}><img src={src} alt={`${task.title} Azure console walkthrough`} loading="lazy" onError={() => { if (sourceIndex < sources.length - 1) setSourceIndex((index) => index + 1); else setFailed(true); }} /><span>Open compact full-screen walkthrough ↗</span></button> : <div className="az104-task-image-fallback"><strong>Task-specific console screenshots will appear here</strong><span>Upload the matching WebP under <code>azure-certification-walkthroughs/az-104/</code> to show it here.</span></div>}
     {open && <div className="az104-task-image-modal" role="dialog" aria-modal="true" aria-label={`${task.title} console walkthrough full view`} onClick={() => setOpen(false)}><button type="button" onClick={() => setOpen(false)}>Close ×</button><img src={src} alt={`${task.title} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}
   </div>;
 }

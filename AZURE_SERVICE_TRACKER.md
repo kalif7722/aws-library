@@ -34,3 +34,16 @@ The catalog preserves every workbook branch reference. Repeated services are int
 | Web | `azure/web/` | 10 |
 
 Image convention: `/azure/<category-folder>/<service-slug>.webp`. A missing or pending image renders an informative placeholder and never blocks service navigation.
+
+Course task walkthroughs use a separate namespace and must never be uploaded into
+the EL10 category folders:
+
+```text
+/azure-certification-walkthroughs/<course-folder>/<task-slug>.webp
+```
+
+For example, AZ-305 assets belong under
+`azure-certification-walkthroughs/az-305/`. A truly shared task may use
+`azure-certification-walkthroughs/common/<category-folder>/`, but a course-specific
+asset takes precedence. This separation prevents walkthrough uploads from
+overwriting a service's EL10 detail visual.
