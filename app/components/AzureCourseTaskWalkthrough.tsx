@@ -15,15 +15,6 @@ const taskFilenameAliases: Record<string, string> = {
   "Azure Database for PostgreSQL Flexible Server": "azure-database-for-postgresql-flexible-server",
 };
 
-const objectiveAssetAliases: Record<string, string> = {
-  "Investigate incidents by using agentic AI, including embedded Microsoft Security Copilot": "microsoft-security-copilot",
-  "Investigate and remediate threats or compromised entities identified by Microsoft Purview": "microsoft-purview",
-  "Investigate and remediate alerts and incidents identified by Microsoft Sentinel": "microsoft-sentinel",
-  "Investigate and remediate alerts and incidents identified by Microsoft Defender for Cloud workload protections": "microsoft-defender-for-cloud",
-  "Investigate and remediate compromised identities that are identified by Microsoft Entra ID": "microsoft-entra-id",
-  "Create and configure Microsoft Sentinel playbooks": "logic-apps",
-};
-
 type Task = {
   name: string;
   slug: string;
@@ -52,7 +43,6 @@ const makeObjectiveTask = (task: string, group: string, domain: AzureExamDomain)
     "Review the resulting configuration, decision, alert, or evidence and record why it meets the requirement.",
   ],
   verify: "Explain the selected option, its scope, and the signal or result that proves the objective is complete.",
-  assetSlug: objectiveAssetAliases[task],
 });
 
 const makeServiceTask = (entry: AzureCourseService, category: AzureCourseScope): Task => ({
