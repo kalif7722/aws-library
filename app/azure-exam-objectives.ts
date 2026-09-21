@@ -120,6 +120,50 @@ export const azureOfficialExamDomains: Record<string, AzureExamDomain[]> = {
       ]
     }
   ],
+  "SC-900": [
+    {
+      "name": "Describe the concepts of security, compliance, and identity",
+      "weight": "10–15%",
+      "groups": [
+        { "name": "Describe security and compliance concepts", "tasks": [
+          "Describe the shared responsibility model", "Describe defense-in-depth", "Describe the Zero Trust model", "Describe encryption and hashing", "Describe Governance, Risk, and Compliance (GRC) concepts"
+        ] },
+        { "name": "Define identity concepts", "tasks": [
+          "Define identity as the primary security perimeter", "Define authentication", "Define authorization", "Describe identity providers", "Describe the concept of directory services and Active Directory", "Describe the concept of federation"
+        ] }
+      ]
+    },
+    {
+      "name": "Describe the capabilities of Microsoft Entra",
+      "weight": "25–30%",
+      "groups": [
+        { "name": "Describe function and identity types of Microsoft Entra ID", "tasks": ["Describe Microsoft Entra ID", "Describe types of identities, including agent ID", "Describe hybrid identity"] },
+        { "name": "Describe authentication capabilities of Microsoft Entra ID", "tasks": ["Describe the authentication methods", "Describe multifactor authentication (MFA)", "Describe password protection and management capabilities"] },
+        { "name": "Describe access management capabilities of Microsoft Entra ID", "tasks": ["Describe Microsoft Entra Conditional Access", "Describe Microsoft Entra roles and role-based access control (RBAC)"] },
+        { "name": "Describe identity protection and governance capabilities of Microsoft Entra", "tasks": ["Describe Microsoft Entra ID Governance", "Describe access reviews", "Describe the capabilities of Microsoft Entra Privileged Identity Management", "Describe Microsoft Entra ID Protection"] }
+      ]
+    },
+    {
+      "name": "Describe the capabilities of Microsoft security solutions",
+      "weight": "35–40%",
+      "groups": [
+        { "name": "Describe core infrastructure security services in Azure", "tasks": ["Describe Azure DDoS Protection", "Describe Azure Firewall", "Describe Azure Web Application Firewall (WAF)", "Describe network segmentation with Azure virtual networks", "Describe network security groups (NSGs)", "Describe Azure Bastion", "Describe Azure Key Vault"] },
+        { "name": "Describe security management capabilities of Azure", "tasks": ["Describe Microsoft Defender for Cloud", "Describe Cloud Security Posture Management (CSPM)", "Describe how security policies, standards, and recommendations improve the cloud security posture", "Describe enhanced security features provided by cloud workload protection"] },
+        { "name": "Describe capabilities of Microsoft Sentinel", "tasks": ["Define the concepts of security information and event management (SIEM) and security orchestration automated response (SOAR)", "Describe threat detection and mitigation capabilities in Microsoft Sentinel"] },
+        { "name": "Describe threat protection with Microsoft Defender XDR", "tasks": ["Describe Microsoft Defender XDR services", "Describe Microsoft Defender for Office 365", "Describe Microsoft Defender for Endpoint", "Describe Microsoft Defender for Cloud Apps", "Describe Microsoft Defender for Identity", "Describe Microsoft Defender Vulnerability Management", "Describe Microsoft Defender Threat Intelligence (Defender TI)", "Describe the Microsoft Defender portal"] }
+      ]
+    },
+    {
+      "name": "Describe the capabilities of Microsoft compliance solutions",
+      "weight": "20–25%",
+      "groups": [
+        { "name": "Describe Microsoft Service Trust Portal and privacy principles", "tasks": ["Describe the Service Trust Portal offerings", "Describe the privacy principles of Microsoft"] },
+        { "name": "Describe compliance management capabilities of Microsoft Purview", "tasks": ["Describe the Microsoft Purview portal", "Describe Compliance Manager", "Describe the uses and benefits of compliance score"] },
+        { "name": "Describe information protection, data lifecycle management, and data governance capabilities of Microsoft Purview", "tasks": ["Describe the data classification capabilities", "Describe the benefits of Content explorer and Activity explorer", "Describe sensitivity labels and sensitivity label policies", "Describe data loss prevention (DLP)", "Describe records management", "Describe retention policies, retention labels, and retention label policies"] },
+        { "name": "Describe insider risk, eDiscovery, and audit capabilities in Microsoft Purview", "tasks": ["Describe insider risk management", "Describe eDiscovery solutions in Microsoft Purview", "Describe audit solutions in Microsoft Purview"] }
+      ]
+    }
+  ],
   "AZ-104": [
     {
       "name": "Manage Azure identities and governance",

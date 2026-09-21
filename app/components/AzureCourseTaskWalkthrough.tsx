@@ -15,6 +15,30 @@ const taskFilenameAliases: Record<string, string> = {
   "Azure Database for PostgreSQL Flexible Server": "azure-database-for-postgresql-flexible-server",
 };
 
+const objectiveAssetAliases: Record<string, string> = {
+  "Describe Microsoft Entra Conditional Access": "microsoft-entra-id",
+  "Describe Microsoft Entra roles and role-based access control (RBAC)": "microsoft-entra-id",
+  "Describe access reviews": "microsoft-entra-id",
+  "Describe the capabilities of Microsoft Entra Privileged Identity Management": "microsoft-entra-id",
+  "Describe Microsoft Entra ID Protection": "microsoft-entra-id",
+  "Describe Azure Key Vault": "azure-key-vault",
+  "Describe Microsoft Defender for Cloud": "microsoft-defender-for-cloud",
+  "Describe capabilities of Microsoft Sentinel": "microsoft-sentinel",
+  "Describe the Microsoft Defender portal": "microsoft-defender-for-cloud",
+  "Describe the Microsoft Purview portal": "microsoft-purview",
+  "Describe Compliance Manager": "microsoft-purview",
+  "Describe sensitivity labels and sensitivity label policies": "microsoft-purview",
+  "Describe data loss prevention (DLP)": "microsoft-purview",
+  "Describe eDiscovery solutions in Microsoft Purview": "microsoft-purview",
+  "Describe audit solutions in Microsoft Purview": "microsoft-purview",
+  "Investigate incidents by using agentic AI, including embedded Microsoft Security Copilot": "microsoft-security-copilot",
+  "Investigate and remediate threats or compromised entities identified by Microsoft Purview": "microsoft-purview",
+  "Investigate and remediate alerts and incidents identified by Microsoft Sentinel": "microsoft-sentinel",
+  "Investigate and remediate alerts and incidents identified by Microsoft Defender for Cloud workload protections": "microsoft-defender-for-cloud",
+  "Investigate and remediate compromised identities that are identified by Microsoft Entra ID": "microsoft-entra-id",
+  "Create and configure Microsoft Sentinel playbooks": "logic-apps",
+};
+
 type Task = {
   name: string;
   slug: string;
@@ -26,6 +50,9 @@ type Task = {
   verify: string;
   assetSlug?: string;
   serviceName?: string;
+  mode?: "concept" | "console";
+  visualTitle?: string;
+  visualSummary?: string;
 };
 
 type DomainBucket = { meta: { name: string; weight: string }; scopes: AzureCourseScope[]; tasks: Task[] };
@@ -43,6 +70,68 @@ const makeObjectiveTask = (task: string, group: string, domain: AzureExamDomain)
     "Review the resulting configuration, decision, alert, or evidence and record why it meets the requirement.",
   ],
   verify: "Explain the selected option, its scope, and the signal or result that proves the objective is complete.",
+  assetSlug: objectiveAssetAliases[task],
+});
+
+const sc900ConsoleObjectives = new Set([
+  "Describe Microsoft Entra Conditional Access",
+  "Describe Microsoft Entra roles and role-based access control (RBAC)",
+  "Describe access reviews",
+  "Describe the capabilities of Microsoft Entra Privileged Identity Management",
+  "Describe Microsoft Entra ID Protection",
+  "Describe Azure Key Vault",
+  "Describe Microsoft Defender for Cloud",
+  "Describe capabilities of Microsoft Sentinel",
+  "Describe the Microsoft Defender portal",
+  "Describe the Microsoft Purview portal",
+  "Describe Compliance Manager",
+  "Describe sensitivity labels and sensitivity label policies",
+  "Describe data loss prevention (DLP)",
+  "Describe eDiscovery solutions in Microsoft Purview",
+  "Describe audit solutions in Microsoft Purview",
+]);
+
+const sc900TaskGuidance = (task: string): Pick<Task, "ask" | "steps" | "verify" | "mode" | "visualTitle" | "visualSummary"> => {
+  const console = sc900ConsoleObjectives.has(task);
+  const lower = task.toLowerCase();
+  if (console) {
+    const product = lower.includes("entra") ? "the Microsoft Entra admin center" : lower.includes("sentinel") || lower.includes("defender") ? "the Microsoft security portal" : "the Microsoft Purview portal";
+    return {
+      mode: "console",
+      ask: `Recognize the ${task.replace(/^Describe /, "")} capability, where it is configured, and what evidence proves it is working.`,
+      steps: [
+        `Open ${product} and locate the blade that represents ${task.replace(/^Describe /, "").toLowerCase()}.`,
+        "Inspect the scope, policy, role, rule, incident, label, or evidence involved and identify the security or compliance decision it controls.",
+        "Review the resulting status, recommendation, activity, report, or audit evidence and explain the operational trade-off."
+      ],
+      verify: `Explain what ${task.replace(/^Describe /, "").toLowerCase()} protects or governs, its scope, and the evidence an administrator should verify.`,
+      visualTitle: task,
+      visualSummary: `Portal orientation: locate the control, inspect its scope and configuration, then verify the resulting security or compliance signal.`
+    };
+  }
+  let lens = "definition, purpose, boundaries, and a practical example";
+  if (lower.includes("authentication") || lower.includes("authorization") || lower.includes("identity")) lens = "who the subject is, how trust is established, what access is granted, and where the control belongs";
+  if (lower.includes("zero trust") || lower.includes("defense") || lower.includes("shared responsibility")) lens = "the control layers, the customer/provider boundary, and how the model changes a design decision";
+  if (lower.includes("encryption") || lower.includes("hashing")) lens = "confidentiality versus integrity, reversibility, key handling, and the correct use case";
+  if (lower.includes("compliance") || lower.includes("privacy") || lower.includes("governance")) lens = "the obligation, control owner, evidence, risk treatment, and accountability boundary";
+  if (lower.includes("defender") || lower.includes("purview") || lower.includes("sentinel") || lower.includes("security")) lens = "the signal or data source, the protection capability, the analyst or compliance action, and the expected outcome";
+  return {
+    mode: "concept",
+    ask: `Learn ${task.replace(/^Describe /, "").toLowerCase()} through ${lens}; connect the definition to an exam scenario rather than memorizing a product name.`,
+    steps: [
+      `Define ${task.replace(/^Describe /, "").toLowerCase()} in one sentence and identify the problem it solves.`,
+      `Place it in the correct boundary: ${lens}.`,
+      "Compare it with the closest alternative and choose it for one realistic Microsoft cloud scenario."
+    ],
+    verify: `You can define ${task.replace(/^Describe /, "").toLowerCase()}, identify its boundary, choose it in a scenario, and explain why the closest alternative is different.`,
+    visualTitle: task,
+    visualSummary: `Concept visual: definition → boundary → scenario → exam distinction for ${task.replace(/^Describe /, "").toLowerCase()}.`
+  };
+};
+
+const makeSc900ObjectiveTask = (task: string, group: string, domain: AzureExamDomain): Task => ({
+  ...makeObjectiveTask(task, group, domain),
+  ...sc900TaskGuidance(task),
 });
 
 const makeServiceTask = (entry: AzureCourseService, category: AzureCourseScope): Task => ({
@@ -75,13 +164,23 @@ function ConsoleImage({ courseCode, task }: { courseCode: string; task: Task }) 
   return <><button className="course-task-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${task.name} console walkthrough full screen`}><img src={src} alt={`${task.name} Azure console walkthrough`} onError={() => sourceIndex < sources.length - 1 ? setSourceIndex((index) => index + 1) : setAvailable(false)} /><span>Open console walkthrough full screen ↗</span></button>{expanded && <div className="course-task-image-modal" role="dialog" aria-modal="true" onClick={() => setExpanded(false)}><button onClick={() => setExpanded(false)}>Close ×</button><img src={src} alt={`${task.name} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}</>;
 }
 
+function ObjectiveVisual({ task }: { task: Task }) {
+  if (task.mode === "console") return <ConsoleImage courseCode="SC-900" task={task} />;
+  return <div className="course-task-concept-visual" role="img" aria-label={`${task.name} concept visual`}>
+    <div className="concept-visual-kicker">VISUAL EXPLAINER · SC-900</div>
+    <h4>{task.visualTitle || task.name}</h4>
+    <div className="concept-visual-flow"><span>DEFINE</span><b>→</b><span>BOUNDARY</span><b>→</b><span>SCENARIO</span><b>→</b><span>EXAM CUE</span></div>
+    <p>{task.visualSummary || "Build the definition, boundary, scenario, and exam distinction before moving to the next objective."}</p>
+  </div>;
+}
+
 export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCourse }) {
   const scopes = course.scope;
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const official = azureOfficialExamDomains[course.code];
   const domainBuckets = useMemo<DomainBucket[]>(() => official
-    ? official.map((domain) => ({ meta: domain, scopes: [], tasks: domain.groups.flatMap((group) => group.tasks.map((task) => makeObjectiveTask(task, group.name, domain))) }))
+    ? official.map((domain) => ({ meta: domain, scopes: [], tasks: domain.groups.flatMap((group) => group.tasks.map((task) => course.code === "SC-900" ? makeSc900ObjectiveTask(task, group.name, domain) : makeObjectiveTask(task, group.name, domain))) }))
     : scopes.map((scope) => ({ meta: { name: scope.title, weight: "Exam scope" }, scopes: [scope], tasks: scope.services.map((entry) => makeServiceTask(entry, scope)) })), [course.code, official, scopes]);
   const activeBucket = domainBuckets[domainIndex] || domainBuckets[0];
   const activeMeta = activeBucket?.meta || { name: "Exam domain", weight: "Exam scope" };
@@ -90,5 +189,5 @@ export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCo
   useEffect(() => setTaskIndex(0), [domainIndex]);
   if (!activeBucket || !activeTask) return null;
   const totalObjectives = domainBuckets.reduce((total, bucket) => total + bucket.tasks.length, 0);
-  return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>CONSOLE PRACTICE LAB · {course.code}</p><h2>Follow every official exam objective</h2><span>Choose a weighted domain, then select the exact Microsoft objective to study its ask, practice path, walkthrough, steps, and verification.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>official objectives</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} objectives</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} objectives`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{activeMeta.name} · {activeMeta.weight} · {activeTask.classification}</p><h3>{activeTask.name}</h3><span>{activeTask.consolePath}</span></div>{activeTask.serviceName && <a href={`/azure-services?service=${encodeURIComponent(slugify(activeTask.serviceName))}`}>Open service page ↗</a>}</header><div className="course-task-ask"><b>WHAT THIS OBJECTIVE ASKS</b><span>{activeTask.ask}</span></div><div className="course-task-selected-grid"><div><p className="course-task-label">SCREENSHOT WALKTHROUGH</p><ConsoleImage courseCode={course.code} task={activeTask} /></div><div className="course-task-instructions"><p className="course-task-label">FOLLOW THESE ACTIONS</p><ol>{activeTask.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="course-task-verify"><b>VERIFY</b><span>{activeTask.verify}</span></div></div></div></article></div></section>;
+  return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>{course.code === "SC-900" ? "EXAM OBJECTIVE PRACTICE · SC-900" : `CONSOLE PRACTICE LAB · ${course.code}`}</p><h2>Follow every official exam objective</h2><span>Choose a weighted domain, then select the exact Microsoft objective to study its ask, practice path, visual treatment, steps, and verification.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>official objectives</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} objectives</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} objectives`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{activeMeta.name} · {activeMeta.weight} · {activeTask.classification}</p><h3>{activeTask.name}</h3><span>{activeTask.consolePath}</span></div>{activeTask.serviceName && <a href={`/azure-services?service=${encodeURIComponent(slugify(activeTask.serviceName))}`}>Open service page ↗</a>}</header><div className="course-task-ask"><b>WHAT THIS OBJECTIVE ASKS</b><span>{activeTask.ask}</span></div><div className="course-task-selected-grid"><div><p className="course-task-label">{activeTask.mode === "concept" ? "VISUAL EXPLAINER" : "CONSOLE WALKTHROUGH"}</p><ObjectiveVisual task={activeTask} /></div><div className="course-task-instructions"><p className="course-task-label">FOLLOW THESE ACTIONS</p><ol>{activeTask.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="course-task-verify"><b>VERIFY</b><span>{activeTask.verify}</span></div></div></div></article></div></section>;
 }
