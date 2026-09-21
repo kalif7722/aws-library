@@ -70,6 +70,19 @@ export default function CertificationCourse({ code, level, title, description, s
   useEffect(() => { const onKey = (event: KeyboardEvent) => event.key === "Escape" && setExpanded(false); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
   useEffect(() => { if (!dragging) return; const move = (event: PointerEvent) => setImageScale(Math.max(60, Math.min(220, dragStart.scale + (event.clientX - dragStart.x) / 4))); const up = () => setDragging(false); window.addEventListener("pointermove", move); window.addEventListener("pointerup", up); return () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); }; }, [dragging, dragStart]);
   const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedScopeName(name); setImageScale(100); setVisualVisible(true); };
+  useEffect(() => {
+    const onCourseService = (event: Event) => {
+      const name = (event as CustomEvent<{ name?: string }>).detail?.name;
+      const match = name ? findGuide(name) : undefined;
+      if (!name || !match) return;
+      setSelectedScopeName(name);
+      setImageScale(100);
+      setVisualVisible(true);
+      requestAnimationFrame(() => document.getElementById("curriculum")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    };
+    window.addEventListener("aws-course-service", onCourseService);
+    return () => window.removeEventListener("aws-course-service", onCourseService);
+  }, []);
 
   return <main className="learning-shell course-page">
     <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" href="#curriculum">{title}</a><a href="/services">Browse all AWS services</a></div></nav>
