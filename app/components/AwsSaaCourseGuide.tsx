@@ -10,6 +10,32 @@ type SAADomain = { number: string; title: string; weight: string; outcome: strin
 
 const V = (kind: VisualKind, title: string, subtitle: string, nodes: string[], explanation: string, cue: string) => ({ kind, title, subtitle, nodes, explanation, cue });
 
+const saaTaskWalkthroughs: Record<string, string> = {
+  "1.1": "task-1-1-secure-access",
+  "1.2": "task-1-2-secure-workloads",
+  "1.3": "task-1-3-data-security-controls",
+  "2.1": "task-2-1-scalable-loosely-coupled",
+  "2.2": "task-2-2-highly-available-fault-tolerant",
+  "3.1": "task-3-1-high-performing-storage",
+  "3.2": "task-3-2-high-performing-elastic-compute",
+  "3.3": "task-3-3-high-performing-databases",
+  "3.4": "task-3-4-high-performing-network",
+  "3.5": "task-3-5-data-ingestion-transformation",
+  "4.1": "task-4-1-cost-optimized-storage",
+  "4.2": "task-4-2-cost-optimized-compute",
+  "4.3": "task-4-3-cost-optimized-databases",
+  "4.4": "task-4-4-cost-optimized-network",
+};
+const saaTaskAsset = (title: string) => saaTaskWalkthroughs[title.match(/^Task ([0-9.]+)/)?.[1] || ""];
+
+function AwsSaaTaskWalkthrough({ asset, title }: { asset: string; title: string }) {
+  const [open, setOpen] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const src = `https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/saa-c03-tasks/${asset}.webp`;
+  if (failed) return <div className="aws-saa-task-walkthrough-fallback"><b>Task walkthrough pending</b><span>Upload <code>{asset}.webp</code> to <code>aws-certification-walkthroughs/saa-c03-tasks/</code>.</span></div>;
+  return <><button type="button" className="aws-saa-task-walkthrough" onClick={() => setOpen(true)} aria-label={`Open ${title} walkthrough full screen`}><img src={src} alt={`${title} AWS console walkthrough`} loading="lazy" onError={() => setFailed(true)} /><span>Open complete task walkthrough full screen ↗</span></button>{open && <div className="aws-saa-task-walkthrough-modal" role="dialog" aria-modal="true" aria-label={`${title} walkthrough`} onClick={() => setOpen(false)}><button type="button" onClick={() => setOpen(false)}>Close ×</button><img src={src} alt={`${title} AWS console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}</>;
+}
+
 const saaDomains: SAADomain[] = [
   {
     number: "01", title: "Design Secure Architectures", weight: "30%", outcome: "Build identity, network, application, and data controls around the workload boundary.", flow: ["Identity", "Network", "Application", "Data"],
@@ -64,6 +90,6 @@ export default function AwsSaaCourseGuide() {
     <div className="aws-saa-domain-tabs" role="tablist" aria-label="SAA-C03 exam domains">{saaDomains.map((item, index) => <button type="button" role="tab" aria-selected={index === domainIndex} className={index === domainIndex ? "is-selected" : ""} key={item.number} onClick={() => { setDomainIndex(index); setTaskIndex(0); }}><b>{item.number}</b><span>{item.title}</span><small>{item.weight}</small><em>{item.tasks.length} tasks</em></button>)}</div>
     <article className="aws-saa-domain"><header><div className="aws-saa-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></header><div className="aws-saa-flow">{domain.flow.map((item, index) => <div key={item}><b>{item}</b>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
       <div className="aws-saa-task-tabs" role="tablist" aria-label={`${domain.title} tasks`}>{domain.tasks.map((item, index) => <button type="button" role="tab" aria-selected={index === taskIndex} className={index === taskIndex ? "is-selected" : ""} key={item.title} onClick={() => setTaskIndex(index)}><b>{String(index + 1).padStart(2, "0")}</b><span>{item.title}</span></button>)}</div>
-      <section className="aws-saa-task"><div className="aws-saa-task-head"><div><p>OFFICIAL TASK STATEMENT</p><h4>{task.title}</h4></div><span>{task.services?.length ? "SERVICE PRACTICE + DESIGN DECISION" : "ARCHITECTURE VISUAL + DESIGN DECISION"}</span></div><div className="aws-saa-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div><div className="aws-saa-task-grid"><div>{task.visual ? <ObjectiveVisual visual={task.visual} /> : null}</div><div className="aws-saa-focus"><p>GUIDE-ALIGNED FOCUS</p><ul>{task.focus.map((item) => <li key={item}>{item}</li>)}</ul>{task.services?.length ? <div className="aws-saa-console"><b>CONSOLE ROUTE</b><span>Open the matching service walkthrough, trace the setting shown, then explain why that service and configuration satisfy the requirement.</span><div>{task.services.map((service) => <span key={service}>{service}</span>)}</div><SharedServiceWalkthrough serviceName={task.services[0]} /></div> : <div className="aws-saa-console aws-saa-no-console"><b>WHY A VISUAL FITS BETTER</b><span>This task is primarily an architecture selection problem. Use the visual to compare boundaries, failure modes, scaling signals, or cost trade-offs before opening a service console.</span></div>}</div></div></section><div className="aws-saa-memory"><b>EXAM MEMORY HOOK</b><span>Start with the business requirement, identify the constraint, then choose the AWS service and configuration that best satisfies it with the fewest unnecessary trade-offs.</span></div></article>
+      <section className="aws-saa-task"><div className="aws-saa-task-head"><div><p>OFFICIAL TASK STATEMENT</p><h4>{task.title}</h4></div><span>{task.services?.length ? "SERVICE PRACTICE + DESIGN DECISION" : "ARCHITECTURE VISUAL + DESIGN DECISION"}</span></div><div className="aws-saa-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div><div className="aws-saa-task-grid"><div>{task.visual ? <ObjectiveVisual visual={task.visual} /> : null}</div><div className="aws-saa-focus"><p>GUIDE-ALIGNED FOCUS</p><ul>{task.focus.map((item) => <li key={item}>{item}</li>)}</ul>{task.services?.length ? <div className="aws-saa-console"><b>CONSOLE ROUTE</b><span>Open the matching service walkthrough, trace the setting shown, then explain why that service and configuration satisfy the requirement.</span><div>{task.services.map((service) => <span key={service}>{service}</span>)}</div>{saaTaskAsset(task.title) ? <AwsSaaTaskWalkthrough asset={saaTaskAsset(task.title)!} title={task.title} /> : <SharedServiceWalkthrough serviceName={task.services[0]} />}</div> : <div className="aws-saa-console aws-saa-no-console"><b>WHY A VISUAL FITS BETTER</b><span>This task is primarily an architecture selection problem. Use the visual to compare boundaries, failure modes, scaling signals, or cost trade-offs before opening a service console.</span></div>}</div></div></section><div className="aws-saa-memory"><b>EXAM MEMORY HOOK</b><span>Start with the business requirement, identify the constraint, then choose the AWS service and configuration that best satisfies it with the fewest unnecessary trade-offs.</span></div></article>
   </section>;
 }
