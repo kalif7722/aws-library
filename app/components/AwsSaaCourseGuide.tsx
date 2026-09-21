@@ -128,10 +128,11 @@ const saaDomains: SAADomain[] = [
 ];
 
 function ObjectiveVisual({ visual, taskTitle }: { visual: NonNullable<SAAObjective["visual"]>; taskTitle: string }) {
+  const taskKey = taskTitle.match(/^Task ([0-9.]+)/)?.[1] || "";
   return <div className={`aws-saa-visual aws-saa-visual-${visual.kind}`} role="img" aria-label={visual.title}>
     <p className="aws-saa-visual-kicker">VISUAL EXPLAINER · {visual.kind.toUpperCase()}</p><h4>{visual.title}</h4><p className="aws-saa-visual-subtitle">{visual.subtitle}</p>
     <div className="aws-saa-diagram">{visual.nodes.map((node) => <span key={node}>{node}</span>)}</div>
-    <div className="aws-saa-visual-note"><b>HOW IT WORKS</b><p>{visual.explanation}</p></div><div className="aws-saa-visual-cue"><b>EXAM CUE</b><p>{visual.cue}</p></div>{saaTaskVisualSteps[taskTitle] && <div className="aws-saa-visual-task-map"><b>HOW THIS COMPLETES THE TASK</b><ol>{saaTaskVisualSteps[taskTitle].map((step) => <li key={step}>{step}</li>)}</ol></div>}
+    <div className="aws-saa-visual-note"><b>HOW IT WORKS</b><p>{visual.explanation}</p></div><div className="aws-saa-visual-cue"><b>EXAM CUE</b><p>{visual.cue}</p></div>{saaTaskVisualSteps[taskKey] && <div className="aws-saa-visual-task-map"><b>HOW THIS COMPLETES THE TASK</b><ol>{saaTaskVisualSteps[taskKey].map((step) => <li key={step}>{step}</li>)}</ol></div>}
   </div>;
 }
 
