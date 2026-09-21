@@ -72,10 +72,13 @@ export default function CertificationCourse({ code, level, title, description, s
   const selectService = (name: string) => { const match = findGuide(name); if (!match) return; setSelectedScopeName(name); setImageScale(100); setVisualVisible(true); };
   useEffect(() => {
     const onCourseService = (event: Event) => {
-      const name = (event as CustomEvent<{ name?: string }>).detail?.name;
+      const detail = (event as CustomEvent<{ name?: string; courseCode?: string }>).detail;
+      const name = detail?.name;
       const match = name ? findGuide(name) : undefined;
-      if (!name || !match) return;
-      setSelectedScopeName(name);
+      if (!name || !match || (detail?.courseCode && detail.courseCode !== code)) return;
+      const scopedName = scope.flatMap((category) => category.services).find((service) => service === name || findGuide(service)?.name === match.name || normalize(service) === normalize(name));
+      if (!scopedName) return;
+      setSelectedScopeName(scopedName);
       setImageScale(100);
       setVisualVisible(true);
       requestAnimationFrame(() => document.getElementById("curriculum")?.scrollIntoView({ behavior: "smooth", block: "start" }));
