@@ -24,7 +24,7 @@ function VisualSlot({ task, kind, onOpen }: { task: AipC01Task; kind: "primary" 
   const src = assetUrl(`${R2_PREFIX}/${file}`).startsWith("/") ? `${R2_PUBLIC_BASE}/${R2_PREFIX}/${file}` : assetUrl(`${R2_PREFIX}/${file}`);
   useEffect(() => { setLoaded(false); }, [src]);
   return <button className={`aip-c01-visual-slot ${loaded ? "has-image" : "is-pending"}`} type="button" aria-disabled={!loaded} onClick={() => loaded && onOpen(src, `${task.title} ${kind} walkthrough`)}>
-    <img src={src} alt={`${task.title} ${kind} walkthrough`} onLoad={(event) => { event.currentTarget.style.display = "block"; setLoaded(true); }} onError={(event) => { setLoaded(false); event.currentTarget.style.display = "none"; }} />
+    <img src={src} alt={`${task.title} ${kind} walkthrough`} onLoad={() => setLoaded(true)} onError={(event) => { setLoaded(false); event.currentTarget.style.display = "none"; }} />
     {!loaded && <BuiltInWalkthrough task={task} kind={kind} />}
   </button>;
 }
