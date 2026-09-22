@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
 import "./AwsSapCourseGuide.css";
 
@@ -57,6 +57,14 @@ const SAP_TASK_R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aw
 
 function SapTaskWalkthrough({ task }: { task: SapTask }) {
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  useEffect(() => {
+    if (!fullscreenSrc) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFullscreenSrc(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [fullscreenSrc]);
   const match = task.title.match(/Task (\d+)\.(\d+)/);
   const taskId = match ? `${match[1]}-${match[2]}` : "";
   const primary = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-primary.png` : "";
