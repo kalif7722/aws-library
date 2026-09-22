@@ -8,24 +8,12 @@ const R2_PREFIX = "aws-certification-walkthroughs/aip-c01-tasks";
 const R2_PUBLIC_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
 const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-function BuiltInWalkthrough({ task, kind }: { task: AipC01Task; kind: "primary" | "companion" }) {
-  const items = kind === "primary" ? task.focus.slice(0, 4) : task.focus;
-  return <div className={`aip-c01-built-in aip-c01-built-in-${kind}`} aria-label={`${task.title} ${kind} walkthrough`}>
-    <div className="aip-c01-built-in-heading"><strong>{kind === "primary" ? "TASK FLOW" : "IMPLEMENTATION CHECKLIST"}</strong><span>{kind === "primary" ? "Decision path" : "Coverage cues"}</span></div>
-    <h4>{task.title}</h4>
-    {kind === "primary" ? <div className="aip-c01-built-in-flow">{items.map((item, index) => <div key={item}><b>{String(index + 1).padStart(2, "0")}</b><span>{item}</span>{index < items.length - 1 && <i>→</i>}</div>)}</div> : <ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>}
-    <div className="aip-c01-built-in-services">{task.services.slice(0, 4).map((service) => <span key={service}>{service}</span>)}</div>
-  </div>;
-}
-
 function VisualSlot({ task, kind, onOpen }: { task: AipC01Task; kind: "primary" | "companion"; onOpen: (src: string, alt: string) => void }) {
-  const [loaded, setLoaded] = useState(false);
   const file = `aip-c01-task-${task.id}-${kind}.png`;
   const src = assetUrl(`${R2_PREFIX}/${file}`).startsWith("/") ? `${R2_PUBLIC_BASE}/${R2_PREFIX}/${file}` : assetUrl(`${R2_PREFIX}/${file}`);
-  useEffect(() => { setLoaded(false); }, [src]);
-  return <button className={`aip-c01-visual-slot ${loaded ? "has-image" : "is-pending"}`} type="button" aria-disabled={!loaded} onClick={() => loaded && onOpen(src, `${task.title} ${kind} walkthrough`)}>
-    <img src={src} alt={`${task.title} ${kind} walkthrough`} onLoad={() => setLoaded(true)} onError={(event) => { setLoaded(false); event.currentTarget.style.display = "none"; }} />
-    {!loaded && <BuiltInWalkthrough task={task} kind={kind} />}
+  return <button className="aip-c01-visual-slot" type="button" onClick={() => onOpen(src, `${task.title} ${kind} walkthrough`)}>
+    <img src={src} alt={`${task.title} ${kind} walkthrough`} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement?.classList.add("is-pending"); }} />
+    <span className="aip-c01-pending-copy"><strong>{kind === "primary" ? "Primary walkthrough" : "Companion coverage"}</strong><small>Upload {file} to {R2_PREFIX}/</small></span>
   </button>;
 }
 
