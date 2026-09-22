@@ -56,7 +56,7 @@ const sapDomains: SapDomain[] = [
 const SAP_TASK_R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/sap-c02-tasks";
 
 function SapTaskWalkthrough({ task }: { task: SapTask }) {
-  const match = task.title.match(/Task (\\d+)\\.(\\d+)/);
+  const match = task.title.match(/Task (\d+)\.(\d+)/);
   const taskId = match ? `${match[1]}-${match[2]}` : "";
   const primary = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-primary.png` : "";
   const companion = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-companion.png` : "";
