@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { assetUrl } from "../../lib/asset-url";
 import { azureAssetPaths, azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
 import type { AzureCourse, AzureCourseService } from "../azure-course-data";
-import { azureOfficialExamDomains } from "../azure-exam-objectives";
 import AzureServiceLearningDetails from "./AzureServiceLearningDetails";
 import Az104CourseGuide from "./Az104CourseGuide";
 import AzureCourseTaskWalkthrough from "./AzureCourseTaskWalkthrough";
@@ -47,8 +46,6 @@ export default function AzureCertificationCourse({ course }: Props) {
   const selectedCategory = course.scope.find((category) => category.services.some((service) => service.name === selectedEntry?.name))?.title || "Azure services";
   const connected = allServices.filter((service) => !!findAzureService(service.name)).length;
   const pending = allServices.length - connected;
-  const officialDomains = azureOfficialExamDomains[course.code];
-  const officialObjectiveCount = officialDomains?.reduce((total, domain) => total + domain.groups.reduce((groupTotal, group) => groupTotal + group.tasks.length, 0), 0);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); };
@@ -71,7 +68,7 @@ export default function AzureCertificationCourse({ course }: Props) {
 
   return <main className="learning-shell course-page">
     <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" href={`/courses/azure-${course.code.toLowerCase()}`}>{course.code}</a><a href="/azure-services">Browse all Azure services</a></div></nav>
-    <header className="course-hero compact-course-hero"><div className="cert-mark"><span>AZURE</span><strong>{course.code}</strong></div><div className="course-title"><p className="course-kicker">{course.level} certification learning path</p><h1>{course.title}</h1><p>{course.description}</p><a className="scope-source" href={course.sourceUrl} target="_blank" rel="noreferrer">Official Microsoft Learn study guide ↗</a></div><div className="course-overview">{officialDomains ? <><div><strong>{officialDomains.length}</strong><span>exam domains</span></div><div><strong>{officialObjectiveCount}</strong><span>official objectives</span></div><div><strong>{new Set(allServices.map((service) => service.name)).size}</strong><span>mapped services</span></div></> : <><div><strong>{course.scope.length}</strong><span>scope categories</span></div><div><strong>{new Set(allServices.map((service) => service.name)).size}</strong><span>mapped services</span></div><div><strong>{allServices.length}</strong><span>scope references</span></div></>}</div></header>
+    <header className="course-hero compact-course-hero"><div className="cert-mark"><span>AZURE</span><strong>{course.code}</strong></div><div className="course-title"><p className="course-kicker">{course.level} certification learning path</p><h1>{course.title}</h1><p>{course.description}</p><a className="scope-source" href={course.sourceUrl} target="_blank" rel="noreferrer">Official Microsoft Learn study guide ↗</a></div><div className="course-overview"><div><strong>{course.scope.length}</strong><span>scope categories</span></div><div><strong>{new Set(allServices.map((service) => service.name)).size}</strong><span>mapped services</span></div><div><strong>{allServices.length}</strong><span>scope references</span></div></div></header>
     <section className="scope-note compact-scope-note"><div><strong>Tracker aligned</strong><span>Service names and Direct/Related classifications come from the attached certification tracker.</span></div><div><strong>{connected} central pages connected</strong><span>Each selected service reuses the shared Azure EL10 and service-learning renderer.</span></div><div><strong>{pending} catalog mappings pending</strong><span>Unmatched tracker rows remain visible for review instead of being silently dropped.</span></div></section>
     {course.code === "AZ-104" && <Az104CourseGuide />}
     {course.code !== "AZ-104" && <AzureCourseTaskWalkthrough course={course} />}
