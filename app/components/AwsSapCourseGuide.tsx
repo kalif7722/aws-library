@@ -59,12 +59,12 @@ function SapTaskWalkthrough({ task }: { task: SapTask }) {
   const match = task.title.match(/Task (\d+)\.(\d+)/);
   const taskId = match ? `${match[1]}-${match[2]}` : "";
   const primary = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-primary.png` : "";
-  const companion = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-companion.png` : "";
+  const companion = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-companion.png` : "";\n  const alternate = taskId === "1-2" ? `${SAP_TASK_R2_BASE}/sap-c02-task-1-2-alternate.png` : "";
   return <div className="aws-sap-task-walkthrough">
     <div className="aws-sap-task-walkthrough-head"><b>CONSOLE WALKTHROUGH · {taskId.replace("-", ".")}</b><span>Task-specific visual coverage</span></div>
     <div className="aws-sap-task-walkthrough-grid">
       <figure><figcaption>PRIMARY WALKTHROUGH</figcaption><img src={primary} alt={`${task.title} primary walkthrough`} loading="lazy" /></figure>
-      <figure><figcaption>COMPANION COVERAGE</figcaption><img src={companion} alt={`${task.title} companion walkthrough`} loading="lazy" /></figure>
+      <figure><figcaption>COMPANION COVERAGE</figcaption><img src={companion} alt={`${task.title} companion walkthrough`} loading="lazy" /></figure>\n      {alternate && <figure><figcaption>ALTERNATE TASK BOARD</figcaption><img src={alternate} alt={`${task.title} alternate walkthrough`} loading="lazy" /></figure>}
     </div>
     <p className="aws-sap-task-walkthrough-note">Upload matching files to <code>aws-certification-walkthroughs/sap-c02-tasks/</code>. The page uses the exact task number, so Task {taskId.replace("-", ".")} cannot resolve to another task or shared service image.</p>
   </div>;
