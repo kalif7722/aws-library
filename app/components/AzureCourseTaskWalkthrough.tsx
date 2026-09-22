@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { AzureCourse, AzureCourseService, AzureCourseScope } from "../azure-course-data";
 import { azureOfficialExamDomains, type AzureExamDomain } from "../azure-exam-objectives";
 import "./AzureCourseTaskWalkthrough.css";
@@ -138,25 +138,28 @@ const imageCandidates = (courseCode: string, task: Task) => {
   return [`${r2Base}/${folder}/${filename}.webp`, `${r2Base}/common/${task.category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${filename}.webp`, `${r2Base}/${legacyFolder}/${filename}.webp`, `${r2Base}/${legacyFolder}/${filename}.png`, `${r2Base}/${legacyFolder}/${filename}/walkthrough.webp`];
 };
 
-function ConsoleImage({ courseCode, task }: { courseCode: string; task: Task }) {
+function ConsoleImage({ courseCode, task, fallback }: { courseCode: string; task: Task; fallback: ReactNode }) {
   const sources = useMemo(() => imageCandidates(courseCode, task), [courseCode, task]);
   const [sourceIndex, setSourceIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [available, setAvailable] = useState(true);
-  useEffect(() => { setSourceIndex(0); setAvailable(true); setExpanded(false); }, [task.slug]);
-  if (!available) return <div className="course-task-image-fallback"><strong>Console walkthrough pending</strong><span>Upload <code>{task.assetSlug || taskFilenameAliases[task.name] || task.slug}.webp</code> to <code>azure-certification-walkthroughs/{courseFolder(courseCode)}/</code>.</span></div>;
+  useEffect(() => { setSourceIndex(0); setAvailable(true); setExpanded(false); }, [courseCode, task.slug]);
+  if (!available) return fallback;
   const src = sources[sourceIndex];
   return <><button className="course-task-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${task.name} console walkthrough full screen`}><img src={src} alt={`${task.name} Azure console walkthrough`} onError={() => sourceIndex < sources.length - 1 ? setSourceIndex((index) => index + 1) : setAvailable(false)} /><span>Open console walkthrough full screen ↗</span></button>{expanded && <div className="course-task-image-modal" role="dialog" aria-modal="true" onClick={() => setExpanded(false)}><button onClick={() => setExpanded(false)}>Close ×</button><img src={src} alt={`${task.name} Azure console walkthrough full view`} onClick={(event) => event.stopPropagation()} /></div>}</>;
 }
 
-function ObjectiveVisual({ task }: { task: Task }) {
-  if (task.mode === "console") return <ConsoleImage courseCode="SC-900" task={task} />;
+function ConceptVisual({ task }: { task: Task }) {
   return <div className="course-task-concept-visual" role="img" aria-label={`${task.name} concept visual`}>
-    <div className="concept-visual-kicker">VISUAL EXPLAINER · SC-900</div>
+    <div className="concept-visual-kicker">VISUAL EXPLAINER · {task.category}</div>
     <h4>{task.visualTitle || task.name}</h4>
     <div className="concept-visual-flow"><span>DEFINE</span><b>→</b><span>BOUNDARY</span><b>→</b><span>SCENARIO</span><b>→</b><span>EXAM CUE</span></div>
     <p>{task.visualSummary || "Build the definition, boundary, scenario, and exam distinction before moving to the next objective."}</p>
   </div>;
+}
+
+function ObjectiveVisual({ courseCode, task }: { courseCode: string; task: Task }) {
+  return <ConsoleImage courseCode={courseCode} task={task} fallback={<ConceptVisual task={task} />} />;
 }
 
 export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCourse }) {
@@ -174,5 +177,5 @@ export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCo
   useEffect(() => setTaskIndex(0), [domainIndex]);
   if (!activeBucket || !activeTask) return null;
   const totalObjectives = domainBuckets.reduce((total, bucket) => total + bucket.tasks.length, 0);
-  return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>{course.code === "SC-900" ? "EXAM OBJECTIVE PRACTICE · SC-900" : `CONSOLE PRACTICE LAB · ${course.code}`}</p><h2>Follow every official exam objective</h2><span>Choose a weighted domain, then select the exact Microsoft objective to study its ask, practice path, visual treatment, steps, and verification.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>official objectives</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} objectives</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} objectives`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{activeMeta.name} · {activeMeta.weight} · {activeTask.classification}</p><h3>{activeTask.name}</h3><span>{activeTask.consolePath}</span></div>{activeTask.serviceName && <a href={`/azure-services?service=${encodeURIComponent(slugify(activeTask.serviceName))}`}>Open service page ↗</a>}</header><div className="course-task-ask"><b>WHAT THIS OBJECTIVE ASKS</b><span>{activeTask.ask}</span></div><div className="course-task-selected-grid"><div><p className="course-task-label">{activeTask.mode === "concept" ? "VISUAL EXPLAINER" : "CONSOLE WALKTHROUGH"}</p><ObjectiveVisual task={activeTask} /></div><div className="course-task-instructions"><p className="course-task-label">FOLLOW THESE ACTIONS</p><ol>{activeTask.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="course-task-verify"><b>VERIFY</b><span>{activeTask.verify}</span></div></div></div></article></div></section>;
+  return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>{course.code === "SC-900" ? "EXAM OBJECTIVE PRACTICE · SC-900" : `CONSOLE PRACTICE LAB · ${course.code}`}</p><h2>Follow every official exam objective</h2><span>Choose a weighted domain, then select the exact Microsoft objective to study its ask, practice path, visual treatment, steps, and verification.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>official objectives</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} objectives</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} objectives`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{activeMeta.name} · {activeMeta.weight} · {activeTask.classification}</p><h3>{activeTask.name}</h3><span>{activeTask.consolePath}</span></div>{activeTask.serviceName && <a href={`/azure-services?service=${encodeURIComponent(slugify(activeTask.serviceName))}`}>Open service page ↗</a>}</header><div className="course-task-ask"><b>WHAT THIS OBJECTIVE ASKS</b><span>{activeTask.ask}</span></div><div className="course-task-selected-grid"><div><p className="course-task-label">{activeTask.mode === "concept" ? "VISUAL EXPLAINER" : "CONSOLE WALKTHROUGH"}</p><ObjectiveVisual courseCode={course.code} task={activeTask} /></div><div className="course-task-instructions"><p className="course-task-label">FOLLOW THESE ACTIONS</p><ol>{activeTask.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="course-task-verify"><b>VERIFY</b><span>{activeTask.verify}</span></div></div></div></article></div></section>;
 }
