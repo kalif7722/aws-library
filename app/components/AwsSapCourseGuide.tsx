@@ -53,6 +53,23 @@ const sapDomains: SapDomain[] = [
   }
 ];
 
+const SAP_TASK_R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/sap-c02-tasks";
+
+function SapTaskWalkthrough({ task }: { task: SapTask }) {
+  const match = task.title.match(/Task (\\d+)\\.(\\d+)/);
+  const taskId = match ? `${match[1]}-${match[2]}` : "";
+  const primary = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-primary.png` : "";
+  const companion = taskId ? `${SAP_TASK_R2_BASE}/sap-c02-task-${taskId}-companion.png` : "";
+  return <div className="aws-sap-task-walkthrough">
+    <div className="aws-sap-task-walkthrough-head"><b>CONSOLE WALKTHROUGH · {taskId.replace("-", ".")}</b><span>Task-specific visual coverage</span></div>
+    <div className="aws-sap-task-walkthrough-grid">
+      <figure><figcaption>PRIMARY WALKTHROUGH</figcaption><img src={primary} alt={`${task.title} primary walkthrough`} loading="lazy" /></figure>
+      <figure><figcaption>COMPANION COVERAGE</figcaption><img src={companion} alt={`${task.title} companion walkthrough`} loading="lazy" /></figure>
+    </div>
+    <p className="aws-sap-task-walkthrough-note">Upload matching files to <code>aws-certification-walkthroughs/sap-c02-tasks/</code>. The page uses the exact task number, so Task {taskId.replace("-", ".")} cannot resolve to another task or shared service image.</p>
+  </div>;
+}
+
 const openSapCourseService = (name: string) => {
   window.dispatchEvent(new CustomEvent("aws-course-service", { detail: { name, courseCode: "SAP" } }));
   requestAnimationFrame(() => document.getElementById("curriculum")?.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -82,6 +99,6 @@ export default function AwsSapCourseGuide() {
     <div className="aws-sap-tabs" role="tablist" aria-label="SAP-C02 exam domains">{sapDomains.map((item, index) => <button type="button" role="tab" aria-selected={index === domainIndex} className={index === domainIndex ? "is-selected" : ""} key={item.number} onClick={() => { setDomainIndex(index); setTaskIndex(0); }}><b>{item.number}</b><span>{item.title}</span><small>{item.weight}</small><em>{item.tasks.length} tasks</em></button>)}</div>
     <article className="aws-sap-domain"><header><div className="aws-sap-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></header><div className="aws-sap-domain-flow">{domain.flow.map((item, index) => <div key={item}><b>{item}</b>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
       <div className="aws-sap-task-tabs" role="tablist" aria-label={domain.title + " tasks"}>{domain.tasks.map((item, index) => <button type="button" role="tab" aria-selected={index === taskIndex} className={index === taskIndex ? "is-selected" : ""} key={item.title} onClick={() => setTaskIndex(index)}><b>{String(index + 1).padStart(2, "0")}</b><span>{item.title}</span></button>)}</div>
-      <section className="aws-sap-task"><div className="aws-sap-task-head"><div><p>OFFICIAL TASK STATEMENT</p><h4>{task.title}</h4></div><span>SERVICE PRACTICE + DESIGN DECISION</span></div><div className="aws-sap-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div><div className="aws-sap-task-grid"><SapVisual task={task}/><div className="aws-sap-focus"><p>GUIDE-ALIGNED FOCUS</p><ul>{task.focus.map((item) => <li key={item}>{item}</li>)}</ul><div className="aws-sap-console"><b>CONSOLE ROUTE + RELATED SERVICES</b><span>Review the matching service walkthrough, trace the configuration, and explain why it satisfies the SAP-C02 requirement.</span><div className="aws-sap-related"><b>REVIEW RELATED SERVICES IN THIS SAP COURSE</b><div>{task.services.map((service) => <button type="button" key={service} onClick={() => openSapCourseService(service)}>{service} ↗</button>)}</div></div><SharedServiceWalkthrough serviceName={task.services[0]} /></div></div></div></section><div className="aws-sap-memory"><b>EXAM MEMORY HOOK</b><span>Start with the organizational or workload requirement, identify the constraint, choose the architecture pattern, and justify the trade-off with measurable evidence.</span></div></article>
+      <section className="aws-sap-task"><div className="aws-sap-task-head"><div><p>OFFICIAL TASK STATEMENT</p><h4>{task.title}</h4></div><span>SERVICE PRACTICE + DESIGN DECISION</span></div><div className="aws-sap-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div><div className="aws-sap-task-grid"><SapVisual task={task}/><div className="aws-sap-focus"><p>GUIDE-ALIGNED FOCUS</p><ul>{task.focus.map((item) => <li key={item}>{item}</li>)}</ul><div className="aws-sap-console"><b>CONSOLE ROUTE + RELATED SERVICES</b><span>Review the matching service walkthrough, trace the configuration, and explain why it satisfies the SAP-C02 requirement.</span><div className="aws-sap-related"><b>REVIEW RELATED SERVICES IN THIS SAP COURSE</b><div>{task.services.map((service) => <button type="button" key={service} onClick={() => openSapCourseService(service)}>{service} ↗</button>)}</div></div><SapTaskWalkthrough task={task} /><SharedServiceWalkthrough serviceName={task.services[0]} /></div></div></div></section><div className="aws-sap-memory"><b>EXAM MEMORY HOOK</b><span>Start with the organizational or workload requirement, identify the constraint, choose the architecture pattern, and justify the trade-off with measurable evidence.</span></div></article>
   </section>;
 }
