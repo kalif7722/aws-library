@@ -9,7 +9,7 @@ type Domain = { number: string; title: string; weight: string; outcome: string; 
 
 const V = (kind: string, title: string, subtitle: string, nodes: string[], explanation: string, cue: string): Visual => ({ kind, title, subtitle, nodes, explanation, cue });
 const taskId = (title: string) => {
-  const match = title.match(/Task (\\d+)\\.(\\d+)/);
+  const match = title.match(/Task (\d+)\.(\d+)/);
   return match ? match[1] + "-" + match[2] : "";
 };
 
@@ -72,7 +72,7 @@ function Walkthrough({ task }: { task: Task }) {
       {items.map(item => <figure key={item.src}>
         <figcaption>{item.kind === "primary" ? "PRIMARY WALKTHROUGH" : "COMPANION COVERAGE"}</figcaption>
         <button type="button" onClick={event => { const image = event.currentTarget.querySelector("img"); if (image) setFull(image.currentSrc); }}>
-          <img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} />
+          <img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} />
           <span>Open full screen</span>
         </button>
       </figure>)}
@@ -84,7 +84,7 @@ function Walkthrough({ task }: { task: Task }) {
 
 function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onSelect: () => void }) {
   return <button type="button" className={"aws-security-task " + (active ? "active" : "")} onClick={onSelect}>
-    <span>{taskId(task.title).replace("-", ".")}</span><strong>{task.title.replace(/^Task \\d+\\.\\d+: /, "")}</strong>
+    <span>{taskId(task.title).replace("-", ".")}</span><strong>{task.title.replace(/^Task \d+\.\d+: /, "")}</strong>
   </button>;
 }
 
@@ -108,7 +108,7 @@ export default function AwsAiPractitionerCourseGuide() {
       </aside>
       <main className="aws-security-main">
         <p className="aws-security-kicker">DOMAIN {domain.number} · {domain.weight} · OFFICIAL OBJECTIVE</p>
-        <h2>{task.title.replace(/^Task \\d+\\.\\d+: /, "")}</h2>
+        <h2>{task.title.replace(/^Task \d+\.\d+: /, "")}</h2>
         <p className="aws-security-breadcrumb">{domain.title} → {task.title}</p>
         <div className="aws-security-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div>
         <div className="aws-security-content-grid">
