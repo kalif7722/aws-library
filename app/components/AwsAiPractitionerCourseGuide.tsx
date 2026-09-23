@@ -96,9 +96,16 @@ export default function AwsAiPractitionerCourseGuide() {
   const selectDomain = (index: number) => { setDomainIndex(index); setTaskIndex(0); };
   return <section className="aws-security-course" id="curriculum">
     <div className="aws-security-course-header">
-      <p className="aws-security-kicker">AWS CERTIFIED AI PRACTITIONER · AIF-C01 · TASK-FIRST COURSE</p>
-      <h1>AI concepts, foundation models, responsible AI, and secure AWS solutions</h1>
-      <p>Study each official AIF-C01 task through a visual explainer, practical architecture, service decisions, and exam-focused memory hooks.</p>
+      <div className="aws-security-course-header-main">
+        <p className="aws-security-kicker">AWS CERTIFIED AI PRACTITIONER · AIF-C01 · TASK-FIRST COURSE</p>
+        <h1>AI concepts, foundation models, responsible AI, and secure AWS solutions</h1>
+        <p>Study each official AIF-C01 task through a visual explainer, practical architecture, service decisions, and exam-focused memory hooks.</p>
+      </div>
+      <div className="aws-security-course-stats">
+        <strong>05</strong><span>exam domains</span>
+        <strong>14</strong><span>official tasks</span>
+        <strong>700</strong><span>passing scaled score</span>
+      </div>
     </div>
     <div className="aws-security-domain-tabs">{domains.map((item, index) => <button type="button" key={item.number} className={domainIndex === index ? "active" : ""} onClick={() => selectDomain(index)}><span>{item.number}</span><strong>{item.title}</strong><em>{item.weight}</em></button>)}</div>
     <div className="aws-security-layout">
