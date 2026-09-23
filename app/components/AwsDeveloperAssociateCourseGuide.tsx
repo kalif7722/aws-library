@@ -61,7 +61,7 @@ function Walkthrough({ task }: { task: Task }) {
     <div className="aws-security-walkthrough-head"><b>CONSOLE WALKTHROUGH · {key.replace("-", ".")}</b><span>Click any board to open full screen</span></div>
     <div className="aws-security-walkthrough-grid">{items.map(item => <figure key={item.src}><figcaption>{item.kind.toUpperCase()} {item.kind === "companion" ? "COVERAGE" : "WALKTHROUGH"}</figcaption><button type="button" onClick={event => { const image = event.currentTarget.querySelector("img"); if (image) setFull(image.currentSrc); }}><img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} /><span>Open full screen ↗</span></button></figure>)}</div>
     {missing && <p>Upload matching files to <code>aws-certification-walkthroughs/dva-c02-tasks/</code>. The task-specific image pair is not available yet.</p>}
-    {full && <div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={() => setFull(null)}><button type="button" onClick={() => setFull(null)}>Close ×</button><img src={full} alt={task.title + " full-screen walkthrough"} onClick={event => event.stopPropagation()} /></div>}
+    {full && <div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={() => setFull(null)}><button type="button" onClick={() => setFull(null)} aria-label="Close full-screen walkthrough">×</button><img src={full} alt={task.title + " full-screen walkthrough"} onClick={event => event.stopPropagation()} /></div>}
   </div>;
 }
 
