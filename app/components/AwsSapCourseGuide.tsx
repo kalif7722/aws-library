@@ -56,7 +56,7 @@ const sapDomains: SapDomain[] = [
 const SAP_TASK_R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/sap-c02-tasks";
 
 function SapTaskWalkthrough({ task }: { task: SapTask }) {
-  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);\n  const [missing, setMissing] = useState<string[]>([]);
   useEffect(() => {
     if (!fullscreenSrc) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -73,7 +73,7 @@ function SapTaskWalkthrough({ task }: { task: SapTask }) {
   return <div className="aws-sap-task-walkthrough">
     <div className="aws-sap-task-walkthrough-head"><b>CONSOLE WALKTHROUGH · {taskId.replace("-", ".")}</b><span>Click any board to open full screen</span></div>
     <div className="aws-sap-task-walkthrough-grid">
-      <figure><figcaption>PRIMARY WALKTHROUGH</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(primary)}><img src={primary} alt={`${task.title} primary walkthrough`} loading="lazy" /></button></figure>
+      <figure><figcaption>PRIMARY WALKTHROUGH</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(primary)}><img src={primary} alt={`${task.title} primary walkthrough`} loading="lazy" onError={event => { event.currentTarget.style.display = "none"; setMissing(items => items.includes(event.currentTarget.src) ? items : [...items, event.currentTarget.src]); }} /></button></figure>
       <figure><figcaption>COMPANION COVERAGE</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(companion)}><img src={companion} alt={`${task.title} companion walkthrough`} loading="lazy" /></button></figure>
       {alternate && <figure><figcaption>ALTERNATE TASK BOARD</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(alternate)}><img src={alternate} alt={`${task.title} alternate walkthrough`} loading="lazy" /></button></figure>}
     </div>
