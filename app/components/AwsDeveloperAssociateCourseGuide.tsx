@@ -58,25 +58,74 @@ function Walkthrough({ task }: { task: Task }) {
   const base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/dva-c02-tasks";
   const items = ["primary", "companion"].map(kind => ({ kind, src: base + "/dva-c02-task-" + key + "-" + kind + ".png" }));
   return <div className="aws-security-walkthrough">
-    <div className="aws-security-walkthrough-head"><b>CONSOLE WALKTHROUGH · {key.replace("-", ".")}</b><span>Click any board to open full screen</span></div>
-    <div className="aws-security-walkthrough-grid">{items.map(item => <figure key={item.src}><figcaption>{item.kind.toUpperCase()} {item.kind === "companion" ? "COVERAGE" : "WALKTHROUGH"}</figcaption><button type="button" onClick={event => { const image = event.currentTarget.querySelector("img"); if (image) setFull(image.currentSrc); }}><img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} /><span>Open full screen ↗</span></button></figure>)}</div>
-    {missing && <p>Upload matching files to <code>aws-certification-walkthroughs/dva-c02-tasks/</code>. The task-specific image pair is not available yet.</p>}
-    {full && <div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={() => setFull(null)}><button type="button" onClick={() => setFull(null)} aria-label="Close full-screen walkthrough">×</button><img src={full} alt={task.title + " full-screen walkthrough"} onClick={event => event.stopPropagation()} /></div>}
+    <div className="aws-security-walkthrough-head"><b>WALKTHROUGH · {key.replace("-", ".")}</b><span>Click any board to open full screen</span></div>
+    <div className="aws-security-walkthrough-grid">
+      {items.map(item => <figure key={item.src}>
+        <figcaption>{item.kind === "primary" ? "PRIMARY WALKTHROUGH" : "COMPANION COVERAGE"}</figcaption>
+        <button type="button" onClick={event => { const image = event.currentTarget.querySelector("img"); if (image) setFull(image.currentSrc); }}>
+          <img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} />
+          <span>Open full screen</span>
+        </button>
+      </figure>)}
+    </div>
+    {missing && <div className="aws-security-walkthrough-missing">Walkthrough guide will appear here once the matching image is uploaded.</div>}
+    {full && <div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={() => setFull(null)}><button type="button" aria-label="Close full-screen walkthrough" onClick={() => setFull(null)}>×</button><img src={full} alt={task.title + " full-screen walkthrough"} onClick={event => event.stopPropagation()} /></div>}
   </div>;
+}
+
+function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onSelect: () => void }) {
+  return <button type="button" className={"aws-aif-task " + (active ? "active" : "")} onClick={onSelect}>
+    <span>{id(task.title).replace("-", ".")}</span><strong>{task.title.replace(/^Task \d+\.\d+: /, "")}</strong>
+  </button>;
 }
 
 export default function AwsDeveloperAssociateCourseGuide() {
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const domain = domains[domainIndex];
-  const task = domain.tasks[taskIndex] || domain.tasks[0];
-  return <section className="aws-security-guide" id="dva-exam-guide">
-    <div className="aws-security-head"><div><p>DVA-C02 · EXAM GUIDE LEARNING PATH</p><h2>Build, secure, deploy, and optimize AWS applications.</h2><span>Follow all four official domains and all 13 exact DVA-C02 tasks. Select a domain and task to study the exam ask, development pattern, related service route, and task-specific walkthrough pair.</span><div className="aws-security-coverage"><b>13 GUIDE TASKS CONNECTED</b><span>Every task combines the official AWS task statement, a visual application model, related services from this Developer course, and a task-specific walkthrough slot.</span></div><a href="https://docs.aws.amazon.com/aws-certification/latest/developer-associate-02/dva-02-exam-guide.html" target="_blank" rel="noreferrer">Open the official AWS DVA-C02 exam guide ↗</a></div><div className="aws-security-stats"><strong>04</strong><span>exam domains</span><strong>13</strong><span>official tasks</span><strong>720</strong><span>passing scaled score</span></div></div>
-    <div className="aws-security-tabs" role="tablist" aria-label="DVA-C02 exam domains">{domains.map((item, index) => <button type="button" role="tab" aria-selected={index === domainIndex} className={index === domainIndex ? "is-selected" : ""} key={item.number} onClick={() => { setDomainIndex(index); setTaskIndex(0); }}><b>{item.number}</b><span>{item.title}</span><small>{item.weight}</small><em>{item.tasks.length} tasks</em></button>)}</div>
-    <article className="aws-security-domain"><header><div className="aws-security-domain-number">{domain.number}</div><div><p>{domain.weight} · EXAM DOMAIN</p><h3>{domain.title}</h3><span>{domain.outcome}</span></div></header><div className="aws-security-domain-flow">{domain.flow.map((item, index) => <div key={item}><b>{item}</b>{index < domain.flow.length - 1 && <i>→</i>}</div>)}</div>
-      <div className="aws-security-task-tabs" role="tablist" aria-label={domain.title + " tasks"}>{domain.tasks.map((item, index) => <button type="button" role="tab" aria-selected={index === taskIndex} className={index === taskIndex ? "is-selected" : ""} key={item.title} onClick={() => setTaskIndex(index)}><b>{String(index + 1).padStart(2, "0")}</b><span>{item.title}</span></button>)}</div>
-      <section className="aws-security-task"><div className="aws-security-task-head"><div><p>OFFICIAL TASK STATEMENT</p><h4>{task.title}</h4></div><span>CODE + VERIFICATION</span></div><div className="aws-security-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div><div className="aws-security-task-grid"><div className={"aws-security-visual aws-security-visual-" + task.visual.kind}><p>VISUAL EXPLAINER · {task.visual.kind.toUpperCase()}</p><h4>{task.visual.title}</h4><span className="aws-security-subtitle">{task.visual.subtitle}</span><div className="aws-security-diagram">{task.visual.nodes.map(node => <span key={node}>{node}</span>)}</div><div className="aws-security-flow-map"><b>TASK-TO-DESIGN FLOW</b><div>{task.flow.map((step, index) => <article key={step}><strong>{"0" + (index + 1)}</strong><span><b>{["READ THE ASK", "CHOOSE THE PATTERN", "APPLY THE CONTROL", "PROVE THE OUTCOME"][index] || "PROVE THE OUTCOME"}</b>{step}</span></article>)}</div></div><div className="aws-security-checks"><div><b>EXAM REQUIREMENT</b><span>{task.ask}</span></div><div><b>GUIDE-ALIGNED COVERAGE</b><span>{task.focus.slice(0, 2).join(" · ")}</span></div></div><div className="aws-security-note"><b>HOW IT WORKS</b><span>{task.visual.explanation}</span></div><div className="aws-security-cue"><b>EXAM CUE</b><span>{task.visual.cue}</span></div></div><div className="aws-security-focus"><p>GUIDE-ALIGNED FOCUS</p><ul>{task.focus.map(item => <li key={item}>{item}</li>)}</ul><div className="aws-security-console"><b>CONSOLE ROUTE + RELATED SERVICES</b><span>Review the matching service guide, trace the configuration, and explain why it satisfies the DVA-C02 requirement.</span><div className="aws-security-related"><b>REVIEW RELATED SERVICES IN THIS DVA COURSE</b><div>{task.services.map(service => <button type="button" key={service} onClick={() => openDvaService(service)}>{service} ↗</button>)}</div></div><Walkthrough task={task} /></div></div></div></section>
-      <div className="aws-security-memory"><b>EXAM MEMORY HOOK</b><span>Start with the application requirement; choose the narrowest effective AWS pattern; then prove identity, behavior, deployment, and runtime evidence.</span></div>
-    </article>
+  const task = domain.tasks[taskIndex];
+  const selectDomain = (index: number) => { setDomainIndex(index); setTaskIndex(0); };
+  return <section className="aws-security-course" id="curriculum" data-course-layout="shared-task-shell-v2">
+    <div className="aws-security-course-header">
+      <div className="aws-security-course-header-main">
+        <p className="aws-security-kicker">AWS CERTIFIED DEVELOPER – ASSOCIATE · DVA-C02 · TASK-FIRST COURSE</p>
+        <h1>Build, secure, deploy, and optimize AWS applications</h1>
+        <p>Study each official DVA-C02 task through a visual explainer, development and deployment patterns, related services, and exam-focused memory hooks.</p>
+      </div>
+      <div className="aws-security-course-stats">
+        <strong>04</strong><span>exam domains</span>
+        <strong>13</strong><span>official tasks</span>
+        <strong>720</strong><span>passing scaled score</span>
+      </div>
+    </div>
+    <div className="aws-security-domain-tabs">{domains.map((item, index) => <button type="button" key={item.number} className={domainIndex === index ? "active" : ""} onClick={() => selectDomain(index)}><span>{item.number}</span><strong>{item.title}</strong><em>{item.weight}</em></button>)}</div>
+    <div className="aws-security-layout">
+      <aside className="aws-security-task-list">
+        <div className="aws-security-task-list-title">TASKS · {domain.title}</div>
+        {domain.tasks.map((item, index) => <TaskCard task={item} active={index === taskIndex} onSelect={() => setTaskIndex(index)} key={item.title} />)}
+      </aside>
+      <main className="aws-security-main">
+        <p className="aws-security-kicker">DOMAIN {domain.number} · {domain.weight} · OFFICIAL OBJECTIVE</p>
+        <h2>{task.title.replace(/^Task \d+\.\d+: /, "")}</h2>
+        <p className="aws-security-breadcrumb">{domain.title} → {task.title}</p>
+        <div className="aws-security-ask"><b>WHAT THIS TASK ASKS</b><span>{task.ask}</span></div>
+        <div className="aws-security-content-grid">
+          <div className="aws-security-visual-card">
+            <p className="aws-security-label">VISUAL EXPLAINER · DVA-C02</p><h3>{task.visual.title}</h3><p>{task.visual.subtitle}</p>
+            <div className="aws-security-flow">{task.visual.nodes.map((node, index) => <span key={node}>{node}{index < task.visual.nodes.length - 1 && <i>→</i>}</span>)}</div>
+            <p className="aws-security-explanation">{task.visual.explanation}</p>
+          </div>
+          <div className="aws-security-focus-card">
+            <p className="aws-security-label">GUIDE-ALIGNED FOCUS</p>
+            {task.focus.map(item => <p key={item}>{item}</p>)}
+            <p className="aws-security-label">RELATED DVA-C02 SERVICES</p>
+            <div className="aws-security-services">{task.services.map(service => <button type="button" key={service} onClick={() => openDvaService(service)}>{service} ↗</button>)}</div>
+          </div>
+        </div>
+        <div className="aws-security-flow-card"><p className="aws-security-label">TASK-TO-DESIGN FLOW</p><div>{task.flow.map((step, index) => <article key={step}><b>0{index + 1}</b><span>{step}</span></article>)}</div></div>
+        <Walkthrough task={task} />
+        <div className="aws-security-memory"><b>EXAM MEMORY HOOK</b><span>{task.visual.cue}</span></div>
+      </main>
+    </div>
   </section>;
 }
