@@ -1,8 +1,11 @@
 import CertificationCourse from "../../components/CertificationCourse";
+import AwsSecurityCourseGuide from "../../components/AwsSecurityCourseGuide";
 import { scsScope } from "../../security-scope";
 
 export default function SecuritySpecialty() {
-  return <CertificationCourse
+  return <>
+    <AwsSecurityCourseGuide />
+    <CertificationCourse
     code="SCS"
     level="Specialty"
     title="AWS Certified Security – Specialty"
@@ -10,5 +13,6 @@ export default function SecuritySpecialty() {
     scope={scsScope}
     sourceUrl="https://docs.aws.amazon.com/aws-certification/latest/security-specialty-03/scs-02-in-scope-services.html"
     sourceLabel="Aligned to the AWS Certified Security – Specialty SCS-C03 guide"
-  />;
+  />
+  </>;
 }
