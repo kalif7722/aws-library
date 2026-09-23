@@ -9,11 +9,12 @@ const R2_PUBLIC_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
 const openAipCourseService = (name: string) => { window.dispatchEvent(new CustomEvent("aws-course-service", { detail: { name, courseCode: "AIP" } })); requestAnimationFrame(() => document.getElementById("curriculum")?.scrollIntoView({ behavior: "smooth", block: "start" })); };
 
 function VisualSlot({ task, kind, onOpen }: { task: AipC01Task; kind: "primary" | "companion"; onOpen: (src: string, alt: string) => void }) {
+  const [failed, setFailed] = useState(false);
   const file = `aip-c01-task-${task.id}-${kind}.png`;
   const src = assetUrl(`${R2_PREFIX}/${file}`).startsWith("/") ? `${R2_PUBLIC_BASE}/${R2_PREFIX}/${file}` : assetUrl(`${R2_PREFIX}/${file}`);
-  return <button className="aip-c01-visual-slot" type="button" onClick={() => onOpen(src, `${task.title} ${kind} walkthrough`)}>
-    <img src={src} alt={`${task.title} ${kind} walkthrough`} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement?.classList.add("is-pending"); }} />
-    <span className="aip-c01-pending-copy"><strong>{kind === "primary" ? "Primary walkthrough" : "Companion coverage"}</strong><small>Upload {file} to {R2_PREFIX}/</small></span>
+  return <button className={`aip-c01-visual-slot${failed ? " is-pending" : ""}`} type="button" onClick={() => !failed && onOpen(src, `${task.title} ${kind} walkthrough`)}>
+    <img src={src} alt={`${task.title} ${kind} walkthrough`} onError={(event) => { event.currentTarget.style.display = "none"; setFailed(true); }} />
+    {failed && <span className="aip-c01-pending-copy"><strong>{kind === "primary" ? "Primary walkthrough" : "Companion coverage"}</strong><small>Upload {file} to {R2_PREFIX}/</small></span>}
   </button>;
 }
 
