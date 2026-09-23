@@ -94,7 +94,7 @@ export default function AwsAiPractitionerCourseGuide() {
   const domain = domains[domainIndex];
   const task = domain.tasks[taskIndex];
   const selectDomain = (index: number) => { setDomainIndex(index); setTaskIndex(0); };
-  return <section className="aws-security-course" id="curriculum" data-course-layout="shared-task-shell">
+  return <section className="aws-security-course" id="curriculum" data-course-layout="shared-task-shell-v2">
     <div className="aws-security-course-header">
       <div className="aws-security-course-header-main">
         <p className="aws-security-kicker">AWS CERTIFIED AI PRACTITIONER · AIF-C01 · TASK-FIRST COURSE</p>
