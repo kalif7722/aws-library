@@ -83,7 +83,7 @@ function Walkthrough({ task }: { task: Task }) {
 }
 
 function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onSelect: () => void }) {
-  return <button type="button" className={"aws-security-task " + (active ? "active" : "")} onClick={onSelect}>
+  return <button type="button" className={"aws-aif-task " + (active ? "active" : "")} onClick={onSelect}>
     <span>{taskId(task.title).replace("-", ".")}</span><strong>{task.title.replace(/^Task \d+\.\d+: /, "")}</strong>
   </button>;
 }
