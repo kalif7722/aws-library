@@ -77,7 +77,7 @@ function SapTaskWalkthrough({ task }: { task: SapTask }) {
       <figure><figcaption>COMPANION COVERAGE</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(companion)}><img src={companion} alt={`${task.title} companion walkthrough`} loading="lazy" /></button></figure>
       {alternate && <figure><figcaption>ALTERNATE TASK BOARD</figcaption><button type="button" className="aws-sap-task-image-button" onClick={() => setFullscreenSrc(alternate)}><img src={alternate} alt={`${task.title} alternate walkthrough`} loading="lazy" /></button></figure>}
     </div>
-    <p className="aws-sap-task-walkthrough-note">Upload matching files to <code>aws-certification-walkthroughs/sap-c02-tasks/</code>. The page uses the exact task number, so Task {taskId.replace("-", ".")} cannot resolve to another task or shared service image.</p>
+    {missing.length > 0 && <p className="aws-sap-task-walkthrough-note">Upload matching files to <code>aws-certification-walkthroughs/sap-c02-tasks/</code>. The page uses the exact task number, so Task {taskId.replace("-", ".")} cannot resolve to another task or shared service image.</p>}
     {fullscreenSrc && <div className="aws-sap-lightbox" role="dialog" aria-modal="true" aria-label={`${task.title} full-screen walkthrough`} onClick={() => setFullscreenSrc(null)}>
       <button type="button" className="aws-sap-lightbox-close" aria-label="Close full-screen walkthrough" onClick={() => setFullscreenSrc(null)}>×</button>
       <img src={fullscreenSrc} alt={`${task.title} full-screen walkthrough`} onClick={(event) => event.stopPropagation()} />
