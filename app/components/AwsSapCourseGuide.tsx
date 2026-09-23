@@ -56,7 +56,8 @@ const sapDomains: SapDomain[] = [
 const SAP_TASK_R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/sap-c02-tasks";
 
 function SapTaskWalkthrough({ task }: { task: SapTask }) {
-  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);\n  const [missing, setMissing] = useState<string[]>([]);
+  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [missing, setMissing] = useState<string[]>([]);
   useEffect(() => {
     if (!fullscreenSrc) return;
     const onKeyDown = (event: KeyboardEvent) => {
