@@ -30,7 +30,28 @@ const domains:Domain[]=[
 ];
 const id=(title:string)=>title.match(/Task (\d+)\.(\d+)/)?.slice(1).join("-")||"";
 const openService=(name:string)=>{window.dispatchEvent(new CustomEvent("aws-course-service",{detail:{name,courseCode:"SCS"}}));};
-function Walkthrough({task}:{task:Task}){const [full,setFull]=useState<string|null>(null);const [missing,setMissing]=useState<string[]>([]);const key=id(task.title);const base="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/scs-c03-tasks";const items=["primary","companion"].map(kind=>({kind,src:`${base}/scs-c03-task-${key}-${kind}.png`}));return <div className="aws-security-walkthrough"><div className="aws-security-walkthrough-head"><b>CONSOLE WALKTHROUGH · {key.replace("-",".")}</b><span>Click any board to open full screen</span></div><div className="aws-security-walkthrough-grid">{items.map(item=><figure key={item.src}><figcaption>{item.kind.toUpperCase()} {item.kind==="companion"?"COVERAGE":"WALKTHROUGH"}</figcaption><button type="button" onClick={()=>setFull(item.src)}><img src={item.src} alt={`${task.title} ${item.kind} walkthrough`} loading="lazy" onError={event=>{event.currentTarget.style.display="none";setMissing(items=>items.includes(item.src)?items:[...items,item.src]);}}/><span>Open full screen ↗</span></button></figure>)}</div>{missing.length>0&&<p>Upload matching files to <code>aws-certification-walkthroughs/scs-c03-tasks/</code>. Each task resolves only to its own image pair.</p>}{full&&<div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={()=>setFull(null)}><button type="button" onClick={()=>setFull(null)} aria-label="Close full-screen walkthrough">×</button><img src={full} alt={`${task.title} full-screen walkthrough`} onClick={e=>e.stopPropagation()}/></div>}</div>}
+function Walkthrough({ task }: { task: Task }) {
+  const [full, setFull] = useState<string | null>(null);
+  const [missing, setMissing] = useState(false);
+  const key = id(task.title);
+  const base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-walkthroughs/scs-c03-tasks";
+  const items = ["primary", "companion"].map(kind => ({ kind, src: base + "/scs-c03-task-" + key + "-" + kind + ".png" }));
+  return <div className="aws-security-walkthrough">
+    <div className="aws-security-walkthrough-head"><b>WALKTHROUGH · {key.replace("-", ".")}</b><span>Click any board to open full screen</span></div>
+    <div className="aws-security-walkthrough-grid">
+      {items.map(item => <figure key={item.src}>
+        <figcaption>{item.kind === "primary" ? "PRIMARY WALKTHROUGH" : "COMPANION COVERAGE"}</figcaption>
+        <button type="button" onClick={event => { const image = event.currentTarget.querySelector("img"); if (image) setFull(image.currentSrc); }}>
+          <img src={item.src} alt={task.title + " " + item.kind + " walkthrough"} loading="lazy" onError={event => { const image = event.currentTarget; if (!image.dataset.fallback) { image.dataset.fallback = "webp"; image.src = image.src.replace(/\.png$/, ".webp"); } else { image.style.display = "none"; setMissing(true); } }} />
+          <span>Open full screen</span>
+        </button>
+      </figure>)}
+    </div>
+    {missing && <div className="aws-security-walkthrough-missing">Walkthrough guide will appear here once the matching image is uploaded.</div>}
+    {full && <div className="aws-security-lightbox" role="dialog" aria-modal="true" onClick={() => setFull(null)}><button type="button" aria-label="Close full-screen walkthrough" onClick={() => setFull(null)}>×</button><img src={full} alt={task.title + " full-screen walkthrough"} onClick={event => event.stopPropagation()} /></div>}
+  </div>;
+}
+
 function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onSelect: () => void }) {
   return <button type="button" className={"aws-aif-task " + (active ? "active" : "")} onClick={onSelect}>
     <span>{id(task.title).replace("-", ".")}</span><strong>{task.title.replace(/^Task \d+\.\d+: /, "")}</strong>
