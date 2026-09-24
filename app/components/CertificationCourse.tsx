@@ -26,7 +26,7 @@ const explicitAliases: Record<string, string> = {
   "Amazon SageMaker Clarify": "Amazon SageMaker Clarify", "Amazon SageMaker Data Wrangler": "Amazon SageMaker Data Wrangler", "Amazon SageMaker Ground Truth": "Amazon SageMaker Ground Truth",
   "Amazon SageMaker JumpStart": "Amazon SageMaker JumpStart", "Amazon SageMaker Model Monitor": "Amazon SageMaker Model Monitor", "Amazon SageMaker Model Registry": "Amazon SageMaker Model Registry",
   "Amazon SageMaker Neo": "Amazon SageMaker Neo", "Amazon SageMaker Processing": "Amazon SageMaker Processing", "Amazon SageMaker Unified Studio": "Amazon SageMaker Unified Studio", "Amazon Titan": "Amazon Titan",
-  "AWS Identity and Access Management (IAM)": "AWS IAM", "AWS Key Management Service (KMS)": "AWS KMS",
+  "AWS Key Management Service (KMS)": "AWS KMS",
   "AWS SDKs and APIs": "AWS Tools and SDKs", "AWS Distro for OpenTelemetry": "Amazon CloudWatch",
   "AWS IAM Policy Simulator": "AWS IAM", "Amazon CloudWatch Logs": "Amazon CloudWatch",
   "Amazon Bedrock Guardrails": "Amazon Bedrock", "Amazon Bedrock Agents": "Amazon Bedrock",
