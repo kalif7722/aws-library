@@ -135,7 +135,7 @@ export default function AwsAdvancedNetworkingCourseGuide() {
           </div>
         </div>
         <div className="aws-security-flow-card"><p className="aws-security-label">TASK-TO-DESIGN FLOW</p><div>{task.flow.map((step, index) => <article key={step}><b>0{index + 1}</b><span>{step}</span></article>)}</div></div>
-        <Walkthrough task={task} />
+        <Walkthrough key={task.title} task={task} />
         <div className="aws-security-memory"><b>EXAM MEMORY HOOK</b><span>{task.visual.cue}</span></div>
       </main>
     </div>
