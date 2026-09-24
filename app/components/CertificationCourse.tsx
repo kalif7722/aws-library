@@ -47,7 +47,7 @@ const certificationBadgeUrl = (title: string) => {
     : normalized.includes("solutions architect") ? "solutions-architect-associate.png"
     : normalized.includes("cloud practitioner") ? "cloud-practitioner.png"
     : normalized.includes("developer") ? "developer-associate.png"
-    : normalized.includes("sysops") ? "sysops-administrator-associate.png"
+    : normalized.includes("sysops") || normalized.includes("cloudops") ? "sysops-administrator-associate.png"
     : normalized.includes("devops") ? "devops-engineer-professional.png"
     : normalized.includes("advanced networking") ? "advanced-networking-specialty.png"
     : normalized.includes("data analytics") ? "data-analytics-specialty.png"
