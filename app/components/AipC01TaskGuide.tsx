@@ -6,7 +6,7 @@ import { assetUrl } from "../../lib/asset-url";
 
 const R2_PREFIX = "aws-certification-walkthroughs/aip-c01-tasks";
 const R2_PUBLIC_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
-const openAipCourseService = (name: string) => { window.dispatchEvent(new CustomEvent("aws-course-service", { detail: { name, courseCode: "AIP" } })); requestAnimationFrame(() => document.getElementById("curriculum")?.scrollIntoView({ behavior: "smooth", block: "start" })); };
+const openAipCourseService = (name: string) => { window.dispatchEvent(new CustomEvent("aws-course-service", { detail: { name, courseCode: "AIP" } })); };
 
 function VisualSlot({ task, kind, onOpen }: { task: AipC01Task; kind: "primary" | "companion"; onOpen: (src: string, alt: string) => void }) {
   const [failed, setFailed] = useState(false);
