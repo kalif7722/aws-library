@@ -353,6 +353,34 @@ export const azureOfficialExamDomains: Record<string, AzureExamDomain[]> = {
       ]
     }
   ],
+  "AZ-400": [
+    { name: "Design and implement processes and communications", weight: "10–15%", groups: [
+      { name: "Design and implement traceability and flow of work", tasks: ["Design and implement a work item strategy", "Configure Azure Boards and GitHub integration", "Design traceability from work items to builds and releases"] },
+      { name: "Design and implement appropriate metrics and queries for DevOps", tasks: ["Design metrics and queries for planning, development, testing, security, delivery, and operations"] },
+      { name: "Configure collaboration and communication", tasks: ["Configure wikis, process diagrams, and documentation", "Automate documentation from Git history", "Configure webhooks and collaboration integrations"] }
+    ] },
+    { name: "Design and implement a source control strategy", weight: "10–15%", groups: [
+      { name: "Design and implement branching strategies for the source code", tasks: ["Design trunk-based, feature, and release branch strategies", "Configure pull request workflows and branch protection"] },
+      { name: "Configure and manage repositories", tasks: ["Manage large files and repository scale", "Configure repository permissions and tags", "Recover and remove data from source control"] }
+    ] },
+    { name: "Design and implement build and release pipelines", weight: "50–55%", groups: [
+      { name: "Design and implement a package management strategy", tasks: ["Select GitHub Packages or Azure Artifacts", "Manage feeds, views, dependencies, and artifact versions"] },
+      { name: "Design and implement a testing strategy for pipelines", tasks: ["Choose local, unit, integration, and load tests", "Configure quality, security, and release gates"] },
+      { name: "Design and implement pipelines", tasks: ["Build YAML pipelines and reusable templates", "Configure agents, triggers, variables, and artifacts"] },
+      { name: "Design and implement deployments", tasks: ["Configure environments, deployment jobs, approvals, and checks", "Choose progressive delivery and rollback strategies"] },
+      { name: "Design and implement infrastructure as code (IaC)", tasks: ["Choose declarative infrastructure definitions", "Validate, deploy, and govern infrastructure through pipelines"] },
+      { name: "Maintain pipelines", tasks: ["Monitor, diagnose, secure, and optimize pipelines"] }
+    ] },
+    { name: "Develop a security and compliance plan", weight: "10–15%", groups: [
+      { name: "Design and implement authentication and authorization methods", tasks: ["Configure service connections and least privilege", "Manage identities and repository or pipeline access"] },
+      { name: "Design and implement a strategy for managing sensitive information in automation", tasks: ["Protect secrets, keys, and certificates in automation", "Use secure variables and secret stores"] },
+      { name: "Automate security and compliance scanning", tasks: ["Integrate dependency, code, and infrastructure scanning", "Review security findings and compliance evidence"] }
+    ] },
+    { name: "Implement an instrumentation strategy", weight: "5–10%", groups: [
+      { name: "Configure monitoring for a DevOps environment", tasks: ["Instrument applications and infrastructure", "Configure telemetry, alerts, and feedback loops"] },
+      { name: "Analyze metrics from instrumentation", tasks: ["Analyze application, infrastructure, and delivery metrics", "Use monitoring insights to improve reliability"] }
+    ] }
+  ],
   "AZ-305": [
     {
       "name": "Design identity, governance, and monitoring solutions",
