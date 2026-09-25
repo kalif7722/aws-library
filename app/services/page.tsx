@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import AipServiceLearningDetailsV8 from "../components/AipServiceLearningDetailsV8";
+import SharedServiceWalkthrough from "../components/SharedServiceWalkthrough";
+import "../components/AzureLibrary.css";
 import { assetUrl } from "../../lib/asset-url";
 
 export const services = [
@@ -345,199 +349,42 @@ const branches = [
   { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
 ];
 
-const collapsedByDefault = Object.fromEntries(branches.map((branch) => [branch.title, true]));
 
-const semanticAliases: Record<string, string> = {
-  "AWS Lambda": "serverless functions event driven code", "AWS Fargate": "serverless containers", "Amazon EKS": "kubernetes containers",
-  "Amazon ECS": "containers orchestration", "Amazon ECR": "container registry docker images OCI", "Amazon EC2": "virtual machine server instance compute",
-  "Amazon S3": "object storage data lake bucket", "Amazon EBS": "block storage disk volume", "Amazon EFS": "shared file storage NFS",
-  "Amazon Route 53": "DNS domains traffic routing", "Amazon CloudFront": "CDN edge content delivery", "Amazon API Gateway": "API REST HTTP websocket",
-  "Elastic Load Balancing": "load balancer ALB NLB traffic", "Amazon VPC": "private network networking subnet", "AWS Direct Connect": "dedicated private network",
-  "AWS IAM": "identity permissions users roles policy", "AWS IAM Identity Center": "SSO workforce identity", "Amazon Cognito": "customer login authentication federation",
-  "AWS KMS": "encryption keys cryptography", "AWS Secrets Manager": "password secret credential rotation", "Amazon GuardDuty": "threat detection security",
-  "Amazon Inspector": "vulnerability scanning security", "AWS Security Hub": "security posture findings", "Amazon CloudWatch": "monitoring metrics logs alarms observability",
-  "AWS X-Ray": "tracing observability performance", "Amazon Managed Grafana": "dashboard visualization monitoring", "Amazon Managed Service for Prometheus": "metrics monitoring prometheus",
-  "Amazon Redshift": "data warehouse analytics SQL", "Amazon Athena": "SQL query S3 serverless analytics", "AWS Glue": "ETL data integration catalog",
-  "Amazon Kinesis Data Streams": "streaming realtime events", "Amazon MSK": "Kafka streaming", "Amazon Bedrock": "generative AI foundation models agents",
-  "Amazon SageMaker AI": "machine learning model training deployment", "Amazon Quick": "business intelligence BI dashboards AI agents automation research",
-  "Amazon CodeGuru": "code review profiler developer tools application performance java python",
-  "AWS IoT Events": "iot events equipment detection alarms state monitoring",
-  "Amazon Fraud Detector": "fraud detection machine learning suspicious transactions legacy",
-  "Amazon SageMaker": "sagemaker sagemaker ai machine learning model training deployment hosting endpoints",
-  "Amazon Q Business": "enterprise chatbot knowledge assistant", "Amazon Lex": "chatbot conversation voice", "Amazon Textract": "OCR documents forms tables",
-  "Amazon Transcribe": "speech to text transcription", "Amazon Polly": "text to speech voice", "Amazon Translate": "language translation",
-  "Amazon Personalize": "recommendation engine personalization", "AWS IoT Core": "devices MQTT edge internet of things", "AWS IoT Greengrass": "edge devices offline",
-  "AWS Cost Explorer": "cost billing spend optimization", "AWS Budgets": "cost alerts budget", "AWS Config": "compliance configuration audit",
-  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",
-  "AWS CDK": "cdk cloud development kit infrastructure as code programming language constructs",
-  "AWS Cost Anomaly Detection": "cost anomaly detection spend unusual billing alert machine learning",
-  "AWS Tools and SDKs": "sdk software development kit aws tools cli powershell cloudshell",
-  "AWS SDKs and Tools": "sdk software development kit aws tools cli powershell cloudshell",
-  "AWS Security Token Service": "sts security token service temporary credentials assume role federation",
-  "AWS STS": "sts security token service temporary credentials assume role federation",
-  "AWS Schema Conversion Tool": "sct schema conversion tool database migration oracle aurora dms",
-  "AWS Management Console": "console browser web interface access aws services",
-  "AWS CLI": "cli command line terminal developer tools automation",
-  "AWS AppConfig": "appconfig feature flags dynamic configuration deployment",
-  "Savings Plans": "savings plans cost savings commitment pricing cloud financial management",
-};
-
-const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-
+const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const catalog = branches.map((branch) => ({ ...branch, items: [...new Set([...Array.from({ length: branch.end - branch.start }, (_, i) => branch.start + i), ...branch.copies])].map((index) => ({ ...services[index], index })).filter((item) => item.name) }));
 export default function ServicesLibrary() {
-  const branchesRef = useRef<HTMLDivElement>(null);
-  const [selected, setSelected] = useState<number | null>(null);
-  const [imageScale, setImageScale] = useState(100);
-  const [dragging, setDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, scale: 100 });
+  const params = useSearchParams();
+  const [selected, setSelected] = useState(0);
+  const [branchIndex, setBranchIndex] = useState(0);
+  const [query, setQuery] = useState("");
+  const [openBranch, setOpenBranch] = useState<{ index: number; top: number } | null>(null);
+  const [menuCollapsed, setMenuCollapsed] = useState(false);
+  const [visualVisible, setVisualVisible] = useState(true);
   const [expanded, setExpanded] = useState(false);
-  const [collapsedBranches, setCollapsedBranches] = useState<Record<string, boolean>>(collapsedByDefault);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [mapScroll, setMapScroll] = useState(0);
-  const [mapScrollMax, setMapScrollMax] = useState(0);
-  useEffect(() => { const onKey = (event: KeyboardEvent) => event.key === "Escape" && setExpanded(false); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
+  const service = services[selected];
+  const results = useMemo(() => catalog.flatMap((branch, index) => branch.items.map((item) => ({ item, branch: branch.title, index }))).filter(({item,branch}) => query.trim() && `${item.name} ${item.summary} ${branch}`.toLowerCase().includes(query.toLowerCase())).slice(0, 16), [query]);
   useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("service");
+    const requested = params.get("service");
     if (!requested) return;
     const index = services.findIndex((item) => normalize(item.name) === normalize(requested));
-    if (index < 0) return;
-    const branch = branches.find((candidate) => (index >= candidate.start && index < candidate.end) || candidate.copies.includes(index));
-    setSelected(index);
-    if (branch) setCollapsedBranches((current) => ({ ...current, [branch.title]: false }));
-  }, []);
-  useEffect(() => { if (!dragging) return; const move = (event: PointerEvent) => setImageScale(Math.max(60, Math.min(220, dragStart.scale + (event.clientX - dragStart.x) / 4))); const up = () => setDragging(false); window.addEventListener("pointermove", move); window.addEventListener("pointerup", up); return () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); }; }, [dragging, dragStart]);
-  useEffect(() => {
-    const element = branchesRef.current;
-    if (!element) return;
-    const sync = () => { setMapScroll(element.scrollLeft); setMapScrollMax(Math.max(0, element.scrollWidth - element.clientWidth)); };
-    sync();
-    element.addEventListener("scroll", sync, { passive: true });
-    const observer = new ResizeObserver(sync);
-    observer.observe(element);
-    const row = element.querySelector(".branch-row");
-    if (row) observer.observe(row);
-    return () => { element.removeEventListener("scroll", sync); observer.disconnect(); };
-  }, [collapsedBranches]);
-  const service = selected === null ? null : services[selected];
-  const uniqueServiceCount = new Set(services.map((item) => normalize(item.name))).size;
-  const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);
-  const query = normalize(searchQuery);
-  const searchResults = query ? services.map((item, index) => {
-    const branch = branches.find((candidate) => (index >= candidate.start && index < candidate.end) || candidate.copies.includes(index)) || { title: "Other Services" };
-    const name = normalize(item.name);
-    const words = query.split(" ").filter(Boolean);
-    const searchable = normalize(`${item.name} ${item.summary} ${branch.title} ${semanticAliases[item.name] || ""}`);
-    let score = name === query ? 100 : name.startsWith(query) ? 80 : name.includes(query) ? 65 : 0;
-    score += words.reduce((total, word) => total + (searchable.includes(word) ? 12 : 0), 0);
-    return { item, index, branch, score };
-  }).filter((result) => result.score > 0).sort((a, b) => b.score - a.score || a.item.name.localeCompare(b.item.name)).slice(0, 8) : [];
-
-  const chooseSearchResult = (index: number, branchTitle: string) => {
-    setSelected(index);
-    setCollapsedBranches((current) => ({ ...current, [branchTitle]: false }));
-    setSearchOpen(false);
-    requestAnimationFrame(() => requestAnimationFrame(() => document.querySelector(`[data-service-index="${index}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })));
-  };
-
-  return (
-    <main className="workspace">
-      <nav className="top-nav" aria-label="Primary navigation">
-        <a className="brand-link" href="/">Visual Learning</a>
-      </nav>
-      <header className="masthead">
-        <div className="site-tools">
-          <div className="service-search">
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(event) => { setSearchQuery(event.target.value); setSearchOpen(true); }}
-              onFocus={() => setSearchOpen(true)}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") { setSearchOpen(false); setSearchQuery(""); }
-                if (event.key === "Enter" && searchResults[0]) chooseSearchResult(searchResults[0].index, searchResults[0].branch.title);
-              }}
-              placeholder="Search by service or concept…"
-              aria-label="Search AWS services by name or concept"
-              aria-expanded={searchOpen && searchResults.length > 0}
-            />
-            {searchOpen && query && <div className="search-results" role="listbox" aria-label="Service search results">
-              {searchResults.length ? searchResults.map((result) => <button key={`${result.item.name}-${result.index}`} role="option" onClick={() => chooseSearchResult(result.index, result.branch.title)}>
-                <span>{result.item.name}</span><small>{result.branch.title} · {result.item.summary}</small>
-              </button>) : <p>No matching services</p>}
-            </div>}
-          </div>
-          <button className="expand-all" onClick={() => setCollapsedBranches(Object.fromEntries(branches.map((branch) => [branch.title, !allCollapsed])))}>
-            {allCollapsed ? "Expand all" : "Collapse all"}
-          </button>
-          <div className="progress"><strong>{uniqueServiceCount}</strong><span>services mapped</span></div>
-        </div>
-      </header>
-
-      <section className="canvas" aria-label="AWS service mind map">
-        <div
-          className="branches"
-          ref={branchesRef}
-          tabIndex={0}
-          aria-label="AWS service category branches. Scroll horizontally to view more categories."
-        >
-          <div className="root-node">AWS Services</div>
-          <div className="connector vertical" aria-hidden="true" />
-          <div className="branch-row">
-            {branches.map((branch) => (
-              <div className={`map-column ${collapsedBranches[branch.title] ? "collapsed" : ""}`} key={branch.title} style={{ "--branch-accent": branch.accent } as React.CSSProperties}>
-                <button
-                  className="branch-toggle"
-                  onClick={() => setCollapsedBranches((current) => ({ ...current, [branch.title]: !current[branch.title] }))}
-                  aria-expanded={!collapsedBranches[branch.title]}
-                  aria-label={`${collapsedBranches[branch.title] ? "Expand" : "Collapse"} ${branch.title}`}
-                  title={`${collapsedBranches[branch.title] ? "Expand" : "Collapse"} branch`}
-                >
-                  {collapsedBranches[branch.title] ? "+" : "−"}
-                </button>
-                <div className="category-node">{branch.title}</div>
-                {!collapsedBranches[branch.title] && <><div className="branch" aria-hidden="true" />
-                <div className="service-list">
-                  {[...Array.from({ length: branch.end - branch.start }, (_, offset) => branch.start + offset), ...(branch.copies || [])].map((index) => {
-                    const item = services[index];
-                    if (!item) return null;
-                    return <button key={item.name} data-service-index={index} className={`service-node ${selected === index ? "active" : ""}`} style={{ "--service-accent": item.accent } as React.CSSProperties} onClick={() => setSelected(index)} aria-pressed={selected === index}>
-                      <span>{item.name}</span><small>{item.summary}</small>
-                    </button>;
-                  })}
-                </div></>}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {service && <article className="viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}>
-          <div className="viewer-head">
-            <div><p>Selected EL10 page</p><h2>{service.name}</h2></div>
-            <button onClick={() => setExpanded(true)}>Fit in browser ↗</button>
-          </div>
-            <button className="image-link" onClick={() => setExpanded(true)} aria-label={`Open ${service.name} EL10 infographic in fitted viewer`}>
-            <img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} style={{ width: `${imageScale}%`, maxWidth: "none" }} alt={`${service.name} EL10 infographic with ten study sections`} />
-          </button>
-          <div className="image-controls"><span>Drag the corner to resize</span><strong>{Math.round(imageScale)}%</strong></div>
-          <div className="resize-handle" role="slider" aria-label="Drag to resize infographic" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setDragStart({ x: event.clientX, scale: imageScale }); setDragging(true); }} />
-          <p className="viewer-note">Select another service node to switch pages. Open full size for readable study view.</p>
-        </article>}
-        {service && expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} fitted infographic viewer`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} onClick={(event) => event.stopPropagation()} /></div>}
+    if (index >= 0) { setSelected(index); const owner = catalog.findIndex((branch) => branch.items.some((item) => item.index === index)); if (owner >= 0) setBranchIndex(owner); }
+  }, [params]);
+  useEffect(() => { const key = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); }; window.addEventListener("keydown", key); return () => window.removeEventListener("keydown", key); }, []);
+  const choose = (index: number, branch: number) => { setSelected(index); setBranchIndex(branch); setQuery(""); setOpenBranch(null); setExpanded(false); setVisualVisible(true); };
+  return <main className="workspace azure-workspace aws-services-library">
+    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" href="/services">AWS services</a><a href="/azure-services">Azure services</a></div></nav>
+    <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
+      <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="AWS service branches">
+        <div className="azure-menu-heading"><span>AWS branches</span><button type="button" aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"} onClick={() => setMenuCollapsed((value) => !value)}>{menuCollapsed ? "›" : "‹"}</button></div>
+        {!menuCollapsed && <><div className="azure-branch-list">{catalog.map((branch, index) => <div className="azure-branch-menu-item" key={branch.title} onMouseEnter={(event) => { const maxHeight = Math.min(window.innerHeight * .76, 680); const top = event.currentTarget.getBoundingClientRect().top; setOpenBranch({ index, top: Math.max(12, Math.min(top, window.innerHeight - maxHeight - 12)) }); }}><button className="azure-branch-trigger" type="button" aria-haspopup="true" onClick={() => branch.items[0] && choose(branch.items[0].index, index)}><span>{branch.title}</span><small>{branch.items.length}</small></button></div>)}</div>
+        {openBranch && <div className="azure-branch-popover" role="menu" style={{ top: openBranch.top }} onMouseLeave={() => setOpenBranch(null)}><div className="azure-dropdown-title">{catalog[openBranch.index].title}</div>{catalog[openBranch.index].items.map((item) => <button key={item.index} type="button" role="menuitem" onClick={() => choose(item.index, openBranch.index)}><span>{item.name}</span><small>{item.summary}</small></button>)}</div>}</>}
+      </aside>
+      <section className="azure-main-pane"><header className="azure-toolbar"><div className="service-search azure-search"><span>Search all AWS services</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search service or branch…" aria-label="Search AWS services and branches" />{results.length > 0 && <div className="search-results" role="listbox" aria-label="AWS search results">{results.map(({item,branch,index}) => <button type="button" key={`${branch}-${item.index}`} role="option" onClick={() => choose(item.index,index)}><span>{item.name}</span><small>{branch} · {item.summary}</small></button>)}</div>}</div><div className="progress"><strong>{new Set(services.map((item) => normalize(item.name))).size}</strong><span>unique services mapped</span></div></header>
+        <article className="viewer azure-viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}><div className="viewer-head"><div><p>Selected AWS service</p><h2>{service.name}</h2><small className="azure-branch-context">{catalog[branchIndex].title}</small></div><div className="azure-viewer-actions"><button type="button" className="visual-toggle" onClick={() => setVisualVisible((value) => !value)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div></div>
+          <section className="azure-el10-section" aria-label={`${service.name} EL10 visual`}><div className="azure-el10-heading"><div><p>EL10 SERVICE VISUAL</p><span>Click the visual to open a full-screen study view.</span></div></div>{visualVisible && <button className="image-link" type="button" onClick={() => setExpanded(true)} aria-label={`Open ${service.name} EL10 full view`}><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} /></button>}</section>
+          <p className="viewer-note">Choose a branch or search globally to explore a service.</p><SharedServiceWalkthrough key={service.name} serviceName={service.name}/><AipServiceLearningDetailsV8 key={service.name} serviceName={service.name} summary={service.summary}/></article>
       </section>
-      <nav className="map-navigator" aria-label="Horizontal category navigation">
-        <button onClick={() => branchesRef.current?.scrollBy({ left: -420, behavior: "smooth" })} disabled={mapScroll <= 1} aria-label="Scroll categories left">←</button>
-        <input
-          type="range"
-          min="0"
-          max={Math.max(1, mapScrollMax)}
-          value={Math.min(mapScroll, Math.max(1, mapScrollMax))}
-          onChange={(event) => { const left = Number(event.target.value); branchesRef.current?.scrollTo({ left }); setMapScroll(left); }}
-          aria-label="Category horizontal position"
-          disabled={mapScrollMax === 0}
-        />
-        <button onClick={() => branchesRef.current?.scrollBy({ left: 420, behavior: "smooth" })} disabled={mapScroll >= mapScrollMax - 1} aria-label="Scroll categories right">→</button>
-      </nav>
-    </main>
-  );
+    </div>
+    {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} EL10 full view`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} alt={`${service.name} EL10 infographic full view`} onClick={(event) => event.stopPropagation()}/></div>}
+  </main>;
 }

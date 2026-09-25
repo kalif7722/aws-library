@@ -976,7 +976,7 @@ export const azureWalkthroughUrls=(service:string,courseCode?:string,category?:s
     ? [`/azure-certification-walkthroughs/${courseFolder}`,...(courseFolder==="az-104"?["/azure-certification-walkthroughs/az104-tasks"]:[]) ]
     : [];
   const commonBases=categoryFolder?[`/azure-certification-walkthroughs/common/${categoryFolder}`]:[];
-  const legacyBases=courseFolder?[]:["/azure-certification-walkthroughs"];
+  const legacyBases=["/azure-certification-walkthroughs/common", "/azure-certification-walkthroughs"];
   const bases=[...scopedBases,...commonBases,...legacyBases];
   return bases.flatMap(base=>filenames.map(filename=>{
     const path=base+"/"+filename;
