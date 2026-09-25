@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import AipServiceLearningDetailsV8 from "../components/AipServiceLearningDetailsV8";
-import SharedServiceWalkthrough from "../components/SharedServiceWalkthrough";
+import AthenaLearningDetails from "../components/AthenaLearningDetails";
+import AnalyticsLearningDetails, { analyticsDetailServices } from "../components/AnalyticsLearningDetails";
+import AipServiceLearningDetails, { hasAipLearningDetails } from "../components/AipServiceLearningDetails";
+import CrossCourseLearningDetails from "../components/CrossCourseLearningDetails";
 import "../components/AzureLibrary.css";
 import { assetUrl } from "../../lib/asset-url";
 
@@ -352,6 +354,22 @@ const branches = [
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const catalog = branches.map((branch) => ({ ...branch, items: [...new Set([...Array.from({ length: branch.end - branch.start }, (_, i) => branch.start + i), ...branch.copies])].map((index) => ({ ...services[index], index })).filter((item) => item.name) }));
+const learningCategory = (branch: string) => ({
+  "Management & Governance": "Management and Governance",
+  "Security, Identity & Compliance": "Security, Identity, and Compliance",
+  "Networking & Content Delivery": "Networking and Content Delivery",
+  "Migration & Transfer": "Migration and Transfer",
+  "Machine Learning & AI": "Machine Learning",
+  "Application Integration & Media": "Application Integration",
+  "Internet of Things": "Internet of Things",
+  "Cloud Financial Management": "Cloud Financial Management",
+}[branch] || branch);
+function SharedAwsServiceDetails({ name, category, summary }: { name: string; category: string; summary: string }) {
+  if (name === "Amazon Athena") return <AthenaLearningDetails />;
+  if (analyticsDetailServices.has(name)) return <AnalyticsLearningDetails serviceName={name} />;
+  if (hasAipLearningDetails(name)) return <AipServiceLearningDetails serviceName={name} summary={summary} />;
+  return <CrossCourseLearningDetails serviceName={name} category={category} summary={summary} />;
+}
 export default function ServicesLibrary() {
   const params = useSearchParams();
   const [selected, setSelected] = useState(0);
@@ -382,7 +400,7 @@ export default function ServicesLibrary() {
       <section className="azure-main-pane"><header className="azure-toolbar"><div className="service-search azure-search"><span>Search all AWS services</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search service or branch…" aria-label="Search AWS services and branches" />{results.length > 0 && <div className="search-results" role="listbox" aria-label="AWS search results">{results.map(({item,branch,index}) => <button type="button" key={`${branch}-${item.index}`} role="option" onClick={() => choose(item.index,index)}><span>{item.name}</span><small>{branch} · {item.summary}</small></button>)}</div>}</div><div className="progress"><strong>{new Set(services.map((item) => normalize(item.name))).size}</strong><span>unique services mapped</span></div></header>
         <article className="viewer azure-viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}><div className="viewer-head"><div><p>Selected AWS service</p><h2>{service.name}</h2><small className="azure-branch-context">{catalog[branchIndex].title}</small></div><div className="azure-viewer-actions"><button type="button" className="visual-toggle" onClick={() => setVisualVisible((value) => !value)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div></div>
           <section className="azure-el10-section" aria-label={`${service.name} EL10 visual`}><div className="azure-el10-heading"><div><p>EL10 SERVICE VISUAL</p><span>Click the visual to open a full-screen study view.</span></div></div>{visualVisible && <button className="image-link" type="button" onClick={() => setExpanded(true)} aria-label={`Open ${service.name} EL10 full view`}><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} /></button>}</section>
-          <p className="viewer-note">Choose a branch or search globally to explore a service.</p><SharedServiceWalkthrough key={service.name} serviceName={service.name}/><AipServiceLearningDetailsV8 key={service.name} serviceName={service.name} summary={service.summary}/></article>
+          <SharedAwsServiceDetails key={service.name} name={service.name} category={learningCategory(catalog[branchIndex].title)} summary={service.summary}/></article>
       </section>
     </div>
     {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} EL10 full view`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} alt={`${service.name} EL10 infographic full view`} onClick={(event) => event.stopPropagation()}/></div>}
