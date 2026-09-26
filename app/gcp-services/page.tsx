@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { gcpAssetReady, gcpAssetUrl, gcpCategories, gcpContent, gcpIcons, gcpServices, gcpSourceUrl, type GcpContent } from "../gcp-data";
 import "../components/GcpLibrary.css";
+import GcpSharedServiceSections from "../components/GcpSharedServiceSections";
 
 function StudyImage({ path, status, title }: { path: string; status?: string; title: string }) {
   const [failed, setFailed] = useState(false);
@@ -68,10 +69,11 @@ export default function GcpServicesPage() {
       </aside>
       {selected && <article className="gcp-main" key={selected.slug}><header className="gcp-service-heading"><p className="course-kicker">{selected.officialCategory}</p><div className="gcp-service-title">{gcpIcons[selected.slug]?.path && <img src={gcpIcons[selected.slug].path || ""} alt={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName + " icon"} title={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName} />}<h2>{selected.displayName}</h2></div>{details?.summary || selected.description ? <p>{details?.summary || selected.description}</p> : <p>Explore {selected.displayName} in the official Google Cloud documentation.</p>}{selected.documentationUrl && <a href={selected.documentationUrl} target="_blank" rel="noreferrer">Official documentation ↗</a>}</header>
         <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} />
-        {details ? <div className="gcp-content-grid">{sections.map(section => {
+        {details ? <GcpSharedServiceSections serviceName={selected.displayName} details={details} /> : <>
+          <div className="gcp-content-grid">{sections.map(section => {
           const items = details[section.key];
           return Array.isArray(items) && items.length > 0 && typeof items[0] === "string" ? <section className="gcp-content-card" key={section.key}><h3>{section.title}</h3><ul>{(items as string[]).map((item, index) => <li key={index}>{item}</li>)}</ul></section> : null;
-        })}</div> : <section className="gcp-content-card"><h3>Service guide in preparation</h3><p>This catalog entry is available for browsing. The complete service explanation, architecture, operations, and study walkthrough are still being prepared.</p></section>}
+        })}</div><section className="gcp-content-card"><h3>Service guide in preparation</h3><p>This catalog entry is available for browsing. The complete service explanation, architecture, operations, and study walkthrough are still being prepared.</p></section></>}
         <StudyImage path={selected.primaryWalkthroughPath} status={selected.primaryWalkthroughStatus} title={selected.displayName + " walkthrough"} />
         {gcpAssetReady(selected.companionWalkthroughStatus) && <StudyImage path={selected.companionWalkthroughPath} status={selected.companionWalkthroughStatus} title={selected.displayName + " companion walkthrough"} />}
         {details?.relatedServices?.length ? <section className="gcp-content-card"><h3>Related services</h3><div className="gcp-related">{details.relatedServices.map(relatedSlug => { const service = gcpServices.find(item => item.slug === relatedSlug); return service ? <a key={relatedSlug} href={"/gcp-services?service=" + service.slug}>{service.displayName}</a> : null; })}</div></section> : null}
