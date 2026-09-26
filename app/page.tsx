@@ -36,7 +36,7 @@ const providers = [
     ["ASSOCIATE · Security Operations Analyst (SC-200)", "/courses/azure-sc-200"],
     ["Browse all Azure services", "/azure-services"],
   ] },
-  { key: "gcp", name: "Google Cloud", short: "GCP", status: "Catalog available", tone: "provider-gcp", description: "Browse Google Cloud’s official service categories. Visual guides and walkthroughs are in preparation.", links: [["Browse all Google Cloud services", "/gcp-services"]] },
+  { key: "gcp", name: "Google Cloud", short: "GCP", status: "Foundation in progress", tone: "provider-gcp", description: "Compare Google Cloud with AWS and Azure, then study the GCP Professional Cloud Architect service map.", links: [["Compare AWS · Azure · GCP", "/gcp-comparison"], ["GCP Professional Cloud Architect", "/courses/gcp-professional-cloud-architect"], ["Browse all Google Cloud services", "/gcp-services"]] },
 ];
 const learningStats = [["225+", "visual service guides"], ["12", "AWS certification paths"], ["1", "shared visual viewer"]];
 export default function LearningHome() { return <main className="learning-shell">
