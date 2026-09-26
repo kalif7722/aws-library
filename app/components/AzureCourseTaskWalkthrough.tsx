@@ -38,6 +38,8 @@ type Task = {
   mode?: "concept" | "console";
   visualTitle?: string;
   visualSummary?: string;
+  taskId?: string;
+  objectives?: string[];
 };
 
 type DomainBucket = { meta: { name: string; weight: string }; scopes: AzureCourseScope[]; tasks: Task[] };
@@ -131,6 +133,39 @@ const makeServiceTask = (entry: AzureCourseService, category: AzureCourseScope):
   serviceName: entry.name,
 });
 
+const groupCourseCodes = new Set(["AI-901", "AI-103", "DP-900", "DP-300"]);
+const makeGroupTask = (domain: AzureExamDomain, group: AzureExamDomain["groups"][number], domainIndex: number, groupIndex: number): Task => ({
+  name: group.name,
+  slug: `task-${domainIndex + 1}-${groupIndex + 1}`,
+  taskId: `${domainIndex + 1}-${groupIndex + 1}`,
+  category: domain.name,
+  classification: "Official skill group",
+  ask: `Work through the assessed decisions in ${group.name.toLowerCase()} and explain how you would verify each outcome.`,
+  consolePath: `${domain.name} → ${group.name}`,
+  steps: group.tasks,
+  objectives: group.tasks,
+  verify: "Explain the requirement, choose the appropriate capability, and identify the evidence that confirms the result.",
+});
+
+function GroupWalkthroughImage({ courseCode, task, variant }: { courseCode: string; task: Task; variant: "primary" | "companion" }) {
+  const [available, setAvailable] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => { setAvailable(true); setExpanded(false); }, [courseCode, task.taskId, variant]);
+  useEffect(() => {
+    if (!expanded) return;
+    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [expanded]);
+  const filename = `${courseFolder(courseCode)}-task-${task.taskId}-${variant}.webp`;
+  const src = `${r2Base}/${courseFolder(courseCode)}-tasks/${filename}`;
+  return <div className="course-group-image"><b>{variant === "primary" ? "PRIMARY WALKTHROUGH" : "COMPANION WALKTHROUGH"}</b>
+    {available ? <button className="course-task-image-button" onClick={() => setExpanded(true)} aria-label={`Open ${task.name} ${variant} walkthrough`}><img src={src} alt={`${courseCode} task ${task.taskId} ${variant} walkthrough`} onError={() => setAvailable(false)} /><span>View {variant} walkthrough ↗</span></button>
+      : <div className="course-task-image-fallback"><strong>{variant} walkthrough pending</strong><span>Upload <code>{filename}</code> to azure-certification-walkthroughs/{courseFolder(courseCode)}-tasks/.</span></div>}
+    {expanded && <div className="course-task-image-modal" role="dialog" aria-modal="true" onClick={() => setExpanded(false)}><button onClick={() => setExpanded(false)} aria-label="Close walkthrough">Close ×</button><img src={src} alt={`${task.name} ${variant} full view`} onClick={(event) => event.stopPropagation()} /></div>}
+  </div>;
+}
+
 const imageCandidates = (courseCode: string, task: Task) => {
   const filename = task.assetSlug || taskFilenameAliases[task.name] || task.slug;
   const folder = courseFolder(courseCode);
@@ -167,8 +202,11 @@ export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCo
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const official = azureOfficialExamDomains[course.code];
+  const groupCourse = groupCourseCodes.has(course.code);
   const domainBuckets = useMemo<DomainBucket[]>(() => official
-    ? official.map((domain) => ({ meta: domain, scopes: [], tasks: domain.groups.flatMap((group) => group.tasks.map((task) => course.code === "SC-900" ? makeSc900ObjectiveTask(task, group.name, domain) : makeObjectiveTask(task, group.name, domain))) }))
+    ? official.map((domain, domainIndex) => ({ meta: domain, scopes: [], tasks: groupCourse
+      ? domain.groups.map((group, groupIndex) => makeGroupTask(domain, group, domainIndex, groupIndex))
+      : domain.groups.flatMap((group) => group.tasks.map((task) => course.code === "SC-900" ? makeSc900ObjectiveTask(task, group.name, domain) : makeObjectiveTask(task, group.name, domain))) }))
     : scopes.map((scope) => ({ meta: { name: scope.title, weight: "Exam scope" }, scopes: [scope], tasks: scope.services.map((entry) => makeServiceTask(entry, scope)) })), [course.code, official, scopes]);
   const activeBucket = domainBuckets[domainIndex] || domainBuckets[0];
   const activeMeta = activeBucket?.meta || { name: "Exam domain", weight: "Exam scope" };
@@ -177,5 +215,10 @@ export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCo
   useEffect(() => setTaskIndex(0), [domainIndex]);
   if (!activeBucket || !activeTask) return null;
   const totalObjectives = domainBuckets.reduce((total, bucket) => total + bucket.tasks.length, 0);
+  const relatedServices = groupCourse && activeTask ? scopes.flatMap((scope) => scope.services).filter((service) => {
+    const token = service.name.toLowerCase().replace(/^(azure|microsoft) /, "").replace(/\s*\([^)]*\)/g, "");
+    return token.length > 4 && `${activeTask.name} ${activeTask.objectives?.join(" ") || ""}`.toLowerCase().includes(token);
+  }).slice(0, 6) : [];
+  if (groupCourse) return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>MICROSOFT STUDY GUIDE · {course.code}</p><h2>Exam domains and skill walkthroughs</h2><span>Select a weighted domain and skill group. Each group pairs a primary walkthrough with a companion and lists every assessed objective from the supplied study guide.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>skill groups</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} skill groups</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} skill groups`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{task.taskId}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{course.code} · TASK {activeTask.taskId} · {activeMeta.weight}</p><h3>{activeTask.name}</h3><span>{activeMeta.name}</span></div></header><div className="course-task-ask"><b>WHAT THIS SKILL ASKS</b><span>{activeTask.ask}</span></div><div className="course-group-images"><GroupWalkthroughImage courseCode={course.code} task={activeTask} variant="primary" /><GroupWalkthroughImage courseCode={course.code} task={activeTask} variant="companion" /></div><div className="course-task-instructions course-group-objectives"><p className="course-task-label">OFFICIAL OBJECTIVES</p><ol>{activeTask.objectives?.map((objective) => <li key={objective}>{objective}</li>)}</ol><div className="course-task-verify"><b>EXAM CHECK</b><span>{activeTask.verify}</span></div></div>{relatedServices.length > 0 && <div className="course-group-services"><strong>Related services in this course</strong><div>{relatedServices.map((service) => <a key={service.name} href={`/courses/azure-${courseFolder(course.code)}?service=${encodeURIComponent(service.name)}#curriculum`}>{service.name} ↗</a>)}</div></div>}</article></div></section>;
   return <section className="course-task-guide" id="console-walkthroughs"><div className="course-task-guide-head"><div><p>{course.code === "SC-900" ? "EXAM OBJECTIVE PRACTICE · SC-900" : `CONSOLE PRACTICE LAB · ${course.code}`}</p><h2>Follow every official exam objective</h2><span>Choose a weighted domain, then select the exact Microsoft objective to study its ask, practice path, visual treatment, steps, and verification.</span></div><div className="course-task-guide-badge"><strong>{domainBuckets.length}</strong><span>exam domains</span><strong>{totalObjectives}</strong><span>official objectives</span></div></div><div className="course-domain-tabs" role="tablist" aria-label={`${course.code} exam domains`}>{domainBuckets.map((bucket, index) => <button key={`${bucket.meta.name}-${index}`} className={index === domainIndex ? "is-selected" : ""} onClick={() => setDomainIndex(index)} role="tab" aria-selected={index === domainIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{bucket.meta.name}</span><small>{bucket.meta.weight}</small><em>{bucket.tasks.length} objectives</em></button>)}</div><div className="course-task-panel"><div className="course-task-tabs" role="tablist" aria-label={`${activeMeta.name} objectives`}>{tasks.map((task, index) => <button key={task.slug} className={index === taskIndex ? "is-selected" : ""} onClick={() => setTaskIndex(index)} role="tab" aria-selected={index === taskIndex}><b>{String(index + 1).padStart(2, "0")}</b><span>{task.name}</span></button>)}</div><article className="course-task-selected"><header><div><p>{activeMeta.name} · {activeMeta.weight} · {activeTask.classification}</p><h3>{activeTask.name}</h3><span>{activeTask.consolePath}</span></div>{activeTask.serviceName && <a href={`/azure-services?service=${encodeURIComponent(slugify(activeTask.serviceName))}`}>Open service page ↗</a>}</header><div className="course-task-ask"><b>WHAT THIS OBJECTIVE ASKS</b><span>{activeTask.ask}</span></div><div className="course-task-selected-grid"><div><p className="course-task-label">{activeTask.mode === "concept" ? "VISUAL EXPLAINER" : "CONSOLE WALKTHROUGH"}</p><ObjectiveVisual courseCode={course.code} task={activeTask} /></div><div className="course-task-instructions"><p className="course-task-label">FOLLOW THESE ACTIONS</p><ol>{activeTask.steps.map((step) => <li key={step}>{step}</li>)}</ol><div className="course-task-verify"><b>VERIFY</b><span>{activeTask.verify}</span></div></div></div></article></div></section>;
 }

@@ -1,6 +1,9 @@
+import { azureNewExamDomains } from "./azure-new-exam-objectives";
+
 export type AzureExamDomain = { name: string; weight: string; groups: Array<{ name: string; tasks: string[] }> };
 
 export const azureOfficialExamDomains: Record<string, AzureExamDomain[]> = {
+  ...azureNewExamDomains,
   "SC-200": [
     {
       "name": "Manage a security operations environment",

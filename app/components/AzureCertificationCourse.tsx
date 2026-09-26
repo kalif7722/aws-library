@@ -38,6 +38,10 @@ export default function AzureCertificationCourse({ course }: Props) {
   const allServices = useMemo(() => course.scope.flatMap((category) => category.services), [course.scope]);
   const firstMapped = allServices.map((service) => findAzureService(service.name)).find(Boolean);
   const [selectedName, setSelectedName] = useState(firstMapped?.name || "");
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("service");
+    if (requested && allServices.some((service) => service.name === requested)) setSelectedName(requested);
+  }, [allServices]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [allOpen, setAllOpen] = useState(false);
   const [visualVisible, setVisualVisible] = useState(true);
