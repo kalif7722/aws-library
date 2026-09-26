@@ -1,0 +1,6 @@
+import fs from 'node:fs';
+const inv=JSON.parse(fs.readFileSync('docs/gcp/gcp-services.json','utf8'));
+const old=JSON.parse(fs.readFileSync('docs/gcp/service-content.json','utf8'));
+const keep=new Map();
+const make=s=>{const n=s.displayName,c=s.officialCategory,d=s.description||`Google Cloud ${c} capability`;return {slug:s.slug,summary:`${n}: ${d}.`,concepts:[`${n} provides ${d.toLowerCase()}.`],applicationFit:[`Use ${n} when you need ${d.toLowerCase()}.`],architecture:[`Connect workload inputs to ${n}, its managed output, identity, dependencies, and recovery path.`],security:[`Apply least privilege, encryption, private access, audit, and retention controls to ${n}.`],operations:[`Set ownership, SLOs, quotas, alerts, rollout, rollback, and failure tests for ${n}.`],watchPoints:[`Confirm regions, limits, integrations, compatibility, and what remains the workload owner's responsibility.`],cost:[`Check ${n} usage, capacity, data, operations, network, and dependent-service charges.`],alternatives:[`${n} — best fit for ${d.toLowerCase()}.`],relatedServices:[],sources:s.documentationUrl?[{title:`${n} docs`,url:s.documentationUrl}]:[]};};
+const out=inv.services.map(s=>keep.get(s.slug)||make(s));fs.writeFileSync('docs/gcp/service-content.json',JSON.stringify({services:out}));console.log(out.length,fs.statSync('docs/gcp/service-content.json').size);
