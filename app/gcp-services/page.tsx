@@ -35,10 +35,11 @@ const sections: { key: keyof GcpContent; title: string }[] = [
 export default function GcpServicesPage() {
   const params = useSearchParams();
   const requested = params.get("service");
-  const [slug, setSlug] = useState(gcpServices[0]?.slug || "");
+  const defaultService = gcpServices.find(service => service.slug === "compute-engine") || gcpServices.find(service => gcpContent[service.slug]) || gcpServices[0];
+  const [slug, setSlug] = useState(defaultService?.slug || "");
   const [query, setQuery] = useState("");
   const [railCollapsed, setRailCollapsed] = useState(false);
-  const [opened, setOpened] = useState<string[]>([gcpServices[0]?.categorySlug || ""]);
+  const [opened, setOpened] = useState<string[]>([defaultService?.categorySlug || ""]);
   useEffect(() => {
     const match = gcpServices.find(service => service.slug === requested);
     if (match) { setSlug(match.slug); setOpened(current => [...new Set([...current, match.categorySlug])]); }
