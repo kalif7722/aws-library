@@ -53,6 +53,17 @@ const localAsset = (assetPath, where) => {
   if (!fs.existsSync(file) || !fs.statSync(file).isFile() || !fs.statSync(file).size) fail(where, `Claimed ready asset missing or empty: public${assetPath}`);
   return file;
 };
+const webpDimensions = file => {
+  const b = fs.readFileSync(file);
+  if (b.length < 30 || b.toString('ascii', 0, 4) !== 'RIFF' || b.toString('ascii', 8, 12) !== 'WEBP') return null;
+  const kind = b.toString('ascii', 12, 16);
+  if (kind === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (kind === 'VP8 ' && b[23] === 0x9d && b[24] === 0x01 && b[25] === 0x2a)
+    return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+  if (kind === 'VP8L' && b[20] === 0x2f)
+    return [1 + (((b[22] & 0x3f) << 8) | b[21]), 1 + (((b[24] & 0x0f) << 10) | (b[23] << 2) | (b[22] >> 6))];
+  return null;
+};
 const statusCounts = {};
 for (const s of services) {
   const where = s.slug || '<missing slug>';
@@ -73,7 +84,15 @@ for (const s of services) {
     ['companionWalkthrough', `${s.slug}-companion.webp`, `/gcp-service-walkthroughs/${s.slug}-companion.webp`],
   ]) {
     if (s[`${prefix}Filename`] !== filename || s[`${prefix}Path`] !== assetPath) fail(where, `${prefix} filename/path mismatch`);
-    if (ready(s[`${prefix}Status`])) localAsset(s[`${prefix}Path`], `${where}.${prefix}`);
+    if (ready(s[`${prefix}Status`])) {
+      const file = localAsset(s[`${prefix}Path`], `${where}.${prefix}`);
+      if (file) {
+        const dims = webpDimensions(file);
+        if (!dims) fail(`${where}.${prefix}`, 'Ready visual must be a valid WebP image');
+        else if (dims[0] < 2048 || dims[1] < 1152 || dims[0] * 9 !== dims[1] * 16)
+          fail(`${where}.${prefix}`, `Ready visual below 2048×1152 16:9 gate: ${dims.join('×')}`);
+      }
+    }
   }
   for (const field of ['iconStatus', 'el10Status', 'primaryWalkthroughStatus', 'companionWalkthroughStatus', 'servicePageStatus', 'mappingStatus', 'routeStatus', 'qaStatus']) {
     if (typeof s[field] !== 'string' || !s[field].trim()) fail(where, `Missing ${field}`);
