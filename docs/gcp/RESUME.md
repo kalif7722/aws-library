@@ -1,6 +1,6 @@
 # GCP pipeline checkpoint — 2026-09-26
 
-Status: PARTIAL. Parallel workers reported a platform usage limit during content/QA/selection work. No claim of full completion or deployment.
+Status: PARTIAL. GitHub draft PR #1 now contains the canonical foundation. No claim of full completion or deployment.
 
 ## Canonical inputs
 - gcp-services.json: 177 products / 14 main-article categories, official catalog snapshot and observed documentation URLs.
@@ -13,8 +13,8 @@ Status: PARTIAL. Parallel workers reported a platform usage limit during content
 ## Implementation
 Home entry and /gcp-services; searchable persistent category rail, expand/collapse, aliases, deep links, local explicit asset paths, fullscreen dialog and related-service links. app/gcp-data.ts derives data from canonical JSON. Missing visual states are honest. No AWS/Azure shared component modifications.
 
-## Image calibration
-Built-in imagegen used with X-Ray style reference. Two Compute Engine variants retained under calibration/. Both native 1672×941 despite requested >=2048×1152. V1 rejected for invented machine labels and disk-lifecycle inaccuracies. V2 corrects requested textual issues but full diagram QA remains pending (health-check arrows need checking). Neither is a production WebP or mapped asset. Do not silently upscale and call it native generation. No walkthrough images generated.
+## Image calibration and first production EL10
+Built-in imagegen used with X-Ray style reference. Two 1672×941 Compute Engine calibration variants retained under calibration/; neither was presented as a production native 2048×1152 image. The first production Compute Engine EL10 is generated directly at 2048×1152 with a vector-like diagram renderer (scripts/render-gcp-compute-el10.py), uses the official product icon, and has 18 reviewed panels. It is saved and mapped at public/gcp/compute/gcp-compute-engine.webp. Remaining 176 EL10 visuals and all walkthroughs are pending.
 
 ## Verification
 Production build passes. Catalog structural validator passes. HTTP render smoke checks return 200 for /, /gcp-services, its Compute Engine query, /services, and /azure-services. Browser interaction and mobile visual QA are still pending. Existing test suite has two failures (preview meta and animation utilities); Both failures reproduced on untouched baseline e07d538; three other tests pass on both revisions. TypeScript check found pre-existing errors in other course components; full clean typecheck not claimed.
@@ -22,8 +22,8 @@ Production build passes. Catalog structural validator passes. HTTP render smoke 
 ## Next work
 1. Review official sources for the ten draft guides and finish missing technical depth; update service status only after validation.
 2. Finish walkthrough applicability decisions and lifecycle/alias review, especially renamed products and source 404.
-3. Resolve native resolution / calibration visual correctness. Keep images below gate out of mappings.
-4. Continue EL10 generation using canonical filenames; map only validated assets.
+3. Continue native-resolution EL10 production for remaining services using canonical filenames, service-specific architecture, and visual review before mapping.
+4. Generate the first service walkthrough with authentic console evidence where feasible; do not label illustrations as screenshots.
 5. Fill remaining 167 guides and required primary/companion walkthroughs.
 6. Complete official icon gaps, related-service relationships, interactive QA, asset uploads, route checks, and deployment validation.
 
