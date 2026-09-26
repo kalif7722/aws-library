@@ -1,0 +1,634 @@
+{
+  "services": [
+    {
+      "slug": "compute-engine",
+      "summary": "Configurable virtual machines for workloads that need operating-system control, specific machine resources, or migration without a container rewrite.",
+      "concepts": [
+        "A VM combines a machine type, boot image, disks, network interfaces, and identity.",
+        "Machine families target general-purpose, memory, compute, storage, network, or accelerator workloads.",
+        "Managed instance groups use templates to operate a repeatable fleet."
+      ],
+      "applicationFit": [
+        "Run existing Linux or Windows applications with OS dependencies.",
+        "Build horizontally scaled web servers using regional managed instance groups.",
+        "Execute batch or specialist compute workloads on suitable machine families."
+      ],
+      "architecture": [
+        "1. Build an instance template containing the application image and runtime configuration.",
+        "2. Create a regional managed instance group across zones and configure health checks.",
+        "3. Send client traffic through a load balancer to healthy instances.",
+        "4. Store durable application data outside replaceable VM boot disks."
+      ],
+      "security": [
+        "Attach a dedicated service account with only required resource access.",
+        "Restrict inbound ports using VPC firewall rules and private administration paths.",
+        "Patch guest operating systems and avoid embedding credentials in images."
+      ],
+      "operations": [
+        "Use separate health checks for traffic readiness and autohealing decisions.",
+        "Set autoscaling signals and capacity limits against measured application demand.",
+        "Roll out template revisions gradually and retain a rollback version."
+      ],
+      "watchPoints": [
+        "A single zonal VM does not provide application high availability.",
+        "Local SSD is ephemeral; choose durable block storage for persistent data.",
+        "Autoscaling cannot repair application state stored only on one instance."
+      ],
+      "cost": [
+        "Machine size and runtime are central compute cost drivers.",
+        "Include disks, snapshots, premium OS licenses, and network transfer in estimates.",
+        "Use interruptible capacity only for workloads designed to recover interruptions."
+      ],
+      "alternatives": [
+        "Cloud Run suits containerized request processing with less infrastructure management.",
+        "GKE provides Kubernetes orchestration when cluster APIs are required.",
+        "Cloud SQL reduces administration for supported relational database engines."
+      ],
+      "sources": [
+        {
+          "title": "Compute Engine overview",
+          "url": "https://docs.cloud.google.com/compute/docs/overview"
+        },
+        {
+          "title": "Instance groups",
+          "url": "https://docs.cloud.google.com/compute/docs/instance-groups"
+        }
+      ],
+      "relatedServices": [
+        "virtual-private-cloud",
+        "cloud-storage",
+        "cloud-sql",
+        "cloud-run"
+      ]
+    },
+    {
+      "slug": "cloud-run",
+      "summary": "Managed application execution for containers and source deployments, with services for requests and jobs for work that runs to completion.",
+      "concepts": [
+        "A service exposes an endpoint and creates immutable revisions when configuration changes.",
+        "A job runs tasks to completion rather than serving an HTTP endpoint.",
+        "Service concurrency controls how many requests an instance can handle simultaneously."
+      ],
+      "applicationFit": [
+        "Publish APIs and web applications without maintaining VM operating systems.",
+        "Process events delivered through supported triggers or authenticated push requests.",
+        "Run scheduled exports and bounded batch tasks as jobs."
+      ],
+      "architecture": [
+        "1. Build an application image and publish it to a supported registry.",
+        "2. Deploy a revision with a runtime service account and resource limits.",
+        "3. Route authenticated requests to the service; instances handle concurrent work.",
+        "4. Persist results in a database or object storage, then return the response."
+      ],
+      "security": [
+        "Separate deployment permissions from the runtime service identity.",
+        "Require authenticated invocation unless public access is intentional.",
+        "Read secrets through Secret Manager integrations instead of image layers."
+      ],
+      "operations": [
+        "Measure startup latency, request errors, and instance resource saturation.",
+        "Tune concurrency and instance limits together with database connection pools.",
+        "Use revision traffic controls to validate a release and roll back."
+      ],
+      "watchPoints": [
+        "Do not treat the container filesystem as durable application storage.",
+        "Request-based CPU allocation affects background work after the response.",
+        "Autoscaling can overload downstream services unless connections and capacity are bounded."
+      ],
+      "cost": [
+        "Billing mode, CPU, memory, and active runtime affect application cost.",
+        "Minimum instances trade idle cost for reduced startup delay.",
+        "Include image builds, registry storage, and network transfer in estimates."
+      ],
+      "alternatives": [
+        "Compute Engine gives direct OS and machine configuration control.",
+        "GKE fits applications that require Kubernetes primitives and cluster customization.",
+        "Pub/Sub buffers asynchronous work before an independently scaling consumer."
+      ],
+      "sources": [
+        {
+          "title": "What is Cloud Run",
+          "url": "https://docs.cloud.google.com/run/docs/overview/what-is-cloud-run"
+        },
+        {
+          "title": "General development tips",
+          "url": "https://docs.cloud.google.com/run/docs/tips/general"
+        },
+        {
+          "title": "Billing settings",
+          "url": "https://docs.cloud.google.com/run/docs/configuring/billing-settings"
+        }
+      ],
+      "relatedServices": [
+        "compute-engine",
+        "cloud-sql",
+        "pub-sub",
+        "secret-manager"
+      ]
+    },
+    {
+      "slug": "google-kubernetes-engine",
+      "summary": "Managed Kubernetes for deploying container workloads with Kubernetes APIs, scheduling, networking, and workload lifecycle controls.",
+      "concepts": [
+        "Clusters contain a managed control plane and compute capacity for Pods.",
+        "Deployments manage replaceable replicas; Services provide stable workload discovery.",
+        "Autopilot manages more infrastructure decisions; Standard exposes additional node control."
+      ],
+      "applicationFit": [
+        "Operate applications built around Kubernetes manifests and controllers.",
+        "Run multiple container services with explicit resource and scheduling requirements.",
+        "Support teams needing a shared Kubernetes platform and workload isolation."
+      ],
+      "architecture": [
+        "1. Publish container images and apply Kubernetes workload manifests.",
+        "2. The scheduler places Pods on eligible compute capacity.",
+        "3. A Service and ingress or Gateway configuration direct client traffic to Pods.",
+        "4. Workloads use dedicated identities to access storage and managed databases."
+      ],
+      "security": [
+        "Use Workload Identity Federation for GKE instead of distributing service account keys.",
+        "Combine Kubernetes RBAC with Google Cloud IAM for their respective control surfaces.",
+        "Constrain workload privileges and network communication between application components."
+      ],
+      "operations": [
+        "Configure readiness, liveness, and startup probes for distinct failure conditions.",
+        "Set realistic resource requests before tuning workload and infrastructure autoscaling.",
+        "Plan upgrades and disruption budgets around application availability needs."
+      ],
+      "watchPoints": [
+        "A running Pod is not proof that the application is ready for requests.",
+        "Autopilot enforces constraints that can affect privileged or host-dependent workloads.",
+        "Persistent volumes do not remove the need for application-consistent recovery planning."
+      ],
+      "cost": [
+        "Resource requests and compute selection materially influence capacity cost.",
+        "Account for load balancers, persistent storage, and network traffic separately.",
+        "Match the operating mode to required control and operational effort."
+      ],
+      "alternatives": [
+        "Cloud Run is simpler for independently deployed request-driven containers.",
+        "Compute Engine fits workloads needing direct guest OS administration.",
+        "Cloud SQL can replace databases otherwise operated inside Kubernetes."
+      ],
+      "sources": [
+        {
+          "title": "GKE overview",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/kubernetes-engine-overview"
+        },
+        {
+          "title": "Autopilot overview",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview"
+        }
+      ],
+      "relatedServices": [
+        "cloud-run",
+        "compute-engine",
+        "virtual-private-cloud",
+        "cloud-sql"
+      ]
+    },
+    {
+      "slug": "cloud-storage",
+      "summary": "Object storage for files, datasets, backups, and application assets, organized in buckets rather than attached VM block devices.",
+      "concepts": [
+        "Buckets define storage location and shared configuration; objects contain data and metadata.",
+        "Storage classes reflect access patterns and influence storage and retrieval economics.",
+        "Object lifecycle rules automate actions such as transitions or deletion."
+      ],
+      "applicationFit": [
+        "Store media and static assets that applications retrieve by object name.",
+        "Stage files for analytics ingestion and data processing pipelines.",
+        "Keep backup artifacts with a deliberately chosen recovery and retention policy."
+      ],
+      "architecture": [
+        "1. An authorized producer uploads an object to a selected bucket.",
+        "2. Bucket policies determine access, location, and data protection behavior.",
+        "3. Consumers read objects directly or a processing workflow reacts to arrivals.",
+        "4. Lifecycle rules manage older objects according to retention requirements."
+      ],
+      "security": [
+        "Prefer uniform bucket-level access for consistent IAM-based authorization.",
+        "Use public access prevention for buckets that must remain private.",
+        "Grant producers and readers separate permissions; protect sensitive object names too."
+      ],
+      "operations": [
+        "Choose bucket location near processing systems and intended users.",
+        "Use retry-capable clients and resumable uploads for large transfers.",
+        "Test recovery behavior before relying on retention or deletion protection."
+      ],
+      "watchPoints": [
+        "Object storage does not behave like a general-purpose POSIX filesystem.",
+        "Retention locks can restrict later deletion; assess them before enabling.",
+        "A low storage rate alone does not imply low cost for frequently read archives."
+      ],
+      "cost": [
+        "Estimate storage volume, operations, retrieval, and network transfer together.",
+        "Compare storage classes against measured access frequency and retention duration.",
+        "Lifecycle policies require review to avoid premature deletion or retrieval surprises."
+      ],
+      "alternatives": [
+        "VM block disks suit directly attached filesystem and database storage.",
+        "Filestore serves workloads requiring managed file sharing semantics.",
+        "BigQuery is a query engine for analytical data, not a bucket replacement."
+      ],
+      "sources": [
+        {
+          "title": "Cloud Storage overview",
+          "url": "https://docs.cloud.google.com/storage/docs/introduction"
+        },
+        {
+          "title": "Best practices",
+          "url": "https://docs.cloud.google.com/storage/docs/best-practices"
+        },
+        {
+          "title": "Storage pricing dimensions",
+          "url": "https://cloud.google.com/storage/pricing"
+        }
+      ],
+      "relatedServices": [
+        "bigquery",
+        "compute-engine",
+        "cloud-run",
+        "identity-and-access-management"
+      ]
+    },
+    {
+      "slug": "virtual-private-cloud",
+      "summary": "A global virtual network that connects Google Cloud resources through regional subnets, routes, and traffic controls.",
+      "concepts": [
+        "VPC networks are global; subnets belong to regions and supply address ranges.",
+        "Routes determine packet destinations; firewall rules determine permitted traffic.",
+        "Shared VPC lets service projects consume centrally administered networking."
+      ],
+      "applicationFit": [
+        "Segment application tiers and control communication between workloads.",
+        "Connect private workloads across regions within a planned address space.",
+        "Provide a common networking foundation for VMs, GKE, and hybrid connectivity."
+      ],
+      "architecture": [
+        "1. Allocate non-overlapping regional subnet ranges in a custom-mode VPC.",
+        "2. Attach workloads to the appropriate subnet and identity-based controls.",
+        "3. Routes select the destination path; firewall policy evaluates applicable traffic.",
+        "4. Add the required private API, internet egress, or hybrid connectivity path."
+      ],
+      "security": [
+        "Allow only required ports and sources instead of broad administrative ingress.",
+        "Evaluate hierarchical policies as well as individual VPC firewall rules.",
+        "Use firewall logging selectively to investigate denied or unexpected flows."
+      ],
+      "operations": [
+        "Document address allocation before adding peering or hybrid connections.",
+        "Validate routes, firewall rules, DNS, and application listeners when debugging.",
+        "Review effective firewall priorities after centralized policy changes."
+      ],
+      "watchPoints": [
+        "A global VPC does not make a subnet global.",
+        "Connectivity and authorization are separate: reachable services still require IAM.",
+        "Peering is not a general transitive routing fabric between all attached networks."
+      ],
+      "cost": [
+        "Include inter-region and external data transfer in architecture estimates.",
+        "Load balancing, NAT, VPN, and dedicated connectivity have their own cost models.",
+        "Logging volume can add operating cost; sample and retain deliberately."
+      ],
+      "alternatives": [
+        "Cloud VPN supplies encrypted hybrid connectivity over internet paths.",
+        "Cloud Interconnect provides dedicated or partner-based hybrid connectivity.",
+        "Private Service Connect exposes supported services through private endpoints."
+      ],
+      "sources": [
+        {
+          "title": "VPC networks",
+          "url": "https://docs.cloud.google.com/vpc/docs/vpc"
+        },
+        {
+          "title": "VPC firewall rules",
+          "url": "https://docs.cloud.google.com/firewall/docs/firewalls"
+        }
+      ],
+      "relatedServices": [
+        "compute-engine",
+        "google-kubernetes-engine",
+        "cloud-sql",
+        "cloud-run"
+      ]
+    },
+    {
+      "slug": "cloud-sql",
+      "summary": "Managed MySQL, PostgreSQL, and SQL Server databases for relational applications, with configurable backup, availability, and connectivity options.",
+      "concepts": [
+        "An instance runs a supported database engine and contains databases and users.",
+        "Regional high availability uses primary and standby resources in different zones.",
+        "Read replicas and HA standbys serve different purposes and are not interchangeable."
+      ],
+      "applicationFit": [
+        "Migrate supported relational applications while retaining familiar SQL engines.",
+        "Store transactions for web applications needing relational constraints.",
+        "Reduce infrastructure maintenance compared with a self-managed database VM."
+      ],
+      "architecture": [
+        "1. The application establishes a permitted network path and authenticated connection.",
+        "2. A connection pool submits transactions to the primary database.",
+        "3. In an HA configuration, writes are synchronously replicated across zones.",
+        "4. After failover, the application reconnects and safely retries eligible operations."
+      ],
+      "security": [
+        "Plan private connectivity and use supported connectors where appropriate.",
+        "Separate instance administration from database-level user permissions.",
+        "Restrict database accounts and manage application credentials outside source code."
+      ],
+      "operations": [
+        "Schedule maintenance and test application reconnect behavior.",
+        "Monitor connection counts, CPU, storage growth, and slow queries.",
+        "Exercise restore and failover procedures instead of assuming backups are sufficient."
+      ],
+      "watchPoints": [
+        "High availability protects against some infrastructure failures, not accidental SQL deletion.",
+        "Failover interrupts connections; applications need retry-aware transaction handling.",
+        "Cross-region disaster recovery requires explicit design beyond regional HA."
+      ],
+      "cost": [
+        "CPU, memory, provisioned storage, region, and transfer affect cost.",
+        "HA and replicas add resources beyond a single-instance configuration.",
+        "Optimize queries and connection pools before simply increasing machine size."
+      ],
+      "alternatives": [
+        "Compute Engine offers greater engine and OS control with more administration.",
+        "BigQuery targets analytical queries rather than transactional request handling.",
+        "Spanner is an alternative when distributed relational scaling is a core requirement."
+      ],
+      "sources": [
+        {
+          "title": "Cloud SQL overview",
+          "url": "https://docs.cloud.google.com/sql/docs/introduction"
+        },
+        {
+          "title": "PostgreSQL high availability",
+          "url": "https://docs.cloud.google.com/sql/docs/postgres/high-availability"
+        }
+      ],
+      "relatedServices": [
+        "cloud-run",
+        "compute-engine",
+        "virtual-private-cloud",
+        "secret-manager"
+      ]
+    },
+    {
+      "slug": "bigquery",
+      "summary": "A managed analytics platform for querying large datasets with SQL while separating analytical compute from data storage.",
+      "concepts": [
+        "Datasets organize tables and views with location and access configuration.",
+        "Query jobs execute SQL using available processing capacity.",
+        "Partitioning and clustering can reduce the data a query needs to read."
+      ],
+      "applicationFit": [
+        "Analyze event history, business metrics, and aggregated operational datasets.",
+        "Build warehouse transformations and reporting tables from multiple sources.",
+        "Explore large datasets without managing database server fleets."
+      ],
+      "architecture": [
+        "1. Load batch files or ingest streaming records into analytical tables.",
+        "2. Transform raw data into curated tables with deliberate partition keys.",
+        "3. Analysts or applications submit SQL query jobs with authorized identities.",
+        "4. Results feed dashboards, exports, or further analytical processing."
+      ],
+      "security": [
+        "Grant job execution separately from permission to read underlying datasets.",
+        "Use dataset and table access controls appropriate to consumer roles.",
+        "Apply row or column restrictions where sensitive data requires narrower access."
+      ],
+      "operations": [
+        "Inspect query plans and job history to identify expensive processing.",
+        "Use dry runs to estimate scanned bytes before running eligible queries.",
+        "Define table expiration and partition requirements for managed retention."
+      ],
+      "watchPoints": [
+        "LIMIT does not generally reduce bytes scanned in a non-clustered table.",
+        "SELECT * can read unnecessary columns and increase work.",
+        "Analytical SQL workloads differ from low-latency transactional database access."
+      ],
+      "cost": [
+        "Compare on-demand processing with capacity-based pricing for the workload.",
+        "Use maximum bytes billed to reject queries above a chosen on-demand limit.",
+        "Partition filters, selected columns, and reuse of results can reduce processing."
+      ],
+      "alternatives": [
+        "Cloud SQL fits transactional applications with relational updates.",
+        "Cloud Storage is an economical object landing area before warehouse ingestion.",
+        "Pub/Sub transports events but does not replace an analytical warehouse."
+      ],
+      "sources": [
+        {
+          "title": "BigQuery overview",
+          "url": "https://docs.cloud.google.com/bigquery/docs/introduction"
+        },
+        {
+          "title": "Estimate and control costs",
+          "url": "https://docs.cloud.google.com/bigquery/docs/best-practices-costs"
+        }
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "pub-sub",
+        "cloud-sql",
+        "identity-and-access-management"
+      ]
+    },
+    {
+      "slug": "identity-and-access-management",
+      "summary": "Identity and Access Management determines which principals can perform which actions on Google Cloud resources.",
+      "concepts": [
+        "A principal is an identity; a permission authorizes an operation.",
+        "Roles bundle permissions, and policy bindings associate roles with principals.",
+        "Resource hierarchy inheritance can grant access from organization, folder, or project policies."
+      ],
+      "applicationFit": [
+        "Give teams narrowly scoped access to project resources.",
+        "Assign application identities permissions to call specific APIs.",
+        "Separate deployment, runtime, security review, and billing responsibilities."
+      ],
+      "architecture": [
+        "1. A user or workload obtains credentials identifying its principal.",
+        "2. It requests an operation against a Google Cloud resource.",
+        "3. IAM evaluates applicable policies and conditions for that operation.",
+        "4. The service permits or rejects the request and applicable audit records capture activity."
+      ],
+      "security": [
+        "Prefer predefined roles over broad basic roles where suitable.",
+        "Use attached workload identities or federation instead of long-lived downloaded keys.",
+        "Restrict service account impersonation because it grants access as that identity."
+      ],
+      "operations": [
+        "Review inherited grants before adding a project-level role.",
+        "Remove unused permissions and identities after validating workload dependencies.",
+        "Investigate authorization failures using the resource, principal, and exact permission."
+      ],
+      "watchPoints": [
+        "Removing one binding does not remove access granted through another path.",
+        "Possessing a service account key enables acting as that service account.",
+        "Authentication identifies the caller; it does not itself grant resource access."
+      ],
+      "cost": [
+        "IAM design reduces the need to distribute and rotate application key files.",
+        "Avoid unnecessary custom-role complexity when predefined roles fit.",
+        "Include audit-log handling and identity operations in the platform operating plan."
+      ],
+      "alternatives": [
+        "Organization Policy constrains resource configuration rather than granting access.",
+        "VPC firewall rules control network traffic rather than API authorization.",
+        "Secret Manager stores secret material; IAM controls who may retrieve it."
+      ],
+      "sources": [
+        {
+          "title": "IAM overview",
+          "url": "https://docs.cloud.google.com/iam/docs/overview"
+        },
+        {
+          "title": "Service account key best practices",
+          "url": "https://docs.cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys"
+        }
+      ],
+      "relatedServices": [
+        "secret-manager",
+        "cloud-storage",
+        "compute-engine",
+        "bigquery"
+      ]
+    },
+    {
+      "slug": "pub-sub",
+      "summary": "Asynchronous messaging that decouples event producers from consumers through topics and independent subscriptions.",
+      "concepts": [
+        "Publishers send messages to topics; subscribers receive through subscriptions.",
+        "Each subscription has its own delivery state and processing backlog.",
+        "Pull, push, and export subscriptions suit different consumer architectures."
+      ],
+      "applicationFit": [
+        "Fan out a business event to independently evolving consumers.",
+        "Buffer traffic spikes before downstream processing capacity catches up.",
+        "Move application events into analytics or event-driven processing pipelines."
+      ],
+      "architecture": [
+        "1. A publisher sends an event to a topic and receives a publish result.",
+        "2. Each subscription makes the event available to its consumer path.",
+        "3. A consumer validates the message and commits an idempotent business operation.",
+        "4. It acknowledges success; unacknowledged messages can be delivered again."
+      ],
+      "security": [
+        "Grant publishing and subscribing permissions to separate workload identities.",
+        "Authenticate push delivery to private application endpoints.",
+        "Avoid placing unnecessary sensitive payloads in broadly consumed event streams."
+      ],
+      "operations": [
+        "Monitor backlog age as well as message counts to detect processing delays.",
+        "Tune subscriber flow control and acknowledgment handling against processing time.",
+        "Configure retry and dead-letter behavior for repeatedly failing messages."
+      ],
+      "watchPoints": [
+        "Default delivery requires consumers to tolerate duplicate messages.",
+        "Ordering is an explicit feature with ordering-key constraints, not a global default.",
+        "Exactly-once delivery supports pull subscriptions within a region; push and export subscriptions do not support it."
+      ],
+      "cost": [
+        "Published and delivered data volume influence messaging cost.",
+        "Retention and transfer choices can add costs beyond basic delivery.",
+        "Repeated retries consume processing resources even when the business operation fails."
+      ],
+      "alternatives": [
+        "Cloud Tasks fits controlled delivery of individual tasks to a target.",
+        "Eventarc routes supported events to destinations with managed integrations.",
+        "Direct synchronous APIs fit operations requiring an immediate caller response."
+      ],
+      "sources": [
+        {
+          "title": "Pub/Sub overview",
+          "url": "https://docs.cloud.google.com/pubsub/docs/overview"
+        },
+        {
+          "title": "Choose a subscription type",
+          "url": "https://docs.cloud.google.com/pubsub/docs/subscriber"
+        },
+        {
+          "title": "Exactly-once delivery",
+          "url": "https://docs.cloud.google.com/pubsub/docs/exactly-once-delivery"
+        },
+        {
+          "title": "Pub/Sub pricing dimensions",
+          "url": "https://cloud.google.com/pubsub/pricing"
+        }
+      ],
+      "relatedServices": [
+        "cloud-run",
+        "bigquery",
+        "cloud-storage",
+        "identity-and-access-management"
+      ]
+    },
+    {
+      "slug": "secret-manager",
+      "summary": "Managed storage and controlled retrieval of sensitive configuration such as passwords, tokens, and API keys.",
+      "concepts": [
+        "A secret holds configuration and metadata; versions hold individual payload values.",
+        "Versions have lifecycle states that control whether their values can be accessed.",
+        "Replication and location choices determine where secret data is stored."
+      ],
+      "applicationFit": [
+        "Remove application credentials from repositories and container images.",
+        "Give each workload access only to its required secrets.",
+        "Manage credential rollout using explicit versions and controlled changes."
+      ],
+      "architecture": [
+        "1. An authorized operator creates a secret and adds a payload version.",
+        "2. IAM grants a workload identity permission to access that secret.",
+        "3. The running application retrieves a selected version through a supported integration.",
+        "4. Rotation introduces a new value, updates consumers, and retires the old version."
+      ],
+      "security": [
+        "Grant Secret Accessor at the smallest practical resource scope.",
+        "Prefer workload credentials over service account key files.",
+        "Keep secret values out of logs, command histories, and debugging output."
+      ],
+      "operations": [
+        "Pin version numbers when repeatable deployments and rollback matter.",
+        "Test new credentials with consumers before disabling old versions.",
+        "Audit access and review unused secrets and versions periodically."
+      ],
+      "watchPoints": [
+        "A rotation schedule does not automatically change the external system credential.",
+        "The latest version can change independently of an application release.",
+        "Deleting or disabling a version can break consumers still referencing it."
+      ],
+      "cost": [
+        "Active versions and access operations are important billing dimensions.",
+        "Control redundant retrieval while keeping cache lifetime consistent with rotation needs.",
+        "Remove obsolete versions only after dependency and recovery checks."
+      ],
+      "alternatives": [
+        "Cloud KMS manages cryptographic keys rather than arbitrary application passwords.",
+        "IAM workload identity can eliminate some stored credentials entirely.",
+        "Ordinary configuration systems suit non-sensitive values without secret payload handling."
+      ],
+      "sources": [
+        {
+          "title": "Secret Manager overview",
+          "url": "https://docs.cloud.google.com/secret-manager/docs/overview"
+        },
+        {
+          "title": "Secret Manager best practices",
+          "url": "https://docs.cloud.google.com/secret-manager/docs/best-practices"
+        },
+        {
+          "title": "Secret Manager pricing dimensions",
+          "url": "https://cloud.google.com/secret-manager/pricing"
+        }
+      ],
+      "relatedServices": [
+        "identity-and-access-management",
+        "cloud-run",
+        "cloud-sql",
+        "google-kubernetes-engine"
+      ]
+    }
+  ]
+}
