@@ -510,9 +510,24 @@ export const azureNewExamDomains: Record<string, AzureExamDomain[]> = {
           "name": "Create and manage database tasks in Azure",
           "tasks": [
             "Create and configure elastic jobs",
-            "Create and configure database tasks by using automation",
+            "Create and configure database tasks by using automation"
+          ]
+        },
+        {
+          "name": "Configure database task alerts and notifications",
+          "tasks": [
             "Configure alerts and notifications on database tasks",
-            "Troubleshoot automated database tasks"
+            "Validate alert rules, action groups, and notification delivery",
+            "Distinguish task execution failures from notification failures"
+          ]
+        },
+        {
+          "name": "Monitor and troubleshoot database deployments",
+          "tasks": [
+            "Monitor and troubleshoot deployments",
+            "Troubleshoot automated database tasks",
+            "Inspect deployment operations and dependency failures",
+            "Validate the final database resource configuration after redeployment"
           ]
         }
       ]
