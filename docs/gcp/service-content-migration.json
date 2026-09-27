@@ -1,0 +1,948 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Migration",
+  "services": [
+    {
+      "slug": "dual-run",
+      "summary": "A migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover.",
+      "concepts": [
+        "source adapter, target adapter, comparison rule, execution and discrepancy define the Dual Run resource and operating model.",
+        "The service-specific flow is production/test input > legacy execution > target execution > normalized comparison > triage/cutover evidence.",
+        "Dual Run manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Dual Run when a migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover.",
+        "It best fits designs that need production/test input > legacy execution > target execution > normalized comparison > triage/cutover evidence.",
+        "Choose custom test harness when supported adapters/comparison workflow do not fit instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Dual Run production flow",
+          "note": "A migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover.",
+          "reference": "Dual Run architecture",
+          "steps": [
+            {
+              "title": "1. production/test input",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. legacy execution",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. target execution",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. normalized comparison",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. triage/cutover evidence",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Dual Run",
+          "note": "Identity, boundary and operations for source adapter, target adapter, comparison rule, execution and discrepancy.",
+          "reference": "Dual Run governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "mask sensitive payloads, isolate comparison access and prevent test execution from causing duplicate business actions",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source/target endpoints, input selection, normalization, comparison rules, masking and evidence retention",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "semantic equivalence is domain-specific; identical bytes are not always required and side effects must be controlled",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "comparison coverage, match rate, severity, latency delta and unresolved discrepancies",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Dual Run",
+          "detail": "Google Cloud Console → Dual Run; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source/target endpoints, input selection, normalization, comparison rules, masking and evidence retention."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply mask sensitive payloads, isolate comparison access and prevent test execution from causing duplicate business actions."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise production/test input > legacy execution > target execution > normalized comparison > triage/cutover evidence; verify comparison coverage, match rate, severity, latency delta and unresolved discrepancies."
+        }
+      ],
+      "security": [
+        "For Dual Run, implement mask sensitive payloads, isolate comparison access and prevent test execution from causing duplicate business actions.",
+        "Separate Dual Run administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for source adapter, target adapter, comparison rule, execution and discrepancy; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor comparison coverage, match rate, severity, latency delta and unresolved discrepancies for Dual Run.",
+        "Version source/target endpoints, input selection, normalization, comparison rules, masking and evidence retention; test failure, rollback and recovery before production promotion.",
+        "Assign Dual Run ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "semantic equivalence is domain-specific; identical bytes are not always required and side effects must be controlled",
+        "Confirm Dual Run availability, locations, quotas, supported versions and lifecycle limits.",
+        "Dual Run's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "comparison executions, retained evidence, integration compute/storage and both systems' run cost.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Dual Run estimate.",
+        "Track Dual Run cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Dual Run — A migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover.",
+        "custom test harness when supported adapters/comparison workflow do not fit — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Dual Run",
+          "fit": "A migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover."
+        },
+        {
+          "name": "custom test harness when supported adapters/comparison workflow do not fit",
+          "fit": "custom test harness when supported adapters/comparison workflow do not fit"
+        }
+      ],
+      "memoryHooks": [
+        "production/test input > legacy execution > target execution > normalized comparison > triage/cutover evidence.",
+        "semantic equivalence is domain-specific; identical bytes are not always required and side effects must be controlled",
+        "Certification clue: A migration validation service for comparing outputs from legacy and modernized systems running in parallel before cutover."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Dual Run documentation",
+          "url": "https://docs.cloud.google.com/mainframe-dual-run/docs"
+        }
+      ]
+    },
+    {
+      "slug": "mainframe-assessment-tool",
+      "summary": "An assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways.",
+      "concepts": [
+        "source inventory, program/dependency graph, assessment rule and report define the Mainframe Assessment Tool resource and operating model.",
+        "The service-specific flow is mainframe artifacts > secure extraction > parser/inventory > dependency analysis > recommendation/report.",
+        "Mainframe Assessment Tool manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Mainframe Assessment Tool when an assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways.",
+        "It best fits designs that need mainframe artifacts > secure extraction > parser/inventory > dependency analysis > recommendation/report.",
+        "Choose manual portfolio assessment when unsupported technologies or organizational factors dominate instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Mainframe Assessment Tool production flow",
+          "note": "An assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways.",
+          "reference": "Mainframe Assessment Tool architecture",
+          "steps": [
+            {
+              "title": "1. mainframe artifacts",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. secure extraction",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. parser/inventory",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. dependency analysis",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. recommendation/report",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Mainframe Assessment Tool",
+          "note": "Identity, boundary and operations for source inventory, program/dependency graph, assessment rule and report.",
+          "reference": "Mainframe Assessment Tool governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "read-only source collection, encrypted transfer and restricted access to code/configuration metadata",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source languages/artifacts, collection scope, exclusions, dependency analysis and report destination",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "assessment output is planning evidence, not proof of functional equivalence, performance or migration effort",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "inventory completeness, unsupported artifacts, dependency coverage and assessment confidence",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Mainframe Assessment Tool",
+          "detail": "Google Cloud Console → Mainframe Assessment Tool; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source languages/artifacts, collection scope, exclusions, dependency analysis and report destination."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply read-only source collection, encrypted transfer and restricted access to code/configuration metadata."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise mainframe artifacts > secure extraction > parser/inventory > dependency analysis > recommendation/report; verify inventory completeness, unsupported artifacts, dependency coverage and assessment confidence."
+        }
+      ],
+      "security": [
+        "For Mainframe Assessment Tool, implement read-only source collection, encrypted transfer and restricted access to code/configuration metadata.",
+        "Separate Mainframe Assessment Tool administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for source inventory, program/dependency graph, assessment rule and report; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor inventory completeness, unsupported artifacts, dependency coverage and assessment confidence for Mainframe Assessment Tool.",
+        "Version source languages/artifacts, collection scope, exclusions, dependency analysis and report destination; test failure, rollback and recovery before production promotion.",
+        "Assign Mainframe Assessment Tool ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "assessment output is planning evidence, not proof of functional equivalence, performance or migration effort",
+        "Confirm Mainframe Assessment Tool availability, locations, quotas, supported versions and lifecycle limits.",
+        "Mainframe Assessment Tool's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "assessment processing/storage and specialist review; source mainframe costs continue.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Mainframe Assessment Tool estimate.",
+        "Track Mainframe Assessment Tool cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Mainframe Assessment Tool — An assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways.",
+        "manual portfolio assessment when unsupported technologies or organizational factors dominate — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Mainframe Assessment Tool",
+          "fit": "An assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways."
+        },
+        {
+          "name": "manual portfolio assessment when unsupported technologies or organizational factors dominate",
+          "fit": "manual portfolio assessment when unsupported technologies or organizational factors dominate"
+        }
+      ],
+      "memoryHooks": [
+        "mainframe artifacts > secure extraction > parser/inventory > dependency analysis > recommendation/report.",
+        "assessment output is planning evidence, not proof of functional equivalence, performance or migration effort",
+        "Certification clue: An assessment utility that inventories mainframe applications and dependencies to estimate modernization complexity and migration pathways."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Mainframe Assessment Tool documentation",
+          "url": "https://docs.cloud.google.com/mainframe-assessment-tool/docs"
+        }
+      ]
+    },
+    {
+      "slug": "mainframe-connector",
+      "summary": "Connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization.",
+      "concepts": [
+        "mainframe agent/connector, transfer job, dataset mapping and destination define the Mainframe Connector resource and operating model.",
+        "The service-specific flow is mainframe dataset/change > connector > encrypted transfer > Cloud Storage/BigQuery > validation.",
+        "Mainframe Connector manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Mainframe Connector when connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization.",
+        "It best fits designs that need mainframe dataset/change > connector > encrypted transfer > Cloud Storage/BigQuery > validation.",
+        "Choose Transfer Appliance or custom ETL for offline/bespoke movement patterns instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Mainframe Connector production flow",
+          "note": "Connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization.",
+          "reference": "Mainframe Connector architecture",
+          "steps": [
+            {
+              "title": "1. mainframe dataset/change",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. connector",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. encrypted transfer",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. Cloud Storage/BigQuery",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. validation",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Mainframe Connector",
+          "note": "Identity, boundary and operations for mainframe agent/connector, transfer job, dataset mapping and destination.",
+          "reference": "Mainframe Connector governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "mainframe credentials, TLS, firewall allowlists, least-privilege destination identity and data classification",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source subsystem/datasets, connectivity, encoding/schema mapping, schedule and destination",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "mainframe encoding, record formats, scheduling and source CPU/I/O impact require explicit testing",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "transfer throughput, lag, failed records, reconnects and source resource consumption",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Mainframe Connector",
+          "detail": "Google Cloud Console → Mainframe Connector; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source subsystem/datasets, connectivity, encoding/schema mapping, schedule and destination."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply mainframe credentials, TLS, firewall allowlists, least-privilege destination identity and data classification."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise mainframe dataset/change > connector > encrypted transfer > Cloud Storage/BigQuery > validation; verify transfer throughput, lag, failed records, reconnects and source resource consumption."
+        }
+      ],
+      "security": [
+        "For Mainframe Connector, implement mainframe credentials, TLS, firewall allowlists, least-privilege destination identity and data classification.",
+        "Separate Mainframe Connector administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for mainframe agent/connector, transfer job, dataset mapping and destination; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor transfer throughput, lag, failed records, reconnects and source resource consumption for Mainframe Connector.",
+        "Version source subsystem/datasets, connectivity, encoding/schema mapping, schedule and destination; test failure, rollback and recovery before production promotion.",
+        "Assign Mainframe Connector ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "mainframe encoding, record formats, scheduling and source CPU/I/O impact require explicit testing",
+        "Confirm Mainframe Connector availability, locations, quotas, supported versions and lifecycle limits.",
+        "Mainframe Connector's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "connector/transfer processing, network, destination storage/analytics and mainframe consumption.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Mainframe Connector estimate.",
+        "Track Mainframe Connector cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Mainframe Connector — Connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization.",
+        "Transfer Appliance or custom ETL for offline/bespoke movement patterns — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Mainframe Connector",
+          "fit": "Connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization."
+        },
+        {
+          "name": "Transfer Appliance or custom ETL",
+          "fit": "Transfer Appliance or custom ETL for offline/bespoke movement patterns"
+        }
+      ],
+      "memoryHooks": [
+        "mainframe dataset/change > connector > encrypted transfer > Cloud Storage/BigQuery > validation.",
+        "mainframe encoding, record formats, scheduling and source CPU/I/O impact require explicit testing",
+        "Certification clue: Connectivity and data-movement components for integrating mainframe systems with Google Cloud services during modernization."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Mainframe Connector documentation",
+          "url": "https://docs.cloud.google.com/mainframe-connector/docs"
+        }
+      ]
+    },
+    {
+      "slug": "migrate-to-containers",
+      "summary": "A modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications.",
+      "concepts": [
+        "migration source, discovery data, migration plan, generated image and Kubernetes/Cloud Run artifacts define the Migrate to Containers resource and operating model.",
+        "The service-specific flow is source VM > discovery/analysis > migration plan > image/artifacts > test deployment > cutover.",
+        "Migrate to Containers manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Migrate to Containers when a modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications.",
+        "It best fits designs that need source VM > discovery/analysis > migration plan > image/artifacts > test deployment > cutover.",
+        "Choose Migrate to VMs for lift-and-shift without container replatforming instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Migrate to Containers production flow",
+          "note": "A modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications.",
+          "reference": "Migrate to Containers architecture",
+          "steps": [
+            {
+              "title": "1. source VM",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. discovery/analysis",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. migration plan",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. image/artifacts",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. test deployment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Migrate to Containers",
+          "note": "Identity, boundary and operations for migration source, discovery data, migration plan, generated image and Kubernetes/Cloud Run artifacts.",
+          "reference": "Migrate to Containers governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "read-only discovery, protected source credentials/artifacts and hardened generated container/runtime identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source, application components, migration plan, image registry, target runtime and validation",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "automatic containerization does not redesign state, scaling or dependencies; generated artifacts require engineering review",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "artifact generation, build/test failures, application health and performance difference",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Migrate to Containers",
+          "detail": "Google Cloud Console → Migrate to Containers; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source, application components, migration plan, image registry, target runtime and validation."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply read-only discovery, protected source credentials/artifacts and hardened generated container/runtime identity."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise source VM > discovery/analysis > migration plan > image/artifacts > test deployment > cutover; verify artifact generation, build/test failures, application health and performance difference."
+        }
+      ],
+      "security": [
+        "For Migrate to Containers, implement read-only discovery, protected source credentials/artifacts and hardened generated container/runtime identity.",
+        "Separate Migrate to Containers administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for migration source, discovery data, migration plan, generated image and Kubernetes/Cloud Run artifacts; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor artifact generation, build/test failures, application health and performance difference for Migrate to Containers.",
+        "Version source, application components, migration plan, image registry, target runtime and validation; test failure, rollback and recovery before production promotion.",
+        "Assign Migrate to Containers ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "automatic containerization does not redesign state, scaling or dependencies; generated artifacts require engineering review",
+        "Confirm Migrate to Containers availability, locations, quotas, supported versions and lifecycle limits.",
+        "Migrate to Containers's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "migration workers/builds, registry, target runtime and parallel-test infrastructure.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Migrate to Containers estimate.",
+        "Track Migrate to Containers cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Migrate to Containers — A modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications.",
+        "Migrate to VMs for lift-and-shift without container replatforming — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Migrate to Containers",
+          "fit": "A modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications."
+        },
+        {
+          "name": "Migrate to VMs",
+          "fit": "Migrate to VMs for lift-and-shift without container replatforming"
+        }
+      ],
+      "memoryHooks": [
+        "source VM > discovery/analysis > migration plan > image/artifacts > test deployment > cutover.",
+        "automatic containerization does not redesign state, scaling or dependencies; generated artifacts require engineering review",
+        "Certification clue: A modernization toolkit that analyzes supported VM workloads and generates container artifacts and deployment specifications."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Migrate to Containers documentation",
+          "url": "https://docs.cloud.google.com/migrate/containers/docs"
+        }
+      ]
+    },
+    {
+      "slug": "migrate-to-vms",
+      "summary": "A service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine.",
+      "concepts": [
+        "source, replication cycle, target details, test clone and cutover operation define the Migrate to VMs resource and operating model.",
+        "The service-specific flow is source disks > replication > Google Cloud staging > test clone > final sync/cutover > cleanup.",
+        "Migrate to VMs manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Migrate to VMs when a service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine.",
+        "It best fits designs that need source disks > replication > Google Cloud staging > test clone > final sync/cutover > cleanup.",
+        "Choose Migrate to Containers when replatforming into containers is the goal instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Migrate to VMs production flow",
+          "note": "A service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine.",
+          "reference": "Migrate to VMs architecture",
+          "steps": [
+            {
+              "title": "1. source disks",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. replication",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Google Cloud staging",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. test clone",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. final sync/cutover",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Migrate to VMs",
+          "note": "Identity, boundary and operations for source, replication cycle, target details, test clone and cutover operation.",
+          "reference": "Migrate to VMs governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "connector credentials, private connectivity, target service account, encryption and source access controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source environment, connector, target project/VPC, VM sizing, licensing, test clone and cutover window",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a successful disk replication does not prove application consistency, dependency reachability or acceptable downtime",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "replication lag, cycle errors, test-clone health, cutover duration and boot adaptation",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Migrate to VMs",
+          "detail": "Google Cloud Console → Migrate to VMs; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source environment, connector, target project/VPC, VM sizing, licensing, test clone and cutover window."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply connector credentials, private connectivity, target service account, encryption and source access controls."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise source disks > replication > Google Cloud staging > test clone > final sync/cutover > cleanup; verify replication lag, cycle errors, test-clone health, cutover duration and boot adaptation."
+        }
+      ],
+      "security": [
+        "For Migrate to VMs, implement connector credentials, private connectivity, target service account, encryption and source access controls.",
+        "Separate Migrate to VMs administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for source, replication cycle, target details, test clone and cutover operation; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor replication lag, cycle errors, test-clone health, cutover duration and boot adaptation for Migrate to VMs.",
+        "Version source environment, connector, target project/VPC, VM sizing, licensing, test clone and cutover window; test failure, rollback and recovery before production promotion.",
+        "Assign Migrate to VMs ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "a successful disk replication does not prove application consistency, dependency reachability or acceptable downtime",
+        "Confirm Migrate to VMs availability, locations, quotas, supported versions and lifecycle limits.",
+        "Migrate to VMs's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "migration service/staging, network transfer, test/target VMs, disks and snapshots.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Migrate to VMs estimate.",
+        "Track Migrate to VMs cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Migrate to VMs — A service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine.",
+        "Migrate to Containers when replatforming into containers is the goal — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Migrate to VMs",
+          "fit": "A service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine."
+        },
+        {
+          "name": "Migrate to Containers when replatforming into containers is the goal",
+          "fit": "Migrate to Containers when replatforming into containers is the goal"
+        }
+      ],
+      "memoryHooks": [
+        "source disks > replication > Google Cloud staging > test clone > final sync/cutover > cleanup.",
+        "a successful disk replication does not prove application consistency, dependency reachability or acceptable downtime",
+        "Certification clue: A service for continuously replicating supported source VMs and orchestrating test clones and cutover to Compute Engine."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Migrate to VMs documentation",
+          "url": "https://docs.cloud.google.com/migrate/virtual-machines/docs/5.0"
+        }
+      ]
+    },
+    {
+      "slug": "migration-center",
+      "summary": "A discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases.",
+      "concepts": [
+        "discovery client/source, asset, group, preference set, assessment and wave define the Migration Center resource and operating model.",
+        "The service-specific flow is estate inventory > utilization/dependency data > grouping > TCO/fit assessment > migration wave > export/action.",
+        "Migration Center manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Migration Center when a discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases.",
+        "It best fits designs that need estate inventory > utilization/dependency data > grouping > TCO/fit assessment > migration wave > export/action.",
+        "Choose Cloud Asset Inventory for Google Cloud resource inventory rather than pre-migration estate assessment instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Migration Center production flow",
+          "note": "A discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases.",
+          "reference": "Migration Center architecture",
+          "steps": [
+            {
+              "title": "1. estate inventory",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. utilization/dependency data",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. grouping",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. TCO/fit assessment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. migration wave",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Migration Center",
+          "note": "Identity, boundary and operations for discovery client/source, asset, group, preference set, assessment and wave.",
+          "reference": "Migration Center governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "read-only collectors, encrypted upload, scoped assessment access and sensitive topology protection",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "discovery method, collection window, groups, preferences, cost assumptions, target fit and waves",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "recommendations depend on observation window and entered pricing/constraints; they are planning estimates, not deployment actions",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "asset coverage, stale inventory, dependency completeness, assessment assumptions and wave readiness",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Migration Center",
+          "detail": "Google Cloud Console → Migration Center; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set discovery method, collection window, groups, preferences, cost assumptions, target fit and waves."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply read-only collectors, encrypted upload, scoped assessment access and sensitive topology protection."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise estate inventory > utilization/dependency data > grouping > TCO/fit assessment > migration wave > export/action; verify asset coverage, stale inventory, dependency completeness, assessment assumptions and wave readiness."
+        }
+      ],
+      "security": [
+        "For Migration Center, implement read-only collectors, encrypted upload, scoped assessment access and sensitive topology protection.",
+        "Separate Migration Center administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for discovery client/source, asset, group, preference set, assessment and wave; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor asset coverage, stale inventory, dependency completeness, assessment assumptions and wave readiness for Migration Center.",
+        "Version discovery method, collection window, groups, preferences, cost assumptions, target fit and waves; test failure, rollback and recovery before production promotion.",
+        "Assign Migration Center ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "recommendations depend on observation window and entered pricing/constraints; they are planning estimates, not deployment actions",
+        "Confirm Migration Center availability, locations, quotas, supported versions and lifecycle limits.",
+        "Migration Center's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "assessment/discovery terms plus collectors, storage and downstream migration tooling.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Migration Center estimate.",
+        "Track Migration Center cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Migration Center — A discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases.",
+        "Cloud Asset Inventory for Google Cloud resource inventory rather than pre-migration estate assessment — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Migration Center",
+          "fit": "A discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases."
+        },
+        {
+          "name": "Cloud Asset Inventory",
+          "fit": "Cloud Asset Inventory for Google Cloud resource inventory rather than pre-migration estate assessment"
+        }
+      ],
+      "memoryHooks": [
+        "estate inventory > utilization/dependency data > grouping > TCO/fit assessment > migration wave > export/action.",
+        "recommendations depend on observation window and entered pricing/constraints; they are planning estimates, not deployment actions",
+        "Certification clue: A discovery, assessment and planning hub for inventorying estates, analyzing utilization/dependencies and building Google Cloud migration waves/business cases."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Migration Center documentation",
+          "url": "https://docs.cloud.google.com/migration-center/docs"
+        }
+      ]
+    }
+  ]
+}

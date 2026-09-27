@@ -1,0 +1,948 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Distributed, hybrid, and multicloud",
+  "services": [
+    {
+      "slug": "cloud-location-finder",
+      "summary": "A discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements.",
+      "concepts": [
+        "location record, facility/region attributes and filtered result define the Cloud Location Finder resource and operating model.",
+        "The service-specific flow is placement requirement > location filters > candidate comparison > connectivity check > selected site.",
+        "Cloud Location Finder manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Cloud Location Finder when a discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements.",
+        "It best fits designs that need placement requirement > location filters > candidate comparison > connectivity check > selected site.",
+        "Choose Network Connectivity Center and Cloud Interconnect when the task is implementing connectivity rather than discovering locations instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Location Finder production flow",
+          "note": "A discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements.",
+          "reference": "Cloud Location Finder architecture",
+          "steps": [
+            {
+              "title": "1. placement requirement",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. location filters",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. candidate comparison",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. connectivity check",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. selected site",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Location Finder",
+          "note": "Identity, boundary and operations for location record, facility/region attributes and filtered result.",
+          "reference": "Cloud Location Finder governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "restrict planning metadata and validate authoritative residency/connectivity requirements outside the search result",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "geography, service availability, latency, residency, sustainability and partner/facility filters",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "location discovery informs placement but does not reserve capacity, establish connectivity or certify compliance",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "coverage, attribute freshness and unresolved placement constraints",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Location Finder",
+          "detail": "Google Cloud Console → Cloud Location Finder; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set geography, service availability, latency, residency, sustainability and partner/facility filters."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply restrict planning metadata and validate authoritative residency/connectivity requirements outside the search result."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise placement requirement > location filters > candidate comparison > connectivity check > selected site; verify coverage, attribute freshness and unresolved placement constraints."
+        }
+      ],
+      "security": [
+        "For Cloud Location Finder, implement restrict planning metadata and validate authoritative residency/connectivity requirements outside the search result.",
+        "Separate Cloud Location Finder administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for location record, facility/region attributes and filtered result; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor coverage, attribute freshness and unresolved placement constraints for Cloud Location Finder.",
+        "Version geography, service availability, latency, residency, sustainability and partner/facility filters; test failure, rollback and recovery before production promotion.",
+        "Assign Cloud Location Finder ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "location discovery informs placement but does not reserve capacity, establish connectivity or certify compliance",
+        "Confirm Cloud Location Finder availability, locations, quotas, supported versions and lifecycle limits.",
+        "Cloud Location Finder's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "no major workload meter; selected facilities, connectivity and deployed services carry cost.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Cloud Location Finder estimate.",
+        "Track Cloud Location Finder cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Cloud Location Finder — A discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements.",
+        "Network Connectivity Center and Cloud Interconnect when the task is implementing connectivity rather than discovering locations — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Location Finder",
+          "fit": "A discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements."
+        },
+        {
+          "name": "Network Connectivity Center and Cloud Interconnect when the task is implementing connectivity rather than discovering locations",
+          "fit": "Network Connectivity Center and Cloud Interconnect when the task is implementing connectivity rather than discovering locations"
+        }
+      ],
+      "memoryHooks": [
+        "placement requirement > location filters > candidate comparison > connectivity check > selected site.",
+        "location discovery informs placement but does not reserve capacity, establish connectivity or certify compliance",
+        "Certification clue: A discovery service for comparing Google Cloud, edge, colocation and partner locations against workload placement requirements."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Location Finder documentation",
+          "url": "https://docs.cloud.google.com/location-finder/docs"
+        }
+      ]
+    },
+    {
+      "slug": "config-controller",
+      "summary": "A managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs.",
+      "concepts": [
+        "Config Controller instance, Kubernetes custom resource and reconciler define the Config Controller resource and operating model.",
+        "The service-specific flow is Git/YAML > Kubernetes API > Config Connector reconciliation > Google Cloud API > resource status.",
+        "Config Controller manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Config Controller when a managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs.",
+        "It best fits designs that need Git/YAML > Kubernetes API > Config Connector reconciliation > Google Cloud API > resource status.",
+        "Choose Infrastructure Manager for direct Terraform-based provisioning instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Config Controller production flow",
+          "note": "A managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs.",
+          "reference": "Config Controller architecture",
+          "steps": [
+            {
+              "title": "1. Git/YAML",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Kubernetes API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Config Connector reconciliation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. Google Cloud API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. resource status",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Config Controller",
+          "note": "Identity, boundary and operations for Config Controller instance, Kubernetes custom resource and reconciler.",
+          "reference": "Config Controller governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "Workload Identity, least-privilege controller service account, admission policy and protected Git source",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, project/folder permissions, Config Connector mode, namespaces, source sync and deletion policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "deleting a Kubernetes resource can delete the underlying cloud resource; ownership and deletion policy must be explicit",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "reconcile errors, resource readiness, drift, API quota and deletion status",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Config Controller",
+          "detail": "Google Cloud Console → Config Controller; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, project/folder permissions, Config Connector mode, namespaces, source sync and deletion policy."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply Workload Identity, least-privilege controller service account, admission policy and protected Git source."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise Git/YAML > Kubernetes API > Config Connector reconciliation > Google Cloud API > resource status; verify reconcile errors, resource readiness, drift, API quota and deletion status."
+        }
+      ],
+      "security": [
+        "For Config Controller, implement Workload Identity, least-privilege controller service account, admission policy and protected Git source.",
+        "Separate Config Controller administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for Config Controller instance, Kubernetes custom resource and reconciler; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor reconcile errors, resource readiness, drift, API quota and deletion status for Config Controller.",
+        "Version region, project/folder permissions, Config Connector mode, namespaces, source sync and deletion policy; test failure, rollback and recovery before production promotion.",
+        "Assign Config Controller ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "deleting a Kubernetes resource can delete the underlying cloud resource; ownership and deletion policy must be explicit",
+        "Confirm Config Controller availability, locations, quotas, supported versions and lifecycle limits.",
+        "Config Controller's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "Config Controller/GKE management, underlying resources, logs and source pipeline.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Config Controller estimate.",
+        "Track Config Controller cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Config Controller — A managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs.",
+        "Infrastructure Manager for direct Terraform-based provisioning — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Config Controller",
+          "fit": "A managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs."
+        },
+        {
+          "name": "Infrastructure Manager",
+          "fit": "Infrastructure Manager for direct Terraform-based provisioning"
+        }
+      ],
+      "memoryHooks": [
+        "Git/YAML > Kubernetes API > Config Connector reconciliation > Google Cloud API > resource status.",
+        "deleting a Kubernetes resource can delete the underlying cloud resource; ownership and deletion policy must be explicit",
+        "Certification clue: A managed Kubernetes control plane for provisioning and managing Google Cloud resources through Config Connector and declarative APIs."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Config Controller documentation",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/config-controller/docs"
+        }
+      ]
+    },
+    {
+      "slug": "config-sync",
+      "summary": "A GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets.",
+      "concepts": [
+        "root/namespace repository, RootSync/RepoSync object and reconciler define the Config Sync resource and operating model.",
+        "The service-specific flow is approved source > sync fetch > render/validate > cluster apply > drift remediation.",
+        "Config Sync manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Config Sync when a GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets.",
+        "It best fits designs that need approved source > sync fetch > render/validate > cluster apply > drift remediation.",
+        "Choose Cloud Deploy for release promotion rather than continuous desired-state reconciliation instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Config Sync production flow",
+          "note": "A GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets.",
+          "reference": "Config Sync architecture",
+          "steps": [
+            {
+              "title": "1. approved source",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. sync fetch",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. render/validate",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. cluster apply",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. drift remediation",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Config Sync",
+          "note": "Identity, boundary and operations for root/namespace repository, RootSync/RepoSync object and reconciler.",
+          "reference": "Config Sync governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "source credentials, fleet/cluster IAM, admission controls and separation of root versus namespace scope",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "fleet/clusters, source type, branch/tag/digest, hierarchy, authentication and sync policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "automatic reconciliation can rapidly propagate a bad commit; staged rollout and source protection are essential",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "sync status, source errors, rendering failures, apply conflicts and drift",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Config Sync",
+          "detail": "Google Cloud Console → Config Sync; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set fleet/clusters, source type, branch/tag/digest, hierarchy, authentication and sync policy."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply source credentials, fleet/cluster IAM, admission controls and separation of root versus namespace scope."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise approved source > sync fetch > render/validate > cluster apply > drift remediation; verify sync status, source errors, rendering failures, apply conflicts and drift."
+        }
+      ],
+      "security": [
+        "For Config Sync, implement source credentials, fleet/cluster IAM, admission controls and separation of root versus namespace scope.",
+        "Separate Config Sync administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for root/namespace repository, RootSync/RepoSync object and reconciler; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor sync status, source errors, rendering failures, apply conflicts and drift for Config Sync.",
+        "Version fleet/clusters, source type, branch/tag/digest, hierarchy, authentication and sync policy; test failure, rollback and recovery before production promotion.",
+        "Assign Config Sync ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "automatic reconciliation can rapidly propagate a bad commit; staged rollout and source protection are essential",
+        "Confirm Config Sync availability, locations, quotas, supported versions and lifecycle limits.",
+        "Config Sync's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "GKE/fleet, repository, logging and network; Config Sync pricing follows service terms.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Config Sync estimate.",
+        "Track Config Sync cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Config Sync — A GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets.",
+        "Cloud Deploy for release promotion rather than continuous desired-state reconciliation — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Config Sync",
+          "fit": "A GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets."
+        },
+        {
+          "name": "Cloud Deploy",
+          "fit": "Cloud Deploy for release promotion rather than continuous desired-state reconciliation"
+        }
+      ],
+      "memoryHooks": [
+        "approved source > sync fetch > render/validate > cluster apply > drift remediation.",
+        "automatic reconciliation can rapidly propagate a bad commit; staged rollout and source protection are essential",
+        "Certification clue: A GitOps service that continuously reconciles Kubernetes configuration from Git, OCI images or Helm repositories across fleets."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Config Sync documentation",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/config-sync/docs"
+        }
+      ]
+    },
+    {
+      "slug": "gke-multi-cloud",
+      "summary": "Managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments.",
+      "concepts": [
+        "fleet membership, attached/managed cluster, node pool and connect agent define the GKE Multi-Cloud resource and operating model.",
+        "The service-specific flow is fleet control plane > cloud-specific cluster API > nodes > workloads > centralized policy/observability.",
+        "GKE Multi-Cloud manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose GKE Multi-Cloud when managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments.",
+        "It best fits designs that need fleet control plane > cloud-specific cluster API > nodes > workloads > centralized policy/observability.",
+        "Choose native provider Kubernetes when centralized GKE fleet management is unnecessary instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "GKE Multi-Cloud production flow",
+          "note": "Managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments.",
+          "reference": "GKE Multi-Cloud architecture",
+          "steps": [
+            {
+              "title": "1. fleet control plane",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. cloud-specific cluster API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. nodes",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. workloads",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. centralized policy/observability",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed GKE Multi-Cloud",
+          "note": "Identity, boundary and operations for fleet membership, attached/managed cluster, node pool and connect agent.",
+          "reference": "GKE Multi-Cloud governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "cloud credentials, fleet identity, Connect Gateway, workload identity and cross-cloud network controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "provider/region, fleet host project, cloud credentials, network, node pools, versions and connectivity",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "the Google control plane does not remove provider-specific quotas, networking, IAM or node responsibilities",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "cluster/node health, connect-agent status, version skew, policy and cross-cloud latency",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open GKE Multi-Cloud",
+          "detail": "Google Cloud Console → GKE Multi-Cloud; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set provider/region, fleet host project, cloud credentials, network, node pools, versions and connectivity."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply cloud credentials, fleet identity, Connect Gateway, workload identity and cross-cloud network controls."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise fleet control plane > cloud-specific cluster API > nodes > workloads > centralized policy/observability; verify cluster/node health, connect-agent status, version skew, policy and cross-cloud latency."
+        }
+      ],
+      "security": [
+        "For GKE Multi-Cloud, implement cloud credentials, fleet identity, Connect Gateway, workload identity and cross-cloud network controls.",
+        "Separate GKE Multi-Cloud administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for fleet membership, attached/managed cluster, node pool and connect agent; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor cluster/node health, connect-agent status, version skew, policy and cross-cloud latency for GKE Multi-Cloud.",
+        "Version provider/region, fleet host project, cloud credentials, network, node pools, versions and connectivity; test failure, rollback and recovery before production promotion.",
+        "Assign GKE Multi-Cloud ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "the Google control plane does not remove provider-specific quotas, networking, IAM or node responsibilities",
+        "Confirm GKE Multi-Cloud availability, locations, quotas, supported versions and lifecycle limits.",
+        "GKE Multi-Cloud's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "GKE management plus AWS/Azure infrastructure, inter-cloud data transfer and observability.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the GKE Multi-Cloud estimate.",
+        "Track GKE Multi-Cloud cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "GKE Multi-Cloud — Managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments.",
+        "native provider Kubernetes when centralized GKE fleet management is unnecessary — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "GKE Multi-Cloud",
+          "fit": "Managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments."
+        },
+        {
+          "name": "native provider Kubernetes when centralized GKE fleet management is unnecessary",
+          "fit": "native provider Kubernetes when centralized GKE fleet management is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "fleet control plane > cloud-specific cluster API > nodes > workloads > centralized policy/observability.",
+        "the Google control plane does not remove provider-specific quotas, networking, IAM or node responsibilities",
+        "Certification clue: Managed GKE clusters and fleet operations across supported AWS, Azure and Google Cloud environments."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "GKE Multi-Cloud documentation",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/multi-cloud/docs"
+        }
+      ]
+    },
+    {
+      "slug": "policy-controller",
+      "summary": "A Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets.",
+      "concepts": [
+        "constraint template, constraint, policy bundle and audit result define the Policy Controller resource and operating model.",
+        "The service-specific flow is manifest admission > constraint evaluation > allow/deny > periodic audit > violation remediation.",
+        "Policy Controller manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Policy Controller when a Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets.",
+        "It best fits designs that need manifest admission > constraint evaluation > allow/deny > periodic audit > violation remediation.",
+        "Choose organization policy for Google Cloud resources outside Kubernetes admission instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Policy Controller production flow",
+          "note": "A Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets.",
+          "reference": "Policy Controller architecture",
+          "steps": [
+            {
+              "title": "1. manifest admission",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. constraint evaluation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. allow/deny",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. periodic audit",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. violation remediation",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Policy Controller",
+          "note": "Identity, boundary and operations for constraint template, constraint, policy bundle and audit result.",
+          "reference": "Policy Controller governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "policy administrator separation, signed policy source and controlled exemptions",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "fleet/clusters, policy bundle/templates, enforcement mode, exclusions and mutation settings",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "enforcement can block critical deployments; start with dry-run/audit and design emergency exemptions",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "admission denials, audit violations, enforcement action and webhook health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Policy Controller",
+          "detail": "Google Cloud Console → Policy Controller; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set fleet/clusters, policy bundle/templates, enforcement mode, exclusions and mutation settings."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply policy administrator separation, signed policy source and controlled exemptions."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise manifest admission > constraint evaluation > allow/deny > periodic audit > violation remediation; verify admission denials, audit violations, enforcement action and webhook health."
+        }
+      ],
+      "security": [
+        "For Policy Controller, implement policy administrator separation, signed policy source and controlled exemptions.",
+        "Separate Policy Controller administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for constraint template, constraint, policy bundle and audit result; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor admission denials, audit violations, enforcement action and webhook health for Policy Controller.",
+        "Version fleet/clusters, policy bundle/templates, enforcement mode, exclusions and mutation settings; test failure, rollback and recovery before production promotion.",
+        "Assign Policy Controller ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "enforcement can block critical deployments; start with dry-run/audit and design emergency exemptions",
+        "Confirm Policy Controller availability, locations, quotas, supported versions and lifecycle limits.",
+        "Policy Controller's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "GKE Enterprise/fleet terms plus logs and policy operations.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Policy Controller estimate.",
+        "Track Policy Controller cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Policy Controller — A Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets.",
+        "organization policy for Google Cloud resources outside Kubernetes admission — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Policy Controller",
+          "fit": "A Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets."
+        },
+        {
+          "name": "organization policy",
+          "fit": "organization policy for Google Cloud resources outside Kubernetes admission"
+        }
+      ],
+      "memoryHooks": [
+        "manifest admission > constraint evaluation > allow/deny > periodic audit > violation remediation.",
+        "enforcement can block critical deployments; start with dry-run/audit and design emergency exemptions",
+        "Certification clue: A Gatekeeper-based admission and audit service for enforcing Kubernetes policies across GKE fleets."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Policy Controller documentation",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/policy-controller/docs"
+        }
+      ]
+    },
+    {
+      "slug": "service-directory",
+      "summary": "A managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments.",
+      "concepts": [
+        "namespace, service, endpoint and regional registry define the Service Directory resource and operating model.",
+        "The service-specific flow is service registration > namespace lookup > endpoint selection > application connection > health lifecycle.",
+        "Service Directory manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Service Directory when a managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments.",
+        "It best fits designs that need service registration > namespace lookup > endpoint selection > application connection > health lifecycle.",
+        "Choose Cloud DNS for name resolution without richer service metadata instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Service Directory production flow",
+          "note": "A managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments.",
+          "reference": "Service Directory architecture",
+          "steps": [
+            {
+              "title": "1. service registration",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. namespace lookup",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. endpoint selection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. application connection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. health lifecycle",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Service Directory",
+          "note": "Identity, boundary and operations for namespace, service, endpoint and regional registry.",
+          "reference": "Service Directory governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "IAM on namespaces/services, controlled endpoint registration and private DNS/network boundaries",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, namespace, service, endpoints, metadata, IAM and DNS integration",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Service Directory stores endpoint metadata but does not load-balance traffic or actively health-check every endpoint",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "registration freshness, endpoint count, lookup errors and stale records",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Service Directory",
+          "detail": "Google Cloud Console → Service Directory; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, namespace, service, endpoints, metadata, IAM and DNS integration."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply IAM on namespaces/services, controlled endpoint registration and private DNS/network boundaries."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise service registration > namespace lookup > endpoint selection > application connection > health lifecycle; verify registration freshness, endpoint count, lookup errors and stale records."
+        }
+      ],
+      "security": [
+        "For Service Directory, implement IAM on namespaces/services, controlled endpoint registration and private DNS/network boundaries.",
+        "Separate Service Directory administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for namespace, service, endpoint and regional registry; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor registration freshness, endpoint count, lookup errors and stale records for Service Directory.",
+        "Version region, namespace, service, endpoints, metadata, IAM and DNS integration; test failure, rollback and recovery before production promotion.",
+        "Assign Service Directory ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "Service Directory stores endpoint metadata but does not load-balance traffic or actively health-check every endpoint",
+        "Confirm Service Directory availability, locations, quotas, supported versions and lifecycle limits.",
+        "Service Directory's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "registered namespaces/services/endpoints, DNS/consumer services and network.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Service Directory estimate.",
+        "Track Service Directory cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Service Directory — A managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments.",
+        "Cloud DNS for name resolution without richer service metadata — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Service Directory",
+          "fit": "A managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments."
+        },
+        {
+          "name": "Cloud DNS",
+          "fit": "Cloud DNS for name resolution without richer service metadata"
+        }
+      ],
+      "memoryHooks": [
+        "service registration > namespace lookup > endpoint selection > application connection > health lifecycle.",
+        "Service Directory stores endpoint metadata but does not load-balance traffic or actively health-check every endpoint",
+        "Certification clue: A managed service registry for publishing and resolving service endpoints across projects and heterogeneous environments."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Service Directory documentation",
+          "url": "https://docs.cloud.google.com/service-directory/docs"
+        }
+      ]
+    }
+  ]
+}

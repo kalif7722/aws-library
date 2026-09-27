@@ -1,0 +1,1105 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Industry solutions",
+  "services": [
+    {
+      "slug": "ai-commerce-search",
+      "summary": "A retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery.",
+      "concepts": [
+        "catalog, product, serving configuration, user event and search/recommendation result define the AI Commerce Search resource and operating model.",
+        "The service-specific flow is catalog import > user-event ingestion > model/serving config > shopper query > ranked products.",
+        "AI Commerce Search manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose AI Commerce Search when a retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery.",
+        "It best fits designs that need catalog import > user-event ingestion > model/serving config > shopper query > ranked products.",
+        "Choose Vertex AI Search for general enterprise/web search rather than retail-specific ranking instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "AI Commerce Search production flow",
+          "note": "A retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery.",
+          "reference": "AI Commerce Search architecture",
+          "steps": [
+            {
+              "title": "1. catalog import",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. user-event ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. model/serving config",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. shopper query",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. ranked products",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed AI Commerce Search",
+          "note": "Identity, boundary and operations for catalog, product, serving configuration, user event and search/recommendation result.",
+          "reference": "AI Commerce Search governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "protect shopper identifiers, restrict catalog/event access and validate attribution/consent",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "catalog branch, attributes, event schema, serving config, filters/boosts and attribution",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "poor catalog and user-event quality cannot be repaired by ranking models; business rules can also distort relevance",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "catalog freshness, event quality, relevance/conversion metrics, latency and no-result rate",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open AI Commerce Search",
+          "detail": "Google Cloud Console → AI Commerce Search; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set catalog branch, attributes, event schema, serving config, filters/boosts and attribution."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply protect shopper identifiers, restrict catalog/event access and validate attribution/consent."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise catalog import > user-event ingestion > model/serving config > shopper query > ranked products; verify catalog freshness, event quality, relevance/conversion metrics, latency and no-result rate."
+        }
+      ],
+      "security": [
+        "For AI Commerce Search, implement protect shopper identifiers, restrict catalog/event access and validate attribution/consent.",
+        "Separate AI Commerce Search administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for catalog, product, serving configuration, user event and search/recommendation result; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor catalog freshness, event quality, relevance/conversion metrics, latency and no-result rate for AI Commerce Search.",
+        "Version catalog branch, attributes, event schema, serving config, filters/boosts and attribution; test failure, rollback and recovery before production promotion.",
+        "Assign AI Commerce Search ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "poor catalog and user-event quality cannot be repaired by ranking models; business rules can also distort relevance",
+        "Confirm AI Commerce Search availability, locations, quotas, supported versions and lifecycle limits.",
+        "AI Commerce Search's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "catalog/events, prediction/search requests, data pipelines and analytics.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the AI Commerce Search estimate.",
+        "Track AI Commerce Search cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "AI Commerce Search — A retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery.",
+        "Vertex AI Search for general enterprise/web search rather than retail-specific ranking — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "AI Commerce Search",
+          "fit": "A retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery."
+        },
+        {
+          "name": "Vertex AI Search",
+          "fit": "Vertex AI Search for general enterprise/web search rather than retail-specific ranking"
+        }
+      ],
+      "memoryHooks": [
+        "catalog import > user-event ingestion > model/serving config > shopper query > ranked products.",
+        "poor catalog and user-event quality cannot be repaired by ranking models; business rules can also distort relevance",
+        "Certification clue: A retail search and recommendation service that uses product catalog, user events and business controls to deliver commerce discovery."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "AI Commerce Search documentation",
+          "url": "https://docs.cloud.google.com/retail/docs"
+        }
+      ]
+    },
+    {
+      "slug": "anti-money-laundering-ai",
+      "summary": "A managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations.",
+      "concepts": [
+        "AML dataset, party/account/transaction data, engine configuration, model and prediction result define the Anti Money Laundering AI (AML AI) resource and operating model.",
+        "The service-specific flow is governed bank data > validation > model training/backtesting > batch prediction > investigator workflow.",
+        "Anti Money Laundering AI (AML AI) manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Anti Money Laundering AI (AML AI) when a managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations.",
+        "It best fits designs that need governed bank data > validation > model training/backtesting > batch prediction > investigator workflow.",
+        "Choose rules-based AML engine when deterministic policy logic is the sole requirement instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Anti Money Laundering AI (AML AI) production flow",
+          "note": "A managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations.",
+          "reference": "Anti Money Laundering AI (AML AI) architecture",
+          "steps": [
+            {
+              "title": "1. governed bank data",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. validation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. model training/backtesting",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. batch prediction",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. investigator workflow",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Anti Money Laundering AI (AML AI)",
+          "note": "Identity, boundary and operations for AML dataset, party/account/transaction data, engine configuration, model and prediction result.",
+          "reference": "Anti Money Laundering AI (AML AI) governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "strict project isolation, CMEK, VPC Service Controls, least privilege and regulated-data retention",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, data model/mappings, engine config, training/backtest windows, prediction and investigation export",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "AML AI prioritizes risk; it does not make final suspicious-activity decisions or replace regulatory governance",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "data validation, model/backtest metrics, alert volume, drift and investigator outcomes",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Anti Money Laundering AI (AML AI)",
+          "detail": "Google Cloud Console → Anti Money Laundering AI (AML AI); choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, data model/mappings, engine config, training/backtest windows, prediction and investigation export."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply strict project isolation, CMEK, VPC Service Controls, least privilege and regulated-data retention."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise governed bank data > validation > model training/backtesting > batch prediction > investigator workflow; verify data validation, model/backtest metrics, alert volume, drift and investigator outcomes."
+        }
+      ],
+      "security": [
+        "For Anti Money Laundering AI (AML AI), implement strict project isolation, CMEK, VPC Service Controls, least privilege and regulated-data retention.",
+        "Separate Anti Money Laundering AI (AML AI) administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for AML dataset, party/account/transaction data, engine configuration, model and prediction result; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor data validation, model/backtest metrics, alert volume, drift and investigator outcomes for Anti Money Laundering AI (AML AI).",
+        "Version region, data model/mappings, engine config, training/backtest windows, prediction and investigation export; test failure, rollback and recovery before production promotion.",
+        "Assign Anti Money Laundering AI (AML AI) ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "AML AI prioritizes risk; it does not make final suspicious-activity decisions or replace regulatory governance",
+        "Confirm Anti Money Laundering AI (AML AI) availability, locations, quotas, supported versions and lifecycle limits.",
+        "Anti Money Laundering AI (AML AI)'s managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "data processing, model training/prediction, storage and investigation systems.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Anti Money Laundering AI (AML AI) estimate.",
+        "Track Anti Money Laundering AI (AML AI) cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Anti Money Laundering AI (AML AI) — A managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations.",
+        "rules-based AML engine when deterministic policy logic is the sole requirement — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Anti Money Laundering AI (AML AI)",
+          "fit": "A managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations."
+        },
+        {
+          "name": "rules-based AML engine when deterministic policy logic is the sole requirement",
+          "fit": "rules-based AML engine when deterministic policy logic is the sole requirement"
+        }
+      ],
+      "memoryHooks": [
+        "governed bank data > validation > model training/backtesting > batch prediction > investigator workflow.",
+        "AML AI prioritizes risk; it does not make final suspicious-activity decisions or replace regulatory governance",
+        "Certification clue: A managed financial-crime risk detection service that generates AML risk scores from governed banking data and model configurations."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Anti Money Laundering AI (AML AI) documentation",
+          "url": "https://docs.cloud.google.com/financial-services/anti-money-laundering/docs"
+        }
+      ]
+    },
+    {
+      "slug": "healthcare-data-engine",
+      "summary": "A healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance.",
+      "concepts": [
+        "healthcare source, FHIR-aligned model, harmonization pipeline and analytical dataset define the Healthcare Data Engine resource and operating model.",
+        "The service-specific flow is EHR/clinical source > secure ingestion > normalization/harmonization > governed store > analytics/AI.",
+        "Healthcare Data Engine manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Healthcare Data Engine when a healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance.",
+        "It best fits designs that need EHR/clinical source > secure ingestion > normalization/harmonization > governed store > analytics/AI.",
+        "Choose Cloud Healthcare API for direct FHIR/HL7v2/DICOM stores and APIs instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Healthcare Data Engine production flow",
+          "note": "A healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance.",
+          "reference": "Healthcare Data Engine architecture",
+          "steps": [
+            {
+              "title": "1. EHR/clinical source",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. secure ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. normalization/harmonization",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. governed store",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. analytics/AI",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Healthcare Data Engine",
+          "note": "Identity, boundary and operations for healthcare source, FHIR-aligned model, harmonization pipeline and analytical dataset.",
+          "reference": "Healthcare Data Engine governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "HIPAA-aligned controls, consent/identity boundaries, CMEK, audit logs and de-identification",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "sources, region, mappings, terminology, identity resolution, retention and analytical outputs",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "semantic harmonization and patient matching require clinical governance; ingestion alone does not create trustworthy longitudinal records",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "ingestion freshness, mapping quality, rejected records, terminology coverage and pipeline health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Healthcare Data Engine",
+          "detail": "Google Cloud Console → Healthcare Data Engine; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set sources, region, mappings, terminology, identity resolution, retention and analytical outputs."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply HIPAA-aligned controls, consent/identity boundaries, CMEK, audit logs and de-identification."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise EHR/clinical source > secure ingestion > normalization/harmonization > governed store > analytics/AI; verify ingestion freshness, mapping quality, rejected records, terminology coverage and pipeline health."
+        }
+      ],
+      "security": [
+        "For Healthcare Data Engine, implement HIPAA-aligned controls, consent/identity boundaries, CMEK, audit logs and de-identification.",
+        "Separate Healthcare Data Engine administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for healthcare source, FHIR-aligned model, harmonization pipeline and analytical dataset; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor ingestion freshness, mapping quality, rejected records, terminology coverage and pipeline health for Healthcare Data Engine.",
+        "Version sources, region, mappings, terminology, identity resolution, retention and analytical outputs; test failure, rollback and recovery before production promotion.",
+        "Assign Healthcare Data Engine ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "semantic harmonization and patient matching require clinical governance; ingestion alone does not create trustworthy longitudinal records",
+        "Confirm Healthcare Data Engine availability, locations, quotas, supported versions and lifecycle limits.",
+        "Healthcare Data Engine's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "connectors/processing, storage, BigQuery/AI, networking and operations.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Healthcare Data Engine estimate.",
+        "Track Healthcare Data Engine cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Healthcare Data Engine — A healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance.",
+        "Cloud Healthcare API for direct FHIR/HL7v2/DICOM stores and APIs — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Healthcare Data Engine",
+          "fit": "A healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance."
+        },
+        {
+          "name": "Cloud Healthcare API",
+          "fit": "Cloud Healthcare API for direct FHIR/HL7v2/DICOM stores and APIs"
+        }
+      ],
+      "memoryHooks": [
+        "EHR/clinical source > secure ingestion > normalization/harmonization > governed store > analytics/AI.",
+        "semantic harmonization and patient matching require clinical governance; ingestion alone does not create trustworthy longitudinal records",
+        "Certification clue: A healthcare data platform for ingesting, harmonizing and analyzing clinical data while preserving healthcare semantics and governance."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Healthcare Data Engine documentation",
+          "url": "https://docs.cloud.google.com/healthcare-api/docs"
+        }
+      ]
+    },
+    {
+      "slug": "talent-solutions",
+      "summary": "AI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration.",
+      "concepts": [
+        "company, job, tenant, search request and event define the Talent Solutions resource and operating model.",
+        "The service-specific flow is job/company import > schema/attribute enrichment > seeker query > ranked jobs > conversion event.",
+        "Talent Solutions manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Talent Solutions when aI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration.",
+        "It best fits designs that need job/company import > schema/attribute enrichment > seeker query > ranked jobs > conversion event.",
+        "Choose Vertex AI Search for non-recruitment enterprise search instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Talent Solutions production flow",
+          "note": "AI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration.",
+          "reference": "Talent Solutions architecture",
+          "steps": [
+            {
+              "title": "1. job/company import",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. schema/attribute enrichment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. seeker query",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. ranked jobs",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. conversion event",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Talent Solutions",
+          "note": "Identity, boundary and operations for company, job, tenant, search request and event.",
+          "reference": "Talent Solutions governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "protect candidate data, isolate tenants and restrict job/event administration",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "tenant/company/job schema, custom attributes, filters, location handling and event tracking",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "ranking output can amplify biased or incomplete job data and must not become an unreviewed employment decision",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "index freshness, search latency, relevance, apply/conversion events and no-result rate",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Talent Solutions",
+          "detail": "Google Cloud Console → Talent Solutions; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set tenant/company/job schema, custom attributes, filters, location handling and event tracking."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply protect candidate data, isolate tenants and restrict job/event administration."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise job/company import > schema/attribute enrichment > seeker query > ranked jobs > conversion event; verify index freshness, search latency, relevance, apply/conversion events and no-result rate."
+        }
+      ],
+      "security": [
+        "For Talent Solutions, implement protect candidate data, isolate tenants and restrict job/event administration.",
+        "Separate Talent Solutions administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for company, job, tenant, search request and event; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor index freshness, search latency, relevance, apply/conversion events and no-result rate for Talent Solutions.",
+        "Version tenant/company/job schema, custom attributes, filters, location handling and event tracking; test failure, rollback and recovery before production promotion.",
+        "Assign Talent Solutions ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "ranking output can amplify biased or incomplete job data and must not become an unreviewed employment decision",
+        "Confirm Talent Solutions availability, locations, quotas, supported versions and lifecycle limits.",
+        "Talent Solutions's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "job/search/event requests, storage/integration and analytics.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Talent Solutions estimate.",
+        "Track Talent Solutions cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Talent Solutions — AI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration.",
+        "Vertex AI Search for non-recruitment enterprise search — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Talent Solutions",
+          "fit": "AI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration."
+        },
+        {
+          "name": "Vertex AI Search",
+          "fit": "Vertex AI Search for non-recruitment enterprise search"
+        }
+      ],
+      "memoryHooks": [
+        "job/company import > schema/attribute enrichment > seeker query > ranked jobs > conversion event.",
+        "ranking output can amplify biased or incomplete job data and must not become an unreviewed employment decision",
+        "Certification clue: AI-assisted job search and matching APIs that connect job seekers with relevant jobs using structured job/company data and search configuration."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Talent Solutions documentation",
+          "url": "https://docs.cloud.google.com/talent-solution/job-search/docs"
+        }
+      ]
+    },
+    {
+      "slug": "telecom-network-automation",
+      "summary": "A cloud-native automation platform for modeling, deploying and operating telecom network functions and services.",
+      "concepts": [
+        "network function, blueprint/package, deployment and operational workflow define the Telecom Network Automation resource and operating model.",
+        "The service-specific flow is vendor package > validated blueprint > environment deployment > lifecycle action > assurance signal.",
+        "Telecom Network Automation manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Telecom Network Automation when a cloud-native automation platform for modeling, deploying and operating telecom network functions and services.",
+        "It best fits designs that need vendor package > validated blueprint > environment deployment > lifecycle action > assurance signal.",
+        "Choose custom GKE/Infrastructure Manager automation when standardized telecom lifecycle features are unnecessary instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Telecom Network Automation production flow",
+          "note": "A cloud-native automation platform for modeling, deploying and operating telecom network functions and services.",
+          "reference": "Telecom Network Automation architecture",
+          "steps": [
+            {
+              "title": "1. vendor package",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. validated blueprint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. environment deployment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. lifecycle action",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. assurance signal",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Telecom Network Automation",
+          "note": "Identity, boundary and operations for network function, blueprint/package, deployment and operational workflow.",
+          "reference": "Telecom Network Automation governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "signed packages, segregated operator roles, private management networks and controlled vendor access",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "site/environment, network-function package, topology, parameters, approvals and rollback",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "vendor function compatibility and change windows remain operator responsibilities; automation does not eliminate service-impact risk",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "deployment state, configuration drift, lifecycle-operation success and network-service health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Telecom Network Automation",
+          "detail": "Google Cloud Console → Telecom Network Automation; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set site/environment, network-function package, topology, parameters, approvals and rollback."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply signed packages, segregated operator roles, private management networks and controlled vendor access."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise vendor package > validated blueprint > environment deployment > lifecycle action > assurance signal; verify deployment state, configuration drift, lifecycle-operation success and network-service health."
+        }
+      ],
+      "security": [
+        "For Telecom Network Automation, implement signed packages, segregated operator roles, private management networks and controlled vendor access.",
+        "Separate Telecom Network Automation administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for network function, blueprint/package, deployment and operational workflow; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor deployment state, configuration drift, lifecycle-operation success and network-service health for Telecom Network Automation.",
+        "Version site/environment, network-function package, topology, parameters, approvals and rollback; test failure, rollback and recovery before production promotion.",
+        "Assign Telecom Network Automation ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "vendor function compatibility and change windows remain operator responsibilities; automation does not eliminate service-impact risk",
+        "Confirm Telecom Network Automation availability, locations, quotas, supported versions and lifecycle limits.",
+        "Telecom Network Automation's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "platform/environment, compute/network resources, logging and vendor licenses.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Telecom Network Automation estimate.",
+        "Track Telecom Network Automation cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Telecom Network Automation — A cloud-native automation platform for modeling, deploying and operating telecom network functions and services.",
+        "custom GKE/Infrastructure Manager automation when standardized telecom lifecycle features are unnecessary — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Telecom Network Automation",
+          "fit": "A cloud-native automation platform for modeling, deploying and operating telecom network functions and services."
+        },
+        {
+          "name": "custom GKE/Infrastructure Manager automation when standardized telecom lifecycle features are unnecessary",
+          "fit": "custom GKE/Infrastructure Manager automation when standardized telecom lifecycle features are unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "vendor package > validated blueprint > environment deployment > lifecycle action > assurance signal.",
+        "vendor function compatibility and change windows remain operator responsibilities; automation does not eliminate service-impact risk",
+        "Certification clue: A cloud-native automation platform for modeling, deploying and operating telecom network functions and services."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Telecom Network Automation documentation",
+          "url": "https://docs.cloud.google.com/telecom-network-automation/docs"
+        }
+      ]
+    },
+    {
+      "slug": "telecom-subscriber-insights-api",
+      "summary": "An API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention.",
+      "concepts": [
+        "subscriber consent, network API request, carrier signal and application decision define the Telecom Subscriber Insights API resource and operating model.",
+        "The service-specific flow is application request > subscriber authorization > carrier network lookup > normalized insight > risk/action policy.",
+        "Telecom Subscriber Insights API manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Telecom Subscriber Insights API when an API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention.",
+        "It best fits designs that need application request > subscriber authorization > carrier network lookup > normalized insight > risk/action policy.",
+        "Choose reCAPTCHA Enterprise/Fraud Defense when web-application risk signals are the main input instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Telecom Subscriber Insights API production flow",
+          "note": "An API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention.",
+          "reference": "Telecom Subscriber Insights API architecture",
+          "steps": [
+            {
+              "title": "1. application request",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. subscriber authorization",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. carrier network lookup",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. normalized insight",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. risk/action policy",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Telecom Subscriber Insights API",
+          "note": "Identity, boundary and operations for subscriber consent, network API request, carrier signal and application decision.",
+          "reference": "Telecom Subscriber Insights API governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "explicit consent, minimal identifiers, purpose limitation and strong API/client authentication",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "supported carrier/region, consent flow, API credential, subscriber identifier and fallback",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "network insights vary by carrier/region and are risk signals, not identity proof or automatic authorization",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "authorization success, API latency, carrier coverage, response availability and decision outcomes",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Telecom Subscriber Insights API",
+          "detail": "Google Cloud Console → Telecom Subscriber Insights API; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set supported carrier/region, consent flow, API credential, subscriber identifier and fallback."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply explicit consent, minimal identifiers, purpose limitation and strong API/client authentication."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise application request > subscriber authorization > carrier network lookup > normalized insight > risk/action policy; verify authorization success, API latency, carrier coverage, response availability and decision outcomes."
+        }
+      ],
+      "security": [
+        "For Telecom Subscriber Insights API, implement explicit consent, minimal identifiers, purpose limitation and strong API/client authentication.",
+        "Separate Telecom Subscriber Insights API administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for subscriber consent, network API request, carrier signal and application decision; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor authorization success, API latency, carrier coverage, response availability and decision outcomes for Telecom Subscriber Insights API.",
+        "Version supported carrier/region, consent flow, API credential, subscriber identifier and fallback; test failure, rollback and recovery before production promotion.",
+        "Assign Telecom Subscriber Insights API ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "network insights vary by carrier/region and are risk signals, not identity proof or automatic authorization",
+        "Confirm Telecom Subscriber Insights API availability, locations, quotas, supported versions and lifecycle limits.",
+        "Telecom Subscriber Insights API's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "API calls, partner/carrier terms and consuming application services.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Telecom Subscriber Insights API estimate.",
+        "Track Telecom Subscriber Insights API cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Telecom Subscriber Insights API — An API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention.",
+        "reCAPTCHA Enterprise/Fraud Defense when web-application risk signals are the main input — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Telecom Subscriber Insights API",
+          "fit": "An API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention."
+        },
+        {
+          "name": "reCAPTCHA Enterprise/Fraud Defense when web-application risk signals are the main input",
+          "fit": "reCAPTCHA Enterprise/Fraud Defense when web-application risk signals are the main input"
+        }
+      ],
+      "memoryHooks": [
+        "application request > subscriber authorization > carrier network lookup > normalized insight > risk/action policy.",
+        "network insights vary by carrier/region and are risk signals, not identity proof or automatic authorization",
+        "Certification clue: An API for using carrier network signals—with subscriber authorization—to improve application decisions such as verification and fraud prevention."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Telecom Subscriber Insights API documentation",
+          "url": "https://docs.cloud.google.com/telecom-subscriber-insights/docs"
+        }
+      ]
+    },
+    {
+      "slug": "vision-api-product-search",
+      "summary": "A Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images.",
+      "concepts": [
+        "product set, product, reference image and product-category metadata define the Vision API Product Search resource and operating model.",
+        "The service-specific flow is catalog/reference images > indexing > shopper image > object/product match > product detail.",
+        "Vision API Product Search manages its control plane while workload owners retain data quality, business policy and downstream reliability."
+      ],
+      "applicationFit": [
+        "Choose Vision API Product Search when a Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images.",
+        "It best fits designs that need catalog/reference images > indexing > shopper image > object/product match > product detail.",
+        "Choose AI Commerce Search for text/behavior-aware retail discovery and recommendations instead when that alternative's responsibility model is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Vision API Product Search production flow",
+          "note": "A Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images.",
+          "reference": "Vision API Product Search architecture",
+          "steps": [
+            {
+              "title": "1. catalog/reference images",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. indexing",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. shopper image",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. object/product match",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. product detail",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Vision API Product Search",
+          "note": "Identity, boundary and operations for product set, product, reference image and product-category metadata.",
+          "reference": "Vision API Product Search governance",
+          "steps": [
+            {
+              "title": "Identity and data",
+              "items": [
+                "restrict catalog administration, protect shopper images and apply retention/consent controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, product set/category, products, reference images, metadata and evaluation set",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "visual similarity is not proof that two products are identical; image quality and catalog coverage dominate results",
+                "Recovery/rollback test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "index freshness, match precision/recall, latency and unmatched-query rate",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Vision API Product Search",
+          "detail": "Google Cloud Console → Vision API Product Search; choose the intended project and supported location."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, product set/category, products, reference images, metadata and evaluation set."
+        },
+        {
+          "title": "Secure the boundaries",
+          "detail": "Apply restrict catalog administration, protect shopper images and apply retention/consent controls."
+        },
+        {
+          "title": "Test and operate",
+          "detail": "Exercise catalog/reference images > indexing > shopper image > object/product match > product detail; verify index freshness, match precision/recall, latency and unmatched-query rate."
+        }
+      ],
+      "security": [
+        "For Vision API Product Search, implement restrict catalog administration, protect shopper images and apply retention/consent controls.",
+        "Separate Vision API Product Search administrators, automation and runtime/consumer identities.",
+        "Audit configuration and data access for product set, product, reference image and product-category metadata; protect secrets, keys and network paths according to classification."
+      ],
+      "operations": [
+        "Monitor index freshness, match precision/recall, latency and unmatched-query rate for Vision API Product Search.",
+        "Version region, product set/category, products, reference images, metadata and evaluation set; test failure, rollback and recovery before production promotion.",
+        "Assign Vision API Product Search ownership for quota, dependency health, lifecycle, regional failure and incidents."
+      ],
+      "watchPoints": [
+        "visual similarity is not proof that two products are identical; image quality and catalog coverage dominate results",
+        "Confirm Vision API Product Search availability, locations, quotas, supported versions and lifecycle limits.",
+        "Vision API Product Search's managed control plane does not remove application authorization, data-quality or resilience duties."
+      ],
+      "cost": [
+        "image queries, catalog/index storage and application/backend services.",
+        "Include dependent compute, storage, logging, network and partner/runtime services in the Vision API Product Search estimate.",
+        "Track Vision API Product Search cost against a useful migrated asset, decision, transaction or delivered workload."
+      ],
+      "alternatives": [
+        "Vision API Product Search — A Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images.",
+        "AI Commerce Search for text/behavior-aware retail discovery and recommendations — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Vision API Product Search",
+          "fit": "A Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images."
+        },
+        {
+          "name": "AI Commerce Search",
+          "fit": "AI Commerce Search for text/behavior-aware retail discovery and recommendations"
+        }
+      ],
+      "memoryHooks": [
+        "catalog/reference images > indexing > shopper image > object/product match > product detail.",
+        "visual similarity is not proof that two products are identical; image quality and catalog coverage dominate results",
+        "Certification clue: A Vision-based product discovery capability that matches query images against retailer-managed product sets and reference images."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Vision API Product Search documentation",
+          "url": "https://docs.cloud.google.com/vision/product-search/docs"
+        }
+      ]
+    }
+  ]
+}

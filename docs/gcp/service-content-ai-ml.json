@@ -1,0 +1,3217 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "AI and ML",
+  "services": [
+    {
+      "slug": "agent-platform-vision",
+      "summary": "A managed video intelligence platform for registering streams, building continuous video-analysis applications, and retaining searchable metadata from live or batch video.",
+      "concepts": [
+        "Streams represent video inputs; applications connect processors into a directed graph that transforms frames into annotations or events.",
+        "Warehouses retain ingested video and indexed intelligence so operators can search clips by time, source and detected attributes.",
+        "Occupancy analytics, person or vehicle recognition and custom models are deployed as processors rather than embedded into camera clients."
+      ],
+      "applicationFit": [
+        "Use for multi-camera operational video where continuous ingestion, model execution and later search belong in one managed system.",
+        "Fit retail, manufacturing, safety and smart-space scenarios that need near-real-time alerts plus historical investigation.",
+        "Use Vision API or Video Intelligence API instead when the workload is a stateless image request or asynchronous file annotation job."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Continuous camera analytics",
+          "note": "RTSP feeds enter registered streams, an application graph evaluates frames and events are delivered to an operational consumer.",
+          "reference": "Continuous camera analytics pattern",
+          "steps": [
+            {
+              "title": "Cameras",
+              "items": [
+                "RTSP feeds",
+                "Site credentials"
+              ]
+            },
+            {
+              "title": "Vision streams",
+              "items": [
+                "Registered sources",
+                "Ingestion endpoint"
+              ]
+            },
+            {
+              "title": "Application graph",
+              "items": [
+                "Model processors",
+                "Temporal logic"
+              ]
+            },
+            {
+              "title": "Event sink",
+              "items": [
+                "Pub/Sub",
+                "Operations app"
+              ]
+            },
+            {
+              "title": "Warehouse",
+              "items": [
+                "Video archive",
+                "Indexed metadata"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Searchable video warehouse",
+          "note": "Stored video and annotations are indexed for investigators without replaying every source file.",
+          "reference": "Searchable video warehouse pattern",
+          "steps": [
+            {
+              "title": "Video sources",
+              "items": [
+                "Live stream",
+                "Batch media"
+              ]
+            },
+            {
+              "title": "Ingestion",
+              "items": [
+                "Time-aligned media",
+                "Metadata"
+              ]
+            },
+            {
+              "title": "Warehouse",
+              "items": [
+                "Retention",
+                "Indexes"
+              ]
+            },
+            {
+              "title": "Search",
+              "items": [
+                "Attribute filters",
+                "Time range"
+              ]
+            },
+            {
+              "title": "Review",
+              "items": [
+                "Clips",
+                "Evidence export"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Use dedicated service accounts for ingestion, application deployment and warehouse search; camera credentials should not be shared with analysts.",
+        "Place event consumers behind least-privilege Pub/Sub subscriptions and treat face, person and license-plate metadata as sensitive data.",
+        "Define regional residency, retention and deletion controls before ingesting regulated surveillance video; audit both configuration and search access."
+      ],
+      "operations": [
+        "Monitor stream connectivity, dropped frames, processor latency and application health separately so camera faults are not mistaken for model faults.",
+        "Version application graphs and models, canary new processors on representative streams and validate event precision before broad rollout.",
+        "Set warehouse retention and export procedures, then rehearse recovery from stream credential rotation and regional input loss."
+      ],
+      "watchPoints": [
+        "Source codecs, frame rates and network stability directly affect usable inference; validate supported media profiles at the edge.",
+        "Continuous video can create high storage and inference volume; apply sampling and retention based on the actual detection objective.",
+        "A recognized object is model output, not identity proof; include confidence thresholds and human review for consequential decisions."
+      ],
+      "cost": [
+        "Charges are driven by video ingestion/processing duration, model or application execution and retained warehouse data.",
+        "Cloud Storage, Pub/Sub, logging and network egress used around the platform add separate charges.",
+        "Estimate using cameras × active hours × sampled frame rate, then add retention and event-consumer costs."
+      ],
+      "alternatives": [
+        "Agent Platform Vision — Continuous stream graphs and searchable video warehouses.",
+        "Video Intelligence API — Asynchronous or streaming annotation through an API.",
+        "Vision API — Stateless analysis of individual images."
+      ],
+      "comparisons": [
+        {
+          "name": "Agent Platform Vision",
+          "fit": "Continuous stream graphs and searchable video warehouses."
+        },
+        {
+          "name": "Video Intelligence API",
+          "fit": "Asynchronous or streaming annotation through an API."
+        },
+        {
+          "name": "Vision API",
+          "fit": "Stateless analysis of individual images."
+        }
+      ],
+      "memoryHooks": [
+        "Stream → application graph → events; warehouse → indexed search.",
+        "Continuous camera estate points to Agent Platform Vision, not a one-file annotation API.",
+        "Certification clue: managed live-video ingestion plus retained searchable intelligence."
+      ],
+      "relatedServices": [
+        "pub-sub",
+        "cloud-storage",
+        "video-intelligence-api",
+        "vision-api"
+      ],
+      "sources": [
+        {
+          "title": "Agent Platform Vision documentation",
+          "url": "https://cloud.google.com/vision-ai/docs"
+        },
+        {
+          "title": "Vision AI overview",
+          "url": "https://cloud.google.com/vision-ai/docs/overview"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Vision AI",
+          "detail": "Google Cloud Console → Vision AI; select the project and a supported region."
+        },
+        {
+          "title": "Register an input",
+          "detail": "Open Streams, create a stream, then configure the camera/encoder to publish to its ingestion endpoint."
+        },
+        {
+          "title": "Build the application",
+          "detail": "Create an application graph, add supported processors and connect event or warehouse outputs."
+        },
+        {
+          "title": "Deploy and verify",
+          "detail": "Deploy the application, inspect stream/application health and query the warehouse for time-aligned results."
+        }
+      ]
+    },
+    {
+      "slug": "cloud-tpu",
+      "summary": "Google-designed tensor accelerators delivered as TPU VMs or queued resources for high-throughput training and inference with XLA-based frameworks.",
+      "concepts": [
+        "A TPU chip contains matrix multiply units optimized for dense tensor operations; chips are connected as slices or large multislice topologies.",
+        "TPU VMs give direct host access, while queued resources request capacity that is provisioned when the selected accelerator topology becomes available.",
+        "JAX, TensorFlow and PyTorch/XLA compile graphs through XLA; model shape, precision and input pipeline determine utilization."
+      ],
+      "applicationFit": [
+        "Choose TPUs for transformer, vision and scientific models that scale across many identical accelerator cores.",
+        "Use reservations or queued resources for planned large training runs; use Spot TPUs only for checkpointable work.",
+        "Prefer GPUs when libraries depend on CUDA-specific kernels or the workload cannot efficiently compile/vectorize through XLA."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Distributed TPU training",
+          "note": "Training data is staged close to the accelerator, workers compile the graph and checkpoints leave the TPU lifecycle boundary.",
+          "reference": "Distributed TPU training pattern",
+          "steps": [
+            {
+              "title": "Cloud Storage",
+              "items": [
+                "Sharded dataset",
+                "Checkpoints"
+              ]
+            },
+            {
+              "title": "TPU VM hosts",
+              "items": [
+                "Input pipeline",
+                "XLA compile"
+              ]
+            },
+            {
+              "title": "TPU slice",
+              "items": [
+                "Data/model parallelism",
+                "High-speed interconnect"
+              ]
+            },
+            {
+              "title": "Vertex AI / custom job",
+              "items": [
+                "Scheduling",
+                "Experiment metadata"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "Metrics",
+                "Checkpoint recovery"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Capacity-aware training queue",
+          "note": "A queued resource waits for a complete topology so a distributed job starts with coherent capacity.",
+          "reference": "Capacity-aware training queue pattern",
+          "steps": [
+            {
+              "title": "Training request",
+              "items": [
+                "Accelerator type",
+                "Topology"
+              ]
+            },
+            {
+              "title": "Queued resource",
+              "items": [
+                "Capacity wait",
+                "Provision atomically"
+              ]
+            },
+            {
+              "title": "TPU VMs",
+              "items": [
+                "Runtime image",
+                "Service account"
+              ]
+            },
+            {
+              "title": "Training job",
+              "items": [
+                "Periodic checkpoints",
+                "Preemption handling"
+              ]
+            },
+            {
+              "title": "Teardown",
+              "items": [
+                "Delete resource",
+                "Retain artifacts"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Assign the TPU VM service account only dataset, artifact and logging permissions required by the job.",
+        "Use private IP networking and VPC controls where supported; restrict SSH and OS access to managed administrator paths.",
+        "Protect training data and checkpoints with Cloud Storage IAM and CMEK where required, recognizing host/runtime configuration has separate controls."
+      ],
+      "operations": [
+        "Track MXU utilization, host CPU, input wait time, HBM pressure and compile time; low accelerator use often originates in the data pipeline.",
+        "Checkpoint to durable storage at a frequency matched to Spot/preemption risk and the time required to rebuild the TPU topology.",
+        "Pin framework and TPU software versions, test numerical behavior when changing precision, and delete idle slices after jobs finish."
+      ],
+      "watchPoints": [
+        "TPU type, topology and region must be selected together; quota alone does not guarantee immediate physical capacity.",
+        "Code that runs on one device may need explicit sharding and collective-operation changes to scale efficiently.",
+        "Large slices fail economically when input data, batch size or checkpoint throughput cannot feed the accelerator fabric."
+      ],
+      "cost": [
+        "Billing follows accelerator type, chip count and provisioned duration; on-demand, reservation and Spot economics differ.",
+        "TPU VMs, persistent disks, Cloud Storage operations and cross-region data transfer are additional cost components.",
+        "Compare time-to-train and achieved utilization, not hourly accelerator price alone."
+      ],
+      "alternatives": [
+        "Cloud TPU — XLA-friendly models needing Google tensor accelerators.",
+        "GPU VM / GKE GPU — CUDA ecosystems, custom kernels and broad framework compatibility.",
+        "Vertex AI custom training — Managed job orchestration that can consume TPU or GPU resources."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud TPU",
+          "fit": "XLA-friendly models needing Google tensor accelerators."
+        },
+        {
+          "name": "GPU VM / GKE GPU",
+          "fit": "CUDA ecosystems, custom kernels and broad framework compatibility."
+        },
+        {
+          "name": "Vertex AI custom training",
+          "fit": "Managed job orchestration that can consume TPU or GPU resources."
+        }
+      ],
+      "memoryHooks": [
+        "TPU performance is a compiler, topology and input-pipeline problem—not just a faster VM.",
+        "Queued resources solve coordinated TPU capacity; checkpoints solve interruption.",
+        "Exam clue: large JAX/TensorFlow training with dense tensor math and XLA points to TPU."
+      ],
+      "relatedServices": [
+        "compute-engine",
+        "cloud-storage",
+        "deep-learning-vm",
+        "colab-enterprise"
+      ],
+      "sources": [
+        {
+          "title": "Cloud TPU documentation",
+          "url": "https://cloud.google.com/tpu/docs"
+        },
+        {
+          "title": "TPU architecture",
+          "url": "https://cloud.google.com/tpu/docs/system-architecture-tpu-vm"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Check capacity inputs",
+          "detail": "Console → Compute Engine → TPUs; confirm region/zone, TPU type, topology and project quota."
+        },
+        {
+          "title": "Create the resource",
+          "detail": "Create a TPU VM or queued resource, selecting runtime version, network, service account and SSH policy."
+        },
+        {
+          "title": "Connect the workload",
+          "detail": "Use SSH/IAP or a managed training job, stage data in Cloud Storage and compile the model with XLA."
+        },
+        {
+          "title": "Observe and release",
+          "detail": "Inspect TPU utilization and job logs, confirm checkpoints, then delete the slice/queued resource when complete."
+        }
+      ]
+    },
+    {
+      "slug": "colab-enterprise",
+      "summary": "A managed, collaborative notebook environment integrated with Vertex AI that supplies governed runtimes, sharing and Google Cloud data access without local notebook servers.",
+      "concepts": [
+        "A notebook file is a collaborative artifact; its runtime is a separate regional compute resource with machine type, accelerator and idle-shutdown settings.",
+        "Managed runtimes run in the user's project and use Google Cloud identity, IAM and audit controls rather than personal Colab consumer storage.",
+        "BigQuery and Cloud Storage integrations let analysts work close to governed data while notebook execution remains reproducible through runtime templates."
+      ],
+      "applicationFit": [
+        "Use for interactive exploration, teaching and model prototyping where browser collaboration and enterprise governance matter.",
+        "Choose shared runtime templates when platform teams must standardize machine types, networks, packages and idle controls.",
+        "Use Vertex AI Workbench when teams require a more persistent Jupyter environment, deeper environment customization or managed notebook instances."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Governed analytics notebook",
+          "note": "An analyst opens a shared notebook, starts a controlled runtime and queries governed data without copying it to a laptop.",
+          "reference": "Governed analytics notebook pattern",
+          "steps": [
+            {
+              "title": "Analyst",
+              "items": [
+                "Google identity",
+                "Shared notebook"
+              ]
+            },
+            {
+              "title": "Colab Enterprise",
+              "items": [
+                "Collaborative document",
+                "Execution session"
+              ]
+            },
+            {
+              "title": "Runtime template",
+              "items": [
+                "Region",
+                "Machine / accelerator"
+              ]
+            },
+            {
+              "title": "BigQuery",
+              "items": [
+                "Authorized data",
+                "Query job"
+              ]
+            },
+            {
+              "title": "Cloud Logging",
+              "items": [
+                "Runtime actions",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Prototype-to-training handoff",
+          "note": "Exploratory code is validated in a notebook, then moved to repeatable managed training and an artifact registry.",
+          "reference": "Prototype-to-training handoff pattern",
+          "steps": [
+            {
+              "title": "Notebook",
+              "items": [
+                "EDA",
+                "Feature code"
+              ]
+            },
+            {
+              "title": "Cloud Storage",
+              "items": [
+                "Versioned data",
+                "Artifacts"
+              ]
+            },
+            {
+              "title": "Vertex AI training",
+              "items": [
+                "Repeatable job",
+                "Service account"
+              ]
+            },
+            {
+              "title": "Model Registry",
+              "items": [
+                "Version",
+                "Evaluation"
+              ]
+            },
+            {
+              "title": "Endpoint",
+              "items": [
+                "Controlled deployment",
+                "Monitoring"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Separate notebook-sharing permission from data permissions; access to a notebook must not automatically grant access to BigQuery tables or buckets.",
+        "Use runtime service accounts and network templates with least privilege; avoid embedding keys or tokens in cells and outputs.",
+        "Apply VPC Service Controls/CMEK where supported and clear sensitive outputs before sharing notebook artifacts broadly."
+      ],
+      "operations": [
+        "Enforce idle shutdown, approved runtime templates and quota limits so abandoned sessions do not become permanent compute.",
+        "Version important notebooks in source control or export repeatable code into pipelines; collaborative history is not a production release process.",
+        "Monitor runtime creation failures, accelerator quota, package drift and long-running cells; document ownership of shared notebooks."
+      ],
+      "watchPoints": [
+        "Notebook region and runtime region affect data locality and available machine types.",
+        "A stopped or deleted runtime does not equal a deleted notebook; manage artifact and compute lifecycles independently.",
+        "Interactive success does not prove batch reproducibility—pin packages, seeds, data snapshots and service-account permissions."
+      ],
+      "cost": [
+        "Runtime VM/accelerator uptime is the primary cost; BigQuery queries, storage and network transfer are billed separately.",
+        "Idle shutdown and smaller default templates provide the largest control for exploratory workloads.",
+        "Chargeback should attribute runtime labels and downstream data-processing jobs, not only notebook count."
+      ],
+      "alternatives": [
+        "Colab Enterprise — Collaborative browser notebooks with managed enterprise runtimes.",
+        "Vertex AI Workbench — Persistent Jupyter development environment with deeper customization.",
+        "Vertex AI Pipelines — Repeatable, scheduled and lineage-aware ML workflows."
+      ],
+      "comparisons": [
+        {
+          "name": "Colab Enterprise",
+          "fit": "Collaborative browser notebooks with managed enterprise runtimes."
+        },
+        {
+          "name": "Vertex AI Workbench",
+          "fit": "Persistent Jupyter development environment with deeper customization."
+        },
+        {
+          "name": "Vertex AI Pipelines",
+          "fit": "Repeatable, scheduled and lineage-aware ML workflows."
+        }
+      ],
+      "memoryHooks": [
+        "Notebook is the shared document; runtime is the billable execution resource.",
+        "Use Colab for exploration, then move repeatable work to training jobs or pipelines.",
+        "Exam clue: familiar Colab collaboration under IAM and Vertex AI governance."
+      ],
+      "relatedServices": [
+        "bigquery",
+        "cloud-storage",
+        "cloud-tpu",
+        "deep-learning-vm"
+      ],
+      "sources": [
+        {
+          "title": "Colab Enterprise documentation",
+          "url": "https://cloud.google.com/colab/docs"
+        },
+        {
+          "title": "Colab Enterprise overview",
+          "url": "https://cloud.google.com/colab/docs/introduction"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Colab Enterprise",
+          "detail": "Console → Vertex AI → Colab Enterprise; choose the notebook region before creating assets."
+        },
+        {
+          "title": "Create a runtime template",
+          "detail": "Set machine type, accelerator, network, service account and idle-shutdown policy."
+        },
+        {
+          "title": "Create or import a notebook",
+          "detail": "Attach the approved runtime and verify BigQuery/Cloud Storage access using the user's IAM context."
+        },
+        {
+          "title": "Share and govern",
+          "detail": "Share the notebook separately from its data, review runtime inventory and stop/delete idle compute."
+        }
+      ]
+    },
+    {
+      "slug": "deep-learning-containers",
+      "summary": "Google-maintained container images with preinstalled ML frameworks, CUDA libraries and common tooling for reproducible training, inference and notebook workloads.",
+      "concepts": [
+        "Images are framework/version-specific and published in Artifact Registry; CPU, GPU and accelerator variants have different drivers and libraries.",
+        "A container fixes the user-space ML stack, while the host or managed service still supplies compatible accelerator drivers, identity and networking.",
+        "Release tags can move; immutable digests provide repeatable builds and make vulnerability findings traceable to an exact base image."
+      ],
+      "applicationFit": [
+        "Use when the same curated framework stack must run across Vertex AI, GKE, Compute Engine or local development.",
+        "Choose a GPU image only when the target runtime supplies compatible NVIDIA hardware and drivers.",
+        "Build a custom derivative when extra packages are required, but retain the supported base and scan the resulting image."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Managed training image",
+          "note": "A versioned image moves from registry through a Vertex AI custom job to durable model artifacts.",
+          "reference": "Managed training image pattern",
+          "steps": [
+            {
+              "title": "Source repository",
+              "items": [
+                "Training code",
+                "Requirements"
+              ]
+            },
+            {
+              "title": "Cloud Build",
+              "items": [
+                "Derived image",
+                "Tests"
+              ]
+            },
+            {
+              "title": "Artifact Registry",
+              "items": [
+                "Pinned digest",
+                "Vulnerability metadata"
+              ]
+            },
+            {
+              "title": "Vertex AI job",
+              "items": [
+                "GPU/CPU workers",
+                "Service account"
+              ]
+            },
+            {
+              "title": "Cloud Storage",
+              "items": [
+                "Model artifacts",
+                "Logs"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Portable GPU workload",
+          "note": "The same digest is tested on a workstation and scheduled on GKE with host drivers exposed through the device plugin.",
+          "reference": "Portable GPU workload pattern",
+          "steps": [
+            {
+              "title": "Developer",
+              "items": [
+                "Local test",
+                "Pinned image"
+              ]
+            },
+            {
+              "title": "Artifact Registry",
+              "items": [
+                "Trusted repository",
+                "Digest"
+              ]
+            },
+            {
+              "title": "GKE GPU nodes",
+              "items": [
+                "Driver / device plugin",
+                "Workload identity"
+              ]
+            },
+            {
+              "title": "Container",
+              "items": [
+                "Framework runtime",
+                "Training process"
+              ]
+            },
+            {
+              "title": "Monitoring",
+              "items": [
+                "GPU metrics",
+                "Job status"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant pull access only to runtime identities and keep image-push rights in the build pipeline.",
+        "Use Artifact Analysis scanning, provenance and Binary Authorization for derived production images.",
+        "Never bake datasets, credentials or service-account keys into layers; mount or fetch them at runtime through IAM."
+      ],
+      "operations": [
+        "Track published image support and framework/CUDA compatibility before updating a tag.",
+        "Rebuild derivatives regularly to inherit patched base layers, then run model regression and accelerator smoke tests.",
+        "Record image digest with every experiment and endpoint release so rollback restores both code and framework."
+      ],
+      "watchPoints": [
+        "A container image does not install or manage host GPU drivers.",
+        "Adding arbitrary packages can break the tested framework/CUDA combination and removes some support assumptions.",
+        "Public image availability does not grant workload access to private data; runtime IAM remains separate."
+      ],
+      "cost": [
+        "Images themselves are available as artifacts; charges come from Artifact Registry storage/egress, builds and the compute running them.",
+        "Large ML layers increase build, pull and node-start time, which matters for elastic clusters.",
+        "Reuse regional registries and layered builds to reduce transfer and rebuild overhead."
+      ],
+      "alternatives": [
+        "Deep Learning Containers — Portable, curated containerized ML runtime.",
+        "Deep Learning VM — Curated ML stack delivered as a VM image.",
+        "Custom container — Maximum package control with full maintenance responsibility."
+      ],
+      "comparisons": [
+        {
+          "name": "Deep Learning Containers",
+          "fit": "Portable, curated containerized ML runtime."
+        },
+        {
+          "name": "Deep Learning VM",
+          "fit": "Curated ML stack delivered as a VM image."
+        },
+        {
+          "name": "Custom container",
+          "fit": "Maximum package control with full maintenance responsibility."
+        }
+      ],
+      "memoryHooks": [
+        "Container controls user space; host controls drivers and hardware.",
+        "Pin digest, scan derivative, record it with the model.",
+        "Exam clue: consistent framework environment across GKE, Vertex AI and VMs."
+      ],
+      "relatedServices": [
+        "artifact-registry",
+        "artifact-analysis",
+        "cloud-build",
+        "google-kubernetes-engine-gke",
+        "deep-learning-vm"
+      ],
+      "sources": [
+        {
+          "title": "Deep Learning Containers documentation",
+          "url": "https://cloud.google.com/deep-learning-containers/docs"
+        },
+        {
+          "title": "Container image choices",
+          "url": "https://cloud.google.com/deep-learning-containers/docs/choosing-container"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Choose an image",
+          "detail": "Use the Deep Learning Containers catalog to select framework, version and CPU/GPU variant."
+        },
+        {
+          "title": "Inspect the artifact",
+          "detail": "Open Artifact Registry and record the exact regional image path and immutable digest."
+        },
+        {
+          "title": "Configure the runtime",
+          "detail": "Reference the digest in Vertex AI, GKE or Compute Engine and attach a least-privilege service account."
+        },
+        {
+          "title": "Validate the stack",
+          "detail": "Run framework/accelerator smoke tests, inspect vulnerabilities and publish a signed derivative only if needed."
+        }
+      ]
+    },
+    {
+      "slug": "deep-learning-vm",
+      "summary": "Compute Engine VM images preconfigured with ML frameworks, accelerator drivers and notebook tooling for customizable deep-learning development and training.",
+      "concepts": [
+        "Images bundle an operating system, framework and accelerator software; image family and release determine compatibility and patch baseline.",
+        "The resource is still a Compute Engine VM, so machine type, disks, network, Shielded VM settings and service account remain customer design choices.",
+        "GPU attachment needs quota and a compatible image/driver; startup scripts can add packages but also introduce configuration drift."
+      ],
+      "applicationFit": [
+        "Use for SSH/Jupyter-based research that needs root-level VM customization or software not supported by managed notebooks.",
+        "Choose it for long-lived development hosts and special drivers; use managed training jobs for repeatable ephemeral runs.",
+        "Prefer Deep Learning Containers when portability across orchestrators is more important than full VM control."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Private research workstation",
+          "note": "A researcher reaches a hardened VM through IAP while datasets stay in private Google Cloud services.",
+          "reference": "Private research workstation pattern",
+          "steps": [
+            {
+              "title": "Researcher",
+              "items": [
+                "IAP TCP forwarding",
+                "OS Login"
+              ]
+            },
+            {
+              "title": "Deep Learning VM",
+              "items": [
+                "Framework image",
+                "GPU"
+              ]
+            },
+            {
+              "title": "VPC",
+              "items": [
+                "No external IP",
+                "Private Google Access"
+              ]
+            },
+            {
+              "title": "Cloud Storage / BigQuery",
+              "items": [
+                "Training data",
+                "IAM"
+              ]
+            },
+            {
+              "title": "Artifact Registry",
+              "items": [
+                "Code / models",
+                "Versioned output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Reproducible VM training pool",
+          "note": "An instance template pins the image and startup configuration so disposable workers recreate the same environment.",
+          "reference": "Reproducible VM training pool pattern",
+          "steps": [
+            {
+              "title": "Image family / version",
+              "items": [
+                "Framework baseline",
+                "Drivers"
+              ]
+            },
+            {
+              "title": "Instance template",
+              "items": [
+                "Machine / disk",
+                "Service account"
+              ]
+            },
+            {
+              "title": "MIG or scheduler",
+              "items": [
+                "Create workers",
+                "Capacity"
+              ]
+            },
+            {
+              "title": "Training",
+              "items": [
+                "Checkpoints",
+                "Metrics"
+              ]
+            },
+            {
+              "title": "Teardown",
+              "items": [
+                "Delete VMs",
+                "Keep artifacts"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Use OS Login and IAP instead of public SSH, and remove broad cloud-platform access from the VM service account.",
+        "Keep secrets outside notebooks and startup scripts; retrieve them with Secret Manager and workload identity.",
+        "Patch the OS and framework image, scan installed packages and use Shielded VM controls where workload compatibility allows."
+      ],
+      "operations": [
+        "Monitor GPU utilization, disk throughput, memory and idle time; stop schedules or instance policies should handle abandoned workstations.",
+        "Recreate from a pinned image/template rather than repairing snowflake VMs; persist code and results outside the boot disk.",
+        "Test driver/framework changes with representative models before rotating an image family in templates."
+      ],
+      "watchPoints": [
+        "Image-family references can advance to a newer release; pin a specific image for regulated or reproducible builds.",
+        "Stopping a VM preserves disks and may retain accelerator reservation implications; it does not eliminate every storage cost.",
+        "Notebook access, OS access and Google Cloud API access are separate identity surfaces."
+      ],
+      "cost": [
+        "Compute Engine VM, GPU/TPU attachment, disks, snapshots and network egress are billed independently.",
+        "Committed use discounts or reservations suit steady research fleets; Spot suits checkpointable training.",
+        "Idle GPU time dominates cost, so schedule shutdown and expose utilization to project owners."
+      ],
+      "alternatives": [
+        "Deep Learning VM — Customizable VM with curated ML software.",
+        "Deep Learning Containers — Portable curated runtime on an existing host/orchestrator.",
+        "Colab Enterprise — Collaborative managed notebook with less host administration."
+      ],
+      "comparisons": [
+        {
+          "name": "Deep Learning VM",
+          "fit": "Customizable VM with curated ML software."
+        },
+        {
+          "name": "Deep Learning Containers",
+          "fit": "Portable curated runtime on an existing host/orchestrator."
+        },
+        {
+          "name": "Colab Enterprise",
+          "fit": "Collaborative managed notebook with less host administration."
+        }
+      ],
+      "memoryHooks": [
+        "Curated image does not remove Compute Engine administration.",
+        "Persist artifacts externally; rebuild the VM from a pinned definition.",
+        "Exam clue: root access and custom drivers on a preconfigured ML workstation."
+      ],
+      "relatedServices": [
+        "compute-engine",
+        "deep-learning-containers",
+        "colab-enterprise",
+        "cloud-storage",
+        "identity-aware-proxy"
+      ],
+      "sources": [
+        {
+          "title": "Deep Learning VM documentation",
+          "url": "https://cloud.google.com/deep-learning-vm/docs"
+        },
+        {
+          "title": "Deep Learning VM images",
+          "url": "https://cloud.google.com/deep-learning-vm/docs/images"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Start from the image",
+          "detail": "Console → Compute Engine → VM instances → Create; choose a Deep Learning VM image or image family."
+        },
+        {
+          "title": "Size and secure",
+          "detail": "Select machine/GPU, disk, VPC, no external IP where possible, Shielded VM, service account and access scopes."
+        },
+        {
+          "title": "Configure access",
+          "detail": "Enable OS Login/IAP, start Jupyter only on an approved path and test access to data/artifact stores."
+        },
+        {
+          "title": "Operationalize",
+          "detail": "Create a template/snapshot policy, enable monitoring and configure stop schedules for idle development hosts."
+        }
+      ]
+    },
+    {
+      "slug": "dialogflow-es",
+      "summary": "A natural-language understanding platform for intent-based chat and voice agents built from agents, intents, entities, contexts and fulfillment webhooks.",
+      "concepts": [
+        "An agent owns intents and entity types; training phrases map utterances to intents and parameters extracted from system or custom entities.",
+        "Input/output contexts carry conversational state across turns and control which intents are eligible to match.",
+        "Fulfillment can return static responses or call a webhook; telephony and messaging integrations provide channels but do not replace backend business logic."
+      ],
+      "applicationFit": [
+        "Use for small-to-medium intent-driven bots with relatively linear conversations and established ES integrations.",
+        "Choose CX for complex state machines, reusable flows, large teams and explicit page/route control.",
+        "Use a generative agent platform when free-form reasoning and tool use dominate over deterministic intent routing."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Transactional chat bot",
+          "note": "A channel sends text to the ES agent, which extracts parameters and invokes a protected fulfillment service.",
+          "reference": "Transactional chat bot pattern",
+          "steps": [
+            {
+              "title": "Web / messaging channel",
+              "items": [
+                "User utterance",
+                "Session ID"
+              ]
+            },
+            {
+              "title": "Dialogflow ES",
+              "items": [
+                "Intent match",
+                "Entities / contexts"
+              ]
+            },
+            {
+              "title": "Fulfillment webhook",
+              "items": [
+                "Authenticated request",
+                "Business validation"
+              ]
+            },
+            {
+              "title": "Backend APIs",
+              "items": [
+                "Transaction",
+                "System of record"
+              ]
+            },
+            {
+              "title": "Response",
+              "items": [
+                "Prompt / confirmation",
+                "Channel reply"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Voice self-service",
+          "note": "Telephony audio is transcribed, routed through intents and escalated with session context when automation cannot complete.",
+          "reference": "Voice self-service pattern",
+          "steps": [
+            {
+              "title": "Caller",
+              "items": [
+                "Audio",
+                "ANI / session"
+              ]
+            },
+            {
+              "title": "Telephony integration",
+              "items": [
+                "Streaming media",
+                "Speech"
+              ]
+            },
+            {
+              "title": "ES agent",
+              "items": [
+                "Intent / slot filling",
+                "Fallback"
+              ]
+            },
+            {
+              "title": "Webhook",
+              "items": [
+                "Customer lookup",
+                "Action"
+              ]
+            },
+            {
+              "title": "Human agent",
+              "items": [
+                "Escalation",
+                "Conversation context"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Authenticate fulfillment with service-to-service identity, validate parameters server-side and never trust a matched intent as authorization.",
+        "Limit agent editors and export access because training phrases can contain sensitive utterances and business vocabulary.",
+        "Configure logging, retention and regionalization according to conversation-data policy; redact sensitive values before downstream logs."
+      ],
+      "operations": [
+        "Measure intent match, fallback, no-input, webhook latency/error and containment by journey—not only total sessions.",
+        "Use versions/environments for controlled promotion and automated conversation tests for critical intents.",
+        "Review unmatched utterances to improve phrases/entities while preventing overfitting and ambiguous intent overlap."
+      ],
+      "watchPoints": [
+        "Contexts are session-scoped state, not a durable customer database.",
+        "Webhook deadlines require fast backends and graceful retry/idempotency behavior.",
+        "Built-in integrations vary by region and channel; verify lifecycle and support before architecture commitment."
+      ],
+      "cost": [
+        "Pricing commonly follows text/audio requests or session usage; telephony, Speech APIs and backend compute can add charges.",
+        "Verbose logging and retained conversation exports create separate observability/storage cost.",
+        "Estimate by turns per conversation and audio duration, not monthly user count alone."
+      ],
+      "alternatives": [
+        "Dialogflow ES — Intent/context bot with moderate conversation complexity.",
+        "Dialogflow CX — Explicit flows/pages for complex enterprise journeys.",
+        "Gemini Enterprise Agent Platform — Generative enterprise agents, grounding and tool orchestration."
+      ],
+      "comparisons": [
+        {
+          "name": "Dialogflow ES",
+          "fit": "Intent/context bot with moderate conversation complexity."
+        },
+        {
+          "name": "Dialogflow CX",
+          "fit": "Explicit flows/pages for complex enterprise journeys."
+        },
+        {
+          "name": "Gemini Enterprise Agent Platform",
+          "fit": "Generative enterprise agents, grounding and tool orchestration."
+        }
+      ],
+      "memoryHooks": [
+        "Intent says what; entity extracts values; context carries turn state; webhook performs the action.",
+        "ES favors intent-centric flows; CX favors explicit state-machine design.",
+        "Exam clue: established FAQ/transaction bot with intents and contexts."
+      ],
+      "relatedServices": [
+        "speech-to-text",
+        "text-to-speech",
+        "cloud-run",
+        "gemini-enterprise-agent-platform"
+      ],
+      "sources": [
+        {
+          "title": "Dialogflow ES documentation",
+          "url": "https://cloud.google.com/dialogflow/es/docs"
+        },
+        {
+          "title": "Dialogflow ES basics",
+          "url": "https://cloud.google.com/dialogflow/es/docs/basics"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Create the agent",
+          "detail": "Dialogflow ES Console → Create agent; select project, language, time zone and region."
+        },
+        {
+          "title": "Model understanding",
+          "detail": "Create intents, training phrases, entities, parameters, contexts and fallback behavior."
+        },
+        {
+          "title": "Configure fulfillment",
+          "detail": "Enable webhook fulfillment, use an authenticated HTTPS service and map only required intents to it."
+        },
+        {
+          "title": "Test and release",
+          "detail": "Use the simulator, create a version/environment, validate channel integration and review diagnostic logs."
+        }
+      ]
+    },
+    {
+      "slug": "docai",
+      "summary": "Document AI converts unstructured documents into structured text and entities through OCR, pretrained or custom processors and human-review-aware workflows.",
+      "concepts": [
+        "A processor is a regional endpoint configured for a document task such as OCR, invoices, forms or custom extraction; processor versions control model behavior.",
+        "Online processing handles synchronous documents while batch processing reads and writes Cloud Storage for larger asynchronous workloads.",
+        "The Document response carries page layout, text anchors, entities, confidence and normalized values—not merely plain OCR text."
+      ],
+      "applicationFit": [
+        "Use for invoices, IDs, contracts and forms where layout-aware extraction and normalized business fields matter.",
+        "Select pretrained processors when schemas match; use custom extractor/classifier models for organization-specific documents.",
+        "Use Vision OCR for simpler image-to-text tasks that do not need document processors or structured entities."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Invoice processing pipeline",
+          "note": "Documents land in a controlled bucket, a processor extracts normalized fields and low-confidence cases enter review.",
+          "reference": "Invoice processing pipeline pattern",
+          "steps": [
+            {
+              "title": "Upload",
+              "items": [
+                "Cloud Storage",
+                "Malware / type check"
+              ]
+            },
+            {
+              "title": "Document AI processor",
+              "items": [
+                "OCR",
+                "Invoice entities"
+              ]
+            },
+            {
+              "title": "Confidence rules",
+              "items": [
+                "Auto accept",
+                "Review queue"
+              ]
+            },
+            {
+              "title": "Business service",
+              "items": [
+                "Validate supplier",
+                "Post transaction"
+              ]
+            },
+            {
+              "title": "Archive",
+              "items": [
+                "Source + JSON",
+                "Audit trail"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Batch document migration",
+          "note": "A manifest drives asynchronous processing and results are partitioned for analytics and search.",
+          "reference": "Batch document migration pattern",
+          "steps": [
+            {
+              "title": "Source bucket",
+              "items": [
+                "PDF/TIFF files",
+                "Lifecycle policy"
+              ]
+            },
+            {
+              "title": "Batch process request",
+              "items": [
+                "Regional processor",
+                "Page ranges"
+              ]
+            },
+            {
+              "title": "Output bucket",
+              "items": [
+                "Document JSON",
+                "Shards"
+              ]
+            },
+            {
+              "title": "Dataflow / BigQuery",
+              "items": [
+                "Flatten entities",
+                "Quality metrics"
+              ]
+            },
+            {
+              "title": "Search / archive",
+              "items": [
+                "Indexed content",
+                "Retention"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Keep processor, input bucket and output bucket in compatible regions and grant the runtime identity only object and processor-use permissions.",
+        "Treat extracted text and entities as the same sensitivity as source documents; apply CMEK/VPC Service Controls where supported.",
+        "Prevent prompt or document content from becoming executable instructions in downstream automation; validate extracted values against systems of record."
+      ],
+      "operations": [
+        "Track processor version, confidence distribution, field-level precision/recall, page failures and human correction rate.",
+        "Deploy a new processor version behind a representative evaluation set and preserve the previous version for rollback.",
+        "Use idempotent document IDs and output paths so retries do not create duplicate business transactions."
+      ],
+      "watchPoints": [
+        "File type, page count, size and synchronous limits differ; batch large documents rather than forcing online processing.",
+        "OCR confidence is not business validity—totals, dates and identifiers still need domain checks.",
+        "Processor availability and data residency are regional; moving documents across regions can violate policy and add transfer cost."
+      ],
+      "cost": [
+        "Billing is usually per page and depends on processor type; custom training/hosting and human review can add costs.",
+        "Cloud Storage operations, batch orchestration, BigQuery analysis and egress are separate.",
+        "Reduce cost by classifying/routing documents before expensive specialized extraction and by avoiding duplicate reprocessing."
+      ],
+      "alternatives": [
+        "Document AI — Layout-aware document processors and structured entities.",
+        "Vision API OCR — General image/PDF text detection without business document schemas.",
+        "Custom ML pipeline — Full model control with larger training and operations burden."
+      ],
+      "comparisons": [
+        {
+          "name": "Document AI",
+          "fit": "Layout-aware document processors and structured entities."
+        },
+        {
+          "name": "Vision API OCR",
+          "fit": "General image/PDF text detection without business document schemas."
+        },
+        {
+          "name": "Custom ML pipeline",
+          "fit": "Full model control with larger training and operations burden."
+        }
+      ],
+      "memoryHooks": [
+        "Processor + version + region define the extraction contract.",
+        "Confidence routes work; validation authorizes business action.",
+        "Exam clue: invoices/forms requiring fields, tables and normalized values."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "bigquery",
+        "dataflow",
+        "vision-api"
+      ],
+      "sources": [
+        {
+          "title": "Document AI documentation",
+          "url": "https://cloud.google.com/document-ai/docs"
+        },
+        {
+          "title": "Document AI overview",
+          "url": "https://cloud.google.com/document-ai/docs/overview"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Create a processor",
+          "detail": "Console → Document AI → Processor Gallery; select processor type, region and display name."
+        },
+        {
+          "title": "Grant storage access",
+          "detail": "Configure source/output Cloud Storage permissions for the calling identity and service agent."
+        },
+        {
+          "title": "Test extraction",
+          "detail": "Upload a representative document, inspect text/entities/confidence and choose online or batch processing."
+        },
+        {
+          "title": "Manage versions",
+          "detail": "Evaluate a processor version, deploy/promote deliberately and monitor field quality and failed pages."
+        }
+      ]
+    },
+    {
+      "slug": "enterprise-knowledge-graph",
+      "summary": "A managed capability for turning enterprise data into connected entities and relationships that improve discovery, semantic context and grounded applications.",
+      "concepts": [
+        "A knowledge graph models entities, attributes and typed relationships so applications can traverse meaning rather than join only by literal keys.",
+        "Entity resolution reconciles aliases and duplicate records into canonical identities while preserving provenance to source systems.",
+        "Ontology and schema governance determine which concepts and relationships are trustworthy enough for search, analytics or agent grounding."
+      ],
+      "applicationFit": [
+        "Use when customer, product, asset or supplier data spans systems and relationship context is central to the question.",
+        "Fit semantic search and grounded-agent scenarios that need curated enterprise facts with provenance.",
+        "Do not introduce a graph for simple tabular reporting where BigQuery joins and governed dimensions are sufficient."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Enterprise entity graph",
+          "note": "Source records are normalized, resolved to canonical entities and published with provenance for downstream consumers.",
+          "reference": "Enterprise entity graph pattern",
+          "steps": [
+            {
+              "title": "Source systems",
+              "items": [
+                "CRM / ERP / catalog",
+                "Record IDs"
+              ]
+            },
+            {
+              "title": "Ingestion",
+              "items": [
+                "Batch / change feeds",
+                "Normalization"
+              ]
+            },
+            {
+              "title": "Entity resolution",
+              "items": [
+                "Match / merge",
+                "Canonical ID"
+              ]
+            },
+            {
+              "title": "Knowledge graph",
+              "items": [
+                "Entities",
+                "Relationships"
+              ]
+            },
+            {
+              "title": "Consumers",
+              "items": [
+                "Search / analytics / agents",
+                "Provenance"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Grounded assistant retrieval",
+          "note": "A user question resolves relevant entities and relationships before selected facts are supplied to a model.",
+          "reference": "Grounded assistant retrieval pattern",
+          "steps": [
+            {
+              "title": "User question",
+              "items": [
+                "Identity",
+                "Business context"
+              ]
+            },
+            {
+              "title": "Entity linker",
+              "items": [
+                "Aliases",
+                "Canonical entities"
+              ]
+            },
+            {
+              "title": "Graph query",
+              "items": [
+                "Relationship traversal",
+                "Policy filter"
+              ]
+            },
+            {
+              "title": "Grounding context",
+              "items": [
+                "Citations",
+                "Fresh facts"
+              ]
+            },
+            {
+              "title": "Gemini agent",
+              "items": [
+                "Answer",
+                "Source links"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Apply source-system entitlements during graph retrieval; a connected graph must not flatten access boundaries.",
+        "Retain provenance and change history so merged identities and inferred relationships can be challenged or corrected.",
+        "Classify sensitive relationship data and prevent high-risk inferences from being exposed merely because individual records were readable."
+      ],
+      "operations": [
+        "Measure match/merge precision, orphan entities, stale sources, schema violations and query latency.",
+        "Establish ontology ownership and a correction workflow; uncontrolled relationship types quickly erode trust.",
+        "Version ingestion mappings and backfill carefully when canonical IDs or merge rules change."
+      ],
+      "watchPoints": [
+        "False-positive entity merges are often more damaging than duplicates because they combine unrelated data and permissions.",
+        "Graph freshness is bounded by source ingestion and resolution cadence; state it in consuming applications.",
+        "A knowledge graph supplies facts and relationships, not automatic authorization or model truthfulness."
+      ],
+      "cost": [
+        "Cost follows ingestion/processing, graph storage, queries and connected pipelines or model calls.",
+        "High-cardinality relationships and frequent full rebuilds increase processing and validation expense.",
+        "Compare the operational value of relationship traversal with a governed BigQuery semantic model before choosing graph architecture."
+      ],
+      "alternatives": [
+        "Enterprise Knowledge Graph — Curated entities and relationships for semantic enterprise use.",
+        "BigQuery — Large-scale SQL analytics and governed dimensional models.",
+        "Vertex AI Search / agent grounding — Retrieval experience that can consume curated enterprise knowledge."
+      ],
+      "comparisons": [
+        {
+          "name": "Enterprise Knowledge Graph",
+          "fit": "Curated entities and relationships for semantic enterprise use."
+        },
+        {
+          "name": "BigQuery",
+          "fit": "Large-scale SQL analytics and governed dimensional models."
+        },
+        {
+          "name": "Vertex AI Search / agent grounding",
+          "fit": "Retrieval experience that can consume curated enterprise knowledge."
+        }
+      ],
+      "memoryHooks": [
+        "Resolve identity before traversing relationships; keep provenance with every fact.",
+        "A graph connects meaning, but entitlements still filter every retrieval.",
+        "Exam clue: fragmented enterprise records plus relationship-aware discovery."
+      ],
+      "relatedServices": [
+        "bigquery",
+        "gemini-enterprise-agent-platform",
+        "dataflow",
+        "datastream"
+      ],
+      "sources": [
+        {
+          "title": "Enterprise Knowledge Graph documentation",
+          "url": "https://cloud.google.com/enterprise-knowledge-graph/docs"
+        },
+        {
+          "title": "Google Cloud knowledge graph solutions",
+          "url": "https://cloud.google.com/solutions/knowledge-graph"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Define the model",
+          "detail": "From the product console/project, establish entity types, identifiers, relationships and provenance requirements."
+        },
+        {
+          "title": "Connect governed sources",
+          "detail": "Configure approved data inputs and mappings without removing source-system access boundaries."
+        },
+        {
+          "title": "Resolve entities",
+          "detail": "Run matching/merge processing, review ambiguous candidates and tune rules against a labeled sample."
+        },
+        {
+          "title": "Publish and monitor",
+          "detail": "Expose governed graph retrieval, validate ACL filtering and monitor freshness, orphan and false-merge metrics."
+        }
+      ]
+    },
+    {
+      "slug": "gemini-enterprise-agent-platform",
+      "summary": "An enterprise agent platform for creating grounded Gemini-powered assistants that search organizational content, invoke approved tools and operate under enterprise identity controls.",
+      "concepts": [
+        "Agents combine model instructions, enterprise data stores and tools; grounding retrieves authorized evidence at request time instead of relying only on model memory.",
+        "Connectors index content from supported repositories while ACL-aware retrieval is required to preserve source permissions.",
+        "Tool calls move an agent from answering to acting, so schemas, confirmation rules and transaction boundaries become part of security design."
+      ],
+      "applicationFit": [
+        "Use for employee assistants, research and cross-system workflows that need enterprise search plus conversational reasoning.",
+        "Choose deterministic orchestration such as Workflows for fixed business processes where every transition must be predefined.",
+        "Use a narrow API such as Translation or Speech-to-Text when the task is a single transformation rather than an agentic workflow."
+      ],
+      "architectureFlows": [
+        {
+          "title": "ACL-aware enterprise assistant",
+          "note": "A signed-in employee retrieves permitted evidence, Gemini produces a cited response and feedback feeds quality operations.",
+          "reference": "ACL-aware enterprise assistant pattern",
+          "steps": [
+            {
+              "title": "Employee",
+              "items": [
+                "Cloud identity",
+                "Question"
+              ]
+            },
+            {
+              "title": "Agent",
+              "items": [
+                "Instructions",
+                "Conversation state"
+              ]
+            },
+            {
+              "title": "Enterprise search",
+              "items": [
+                "ACL filtering",
+                "Hybrid retrieval"
+              ]
+            },
+            {
+              "title": "Gemini model",
+              "items": [
+                "Grounded generation",
+                "Safety controls"
+              ]
+            },
+            {
+              "title": "Response",
+              "items": [
+                "Citations",
+                "Feedback"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Action-taking support agent",
+          "note": "The agent retrieves policy, proposes an action and invokes a backend only after policy and confirmation gates succeed.",
+          "reference": "Action-taking support agent pattern",
+          "steps": [
+            {
+              "title": "Support user",
+              "items": [
+                "Case context",
+                "Request"
+              ]
+            },
+            {
+              "title": "Agent reasoning",
+              "items": [
+                "Grounding",
+                "Tool selection"
+              ]
+            },
+            {
+              "title": "Policy gate",
+              "items": [
+                "Authorization",
+                "Confirmation"
+              ]
+            },
+            {
+              "title": "Tool endpoint",
+              "items": [
+                "Typed request",
+                "Idempotency key"
+              ]
+            },
+            {
+              "title": "System of record",
+              "items": [
+                "Transaction",
+                "Audit event"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Propagate user identity to retrieval and tools; never let a broadly privileged indexing or tool account silently bypass source ACLs.",
+        "Separate read tools from mutating tools, require confirmation for consequential actions and validate every tool argument server-side.",
+        "Apply data-store, conversation-retention, model-safety and audit policies; defend retrieval content against prompt injection."
+      ],
+      "operations": [
+        "Evaluate groundedness, citation quality, retrieval recall, task completion, tool error and unsafe-action rate on a curated test set.",
+        "Version instructions, connector configuration and tools together; canary changes and keep trace data sufficient to diagnose regressions.",
+        "Monitor connector freshness and permission synchronization because stale indexes can create inaccurate or unauthorized answers."
+      ],
+      "watchPoints": [
+        "A citation shows retrieval provenance, not that the source is correct or current.",
+        "Connector ingestion and ACL sync have latency; design revocation expectations explicitly.",
+        "Generative output is probabilistic—high-impact decisions need deterministic validation or human approval."
+      ],
+      "cost": [
+        "Costs can include indexed data/search, model input/output tokens, connector processing and tool backends.",
+        "Long contexts and repeated retrieval increase latency and token charges; retrieve the smallest evidence set that answers the task.",
+        "Measure cost per successfully completed task, not only cost per chat turn."
+      ],
+      "alternatives": [
+        "Gemini Enterprise Agent Platform — Grounded enterprise assistants with connectors and tools.",
+        "Dialogflow ES — Intent-driven conversational automation.",
+        "Workflows — Deterministic service orchestration without generative reasoning."
+      ],
+      "comparisons": [
+        {
+          "name": "Gemini Enterprise Agent Platform",
+          "fit": "Grounded enterprise assistants with connectors and tools."
+        },
+        {
+          "name": "Dialogflow ES",
+          "fit": "Intent-driven conversational automation."
+        },
+        {
+          "name": "Workflows",
+          "fit": "Deterministic service orchestration without generative reasoning."
+        }
+      ],
+      "memoryHooks": [
+        "Grounding answers with evidence; tools turn evidence into controlled action.",
+        "User ACLs must survive indexing, retrieval and tool execution.",
+        "Exam clue: enterprise assistant searching internal content and invoking governed tools."
+      ],
+      "relatedServices": [
+        "dialogflow-es",
+        "cloud-run",
+        "workflows",
+        "enterprise-knowledge-graph"
+      ],
+      "sources": [
+        {
+          "title": "Gemini Enterprise documentation",
+          "url": "https://cloud.google.com/gemini-enterprise/docs"
+        },
+        {
+          "title": "Gemini Enterprise overview",
+          "url": "https://cloud.google.com/gemini-enterprise/docs/overview"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Create the application",
+          "detail": "Console → Gemini Enterprise; create an app/agent in the intended project and location."
+        },
+        {
+          "title": "Add enterprise data",
+          "detail": "Configure supported connectors/data stores, synchronization cadence and ACL-aware identity mapping."
+        },
+        {
+          "title": "Configure the agent",
+          "detail": "Set instructions, grounding, safety controls and typed tools with separate read/write permissions."
+        },
+        {
+          "title": "Evaluate and publish",
+          "detail": "Run a curated evaluation set, inspect citations/tool traces, then publish to a controlled user group."
+        }
+      ]
+    },
+    {
+      "slug": "live-stream-api",
+      "summary": "A managed live-video transcoding service that converts real-time input feeds into adaptive-bitrate HLS or DASH renditions for delivery through Cloud Storage and a CDN.",
+      "concepts": [
+        "An input endpoint accepts live SRT or RTMP contribution; a channel defines elementary streams, muxed outputs, manifests and the output bucket.",
+        "Adaptive bitrate ladders create multiple resolution/bitrate renditions so players switch based on device and network conditions.",
+        "The service writes manifests and segments to Cloud Storage; CDN delivery and playback authorization remain separate architecture layers."
+      ],
+      "applicationFit": [
+        "Use for 24×7 or event live streaming that needs managed transcoding and packaged HLS/DASH output.",
+        "Combine with Media CDN or Cloud CDN for global audience distribution and origin protection.",
+        "Use Transcoder API for file-based video-on-demand assets, not an ongoing live contribution feed."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Global live event",
+          "note": "An encoder contributes one reliable feed; Live Stream API produces renditions that a CDN distributes globally.",
+          "reference": "Global live event pattern",
+          "steps": [
+            {
+              "title": "Venue encoder",
+              "items": [
+                "SRT / RTMP",
+                "Primary feed"
+              ]
+            },
+            {
+              "title": "Input endpoint",
+              "items": [
+                "Ingest URI",
+                "Regional boundary"
+              ]
+            },
+            {
+              "title": "Channel",
+              "items": [
+                "Transcode ladder",
+                "HLS / DASH"
+              ]
+            },
+            {
+              "title": "Cloud Storage",
+              "items": [
+                "Segments",
+                "Manifests"
+              ]
+            },
+            {
+              "title": "Media CDN",
+              "items": [
+                "Edge cache",
+                "Viewers"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Protected premium stream",
+          "note": "Playback requests are authorized at the edge while segments originate from a restricted output bucket.",
+          "reference": "Protected premium stream pattern",
+          "steps": [
+            {
+              "title": "Subscriber app",
+              "items": [
+                "Playback request",
+                "Entitlement token"
+              ]
+            },
+            {
+              "title": "Edge policy",
+              "items": [
+                "Signed request",
+                "Geo / policy check"
+              ]
+            },
+            {
+              "title": "Media CDN",
+              "items": [
+                "Cached segments",
+                "TLS"
+              ]
+            },
+            {
+              "title": "Output bucket",
+              "items": [
+                "Private origin",
+                "Lifecycle"
+              ]
+            },
+            {
+              "title": "Monitoring",
+              "items": [
+                "Channel health",
+                "Viewer QoE"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Restrict input endpoint details and permit output-bucket writes only to the service agent; viewers should access content through the delivery layer.",
+        "Use signed requests/tokens and DRM or application entitlement controls where content rights require them.",
+        "Separate contribution-network access, channel administration and playback authorization into different identities and audit trails."
+      ],
+      "operations": [
+        "Monitor input continuity, channel state, encoding errors, segment freshness and end-to-end player latency.",
+        "Start and stop channels through a rehearsed event runbook and validate every rendition/manifest before audience cutover.",
+        "Use redundant encoders and contribution paths for premium events; archive the source separately if replay or forensic recovery is required."
+      ],
+      "watchPoints": [
+        "Starting a channel without a valid continuous input does not create useful output and can still consume provisioned resources.",
+        "Codec, frame rate, keyframe interval and audio layout must be compatible with the selected transcoding ladder.",
+        "Live Stream API creates media outputs; it does not provide a player, subscriber system or complete DRM service."
+      ],
+      "cost": [
+        "Charges depend on channel transcoding time and output characteristics; HD/UHD and multiple renditions increase processing.",
+        "Cloud Storage, CDN delivery, cache misses, logging and network egress are separate charges.",
+        "For events, automate channel start/stop and choose the smallest ladder that meets device and quality requirements."
+      ],
+      "alternatives": [
+        "Live Stream API — Real-time input to live HLS/DASH outputs.",
+        "Transcoder API — Asynchronous file-to-file VOD transcoding.",
+        "Video Stitcher API — Server-side ad insertion into live or VOD manifests."
+      ],
+      "comparisons": [
+        {
+          "name": "Live Stream API",
+          "fit": "Real-time input to live HLS/DASH outputs."
+        },
+        {
+          "name": "Transcoder API",
+          "fit": "Asynchronous file-to-file VOD transcoding."
+        },
+        {
+          "name": "Video Stitcher API",
+          "fit": "Server-side ad insertion into live or VOD manifests."
+        }
+      ],
+      "memoryHooks": [
+        "Input endpoint receives; channel transcodes; bucket originates; CDN delivers.",
+        "Live Stream creates renditions, Video Stitcher personalizes manifests.",
+        "Exam clue: SRT/RTMP live contribution converted to adaptive streaming."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "media-cdn",
+        "transcoder-api",
+        "video-stitcher-api"
+      ],
+      "sources": [
+        {
+          "title": "Live Stream API documentation",
+          "url": "https://cloud.google.com/livestream/docs"
+        },
+        {
+          "title": "Live Stream API overview",
+          "url": "https://cloud.google.com/livestream/docs/overview"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Create input endpoint",
+          "detail": "Console → Live Stream API → Input endpoints; choose region and protocol, then record the ingest URI."
+        },
+        {
+          "title": "Configure the channel",
+          "detail": "Create a channel with input attachment, elementary streams, mux streams, manifests and output bucket."
+        },
+        {
+          "title": "Start and validate",
+          "detail": "Start the channel after the encoder is sending; verify fresh HLS/DASH segments and every rendition."
+        },
+        {
+          "title": "Connect delivery",
+          "detail": "Configure CDN/origin authorization, monitor channel health and stop the channel when an event ends."
+        }
+      ]
+    },
+    {
+      "slug": "speech-to-text",
+      "summary": "A speech recognition API for converting short, long-form or streaming audio into transcripts with language, model, adaptation and diarization controls.",
+      "concepts": [
+        "Synchronous recognition suits short audio, batch recognition processes stored files, and streaming recognition returns interim/final results over a live connection.",
+        "Recognizer configuration selects language, model and features; phrase adaptation biases likely vocabulary but does not guarantee a phrase.",
+        "Word time offsets, confidence, punctuation, channel separation and diarization enrich transcripts for downstream workflows."
+      ],
+      "applicationFit": [
+        "Use for call transcription, captions, voice commands and searchable media where audio must become text.",
+        "Use streaming for interactive latency and batch for throughput-oriented stored audio.",
+        "Pair with Dialogflow when transcription is only the input stage of an intent-based conversation."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Contact-center transcription",
+          "note": "Separate audio channels are streamed or batched into transcripts that are redacted and analyzed.",
+          "reference": "Contact-center transcription pattern",
+          "steps": [
+            {
+              "title": "Contact platform",
+              "items": [
+                "Agent/customer channels",
+                "Audio frames"
+              ]
+            },
+            {
+              "title": "Speech-to-Text",
+              "items": [
+                "Telephony model",
+                "Channel recognition"
+              ]
+            },
+            {
+              "title": "Transcript",
+              "items": [
+                "Words / timestamps",
+                "Confidence"
+              ]
+            },
+            {
+              "title": "Sensitive Data Protection",
+              "items": [
+                "Redaction",
+                "Policy"
+              ]
+            },
+            {
+              "title": "BigQuery / SecOps",
+              "items": [
+                "QA analytics",
+                "Retention"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Real-time captions",
+          "note": "A client streams correctly encoded audio, receives interim hypotheses and displays only stable final segments.",
+          "reference": "Real-time captions pattern",
+          "steps": [
+            {
+              "title": "Microphone",
+              "items": [
+                "Audio capture",
+                "Codec / sample rate"
+              ]
+            },
+            {
+              "title": "Streaming session",
+              "items": [
+                "Authentication",
+                "Flow control"
+              ]
+            },
+            {
+              "title": "Recognizer",
+              "items": [
+                "Language / adaptation",
+                "Interim results"
+              ]
+            },
+            {
+              "title": "Caption service",
+              "items": [
+                "Stability logic",
+                "Final segments"
+              ]
+            },
+            {
+              "title": "Viewer",
+              "items": [
+                "Low-latency text",
+                "Accessibility"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Send audio only from authenticated workloads and restrict access to stored recordings/transcripts separately.",
+        "Treat voice and transcripts as sensitive personal data; apply consent, retention, residency and redaction requirements.",
+        "Avoid logging raw audio or credentials in request diagnostics; use service accounts and private access controls where applicable."
+      ],
+      "operations": [
+        "Measure word error rate on domain audio, end-to-end latency, empty results, stream reconnects and quota exhaustion.",
+        "Keep an evaluation corpus across accents, codecs and noise conditions before changing models or adaptation.",
+        "Retry batch jobs idempotently; streaming clients must handle session limits and reconnect without duplicating finalized text."
+      ],
+      "watchPoints": [
+        "Declared encoding and sample rate must match the actual audio or accuracy can collapse without a clear API error.",
+        "Diarization estimates speakers; multi-channel recognition is preferable when speakers are already isolated.",
+        "Confidence is model evidence, not a universal probability or authorization signal."
+      ],
+      "cost": [
+        "Billing is based primarily on audio duration and selected recognition features/model.",
+        "Storage, streaming transport, redaction, analytics and egress add downstream costs.",
+        "Trim silence, choose the correct model and avoid retranscribing unchanged recordings."
+      ],
+      "alternatives": [
+        "Speech-to-Text — General audio transcription with streaming and batch modes.",
+        "Dialogflow ES — Conversation intent/entity handling after speech recognition.",
+        "Video Intelligence API — Video annotation where speech transcription is one media feature."
+      ],
+      "comparisons": [
+        {
+          "name": "Speech-to-Text",
+          "fit": "General audio transcription with streaming and batch modes."
+        },
+        {
+          "name": "Dialogflow ES",
+          "fit": "Conversation intent/entity handling after speech recognition."
+        },
+        {
+          "name": "Video Intelligence API",
+          "fit": "Video annotation where speech transcription is one media feature."
+        }
+      ],
+      "memoryHooks": [
+        "Audio configuration must describe the bytes actually sent.",
+        "Streaming favors latency; batch favors stored-audio throughput.",
+        "Exam clue: convert calls or microphone audio to timestamped text."
+      ],
+      "relatedServices": [
+        "dialogflow-es",
+        "sensitive-data-protection",
+        "bigquery",
+        "text-to-speech"
+      ],
+      "sources": [
+        {
+          "title": "Speech-to-Text documentation",
+          "url": "https://cloud.google.com/speech-to-text/docs"
+        },
+        {
+          "title": "Speech-to-Text recognition methods",
+          "url": "https://cloud.google.com/speech-to-text/docs/speech-to-text-requests"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Enable and scope",
+          "detail": "Console → APIs & Services → Library → Speech-to-Text API; enable it and assign the caller role."
+        },
+        {
+          "title": "Create recognition config",
+          "detail": "Choose recognizer/location, language, model, encoding, channels and optional adaptation/features."
+        },
+        {
+          "title": "Submit representative audio",
+          "detail": "Use synchronous, batch or streaming mode that matches duration/latency; verify actual codec/sample rate."
+        },
+        {
+          "title": "Review quality",
+          "detail": "Inspect transcript, confidence/timestamps and logs; measure word error rate before production rollout."
+        }
+      ]
+    },
+    {
+      "slug": "tensorflow-enterprise",
+      "summary": "An enterprise support and compatibility offering for selected TensorFlow versions on Google Cloud, aimed at stable production ML environments rather than a separate execution service.",
+      "concepts": [
+        "TensorFlow Enterprise centers on supported TensorFlow distributions and long maintenance windows for designated versions.",
+        "The framework still runs on Compute Engine, GKE, Deep Learning images or managed training; TensorFlow Enterprise does not create a new data plane.",
+        "Compatibility with CUDA, cuDNN, Python and accelerator drivers must be validated as one tested runtime stack."
+      ],
+      "applicationFit": [
+        "Use when production TensorFlow workloads need a curated, supportable version strategy on Google Cloud.",
+        "Combine with Deep Learning Containers/VM images to consume tested framework and accelerator combinations.",
+        "Do not select it as an inference endpoint or training scheduler; use Vertex AI, GKE or Compute Engine for runtime orchestration."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Supported TensorFlow training stack",
+          "note": "A pinned supported image moves through testing into managed training with exact dependencies recorded.",
+          "reference": "Supported TensorFlow training stack pattern",
+          "steps": [
+            {
+              "title": "Model source",
+              "items": [
+                "TensorFlow code",
+                "Tests"
+              ]
+            },
+            {
+              "title": "Supported image",
+              "items": [
+                "TF / CUDA versions",
+                "Pinned digest"
+              ]
+            },
+            {
+              "title": "Training platform",
+              "items": [
+                "Vertex AI / GKE",
+                "Accelerators"
+              ]
+            },
+            {
+              "title": "Artifact store",
+              "items": [
+                "SavedModel",
+                "Metadata"
+              ]
+            },
+            {
+              "title": "Release process",
+              "items": [
+                "Compatibility test",
+                "Rollback"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Long-lived inference maintenance",
+          "note": "A production model and runtime are upgraded independently through a compatibility matrix and canary deployment.",
+          "reference": "Long-lived inference maintenance pattern",
+          "steps": [
+            {
+              "title": "Current model",
+              "items": [
+                "SavedModel signature",
+                "Baseline"
+              ]
+            },
+            {
+              "title": "Runtime candidate",
+              "items": [
+                "Supported TF version",
+                "Driver matrix"
+              ]
+            },
+            {
+              "title": "Regression suite",
+              "items": [
+                "Accuracy",
+                "Latency"
+              ]
+            },
+            {
+              "title": "Canary endpoint",
+              "items": [
+                "Small traffic share",
+                "Observability"
+              ]
+            },
+            {
+              "title": "Promotion",
+              "items": [
+                "Versioned image",
+                "Support evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Scan and sign images containing the framework, and isolate runtime service accounts from build identities.",
+        "Patch the full image/OS stack; a supported TensorFlow package does not remediate vulnerable system or Python dependencies.",
+        "Protect model artifacts and training data through the storage and runtime platform's IAM/CMEK controls."
+      ],
+      "operations": [
+        "Maintain a compatibility matrix for TensorFlow, Python, CUDA/cuDNN, drivers, hardware and model format.",
+        "Capture exact package/image versions and run numerical, performance and serialization regression tests before upgrades.",
+        "Track end-of-support dates and plan migration rather than allowing production jobs to depend indefinitely on an obsolete version."
+      ],
+      "watchPoints": [
+        "Framework support does not guarantee that custom ops or third-party packages work after an upgrade.",
+        "The catalog name can be mistaken for a standalone managed service; architecture must still name the actual compute/training platform.",
+        "SavedModel and custom-op compatibility deserve explicit rollback tests across runtime versions."
+      ],
+      "cost": [
+        "Framework packages are not the main billable resource; compute accelerators, storage, images and support plan drive cost.",
+        "Staying on a supported stack can reduce engineering risk but may constrain adoption of the newest framework release.",
+        "Account for duplicate environments during upgrade and performance validation."
+      ],
+      "alternatives": [
+        "TensorFlow Enterprise — Supported TensorFlow version strategy on Google Cloud.",
+        "Deep Learning Containers — Curated runnable image, including framework dependencies.",
+        "Vertex AI training — Managed orchestration and infrastructure for training jobs."
+      ],
+      "comparisons": [
+        {
+          "name": "TensorFlow Enterprise",
+          "fit": "Supported TensorFlow version strategy on Google Cloud."
+        },
+        {
+          "name": "Deep Learning Containers",
+          "fit": "Curated runnable image, including framework dependencies."
+        },
+        {
+          "name": "Vertex AI training",
+          "fit": "Managed orchestration and infrastructure for training jobs."
+        }
+      ],
+      "memoryHooks": [
+        "It is a supported framework stack, not a training control plane.",
+        "Version TensorFlow, CUDA, driver and model compatibility together.",
+        "Exam clue: production TensorFlow stability and extended support."
+      ],
+      "relatedServices": [
+        "deep-learning-containers",
+        "deep-learning-vm",
+        "cloud-tpu",
+        "google-kubernetes-engine-gke"
+      ],
+      "sources": [
+        {
+          "title": "TensorFlow Enterprise documentation",
+          "url": "https://cloud.google.com/tensorflow-enterprise/docs"
+        },
+        {
+          "title": "TensorFlow Enterprise overview",
+          "url": "https://cloud.google.com/tensorflow-enterprise/docs/overview"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Select a supported stack",
+          "detail": "Review TensorFlow Enterprise-supported versions and map TensorFlow, Python, CUDA/cuDNN and drivers."
+        },
+        {
+          "title": "Choose execution platform",
+          "detail": "Create a Deep Learning VM/container, GKE workload or Vertex AI job using the pinned supported runtime."
+        },
+        {
+          "title": "Run compatibility tests",
+          "detail": "Validate custom ops, SavedModel load, numerical results and accelerator performance."
+        },
+        {
+          "title": "Promote with evidence",
+          "detail": "Record exact image/package versions, canary the new runtime and retain a tested rollback image."
+        }
+      ]
+    },
+    {
+      "slug": "text-to-speech",
+      "summary": "A speech synthesis API that converts text or SSML into natural-sounding audio using selectable languages, voices, encodings and speaking controls.",
+      "concepts": [
+        "Input can be plain text or SSML; SSML adds pauses, pronunciation, emphasis and other presentation controls.",
+        "Voice selection combines language, named voice and model family; audio configuration defines encoding, pitch, speaking rate and effects profile.",
+        "Synthesis returns audio bytes or long-form output depending on method; the application owns playback, caching and content workflow."
+      ],
+      "applicationFit": [
+        "Use for accessibility narration, IVR prompts, learning content and dynamic spoken responses.",
+        "Pre-synthesize stable phrases and cache them; synthesize personalized or rapidly changing text on demand.",
+        "Use human voice production where brand performance, legal approval or highly expressive direction outweighs dynamic generation."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Accessible content narration",
+          "note": "Approved text is normalized, synthesized once and cached for repeated delivery.",
+          "reference": "Accessible content narration pattern",
+          "steps": [
+            {
+              "title": "Content system",
+              "items": [
+                "Approved text",
+                "Language"
+              ]
+            },
+            {
+              "title": "SSML builder",
+              "items": [
+                "Pronunciation",
+                "Pauses"
+              ]
+            },
+            {
+              "title": "Text-to-Speech",
+              "items": [
+                "Voice",
+                "Audio encoding"
+              ]
+            },
+            {
+              "title": "Cloud Storage",
+              "items": [
+                "Versioned audio",
+                "Metadata"
+              ]
+            },
+            {
+              "title": "CDN / application",
+              "items": [
+                "Cached playback",
+                "Users"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Conversational voice response",
+          "note": "A bot response is policy-filtered, converted to low-latency audio and returned through a telephony or app channel.",
+          "reference": "Conversational voice response pattern",
+          "steps": [
+            {
+              "title": "Dialogflow / agent",
+              "items": [
+                "Response text",
+                "Locale"
+              ]
+            },
+            {
+              "title": "Policy layer",
+              "items": [
+                "Content filter",
+                "Length limit"
+              ]
+            },
+            {
+              "title": "Text-to-Speech",
+              "items": [
+                "Streaming / synthesis",
+                "Voice"
+              ]
+            },
+            {
+              "title": "Channel",
+              "items": [
+                "Telephony codec",
+                "Playback"
+              ]
+            },
+            {
+              "title": "Telemetry",
+              "items": [
+                "Latency",
+                "Failures"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Restrict synthesis to trusted workloads to prevent abuse, unexpected cost or generation of unauthorized content.",
+        "Do not send secrets or unnecessary personal data in synthesis text; logs and caches must follow the text's classification.",
+        "Confirm voice usage, disclosure and consent requirements for the target geography and experience."
+      ],
+      "operations": [
+        "Monitor characters synthesized, latency, quota errors, unsupported SSML and playback failures by voice/locale.",
+        "Regression-test pronunciation dictionaries and SSML when changing voices; voice names and capabilities are not interchangeable.",
+        "Cache immutable audio by normalized-text, voice and configuration hash so a voice change does not serve stale output."
+      ],
+      "watchPoints": [
+        "SSML must be valid and within request limits; unsupported tags or excessive input require chunking and validation.",
+        "Audio encoding must match the playback channel—telephony and web clients often need different formats.",
+        "A natural voice does not verify the underlying text; content correctness is upstream responsibility."
+      ],
+      "cost": [
+        "Billing is primarily based on characters synthesized and voice/model class.",
+        "Cloud Storage, CDN delivery and application compute are separate; caching repeated prompts can materially reduce calls.",
+        "Estimate by normalized character count, languages and premium voice selection rather than number of audio files."
+      ],
+      "alternatives": [
+        "Text-to-Speech — Dynamic text/SSML synthesis into audio.",
+        "Recorded human audio — Highest directed performance for stable content.",
+        "Speech-to-Text — The inverse task: audio into text."
+      ],
+      "comparisons": [
+        {
+          "name": "Text-to-Speech",
+          "fit": "Dynamic text/SSML synthesis into audio."
+        },
+        {
+          "name": "Recorded human audio",
+          "fit": "Highest directed performance for stable content."
+        },
+        {
+          "name": "Speech-to-Text",
+          "fit": "The inverse task: audio into text."
+        }
+      ],
+      "memoryHooks": [
+        "Text/SSML in; encoded audio out; playback remains your application.",
+        "Cache stable prompts and key cache by voice configuration.",
+        "Exam clue: generate multilingual spoken audio from application text."
+      ],
+      "relatedServices": [
+        "speech-to-text",
+        "dialogflow-es",
+        "cloud-storage",
+        "cloud-cdn"
+      ],
+      "sources": [
+        {
+          "title": "Text-to-Speech documentation",
+          "url": "https://cloud.google.com/text-to-speech/docs"
+        },
+        {
+          "title": "Text-to-Speech concepts",
+          "url": "https://cloud.google.com/text-to-speech/docs/basics"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Enable access",
+          "detail": "Console → APIs & Services → Library → Text-to-Speech API; enable it and authorize a service account."
+        },
+        {
+          "title": "Select voice settings",
+          "detail": "Choose language, named voice/model, output encoding, rate, pitch and effects profile."
+        },
+        {
+          "title": "Validate input",
+          "detail": "Test plain text or valid SSML in the product demo/API and confirm pronunciation and request limits."
+        },
+        {
+          "title": "Integrate and cache",
+          "detail": "Call synthesis from the backend, store/cache approved stable audio and monitor character usage/errors."
+        }
+      ]
+    },
+    {
+      "slug": "transcoder-api",
+      "summary": "An asynchronous media transcoding service that converts Cloud Storage video files into web-ready renditions, manifests, thumbnails and other VOD outputs.",
+      "concepts": [
+        "A job references an input URI, output URI and job template or inline configuration; processing is regional and asynchronous.",
+        "Elementary streams define video/audio codecs, mux streams package them, and manifests assemble HLS or DASH adaptive playback.",
+        "Job templates standardize ladders, overlays, spritesheets and publishing behavior across a media catalog."
+      ],
+      "applicationFit": [
+        "Use for uploaded video-on-demand processing, mezzanine conversion and multi-rendition publishing.",
+        "Create reusable templates for known device ladders; use per-job configuration only when assets genuinely differ.",
+        "Use Live Stream API for real-time feeds and Video Stitcher API for server-side ad personalization."
+      ],
+      "architectureFlows": [
+        {
+          "title": "VOD publishing pipeline",
+          "note": "An upload event creates an idempotent job whose renditions are validated before catalog publication.",
+          "reference": "VOD publishing pipeline pattern",
+          "steps": [
+            {
+              "title": "Upload bucket",
+              "items": [
+                "Mezzanine file",
+                "Object event"
+              ]
+            },
+            {
+              "title": "Eventarc / Workflows",
+              "items": [
+                "Validate metadata",
+                "Create job"
+              ]
+            },
+            {
+              "title": "Transcoder API",
+              "items": [
+                "Encode ladder",
+                "HLS / DASH"
+              ]
+            },
+            {
+              "title": "Output bucket",
+              "items": [
+                "Segments / manifests",
+                "Thumbnails"
+              ]
+            },
+            {
+              "title": "Media CDN",
+              "items": [
+                "Distribution",
+                "Players"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Controlled template factory",
+          "note": "Media engineering versions a standard template and promotion process instead of embedding encoder settings in every application.",
+          "reference": "Controlled template factory pattern",
+          "steps": [
+            {
+              "title": "Media standards",
+              "items": [
+                "Codec / bitrate",
+                "Device targets"
+              ]
+            },
+            {
+              "title": "Job template",
+              "items": [
+                "Versioned config",
+                "Region"
+              ]
+            },
+            {
+              "title": "Test assets",
+              "items": [
+                "Quality / duration",
+                "Compatibility"
+              ]
+            },
+            {
+              "title": "Production jobs",
+              "items": [
+                "Template reference",
+                "Labels"
+              ]
+            },
+            {
+              "title": "Analytics",
+              "items": [
+                "Failure rate",
+                "Output cost"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant the Transcoder service agent scoped read/write access to designated buckets; separate template editors from job submitters.",
+        "Keep source and output buckets private and deliver through signed CDN/application paths where media is protected.",
+        "Validate user-supplied media and job parameters to prevent arbitrary bucket reads/writes or resource-exhaustion abuse."
+      ],
+      "operations": [
+        "Track job state, queue time, processing errors, output completeness and quality metrics; emit completion events instead of polling aggressively.",
+        "Use deterministic job IDs/output prefixes and record source generation so retries do not overwrite unrelated renditions.",
+        "Version templates and validate players, captions and audio tracks before production promotion."
+      ],
+      "watchPoints": [
+        "Input/output buckets and job location must meet regional requirements; moving large mezzanine files adds delay and transfer cost.",
+        "Successful job status does not guarantee subjective quality or that every target player supports the chosen codecs.",
+        "Transcoder does not serve media or manage viewers; Cloud Storage/CDN/player layers remain required."
+      ],
+      "cost": [
+        "Charges depend on output duration, resolution and processing features; every rendition increases encoded minutes.",
+        "Cloud Storage, event orchestration, CDN and egress are separate.",
+        "Avoid unnecessary ladder rungs and re-encoding unchanged assets; retain a high-quality mezzanine for future formats."
+      ],
+      "alternatives": [
+        "Transcoder API — Asynchronous file-based VOD transcoding.",
+        "Live Stream API — Continuous live-feed transcoding and packaging.",
+        "Video Stitcher API — Dynamic ad insertion into existing live/VOD content."
+      ],
+      "comparisons": [
+        {
+          "name": "Transcoder API",
+          "fit": "Asynchronous file-based VOD transcoding."
+        },
+        {
+          "name": "Live Stream API",
+          "fit": "Continuous live-feed transcoding and packaging."
+        },
+        {
+          "name": "Video Stitcher API",
+          "fit": "Dynamic ad insertion into existing live/VOD content."
+        }
+      ],
+      "memoryHooks": [
+        "Job converts stored input to stored renditions; CDN performs delivery.",
+        "Templates standardize ladders and make jobs reproducible.",
+        "Exam clue: Cloud Storage video file to HLS/DASH and thumbnails."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "eventarc",
+        "workflows",
+        "media-cdn",
+        "live-stream-api"
+      ],
+      "sources": [
+        {
+          "title": "Transcoder API documentation",
+          "url": "https://cloud.google.com/transcoder/docs"
+        },
+        {
+          "title": "Transcoder API concepts",
+          "url": "https://cloud.google.com/transcoder/docs/concepts"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Prepare storage",
+          "detail": "Create regional input/output buckets and grant the Transcoder service agent the minimum object permissions."
+        },
+        {
+          "title": "Create a template",
+          "detail": "Console → Transcoder API → Job templates; define streams, muxes, manifests, overlays and thumbnails."
+        },
+        {
+          "title": "Submit a job",
+          "detail": "Create a job with input URI, output prefix, region and template; record the job ID for idempotent tracking."
+        },
+        {
+          "title": "Validate output",
+          "detail": "Check job status/errors, play all renditions/manifests and publish only after quality checks pass."
+        }
+      ]
+    },
+    {
+      "slug": "translation",
+      "summary": "Cloud Translation provides neural text and document translation, language detection, glossaries and custom models for multilingual applications.",
+      "concepts": [
+        "Basic and Advanced editions expose different resources and features; Advanced uses regional locations and supports glossaries, document translation and custom models.",
+        "Glossaries bias approved term mappings such as product names; they do not retrain the underlying model.",
+        "Synchronous text translation suits small requests, while batch/document methods use Cloud Storage for larger asynchronous workloads."
+      ],
+      "applicationFit": [
+        "Use general models for broad language coverage and glossaries for controlled terminology.",
+        "Use custom translation models when parallel domain corpora justify training and measurable evaluation.",
+        "Use a generative model only when translation is part of a broader reasoning task and nondeterminism is acceptable."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Localized content pipeline",
+          "note": "Source content is extracted, translated with a glossary and reviewed before localized publishing.",
+          "reference": "Localized content pipeline pattern",
+          "steps": [
+            {
+              "title": "CMS",
+              "items": [
+                "Source text",
+                "Locale metadata"
+              ]
+            },
+            {
+              "title": "Translation API",
+              "items": [
+                "Target languages",
+                "Glossary"
+              ]
+            },
+            {
+              "title": "Quality checks",
+              "items": [
+                "Placeholders",
+                "Terminology"
+              ]
+            },
+            {
+              "title": "Human review",
+              "items": [
+                "Priority content",
+                "Corrections"
+              ]
+            },
+            {
+              "title": "Localized publish",
+              "items": [
+                "Version",
+                "Fallback"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Batch document translation",
+          "note": "Documents move through regional buckets and asynchronous jobs while formatting and outputs are validated.",
+          "reference": "Batch document translation pattern",
+          "steps": [
+            {
+              "title": "Input bucket",
+              "items": [
+                "Supported documents",
+                "Source region"
+              ]
+            },
+            {
+              "title": "Batch translation",
+              "items": [
+                "Language pairs",
+                "Location"
+              ]
+            },
+            {
+              "title": "Output bucket",
+              "items": [
+                "Translated files",
+                "Manifest"
+              ]
+            },
+            {
+              "title": "Validation",
+              "items": [
+                "Layout / glossary",
+                "Completeness"
+              ]
+            },
+            {
+              "title": "Archive",
+              "items": [
+                "Source + output",
+                "Audit"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Restrict glossary, model and bucket access; translated output has the same classification as the source.",
+        "Avoid sending unnecessary personal or confidential data and choose locations that satisfy residency requirements.",
+        "Protect placeholders, markup and control tokens before translation so output cannot alter executable templates or policies."
+      ],
+      "operations": [
+        "Evaluate BLEU/COMET plus human quality for important language pairs; monitor language-detection errors and glossary misses.",
+        "Version glossaries and custom models with content releases, and maintain fallback behavior for unsupported languages.",
+        "Retry batch operations idempotently and preserve source/output manifests for completeness checks."
+      ],
+      "watchPoints": [
+        "Automatic language detection can confuse short or mixed-language text; specify source language when known.",
+        "Glossary behavior depends on language pair and tokenization; it is terminology guidance, not a universal replacement engine.",
+        "Machine translation is unsuitable as the sole authority for legal, clinical or safety-critical text without qualified review."
+      ],
+      "cost": [
+        "Text translation is billed by processed characters; document/batch and custom model usage have separate meters.",
+        "Storage, human review, orchestration and egress add cost.",
+        "Deduplicate identical strings, use translation memory and avoid retranslating unchanged content."
+      ],
+      "alternatives": [
+        "Cloud Translation — Purpose-built text/document translation with glossaries.",
+        "Custom Translation — Domain-adapted model trained on parallel examples.",
+        "Gemini model — Broader multilingual generation and reasoning with different control characteristics."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Translation",
+          "fit": "Purpose-built text/document translation with glossaries."
+        },
+        {
+          "name": "Custom Translation",
+          "fit": "Domain-adapted model trained on parallel examples."
+        },
+        {
+          "name": "Gemini model",
+          "fit": "Broader multilingual generation and reasoning with different control characteristics."
+        }
+      ],
+      "memoryHooks": [
+        "Glossary controls terms; custom model learns from parallel data.",
+        "Known language beats auto-detect for short strings.",
+        "Exam clue: multilingual text/documents with terminology consistency."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "gemini-enterprise-agent-platform",
+        "workflows"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Translation documentation",
+          "url": "https://cloud.google.com/translate/docs"
+        },
+        {
+          "title": "Translation editions",
+          "url": "https://cloud.google.com/translate/docs/editions"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Choose edition and location",
+          "detail": "Console → APIs & Services; enable Cloud Translation and decide Basic versus Advanced features/location."
+        },
+        {
+          "title": "Prepare terminology",
+          "detail": "For Advanced, create a glossary in a compatible Cloud Storage location and define language pairs."
+        },
+        {
+          "title": "Test the method",
+          "detail": "Run text, document or batch translation with explicit source language where known and validate placeholders."
+        },
+        {
+          "title": "Measure quality and usage",
+          "detail": "Review terminology/human quality, quota and character metrics before scaling or training a custom model."
+        }
+      ]
+    },
+    {
+      "slug": "video-intelligence-api",
+      "summary": "An API that annotates stored or streaming video with labels, shots, explicit-content signals, text, objects, speech and other time-based metadata.",
+      "concepts": [
+        "Annotation requests select explicit features; results attach entities and segments to time offsets rather than returning a single image label.",
+        "Asynchronous file analysis reads video from Cloud Storage, while streaming annotation targets supported real-time features.",
+        "Shot-change detection divides a video into coherent segments that can improve downstream indexing, thumbnails and feature interpretation."
+      ],
+      "applicationFit": [
+        "Use for catalog enrichment, moderation assistance, media search and extracting time-aligned metadata from video.",
+        "Choose only needed annotation features to control latency, cost and result volume.",
+        "Use Agent Platform Vision when managing persistent live streams, application graphs and searchable warehouses."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Media catalog enrichment",
+          "note": "A new asset is annotated asynchronously and time-coded metadata becomes searchable alongside the catalog.",
+          "reference": "Media catalog enrichment pattern",
+          "steps": [
+            {
+              "title": "Media bucket",
+              "items": [
+                "Uploaded video",
+                "Object generation"
+              ]
+            },
+            {
+              "title": "Workflow",
+              "items": [
+                "Select features",
+                "Submit operation"
+              ]
+            },
+            {
+              "title": "Video Intelligence",
+              "items": [
+                "Shots / labels / text",
+                "Time offsets"
+              ]
+            },
+            {
+              "title": "BigQuery / search",
+              "items": [
+                "Flatten annotations",
+                "Index"
+              ]
+            },
+            {
+              "title": "Catalog UI",
+              "items": [
+                "Facets",
+                "Jump-to-time"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Moderation-assistance queue",
+          "note": "Explicit-content and object signals prioritize clips for human review without making an automatic final policy decision.",
+          "reference": "Moderation-assistance queue pattern",
+          "steps": [
+            {
+              "title": "Incoming video",
+              "items": [
+                "Policy scope",
+                "Sampling"
+              ]
+            },
+            {
+              "title": "Annotation API",
+              "items": [
+                "Explicit-content likelihood",
+                "Labels"
+              ]
+            },
+            {
+              "title": "Policy engine",
+              "items": [
+                "Thresholds",
+                "Context"
+              ]
+            },
+            {
+              "title": "Reviewer queue",
+              "items": [
+                "Clip + timestamps",
+                "Decision"
+              ]
+            },
+            {
+              "title": "Audit store",
+              "items": [
+                "Outcome",
+                "Model metadata"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant read access only to intended source objects and protect annotation output because it can expose transcript and inferred content.",
+        "Use human review for moderation or identity-impacting actions; likelihood labels are not determinations.",
+        "Apply retention, residency and consent requirements to source media, transcripts and extracted faces/text."
+      ],
+      "operations": [
+        "Track long-running operation failures, per-feature latency, annotation volume and quality against a representative media set.",
+        "Persist operation IDs and source object generations so retries and catalog updates are idempotent.",
+        "Monitor API quotas and split very large catalogs into controllable batches with dead-letter handling."
+      ],
+      "watchPoints": [
+        "Feature support, file limits and regional endpoints differ; validate the exact annotation combination.",
+        "Time offsets and confidence need downstream tolerance; labels can overlap and vary across model revisions.",
+        "Face detection is not face recognition and must not be presented as identity verification."
+      ],
+      "cost": [
+        "Billing is based on video minutes and requested annotation features; selecting multiple features compounds processing.",
+        "Cloud Storage, eventing, indexing and egress are additional.",
+        "Avoid repeatedly annotating identical object generations and store reusable results."
+      ],
+      "alternatives": [
+        "Video Intelligence API — Time-based annotations for video files or supported streams.",
+        "Vision API — Analysis of individual images and pages.",
+        "Agent Platform Vision — Persistent live-video applications and warehouse search."
+      ],
+      "comparisons": [
+        {
+          "name": "Video Intelligence API",
+          "fit": "Time-based annotations for video files or supported streams."
+        },
+        {
+          "name": "Vision API",
+          "fit": "Analysis of individual images and pages."
+        },
+        {
+          "name": "Agent Platform Vision",
+          "fit": "Persistent live-video applications and warehouse search."
+        }
+      ],
+      "memoryHooks": [
+        "Features produce time-coded annotations, not edited video.",
+        "Select only required features; store results by source generation.",
+        "Exam clue: find labels/shots/text at timestamps inside stored video."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "bigquery",
+        "vision-api",
+        "agent-platform-vision"
+      ],
+      "sources": [
+        {
+          "title": "Video Intelligence API documentation",
+          "url": "https://cloud.google.com/video-intelligence/docs"
+        },
+        {
+          "title": "Video annotation features",
+          "url": "https://cloud.google.com/video-intelligence/docs/features"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Enable the API",
+          "detail": "Console → APIs & Services → Library → Video Intelligence API; enable it and authorize the caller."
+        },
+        {
+          "title": "Prepare the request",
+          "detail": "Place the video in Cloud Storage, choose only required annotation features and set output handling."
+        },
+        {
+          "title": "Run annotation",
+          "detail": "Submit the long-running operation, persist its operation ID and wait for completion without duplicate jobs."
+        },
+        {
+          "title": "Inspect and index",
+          "detail": "Review time offsets/confidence, store results against the source generation and route uncertain findings to review."
+        }
+      ]
+    },
+    {
+      "slug": "video-stitcher-api",
+      "summary": "A server-side ad insertion service that creates personalized HLS/DASH playback sessions by stitching ad decisions into live or video-on-demand manifests.",
+      "concepts": [
+        "A live or VOD session binds source video configuration, ad-tag information and playback parameters, returning a session-specific manifest URI.",
+        "The API manipulates manifests so ads and content play as one stream; it does not transcode the underlying program or act as the ad decision server.",
+        "CDN keys, slates, ad tracking and session metadata handle delivery integrity and measurement around the stitched manifest."
+      ],
+      "applicationFit": [
+        "Use for server-side ad insertion where client ad blockers and seamless playback make manifest-level stitching valuable.",
+        "Pair with Live Stream API for managed live outputs or with existing HLS/DASH VOD origins.",
+        "Use client-side ad SDKs when interactive ad behavior or client-specific measurement outweighs seamless server-side insertion."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Monetized live channel",
+          "note": "A viewer creates a session, the stitcher obtains an ad decision and returns a personalized manifest delivered through the CDN.",
+          "reference": "Monetized live channel pattern",
+          "steps": [
+            {
+              "title": "Viewer app",
+              "items": [
+                "Session request",
+                "Entitlement context"
+              ]
+            },
+            {
+              "title": "Video Stitcher",
+              "items": [
+                "Live config",
+                "Manifest personalization"
+              ]
+            },
+            {
+              "title": "Ad decision server",
+              "items": [
+                "VAST response",
+                "Tracking URLs"
+              ]
+            },
+            {
+              "title": "Live origin / CDN",
+              "items": [
+                "Program + ad segments",
+                "HLS / DASH"
+              ]
+            },
+            {
+              "title": "Player",
+              "items": [
+                "Session manifest",
+                "Beacon events"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "VOD ad insertion",
+          "note": "A VOD asset and ad tag produce a session-specific timeline while content remains in the existing origin.",
+          "reference": "VOD ad insertion pattern",
+          "steps": [
+            {
+              "title": "Content catalog",
+              "items": [
+                "VOD config",
+                "Asset metadata"
+              ]
+            },
+            {
+              "title": "Session API",
+              "items": [
+                "Ad tag",
+                "Playback options"
+              ]
+            },
+            {
+              "title": "Ad media",
+              "items": [
+                "Transcoded creatives",
+                "Slate fallback"
+              ]
+            },
+            {
+              "title": "Personalized manifest",
+              "items": [
+                "Break timeline",
+                "Tracking"
+              ]
+            },
+            {
+              "title": "Analytics",
+              "items": [
+                "Impressions",
+                "Errors"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Authenticate session creation and prevent clients from substituting arbitrary ad tags or source configurations.",
+        "Protect CDN keys and origin access; separate configuration administration from application session creation.",
+        "Treat ad identifiers and playback events as user data subject to consent, minimization and retention policies."
+      ],
+      "operations": [
+        "Monitor session-creation latency, fill rate, manifest errors, ad-media compatibility, beacon delivery and fallback slate use.",
+        "Validate ad creatives against codec, duration and rendition requirements before campaigns start.",
+        "Use synthetic players across target devices to catch manifest or discontinuity problems before traffic peaks."
+      ],
+      "watchPoints": [
+        "Video Stitcher personalizes manifests; it does not create the live channel, host the player or make ad-auction decisions.",
+        "Ad creative encoding mismatches can break playback even when session creation succeeds.",
+        "Caching must preserve session personalization—do not share a personalized manifest across viewers."
+      ],
+      "cost": [
+        "Charges follow stitched playback/session usage; ad decisioning, transcoding, CDN delivery and egress are separate.",
+        "Unfilled breaks and invalid creatives affect revenue even if infrastructure cost is low.",
+        "Control session churn and select CDN caching rules that reuse segments without caching personalized manifests incorrectly."
+      ],
+      "alternatives": [
+        "Video Stitcher API — Server-side personalized ad insertion into manifests.",
+        "Live Stream API — Creates live adaptive renditions but not personalized ads.",
+        "Transcoder API — Creates VOD renditions and assets, not playback sessions."
+      ],
+      "comparisons": [
+        {
+          "name": "Video Stitcher API",
+          "fit": "Server-side personalized ad insertion into manifests."
+        },
+        {
+          "name": "Live Stream API",
+          "fit": "Creates live adaptive renditions but not personalized ads."
+        },
+        {
+          "name": "Transcoder API",
+          "fit": "Creates VOD renditions and assets, not playback sessions."
+        }
+      ],
+      "memoryHooks": [
+        "Stitcher changes the manifest, not the source video essence.",
+        "Session manifest is personalized; media segments remain CDN-friendly.",
+        "Exam clue: server-side ads in HLS/DASH with an external ad decision server."
+      ],
+      "relatedServices": [
+        "live-stream-api",
+        "transcoder-api",
+        "media-cdn",
+        "cloud-storage"
+      ],
+      "sources": [
+        {
+          "title": "Video Stitcher API documentation",
+          "url": "https://cloud.google.com/video-stitcher/docs"
+        },
+        {
+          "title": "Video Stitcher concepts",
+          "url": "https://cloud.google.com/video-stitcher/docs/concepts"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Create source configuration",
+          "detail": "Console → Video Stitcher API; configure the live stream or VOD source and CDN settings."
+        },
+        {
+          "title": "Configure ad behavior",
+          "detail": "Set ad tag/decision endpoint, slate/fallback and any required CDN keys or playback parameters."
+        },
+        {
+          "title": "Create a test session",
+          "detail": "Request a live or VOD session and play its returned manifest across supported clients."
+        },
+        {
+          "title": "Verify monetization signals",
+          "detail": "Inspect fill, creative compatibility, tracking beacons, errors and manifest caching before launch."
+        }
+      ]
+    },
+    {
+      "slug": "vision-api",
+      "summary": "A pre-trained image analysis API for labels, OCR, landmarks, logos, faces, objects, crop hints and safe-search signals without training a custom model.",
+      "concepts": [
+        "AnnotateImage requests can ask for multiple feature types; each returns independent detections, coordinates and confidence/likelihood values.",
+        "Images can be sent as bytes or referenced in Cloud Storage; asynchronous batch file annotation supports supported PDF/TIFF workflows.",
+        "Document Text Detection returns page/block/paragraph/word structure, while Text Detection is optimized for text in general images."
+      ],
+      "applicationFit": [
+        "Use for commodity image understanding and OCR when pretrained features meet the requirement.",
+        "Use Document AI for structured forms/invoices and normalized business entities.",
+        "Use a custom Vertex AI vision model when organization-specific classes or domain accuracy require training."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Secure image moderation assist",
+          "note": "An upload is isolated, scanned and annotated before policy logic determines publish/review/reject.",
+          "reference": "Secure image moderation assist pattern",
+          "steps": [
+            {
+              "title": "Upload service",
+              "items": [
+                "Object quarantine",
+                "Content type"
+              ]
+            },
+            {
+              "title": "Vision API",
+              "items": [
+                "SafeSearch / labels",
+                "Likelihoods"
+              ]
+            },
+            {
+              "title": "Policy engine",
+              "items": [
+                "Thresholds",
+                "User context"
+              ]
+            },
+            {
+              "title": "Review queue",
+              "items": [
+                "Image + evidence",
+                "Human decision"
+              ]
+            },
+            {
+              "title": "Published bucket",
+              "items": [
+                "Approved object",
+                "Audit event"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "OCR indexing pipeline",
+          "note": "Images or page files are annotated and structured text is indexed with source coordinates.",
+          "reference": "OCR indexing pipeline pattern",
+          "steps": [
+            {
+              "title": "Source bucket",
+              "items": [
+                "Images / PDF",
+                "Object generation"
+              ]
+            },
+            {
+              "title": "Batch annotation",
+              "items": [
+                "Document text",
+                "Page structure"
+              ]
+            },
+            {
+              "title": "Dataflow",
+              "items": [
+                "Normalize words",
+                "Quality checks"
+              ]
+            },
+            {
+              "title": "Search / BigQuery",
+              "items": [
+                "Index text",
+                "Coordinates"
+              ]
+            },
+            {
+              "title": "Application",
+              "items": [
+                "Search result",
+                "Source highlight"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Restrict object and annotation access; extracted text and inferred attributes can be as sensitive as the image.",
+        "Do not use face detection as identity recognition, and avoid fully automated consequential decisions from likelihood scores.",
+        "Apply consent, retention, regional and audit requirements to biometric-adjacent and document-image workloads."
+      ],
+      "operations": [
+        "Measure feature-specific precision/recall, OCR character error, latency and quota errors using representative images.",
+        "Key stored results by object generation and API/model context to avoid stale annotations after image replacement.",
+        "Handle partial feature errors independently and route uncertain results for review rather than discarding the whole request."
+      ],
+      "watchPoints": [
+        "SafeSearch values are likelihood categories, not policy decisions.",
+        "Requesting more features increases latency, output size and cost even when the application ignores them.",
+        "Image size, format and batch limits differ across online and file annotation methods."
+      ],
+      "cost": [
+        "Billing follows image/page units per requested feature; multiple features on one image are separately metered.",
+        "Cloud Storage, orchestration, review and downstream indexing add charges.",
+        "Resize where acceptable, request only required features and cache annotations by immutable object version."
+      ],
+      "alternatives": [
+        "Vision API — Pretrained general image features and OCR.",
+        "Document AI — Layout-aware structured document extraction.",
+        "Video Intelligence API — Time-based annotation across video.",
+        "Custom vision model — Domain-specific classes trained on labeled examples."
+      ],
+      "comparisons": [
+        {
+          "name": "Vision API",
+          "fit": "Pretrained general image features and OCR."
+        },
+        {
+          "name": "Document AI",
+          "fit": "Layout-aware structured document extraction."
+        },
+        {
+          "name": "Video Intelligence API",
+          "fit": "Time-based annotation across video."
+        },
+        {
+          "name": "Custom vision model",
+          "fit": "Domain-specific classes trained on labeled examples."
+        }
+      ],
+      "memoryHooks": [
+        "Feature request determines both result schema and meter.",
+        "Likelihood is input to policy, not the final decision.",
+        "Exam clue: labels/OCR/logos/landmarks from individual images without training."
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "docai",
+        "video-intelligence-api",
+        "sensitive-data-protection"
+      ],
+      "sources": [
+        {
+          "title": "Vision API documentation",
+          "url": "https://cloud.google.com/vision/docs"
+        },
+        {
+          "title": "Vision API features",
+          "url": "https://cloud.google.com/vision/docs/features-list"
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Enable and authorize",
+          "detail": "Console → APIs & Services → Library → Cloud Vision API; enable it and grant a scoped runtime identity."
+        },
+        {
+          "title": "Choose features",
+          "detail": "In Vision API/product demo, select label, text, document text, object, logo, landmark or SafeSearch features."
+        },
+        {
+          "title": "Test representative images",
+          "detail": "Use bytes or Cloud Storage URIs, request only needed features and inspect coordinates/likelihoods."
+        },
+        {
+          "title": "Build controlled processing",
+          "detail": "Persist results by object generation, implement policy/human review and monitor quota and feature accuracy."
+        }
+      ]
+    }
+  ]
+}

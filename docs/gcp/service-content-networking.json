@@ -1,0 +1,3617 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Networking",
+  "services": [
+    {
+      "slug": "cloud-armor",
+      "summary": "A distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications.",
+      "concepts": [
+        "security policy, rule, priority, match expression and backend attachment define the Cloud Armor resource model.",
+        "The production flow is internet client > Google edge > Armor policy > load balancer > backend.",
+        "Cloud Armor manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Armor when a distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications.",
+        "It best fits a design that needs internet client > Google edge > Armor policy > load balancer > backend.",
+        "Choose Secure Web Proxy for governed outbound web access instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Armor production flow",
+          "note": "A distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications.",
+          "reference": "Cloud Armor architecture",
+          "steps": [
+            {
+              "title": "1. internet client",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Google edge",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Armor policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. load balancer",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backend",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Armor",
+          "note": "Identity, boundary, resilience and operations for security policy, rule, priority, match expression and backend attachment.",
+          "reference": "Cloud Armor governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "least-privilege policy administration, preview mode, WAF rules, rate limiting and Adaptive Protection",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "policy type, rule priorities, match expressions, WAF/rate limits, preview and backend attachment",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "rule priority and broad expressions can block legitimate traffic; stage changes in preview and preserve emergency access",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "allowed/denied requests, rule hits, preview matches, attack signals and backend health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Armor",
+          "detail": "Google Cloud Console → Cloud Armor; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set policy type, rule priorities, match expressions, WAF/rate limits, preview and backend attachment."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement least-privilege policy administration, preview mode, WAF rules, rate limiting and Adaptive Protection."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise internet client > Google edge > Armor policy > load balancer > backend; inspect allowed/denied requests, rule hits, preview matches, attack signals and backend health."
+        }
+      ],
+      "security": [
+        "For Cloud Armor, implement least-privilege policy administration, preview mode, WAF rules, rate limiting and Adaptive Protection.",
+        "Separate Cloud Armor policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with security policy, rule, priority, match expression and backend attachment."
+      ],
+      "operations": [
+        "Monitor allowed/denied requests, rule hits, preview matches, attack signals and backend health for Cloud Armor.",
+        "Version policy type, rule priorities, match expressions, WAF/rate limits, preview and backend attachment; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Armor ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "rule priority and broad expressions can block legitimate traffic; stage changes in preview and preserve emergency access",
+        "Confirm Cloud Armor scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Armor's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "policy/rule/request processing, logging and load-balancing/backend services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Armor estimate.",
+        "Track Cloud Armor cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Armor — A distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications.",
+        "Secure Web Proxy for governed outbound web access — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Armor",
+          "fit": "A distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications."
+        },
+        {
+          "name": "Secure Web Proxy",
+          "fit": "Secure Web Proxy for governed outbound web access"
+        }
+      ],
+      "memoryHooks": [
+        "internet client > Google edge > Armor policy > load balancer > backend.",
+        "rule priority and broad expressions can block legitimate traffic; stage changes in preview and preserve emergency access",
+        "Certification clue: A distributed web application and DDoS protection service that applies edge security policies to supported load-balanced applications."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Armor documentation",
+          "url": "https://docs.cloud.google.com/armor/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-cdn",
+      "summary": "A global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins.",
+      "concepts": [
+        "backend service/bucket, cache key, cache mode, TTL and invalidation define the Cloud CDN resource model.",
+        "The production flow is user > edge POP > cache lookup > origin on miss > cached response.",
+        "Cloud CDN manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud CDN when a global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins.",
+        "It best fits a design that needs user > edge POP > cache lookup > origin on miss > cached response.",
+        "Choose Media CDN for high-throughput streaming media delivery instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud CDN production flow",
+          "note": "A global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins.",
+          "reference": "Cloud CDN architecture",
+          "steps": [
+            {
+              "title": "1. user",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. edge POP",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. cache lookup",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. origin on miss",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. cached response",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud CDN",
+          "note": "Identity, boundary, resilience and operations for backend service/bucket, cache key, cache mode, TTL and invalidation.",
+          "reference": "Cloud CDN governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "TLS, signed URLs/cookies, private origin controls and cache-safe headers",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "backend, cache mode/key, TTL, negative caching, signed requests and invalidation process",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "incorrect cache keys or Cache-Control headers can leak personalized content or destroy hit rate",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "cache-hit ratio, fill latency, egress, response codes and origin load",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud CDN",
+          "detail": "Google Cloud Console → Cloud CDN; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set backend, cache mode/key, TTL, negative caching, signed requests and invalidation process."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement TLS, signed URLs/cookies, private origin controls and cache-safe headers."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise user > edge POP > cache lookup > origin on miss > cached response; inspect cache-hit ratio, fill latency, egress, response codes and origin load."
+        }
+      ],
+      "security": [
+        "For Cloud CDN, implement TLS, signed URLs/cookies, private origin controls and cache-safe headers.",
+        "Separate Cloud CDN policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with backend service/bucket, cache key, cache mode, TTL and invalidation."
+      ],
+      "operations": [
+        "Monitor cache-hit ratio, fill latency, egress, response codes and origin load for Cloud CDN.",
+        "Version backend, cache mode/key, TTL, negative caching, signed requests and invalidation process; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud CDN ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "incorrect cache keys or Cache-Control headers can leak personalized content or destroy hit rate",
+        "Confirm Cloud CDN scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud CDN's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "cache egress/fill, requests, invalidations and origin/load-balancer charges.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud CDN estimate.",
+        "Track Cloud CDN cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud CDN — A global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins.",
+        "Media CDN for high-throughput streaming media delivery — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud CDN",
+          "fit": "A global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins."
+        },
+        {
+          "name": "Media CDN",
+          "fit": "Media CDN for high-throughput streaming media delivery"
+        }
+      ],
+      "memoryHooks": [
+        "user > edge POP > cache lookup > origin on miss > cached response.",
+        "incorrect cache keys or Cache-Control headers can leak personalized content or destroy hit rate",
+        "Certification clue: A global content delivery network that caches HTTP(S) content at Google edge locations in front of load-balanced origins."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud CDN documentation",
+          "url": "https://docs.cloud.google.com/cdn/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-dns",
+      "summary": "A highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC.",
+      "concepts": [
+        "managed zone, record set, policy, server policy and DNSSEC key define the Cloud DNS resource model.",
+        "The production flow is resolver query > zone selection > record/policy evaluation > authoritative answer > cached response.",
+        "Cloud DNS manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud DNS when a highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC.",
+        "It best fits a design that needs resolver query > zone selection > record/policy evaluation > authoritative answer > cached response.",
+        "Choose Service Directory for richer service endpoint registration instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud DNS production flow",
+          "note": "A highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC.",
+          "reference": "Cloud DNS architecture",
+          "steps": [
+            {
+              "title": "1. resolver query",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. zone selection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. record/policy evaluation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. authoritative answer",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. cached response",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud DNS",
+          "note": "Identity, boundary, resilience and operations for managed zone, record set, policy, server policy and DNSSEC key.",
+          "reference": "Cloud DNS governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "IAM on zones, DNSSEC for public integrity, restricted private-zone visibility and change auditing",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "public/private/forwarding zone, visibility networks, records/TTL, DNSSEC and logging",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "DNS is cached according to TTL; record rollback is not immediate and overlapping private zones affect resolution",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "query volume, response code, propagation, policy behavior and DNSSEC state",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud DNS",
+          "detail": "Google Cloud Console → Cloud DNS; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set public/private/forwarding zone, visibility networks, records/TTL, DNSSEC and logging."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement IAM on zones, DNSSEC for public integrity, restricted private-zone visibility and change auditing."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise resolver query > zone selection > record/policy evaluation > authoritative answer > cached response; inspect query volume, response code, propagation, policy behavior and DNSSEC state."
+        }
+      ],
+      "security": [
+        "For Cloud DNS, implement IAM on zones, DNSSEC for public integrity, restricted private-zone visibility and change auditing.",
+        "Separate Cloud DNS policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with managed zone, record set, policy, server policy and DNSSEC key."
+      ],
+      "operations": [
+        "Monitor query volume, response code, propagation, policy behavior and DNSSEC state for Cloud DNS.",
+        "Version public/private/forwarding zone, visibility networks, records/TTL, DNSSEC and logging; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud DNS ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "DNS is cached according to TTL; record rollback is not immediate and overlapping private zones affect resolution",
+        "Confirm Cloud DNS scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud DNS's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "managed zones and queries plus forwarding/network services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud DNS estimate.",
+        "Track Cloud DNS cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud DNS — A highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC.",
+        "Service Directory for richer service endpoint registration — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud DNS",
+          "fit": "A highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC."
+        },
+        {
+          "name": "Service Directory",
+          "fit": "Service Directory for richer service endpoint registration"
+        }
+      ],
+      "memoryHooks": [
+        "resolver query > zone selection > record/policy evaluation > authoritative answer > cached response.",
+        "DNS is cached according to TTL; record rollback is not immediate and overlapping private zones affect resolution",
+        "Certification clue: A highly available authoritative DNS service for public zones, private zones, forwarding and DNSSEC."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud DNS documentation",
+          "url": "https://docs.cloud.google.com/dns/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-domains",
+      "summary": "A domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle.",
+      "concepts": [
+        "registration, registrant/contact settings, DNS configuration and transfer lock define the Cloud Domains resource model.",
+        "The production flow is search/register > contact verification > nameserver delegation > renewal > transfer lifecycle.",
+        "Cloud Domains manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Domains when a domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle.",
+        "It best fits a design that needs search/register > contact verification > nameserver delegation > renewal > transfer lifecycle.",
+        "Choose external registrar when portfolio features or TLD support are stronger instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Domains production flow",
+          "note": "A domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle.",
+          "reference": "Cloud Domains architecture",
+          "steps": [
+            {
+              "title": "1. search/register",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. contact verification",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. nameserver delegation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. renewal",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. transfer lifecycle",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Domains",
+          "note": "Identity, boundary, resilience and operations for registration, registrant/contact settings, DNS configuration and transfer lock.",
+          "reference": "Cloud Domains governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "restrict registration administrators, enable transfer lock, protect contact account and audit nameserver changes",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "domain/TLD, contact privacy, auto-renewal, nameservers, DNSSEC delegation and transfer lock",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "domain registration does not host DNS records by itself; failed verification or renewal can cause business-wide outage",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "registration status, verification, expiration/renewal and delegation correctness",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Domains",
+          "detail": "Google Cloud Console → Cloud Domains; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set domain/TLD, contact privacy, auto-renewal, nameservers, DNSSEC delegation and transfer lock."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement restrict registration administrators, enable transfer lock, protect contact account and audit nameserver changes."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise search/register > contact verification > nameserver delegation > renewal > transfer lifecycle; inspect registration status, verification, expiration/renewal and delegation correctness."
+        }
+      ],
+      "security": [
+        "For Cloud Domains, implement restrict registration administrators, enable transfer lock, protect contact account and audit nameserver changes.",
+        "Separate Cloud Domains policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with registration, registrant/contact settings, DNS configuration and transfer lock."
+      ],
+      "operations": [
+        "Monitor registration status, verification, expiration/renewal and delegation correctness for Cloud Domains.",
+        "Version domain/TLD, contact privacy, auto-renewal, nameservers, DNSSEC delegation and transfer lock; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Domains ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "domain registration does not host DNS records by itself; failed verification or renewal can cause business-wide outage",
+        "Confirm Cloud Domains scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Domains's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "annual registration/renewal, premium domains and DNS/hosting services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Domains estimate.",
+        "Track Cloud Domains cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Domains — A domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle.",
+        "external registrar when portfolio features or TLD support are stronger — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Domains",
+          "fit": "A domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle."
+        },
+        {
+          "name": "external registrar when portfolio features or TLD support are stronger",
+          "fit": "external registrar when portfolio features or TLD support are stronger"
+        }
+      ],
+      "memoryHooks": [
+        "search/register > contact verification > nameserver delegation > renewal > transfer lifecycle.",
+        "domain registration does not host DNS records by itself; failed verification or renewal can cause business-wide outage",
+        "Certification clue: A domain registration service integrated with Cloud DNS and Google Cloud IAM for managing domain lifecycle."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Domains documentation",
+          "url": "https://docs.cloud.google.com/domains/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-ids",
+      "summary": "A managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection.",
+      "concepts": [
+        "IDS endpoint, packet-mirroring policy, inspected network and threat finding define the Cloud IDS resource model.",
+        "The production flow is workload traffic > packet mirror > IDS endpoint > signature analysis > alert/log workflow.",
+        "Cloud IDS manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud IDS when a managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection.",
+        "It best fits a design that needs workload traffic > packet mirror > IDS endpoint > signature analysis > alert/log workflow.",
+        "Choose Cloud NGFW intrusion prevention for inline enforcement instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud IDS production flow",
+          "note": "A managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection.",
+          "reference": "Cloud IDS architecture",
+          "steps": [
+            {
+              "title": "1. workload traffic",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. packet mirror",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. IDS endpoint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. signature analysis",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. alert/log workflow",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud IDS",
+          "note": "Identity, boundary, resilience and operations for IDS endpoint, packet-mirroring policy, inspected network and threat finding.",
+          "reference": "Cloud IDS governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "limit endpoint/policy administration, protect mirrored traffic scope and restrict security findings",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/zone, VPC/subnets, endpoint capacity, mirrored sources/filters and alert routing",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Cloud IDS detects from mirrored copies and does not block traffic; prevention requires firewall or response automation",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "mirrored bytes, endpoint utilization, threat severity, dropped analysis and false positives",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud IDS",
+          "detail": "Google Cloud Console → Cloud IDS; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/zone, VPC/subnets, endpoint capacity, mirrored sources/filters and alert routing."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement limit endpoint/policy administration, protect mirrored traffic scope and restrict security findings."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise workload traffic > packet mirror > IDS endpoint > signature analysis > alert/log workflow; inspect mirrored bytes, endpoint utilization, threat severity, dropped analysis and false positives."
+        }
+      ],
+      "security": [
+        "For Cloud IDS, implement limit endpoint/policy administration, protect mirrored traffic scope and restrict security findings.",
+        "Separate Cloud IDS policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with IDS endpoint, packet-mirroring policy, inspected network and threat finding."
+      ],
+      "operations": [
+        "Monitor mirrored bytes, endpoint utilization, threat severity, dropped analysis and false positives for Cloud IDS.",
+        "Version region/zone, VPC/subnets, endpoint capacity, mirrored sources/filters and alert routing; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud IDS ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "Cloud IDS detects from mirrored copies and does not block traffic; prevention requires firewall or response automation",
+        "Confirm Cloud IDS scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud IDS's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "IDS endpoint capacity/uptime, mirrored traffic and logging/SIEM.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud IDS estimate.",
+        "Track Cloud IDS cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud IDS — A managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection.",
+        "Cloud NGFW intrusion prevention for inline enforcement — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud IDS",
+          "fit": "A managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection."
+        },
+        {
+          "name": "Cloud NGFW intrusion prevention",
+          "fit": "Cloud NGFW intrusion prevention for inline enforcement"
+        }
+      ],
+      "memoryHooks": [
+        "workload traffic > packet mirror > IDS endpoint > signature analysis > alert/log workflow.",
+        "Cloud IDS detects from mirrored copies and does not block traffic; prevention requires firewall or response automation",
+        "Certification clue: A managed network threat-detection service using packet mirroring and Palo Alto Networks threat signatures for east-west and north-south inspection."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud IDS documentation",
+          "url": "https://docs.cloud.google.com/intrusion-detection-system/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-interconnect",
+      "summary": "Dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP.",
+      "concepts": [
+        "Interconnect connection, VLAN attachment, Cloud Router and BGP session define the Cloud Interconnect resource model.",
+        "The production flow is on-prem router > carrier/cross-connect > Interconnect > VLAN attachment > Cloud Router > VPC.",
+        "Cloud Interconnect manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Interconnect when dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP.",
+        "It best fits a design that needs on-prem router > carrier/cross-connect > Interconnect > VLAN attachment > Cloud Router > VPC.",
+        "Choose Cloud VPN for encrypted lower-bandwidth or rapid deployment connectivity instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Interconnect production flow",
+          "note": "Dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP.",
+          "reference": "Cloud Interconnect architecture",
+          "steps": [
+            {
+              "title": "1. on-prem router",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. carrier/cross-connect",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Interconnect",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. VLAN attachment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. Cloud Router",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Interconnect",
+          "note": "Identity, boundary, resilience and operations for Interconnect connection, VLAN attachment, Cloud Router and BGP session.",
+          "reference": "Cloud Interconnect governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "physical/provider controls, MACsec where supported, BGP authentication/filters and route governance",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "Dedicated/Partner type, locations, redundancy, VLANs, MTU, Cloud Router ASN and route policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "production SLA requires prescribed redundant connections/VLANs in separate edge availability domains; routes must also fail over correctly",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "link/VLAN status, BGP session, throughput, drops and redundant path health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Interconnect",
+          "detail": "Google Cloud Console → Cloud Interconnect; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set Dedicated/Partner type, locations, redundancy, VLANs, MTU, Cloud Router ASN and route policy."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement physical/provider controls, MACsec where supported, BGP authentication/filters and route governance."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise on-prem router > carrier/cross-connect > Interconnect > VLAN attachment > Cloud Router > VPC; inspect link/VLAN status, BGP session, throughput, drops and redundant path health."
+        }
+      ],
+      "security": [
+        "For Cloud Interconnect, implement physical/provider controls, MACsec where supported, BGP authentication/filters and route governance.",
+        "Separate Cloud Interconnect policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with Interconnect connection, VLAN attachment, Cloud Router and BGP session."
+      ],
+      "operations": [
+        "Monitor link/VLAN status, BGP session, throughput, drops and redundant path health for Cloud Interconnect.",
+        "Version Dedicated/Partner type, locations, redundancy, VLANs, MTU, Cloud Router ASN and route policy; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Interconnect ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "production SLA requires prescribed redundant connections/VLANs in separate edge availability domains; routes must also fail over correctly",
+        "Confirm Cloud Interconnect scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Interconnect's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "ports/attachments, partner circuits, egress and cross-connect/provider charges.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Interconnect estimate.",
+        "Track Cloud Interconnect cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Interconnect — Dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP.",
+        "Cloud VPN for encrypted lower-bandwidth or rapid deployment connectivity — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Interconnect",
+          "fit": "Dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP."
+        },
+        {
+          "name": "Cloud VPN",
+          "fit": "Cloud VPN for encrypted lower-bandwidth or rapid deployment connectivity"
+        }
+      ],
+      "memoryHooks": [
+        "on-prem router > carrier/cross-connect > Interconnect > VLAN attachment > Cloud Router > VPC.",
+        "production SLA requires prescribed redundant connections/VLANs in separate edge availability domains; routes must also fail over correctly",
+        "Certification clue: Dedicated or partner private connectivity between on-premises networks and Google Cloud VPCs using VLAN attachments and Cloud Router BGP."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Interconnect documentation",
+          "url": "https://docs.cloud.google.com/network-connectivity/docs/interconnect"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-load-balancing",
+      "summary": "Managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends.",
+      "concepts": [
+        "forwarding rule, IP, proxy, URL map, backend service, NEG and health check define the Cloud Load Balancing resource model.",
+        "The production flow is client > anycast/regional frontend > proxy/rule > health-aware backend selection > target.",
+        "Cloud Load Balancing manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Load Balancing when managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends.",
+        "It best fits a design that needs client > anycast/regional frontend > proxy/rule > health-aware backend selection > target.",
+        "Choose DNS routing when endpoint-level balancing/proxying is unnecessary instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Load Balancing production flow",
+          "note": "Managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends.",
+          "reference": "Cloud Load Balancing architecture",
+          "steps": [
+            {
+              "title": "1. client",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. anycast/regional frontend",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. proxy/rule",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. health-aware backend selection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. target",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Load Balancing",
+          "note": "Identity, boundary, resilience and operations for forwarding rule, IP, proxy, URL map, backend service, NEG and health check.",
+          "reference": "Cloud Load Balancing governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "TLS certificates/policies, Cloud Armor, private frontends, IAM and backend firewall rules",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "global/regional, internal/external, protocol, IP, routing, backends, health check, TLS and security",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "load-balancer family, scope and protocol determine capabilities; a health check success must represent real application readiness",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "request/connection latency, 4xx/5xx, healthy backends, utilization and dropped connections",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Load Balancing",
+          "detail": "Google Cloud Console → Cloud Load Balancing; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set global/regional, internal/external, protocol, IP, routing, backends, health check, TLS and security."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement TLS certificates/policies, Cloud Armor, private frontends, IAM and backend firewall rules."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise client > anycast/regional frontend > proxy/rule > health-aware backend selection > target; inspect request/connection latency, 4xx/5xx, healthy backends, utilization and dropped connections."
+        }
+      ],
+      "security": [
+        "For Cloud Load Balancing, implement TLS certificates/policies, Cloud Armor, private frontends, IAM and backend firewall rules.",
+        "Separate Cloud Load Balancing policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with forwarding rule, IP, proxy, URL map, backend service, NEG and health check."
+      ],
+      "operations": [
+        "Monitor request/connection latency, 4xx/5xx, healthy backends, utilization and dropped connections for Cloud Load Balancing.",
+        "Version global/regional, internal/external, protocol, IP, routing, backends, health check, TLS and security; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Load Balancing ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "load-balancer family, scope and protocol determine capabilities; a health check success must represent real application readiness",
+        "Confirm Cloud Load Balancing scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Load Balancing's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "forwarding/rules, data processing, egress, certificates and backend compute.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Load Balancing estimate.",
+        "Track Cloud Load Balancing cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Load Balancing — Managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends.",
+        "DNS routing when endpoint-level balancing/proxying is unnecessary — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Load Balancing",
+          "fit": "Managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends."
+        },
+        {
+          "name": "DNS routing when endpoint-level balancing/proxying is unnecessary",
+          "fit": "DNS routing when endpoint-level balancing/proxying is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "client > anycast/regional frontend > proxy/rule > health-aware backend selection > target.",
+        "load-balancer family, scope and protocol determine capabilities; a health check success must represent real application readiness",
+        "Certification clue: Managed global and regional Layer 4/7 load balancing across VMs, containers, serverless and hybrid backends."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Load Balancing documentation",
+          "url": "https://docs.cloud.google.com/load-balancing/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-nat",
+      "summary": "A managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections.",
+      "concepts": [
+        "Cloud Router NAT gateway, NAT IP, subnet ranges, port allocation and logging define the Cloud NAT resource model.",
+        "The production flow is private VM/pod > VPC route > NAT translation > internet/API > return mapping.",
+        "Cloud NAT manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud NAT when a managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections.",
+        "It best fits a design that needs private VM/pod > VPC route > NAT translation > internet/API > return mapping.",
+        "Choose Private Google Access/Private Service Connect for private Google/API service access without internet NAT instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud NAT production flow",
+          "note": "A managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections.",
+          "reference": "Cloud NAT architecture",
+          "steps": [
+            {
+              "title": "1. private VM/pod",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. VPC route",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. NAT translation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. internet/API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. return mapping",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud NAT",
+          "note": "Identity, boundary, resilience and operations for Cloud Router NAT gateway, NAT IP, subnet ranges, port allocation and logging.",
+          "reference": "Cloud NAT governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "no inbound exposure, scoped subnet ranges, firewall egress policy and NAT log access",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/router, subnet ranges, manual/auto IPs, port allocation, endpoint mapping, timeouts and logs",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "port exhaustion—not bandwidth—is a common failure; endpoint-independent mapping and idle timeouts affect connection-heavy applications",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "allocated/used ports, dropped packets, NAT IP utilization and connection errors",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud NAT",
+          "detail": "Google Cloud Console → Cloud NAT; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/router, subnet ranges, manual/auto IPs, port allocation, endpoint mapping, timeouts and logs."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement no inbound exposure, scoped subnet ranges, firewall egress policy and NAT log access."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise private VM/pod > VPC route > NAT translation > internet/API > return mapping; inspect allocated/used ports, dropped packets, NAT IP utilization and connection errors."
+        }
+      ],
+      "security": [
+        "For Cloud NAT, implement no inbound exposure, scoped subnet ranges, firewall egress policy and NAT log access.",
+        "Separate Cloud NAT policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with Cloud Router NAT gateway, NAT IP, subnet ranges, port allocation and logging."
+      ],
+      "operations": [
+        "Monitor allocated/used ports, dropped packets, NAT IP utilization and connection errors for Cloud NAT.",
+        "Version region/router, subnet ranges, manual/auto IPs, port allocation, endpoint mapping, timeouts and logs; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud NAT ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "port exhaustion—not bandwidth—is a common failure; endpoint-independent mapping and idle timeouts affect connection-heavy applications",
+        "Confirm Cloud NAT scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud NAT's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "gateway uptime/data processing, external IPs, logging and egress.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud NAT estimate.",
+        "Track Cloud NAT cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud NAT — A managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections.",
+        "Private Google Access/Private Service Connect for private Google/API service access without internet NAT — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud NAT",
+          "fit": "A managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections."
+        },
+        {
+          "name": "Private Google Access/Private Service Connect",
+          "fit": "Private Google Access/Private Service Connect for private Google/API service access without internet NAT"
+        }
+      ],
+      "memoryHooks": [
+        "private VM/pod > VPC route > NAT translation > internet/API > return mapping.",
+        "port exhaustion—not bandwidth—is a common failure; endpoint-independent mapping and idle timeouts affect connection-heavy applications",
+        "Certification clue: A managed distributed NAT service that gives private resources outbound IPv4/IPv6 translation without accepting unsolicited inbound connections."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud NAT documentation",
+          "url": "https://docs.cloud.google.com/nat/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-ngfw",
+      "summary": "A managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies.",
+      "concepts": [
+        "hierarchical/global/regional network firewall policy, rule, secure tag and security profile define the Cloud NGFW resource model.",
+        "The production flow is packet > hierarchical policy > global/regional policy > threat inspection > allow/deny/log.",
+        "Cloud NGFW manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud NGFW when a managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies.",
+        "It best fits a design that needs packet > hierarchical policy > global/regional policy > threat inspection > allow/deny/log.",
+        "Choose VPC firewall rules for basic distributed L3/L4 controls instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud NGFW production flow",
+          "note": "A managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies.",
+          "reference": "Cloud NGFW architecture",
+          "steps": [
+            {
+              "title": "1. packet",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. hierarchical policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. global/regional policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. threat inspection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. allow/deny/log",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud NGFW",
+          "note": "Identity, boundary, resilience and operations for hierarchical/global/regional network firewall policy, rule, secure tag and security profile.",
+          "reference": "Cloud NGFW governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "separate policy admins, secure-tag governance, TLS inspection controls and immutable logging",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "policy hierarchy/scope, rules/priorities, secure tags, threat/TLS profiles, endpoints and logging",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "policy evaluation order and implied rules matter; TLS inspection changes trust/certificate requirements and can break applications",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "rule hits, threat detections, dropped traffic, inspection health and policy coverage",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud NGFW",
+          "detail": "Google Cloud Console → Cloud NGFW; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set policy hierarchy/scope, rules/priorities, secure tags, threat/TLS profiles, endpoints and logging."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement separate policy admins, secure-tag governance, TLS inspection controls and immutable logging."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise packet > hierarchical policy > global/regional policy > threat inspection > allow/deny/log; inspect rule hits, threat detections, dropped traffic, inspection health and policy coverage."
+        }
+      ],
+      "security": [
+        "For Cloud NGFW, implement separate policy admins, secure-tag governance, TLS inspection controls and immutable logging.",
+        "Separate Cloud NGFW policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with hierarchical/global/regional network firewall policy, rule, secure tag and security profile."
+      ],
+      "operations": [
+        "Monitor rule hits, threat detections, dropped traffic, inspection health and policy coverage for Cloud NGFW.",
+        "Version policy hierarchy/scope, rules/priorities, secure tags, threat/TLS profiles, endpoints and logging; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud NGFW ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "policy evaluation order and implied rules matter; TLS inspection changes trust/certificate requirements and can break applications",
+        "Confirm Cloud NGFW scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud NGFW's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "firewall endpoint/policy, inspection data, logging and certificates.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud NGFW estimate.",
+        "Track Cloud NGFW cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud NGFW — A managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies.",
+        "VPC firewall rules for basic distributed L3/L4 controls — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud NGFW",
+          "fit": "A managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies."
+        },
+        {
+          "name": "VPC firewall rules",
+          "fit": "VPC firewall rules for basic distributed L3/L4 controls"
+        }
+      ],
+      "memoryHooks": [
+        "packet > hierarchical policy > global/regional policy > threat inspection > allow/deny/log.",
+        "policy evaluation order and implied rules matter; TLS inspection changes trust/certificate requirements and can break applications",
+        "Certification clue: A managed next-generation firewall platform with hierarchical policies, secure tags, threat prevention and network firewall policies."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud NGFW documentation",
+          "url": "https://docs.cloud.google.com/firewall/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-router",
+      "summary": "A regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect.",
+      "concepts": [
+        "Cloud Router, BGP peer/session, advertised route and learned route define the Cloud Router resource model.",
+        "The production flow is on-prem/peer router > BGP session > Cloud Router > dynamic route > VPC path.",
+        "Cloud Router manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Router when a regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect.",
+        "It best fits a design that needs on-prem/peer router > BGP session > Cloud Router > dynamic route > VPC path.",
+        "Choose static/custom routes when dynamic exchange is unnecessary instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Router production flow",
+          "note": "A regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect.",
+          "reference": "Cloud Router architecture",
+          "steps": [
+            {
+              "title": "1. on-prem/peer router",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. BGP session",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Cloud Router",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. dynamic route",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. VPC path",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Router",
+          "note": "Identity, boundary, resilience and operations for Cloud Router, BGP peer/session, advertised route and learned route.",
+          "reference": "Cloud Router governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "router/peer configuration IAM, MD5 authentication where supported and controlled route advertisements",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, ASN, dynamic routing mode, peers, advertisements, priorities and BFD",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Cloud Router forwards no packets; regional dynamic-routing mode, MED/base priority and prefix limits determine path behavior",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "BGP state, learned/advertised routes, flap count and route priority",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Router",
+          "detail": "Google Cloud Console → Cloud Router; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, ASN, dynamic routing mode, peers, advertisements, priorities and BFD."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement router/peer configuration IAM, MD5 authentication where supported and controlled route advertisements."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise on-prem/peer router > BGP session > Cloud Router > dynamic route > VPC path; inspect BGP state, learned/advertised routes, flap count and route priority."
+        }
+      ],
+      "security": [
+        "For Cloud Router, implement router/peer configuration IAM, MD5 authentication where supported and controlled route advertisements.",
+        "Separate Cloud Router policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with Cloud Router, BGP peer/session, advertised route and learned route."
+      ],
+      "operations": [
+        "Monitor BGP state, learned/advertised routes, flap count and route priority for Cloud Router.",
+        "Version region, ASN, dynamic routing mode, peers, advertisements, priorities and BFD; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Router ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "Cloud Router forwards no packets; regional dynamic-routing mode, MED/base priority and prefix limits determine path behavior",
+        "Confirm Cloud Router scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Router's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "router/BGP control plane generally no separate charge; VPN/Interconnect and egress do.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Router estimate.",
+        "Track Cloud Router cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Router — A regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect.",
+        "static/custom routes when dynamic exchange is unnecessary — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Router",
+          "fit": "A regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect."
+        },
+        {
+          "name": "static/custom routes when dynamic exchange is unnecessary",
+          "fit": "static/custom routes when dynamic exchange is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "on-prem/peer router > BGP session > Cloud Router > dynamic route > VPC path.",
+        "Cloud Router forwards no packets; regional dynamic-routing mode, MED/base priority and prefix limits determine path behavior",
+        "Certification clue: A regional dynamic-routing service that exchanges routes with hybrid connectivity and manages BGP for Cloud VPN and Interconnect."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Router documentation",
+          "url": "https://docs.cloud.google.com/network-connectivity/docs/router"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-service-mesh",
+      "summary": "A managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads.",
+      "concepts": [
+        "fleet, mesh, service, proxy/sidecar or proxyless client and policy define the Cloud Service Mesh resource model.",
+        "The production flow is service client > mesh data plane > traffic/security policy > service endpoint > telemetry.",
+        "Cloud Service Mesh manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Service Mesh when a managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads.",
+        "It best fits a design that needs service client > mesh data plane > traffic/security policy > service endpoint > telemetry.",
+        "Choose Cloud Load Balancing for north-south traffic without service-to-service mesh controls instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Service Mesh production flow",
+          "note": "A managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads.",
+          "reference": "Cloud Service Mesh architecture",
+          "steps": [
+            {
+              "title": "1. service client",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. mesh data plane",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. traffic/security policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. service endpoint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. telemetry",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Service Mesh",
+          "note": "Identity, boundary, resilience and operations for fleet, mesh, service, proxy/sidecar or proxyless client and policy.",
+          "reference": "Cloud Service Mesh governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "mTLS workload identity, authorization policy, fleet membership and certificate lifecycle",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "fleet/cluster, data plane, service discovery, mTLS, authorization, traffic policy and observability",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a mesh adds data-plane and operational complexity; it does not fix poor service boundaries or application-level authorization",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "request rate/latency/errors, proxy health, config distribution and certificate status",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Service Mesh",
+          "detail": "Google Cloud Console → Cloud Service Mesh; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set fleet/cluster, data plane, service discovery, mTLS, authorization, traffic policy and observability."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement mTLS workload identity, authorization policy, fleet membership and certificate lifecycle."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise service client > mesh data plane > traffic/security policy > service endpoint > telemetry; inspect request rate/latency/errors, proxy health, config distribution and certificate status."
+        }
+      ],
+      "security": [
+        "For Cloud Service Mesh, implement mTLS workload identity, authorization policy, fleet membership and certificate lifecycle.",
+        "Separate Cloud Service Mesh policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with fleet, mesh, service, proxy/sidecar or proxyless client and policy."
+      ],
+      "operations": [
+        "Monitor request rate/latency/errors, proxy health, config distribution and certificate status for Cloud Service Mesh.",
+        "Version fleet/cluster, data plane, service discovery, mTLS, authorization, traffic policy and observability; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud Service Mesh ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "a mesh adds data-plane and operational complexity; it does not fix poor service boundaries or application-level authorization",
+        "Confirm Cloud Service Mesh scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud Service Mesh's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "mesh/GKE Enterprise terms, proxies, telemetry storage and cluster compute.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud Service Mesh estimate.",
+        "Track Cloud Service Mesh cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud Service Mesh — A managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads.",
+        "Cloud Load Balancing for north-south traffic without service-to-service mesh controls — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Service Mesh",
+          "fit": "A managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads."
+        },
+        {
+          "name": "Cloud Load Balancing",
+          "fit": "Cloud Load Balancing for north-south traffic without service-to-service mesh controls"
+        }
+      ],
+      "memoryHooks": [
+        "service client > mesh data plane > traffic/security policy > service endpoint > telemetry.",
+        "a mesh adds data-plane and operational complexity; it does not fix poor service boundaries or application-level authorization",
+        "Certification clue: A managed service mesh for traffic management, identity, policy and telemetry across supported GKE and hybrid workloads."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Service Mesh documentation",
+          "url": "https://docs.cloud.google.com/service-mesh/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-vpn",
+      "summary": "IPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways.",
+      "concepts": [
+        "VPN gateway/interface, tunnel, peer gateway, Cloud Router and IKE settings define the Cloud VPN resource model.",
+        "The production flow is on-prem peer > IPsec tunnel > HA VPN interface > Cloud Router/static routes > VPC.",
+        "Cloud VPN manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud VPN when iPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways.",
+        "It best fits a design that needs on-prem peer > IPsec tunnel > HA VPN interface > Cloud Router/static routes > VPC.",
+        "Choose Cloud Interconnect for predictable high-bandwidth private connectivity instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud VPN production flow",
+          "note": "IPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways.",
+          "reference": "Cloud VPN architecture",
+          "steps": [
+            {
+              "title": "1. on-prem peer",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. IPsec tunnel",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. HA VPN interface",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. Cloud Router/static routes",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. VPC",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud VPN",
+          "note": "Identity, boundary, resilience and operations for VPN gateway/interface, tunnel, peer gateway, Cloud Router and IKE settings.",
+          "reference": "Cloud VPN governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "strong shared secrets/IKE, restricted administration, redundant peers and route filters",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "HA/classic, region, peer gateway, tunnels, IKE, BGP/static routes and redundancy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "HA VPN SLA requires redundant tunnels/interfaces and correct routing; VPN throughput/latency is internet-path dependent",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "tunnel status, packet loss, throughput, BGP state and failover time",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud VPN",
+          "detail": "Google Cloud Console → Cloud VPN; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set HA/classic, region, peer gateway, tunnels, IKE, BGP/static routes and redundancy."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement strong shared secrets/IKE, restricted administration, redundant peers and route filters."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise on-prem peer > IPsec tunnel > HA VPN interface > Cloud Router/static routes > VPC; inspect tunnel status, packet loss, throughput, BGP state and failover time."
+        }
+      ],
+      "security": [
+        "For Cloud VPN, implement strong shared secrets/IKE, restricted administration, redundant peers and route filters.",
+        "Separate Cloud VPN policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with VPN gateway/interface, tunnel, peer gateway, Cloud Router and IKE settings."
+      ],
+      "operations": [
+        "Monitor tunnel status, packet loss, throughput, BGP state and failover time for Cloud VPN.",
+        "Version HA/classic, region, peer gateway, tunnels, IKE, BGP/static routes and redundancy; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Cloud VPN ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "HA VPN SLA requires redundant tunnels/interfaces and correct routing; VPN throughput/latency is internet-path dependent",
+        "Confirm Cloud VPN scope, regional/global behavior, quotas and supported integrations.",
+        "Cloud VPN's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "gateway/tunnel hours, egress and external peer/provider costs.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Cloud VPN estimate.",
+        "Track Cloud VPN cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Cloud VPN — IPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways.",
+        "Cloud Interconnect for predictable high-bandwidth private connectivity — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud VPN",
+          "fit": "IPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways."
+        },
+        {
+          "name": "Cloud Interconnect",
+          "fit": "Cloud Interconnect for predictable high-bandwidth private connectivity"
+        }
+      ],
+      "memoryHooks": [
+        "on-prem peer > IPsec tunnel > HA VPN interface > Cloud Router/static routes > VPC.",
+        "HA VPN SLA requires redundant tunnels/interfaces and correct routing; VPN throughput/latency is internet-path dependent",
+        "Certification clue: IPsec VPN connectivity between VPC networks and external networks using HA VPN or Classic VPN gateways."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud VPN documentation",
+          "url": "https://docs.cloud.google.com/network-connectivity/docs/vpn"
+        }
+      ]
+    },
+    {
+      "slug": "data-transfer-essentials",
+      "summary": "Network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments.",
+      "concepts": [
+        "transfer path, source/destination location, tier and egress class define the Data Transfer Essentials resource model.",
+        "The production flow is source service > selected network path > regional/global boundary > destination > usage record.",
+        "Data Transfer Essentials manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Data Transfer Essentials when network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments.",
+        "It best fits a design that needs source service > selected network path > regional/global boundary > destination > usage record.",
+        "Choose Storage Transfer Service for managed object-data transfer workflows instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Data Transfer Essentials production flow",
+          "note": "Network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments.",
+          "reference": "Data Transfer Essentials architecture",
+          "steps": [
+            {
+              "title": "1. source service",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. selected network path",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. regional/global boundary",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. destination",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. usage record",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Data Transfer Essentials",
+          "note": "Identity, boundary, resilience and operations for transfer path, source/destination location, tier and egress class.",
+          "reference": "Data Transfer Essentials governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "classify data, encrypt in transit, restrict endpoints and verify destination authorization",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source/destination, direction, locations, network tier, private path, volume and schedule",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "service-to-service traffic is not automatically free; direction, location, tier and public/private path determine billing",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "bytes by path/location, throughput, latency, retries and unexpected egress",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Data Transfer Essentials",
+          "detail": "Google Cloud Console → Data Transfer Essentials; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set source/destination, direction, locations, network tier, private path, volume and schedule."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement classify data, encrypt in transit, restrict endpoints and verify destination authorization."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise source service > selected network path > regional/global boundary > destination > usage record; inspect bytes by path/location, throughput, latency, retries and unexpected egress."
+        }
+      ],
+      "security": [
+        "For Data Transfer Essentials, implement classify data, encrypt in transit, restrict endpoints and verify destination authorization.",
+        "Separate Data Transfer Essentials policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with transfer path, source/destination location, tier and egress class."
+      ],
+      "operations": [
+        "Monitor bytes by path/location, throughput, latency, retries and unexpected egress for Data Transfer Essentials.",
+        "Version source/destination, direction, locations, network tier, private path, volume and schedule; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Data Transfer Essentials ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "service-to-service traffic is not automatically free; direction, location, tier and public/private path determine billing",
+        "Confirm Data Transfer Essentials scope, regional/global behavior, quotas and supported integrations.",
+        "Data Transfer Essentials's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "internet/inter-region/inter-zone egress, transfer services and provider circuits.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Data Transfer Essentials estimate.",
+        "Track Data Transfer Essentials cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Data Transfer Essentials — Network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments.",
+        "Storage Transfer Service for managed object-data transfer workflows — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Data Transfer Essentials",
+          "fit": "Network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments."
+        },
+        {
+          "name": "Storage Transfer Service",
+          "fit": "Storage Transfer Service for managed object-data transfer workflows"
+        }
+      ],
+      "memoryHooks": [
+        "source service > selected network path > regional/global boundary > destination > usage record.",
+        "service-to-service traffic is not automatically free; direction, location, tier and public/private path determine billing",
+        "Certification clue: Network data-transfer capabilities and guidance for moving data efficiently between users, regions, services and external environments."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Data Transfer Essentials documentation",
+          "url": "https://docs.cloud.google.com/data-transfer-essentials/docs"
+        }
+      ]
+    },
+    {
+      "slug": "media-cdn",
+      "summary": "A high-throughput edge caching platform optimized for streaming video, large downloads and media workloads.",
+      "concepts": [
+        "Edge Cache service, origin, route, cache key/policy and signed request define the Media CDN resource model.",
+        "The production flow is viewer > edge route > cache > origin shield/fill > media origin.",
+        "Media CDN manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Media CDN when a high-throughput edge caching platform optimized for streaming video, large downloads and media workloads.",
+        "It best fits a design that needs viewer > edge route > cache > origin shield/fill > media origin.",
+        "Choose Cloud CDN for general web/application content instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Media CDN production flow",
+          "note": "A high-throughput edge caching platform optimized for streaming video, large downloads and media workloads.",
+          "reference": "Media CDN architecture",
+          "steps": [
+            {
+              "title": "1. viewer",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. edge route",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. cache",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. origin shield/fill",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. media origin",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Media CDN",
+          "note": "Identity, boundary, resilience and operations for Edge Cache service, origin, route, cache key/policy and signed request.",
+          "reference": "Media CDN governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "signed requests, origin authentication, TLS, geo/access policy and log protection",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "origins, routes, cache keys/TTLs, signed requests, edge security, logs and fill behavior",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "media manifests, segments and personalized content need different cache keys/TTLs; range requests and origin behavior affect efficiency",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "cache hit/byte hit, origin fill, playback errors, latency and egress",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Media CDN",
+          "detail": "Google Cloud Console → Media CDN; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set origins, routes, cache keys/TTLs, signed requests, edge security, logs and fill behavior."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement signed requests, origin authentication, TLS, geo/access policy and log protection."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise viewer > edge route > cache > origin shield/fill > media origin; inspect cache hit/byte hit, origin fill, playback errors, latency and egress."
+        }
+      ],
+      "security": [
+        "For Media CDN, implement signed requests, origin authentication, TLS, geo/access policy and log protection.",
+        "Separate Media CDN policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with Edge Cache service, origin, route, cache key/policy and signed request."
+      ],
+      "operations": [
+        "Monitor cache hit/byte hit, origin fill, playback errors, latency and egress for Media CDN.",
+        "Version origins, routes, cache keys/TTLs, signed requests, edge security, logs and fill behavior; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Media CDN ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "media manifests, segments and personalized content need different cache keys/TTLs; range requests and origin behavior affect efficiency",
+        "Confirm Media CDN scope, regional/global behavior, quotas and supported integrations.",
+        "Media CDN's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "requests, cache/egress, origin fill, logging and load-balancing/origin services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Media CDN estimate.",
+        "Track Media CDN cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Media CDN — A high-throughput edge caching platform optimized for streaming video, large downloads and media workloads.",
+        "Cloud CDN for general web/application content — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Media CDN",
+          "fit": "A high-throughput edge caching platform optimized for streaming video, large downloads and media workloads."
+        },
+        {
+          "name": "Cloud CDN",
+          "fit": "Cloud CDN for general web/application content"
+        }
+      ],
+      "memoryHooks": [
+        "viewer > edge route > cache > origin shield/fill > media origin.",
+        "media manifests, segments and personalized content need different cache keys/TTLs; range requests and origin behavior affect efficiency",
+        "Certification clue: A high-throughput edge caching platform optimized for streaming video, large downloads and media workloads."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Media CDN documentation",
+          "url": "https://docs.cloud.google.com/media-cdn/docs"
+        }
+      ]
+    },
+    {
+      "slug": "network-connectivity-center",
+      "summary": "A hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites.",
+      "concepts": [
+        "hub, spoke, group, topology and route table define the Network Connectivity Center (NCC) resource model.",
+        "The production flow is VPC/hybrid/site spoke > NCC hub > route exchange/policy > destination spoke > return path.",
+        "Network Connectivity Center (NCC) manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Network Connectivity Center (NCC) when a hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites.",
+        "It best fits a design that needs VPC/hybrid/site spoke > NCC hub > route exchange/policy > destination spoke > return path.",
+        "Choose VPC Network Peering for small non-transitive VPC relationships instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Network Connectivity Center (NCC) production flow",
+          "note": "A hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites.",
+          "reference": "Network Connectivity Center (NCC) architecture",
+          "steps": [
+            {
+              "title": "1. VPC/hybrid/site spoke",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. NCC hub",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. route exchange/policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. destination spoke",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. return path",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Network Connectivity Center (NCC)",
+          "note": "Identity, boundary, resilience and operations for hub, spoke, group, topology and route table.",
+          "reference": "Network Connectivity Center (NCC) governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "hub/spoke IAM separation, route isolation/groups and controlled transitivity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "hub region/scope, spoke types, groups, route tables/policies, hybrid links and CIDRs",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "NCC orchestrates connectivity but underlying VPN/Interconnect/appliance capacity and overlapping CIDRs still constrain reachability",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "spoke status, route propagation, topology reachability and hybrid link health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Network Connectivity Center (NCC)",
+          "detail": "Google Cloud Console → Network Connectivity Center (NCC); select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set hub region/scope, spoke types, groups, route tables/policies, hybrid links and CIDRs."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement hub/spoke IAM separation, route isolation/groups and controlled transitivity."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise VPC/hybrid/site spoke > NCC hub > route exchange/policy > destination spoke > return path; inspect spoke status, route propagation, topology reachability and hybrid link health."
+        }
+      ],
+      "security": [
+        "For Network Connectivity Center (NCC), implement hub/spoke IAM separation, route isolation/groups and controlled transitivity.",
+        "Separate Network Connectivity Center (NCC) policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with hub, spoke, group, topology and route table."
+      ],
+      "operations": [
+        "Monitor spoke status, route propagation, topology reachability and hybrid link health for Network Connectivity Center (NCC).",
+        "Version hub region/scope, spoke types, groups, route tables/policies, hybrid links and CIDRs; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Network Connectivity Center (NCC) ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "NCC orchestrates connectivity but underlying VPN/Interconnect/appliance capacity and overlapping CIDRs still constrain reachability",
+        "Confirm Network Connectivity Center (NCC) scope, regional/global behavior, quotas and supported integrations.",
+        "Network Connectivity Center (NCC)'s managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "hub/spoke data processing under applicable model plus VPN/Interconnect/appliance and egress.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Network Connectivity Center (NCC) estimate.",
+        "Track Network Connectivity Center (NCC) cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Network Connectivity Center (NCC) — A hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites.",
+        "VPC Network Peering for small non-transitive VPC relationships — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Network Connectivity Center (NCC)",
+          "fit": "A hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites."
+        },
+        {
+          "name": "VPC Network Peering",
+          "fit": "VPC Network Peering for small non-transitive VPC relationships"
+        }
+      ],
+      "memoryHooks": [
+        "VPC/hybrid/site spoke > NCC hub > route exchange/policy > destination spoke > return path.",
+        "NCC orchestrates connectivity but underlying VPN/Interconnect/appliance capacity and overlapping CIDRs still constrain reachability",
+        "Certification clue: A hub-and-spoke orchestration service for connecting VPCs, hybrid links, router appliances and supported WAN sites."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Network Connectivity Center (NCC) documentation",
+          "url": "https://docs.cloud.google.com/network-connectivity/docs/network-connectivity-center"
+        }
+      ]
+    },
+    {
+      "slug": "network-intelligence-center",
+      "summary": "Network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights.",
+      "concepts": [
+        "connectivity test, topology model, performance metric and firewall insight define the Network Intelligence Center resource model.",
+        "The production flow is configuration/telemetry > path simulation or metric analysis > finding > remediation > retest.",
+        "Network Intelligence Center manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Network Intelligence Center when network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights.",
+        "It best fits a design that needs configuration/telemetry > path simulation or metric analysis > finding > remediation > retest.",
+        "Choose active application probes when end-to-end service behavior must be measured instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Network Intelligence Center production flow",
+          "note": "Network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights.",
+          "reference": "Network Intelligence Center architecture",
+          "steps": [
+            {
+              "title": "1. configuration/telemetry",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. path simulation or metric analysis",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. finding",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. remediation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. retest",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Network Intelligence Center",
+          "note": "Identity, boundary, resilience and operations for connectivity test, topology model, performance metric and firewall insight.",
+          "reference": "Network Intelligence Center governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "read-only diagnostic roles separated from network change permissions and protected telemetry",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source/destination/protocol, project scope, data-plane analysis, topology and insight schedule",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Connectivity Tests simulate configuration and selected data-plane checks; a reachable path does not prove application health",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "test result, packet path, regional latency/loss and unused/shadowed firewall rules",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Network Intelligence Center",
+          "detail": "Google Cloud Console → Network Intelligence Center; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set source/destination/protocol, project scope, data-plane analysis, topology and insight schedule."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement read-only diagnostic roles separated from network change permissions and protected telemetry."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise configuration/telemetry > path simulation or metric analysis > finding > remediation > retest; inspect test result, packet path, regional latency/loss and unused/shadowed firewall rules."
+        }
+      ],
+      "security": [
+        "For Network Intelligence Center, implement read-only diagnostic roles separated from network change permissions and protected telemetry.",
+        "Separate Network Intelligence Center policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with connectivity test, topology model, performance metric and firewall insight."
+      ],
+      "operations": [
+        "Monitor test result, packet path, regional latency/loss and unused/shadowed firewall rules for Network Intelligence Center.",
+        "Version source/destination/protocol, project scope, data-plane analysis, topology and insight schedule; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Network Intelligence Center ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "Connectivity Tests simulate configuration and selected data-plane checks; a reachable path does not prove application health",
+        "Confirm Network Intelligence Center scope, regional/global behavior, quotas and supported integrations.",
+        "Network Intelligence Center's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "test/telemetry/logging terms plus flow logs and monitoring storage.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Network Intelligence Center estimate.",
+        "Track Network Intelligence Center cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Network Intelligence Center — Network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights.",
+        "active application probes when end-to-end service behavior must be measured — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Network Intelligence Center",
+          "fit": "Network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights."
+        },
+        {
+          "name": "active application probes when end-to-end service behavior must be measured",
+          "fit": "active application probes when end-to-end service behavior must be measured"
+        }
+      ],
+      "memoryHooks": [
+        "configuration/telemetry > path simulation or metric analysis > finding > remediation > retest.",
+        "Connectivity Tests simulate configuration and selected data-plane checks; a reachable path does not prove application health",
+        "Certification clue: Network observability and diagnostics including topology, Connectivity Tests, Performance Dashboard and firewall insights."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Network Intelligence Center documentation",
+          "url": "https://docs.cloud.google.com/network-intelligence-center/docs"
+        }
+      ]
+    },
+    {
+      "slug": "network-security-integration",
+      "summary": "Integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths.",
+      "concepts": [
+        "security service, service attachment/endpoint, policy and routed traffic path define the Network Security Integration resource model.",
+        "The production flow is workload traffic > steering policy > inspection service > verdict > destination.",
+        "Network Security Integration manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Network Security Integration when integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths.",
+        "It best fits a design that needs workload traffic > steering policy > inspection service > verdict > destination.",
+        "Choose Cloud NGFW for Google-managed firewall/threat prevention instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Network Security Integration production flow",
+          "note": "Integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths.",
+          "reference": "Network Security Integration architecture",
+          "steps": [
+            {
+              "title": "1. workload traffic",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. steering policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. inspection service",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. verdict",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. destination",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Network Security Integration",
+          "note": "Identity, boundary, resilience and operations for security service, service attachment/endpoint, policy and routed traffic path.",
+          "reference": "Network Security Integration governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "provider trust, service-account/IAM boundaries, symmetric routing and fail-open/fail-closed governance",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "provider/service, insertion topology, zones/regions, steering, scaling, symmetry and failure behavior",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "service insertion can become a regional bottleneck or single failure domain; routing symmetry and bypass prevention must be tested",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "inspection health, throughput, latency, drops, asymmetric paths and policy hits",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Network Security Integration",
+          "detail": "Google Cloud Console → Network Security Integration; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set provider/service, insertion topology, zones/regions, steering, scaling, symmetry and failure behavior."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement provider trust, service-account/IAM boundaries, symmetric routing and fail-open/fail-closed governance."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise workload traffic > steering policy > inspection service > verdict > destination; inspect inspection health, throughput, latency, drops, asymmetric paths and policy hits."
+        }
+      ],
+      "security": [
+        "For Network Security Integration, implement provider trust, service-account/IAM boundaries, symmetric routing and fail-open/fail-closed governance.",
+        "Separate Network Security Integration policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with security service, service attachment/endpoint, policy and routed traffic path."
+      ],
+      "operations": [
+        "Monitor inspection health, throughput, latency, drops, asymmetric paths and policy hits for Network Security Integration.",
+        "Version provider/service, insertion topology, zones/regions, steering, scaling, symmetry and failure behavior; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Network Security Integration ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "service insertion can become a regional bottleneck or single failure domain; routing symmetry and bypass prevention must be tested",
+        "Confirm Network Security Integration scope, regional/global behavior, quotas and supported integrations.",
+        "Network Security Integration's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "security appliance/service, load balancing/steering, data processing, logging and egress.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Network Security Integration estimate.",
+        "Track Network Security Integration cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Network Security Integration — Integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths.",
+        "Cloud NGFW for Google-managed firewall/threat prevention — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Network Security Integration",
+          "fit": "Integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths."
+        },
+        {
+          "name": "Cloud NGFW",
+          "fit": "Cloud NGFW for Google-managed firewall/threat prevention"
+        }
+      ],
+      "memoryHooks": [
+        "workload traffic > steering policy > inspection service > verdict > destination.",
+        "service insertion can become a regional bottleneck or single failure domain; routing symmetry and bypass prevention must be tested",
+        "Certification clue: Integration patterns and controls for inserting third-party or Google security services into cloud network traffic paths."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Network Security Integration documentation",
+          "url": "https://docs.cloud.google.com/network-security-integration/docs"
+        }
+      ]
+    },
+    {
+      "slug": "network-service-tiers",
+      "summary": "Premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing.",
+      "concepts": [
+        "network tier on external IP/forwarding resource and egress path define the Network Service Tiers resource model.",
+        "The production flow is client > selected tier edge/path > regional/global frontend > workload > response.",
+        "Network Service Tiers manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Network Service Tiers when premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing.",
+        "It best fits a design that needs client > selected tier edge/path > regional/global frontend > workload > response.",
+        "Choose Premium Tier for global performance/features; Standard Tier for cost-optimized regional delivery instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Network Service Tiers production flow",
+          "note": "Premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing.",
+          "reference": "Network Service Tiers architecture",
+          "steps": [
+            {
+              "title": "1. client",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. selected tier edge/path",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. regional/global frontend",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. workload",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. response",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Network Service Tiers",
+          "note": "Identity, boundary, resilience and operations for network tier on external IP/forwarding resource and egress path.",
+          "reference": "Network Service Tiers governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "organization policy/resource governance to prevent unintended tier use and consistent frontend configuration",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "tier, region, external IP, load-balancer compatibility, user geography and cost/performance SLO",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a resource's tier and load-balancer support must align; changing tier can require IP/frontend changes",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "latency, packet loss, route geography, availability and egress by tier",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Network Service Tiers",
+          "detail": "Google Cloud Console → Network Service Tiers; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set tier, region, external IP, load-balancer compatibility, user geography and cost/performance SLO."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement organization policy/resource governance to prevent unintended tier use and consistent frontend configuration."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise client > selected tier edge/path > regional/global frontend > workload > response; inspect latency, packet loss, route geography, availability and egress by tier."
+        }
+      ],
+      "security": [
+        "For Network Service Tiers, implement organization policy/resource governance to prevent unintended tier use and consistent frontend configuration.",
+        "Separate Network Service Tiers policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with network tier on external IP/forwarding resource and egress path."
+      ],
+      "operations": [
+        "Monitor latency, packet loss, route geography, availability and egress by tier for Network Service Tiers.",
+        "Version tier, region, external IP, load-balancer compatibility, user geography and cost/performance SLO; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Network Service Tiers ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "a resource's tier and load-balancer support must align; changing tier can require IP/frontend changes",
+        "Confirm Network Service Tiers scope, regional/global behavior, quotas and supported integrations.",
+        "Network Service Tiers's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "internet egress rates differ by tier/location; related IP/load-balancer charges apply.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Network Service Tiers estimate.",
+        "Track Network Service Tiers cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Network Service Tiers — Premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing.",
+        "Premium Tier for global performance/features; Standard Tier for cost-optimized regional delivery — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Network Service Tiers",
+          "fit": "Premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing."
+        },
+        {
+          "name": "Premium Tier",
+          "fit": "Premium Tier for global performance/features; Standard Tier for cost-optimized regional delivery"
+        }
+      ],
+      "memoryHooks": [
+        "client > selected tier edge/path > regional/global frontend > workload > response.",
+        "a resource's tier and load-balancer support must align; changing tier can require IP/frontend changes",
+        "Certification clue: Premium and Standard network routing options that trade global Google backbone performance/features against lower-cost regional internet routing."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Network Service Tiers documentation",
+          "url": "https://docs.cloud.google.com/network-tiers/docs"
+        }
+      ]
+    },
+    {
+      "slug": "secure-access-connect",
+      "summary": "A managed secure access service for providing identity- and context-aware connectivity to private applications and resources.",
+      "concepts": [
+        "connector/gateway, application/resource, access policy and client session define the Secure Access Connect resource model.",
+        "The production flow is user/device > identity/context check > secure access edge > connector > private resource.",
+        "Secure Access Connect manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Secure Access Connect when a managed secure access service for providing identity- and context-aware connectivity to private applications and resources.",
+        "It best fits a design that needs user/device > identity/context check > secure access edge > connector > private resource.",
+        "Choose Cloud VPN for network-level site/user connectivity without per-application identity context instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Secure Access Connect production flow",
+          "note": "A managed secure access service for providing identity- and context-aware connectivity to private applications and resources.",
+          "reference": "Secure Access Connect architecture",
+          "steps": [
+            {
+              "title": "1. user/device",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. identity/context check",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. secure access edge",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. connector",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. private resource",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Secure Access Connect",
+          "note": "Identity, boundary, resilience and operations for connector/gateway, application/resource, access policy and client session.",
+          "reference": "Secure Access Connect governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "strong identity, device/context policy, least-privilege application access and session logging",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/connectors, protected resources, identity provider, context policy, client and logging",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "identity-aware access does not replace application authorization or resource-side firewall policy; connector capacity/failure matters",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "authentication, session establishment, connector health, latency and denied access",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Secure Access Connect",
+          "detail": "Google Cloud Console → Secure Access Connect; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/connectors, protected resources, identity provider, context policy, client and logging."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement strong identity, device/context policy, least-privilege application access and session logging."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise user/device > identity/context check > secure access edge > connector > private resource; inspect authentication, session establishment, connector health, latency and denied access."
+        }
+      ],
+      "security": [
+        "For Secure Access Connect, implement strong identity, device/context policy, least-privilege application access and session logging.",
+        "Separate Secure Access Connect policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with connector/gateway, application/resource, access policy and client session."
+      ],
+      "operations": [
+        "Monitor authentication, session establishment, connector health, latency and denied access for Secure Access Connect.",
+        "Version region/connectors, protected resources, identity provider, context policy, client and logging; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Secure Access Connect ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "identity-aware access does not replace application authorization or resource-side firewall policy; connector capacity/failure matters",
+        "Confirm Secure Access Connect scope, regional/global behavior, quotas and supported integrations.",
+        "Secure Access Connect's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "users/connectors/data processing plus identity, logging and private-resource services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Secure Access Connect estimate.",
+        "Track Secure Access Connect cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Secure Access Connect — A managed secure access service for providing identity- and context-aware connectivity to private applications and resources.",
+        "Cloud VPN for network-level site/user connectivity without per-application identity context — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Secure Access Connect",
+          "fit": "A managed secure access service for providing identity- and context-aware connectivity to private applications and resources."
+        },
+        {
+          "name": "Cloud VPN",
+          "fit": "Cloud VPN for network-level site/user connectivity without per-application identity context"
+        }
+      ],
+      "memoryHooks": [
+        "user/device > identity/context check > secure access edge > connector > private resource.",
+        "identity-aware access does not replace application authorization or resource-side firewall policy; connector capacity/failure matters",
+        "Certification clue: A managed secure access service for providing identity- and context-aware connectivity to private applications and resources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Secure Access Connect documentation",
+          "url": "https://docs.cloud.google.com/secure-access-connect/docs"
+        }
+      ]
+    },
+    {
+      "slug": "secure-web-proxy",
+      "summary": "A managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic.",
+      "concepts": [
+        "gateway, URL list, security policy, TLS inspection policy and certificate define the Secure Web Proxy resource model.",
+        "The production flow is workload/user > explicit proxy > policy/TLS inspection > internet destination > logs.",
+        "Secure Web Proxy manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Secure Web Proxy when a managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic.",
+        "It best fits a design that needs workload/user > explicit proxy > policy/TLS inspection > internet destination > logs.",
+        "Choose Cloud NAT for unfiltered outbound translation without application-layer web policy instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Secure Web Proxy production flow",
+          "note": "A managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic.",
+          "reference": "Secure Web Proxy architecture",
+          "steps": [
+            {
+              "title": "1. workload/user",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. explicit proxy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. policy/TLS inspection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. internet destination",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. logs",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Secure Web Proxy",
+          "note": "Identity, boundary, resilience and operations for gateway, URL list, security policy, TLS inspection policy and certificate.",
+          "reference": "Secure Web Proxy governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "restricted policy admins, trusted enterprise CA, certificate rotation and privacy-aware logging",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/network, proxy IP/ports, URL lists, policy priorities, TLS inspection and client configuration",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "clients must use/reach the proxy and trust the inspection CA; certificate-pinned applications may fail",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "allowed/denied requests, category/threat hits, TLS failures, latency and gateway health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Secure Web Proxy",
+          "detail": "Google Cloud Console → Secure Web Proxy; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/network, proxy IP/ports, URL lists, policy priorities, TLS inspection and client configuration."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement restricted policy admins, trusted enterprise CA, certificate rotation and privacy-aware logging."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise workload/user > explicit proxy > policy/TLS inspection > internet destination > logs; inspect allowed/denied requests, category/threat hits, TLS failures, latency and gateway health."
+        }
+      ],
+      "security": [
+        "For Secure Web Proxy, implement restricted policy admins, trusted enterprise CA, certificate rotation and privacy-aware logging.",
+        "Separate Secure Web Proxy policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with gateway, URL list, security policy, TLS inspection policy and certificate."
+      ],
+      "operations": [
+        "Monitor allowed/denied requests, category/threat hits, TLS failures, latency and gateway health for Secure Web Proxy.",
+        "Version region/network, proxy IP/ports, URL lists, policy priorities, TLS inspection and client configuration; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Secure Web Proxy ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "clients must use/reach the proxy and trust the inspection CA; certificate-pinned applications may fail",
+        "Confirm Secure Web Proxy scope, regional/global behavior, quotas and supported integrations.",
+        "Secure Web Proxy's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "proxy gateway/data processing, TLS inspection, logging and internet egress.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Secure Web Proxy estimate.",
+        "Track Secure Web Proxy cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Secure Web Proxy — A managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic.",
+        "Cloud NAT for unfiltered outbound translation without application-layer web policy — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Secure Web Proxy",
+          "fit": "A managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic."
+        },
+        {
+          "name": "Cloud NAT",
+          "fit": "Cloud NAT for unfiltered outbound translation without application-layer web policy"
+        }
+      ],
+      "memoryHooks": [
+        "workload/user > explicit proxy > policy/TLS inspection > internet destination > logs.",
+        "clients must use/reach the proxy and trust the inspection CA; certificate-pinned applications may fail",
+        "Certification clue: A managed explicit web proxy for enforcing URL/category, threat and TLS policies on outbound HTTP(S) traffic."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Secure Web Proxy documentation",
+          "url": "https://docs.cloud.google.com/secure-web-proxy/docs"
+        }
+      ]
+    },
+    {
+      "slug": "service-extensions",
+      "summary": "Programmable extensions for supported load-balancing and networking datapaths using callouts to custom services.",
+      "concepts": [
+        "extension chain, extension service, callout, forwarding rule and backend define the Service Extensions resource model.",
+        "The production flow is client > load balancer stage > extension callout > decision/mutation > backend.",
+        "Service Extensions manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Service Extensions when programmable extensions for supported load-balancing and networking datapaths using callouts to custom services.",
+        "It best fits a design that needs client > load balancer stage > extension callout > decision/mutation > backend.",
+        "Choose native load-balancer/Cloud Armor policies when built-in controls are sufficient instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Service Extensions production flow",
+          "note": "Programmable extensions for supported load-balancing and networking datapaths using callouts to custom services.",
+          "reference": "Service Extensions architecture",
+          "steps": [
+            {
+              "title": "1. client",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. load balancer stage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. extension callout",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. decision/mutation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backend",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Service Extensions",
+          "note": "Identity, boundary, resilience and operations for extension chain, extension service, callout, forwarding rule and backend.",
+          "reference": "Service Extensions governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "authenticate extension service, minimize shared data, constrain mutation and design fail-open/closed behavior",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "supported hook/stage, extension endpoint, timeout, failure mode, data access and rollout",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "extensions sit on the request path; slow or unavailable code can affect every request and must obey strict timeouts",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "callout latency/errors, extension availability, load-balancer impact and policy decisions",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Service Extensions",
+          "detail": "Google Cloud Console → Service Extensions; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set supported hook/stage, extension endpoint, timeout, failure mode, data access and rollout."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement authenticate extension service, minimize shared data, constrain mutation and design fail-open/closed behavior."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise client > load balancer stage > extension callout > decision/mutation > backend; inspect callout latency/errors, extension availability, load-balancer impact and policy decisions."
+        }
+      ],
+      "security": [
+        "For Service Extensions, implement authenticate extension service, minimize shared data, constrain mutation and design fail-open/closed behavior.",
+        "Separate Service Extensions policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with extension chain, extension service, callout, forwarding rule and backend."
+      ],
+      "operations": [
+        "Monitor callout latency/errors, extension availability, load-balancer impact and policy decisions for Service Extensions.",
+        "Version supported hook/stage, extension endpoint, timeout, failure mode, data access and rollout; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Service Extensions ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "extensions sit on the request path; slow or unavailable code can affect every request and must obey strict timeouts",
+        "Confirm Service Extensions scope, regional/global behavior, quotas and supported integrations.",
+        "Service Extensions's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "extension compute, load-balancer/data processing, network and logging.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Service Extensions estimate.",
+        "Track Service Extensions cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Service Extensions — Programmable extensions for supported load-balancing and networking datapaths using callouts to custom services.",
+        "native load-balancer/Cloud Armor policies when built-in controls are sufficient — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Service Extensions",
+          "fit": "Programmable extensions for supported load-balancing and networking datapaths using callouts to custom services."
+        },
+        {
+          "name": "native load-balancer/Cloud Armor policies when built-in controls are sufficient",
+          "fit": "native load-balancer/Cloud Armor policies when built-in controls are sufficient"
+        }
+      ],
+      "memoryHooks": [
+        "client > load balancer stage > extension callout > decision/mutation > backend.",
+        "extensions sit on the request path; slow or unavailable code can affect every request and must obey strict timeouts",
+        "Certification clue: Programmable extensions for supported load-balancing and networking datapaths using callouts to custom services."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Service Extensions documentation",
+          "url": "https://docs.cloud.google.com/service-extensions/docs"
+        }
+      ]
+    },
+    {
+      "slug": "virtual-private-cloud",
+      "summary": "Google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources.",
+      "concepts": [
+        "VPC network, regional subnet, route, firewall policy, IP range and peering/shared VPC relationship define the Virtual Private Cloud (VPC) resource model.",
+        "The production flow is workload NIC > subnet > route/firewall evaluation > next hop/service > destination.",
+        "Virtual Private Cloud (VPC) manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Virtual Private Cloud (VPC) when google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources.",
+        "It best fits a design that needs workload NIC > subnet > route/firewall evaluation > next hop/service > destination.",
+        "Choose Network Connectivity Center for larger transitive multi-network/hybrid topologies instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Virtual Private Cloud (VPC) production flow",
+          "note": "Google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources.",
+          "reference": "Virtual Private Cloud (VPC) architecture",
+          "steps": [
+            {
+              "title": "1. workload NIC",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. subnet",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. route/firewall evaluation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. next hop/service",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. destination",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Virtual Private Cloud (VPC)",
+          "note": "Identity, boundary, resilience and operations for VPC network, regional subnet, route, firewall policy, IP range and peering/shared VPC relationship.",
+          "reference": "Virtual Private Cloud (VPC) governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "hierarchical/network firewall, IAM, Shared VPC separation, private access and IPAM",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "custom/auto mode, subnets/IPAM, routing mode, firewall, private access, DNS, sharing and peering",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "subnets are regional while VPCs are global; overlapping CIDRs, non-transitive peering and implied firewall rules shape design",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "flow logs, route/firewall changes, IP utilization, reachability and dropped traffic",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Virtual Private Cloud (VPC)",
+          "detail": "Google Cloud Console → Virtual Private Cloud (VPC); select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set custom/auto mode, subnets/IPAM, routing mode, firewall, private access, DNS, sharing and peering."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement hierarchical/network firewall, IAM, Shared VPC separation, private access and IPAM."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise workload NIC > subnet > route/firewall evaluation > next hop/service > destination; inspect flow logs, route/firewall changes, IP utilization, reachability and dropped traffic."
+        }
+      ],
+      "security": [
+        "For Virtual Private Cloud (VPC), implement hierarchical/network firewall, IAM, Shared VPC separation, private access and IPAM.",
+        "Separate Virtual Private Cloud (VPC) policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with VPC network, regional subnet, route, firewall policy, IP range and peering/shared VPC relationship."
+      ],
+      "operations": [
+        "Monitor flow logs, route/firewall changes, IP utilization, reachability and dropped traffic for Virtual Private Cloud (VPC).",
+        "Version custom/auto mode, subnets/IPAM, routing mode, firewall, private access, DNS, sharing and peering; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Virtual Private Cloud (VPC) ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "subnets are regional while VPCs are global; overlapping CIDRs, non-transitive peering and implied firewall rules shape design",
+        "Confirm Virtual Private Cloud (VPC) scope, regional/global behavior, quotas and supported integrations.",
+        "Virtual Private Cloud (VPC)'s managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "egress, external IPs, flow logs and attached network services; VPC itself has no hourly fee.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Virtual Private Cloud (VPC) estimate.",
+        "Track Virtual Private Cloud (VPC) cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Virtual Private Cloud (VPC) — Google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources.",
+        "Network Connectivity Center for larger transitive multi-network/hybrid topologies — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Virtual Private Cloud (VPC)",
+          "fit": "Google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources."
+        },
+        {
+          "name": "Network Connectivity Center",
+          "fit": "Network Connectivity Center for larger transitive multi-network/hybrid topologies"
+        }
+      ],
+      "memoryHooks": [
+        "workload NIC > subnet > route/firewall evaluation > next hop/service > destination.",
+        "subnets are regional while VPCs are global; overlapping CIDRs, non-transitive peering and implied firewall rules shape design",
+        "Certification clue: Google Cloud's global software-defined network providing subnets, routes, firewalls, private access and shared networking for resources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Virtual Private Cloud (VPC) documentation",
+          "url": "https://docs.cloud.google.com/vpc/docs"
+        }
+      ]
+    },
+    {
+      "slug": "vpc-service-controls",
+      "summary": "A data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources.",
+      "concepts": [
+        "service perimeter, protected service, access level, ingress rule and egress rule define the VPC Service Controls resource model.",
+        "The production flow is principal/request > perimeter evaluation > ingress/egress policy > supported API > audit decision.",
+        "VPC Service Controls manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose VPC Service Controls when a data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources.",
+        "It best fits a design that needs principal/request > perimeter evaluation > ingress/egress policy > supported API > audit decision.",
+        "Choose IAM for who may act and firewall controls for packet-level connectivity instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "VPC Service Controls production flow",
+          "note": "A data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources.",
+          "reference": "VPC Service Controls architecture",
+          "steps": [
+            {
+              "title": "1. principal/request",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. perimeter evaluation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. ingress/egress policy",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. supported API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. audit decision",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed VPC Service Controls",
+          "note": "Identity, boundary, resilience and operations for service perimeter, protected service, access level, ingress rule and egress rule.",
+          "reference": "VPC Service Controls governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "separate perimeter administration, Access Context Manager levels, dry-run and tightly scoped bridge/rules",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "regular/dry-run perimeter, projects/services, access levels, ingress/egress rules, bridges and exception process",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "VPC Service Controls is API-layer context protection, not a network firewall; unsupported services and mis-scoped ingress/egress create gaps or outages",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "denied requests, violation reason, dry-run findings and perimeter coverage",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open VPC Service Controls",
+          "detail": "Google Cloud Console → VPC Service Controls; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set regular/dry-run perimeter, projects/services, access levels, ingress/egress rules, bridges and exception process."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement separate perimeter administration, Access Context Manager levels, dry-run and tightly scoped bridge/rules."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise principal/request > perimeter evaluation > ingress/egress policy > supported API > audit decision; inspect denied requests, violation reason, dry-run findings and perimeter coverage."
+        }
+      ],
+      "security": [
+        "For VPC Service Controls, implement separate perimeter administration, Access Context Manager levels, dry-run and tightly scoped bridge/rules.",
+        "Separate VPC Service Controls policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with service perimeter, protected service, access level, ingress rule and egress rule."
+      ],
+      "operations": [
+        "Monitor denied requests, violation reason, dry-run findings and perimeter coverage for VPC Service Controls.",
+        "Version regular/dry-run perimeter, projects/services, access levels, ingress/egress rules, bridges and exception process; canary changes and retain tested rollback or bypass procedures.",
+        "Assign VPC Service Controls ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "VPC Service Controls is API-layer context protection, not a network firewall; unsupported services and mis-scoped ingress/egress create gaps or outages",
+        "Confirm VPC Service Controls scope, regional/global behavior, quotas and supported integrations.",
+        "VPC Service Controls's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "no direct perimeter charge; logging, access-context and protected services bill normally.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the VPC Service Controls estimate.",
+        "Track VPC Service Controls cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "VPC Service Controls — A data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources.",
+        "IAM for who may act and firewall controls for packet-level connectivity — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "VPC Service Controls",
+          "fit": "A data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources."
+        },
+        {
+          "name": "IAM",
+          "fit": "IAM for who may act and firewall controls for packet-level connectivity"
+        }
+      ],
+      "memoryHooks": [
+        "principal/request > perimeter evaluation > ingress/egress policy > supported API > audit decision.",
+        "VPC Service Controls is API-layer context protection, not a network firewall; unsupported services and mis-scoped ingress/egress create gaps or outages",
+        "Certification clue: A data-exfiltration mitigation control that creates service perimeters around supported Google Cloud APIs and resources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "VPC Service Controls documentation",
+          "url": "https://docs.cloud.google.com/vpc-service-controls/docs"
+        }
+      ]
+    }
+  ]
+}
