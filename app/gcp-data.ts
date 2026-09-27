@@ -1,7 +1,6 @@
 import inventory from "../docs/gcp/gcp-services.json";
 import iconManifest from "../docs/gcp/icon-manifest.json";
 import content from "../docs/gcp/service-content.json";
-import pilotContent from "../docs/gcp/pilot-service-content.json";
 import { assetUrl } from "../lib/asset-url";
 
 export type GcpService = {
@@ -16,13 +15,10 @@ export type GcpContent = {
   architecture?: string[]; security?: string[]; operations?: string[]; watchPoints?: string[];
   cost?: string[]; alternatives?: string[]; relatedServices?: string[];
   sources?: { title: string; url: string }[];
-  sections?: { title: string; kind: string; body?: string; steps?: string[] }[];
 };
 export const gcpServices = inventory.services as GcpService[];
 export const gcpCategories = inventory.categories;
-const baseGcpContent = Object.fromEntries((content.services as GcpContent[]).map(item => [item.slug, item]));
-const pilotGcpContent = Object.fromEntries((pilotContent.services as GcpContent[]).map(item => [item.slug, item]));
-export const gcpContent = { ...baseGcpContent, ...pilotGcpContent };
+export const gcpContent = Object.fromEntries((content.services as GcpContent[]).map(item => [item.slug, item]));
 export const gcpSourceUrl = inventory.source.url;
 
 // Status is still useful for reviewed/published walkthroughs, but EL10 visuals are
@@ -31,7 +27,7 @@ export const gcpSourceUrl = inventory.source.url;
 export const gcpAssetReady = (status?: string) => /^(READY|PUBLISHED|VERIFIED|VALIDATED|MAPPED|COMPLETE|COMPLETED)$/i.test(status || "");
 
 const gcpR2Base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
-export const gcpAssetCandidates = (path: string) => {
+export const gcpAssetUrl = (path: string) => {
   const configured = assetUrl(path);
   return configured === path ? gcpR2Base + (path.startsWith("/") ? path : `/${path}`) : configured;
 };
