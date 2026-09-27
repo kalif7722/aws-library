@@ -34,6 +34,17 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
   </section>;
 }
 
+function ConsoleWalkthrough({ serviceName, details, visual }: { serviceName: string; details: GcpContent; visual?: ReactNode }) {
+  if (!details.consoleSteps?.length && !visual) return null;
+  return <section className="service-walkthrough-section" id="console-walkthrough">
+    <div className="service-section-cap"><div><p>GOOGLE CLOUD CONSOLE</p><h3>Console walk-through</h3></div><span>Follow the service-specific control path; verify identity, scope and outcome at every step.</span></div>
+    {details.consoleSteps?.length ? <div className="service-console-steps" aria-label={`${serviceName} console walk-through steps`}>
+      {details.consoleSteps.slice(0, 6).map((step, index) => <article key={step.title}><b>{String(index + 1).padStart(2, "0")}</b><div><h4>{step.title}</h4><p>{step.detail}</p></div></article>)}
+    </div> : null}
+    {visual}
+  </section>;
+}
+
 export default function GcpSharedServiceSections({ serviceName, details, consoleWalkthrough }: { serviceName: string; details: GcpContent; consoleWalkthrough?: ReactNode }) {
   const tabs = [["concepts", "Concepts"], ["architecture", "Architecture"], ["console-walkthrough", "Console"], ["security", "Security"], ["cost-models", "Cost"], ["exam-hook", "Exam hook"]] as const;
   const comparisons = details.comparisons || (details.alternatives || []).slice(0, 3).map((item, index) => ({ name: item.split(" — ")[0] || item, fit: item.split(" — ")[1] || (index === 0 ? "Best fit for this service boundary." : "Use when the workload boundary differs.") }));
@@ -49,7 +60,7 @@ export default function GcpSharedServiceSections({ serviceName, details, console
 
     <ArchitectureWalkthroughs serviceName={serviceName} details={details} />
 
-    {consoleWalkthrough && <section id="console-walkthrough">{consoleWalkthrough}</section>}
+    <ConsoleWalkthrough serviceName={serviceName} details={details} visual={consoleWalkthrough} />
 
     <div className="service-insight-grid">
       <NumberedPanel title="Security & governance" icon="◆" items={details.security || []} id="security" />
