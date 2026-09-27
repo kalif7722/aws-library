@@ -14,16 +14,16 @@ function NumberedPanel({ title, items, icon, id }: { title: string; items: strin
 
 function GenericArchitectureIcon({ label }: { label: string }) {
   const key = label.toLowerCase();
-  const Icon = /user|customer|buyer|approver|operator|personnel|developer|designer|owner|team|consumer/.test(key) ? Users
-    : /database|data|bigquery|firestore|sql/.test(key) ? Database
-    : /security|identity|iam|approval|policy|auth|token|mfa|governance/.test(key) ? Shield
-    : /network|edge|load balancer|route|vpc/.test(key) ? Network
-    : /file|manifest|yaml|repository|configuration|output|evidence|log/.test(key) ? FileText
-    : /monitor|health|incident|telemetry|alert|status|review/.test(key) ? Activity
-    : /compute|runtime|cluster|kubernetes|pipeline|automation|deployment/.test(key) ? Server
-    : /web|mobile|application|client|saas|portal/.test(key) ? Laptop
-    : /internet|provider|vendor|external/.test(key) ? Globe2 : Cloud;
-  return <div className="gcp-architecture-generic"><Icon size={30} /></div>;
+  const [Icon, tone] = /user|customer|buyer|approver|operator|personnel|developer|designer|owner|team|consumer/.test(key) ? [Users, "user"]
+    : /database|data|warehouse|record|dataset|table/.test(key) ? [Database, "data"]
+    : /security|identity|iam|approval|policy|auth|token|mfa|governance|permission/.test(key) ? [Shield, "security"]
+    : /network|edge|route|traffic|endpoint|connection/.test(key) ? [Network, "network"]
+    : /file|manifest|yaml|repository|configuration|output|evidence|log|report|artifact/.test(key) ? [FileText, "file"]
+    : /monitor|health|incident|telemetry|alert|status|review|metric|audit/.test(key) ? [Activity, "monitor"]
+    : /compute|runtime|cluster|kubernetes|pipeline|automation|deployment|worker|instance/.test(key) ? [Server, "compute"]
+    : /web|mobile|application|client|saas|portal|console/.test(key) ? [Laptop, "app"]
+    : /internet|provider|vendor|external|partner/.test(key) ? [Globe2, "internet"] : [Cloud, "cloud"];
+  return <div className={`gcp-architecture-generic tone-${tone}`}><Icon size={30} /></div>;
 }
 
 function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
