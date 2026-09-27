@@ -9,7 +9,12 @@ export type GcpArchitectureIcon = {
 };
 export type ResolvedGcpArchitectureIcon = GcpArchitectureIcon & { path: string };
 
-const normalize = (value: string) => value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "").trim();
+const normalize = (value: string) => value
+  .toLowerCase()
+  .replace(/^\s*(?:step|stage|layer|phase)?\s*\d+\s*[.\-:)]*\s*/, "")
+  .replace(/&/g, "and")
+  .replace(/[^a-z0-9]+/g, "")
+  .trim();
 const mappings = manifest.serviceMappings as Record<string, GcpArchitectureIcon | undefined>;
 const catalog = manifest.icons as Record<string, GcpArchitectureIcon | undefined>;
 const serviceAliases = new Map<string, string>();
@@ -49,7 +54,7 @@ const diagramIconAliases: Record<string, string> = {
   cloudfirewall: "legacy-cloud-firewall-rules", firewallrules: "legacy-cloud-firewall-rules",
   cloudkms: "legacy-key-management-service", kms: "legacy-key-management-service",
   cloudfunctions: "legacy-cloud-functions", cloudfunction: "legacy-cloud-functions",
-  gke: "core-gke", kubernetesengine: "core-gke", googlekubernetesengine: "core-gke",
+  gke: "core-gke", gkecluster: "core-gke", kubernetesengine: "core-gke", googlekubernetesengine: "core-gke",
   computeenginevm: "core-compute-engine", virtualmachine: "core-compute-engine", vm: "core-compute-engine",
   cloudstoragebucket: "core-cloud-storage", storagebucket: "core-cloud-storage", bucket: "core-cloud-storage",
   cloudsqlinstance: "core-cloud-sql", firestore: "legacy-firestore", bigtable: "legacy-bigtable",
@@ -57,8 +62,8 @@ const diagramIconAliases: Record<string, string> = {
   secrets: "legacy-secret-manager", secret: "legacy-secret-manager", secretmanager: "legacy-secret-manager",
   scheduler: "legacy-cloud-scheduler", cloudscheduler: "legacy-cloud-scheduler",
   eventarc: "legacy-eventarc", workflows: "legacy-workflows", workflow: "legacy-workflows",
-  cloudarmor: "legacy-cloud-armor", clouddns: "legacy-cloud-dns", cloudnat: "legacy-cloud-nat",
-  cloudvpn: "legacy-cloud-vpn", cloudrouter: "legacy-cloud-router", cloudcdn: "legacy-cloud-cdn",
+  cloudarmor: "legacy-cloud-armor", armorpolicy: "legacy-cloud-armor", clouddns: "legacy-cloud-dns", cloudnat: "legacy-cloud-nat",
+  cloudvpn: "legacy-cloud-vpn", cloudrouter: "legacy-cloud-router", cloudcdn: "legacy-cloud-cdn", edgepop: "legacy-cloud-cdn",
 };
 
 const embeddedServiceAliases = [...serviceAliases.entries()].filter(([name]) => name.length >= 7).sort((a, b) => b[0].length - a[0].length);
