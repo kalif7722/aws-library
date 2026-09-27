@@ -1,0 +1,504 @@
+{
+  "services": [
+    {
+      "slug": "cloud-storage",
+      "summary": "Object storage for durable, highly available data at internet scale. Cloud Storage organizes immutable or replaceable objects inside globally unique buckets, with location, storage class, lifecycle, retention, and access controls chosen per workload.",
+      "sections": [
+        {
+          "title": "What problem it solves",
+          "kind": "explain",
+          "body": "Use Cloud Storage when the durable unit is an object rather than a mounted filesystem or transactional row. It decouples producers and consumers, absorbs bursty ingestion, and keeps data available for analytics, backup, media, static content, and archival."
+        },
+        {
+          "title": "Resource anatomy",
+          "kind": "hierarchy",
+          "body": "Organization → folder or project context → bucket → object name and generation. A bucket has a location, default storage class, IAM policy, retention settings, lifecycle rules, labels, and optional Pub/Sub notifications. Objects carry data, metadata, checksums, generations, and encryption configuration."
+        },
+        {
+          "title": "Primary request flow",
+          "kind": "flow",
+          "steps": [
+            "Client or workload obtains an identity or signed URL",
+            "Request reaches the Cloud Storage JSON or XML API",
+            "IAM and bucket-level conditions authorize the operation",
+            "Object data is written or read with generation and checksum handling",
+            "Audit logs and service metrics expose the operation"
+          ]
+        },
+        {
+          "title": "Production architecture",
+          "kind": "architecture",
+          "steps": [
+            "Web or mobile client",
+            "Cloud Run upload API",
+            "Cloud Storage landing bucket",
+            "Event notification to Pub/Sub",
+            "Dataflow or Cloud Functions processing",
+            "Curated bucket and BigQuery table"
+          ]
+        },
+        {
+          "title": "Storage classes and placement",
+          "kind": "table",
+          "body": "Standard suits frequently accessed data; Nearline, Coldline, and Archive reduce storage cost for progressively colder data while increasing retrieval considerations. Choose regional, dual-region, or multi-region placement based on access geography, resilience, and data residency—not simply on lowest storage price."
+        },
+        {
+          "title": "Consistency and object design",
+          "kind": "explain",
+          "body": "Design object names and generations deliberately. Use resumable uploads for large objects, checksums for integrity, preconditions such as if-generation-match for safe replacement, and separate immutable landing objects from curated outputs."
+        },
+        {
+          "title": "Lifecycle automation",
+          "kind": "lifecycle",
+          "steps": [
+            "Object created in landing prefix",
+            "Age or custom metadata matches a rule",
+            "Transition storage class or delete object",
+            "Audit lifecycle actions and exceptions",
+            "Retain legal or compliance objects outside automatic deletion"
+          ]
+        },
+        {
+          "title": "Access patterns",
+          "kind": "comparison",
+          "body": "IAM and uniform bucket-level access are the default enterprise pattern. Signed URLs are useful for time-limited direct transfer. Public access should be exceptional and controlled with organization policy, public access prevention, and reviewable ownership."
+        },
+        {
+          "title": "Networking",
+          "kind": "security",
+          "body": "Private Google Access and VPC Service Controls can reduce exposure for supported workload paths. VPC Service Controls provide a service perimeter; they do not replace IAM. Plan egress, Private Google Access, DNS, and perimeter bridges for hybrid workloads."
+        },
+        {
+          "title": "IAM and trust boundary",
+          "kind": "iam",
+          "steps": [
+            "Human or workload identity",
+            "Role binding at project, bucket, or object boundary",
+            "IAM Conditions restrict prefix, time, or resource attributes",
+            "Cloud Storage service checks authorization",
+            "Cloud Audit Logs record administrative and data access where configured"
+          ]
+        },
+        {
+          "title": "Encryption and retention",
+          "kind": "security",
+          "body": "Data is encrypted by default. Use Google-managed encryption for the baseline, customer-managed encryption keys when key ownership or rotation requires it, and retention policies or object holds when deletion must be blocked. Removing a key can make protected data unreadable."
+        },
+        {
+          "title": "Availability and recovery",
+          "kind": "architecture",
+          "steps": [
+            "Choose regional, dual-region, or multi-region placement",
+            "Use object versioning for recovery from overwrite or deletion",
+            "Replicate or copy across locations when application RPO requires it",
+            "Test restore and permission recovery",
+            "Keep backup and production retention policies separate"
+          ]
+        },
+        {
+          "title": "Integrations",
+          "kind": "integrations",
+          "body": "Common integrations include Pub/Sub notifications, Dataflow, BigQuery external tables and load jobs, Dataproc, Cloud Run, Cloud Functions, Cloud CDN, Transfer Service, Backup and DR, Artifact Registry, and Cloud KMS."
+        },
+        {
+          "title": "Monitoring and operations",
+          "kind": "operations",
+          "body": "Track request counts, latency, bytes, storage growth, retrieval activity, failed authorization, lifecycle actions, and replication health. Use audit logs for control-plane investigations and carefully enable data-access logging because it can increase log volume."
+        },
+        {
+          "title": "Pricing drivers",
+          "kind": "cost",
+          "body": "Model stored bytes by class and location, operation counts, retrieval and early-deletion charges where applicable, network egress, replication, and monitoring or logging volume. Lifecycle transitions and object fragmentation can create unexpected operation costs."
+        },
+        {
+          "title": "Quotas and limits",
+          "kind": "limits",
+          "body": "Plan around bucket and project quotas, API request rates, upload behavior, object size and naming rules, notification throughput, and location availability. Treat quota errors separately from IAM failures and retry only transient responses with backoff."
+        },
+        {
+          "title": "Failure modes",
+          "kind": "troubleshooting",
+          "steps": [
+            "403: inspect principal, bucket policy, conditions, and perimeter",
+            "404: confirm bucket, object name, location, and generation",
+            "412: resolve failed precondition or stale generation",
+            "429/5xx: apply bounded exponential backoff",
+            "Unexpected cost: inspect egress, retrieval, operations, and lifecycle rules"
+          ]
+        },
+        {
+          "title": "When to choose it",
+          "kind": "decision",
+          "body": "Choose Cloud Storage for objects, data lakes, backups, static assets, exchange files, and asynchronous pipelines. Do not use it as a POSIX filesystem, low-latency row store, or replacement for a database transaction boundary."
+        },
+        {
+          "title": "Adjacent-service comparison",
+          "kind": "comparison",
+          "body": "Cloud Storage is object storage; Filestore is managed NFS; Persistent Disk is block storage for compute; BigQuery is an analytical warehouse; Firestore and Cloud SQL provide application-oriented databases. Compare access semantics before comparing price."
+        },
+        {
+          "title": "Certification takeaway",
+          "kind": "exam",
+          "body": "Remember: bucket location and storage class are independent decisions; IAM is not the same as VPC Service Controls; signed URLs grant temporary access but do not change IAM policy; retention policy and object holds can prevent deletion; object versioning supports recovery but increases storage cost."
+        }
+      ],
+      "relatedServices": [
+        "pub-sub",
+        "bigquery",
+        "cloud-run",
+        "dataflow",
+        "identity-and-access-management"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Storage documentation",
+          "url": "https://cloud.google.com/storage/docs"
+        },
+        {
+          "title": "Cloud Storage pricing",
+          "url": "https://cloud.google.com/storage/pricing"
+        },
+        {
+          "title": "Cloud Storage IAM",
+          "url": "https://cloud.google.com/storage/docs/access-control/iam"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-run",
+      "summary": "A fully managed application platform for running stateless containers over HTTPS, with revisions, traffic management, request-based autoscaling, scale-to-zero, jobs, and services.",
+      "sections": [
+        {
+          "title": "What problem it solves",
+          "kind": "explain",
+          "body": "Cloud Run removes server and cluster management for HTTP services, event handlers, and batch jobs packaged as containers. It is a strong fit when the application can start from an image, tolerate instance lifecycle changes, and expose a request or job boundary."
+        },
+        {
+          "title": "Resource anatomy",
+          "kind": "hierarchy",
+          "body": "Project and region contain Cloud Run services and jobs. A service points to immutable revisions; each revision defines the container image, CPU and memory, concurrency, timeout, environment, identity, networking, and scaling settings. Traffic can be split across revisions."
+        },
+        {
+          "title": "Request flow",
+          "kind": "flow",
+          "steps": [
+            "Client or event source sends HTTPS request",
+            "Cloud Run ingress and IAM policy evaluate access",
+            "Traffic is routed to a service revision",
+            "Autoscaler creates, reuses, or scales instances",
+            "Container returns response and telemetry flows to operations tools"
+          ]
+        },
+        {
+          "title": "Production architecture",
+          "kind": "architecture",
+          "steps": [
+            "Cloud Load Balancing or API Gateway",
+            "Cloud Run service with revision traffic split",
+            "Secret Manager and Cloud SQL private connection",
+            "Cloud Storage or Pub/Sub integration",
+            "Cloud Monitoring and Cloud Logging"
+          ]
+        },
+        {
+          "title": "Services, jobs, and functions",
+          "kind": "comparison",
+          "body": "Use a Cloud Run service for request-driven containers, a job for finite batch execution, and event-driven functions when the function model is the clearest abstraction. Do not choose a Cloud Run service for a workload requiring durable local state or long-lived unmanaged connections."
+        },
+        {
+          "title": "Deployment flow",
+          "kind": "lifecycle",
+          "steps": [
+            "Build source into container with Cloud Build",
+            "Push immutable image to Artifact Registry",
+            "Deploy a new Cloud Run revision",
+            "Run health and smoke checks",
+            "Shift traffic gradually or roll back to a prior revision"
+          ]
+        },
+        {
+          "title": "Scaling model",
+          "kind": "explain",
+          "body": "Instances scale with incoming work and configured concurrency, subject to minimum and maximum instances, CPU and memory, request timeout, startup behavior, and regional capacity. Scale-to-zero saves idle cost but makes startup latency and initialization design important."
+        },
+        {
+          "title": "Revision and traffic strategy",
+          "kind": "architecture",
+          "steps": [
+            "Revision A serves stable traffic",
+            "Revision B receives tagged or canary traffic",
+            "Metrics and logs compare behavior",
+            "Move traffic after validation",
+            "Keep rollback target until confidence and retention goals are met"
+          ]
+        },
+        {
+          "title": "Networking",
+          "kind": "security",
+          "body": "Configure ingress to limit public exposure, use an authenticated invoker for private services, and route outbound traffic through a VPC connector or Direct VPC egress when private resources or controlled egress are required. Distinguish ingress policy from outbound network configuration."
+        },
+        {
+          "title": "IAM and identity",
+          "kind": "iam",
+          "steps": [
+            "Caller identity requests the service",
+            "Cloud Run Invoker permission authorizes the request",
+            "Runtime service account accesses downstream resources",
+            "Service-to-service calls use identity tokens",
+            "Audit logs capture deployment and access events"
+          ]
+        },
+        {
+          "title": "Secrets and protection",
+          "kind": "security",
+          "body": "Use Secret Manager references rather than embedding credentials in images or environment files. Restrict deployer and runtime roles separately, use Artifact Registry access controls, and apply Binary Authorization or organization policy when the release process requires image attestation."
+        },
+        {
+          "title": "Availability",
+          "kind": "architecture",
+          "steps": [
+            "Deploy independently in the target region",
+            "Use global or regional load balancing where multi-region service is required",
+            "Keep state in managed regional or multi-region services",
+            "Replicate data according to RPO",
+            "Test revision rollback and regional recovery"
+          ]
+        },
+        {
+          "title": "Integrations",
+          "kind": "integrations",
+          "body": "Cloud Run commonly integrates with Artifact Registry, Cloud Build, Cloud SQL, Memorystore, Cloud Storage, Pub/Sub, Eventarc, Secret Manager, API Gateway, Cloud Load Balancing, VPC, Cloud Monitoring, and Cloud Trace."
+        },
+        {
+          "title": "Observability",
+          "kind": "operations",
+          "body": "Use request latency, error rate, instance count, startup latency, container logs, structured logging, traces, and revision labels. Correlate request IDs with downstream Cloud SQL, Pub/Sub, or external API failures."
+        },
+        {
+          "title": "Pricing drivers",
+          "kind": "cost",
+          "body": "Cost depends on allocated CPU and memory time, request or job execution, minimum instances, networking, build and registry usage, and connected services. Minimum instances trade lower startup latency for baseline spend."
+        },
+        {
+          "title": "Limits and failure modes",
+          "kind": "limits",
+          "body": "Validate container startup, port binding, request timeout, concurrency safety, memory pressure, max instances, regional capacity, VPC egress, and downstream connection pools. A container that works locally can fail in production when it assumes writable durable disk or a fixed hostname."
+        },
+        {
+          "title": "Troubleshooting workflow",
+          "kind": "troubleshooting",
+          "steps": [
+            "Confirm revision and traffic allocation",
+            "Inspect deployment events and container startup logs",
+            "Check invoker IAM and ingress policy",
+            "Check service account access to dependencies",
+            "Check timeout, concurrency, memory, and downstream limits"
+          ]
+        },
+        {
+          "title": "When to choose it",
+          "kind": "decision",
+          "body": "Choose Cloud Run for stateless APIs, webhooks, microservices, event consumers, and finite jobs. Prefer GKE when Kubernetes primitives, custom scheduling, sidecars, or long-running cluster control are central."
+        },
+        {
+          "title": "Adjacent-service comparison",
+          "kind": "comparison",
+          "body": "Cloud Run is more managed than GKE and more container-oriented than Cloud Functions. App Engine offers application-platform conventions and versions. Compute Engine provides VM control. Compare operational ownership, workload shape, networking, and scaling—not just deployment speed."
+        },
+        {
+          "title": "Certification takeaway",
+          "kind": "exam",
+          "body": "Remember: revisions are immutable deployment snapshots; traffic splitting is revision-based; scale-to-zero is not the same as zero cost for connected services; Cloud Run IAM controls invocation; ingress and outbound VPC configuration solve different problems."
+        }
+      ],
+      "relatedServices": [
+        "artifact-registry",
+        "cloud-build",
+        "cloud-sql",
+        "pub-sub",
+        "secret-manager",
+        "monitoring"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Run documentation",
+          "url": "https://cloud.google.com/run/docs"
+        },
+        {
+          "title": "Cloud Run autoscaling",
+          "url": "https://cloud.google.com/run/docs/about-instance-autoscaling"
+        },
+        {
+          "title": "Cloud Run pricing",
+          "url": "https://cloud.google.com/run/pricing"
+        }
+      ]
+    },
+    {
+      "slug": "bigquery",
+      "summary": "A serverless, highly scalable analytical warehouse for SQL and data analysis across managed tables, external data, streaming or batch ingestion, and governed datasets.",
+      "sections": [
+        {
+          "title": "What problem it solves",
+          "kind": "explain",
+          "body": "BigQuery separates analytical storage from query compute so teams can analyze large datasets without provisioning database servers. It is designed for scans, joins, aggregations, scheduled transformations, and governed sharing rather than OLTP transactions."
+        },
+        {
+          "title": "Resource anatomy",
+          "kind": "hierarchy",
+          "body": "Organization and project contain datasets; datasets contain tables, views, materialized views, routines, models, and row or column access policies. Reservations and assignments control capacity-based query compute; jobs represent queries, loads, extracts, and copies."
+        },
+        {
+          "title": "Query lifecycle",
+          "kind": "flow",
+          "steps": [
+            "Principal submits SQL or API job",
+            "BigQuery validates syntax, permissions, referenced objects, and location",
+            "Query planner distributes work across slots",
+            "Columnar storage is scanned, filtered, joined, and aggregated",
+            "Results are returned, cached where eligible, or written to a destination table"
+          ]
+        },
+        {
+          "title": "Production architecture",
+          "kind": "architecture",
+          "steps": [
+            "Cloud Storage landing zone",
+            "Dataflow or Datastream ingestion",
+            "BigQuery partitioned and clustered tables",
+            "Authorized views or row access policies",
+            "Looker or BI Engine for consumption",
+            "Cloud Monitoring and audit logs"
+          ]
+        },
+        {
+          "title": "Storage and table design",
+          "kind": "explain",
+          "body": "Use partitioning to reduce scanned data by time or integer range and clustering to improve pruning within partitions. Choose schemas deliberately, avoid repeated full-table scans, and separate raw, curated, and serving datasets with clear ownership."
+        },
+        {
+          "title": "Ingestion patterns",
+          "kind": "comparison",
+          "body": "Batch load jobs suit files in Cloud Storage; streaming inserts or the Storage Write API support continuous ingestion; Dataflow handles transformation and windowing; Datastream supports database change capture. Choose based on latency, delivery semantics, replay, and transformation complexity."
+        },
+        {
+          "title": "Capacity model",
+          "kind": "cost",
+          "body": "On-demand analysis charges by data processed subject to query behavior; capacity editions or reservations charge for allocated compute capacity and workload management. Slot contention, concurrency, autoscaling behavior, and reservation assignments matter more than raw row count."
+        },
+        {
+          "title": "Governance and sharing",
+          "kind": "iam",
+          "steps": [
+            "User or workload principal authenticates",
+            "Dataset and table permissions authorize access",
+            "Policy tags and column policies restrict sensitive fields",
+            "Authorized views expose a curated projection",
+            "Audit logs record query and data-access activity"
+          ]
+        },
+        {
+          "title": "Security boundary",
+          "kind": "security",
+          "body": "Use IAM, dataset-level ownership, row access policies, policy tags with Data Catalog or Dataplex governance, VPC Service Controls where appropriate, and customer-managed keys when key ownership is required. Do not treat a view as a substitute for a complete data-governance design."
+        },
+        {
+          "title": "Data location and resilience",
+          "kind": "architecture",
+          "steps": [
+            "Choose dataset location compatible with source and processing services",
+            "Keep query jobs and referenced datasets location-compatible",
+            "Use table snapshots, clones, copies, or export patterns for recovery",
+            "Replicate critical data based on RPO",
+            "Test permissions and restore paths"
+          ]
+        },
+        {
+          "title": "Performance workflow",
+          "kind": "operations",
+          "steps": [
+            "Inspect query plan and bytes processed",
+            "Filter partitions early",
+            "Select only required columns",
+            "Improve clustering and join strategy",
+            "Use materialized views, BI Engine, or pre-aggregation where justified",
+            "Monitor slot utilization and queueing"
+          ]
+        },
+        {
+          "title": "Integrations",
+          "kind": "integrations",
+          "body": "BigQuery integrates with Cloud Storage, Pub/Sub, Dataflow, Dataproc, Datastream, Dataplex, Looker, Vertex AI, Cloud Composer, Analytics Hub, and Cloud Monitoring. Each integration has its own location, IAM, quota, and billing implications."
+        },
+        {
+          "title": "Workload isolation",
+          "kind": "architecture",
+          "body": "Use reservations, assignments, projects, labels, and separate datasets to isolate production BI, ELT, data science, and ad-hoc workloads. Capacity governance should prevent one noisy workload from consuming the operational budget."
+        },
+        {
+          "title": "Monitoring",
+          "kind": "operations",
+          "body": "Track bytes processed, slot utilization, query duration, queue time, failures, shuffle pressure, reservation usage, streaming errors, table growth, and audit events. Alert on cost or workload anomalies rather than only infrastructure health."
+        },
+        {
+          "title": "Pricing drivers",
+          "kind": "cost",
+          "body": "Model query or capacity charges, storage, streaming or write paths, materialized views, BI Engine, cross-region movement, extracts, and connected services. Partitioning and column selection are cost controls, not merely performance optimizations."
+        },
+        {
+          "title": "Quotas and limits",
+          "kind": "limits",
+          "body": "Plan for concurrent jobs, API request rates, load and streaming throughput, reservation capacity, table and partition behavior, query complexity, and regional availability. Quota errors and access errors require different remediation paths."
+        },
+        {
+          "title": "Failure modes",
+          "kind": "troubleshooting",
+          "steps": [
+            "Access denied: inspect project, dataset, table, policy tag, and authorized-view permissions",
+            "Location error: align job, dataset, and source locations",
+            "Resources exceeded: inspect shuffle, joins, and query plan",
+            "Quota exceeded: inspect API, concurrency, ingestion, and reservation limits",
+            "Unexpected cost: inspect bytes scanned, cache eligibility, and repeated queries"
+          ]
+        },
+        {
+          "title": "When to choose it",
+          "kind": "decision",
+          "body": "Choose BigQuery for analytical SQL, warehouse workloads, large-scale reporting, event analysis, and governed data sharing. Do not use it as a high-frequency transactional database or as a replacement for an operational key-value store."
+        },
+        {
+          "title": "Adjacent-service comparison",
+          "kind": "comparison",
+          "body": "BigQuery is an analytical warehouse; Cloud SQL and Spanner serve transactional patterns; Bigtable serves wide-column low-latency access; Dataproc serves Spark/Hadoop control; Dataflow provides unified stream and batch processing."
+        },
+        {
+          "title": "Certification takeaway",
+          "kind": "exam",
+          "body": "Remember: datasets have locations; partitioning reduces scanned data; clustering improves pruning; IAM and policy tags solve different governance layers; reservations manage capacity; Cloud Storage is often the landing layer, not the analytical query engine."
+        }
+      ],
+      "relatedServices": [
+        "cloud-storage",
+        "dataflow",
+        "pub-sub",
+        "dataproc",
+        "monitoring",
+        "cloud-composer"
+      ],
+      "sources": [
+        {
+          "title": "BigQuery documentation",
+          "url": "https://cloud.google.com/bigquery/docs"
+        },
+        {
+          "title": "BigQuery pricing",
+          "url": "https://cloud.google.com/bigquery/pricing"
+        },
+        {
+          "title": "BigQuery performance best practices",
+          "url": "https://cloud.google.com/bigquery/docs/best-practices-performance-overview"
+        }
+      ]
+    }
+  ]
+}
