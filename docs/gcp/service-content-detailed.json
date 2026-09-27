@@ -904,6 +904,668 @@
           "url": "https://cloud.google.com/identity/docs/apis"
         }
       ]
+    },
+    {
+      "slug": "cloud-marketplace",
+      "summary": "A governed procurement and deployment channel for Google, partner and open-source solutions delivered as SaaS subscriptions, VM images, Kubernetes applications and professional services.",
+      "concepts": [
+        "Marketplace listings package commercial terms, deployment metadata, support ownership and billing integration; the deployed software still runs in vendor SaaS or customer Google Cloud resources.",
+        "Private Marketplace lets administrators curate products approved for organization, folder or project members, while product requests provide a governed exception path.",
+        "Private offers bind negotiated pricing and duration to a Cloud Billing account; infrastructure charges for VM and Kubernetes products remain separate from software pricing."
+      ],
+      "applicationFit": [
+        "Use Marketplace to shorten procurement and deploy supported third-party software with consolidated Google Cloud billing.",
+        "Use Private Marketplace when platform teams must restrict deployment to security- and procurement-approved products.",
+        "Use an internal golden-image or software catalog when the artifact is private, self-supported or not distributed through Marketplace."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Governed product deployment",
+          "note": "An administrator curates approved listings; a project user selects a product and deploys it into the permitted Google Cloud environment.",
+          "reference": "Private Marketplace governance",
+          "steps": [
+            {
+              "title": "Vendor listing",
+              "items": [
+                "VM",
+                "Kubernetes",
+                "SaaS"
+              ]
+            },
+            {
+              "title": "Private Marketplace",
+              "items": [
+                "Collection",
+                "Org/folder/project scope"
+              ]
+            },
+            {
+              "title": "Buyer",
+              "items": [
+                "Entitlement",
+                "Billing account"
+              ]
+            },
+            {
+              "title": "Deployment",
+              "items": [
+                "Project resources",
+                "Vendor SaaS"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "Updates",
+                "Support"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Private-offer procurement",
+          "note": "Negotiated commercial terms are accepted against the intended billing account before the entitlement becomes active.",
+          "reference": "Cloud Marketplace private offer",
+          "steps": [
+            {
+              "title": "Vendor",
+              "items": [
+                "Custom price",
+                "Term"
+              ]
+            },
+            {
+              "title": "Private offer",
+              "items": [
+                "Customer",
+                "Billing account"
+              ]
+            },
+            {
+              "title": "Approver",
+              "items": [
+                "Review",
+                "Accept"
+              ]
+            },
+            {
+              "title": "Entitlement",
+              "items": [
+                "Subscription",
+                "Plan"
+              ]
+            },
+            {
+              "title": "Billing",
+              "items": [
+                "Software charge",
+                "Infrastructure charge"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Separate procurement, billing-account, Marketplace governance and deployment roles; accepting an offer should require explicit commercial authority.",
+        "Review listing permissions, vendor support, data flows, image provenance and required service accounts before approval.",
+        "Use organization policies, VPC controls and workload IAM after deployment; Marketplace approval does not make the runtime automatically secure."
+      ],
+      "operations": [
+        "Track subscriptions, offer renewal dates, product updates, deployment-manager ownership and vendor support contacts.",
+        "Patch or replace Marketplace images and applications according to vendor guidance; listing updates do not necessarily update running deployments.",
+        "Test entitlement cancellation and resource deletion separately to avoid either orphaned infrastructure or accidental service interruption."
+      ],
+      "watchPoints": [
+        "Private Marketplace scope determines catalog visibility, not permission to create every underlying resource.",
+        "Private-offer discounts may exclude Google Cloud infrastructure and can revert or require renewal when the contract ends.",
+        "Responsibility is shared among Google, vendor and customer; validate support and SLA boundaries per listing."
+      ],
+      "cost": [
+        "Model software subscription or usage charges separately from Compute Engine, GKE, storage, networking and logging charges.",
+        "Private offers can change price and commitment term; monitor renewal and post-contract pricing.",
+        "Idle deployed infrastructure can continue billing even if the Marketplace subscription changes or is cancelled."
+      ],
+      "alternatives": [
+        "Cloud Marketplace — curated commercial software procurement and deployment.",
+        "Private internal catalog — organization-owned artifacts and deployment templates.",
+        "Artifact Registry — package and container storage, not commercial procurement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Marketplace",
+          "fit": "curated commercial software procurement and deployment."
+        },
+        {
+          "name": "Private internal catalog",
+          "fit": "organization-owned artifacts and deployment templates."
+        },
+        {
+          "name": "Artifact Registry",
+          "fit": "package and container storage, not commercial procurement."
+        }
+      ],
+      "memoryHooks": [
+        "Marketplace governs acquisition; IAM and policy still govern the deployed workload.",
+        "Private Marketplace curates listings; private offers customize commercial terms.",
+        "Exam clue: approved third-party software with consolidated billing points to Cloud Marketplace."
+      ],
+      "relatedServices": [
+        "cloud-billing",
+        "artifact-registry",
+        "service-catalog",
+        "identity-and-access-management"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Marketplace documentation",
+          "url": "https://cloud.google.com/marketplace/docs"
+        },
+        {
+          "title": "Private Marketplace",
+          "url": "https://cloud.google.com/marketplace/docs/governance/private-marketplace"
+        },
+        {
+          "title": "Private offers",
+          "url": "https://cloud.google.com/marketplace/docs/offers/discover-private-offers"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-quotas",
+      "summary": "A centralized service for observing Google Cloud resource and API quotas, setting quota preferences, creating alerts and requesting or automating supported limit adjustments.",
+      "concepts": [
+        "Allocation quotas limit resources such as CPUs or IP addresses; rate quotas limit operations over time. Quota values can vary by project, region, service and dimension.",
+        "A quota preference records the desired limit and can initiate an adjustment request; approval and resulting effective quota depend on service policy and capacity.",
+        "Quota adjuster can proactively request increases for supported quotas, while monitoring and alerts expose approaching saturation."
+      ],
+      "applicationFit": [
+        "Use Cloud Quotas for inventory, alerting and adjustment workflows across Google Cloud services.",
+        "Request increases before launches or migrations and validate regional dimensions, not only the global service total.",
+        "Use application rate limiting and capacity controls as well; a larger provider quota does not protect downstream systems or budget."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Capacity readiness workflow",
+          "note": "Teams compare forecast demand with current effective quotas, request changes and verify approval before rollout.",
+          "reference": "Quota adjustment lifecycle",
+          "steps": [
+            {
+              "title": "Demand forecast",
+              "items": [
+                "Launch",
+                "Migration"
+              ]
+            },
+            {
+              "title": "Cloud Quotas",
+              "items": [
+                "Usage",
+                "Effective limit"
+              ]
+            },
+            {
+              "title": "Preference",
+              "items": [
+                "Desired value",
+                "Dimensions"
+              ]
+            },
+            {
+              "title": "Google review",
+              "items": [
+                "Approve",
+                "Partial",
+                "Reject"
+              ]
+            },
+            {
+              "title": "Deployment gate",
+              "items": [
+                "Load test",
+                "Proceed"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Automated quota governance",
+          "note": "Monitoring and supported quota adjuster settings reduce surprise exhaustion while keeping human review for capacity and cost risk.",
+          "reference": "Quota adjuster pattern",
+          "steps": [
+            {
+              "title": "Usage telemetry",
+              "items": [
+                "Project",
+                "Region",
+                "Service"
+              ]
+            },
+            {
+              "title": "Alert",
+              "items": [
+                "Threshold",
+                "Forecast"
+              ]
+            },
+            {
+              "title": "Quota adjuster",
+              "items": [
+                "Supported quota",
+                "Auto request"
+              ]
+            },
+            {
+              "title": "Approval",
+              "items": [
+                "Service policy",
+                "Capacity"
+              ]
+            },
+            {
+              "title": "Owner",
+              "items": [
+                "Cost check",
+                "Incident response"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Limit quota-administration permissions because increases can expand spend and resource exposure.",
+        "Separate quota requesters from budget owners for high-cost capacity and audit preference changes.",
+        "Do not put secrets in request justification; use Cloud Audit Logs for administrative review."
+      ],
+      "operations": [
+        "Maintain a quota baseline for critical projects and regions and recheck it before major releases.",
+        "Alert on both utilization percentage and remaining absolute headroom; low-limit quotas can fail before percentage alerts are useful.",
+        "Handle RESOURCE_EXHAUSTED differently from IAM, billing and regional-capacity errors."
+      ],
+      "watchPoints": [
+        "A quota increase is not a capacity reservation and does not guarantee zonal or regional stock.",
+        "Some quotas are fixed or not supported by the quota adjuster; availability varies by service and project.",
+        "Quota dimensions matter: sufficient global quota does not resolve a region-specific limit."
+      ],
+      "cost": [
+        "Cloud Quotas has no meaningful standalone workload charge, but approved increases enable billable consumption.",
+        "Monitoring, logging and automation used for quota governance can incur charges.",
+        "Over-requesting capacity can increase cost risk even when actual billing remains usage-based."
+      ],
+      "alternatives": [
+        "Cloud Quotas — provider quota visibility and adjustment.",
+        "Cloud Billing budgets — financial thresholds and alerts.",
+        "Application rate limiter — protects an API or dependency at runtime."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Quotas",
+          "fit": "provider quota visibility and adjustment."
+        },
+        {
+          "name": "Cloud Billing budgets",
+          "fit": "financial thresholds and alerts."
+        },
+        {
+          "name": "Application rate limiter",
+          "fit": "protects an API or dependency at runtime."
+        }
+      ],
+      "memoryHooks": [
+        "Quota is a service limit, not a budget and not a reservation.",
+        "Preference is desired quota; effective limit is what the service currently enforces.",
+        "Exam clue: RESOURCE_EXHAUSTED before a planned launch requires quota review and possibly adjustment."
+      ],
+      "relatedServices": [
+        "cloud-billing",
+        "monitoring",
+        "service-usage",
+        "recommender"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Quotas overview",
+          "url": "https://cloud.google.com/docs/quotas/overview"
+        },
+        {
+          "title": "View and manage quotas",
+          "url": "https://cloud.google.com/docs/quotas/view-manage"
+        },
+        {
+          "title": "Quota adjuster",
+          "url": "https://cloud.google.com/docs/quotas/quota-adjuster"
+        }
+      ]
+    },
+    {
+      "slug": "config-connector",
+      "summary": "A Kubernetes-native infrastructure controller that represents Google Cloud resources as custom resources and continuously reconciles their desired state through the Kubernetes API.",
+      "concepts": [
+        "Config Connector installs CRDs in the cnrm.cloud.google.com API group; Kubernetes manifests become desired state for supported Google Cloud resources.",
+        "Controllers reconcile resource specifications against Google Cloud using the Config Connector IAM identity, not the identity of the person who submitted the manifest.",
+        "Namespaces can map to projects and deletion policy determines whether deleting the Kubernetes object deletes or abandons the underlying cloud resource."
+      ],
+      "applicationFit": [
+        "Use Config Connector when teams already operate Kubernetes/GitOps and want cloud resources managed through the same declarative API.",
+        "Use policy controllers and admission controls to govern manifests before reconciliation.",
+        "Prefer Terraform or Infrastructure Manager when Kubernetes is not the desired control plane or plan/review workflows are central."
+      ],
+      "architectureFlows": [
+        {
+          "title": "GitOps cloud-resource lifecycle",
+          "note": "A reviewed manifest enters a cluster; Config Connector reconciles it into a Google Cloud resource and publishes status back to Kubernetes.",
+          "reference": "Config Connector reconciliation",
+          "steps": [
+            {
+              "title": "Git repository",
+              "items": [
+                "Resource YAML",
+                "Review"
+              ]
+            },
+            {
+              "title": "GitOps controller",
+              "items": [
+                "Apply",
+                "Drift correction"
+              ]
+            },
+            {
+              "title": "Kubernetes API",
+              "items": [
+                "CRD",
+                "Namespace"
+              ]
+            },
+            {
+              "title": "Config Connector",
+              "items": [
+                "Reconcile",
+                "IAM identity"
+              ]
+            },
+            {
+              "title": "Google Cloud",
+              "items": [
+                "Create/update",
+                "Observed state"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Policy-controlled platform API",
+          "note": "Platform teams expose approved custom resources while admission policy blocks unsafe regions, networks or public exposure.",
+          "reference": "Kubernetes policy governance",
+          "steps": [
+            {
+              "title": "Developer",
+              "items": [
+                "Namespaced manifest",
+                "Service request"
+              ]
+            },
+            {
+              "title": "Admission",
+              "items": [
+                "Policy Controller",
+                "Gatekeeper"
+              ]
+            },
+            {
+              "title": "Config Connector",
+              "items": [
+                "Direct/controller reconciler",
+                "Events"
+              ]
+            },
+            {
+              "title": "Cloud API",
+              "items": [
+                "Quota",
+                "IAM"
+              ]
+            },
+            {
+              "title": "Status",
+              "items": [
+                "Conditions",
+                "Kubernetes events"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant the Config Connector service account only permissions needed by the resource types and projects it reconciles.",
+        "Use namespace/project mappings, admission policy and RBAC to prevent manifest authors from indirectly creating privileged cloud resources.",
+        "Protect the cluster and GitOps repository because control-plane compromise can mutate the managed Google Cloud estate."
+      ],
+      "operations": [
+        "Monitor resource conditions, Kubernetes events, controller health and reconciliation latency; investigate UpdateFailed rather than repeatedly reapplying.",
+        "Pin and test Config Connector upgrades because CRD schemas and controllers evolve.",
+        "Choose reconcile intervals carefully to balance drift correction against API quota and operational noise."
+      ],
+      "watchPoints": [
+        "Deleting a Kubernetes object can delete the cloud resource unless abandon behavior is configured.",
+        "Out-of-band cloud changes may be reverted by reconciliation or cause conflicts; establish one authoritative owner.",
+        "Some immutable field changes require recreation and some resources or fields have support limitations."
+      ],
+      "cost": [
+        "Config Connector itself is open-source/managed tooling, while GKE, cluster operations and created Google Cloud resources are billable.",
+        "Frequent reconciliation can contribute to API quota usage and logging volume.",
+        "Running a dedicated management cluster adds compute and operational cost."
+      ],
+      "alternatives": [
+        "Config Connector — Kubernetes-native cloud resource reconciliation.",
+        "Terraform with Infrastructure Manager — plan-based infrastructure deployment.",
+        "Crossplane — multi-provider Kubernetes control plane."
+      ],
+      "comparisons": [
+        {
+          "name": "Config Connector",
+          "fit": "Kubernetes-native cloud resource reconciliation."
+        },
+        {
+          "name": "Terraform with Infrastructure Manager",
+          "fit": "plan-based infrastructure deployment."
+        },
+        {
+          "name": "Crossplane",
+          "fit": "multi-provider Kubernetes control plane."
+        }
+      ],
+      "memoryHooks": [
+        "The controller identity performs cloud API actions, not the manifest submitter.",
+        "Kubernetes object deletion policy determines cloud-resource deletion versus abandonment.",
+        "Exam clue: manage Google Cloud resources through Kubernetes CRDs points to Config Connector."
+      ],
+      "relatedServices": [
+        "google-kubernetes-engine",
+        "infra-manager",
+        "policy-controller",
+        "service-usage"
+      ],
+      "sources": [
+        {
+          "title": "Config Connector overview",
+          "url": "https://cloud.google.com/config-connector/docs/overview"
+        },
+        {
+          "title": "Config Connector resources",
+          "url": "https://cloud.google.com/config-connector/docs/concepts/resources"
+        },
+        {
+          "title": "Reconciliation strategy",
+          "url": "https://cloud.google.com/config-connector/docs/concepts/reconciliation"
+        }
+      ]
+    },
+    {
+      "slug": "gcloud-cli",
+      "summary": "The primary command-line interface for authenticating to, configuring and automating Google Cloud services through consistent command groups, named configurations and machine-readable output.",
+      "concepts": [
+        "Named configurations contain properties such as active account, project, region and zone; switching configuration changes client defaults, not server-side resource policy.",
+        "gcloud user authentication, application-default credentials and service-account/workload federation credentials serve different consumers and should not be conflated.",
+        "Commands expose alpha, beta and generally available surfaces; scripts should pin assumptions, use explicit flags and consume structured output."
+      ],
+      "applicationFit": [
+        "Use gcloud for interactive administration, diagnostics, CI/CD steps and repeatable service operations.",
+        "Use client libraries when an application needs typed APIs, retries and long-lived integration; use Terraform/Infrastructure Manager for declarative resource lifecycle.",
+        "Use Cloud Shell for an immediately authenticated browser environment, while keeping production automation in versioned pipelines."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Operator command flow",
+          "note": "A named configuration selects client defaults; credentials obtain a token; the command invokes a Google Cloud API and receives structured output.",
+          "reference": "gcloud CLI request path",
+          "steps": [
+            {
+              "title": "Operator",
+              "items": [
+                "Command",
+                "Flags"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "Account",
+                "Project",
+                "Region"
+              ]
+            },
+            {
+              "title": "Authentication",
+              "items": [
+                "User token",
+                "Federated identity"
+              ]
+            },
+            {
+              "title": "Google Cloud API",
+              "items": [
+                "IAM check",
+                "Operation"
+              ]
+            },
+            {
+              "title": "Output",
+              "items": [
+                "JSON",
+                "Table",
+                "Exit code"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "CI/CD automation",
+          "note": "A workload identity authenticates without a stored service-account key and the script uses explicit project and noninteractive settings.",
+          "reference": "Keyless CLI automation",
+          "steps": [
+            {
+              "title": "Pipeline",
+              "items": [
+                "OIDC identity",
+                "Job"
+              ]
+            },
+            {
+              "title": "Federation",
+              "items": [
+                "STS",
+                "Service account"
+              ]
+            },
+            {
+              "title": "gcloud",
+              "items": [
+                "--project",
+                "--quiet",
+                "--format=json"
+              ]
+            },
+            {
+              "title": "Cloud API",
+              "items": [
+                "Deploy",
+                "Query"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Pipeline log",
+                "Audit log"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Prefer workforce/workload identity federation or impersonation over downloaded service-account keys.",
+        "Use least-privilege identities, verify the active account/project before destructive commands and separate configurations for environments.",
+        "Do not expose access tokens, credential files or verbose sensitive output in shell history and CI logs."
+      ],
+      "operations": [
+        "Use named configurations, explicit flags and versioned scripts; validate exit codes and parse JSON rather than human table output.",
+        "Update components in controlled environments and test scripts against release-channel changes.",
+        "Use --verbosity and API audit logs for troubleshooting, but sanitize logs before sharing."
+      ],
+      "watchPoints": [
+        "gcloud auth application-default login configures ADC for local applications; it is distinct from gcloud's own active account.",
+        "Implicit project/region defaults can target the wrong environment; production automation should specify them explicitly.",
+        "Alpha and beta commands can change and may require different components or APIs."
+      ],
+      "cost": [
+        "The CLI has no separate per-command charge, but invoked APIs and created resources retain normal pricing.",
+        "Cloud Shell quotas and persistent storage differ from local or CI environments.",
+        "Verbose logging and automated polling can increase API requests and log volume."
+      ],
+      "alternatives": [
+        "gcloud CLI — interactive and scripted Google Cloud administration.",
+        "Client libraries — application integration with typed APIs and retry behavior.",
+        "Terraform/Infrastructure Manager — declarative infrastructure state and deployment."
+      ],
+      "comparisons": [
+        {
+          "name": "gcloud CLI",
+          "fit": "interactive and scripted Google Cloud administration."
+        },
+        {
+          "name": "Client libraries",
+          "fit": "application integration with typed APIs and retry behavior."
+        },
+        {
+          "name": "Terraform/Infrastructure Manager",
+          "fit": "declarative infrastructure state and deployment."
+        }
+      ],
+      "memoryHooks": [
+        "Configuration selects defaults; IAM still decides authorization.",
+        "gcloud credentials and ADC credentials are separate contexts.",
+        "Exam clue: one-off administration or shell automation usually points to gcloud, not an application SDK."
+      ],
+      "relatedServices": [
+        "cloud-shell",
+        "cloud-sdk",
+        "infra-manager",
+        "service-usage"
+      ],
+      "sources": [
+        {
+          "title": "gcloud CLI overview",
+          "url": "https://cloud.google.com/sdk/gcloud"
+        },
+        {
+          "title": "gcloud configurations",
+          "url": "https://cloud.google.com/sdk/docs/configurations"
+        },
+        {
+          "title": "Authenticate gcloud CLI",
+          "url": "https://cloud.google.com/sdk/docs/authenticate"
+        }
+      ]
     }
   ]
 }
