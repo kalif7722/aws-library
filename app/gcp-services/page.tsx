@@ -9,6 +9,9 @@ import GcpSharedServiceSections from "../components/GcpSharedServiceSections";
 function StudyImage({ path, status, title, discover = false }: { path: string; status?: string; title: string; discover?: boolean }) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [candidateIndex, setCandidateIndex] = useState(0);
+  const candidates = gcpAssetCandidates(path);
+  const imageUrl = candidates[candidateIndex] || candidates[0];
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const available = Boolean(path) && !failed && (discover || gcpAssetReady(status));
