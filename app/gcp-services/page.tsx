@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { gcpAssetReady, gcpAssetUrl, gcpCategories, gcpContent, gcpIcons, gcpServices, gcpSourceUrl, type GcpContent } from "../gcp-data";
+import { gcpAssetReady, gcpAssetCandidates, gcpCategories, gcpContent, gcpIcons, gcpServices, gcpSourceUrl, type GcpContent } from "../gcp-data";
 import "../components/GcpLibrary.css";
 import GcpSharedServiceSections from "../components/GcpSharedServiceSections";
 
@@ -16,11 +16,11 @@ function StudyImage({ path, status, title, discover = false }: { path: string; s
   return <section className="gcp-visual-section"><h3>{title}</h3>{available ? <>
     {!loaded && <p role="status">Loading visual…</p>}
     <button ref={trigger} className="gcp-image-button" type="button" disabled={!loaded} onClick={() => dialog.current?.showModal()} aria-label={"Open " + title + " full screen"}>
-      <img src={gcpAssetUrl(path)} alt={title} loading="lazy" onLoad={() => setLoaded(true)} onError={() => setFailed(true)} />
+      <img src={imageUrl} alt={title} loading="lazy" onLoad={() => setLoaded(true)} onError={() => candidateIndex + 1 < candidates.length ? setCandidateIndex(value => value + 1) : setFailed(true)} />
     </button>
     <dialog ref={dialog} className="gcp-image-dialog" aria-label={title + " full screen"} onCancel={close} onClick={event => { if (event.target === event.currentTarget) close(); }}>
       <button type="button" className="gcp-modal-close" onClick={close} autoFocus aria-label="Close full screen">Close ×</button>
-      <img src={gcpAssetUrl(path)} alt={title} />
+      <img src={imageUrl} alt={title} />
     </dialog>
   </> : <div className="gcp-pending"><strong>{failed ? "Visual not uploaded yet" : "Visual in preparation"}</strong><p>{failed ? "No image was found at the mapped R2 path yet. Upload the correctly named file and it will appear automatically after refresh/deploy cache expiry." : "This service is mapped. Its reviewed study visual will appear here when published."}</p></div>}</section>;
 }
@@ -57,7 +57,7 @@ export default function GcpServicesPage() {
   };
   return <main className="workspace gcp-workspace">
     <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a href="/services">AWS services</a><a href="/azure-services">Azure services</a><a className="active" href="/gcp-services">Google Cloud</a></div></nav>
-    <header className="gcp-heading"><div><p className="course-kicker">Google Cloud service library</p><h1>Explore Google Cloud, service by service.</h1><p>Browse the official product categories. Study guides and visuals are being prepared.</p></div><a href={gcpSourceUrl} target="_blank" rel="noreferrer">Official product catalog ↗</a></header>
+    <header className="gcp-heading"><div><p className="course-kicker">Google Cloud service library</p><h1>Explore Google Cloud, service by service.</h1><p>Browse the official product catalog with service-specific architecture, operations, security, cost, and certification guidance. The detailed pilot set is live first; the same quality gate applies as the catalog expands.</p></div><a href={gcpSourceUrl} target="_blank" rel="noreferrer">Official product catalog ↗</a></header>
     <div className={"gcp-shell" + (railCollapsed ? " gcp-collapsed" : "")}>
       <aside className="gcp-rail" aria-label="Google Cloud categories"><div className="gcp-rail-title">{!railCollapsed && <strong>Service categories</strong>}<button type="button" onClick={() => setRailCollapsed(value => !value)} aria-expanded={!railCollapsed} aria-label={railCollapsed ? "Expand categories" : "Collapse categories"}>{railCollapsed ? "›" : "‹"}</button></div>
         {!railCollapsed && <><label className="gcp-search">Search services<input type="search" placeholder="Service, alias or category…" value={query} onChange={event => setQuery(event.target.value)} /></label><div className="gcp-rail-actions"><button type="button" onClick={() => setOpened(gcpCategories.map(category => category.slug))}>Expand all</button><button type="button" onClick={() => setOpened([])}>Collapse all</button></div><p className="gcp-result-count" role="status">{filtered.length} of {gcpServices.length} services</p>
@@ -70,7 +70,7 @@ export default function GcpServicesPage() {
       </aside>
       {selected && <article className="gcp-main" key={selected.slug}><header className="gcp-service-heading"><p className="course-kicker">{selected.officialCategory}</p><div className="gcp-service-title">{gcpIcons[selected.slug]?.path && <img src={gcpIcons[selected.slug].path || ""} alt={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName + " icon"} title={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName} />}<h2>{selected.displayName}</h2></div>{details?.summary || selected.description ? <p>{details?.summary || selected.description}</p> : <p>Explore {selected.displayName} in the official Google Cloud documentation.</p>}{selected.documentationUrl && <a href={selected.documentationUrl} target="_blank" rel="noreferrer">Official documentation ↗</a>}</header>
         <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} discover />
-        {details ? <GcpSharedServiceSections serviceName={selected.displayName} details={details} /> : <section className="gcp-content-card"><h3>Service guide in preparation</h3><p>This catalog entry is available for browsing. The complete service explanation, architecture, operations, and study walkthrough are still being prepared.</p></section>}
+        {details ? <GcpSharedServiceSections serviceName={selected.displayName} details={details} /> : <section className="gcp-content-card"><h3>Detailed guide queued</h3><p>This service is indexed in the catalog. Its unique 20-section guide will be published after the current pilot set passes content validation.</p></section>}
         <StudyImage path={selected.primaryWalkthroughPath} status={selected.primaryWalkthroughStatus} title={selected.displayName + " walkthrough"} />
         {gcpAssetReady(selected.companionWalkthroughStatus) && <StudyImage path={selected.companionWalkthroughPath} status={selected.companionWalkthroughStatus} title={selected.displayName + " companion walkthrough"} />}
         {details?.relatedServices?.length ? <section className="gcp-content-card"><h3>Related services</h3><div className="gcp-related">{details.relatedServices.map(relatedSlug => { const service = gcpServices.find(item => item.slug === relatedSlug); return service ? <a key={relatedSlug} href={"/gcp-services?service=" + service.slug}>{service.displayName}</a> : null; })}</div></section> : null}
