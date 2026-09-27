@@ -17,6 +17,7 @@ export type GcpContent = {
   cost?: string[]; alternatives?: string[]; relatedServices?: string[];
   sources?: { title: string; url: string }[];
   architectureFlows?: { title: string; note: string; reference?: string; steps: { title: string; items: string[] }[] }[];
+  consoleSteps?: { title: string; detail: string }[];
   comparisons?: { name: string; fit: string }[];
   memoryHooks?: string[];
 };
