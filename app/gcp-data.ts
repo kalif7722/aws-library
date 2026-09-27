@@ -31,7 +31,7 @@ export const gcpSourceUrl = inventory.source.url;
 export const gcpAssetReady = (status?: string) => /^(READY|PUBLISHED|VERIFIED|VALIDATED|MAPPED|COMPLETE|COMPLETED)$/i.test(status || "");
 
 const gcpR2Base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
-export const gcpAssetUrl = (path: string) => {
+export const gcpAssetCandidates = (path: string) => {
   const configured = assetUrl(path);
   return configured === path ? gcpR2Base + (path.startsWith("/") ? path : `/${path}`) : configured;
 };
