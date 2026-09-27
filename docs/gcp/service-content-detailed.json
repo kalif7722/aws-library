@@ -2239,6 +2239,214 @@
           "url": "https://cloud.google.com/recommender/docs/whatis-activeassist"
         }
       ]
+    },
+    {
+      "slug": "service-catalog",
+      "summary": "An internal enterprise storefront where cloud administrators curate approved reference links, Terraform configurations, Deployment Manager templates and Marketplace products, then share catalogs to organization, folder or project audiences.",
+      "concepts": [
+        "A catalog is a curated collection; a solution is an entry assigned to one or more catalogs. Users only discover catalogs shared to a resource they can access.",
+        "Solutions can be reference links, Terraform configurations, Deployment Manager templates or selected Cloud Marketplace products; the solution type determines whether Service Catalog only redirects or also deploys infrastructure.",
+        "Terraform solutions use Cloud Build to run Terraform and Cloud Storage for packaged modules and state-related artifacts; generated resources remain ordinary Google Cloud resources with their own IAM, lifecycle and charges."
+      ],
+      "applicationFit": [
+        "Use Service Catalog to give platform teams a governed self-service front door for approved infrastructure patterns and enterprise resources.",
+        "Use separate catalogs and resource-level sharing when business units, environments or compliance zones need different approved offerings.",
+        "Do not use it as a public software marketplace, a CI/CD engine, a policy-enforcement substitute or a complete Terraform state-management platform."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Curate and share an approved catalog",
+          "note": "A platform administrator publishes reviewed solutions once, assigns them to a catalog and exposes that catalog only to selected resource hierarchy audiences.",
+          "reference": "Service Catalog administration and sharing",
+          "steps": [
+            { "title": "Platform team", "items": ["Catalog Admin", "Catalog Manager"] },
+            { "title": "Solutions", "items": ["Terraform", "Link", "Marketplace"] },
+            { "title": "Catalog", "items": ["Curated collection", "Support metadata"] },
+            { "title": "Share scope", "items": ["Organization", "Folder", "Project"] },
+            { "title": "Consumers", "items": ["Discover", "Launch approved item"] }
+          ]
+        },
+        {
+          "title": "Launch a Terraform solution",
+          "note": "The user supplies approved parameters; a controlled build identity reads the packaged module, executes Terraform and creates resources in the deployment project.",
+          "reference": "Service Catalog Terraform configuration",
+          "steps": [
+            { "title": "Consumer", "items": ["Select solution", "Enter parameters"] },
+            { "title": "Service Catalog", "items": ["Preview", "Deployment record"] },
+            { "title": "Cloud Build", "items": ["Managed service account", "Terraform image"] },
+            { "title": "Cloud Storage", "items": ["Module archive", "State artifacts"] },
+            { "title": "Target project", "items": ["VPC", "VMs", "Managed services"] }
+          ]
+        },
+        {
+          "title": "Curated Marketplace adoption",
+          "note": "Administrators approve selected Marketplace software, publish it in an internal catalog and let eligible teams launch it under organizational controls.",
+          "reference": "Service Catalog Marketplace solutions",
+          "steps": [
+            { "title": "Marketplace", "items": ["VM product", "SaaS product"] },
+            { "title": "Cloud admin", "items": ["Review", "Add solution"] },
+            { "title": "Catalog", "items": ["Assign", "Version metadata"] },
+            { "title": "IAM scope", "items": ["Share to folder", "Consumer role"] },
+            { "title": "User project", "items": ["Launch", "Operate product"] }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        { "title": "Enable and open Admin", "detail": "Enable Service Catalog for the organization, select its administration project, then open Service Catalog Admin." },
+        { "title": "Create the catalog", "detail": "Create a named catalog; treat the immutable catalog name and administrative description as governed metadata." },
+        { "title": "Create a solution", "detail": "Choose link, Terraform, Deployment Manager or Marketplace; add owner, support and documentation details." },
+        { "title": "Assign the solution", "detail": "Attach the solution to the intended catalog. A solution is not discoverable merely because it exists." },
+        { "title": "Share to an audience", "detail": "Share the catalog to an organization, folder or project and grant only the required consumer visibility." },
+        { "title": "Preview and launch", "detail": "As a consumer, open Service Catalog, enter deployment parameters, preview changes and verify created resources." }
+      ],
+      "security": [
+        "Separate Catalog Admin, Catalog Manager and Catalog Consumer responsibilities; grant catalog producer roles to groups rather than broad project owners.",
+        "Treat the Cloud Build or user-managed service account as the deployment security boundary. It needs only the permissions required by the Terraform solution and access to the module bucket.",
+        "Catalog curation does not override Organization Policy, IAM or Deployment Manager constraints; use those controls to prevent a published solution from creating prohibited resources."
+      ],
+      "operations": [
+        "Version solution packages and ownership metadata, test parameter schemas in a non-production project and publish changes through a review workflow.",
+        "Remove a solution from a catalog to stop new discovery without confusing that action with deletion of existing deployed resources.",
+        "Track Cloud Build executions, deployment failures, stale solution versions, support contacts and consumer adoption; validate deprovision behavior before production use."
+      ],
+      "watchPoints": [
+        "Terraform modules must be packaged in the supported layout; modules in unsupported subdirectories can fail even when the Terraform code itself is valid.",
+        "Post-deployment resources and costs belong to the consumer project. Removing or updating the catalog entry does not automatically reconcile every existing deployment.",
+        "Deployment Manager solutions remain supported in the catalog, but Google recommends Terraform for an infrastructure-as-code approach; do not design new governance around a legacy template format by default."
+      ],
+      "cost": [
+        "Service Catalog itself is free to use, but billing must be enabled because creating or launching solutions can consume chargeable services.",
+        "Terraform launches can incur Cloud Build, Cloud Storage, logging and networking charges in addition to every resource created by the module.",
+        "Model lifecycle cost—not only deployment cost—including idle infrastructure, software licensing, updates, support and deprovisioning."
+      ],
+      "alternatives": [
+        "Service Catalog — internal discovery and governed launch of curated enterprise solutions.",
+        "Cloud Marketplace — public Google and partner product discovery, procurement and deployment.",
+        "Infrastructure Manager — managed Terraform deployment execution and lifecycle without an internal storefront.",
+        "Organization Policy — mandatory preventive constraints rather than a curated self-service experience."
+      ],
+      "comparisons": [
+        { "name": "Service Catalog", "fit": "Best fit for an internal, curated storefront shared to selected organization, folder or project audiences." },
+        { "name": "Cloud Marketplace", "fit": "Choose for Google and partner product procurement and public catalog discovery." },
+        { "name": "Infrastructure Manager", "fit": "Choose when managed Terraform deployment lifecycle is required without catalog curation." }
+      ],
+      "memoryHooks": [
+        "Solution is the item; catalog is the curated collection; sharing determines who can discover it.",
+        "Service Catalog governs discovery and launch—not the runtime behavior of resources created by a solution.",
+        "Exam clue: approved self-service blueprints for internal teams point to Service Catalog; mandatory denial rules point to Organization Policy."
+      ],
+      "relatedServices": ["cloud-marketplace", "infra-manager", "cloud-build", "cloud-storage", "organization-policy-service", "iam"],
+      "sources": [
+        { "title": "Service Catalog overview", "url": "https://cloud.google.com/service-catalog/docs/overview" },
+        { "title": "Creating solutions", "url": "https://cloud.google.com/service-catalog/docs/create-solutions" },
+        { "title": "Terraform configurations", "url": "https://cloud.google.com/service-catalog/docs/terraform-configuration" },
+        { "title": "Sharing a catalog", "url": "https://cloud.google.com/service-catalog/docs/share-catalog" },
+        { "title": "Service Catalog quotas", "url": "https://cloud.google.com/service-catalog/quotas" }
+      ]
+    },
+    {
+      "slug": "service-usage",
+      "summary": "The Google Cloud infrastructure service that lists, enables and disables Google, Google Cloud and third-party APIs and services for consumer projects, with IAM-controlled state changes and long-running operations.",
+      "concepts": [
+        "Most Google APIs must be enabled for a consumer project before credentials in that project can call them; enablement is project state, not permission to use every resource exposed by the API.",
+        "Service Usage represents services by names such as compute.googleapis.com and returns long-running operations for enable, disable and batch enable requests.",
+        "Service Usage Admin changes service state; Consumer can inspect state and consume quota/billing; Viewer provides read-only inspection. Product-specific IAM still authorizes actual API operations."
+      ],
+      "applicationFit": [
+        "Use Service Usage in project bootstrapping, landing-zone automation and CI/CD prerequisites so required APIs are enabled deterministically.",
+        "Use inventory of enabled services for governance, attack-surface review and drift detection across projects.",
+        "Do not use Service Usage as an API gateway, API key store, runtime authorization layer or quota dashboard for every product."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Project bootstrap and API enablement",
+          "note": "Provisioning automation enables required producer APIs first, waits for completion and only then creates resources through those APIs.",
+          "reference": "Service Usage enable workflow",
+          "steps": [
+            { "title": "Platform pipeline", "items": ["Project ID", "Required API list"] },
+            { "title": "Service Usage", "items": ["batchEnable", "Consumer project"] },
+            { "title": "Operation", "items": ["Long-running", "Poll to done"] },
+            { "title": "Producer APIs", "items": ["Compute", "Storage", "Monitoring"] },
+            { "title": "Provisioning", "items": ["Terraform", "Application deploy"] }
+          ]
+        },
+        {
+          "title": "Govern enabled-service drift",
+          "note": "A central inventory process lists enabled services, compares them with an approved baseline and routes exceptions to owners instead of disabling blindly.",
+          "reference": "Service Usage list and governance pattern",
+          "steps": [
+            { "title": "Projects", "items": ["Folders", "Business units"] },
+            { "title": "Service Usage API", "items": ["List ENABLED", "Batch get"] },
+            { "title": "Policy baseline", "items": ["Required", "Allowed", "Exception"] },
+            { "title": "Finding", "items": ["Owner", "Risk review"] },
+            { "title": "Controlled action", "items": ["Keep", "Disable", "Document"] }
+          ]
+        },
+        {
+          "title": "Safe service disablement",
+          "note": "Operators assess dependencies and active resources before disablement because existing resources or dependent services can block or break the change.",
+          "reference": "Service Usage disable workflow",
+          "steps": [
+            { "title": "Change request", "items": ["Service name", "Project"] },
+            { "title": "Dependency check", "items": ["Active resources", "Dependent APIs"] },
+            { "title": "IAM approval", "items": ["Service Usage Admin", "Change window"] },
+            { "title": "Disable LRO", "items": ["Poll operation", "Handle failure"] },
+            { "title": "Verification", "items": ["State DISABLED", "Audit log"] }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        { "title": "Select the consumer project", "detail": "Open APIs & Services in the project that will consume the API; service enablement is scoped to that project." },
+        { "title": "Open API Library", "detail": "Search by the canonical service/API name and review prerequisites, terms, access approval and billing requirements." },
+        { "title": "Enable the service", "detail": "Choose Enable with a principal holding Service Usage Admin; wait for the operation to finish." },
+        { "title": "Verify status", "detail": "Open Enabled APIs & services or run gcloud services list --enabled and confirm the exact service name." },
+        { "title": "Test product IAM", "detail": "Call the API with the intended workload identity; enabling an API does not grant its product permissions." },
+        { "title": "Disable cautiously", "detail": "Check dependencies and active resources, schedule the change, disable, then verify state and audit evidence." }
+      ],
+      "security": [
+        "Restrict roles/serviceusage.serviceUsageAdmin because enabling a new API can expand a project's reachable control plane and disabling one can disrupt workloads.",
+        "Grant roles/serviceusage.serviceUsageConsumer to workload identities only when quota/billing consumption and service-state inspection are required; keep product roles separate.",
+        "Review Admin Activity audit logs for enable and disable operations and combine service inventory with organization policies where API availability must be centrally constrained."
+      ],
+      "operations": [
+        "Declare required APIs in infrastructure code and wait for enablement operations before creating dependent resources to avoid eventual-consistency race failures.",
+        "Use batchEnable for project bootstrap, but account for write quotas and report the individual service that failed rather than retrying the whole build indefinitely.",
+        "Maintain an approved service baseline and dependency map; monitor unexpected enablement, failed operations and projects where critical APIs were disabled."
+      ],
+      "watchPoints": [
+        "Enabling a service does not grant IAM permissions, create credentials, increase product quota or guarantee the API is available in every region.",
+        "Disabling an API can fail when resources still exist and can interrupt automation or applications that depend on it; assess dependencies before the change.",
+        "Service Usage API rate limits are separate from quotas of the service being enabled: default read calls are 240/minute and write calls are 60/minute; batchEnable counts as five write calls."
+      ],
+      "cost": [
+        "Service Usage does not add a separate charge for toggling service state; charges come from the enabled APIs and the resources, requests, data and networking they consume.",
+        "An enabled but unused API is generally not itself a billable resource, but it can permit chargeable resources or requests to be created.",
+        "Include automation, inventory storage, audit-log routing and downstream product charges when evaluating governance cost."
+      ],
+      "alternatives": [
+        "Service Usage — enable, disable and inspect API/service state for consumer projects.",
+        "Cloud Quotas — view and adjust quota preferences and limits for services.",
+        "API Gateway or Apigee — publish, secure and manage application APIs at runtime.",
+        "Organization Policy — centrally constrain resource behavior and supported service controls."
+      ],
+      "comparisons": [
+        { "name": "Service Usage", "fit": "Best fit for project-level API/service activation state and bootstrap automation." },
+        { "name": "Cloud Quotas", "fit": "Choose to inspect and manage allowed consumption after a service is available." },
+        { "name": "API Gateway / Apigee", "fit": "Choose to expose, authenticate, protect and observe application APIs." }
+      ],
+      "memoryHooks": [
+        "Enabled means the project may call the API; IAM decides who may do what; quota limits how much may be consumed.",
+        "Enable and disable return long-running operations—automation must wait for completion before assuming state changed.",
+        "Exam clue: gcloud services enable, APIs & Services Library or project bootstrap prerequisites point to Service Usage."
+      ],
+      "relatedServices": ["cloud-quotas", "gcloud-cli", "iam", "api-gateway", "apigee", "organization-policy-service"],
+      "sources": [
+        { "title": "Service Usage overview", "url": "https://cloud.google.com/service-usage/docs/overview" },
+        { "title": "Enable and disable services", "url": "https://cloud.google.com/service-usage/docs/enable-disable" },
+        { "title": "Service Usage access control", "url": "https://cloud.google.com/service-usage/docs/access-control" },
+        { "title": "Service Usage quotas", "url": "https://cloud.google.com/service-usage/docs/quotas" },
+        { "title": "Service Usage API", "url": "https://cloud.google.com/service-usage/docs/reference/rest" }
+      ]
     }
   ]
 }
