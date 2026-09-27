@@ -62,7 +62,8 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
     reference: "Google Cloud architecture guidance",
     steps: [{ title: serviceName, items: ["Managed service boundary"] }],
   }));
-  if (details.architectureVersion === 2) return <section className="gcp-architecture-section" id="architecture">
+  const hasStructuredArchitecture = Boolean(details.architectureFlows?.length);
+  if (details.architectureVersion === 2 || hasStructuredArchitecture) return <section className="gcp-architecture-section" id="architecture">
     {flows.slice(0, 3).map((flow, flowIndex) => <ArchitectureDiagram flow={flow} index={flowIndex + 1} key={flow.title} />)}
   </section>;
   return <section className="service-walkthrough-section" id="architecture">
