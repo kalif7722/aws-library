@@ -87,13 +87,13 @@ const RULES: CopyRule[] = [
   [/model|inference/, ["Executes the selected model or inference logic", "Version, prompt/input shape and accelerator capacity affect quality and latency"]]
 ];
 
-export function architectureStageCopy(serviceName: string, flowTitle: string, stageTitle: string, currentItems: string[]) {
+export function architectureStageCopy(serviceName: string, _flowTitle: string, stageTitle: string, currentItems: string[]) {
   const meaningful = currentItems.filter(item => !isGenericArchitectureItem(item));
   if (meaningful.length) return meaningful.slice(0, 3);
 
   const stage = clean(stageTitle);
-  const haystack = `${stage} ${flowTitle} ${serviceName}`.toLowerCase();
-  for (const [pattern, copy] of RULES) if (pattern.test(haystack)) return copy;
+  const stageKey = stage.toLowerCase();
+  for (const [pattern, copy] of RULES) if (pattern.test(stageKey)) return copy;
 
   return [
     `Performs the ${stage.toLowerCase()} responsibility in the ${serviceName} flow`,
