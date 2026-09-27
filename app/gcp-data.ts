@@ -1,6 +1,7 @@
 import inventory from "../docs/gcp/gcp-services.json";
 import iconManifest from "../docs/gcp/icon-manifest.json";
 import content from "../docs/gcp/service-content.json";
+import pilotContent from "../docs/gcp/pilot-service-content.json";
 import { assetUrl } from "../lib/asset-url";
 
 export type GcpService = {
@@ -15,10 +16,13 @@ export type GcpContent = {
   architecture?: string[]; security?: string[]; operations?: string[]; watchPoints?: string[];
   cost?: string[]; alternatives?: string[]; relatedServices?: string[];
   sources?: { title: string; url: string }[];
+  sections?: { title: string; kind: string; body?: string; steps?: string[] }[];
 };
 export const gcpServices = inventory.services as GcpService[];
 export const gcpCategories = inventory.categories;
-export const gcpContent = Object.fromEntries((content.services as GcpContent[]).map(item => [item.slug, item]));
+const baseGcpContent = Object.fromEntries((content.services as GcpContent[]).map(item => [item.slug, item]));
+const pilotGcpContent = Object.fromEntries((pilotContent.services as GcpContent[]).map(item => [item.slug, item]));
+export const gcpContent = { ...baseGcpContent, ...pilotGcpContent };
 export const gcpSourceUrl = inventory.source.url;
 
 // Status is still useful for reviewed/published walkthroughs, but EL10 visuals are
