@@ -218,6 +218,692 @@
           "url": "https://cloud.google.com/run/pricing"
         }
       ]
+    },
+    {
+      "slug": "access-approval",
+      "summary": "A privileged-access control that requires authorized customer approval before Google personnel can access supported customer data, complementing Access Transparency evidence.",
+      "concepts": [
+        "Google personnel submit a cryptographically signed request containing the reason, resource scope, requested time and access duration; an authorized customer approver accepts, dismisses or later invalidates it.",
+        "Notifications can be delivered by email or Pub/Sub, while request history and approval actions remain available through the console, API and Cloud Audit Logs.",
+        "Access Approval controls Google administrative access to customer data; it does not approve access by the customer's own users, service accounts or applications."
+      ],
+      "applicationFit": [
+        "Use it for regulated workloads that require explicit customer control over exceptional Google personnel access.",
+        "Pair it with Access Transparency to see actions taken, Assured Workloads for compliance controls and Key Access Justifications when external-key access needs justification.",
+        "Do not treat it as PAM for workforce administrators or as a replacement for IAM, organization policy or VPC Service Controls."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Human approval workflow",
+          "note": "A Google support or operational need becomes a time-bound request that cannot proceed until an authorized customer approver acts.",
+          "reference": "Access Approval request lifecycle",
+          "steps": [
+            {
+              "title": "Google personnel",
+              "items": [
+                "Business justification",
+                "Requested scope"
+              ]
+            },
+            {
+              "title": "Access Approval",
+              "items": [
+                "Signed request",
+                "Pending state"
+              ]
+            },
+            {
+              "title": "Notification",
+              "items": [
+                "Email",
+                "Pub/Sub"
+              ]
+            },
+            {
+              "title": "Customer approver",
+              "items": [
+                "Approve",
+                "Dismiss",
+                "Invalidate"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Audit Logs",
+                "Request history"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Regulated workload control",
+          "note": "Access Approval adds customer authorization to the privileged-access path while other controls protect identity, keys and the service perimeter.",
+          "reference": "Privileged access control pattern",
+          "steps": [
+            {
+              "title": "Assured workload",
+              "items": [
+                "Regulated data",
+                "Supported services"
+              ]
+            },
+            {
+              "title": "Access request",
+              "items": [
+                "Resource",
+                "Duration",
+                "Reason"
+              ]
+            },
+            {
+              "title": "Approval boundary",
+              "items": [
+                "Least-privilege approvers",
+                "Separation of duties"
+              ]
+            },
+            {
+              "title": "Google access",
+              "items": [
+                "Approved window",
+                "Tracked actions"
+              ]
+            },
+            {
+              "title": "Review",
+              "items": [
+                "Access Transparency",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant request-view and request-approval permissions to separate groups where segregation of duties is required; avoid broad project roles for approvers.",
+        "Protect Pub/Sub notification subscriptions and approval automation because approval actions are privileged administrative decisions.",
+        "Review Access Approval Admin Activity logs and Access Transparency records together; retain evidence according to regulatory requirements."
+      ],
+      "operations": [
+        "Configure settings and notification channels at the correct organization, folder or project scope, then test request visibility and escalation ownership.",
+        "Track pending, approved, dismissed, expired, policy-approved and invalidated requests; establish an on-call process for time-sensitive requests.",
+        "Use Logs Explorer filters for accessapproval.googleapis.com and monitor notification delivery so pending requests do not become silent operational blockers."
+      ],
+      "watchPoints": [
+        "Unsupported services or data paths are outside the Access Approval control boundary; confirm service coverage before claiming compliance.",
+        "Approving a request authorizes the stated Google personnel access for its scope and duration; it does not prove that access occurred—use Access Transparency for that evidence.",
+        "If approvers or notification channels are unavailable, support activity can be delayed; design break-glass governance and escalation deliberately."
+      ],
+      "cost": [
+        "Access Approval availability and commercial terms can depend on the support or compliance offering associated with the organization.",
+        "Include Pub/Sub, Cloud Logging retention and SIEM export costs used for notifications and evidence.",
+        "Operational cost is driven mainly by approval ownership, 24×7 response expectations and audit-evidence handling rather than request throughput."
+      ],
+      "alternatives": [
+        "Access Approval — explicit customer consent for Google personnel access.",
+        "Access Transparency — records actions Google personnel performed; it does not request customer approval.",
+        "Privileged Access Manager — governs time-bound elevated access for customer-managed principals.",
+        "Key Access Justifications — provides reasons for externally managed encryption-key access."
+      ],
+      "comparisons": [
+        {
+          "name": "Access Approval",
+          "fit": "Best fit when customer consent must precede supported Google personnel access."
+        },
+        {
+          "name": "Access Transparency",
+          "fit": "Choose for visibility and evidence of Google personnel actions."
+        },
+        {
+          "name": "Privileged Access Manager",
+          "fit": "Choose for just-in-time elevated access by workforce or workload principals."
+        }
+      ],
+      "memoryHooks": [
+        "Approval answers “may Google personnel access this data?”; Transparency answers “what did Google personnel do?”",
+        "Requests are scoped and time-bound and can be approved, dismissed or invalidated.",
+        "Exam clue: explicit customer authorization before Google support access points to Access Approval."
+      ],
+      "relatedServices": [
+        "access-transparency",
+        "assured-workloads",
+        "privileged-access-manager",
+        "cloud-logging",
+        "pub-sub"
+      ],
+      "sources": [
+        {
+          "title": "Access Approval overview",
+          "url": "https://cloud.google.com/assured-workloads/access-approval/docs/overview"
+        },
+        {
+          "title": "Approval request details",
+          "url": "https://cloud.google.com/assured-workloads/access-approval/docs/approval-request-details"
+        },
+        {
+          "title": "Access Approval audit logging",
+          "url": "https://cloud.google.com/assured-workloads/access-approval/docs/audit-logging"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-billing",
+      "summary": "The account, reporting, export, budget and cost-management control plane that links Google Cloud projects to payment responsibility and exposes usage and pricing data for FinOps.",
+      "concepts": [
+        "A Cloud Billing account pays for linked projects and is associated with a Google payments profile; project resource hierarchy and billing-account hierarchy are related but separate.",
+        "Reports, cost tables and BigQuery billing export expose cost and usage at different levels of detail; exports should be enabled early because historical detail is not recreated retroactively.",
+        "Budgets compare actual and forecast spend with thresholds and notifications, but a budget does not automatically cap consumption unless automation acts on its Pub/Sub notification."
+      ],
+      "applicationFit": [
+        "Use Cloud Billing to link projects, assign billing roles, analyze spend, configure budgets and export detailed cost data.",
+        "Use BigQuery billing export with labels, tags, folders and projects for allocation, chargeback and unit-cost analysis.",
+        "Use quotas, organization policy or controlled automation when spending must be constrained; budget alerts alone are informational."
+      ],
+      "architectureFlows": [
+        {
+          "title": "FinOps reporting pipeline",
+          "note": "Detailed billing records flow into an analytics dataset where finance and engineering teams build allocation, anomaly and forecast views.",
+          "reference": "Cloud Billing export architecture",
+          "steps": [
+            {
+              "title": "Projects",
+              "items": [
+                "Usage",
+                "Labels",
+                "SKUs"
+              ]
+            },
+            {
+              "title": "Billing account",
+              "items": [
+                "Pricing",
+                "Credits",
+                "Adjustments"
+              ]
+            },
+            {
+              "title": "Export",
+              "items": [
+                "Standard usage",
+                "Detailed usage",
+                "Pricing data"
+              ]
+            },
+            {
+              "title": "BigQuery",
+              "items": [
+                "Curated views",
+                "Allocation rules"
+              ]
+            },
+            {
+              "title": "Consumers",
+              "items": [
+                "Looker",
+                "FinOps alerts"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Budget notification and response",
+          "note": "Budgets evaluate scoped spend and publish threshold events; a controlled automation path decides whether to notify, open a ticket or apply an approved action.",
+          "reference": "Budget automation pattern",
+          "steps": [
+            {
+              "title": "Budget scope",
+              "items": [
+                "Account",
+                "Projects",
+                "Services"
+              ]
+            },
+            {
+              "title": "Thresholds",
+              "items": [
+                "Actual",
+                "Forecast"
+              ]
+            },
+            {
+              "title": "Notification",
+              "items": [
+                "Email",
+                "Pub/Sub"
+              ]
+            },
+            {
+              "title": "Automation",
+              "items": [
+                "Cloud Run",
+                "Workflow"
+              ]
+            },
+            {
+              "title": "Action",
+              "items": [
+                "Notify owner",
+                "Ticket",
+                "Policy-controlled response"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Separate Billing Account Administrator, User, Viewer and Costs Manager duties; project creation rights should not imply billing administration.",
+        "Restrict BigQuery export datasets because they reveal organization-wide consumption, project names, pricing and discount information.",
+        "Use audit logs and periodic access reviews for project-billing links, billing account IAM, budgets and export configuration."
+      ],
+      "operations": [
+        "Enable billing export when the account is created, validate daily ingestion and monitor schema changes before downstream reports fail.",
+        "Define project naming, labels and tags before chargeback; missing allocation metadata cannot be repaired reliably after usage occurs.",
+        "Reconcile invoices, cost reports, credits and exports with documented timing differences rather than expecting every surface to match in real time."
+      ],
+      "watchPoints": [
+        "Budgets alert; they do not impose a hard spending limit.",
+        "Billing export data arrives with latency and can receive corrections; pipelines must tolerate late and adjusted records.",
+        "Unlinking or disabling billing can stop billable services in a project and may cause workload disruption."
+      ],
+      "cost": [
+        "Cloud Billing tools do not replace the charges from the underlying services represented in reports.",
+        "BigQuery storage and query processing, Looker dashboards, Pub/Sub notifications and automation incur their own charges.",
+        "Poor partition filtering or repeated full scans of detailed exports can turn cost reporting into a noticeable cost driver."
+      ],
+      "alternatives": [
+        "Cloud Billing — authoritative Google Cloud account, invoice, cost and usage management.",
+        "Cloud Hub optimization — centralized application and resource recommendations, not the billing ledger.",
+        "Recommender — service-specific optimization recommendations, not invoice or payment management.",
+        "Cloud Quotas — capacity and rate governance, not financial budgeting."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Billing",
+          "fit": "Best fit for payment responsibility, cost reporting, exports and budgets."
+        },
+        {
+          "name": "Recommender",
+          "fit": "Choose for actionable service optimization recommendations."
+        },
+        {
+          "name": "Cloud Quotas",
+          "fit": "Choose to govern API and resource capacity rather than monetary spend."
+        }
+      ],
+      "memoryHooks": [
+        "Billing account pays; project consumes. IAM must be managed at both boundaries.",
+        "Budget ≠ cap. Use Pub/Sub plus governed automation for actions.",
+        "Enable BigQuery export early; detailed historical data is not backfilled."
+      ],
+      "relatedServices": [
+        "bigquery",
+        "pub-sub",
+        "recommender",
+        "cloud-quotas",
+        "cloud-hub"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Billing documentation",
+          "url": "https://cloud.google.com/billing/docs"
+        },
+        {
+          "title": "Billing export to BigQuery",
+          "url": "https://cloud.google.com/billing/docs/how-to/export-data-bigquery"
+        },
+        {
+          "title": "Budgets and alerts",
+          "url": "https://cloud.google.com/billing/docs/how-to/budgets"
+        },
+        {
+          "title": "Billing access control",
+          "url": "https://cloud.google.com/billing/docs/how-to/billing-access"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-hub",
+      "summary": "An application-centric operations surface that aggregates health, incidents, deployments, security findings, costs and recommendations for Google Cloud resources and App Hub applications.",
+      "concepts": [
+        "Cloud Hub presents centralized data and insights in project views or application views; App Hub supplies the logical application, service and workload model.",
+        "Application Design Center can design and deploy resources that become App Hub applications, while existing supported resources can be registered into applications.",
+        "Cloud Hub is an aggregation and action surface over operational systems; source services remain authoritative for metrics, findings, incidents, costs and recommendations."
+      ],
+      "applicationFit": [
+        "Use Cloud Hub when platform and application teams need one application-centric view across resources and projects.",
+        "Use App Hub to group existing resources by business application and expose service/workload ownership before relying on application views.",
+        "Continue using specialist products such as Cloud Monitoring, Security Command Center and Cloud Billing for deep investigation and configuration."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Application-centric operations",
+          "note": "Resources across projects are registered as App Hub services and workloads, then Cloud Hub correlates operational signals around the application.",
+          "reference": "Cloud Hub application view",
+          "steps": [
+            {
+              "title": "Resource projects",
+              "items": [
+                "Cloud Run",
+                "GKE",
+                "Cloud SQL"
+              ]
+            },
+            {
+              "title": "App Hub",
+              "items": [
+                "Application",
+                "Services",
+                "Workloads"
+              ]
+            },
+            {
+              "title": "Cloud Hub",
+              "items": [
+                "Health",
+                "Incidents",
+                "Findings"
+              ]
+            },
+            {
+              "title": "Platform team",
+              "items": [
+                "Prioritize",
+                "Investigate"
+              ]
+            },
+            {
+              "title": "Source console",
+              "items": [
+                "Remediate",
+                "Verify"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Designed application lifecycle",
+          "note": "Application Design Center creates an architecture and deployment; Cloud Hub surfaces deployment state, updates and operational posture.",
+          "reference": "Application-centric Google Cloud",
+          "steps": [
+            {
+              "title": "Designer",
+              "items": [
+                "Application template",
+                "Resource relationships"
+              ]
+            },
+            {
+              "title": "Application Design Center",
+              "items": [
+                "Validate",
+                "Deploy"
+              ]
+            },
+            {
+              "title": "Google Cloud resources",
+              "items": [
+                "Projects",
+                "Regional services"
+              ]
+            },
+            {
+              "title": "App Hub application",
+              "items": [
+                "Ownership",
+                "Components"
+              ]
+            },
+            {
+              "title": "Cloud Hub",
+              "items": [
+                "Deployment failure",
+                "Update insight"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant Cloud Hub, App Hub and source-service permissions according to operational role; visibility across projects can expose sensitive inventory and findings.",
+        "Use management projects and application boundaries deliberately so centralized operators see the intended estate without acquiring broad mutation rights.",
+        "Audit registration, application ownership and remediation actions in their source services; Cloud Hub presentation does not replace source audit logs."
+      ],
+      "operations": [
+        "Establish application ownership and register supported resources before treating application views as complete.",
+        "Validate that required APIs and data providers are enabled in the management project and that operators can follow links into source services.",
+        "Use Cloud Hub to prioritize cross-product issues, then verify remediation in the authoritative product and monitor recurrence."
+      ],
+      "watchPoints": [
+        "Unsupported or unregistered resources can make an application view incomplete.",
+        "Cloud Hub aggregates data; freshness, retention and available actions depend on each source product.",
+        "Project views and application views answer different questions—do not infer application ownership solely from project membership."
+      ],
+      "cost": [
+        "Cloud Hub itself is primarily a management experience, while monitored resources and connected source services retain their normal pricing.",
+        "App Hub/Application Design Center deployments create billable Google Cloud resources.",
+        "Logging, monitoring, security, recommendation and analytics retention can dominate the cost of the operational view."
+      ],
+      "alternatives": [
+        "Cloud Hub — cross-product application and resource insights with action links.",
+        "Cloud Monitoring — deep metrics, dashboards, uptime checks and alerting.",
+        "Security Command Center — security posture, findings and threat management.",
+        "Cloud Billing — authoritative cost, usage and payment analysis."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Hub",
+          "fit": "Best fit for centralized application-centric health and action across products."
+        },
+        {
+          "name": "Cloud Monitoring",
+          "fit": "Choose for telemetry, SLOs, dashboards and alert policies."
+        },
+        {
+          "name": "Security Command Center",
+          "fit": "Choose for security findings, posture and threat investigation."
+        }
+      ],
+      "memoryHooks": [
+        "Cloud Hub is the unified view; App Hub supplies the application model.",
+        "Application view follows registered services/workloads, not merely a folder or project.",
+        "Use Cloud Hub to prioritize, then remediate in the authoritative source service."
+      ],
+      "relatedServices": [
+        "app-hub",
+        "application-design-center",
+        "monitoring",
+        "security-command-center",
+        "cloud-billing",
+        "recommender"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Hub overview",
+          "url": "https://cloud.google.com/hub/docs/overview"
+        },
+        {
+          "title": "Application-centric Google Cloud",
+          "url": "https://cloud.google.com/hub/docs/application-centric-google-cloud"
+        },
+        {
+          "title": "Cloud Hub application and project views",
+          "url": "https://cloud.google.com/hub/docs/app-project-views"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-identity",
+      "summary": "Google's identity-as-a-service platform for centrally managing workforce users, groups, devices, federation, single sign-on and access context without requiring Google Workspace productivity licenses.",
+      "concepts": [
+        "The Cloud Identity customer/organization contains users, groups, organizational units and devices; managed Google Accounts become principals for Google Cloud and configured SaaS applications.",
+        "Federation and directory synchronization connect external identity providers such as Active Directory or Microsoft Entra ID, while Google remains the relying platform for managed accounts.",
+        "Cloud Identity manages workforce identity and device posture; IAM grants permissions to Google Cloud resources and Identity Platform serves application customers."
+      ],
+      "applicationFit": [
+        "Use Cloud Identity to provision workforce identities, groups and devices for organizations that need Google Cloud access without full Google Workspace.",
+        "Use SAML/OIDC SSO, directory synchronization or federation to keep an external directory authoritative and reduce duplicate credential management.",
+        "Use Identity Platform for customer sign-in and Workforce Identity Federation when external workforce identities should access Google Cloud without synchronized Google accounts."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Hybrid workforce identity",
+          "note": "An enterprise directory remains authoritative while accounts and groups are synchronized or federated into Cloud Identity for Google Cloud and SaaS access.",
+          "reference": "Cloud Identity hybrid identity",
+          "steps": [
+            {
+              "title": "Enterprise directory",
+              "items": [
+                "Active Directory",
+                "Microsoft Entra ID"
+              ]
+            },
+            {
+              "title": "Provisioning",
+              "items": [
+                "Directory Sync",
+                "SCIM/API"
+              ]
+            },
+            {
+              "title": "Cloud Identity",
+              "items": [
+                "Users",
+                "Groups",
+                "Org units"
+              ]
+            },
+            {
+              "title": "Access",
+              "items": [
+                "Google Cloud",
+                "SaaS SSO"
+              ]
+            },
+            {
+              "title": "Governance",
+              "items": [
+                "Lifecycle",
+                "Audit"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Context-aware workforce access",
+          "note": "User identity and device state contribute to an access decision before the workforce reaches a protected application.",
+          "reference": "BeyondCorp workforce access",
+          "steps": [
+            {
+              "title": "User",
+              "items": [
+                "Managed account",
+                "MFA"
+              ]
+            },
+            {
+              "title": "Device",
+              "items": [
+                "Inventory",
+                "Compliance state"
+              ]
+            },
+            {
+              "title": "Access context",
+              "items": [
+                "Identity",
+                "Device",
+                "Location"
+              ]
+            },
+            {
+              "title": "Application",
+              "items": [
+                "Google Cloud",
+                "SAML app"
+              ]
+            },
+            {
+              "title": "Response",
+              "items": [
+                "Allow",
+                "Challenge",
+                "Block"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Protect super administrator accounts with phishing-resistant MFA, separate daily-use identities and emergency access procedures.",
+        "Use groups for role assignment, automate joiner/mover/leaver lifecycle and prevent unmanaged consumer accounts from retaining corporate identity.",
+        "Combine device management and context-aware access with IAM least privilege; identity assurance does not itself grant resource permissions."
+      ],
+      "operations": [
+        "Define the authoritative directory and immutable identifiers before synchronization; test rename, suspension and deletion behavior.",
+        "Monitor provisioning errors, group membership changes, SSO certificate expiry, device compliance and administrator audit events.",
+        "Stage federation and SSO changes with break-glass administrators so a configuration error does not lock out the organization."
+      ],
+      "watchPoints": [
+        "Cloud Identity, Google Workspace, IAM, Workforce Identity Federation and Identity Platform serve different identity populations and control planes.",
+        "Group membership propagation and directory synchronization are not instantaneous; design access-change expectations accordingly.",
+        "Deleting or renaming identities can affect resource ownership, audit attribution and application mappings."
+      ],
+      "cost": [
+        "Cloud Identity Free and Premium editions provide different device, security and management capabilities; verify edition requirements.",
+        "Directory synchronization infrastructure, third-party IdP licensing and endpoint-management operations remain external costs.",
+        "Audit export, SIEM retention and context-aware access dependencies can add platform cost."
+      ],
+      "alternatives": [
+        "Cloud Identity — managed workforce users, groups, devices and SSO.",
+        "Workforce Identity Federation — external workforce access to Google Cloud without synchronizing Google accounts.",
+        "Identity Platform — customer identity for applications.",
+        "Managed Microsoft AD — managed Windows domain services for domain-joined workloads."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Identity",
+          "fit": "Best fit for managed workforce accounts, groups, devices and SaaS SSO."
+        },
+        {
+          "name": "Workforce Identity Federation",
+          "fit": "Choose when external workforce identities should access Google Cloud without account synchronization."
+        },
+        {
+          "name": "Identity Platform",
+          "fit": "Choose for customer authentication inside an application."
+        }
+      ],
+      "memoryHooks": [
+        "Cloud Identity manages workforce identities; IAM authorizes those identities to resources.",
+        "Identity Platform is CIAM; Managed Microsoft AD is domain service; neither replaces Cloud Identity workforce lifecycle.",
+        "Exam clue: central Google-managed users/groups without Workspace productivity apps points to Cloud Identity."
+      ],
+      "relatedServices": [
+        "identity-and-access-management",
+        "identity-platform",
+        "managed-microsoft-ad",
+        "access-context-manager",
+        "security-command-center"
+      ],
+      "sources": [
+        {
+          "title": "Cloud Identity overview",
+          "url": "https://cloud.google.com/identity/docs/overview"
+        },
+        {
+          "title": "Cloud Identity groups",
+          "url": "https://cloud.google.com/identity/docs/groups"
+        },
+        {
+          "title": "Cloud Identity devices",
+          "url": "https://cloud.google.com/identity/docs/concepts/overview-devices"
+        },
+        {
+          "title": "Cloud Identity APIs",
+          "url": "https://cloud.google.com/identity/docs/apis"
+        }
+      ]
     }
   ]
 }
