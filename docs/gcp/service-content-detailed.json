@@ -1566,6 +1566,679 @@
           "url": "https://cloud.google.com/sdk/docs/authenticate"
         }
       ]
+    },
+    {
+      "slug": "identity-platform",
+      "summary": "A customer identity and access management service for adding secure sign-up, sign-in, federation, MFA and multi-tenant user isolation to web, mobile and API applications.",
+      "concepts": [
+        "Identity Platform authenticates application users with email/password, phone, social, OIDC and SAML providers and issues tokens that the application backend validates.",
+        "A project can use a default user pool or tenants; each tenant isolates users, providers, IAM/auditing configuration, quotas and usage reporting for B2B SaaS boundaries.",
+        "Authentication proves user identity; application authorization still belongs in backend policy, claims and data-access rules."
+      ],
+      "applicationFit": [
+        "Use Identity Platform for customer or partner authentication when the application should not store passwords or build federation flows.",
+        "Use tenants when customers or business units require isolated user stores and identity-provider configuration within one project.",
+        "Use Cloud Identity for workforce accounts and Workforce Identity Federation for external workforce access to Google Cloud resources."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Web application sign-in",
+          "note": "The client completes a configured sign-in flow, receives an Identity Platform token and presents it to an application backend.",
+          "reference": "Identity Platform authentication",
+          "steps": [
+            {
+              "title": "End user",
+              "items": [
+                "Web",
+                "Mobile"
+              ]
+            },
+            {
+              "title": "Provider",
+              "items": [
+                "Email",
+                "Social",
+                "OIDC/SAML"
+              ]
+            },
+            {
+              "title": "Identity Platform",
+              "items": [
+                "User record",
+                "ID token"
+              ]
+            },
+            {
+              "title": "Backend",
+              "items": [
+                "Verify token",
+                "Authorize"
+              ]
+            },
+            {
+              "title": "Data",
+              "items": [
+                "Firestore",
+                "Cloud SQL"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Multi-tenant SaaS identity",
+          "note": "The application selects a tenant before sign-in so each customer has isolated users and provider settings.",
+          "reference": "Identity Platform multi-tenancy",
+          "steps": [
+            {
+              "title": "Customer domain",
+              "items": [
+                "Tenant lookup",
+                "Branding"
+              ]
+            },
+            {
+              "title": "Tenant",
+              "items": [
+                "Users",
+                "IdPs",
+                "Quota"
+              ]
+            },
+            {
+              "title": "Authentication",
+              "items": [
+                "MFA",
+                "Token"
+              ]
+            },
+            {
+              "title": "SaaS API",
+              "items": [
+                "Tenant claim",
+                "Authorization"
+              ]
+            },
+            {
+              "title": "Audit/billing",
+              "items": [
+                "Tenant usage",
+                "Logs"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Enforce MFA and strong provider configuration where risk requires it; protect Admin SDK credentials and tenant-management APIs.",
+        "Validate token issuer, audience, signature, expiry and tenant context on every backend; never trust client-supplied user IDs.",
+        "Use blocking functions and audit logs carefully for account policy, and rate-limit abuse-prone sign-up and password-reset paths."
+      ],
+      "operations": [
+        "Monitor sign-in success, provider errors, MAU, SMS delivery, tenant usage and account-abuse indicators.",
+        "Plan user migration, password-hash compatibility and account-linking behavior before cutover.",
+        "Maintain recovery procedures for provider certificate/secret rotation and administrator lockout."
+      ],
+      "watchPoints": [
+        "Identity Platform authenticates customers; it does not grant Google Cloud IAM permissions.",
+        "Tenant features and supported controls differ from the non-tenant project and have documented limitations.",
+        "Phone/SMS and federation failures can depend on external providers, geography and anti-abuse controls."
+      ],
+      "cost": [
+        "Most providers are billed by monthly active users; SAML/OIDC and phone/MFA have distinct pricing dimensions.",
+        "SMS messages, Cloud Functions/blocking functions, logging and backend resources add cost.",
+        "Anonymous-user cleanup and tenant usage reporting affect cost control."
+      ],
+      "alternatives": [
+        "Identity Platform — customer and partner application authentication.",
+        "Cloud Identity — managed workforce accounts, groups, devices and SaaS SSO.",
+        "Workforce Identity Federation — external workforce access to Google Cloud."
+      ],
+      "comparisons": [
+        {
+          "name": "Identity Platform",
+          "fit": "customer and partner application authentication."
+        },
+        {
+          "name": "Cloud Identity",
+          "fit": "managed workforce accounts, groups, devices and SaaS SSO."
+        },
+        {
+          "name": "Workforce Identity Federation",
+          "fit": "external workforce access to Google Cloud."
+        }
+      ],
+      "memoryHooks": [
+        "Identity Platform = CIAM; Cloud Identity = workforce identity.",
+        "Tenant isolates users and IdP configuration inside one project.",
+        "Authentication token verification comes before application authorization."
+      ],
+      "relatedServices": [
+        "cloud-identity",
+        "identity-and-access-management",
+        "cloud-run",
+        "firebase",
+        "secret-manager"
+      ],
+      "sources": [
+        {
+          "title": "Identity Platform authentication",
+          "url": "https://cloud.google.com/identity-platform/docs/concepts-authentication"
+        },
+        {
+          "title": "Identity Platform multi-tenancy",
+          "url": "https://cloud.google.com/identity-platform/docs/multi-tenancy"
+        },
+        {
+          "title": "Identity Platform pricing",
+          "url": "https://cloud.google.com/identity-platform/pricing"
+        }
+      ]
+    },
+    {
+      "slug": "infra-manager",
+      "summary": "A managed Terraform execution and state service that turns versioned blueprints into Google Cloud infrastructure deployments, revisions and pre-apply previews.",
+      "concepts": [
+        "Infrastructure Manager calls Terraform configurations blueprints and creates regional deployments whose revisions represent applied infrastructure state.",
+        "A preview executes Terraform plan so proposed create, update, replace and delete actions can be reviewed before deployment.",
+        "Blueprint sources can come from local content, Cloud Storage or Git, while a deployment service account performs resource operations."
+      ],
+      "applicationFit": [
+        "Use Infra Manager when teams want Google-managed Terraform execution, state and deployment lifecycle on Google Cloud.",
+        "Use previews as an approval gate and Cloud Build integration for automated infrastructure delivery.",
+        "Use Config Connector for Kubernetes-native reconciliation and Cloud Deploy or application pipelines for application releases."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Reviewed infrastructure deployment",
+          "note": "A versioned Terraform blueprint is previewed, approved and applied by a least-privilege deployment identity.",
+          "reference": "Infra Manager deployment lifecycle",
+          "steps": [
+            {
+              "title": "Source",
+              "items": [
+                "Git",
+                "Cloud Storage"
+              ]
+            },
+            {
+              "title": "Preview",
+              "items": [
+                "Terraform plan",
+                "Artifacts"
+              ]
+            },
+            {
+              "title": "Approval",
+              "items": [
+                "Review",
+                "Policy gate"
+              ]
+            },
+            {
+              "title": "Deployment",
+              "items": [
+                "Revision",
+                "Service account"
+              ]
+            },
+            {
+              "title": "Google Cloud",
+              "items": [
+                "Provision",
+                "Update"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "CI infrastructure pipeline",
+          "note": "Cloud Build validates the blueprint, creates a preview and promotes the reviewed configuration into an Infra Manager deployment.",
+          "reference": "Infra Manager automation",
+          "steps": [
+            {
+              "title": "Commit",
+              "items": [
+                "Blueprint",
+                "Modules"
+              ]
+            },
+            {
+              "title": "Cloud Build",
+              "items": [
+                "Validate",
+                "Security scan"
+              ]
+            },
+            {
+              "title": "Infra Manager",
+              "items": [
+                "Preview",
+                "Deployment"
+              ]
+            },
+            {
+              "title": "Resources",
+              "items": [
+                "VPC",
+                "Compute",
+                "IAM"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Build logs",
+                "Revision history"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Use a dedicated deployment service account with only permissions required by the blueprint; separate preview/deployment operators from resource administrators.",
+        "Secure Git and Cloud Storage blueprint sources and pin module/provider versions to reduce supply-chain risk.",
+        "Review plans for IAM, public exposure and destructive replacement; policy checks should run before deployment."
+      ],
+      "operations": [
+        "Track deployment and revision state, preview results, Cloud Build execution and drift caused by out-of-band changes.",
+        "Promote immutable blueprint versions through environments rather than editing production deployments ad hoc.",
+        "Test deletion and failed-update recovery because managed execution does not remove Terraform lifecycle semantics."
+      ],
+      "watchPoints": [
+        "Infra Manager deploys infrastructure, not application binaries or runtime configuration.",
+        "A successful preview is a point-in-time plan; source, state or remote resources can change before apply.",
+        "Terraform provider/version support and deployment location must be checked before standardizing."
+      ],
+      "cost": [
+        "Charges include Infrastructure Manager operation/pricing terms plus resources created by Terraform.",
+        "Cloud Build, Cloud Storage artifacts, logging and source hosting can add cost.",
+        "Preview frequency and long-running deployments affect operational usage even when no resource change is applied."
+      ],
+      "alternatives": [
+        "Infrastructure Manager — managed Terraform previews, state and deployments.",
+        "Config Connector — continuous Kubernetes CRD reconciliation.",
+        "Terraform in CI — self-managed runners, backend and execution controls."
+      ],
+      "comparisons": [
+        {
+          "name": "Infrastructure Manager",
+          "fit": "managed Terraform previews, state and deployments."
+        },
+        {
+          "name": "Config Connector",
+          "fit": "continuous Kubernetes CRD reconciliation."
+        },
+        {
+          "name": "Terraform in CI",
+          "fit": "self-managed runners, backend and execution controls."
+        }
+      ],
+      "memoryHooks": [
+        "Blueprint = Terraform configuration; preview = plan; deployment revision = applied lifecycle state.",
+        "Deployment service account owns cloud API actions.",
+        "Exam clue: managed Google Cloud Terraform execution with previews points to Infra Manager."
+      ],
+      "relatedServices": [
+        "config-connector",
+        "cloud-build",
+        "cloud-storage",
+        "gcloud-cli"
+      ],
+      "sources": [
+        {
+          "title": "Infrastructure Manager overview",
+          "url": "https://cloud.google.com/infrastructure-manager/docs/overview"
+        },
+        {
+          "title": "Deployments, revisions and previews",
+          "url": "https://cloud.google.com/infrastructure-manager/docs/deployments-revisions"
+        },
+        {
+          "title": "Preview a deployment",
+          "url": "https://cloud.google.com/infrastructure-manager/docs/preview-deployment"
+        }
+      ]
+    },
+    {
+      "slug": "managed-microsoft-ad",
+      "summary": "A highly available, hardened Microsoft Active Directory domain service operated by Google for Windows-integrated workloads, domain join, LDAP/Kerberos and forest trust connectivity.",
+      "concepts": [
+        "Managed Microsoft AD runs real Microsoft AD domain controllers while Google handles controller deployment, patching, backup and core service maintenance.",
+        "Each selected region receives two domain controllers in non-overlapping zones; adding regions improves locality and domain resilience.",
+        "Forest trusts connect a managed resource forest to on-premises or self-managed AD; DNS forwarding and hybrid network connectivity are prerequisites."
+      ],
+      "applicationFit": [
+        "Use it for Windows and legacy applications that require AD domain join, Kerberos, LDAP, group policy or SQL Server integration without self-managing controllers.",
+        "Use Shared VPC and trusts for multi-project resource-forest patterns connected to an existing identity forest.",
+        "Use Cloud Identity for workforce SaaS/Google accounts; it does not provide Windows domain services."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Hybrid resource forest",
+          "note": "On-premises identities access domain-joined Google Cloud workloads through private connectivity, DNS forwarding and a forest trust.",
+          "reference": "Managed Microsoft AD trust architecture",
+          "steps": [
+            {
+              "title": "Identity forest",
+              "items": [
+                "On-prem AD",
+                "Users/groups"
+              ]
+            },
+            {
+              "title": "Hybrid network",
+              "items": [
+                "Cloud VPN",
+                "Interconnect"
+              ]
+            },
+            {
+              "title": "DNS/trust",
+              "items": [
+                "Conditional forwarding",
+                "Forest trust"
+              ]
+            },
+            {
+              "title": "Managed Microsoft AD",
+              "items": [
+                "Resource forest",
+                "Regional DCs"
+              ]
+            },
+            {
+              "title": "Workloads",
+              "items": [
+                "Windows VM",
+                "SQL Server"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Multi-region AD service",
+          "note": "The managed domain extends domain controllers into selected regions so workloads use nearby highly available authentication endpoints.",
+          "reference": "Managed Microsoft AD regional design",
+          "steps": [
+            {
+              "title": "Managed domain",
+              "items": [
+                "DNS namespace",
+                "Policies"
+              ]
+            },
+            {
+              "title": "Region A",
+              "items": [
+                "DC zone 1",
+                "DC zone 2"
+              ]
+            },
+            {
+              "title": "Global VPC",
+              "items": [
+                "Private routing",
+                "DNS"
+              ]
+            },
+            {
+              "title": "Region B",
+              "items": [
+                "DC zone 1",
+                "DC zone 2"
+              ]
+            },
+            {
+              "title": "Clients",
+              "items": [
+                "Domain join",
+                "Kerberos/LDAP"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Restrict delegated AD administration, protect trust credentials and use separate privileged accounts for domain management.",
+        "Permit only required AD ports between client, trust and DNS networks; avoid exposing domain controllers publicly.",
+        "Audit AD administrative events and monitor trust health while respecting the shared-responsibility boundary for managed controllers."
+      ],
+      "operations": [
+        "Monitor DNS resolution, trust status, authentication latency and regional connectivity before investigating application-level failures.",
+        "Plan domain names, CIDR/subnet allocation and regions before creation because some domain properties are difficult or impossible to change.",
+        "Test hybrid failure modes, password/Kerberos time synchronization and domain-join recovery."
+      ],
+      "watchPoints": [
+        "Managed Microsoft AD cannot simply join an existing forest as another managed domain; forest trusts connect separate forests.",
+        "DNS and firewall mistakes commonly appear as authentication or domain-join failures.",
+        "Google manages domain controllers, but customers still manage directory objects, group policy, trusts and application permissions."
+      ],
+      "cost": [
+        "Pricing is based on managed domain/service tier and regional deployment; each region includes highly available domain controllers.",
+        "Hybrid networking, Cloud DNS, monitoring and domain-joined VMs have separate charges.",
+        "Adding regions improves locality/resilience but increases service cost."
+      ],
+      "alternatives": [
+        "Managed Microsoft AD — Google-operated Microsoft AD domain services.",
+        "Self-managed AD on Compute Engine — full domain-controller and OS control.",
+        "Cloud Identity — workforce users, groups, devices and SaaS SSO."
+      ],
+      "comparisons": [
+        {
+          "name": "Managed Microsoft AD",
+          "fit": "Google-operated Microsoft AD domain services."
+        },
+        {
+          "name": "Self-managed AD on Compute Engine",
+          "fit": "full domain-controller and OS control."
+        },
+        {
+          "name": "Cloud Identity",
+          "fit": "workforce users, groups, devices and SaaS SSO."
+        }
+      ],
+      "memoryHooks": [
+        "Two managed domain controllers per region provide zonal HA.",
+        "Trust connects forests; DNS and private network connectivity make the trust usable.",
+        "Exam clue: Windows domain join/Kerberos without managing DCs points to Managed Microsoft AD."
+      ],
+      "relatedServices": [
+        "cloud-identity",
+        "compute-engine",
+        "cloud-dns",
+        "cloud-vpn",
+        "cloud-interconnect"
+      ],
+      "sources": [
+        {
+          "title": "Managed Microsoft AD overview",
+          "url": "https://cloud.google.com/managed-microsoft-ad/docs/overview"
+        },
+        {
+          "title": "Create a trust",
+          "url": "https://cloud.google.com/managed-microsoft-ad/docs/create-trust"
+        },
+        {
+          "title": "Regional domain controllers",
+          "url": "https://cloud.google.com/managed-microsoft-ad/docs/add-remove-regions"
+        },
+        {
+          "title": "Managed Microsoft AD pricing",
+          "url": "https://cloud.google.com/managed-microsoft-ad/pricing"
+        }
+      ]
+    },
+    {
+      "slug": "recommender",
+      "summary": "The API and Active Assist framework that analyzes resource configuration and usage to produce product-specific insights and actionable recommendations for cost, security, performance, reliability and manageability.",
+      "concepts": [
+        "An insight describes an observed condition; a recommendation proposes operations that improve the resource. Both are scoped by project, location and type.",
+        "Recommendation state tracks workflow such as claimed, succeeded, failed or dismissed so automation and operators can coordinate without repeatedly applying advice.",
+        "Each recommender and insight type has its own IAM roles, refresh cadence, supported resources and evidence; recommendations are not universal policy."
+      ],
+      "applicationFit": [
+        "Use Recommender to discover idle resources, rightsizing opportunities, IAM risks, reliability improvements and deprecation exposure.",
+        "Feed recommendations into reviewed automation where change risk is understood and rollback is available.",
+        "Use organization policy for mandatory guardrails and Monitoring alerts for live operational conditions."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Human-reviewed optimization",
+          "note": "Active Assist produces evidence and proposed operations; an owner validates business context before applying and updating recommendation state.",
+          "reference": "Recommendation lifecycle",
+          "steps": [
+            {
+              "title": "Telemetry/config",
+              "items": [
+                "Usage",
+                "Resource metadata"
+              ]
+            },
+            {
+              "title": "Insight",
+              "items": [
+                "Observation",
+                "Evidence"
+              ]
+            },
+            {
+              "title": "Recommendation",
+              "items": [
+                "Operations",
+                "Impact"
+              ]
+            },
+            {
+              "title": "Owner",
+              "items": [
+                "Claim",
+                "Approve",
+                "Apply"
+              ]
+            },
+            {
+              "title": "State",
+              "items": [
+                "Succeeded",
+                "Dismissed",
+                "Failed"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Automated recommendation pipeline",
+          "note": "The API exports selected recommendation types into a controlled workflow with risk checks, change execution and audit evidence.",
+          "reference": "Recommender API automation",
+          "steps": [
+            {
+              "title": "Recommender API",
+              "items": [
+                "Project/location",
+                "Type"
+              ]
+            },
+            {
+              "title": "Filter",
+              "items": [
+                "Priority",
+                "Savings",
+                "Risk"
+              ]
+            },
+            {
+              "title": "Workflow",
+              "items": [
+                "Approval",
+                "Change window"
+              ]
+            },
+            {
+              "title": "Executor",
+              "items": [
+                "Terraform",
+                "Cloud Run"
+              ]
+            },
+            {
+              "title": "Verification",
+              "items": [
+                "Metrics",
+                "State update"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Grant view and update permissions per recommender type; recommendations can expose sensitive resource, IAM and cost context.",
+        "Never auto-apply broad IAM, deletion or rightsizing recommendations without business-owner validation and rollback.",
+        "Use etags/state transitions to prevent concurrent or stale automation from applying the same recommendation."
+      ],
+      "operations": [
+        "Inventory recommender and insight types relevant to the estate and record ownership and refresh expectations.",
+        "Track recommendation age, state, projected impact and post-change validation rather than counting open recommendations alone.",
+        "Use Cloud Audit Logs for recommendation access/state changes and the resource's own logs for applied changes."
+      ],
+      "watchPoints": [
+        "Recommendations are advisory and can lack application context, seasonality or future demand.",
+        "A recommendation can become stale when resource state changes; refetch and use etag-aware updates.",
+        "Dismissing advice removes it from active workflow but does not create a mandatory exception policy."
+      ],
+      "cost": [
+        "The Recommender API is generally not the dominant charge; savings or risk reduction relate to the underlying service.",
+        "Automation, exports, analytics and logging can add cost.",
+        "Projected savings are estimates and must be compared with performance, commitment and migration impact."
+      ],
+      "alternatives": [
+        "Recommender — product-specific optimization insights and proposed actions.",
+        "Organization Policy — mandatory preventive constraints.",
+        "Cloud Monitoring — telemetry, SLOs and runtime alerting."
+      ],
+      "comparisons": [
+        {
+          "name": "Recommender",
+          "fit": "product-specific optimization insights and proposed actions."
+        },
+        {
+          "name": "Organization Policy",
+          "fit": "mandatory preventive constraints."
+        },
+        {
+          "name": "Cloud Monitoring",
+          "fit": "telemetry, SLOs and runtime alerting."
+        }
+      ],
+      "memoryHooks": [
+        "Insight explains what was observed; recommendation explains what to change.",
+        "Recommendation state is workflow, not proof that the resource outcome succeeded.",
+        "Exam clue: rightsizing or IAM least-privilege advice from usage analysis points to Recommender."
+      ],
+      "relatedServices": [
+        "cloud-hub",
+        "cloud-billing",
+        "monitoring",
+        "organization-policy-service",
+        "policy-intelligence"
+      ],
+      "sources": [
+        {
+          "title": "Recommender concepts",
+          "url": "https://cloud.google.com/recommender/docs/key-concepts"
+        },
+        {
+          "title": "Recommender documentation",
+          "url": "https://cloud.google.com/recommender/docs"
+        },
+        {
+          "title": "Using recommendations API",
+          "url": "https://cloud.google.com/recommender/docs/use-api"
+        },
+        {
+          "title": "Active Assist",
+          "url": "https://cloud.google.com/recommender/docs/whatis-activeassist"
+        }
+      ]
     }
   ]
 }
