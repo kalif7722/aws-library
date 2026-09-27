@@ -6,12 +6,12 @@ import { gcpAssetReady, gcpAssetUrl, gcpCategories, gcpContent, gcpIcons, gcpSer
 import "../components/GcpLibrary.css";
 import GcpSharedServiceSections from "../components/GcpSharedServiceSections";
 
-function StudyImage({ path, status, title }: { path: string; status?: string; title: string }) {
+function StudyImage({ path, status, title, discover = false }: { path: string; status?: string; title: string; discover?: boolean }) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
-  const available = gcpAssetReady(status) && Boolean(path) && !failed;
+  const available = Boolean(path) && !failed && (discover || gcpAssetReady(status));
   const close = () => { dialog.current?.close(); trigger.current?.focus(); };
   return <section className="gcp-visual-section"><h3>{title}</h3>{available ? <>
     {!loaded && <p role="status">Loading visual…</p>}
@@ -22,7 +22,7 @@ function StudyImage({ path, status, title }: { path: string; status?: string; ti
       <button type="button" className="gcp-modal-close" onClick={close} autoFocus aria-label="Close full screen">Close ×</button>
       <img src={gcpAssetUrl(path)} alt={title} />
     </dialog>
-  </> : <div className="gcp-pending"><strong>{failed ? "Visual temporarily unavailable" : "Visual in preparation"}</strong><p>{failed ? "The published image could not be loaded. The service information below remains available." : "This service is mapped. Its reviewed study visual will appear here when published."}</p></div>}</section>;
+  </> : <div className="gcp-pending"><strong>{failed ? "Visual not uploaded yet" : "Visual in preparation"}</strong><p>{failed ? "No image was found at the mapped R2 path yet. Upload the correctly named file and it will appear automatically after refresh/deploy cache expiry." : "This service is mapped. Its reviewed study visual will appear here when published."}</p></div>}</section>;
 }
 
 const sections: { key: keyof GcpContent; title: string }[] = [
@@ -69,7 +69,7 @@ export default function GcpServicesPage() {
           })}{filtered.length === 0 && <p>No matching services. Try another name or abbreviation.</p>}</div></>}
       </aside>
       {selected && <article className="gcp-main" key={selected.slug}><header className="gcp-service-heading"><p className="course-kicker">{selected.officialCategory}</p><div className="gcp-service-title">{gcpIcons[selected.slug]?.path && <img src={gcpIcons[selected.slug].path || ""} alt={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName + " icon"} title={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName} />}<h2>{selected.displayName}</h2></div>{details?.summary || selected.description ? <p>{details?.summary || selected.description}</p> : <p>Explore {selected.displayName} in the official Google Cloud documentation.</p>}{selected.documentationUrl && <a href={selected.documentationUrl} target="_blank" rel="noreferrer">Official documentation ↗</a>}</header>
-        <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} />
+        <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} discover />
         {details ? <GcpSharedServiceSections serviceName={selected.displayName} details={details} /> : <section className="gcp-content-card"><h3>Service guide in preparation</h3><p>This catalog entry is available for browsing. The complete service explanation, architecture, operations, and study walkthrough are still being prepared.</p></section>}
         <StudyImage path={selected.primaryWalkthroughPath} status={selected.primaryWalkthroughStatus} title={selected.displayName + " walkthrough"} />
         {gcpAssetReady(selected.companionWalkthroughStatus) && <StudyImage path={selected.companionWalkthroughPath} status={selected.companionWalkthroughStatus} title={selected.displayName + " companion walkthrough"} />}
