@@ -4,6 +4,7 @@ import { ServiceCostBoard } from "./ServiceLearningShowcase";
 import "./ServiceLearningShowcase.css";
 import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
+import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
 
 function NumberedPanel({ title, items, icon, id }: { title: string; items: string[]; icon: string; id?: string }) {
   return <section className="service-insight-panel" id={id}>
@@ -34,21 +35,27 @@ function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
   </div>;
 }
 
-function ArchitectureDiagram({ flow, index }: { flow: NonNullable<GcpContent["architectureFlows"]>[number]; index: number }) {
+function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string; flow: NonNullable<GcpContent["architectureFlows"]>[number]; index: number }) {
+  const visibleSteps = flow.steps.slice(0, 6);
   return <article className="gcp-architecture-panel">
     <div className="service-section-cap"><div><p>ARCHITECTURE {String(index).padStart(2, "0")}</p><h3>{flow.title}</h3></div><span>{flow.note}</span></div>
     {flow.reference ? <div className="gcp-architecture-reference">Reference pattern: {flow.reference}</div> : null}
     <div className="gcp-architecture-layers">
-      {flow.steps.slice(0, 6).map((step, stepIndex) => {
-        const stepIcon = findGcpArchitectureIcon(step.title);
+      {visibleSteps.map((step, stepIndex) => {
+        const stageLabel = architectureStageLabel(step.title);
+        const stageCopy = architectureStageCopy(serviceName, flow.title, step.title, step.items);
+        const childItems = step.items
+          .filter(item => !isGenericArchitectureItem(item) && item.length <= 48 && item.toLowerCase() !== stageLabel.toLowerCase())
+          .slice(0, 2);
         return <div className="gcp-architecture-layer-wrap" key={`${step.title}-${stepIndex}`}>
           <div className="gcp-architecture-layer">
             <b>{step.title}</b>
             <div className="gcp-architecture-nodes">
-              {stepIcon ? <ArchitectureNode label={step.title} sub={step.items.slice(0, 3).join(" • ")} /> : step.items.slice(0, 3).map((item) => <ArchitectureNode label={item} key={item} />)}
+              <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} />
+              {childItems.map((item) => <ArchitectureNode label={item} key={item} />)}
             </div>
           </div>
-          {stepIndex < flow.steps.length - 1 ? <div className="gcp-architecture-arrow" aria-hidden="true">→</div> : null}
+          {stepIndex < visibleSteps.length - 1 ? <div className="gcp-architecture-arrow" aria-hidden="true">→</div> : null}
         </div>;
       })}
     </div>
@@ -64,7 +71,7 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
   }));
   const hasStructuredArchitecture = Boolean(details.architectureFlows?.length);
   if (details.architectureVersion === 2 || hasStructuredArchitecture) return <section className="gcp-architecture-section" id="architecture">
-    {flows.slice(0, 3).map((flow, flowIndex) => <ArchitectureDiagram flow={flow} index={flowIndex + 1} key={flow.title} />)}
+    {flows.slice(0, 3).map((flow, flowIndex) => <ArchitectureDiagram serviceName={serviceName} flow={flow} index={flowIndex + 1} key={flow.title} />)}
   </section>;
   return <section className="service-walkthrough-section" id="architecture">
     <div className="service-section-cap"><div><p>REAL-WORLD EXAMPLES</p><h3>Architecture walk-throughs</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
