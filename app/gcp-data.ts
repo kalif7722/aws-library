@@ -26,6 +26,7 @@ export type GcpService = {
 };
 export type GcpContent = {
   slug: string; summary?: string; concepts?: string[]; applicationFit?: string[];
+  architectureVersion?: number;
   architecture?: string[]; security?: string[]; operations?: string[]; watchPoints?: string[];
   cost?: string[]; alternatives?: string[]; relatedServices?: string[];
   sources?: { title: string; url: string }[];

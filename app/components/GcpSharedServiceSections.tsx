@@ -1,13 +1,58 @@
 import type { ReactNode } from "react";
+import { Activity, Cloud, Database, FileText, Globe2, Laptop, Network, Server, Shield, Users } from "lucide-react";
 import { ServiceCostBoard } from "./ServiceLearningShowcase";
 import "./ServiceLearningShowcase.css";
 import type { GcpContent } from "../gcp-data";
+import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 
 function NumberedPanel({ title, items, icon, id }: { title: string; items: string[]; icon: string; id?: string }) {
   return <section className="service-insight-panel" id={id}>
     <div className="service-panel-title"><span>{icon}</span><h3>{title}</h3></div>
     <div className="service-insight-list">{items.slice(0, 3).map((item, index) => <div key={item}><b>{String(index + 1).padStart(2, "0")}</b><p>{item}</p></div>)}</div>
   </section>;
+}
+
+function GenericArchitectureIcon({ label }: { label: string }) {
+  const key = label.toLowerCase();
+  const Icon = /user|customer|buyer|approver|operator|personnel|developer|designer|owner|team|consumer/.test(key) ? Users
+    : /database|data|bigquery|firestore|sql/.test(key) ? Database
+    : /security|identity|iam|approval|policy|auth|token|mfa|governance/.test(key) ? Shield
+    : /network|edge|load balancer|route|vpc/.test(key) ? Network
+    : /file|manifest|yaml|repository|configuration|output|evidence|log/.test(key) ? FileText
+    : /monitor|health|incident|telemetry|alert|status|review/.test(key) ? Activity
+    : /compute|runtime|cluster|kubernetes|pipeline|automation|deployment/.test(key) ? Server
+    : /web|mobile|application|client|saas|portal/.test(key) ? Laptop
+    : /internet|provider|vendor|external/.test(key) ? Globe2 : Cloud;
+  return <div className="gcp-architecture-generic"><Icon size={30} /></div>;
+}
+
+function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
+  const icon = findGcpArchitectureIcon(label);
+  return <div className={`gcp-architecture-node ${icon ? "official" : "generic"}`}>
+    {icon ? <div className="gcp-architecture-icon"><img src={icon.path} alt={`${label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={label} />}
+    <strong>{label}</strong>{sub ? <small>{sub}</small> : null}
+  </div>;
+}
+
+function ArchitectureDiagram({ flow, index }: { flow: NonNullable<GcpContent["architectureFlows"]>[number]; index: number }) {
+  return <article className="gcp-architecture-panel">
+    <div className="service-section-cap"><div><p>ARCHITECTURE {String(index).padStart(2, "0")}</p><h3>{flow.title}</h3></div><span>{flow.note}</span></div>
+    {flow.reference ? <div className="gcp-architecture-reference">Reference pattern: {flow.reference}</div> : null}
+    <div className="gcp-architecture-layers">
+      {flow.steps.slice(0, 6).map((step, stepIndex) => {
+        const stepIcon = findGcpArchitectureIcon(step.title);
+        return <div className="gcp-architecture-layer-wrap" key={`${step.title}-${stepIndex}`}>
+          <div className="gcp-architecture-layer">
+            <b>{step.title}</b>
+            <div className="gcp-architecture-nodes">
+              {stepIcon ? <ArchitectureNode label={step.title} sub={step.items.slice(0, 3).join(" • ")} /> : step.items.slice(0, 3).map((item) => <ArchitectureNode label={item} key={item} />)}
+            </div>
+          </div>
+          {stepIndex < flow.steps.length - 1 ? <div className="gcp-architecture-arrow" aria-hidden="true">→</div> : null}
+        </div>;
+      })}
+    </div>
+  </article>;
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
@@ -17,6 +62,9 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
     reference: "Google Cloud architecture guidance",
     steps: [{ title: serviceName, items: ["Managed service boundary"] }],
   }));
+  if (details.architectureVersion === 2) return <section className="gcp-architecture-section" id="architecture">
+    {flows.slice(0, 3).map((flow, flowIndex) => <ArchitectureDiagram flow={flow} index={flowIndex + 1} key={flow.title} />)}
+  </section>;
   return <section className="service-walkthrough-section" id="architecture">
     <div className="service-section-cap"><div><p>REAL-WORLD EXAMPLES</p><h3>Architecture walk-throughs</h3></div><span>Read each flow left to right and connect the service to the responsibility it actually owns.</span></div>
     <div className={`service-walk-grid count-${Math.max(1, Math.min(3, flows.length))}`}>
