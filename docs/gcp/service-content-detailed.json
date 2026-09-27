@@ -1,0 +1,223 @@
+{
+  "services": [
+    {
+      "slug": "cloud-run",
+      "summary": "A fully managed application platform for deploying stateless containers as request-driven services, event handlers, scheduled jobs, and finite batch workloads without operating servers or Kubernetes clusters.",
+      "concepts": [
+        "A Cloud Run service exposes a stable HTTPS endpoint while every deployment creates an immutable revision containing the image and configuration.",
+        "Instances autoscale per revision from incoming requests, events or CPU utilization; minimum instances reduce startup latency and maximum instances protect cost and downstream systems.",
+        "Services handle requests, jobs run finite tasks to completion, and worker pools support continuous non-HTTP workloads; choose the resource type before tuning runtime settings."
+      ],
+      "applicationFit": [
+        "Use Cloud Run for stateless APIs, web applications, webhooks, event consumers and containerized functions that fit the managed runtime contract.",
+        "Use Cloud Run jobs for migrations, scheduled processing and parallel batch work that must finish rather than listen on an HTTP endpoint.",
+        "Choose GKE when Kubernetes APIs, operators, custom scheduling or deep cluster control are requirements; choose Compute Engine when the workload needs VM or operating-system control."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Public API with managed data",
+          "note": "A regional Cloud Run service terminates managed HTTPS, runs stateless application code and keeps durable state in managed services.",
+          "reference": "Cloud Run service architecture",
+          "steps": [
+            {
+              "title": "Clients",
+              "items": [
+                "Web",
+                "Mobile",
+                "Partner API"
+              ]
+            },
+            {
+              "title": "Edge",
+              "items": [
+                "External Application Load Balancer",
+                "Cloud Armor"
+              ]
+            },
+            {
+              "title": "Runtime",
+              "items": [
+                "Cloud Run service",
+                "Revision traffic split"
+              ]
+            },
+            {
+              "title": "Data",
+              "items": [
+                "Cloud SQL",
+                "Cloud Storage"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "Cloud Logging",
+                "Cloud Monitoring"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Event-driven processing",
+          "note": "Events are buffered outside the container so delivery, retries and back-pressure are independent of instance lifetime.",
+          "reference": "Cloud Run event-driven architecture",
+          "steps": [
+            {
+              "title": "Producers",
+              "items": [
+                "Application events",
+                "Cloud Storage events"
+              ]
+            },
+            {
+              "title": "Event layer",
+              "items": [
+                "Pub/Sub",
+                "Eventarc"
+              ]
+            },
+            {
+              "title": "Consumer",
+              "items": [
+                "Private Cloud Run service",
+                "Idempotent handler"
+              ]
+            },
+            {
+              "title": "Results",
+              "items": [
+                "BigQuery",
+                "Firestore"
+              ]
+            },
+            {
+              "title": "Failure path",
+              "items": [
+                "Retry policy",
+                "Dead-letter topic"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Private service-to-service API",
+          "note": "Each service uses a dedicated identity; the caller presents a Google-signed ID token and the receiver authorizes the invoker role.",
+          "reference": "Cloud Run service-to-service authentication",
+          "steps": [
+            {
+              "title": "Frontend",
+              "items": [
+                "Cloud Run caller",
+                "User-managed service account"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "OIDC ID token",
+                "IAM policy"
+              ]
+            },
+            {
+              "title": "Backend",
+              "items": [
+                "Private Cloud Run service",
+                "roles/run.invoker"
+              ]
+            },
+            {
+              "title": "Private data",
+              "items": [
+                "Direct VPC egress",
+                "Cloud SQL private IP"
+              ]
+            },
+            {
+              "title": "Telemetry",
+              "items": [
+                "Trace correlation",
+                "Audit logs"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Separate deployer identity from runtime service identity. Grant the deployer Service Account User only where needed and give each runtime service account the minimum downstream permissions.",
+        "Control inbound reachability with ingress settings and IAM. Public reachability and unauthenticated invocation are separate decisions; private service calls should use ID tokens and Cloud Run Invoker.",
+        "Store secrets in Secret Manager, restrict Artifact Registry access, use Binary Authorization where provenance is required, and route private egress through Direct VPC egress or an appropriate connector."
+      ],
+      "operations": [
+        "Deploy immutable image digests, test tagged revisions without production traffic, then use percentage traffic splitting for canaries and rapid rollback.",
+        "Tune concurrency, CPU, memory, request timeout, minimum instances and maximum instances together; also protect Cloud SQL connection pools and other downstream quotas.",
+        "Monitor request latency, error rate, container startup latency, instance count, billable instance time, logs and traces by revision so regressions can be tied to a deployment."
+      ],
+      "watchPoints": [
+        "A maximum-instance setting applies per revision; during a traffic split, total service instances can exceed the limit configured on one revision.",
+        "The writable container filesystem is disposable. Durable state must be externalized, and startup code must tolerate instance replacement and scale-to-zero.",
+        "Request-based and instance-based billing have different CPU-allocation behavior; minimum instances, VPC connectors and dependent services can generate cost even when request volume is low."
+      ],
+      "cost": [
+        "Primary Cloud Run charges follow allocated vCPU and memory time, requests, and the selected request-based or instance-based billing mode; usage is rounded to 100-millisecond increments.",
+        "Minimum instances reduce cold starts but establish baseline compute spend. Higher concurrency can improve resource sharing when the application is concurrency-safe.",
+        "Include outbound data transfer, Serverless VPC Access or VPC networking, Artifact Registry, Cloud Build, logging volume, Cloud SQL and other dependent-service charges."
+      ],
+      "alternatives": [
+        "Cloud Run — managed stateless containers, HTTPS services, events and jobs with revision-based deployment.",
+        "Google Kubernetes Engine — Kubernetes control, operators, complex scheduling, sidecars and portable cluster APIs.",
+        "Compute Engine — VM, operating-system, custom networking or specialized host control.",
+        "App Engine — opinionated application platform with versions and language/runtime conventions."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Run",
+          "fit": "Best fit for stateless containers, APIs, event handlers and jobs with minimal infrastructure ownership."
+        },
+        {
+          "name": "Google Kubernetes Engine",
+          "fit": "Choose when Kubernetes primitives and cluster-level customization are part of the requirement."
+        },
+        {
+          "name": "Compute Engine",
+          "fit": "Choose when the application requires VM lifecycle, OS access or specialized machine control."
+        }
+      ],
+      "memoryHooks": [
+        "Service = stable endpoint; revision = immutable deployment snapshot. Traffic moves between revisions, not between mutable containers.",
+        "Invoker IAM controls who can call the service; the runtime service account controls what the running container can access.",
+        "Exam clue: fastest managed path for a stateless container with scale-to-zero and HTTPS usually points to Cloud Run."
+      ],
+      "relatedServices": [
+        "artifact-registry",
+        "cloud-build",
+        "cloud-sql",
+        "pub-sub",
+        "eventarc",
+        "secret-manager",
+        "monitoring"
+      ],
+      "sources": [
+        {
+          "title": "What is Cloud Run",
+          "url": "https://cloud.google.com/run/docs/overview/what-is-cloud-run"
+        },
+        {
+          "title": "Cloud Run resource model",
+          "url": "https://cloud.google.com/run/docs/resource-model"
+        },
+        {
+          "title": "Cloud Run autoscaling",
+          "url": "https://cloud.google.com/run/docs/about-instance-autoscaling"
+        },
+        {
+          "title": "Cloud Run service identity",
+          "url": "https://cloud.google.com/run/docs/securing/service-identity"
+        },
+        {
+          "title": "Cloud Run pricing",
+          "url": "https://cloud.google.com/run/pricing"
+        }
+      ]
+    }
+  ]
+}
