@@ -16,6 +16,7 @@ import observabilityContent from "../docs/gcp/service-content-observability.json
 import securityContent from "../docs/gcp/service-content-security.json";
 import storageContent from "../docs/gcp/service-content-storage.json";
 import { assetUrl } from "../lib/asset-url";
+import { gcpArchitectureBoardsBySlug, type GcpArchitectureBoard } from "../lib/gcp-architecture-boards";
 
 export type GcpService = {
   slug: string; displayName: string; canonicalName: string; categorySlug: string;
@@ -30,6 +31,7 @@ export type GcpContent = {
   architecture?: string[]; security?: string[]; operations?: string[]; watchPoints?: string[];
   cost?: string[]; alternatives?: string[]; relatedServices?: string[];
   sources?: { title: string; url: string }[];
+  architectureBoards?: GcpArchitectureBoard[];
   architectureFlows?: { title: string; note: string; reference?: string; steps: { title: string; items: string[] }[] }[];
   consoleSteps?: { title: string; detail: string }[];
   comparisons?: { name: string; fit: string }[];
@@ -52,7 +54,8 @@ const networkingGcpContent = Object.fromEntries((networkingContent.services as G
 const observabilityGcpContent = Object.fromEntries((observabilityContent.services as GcpContent[]).map(item => [item.slug, item]));
 const securityGcpContent = Object.fromEntries((securityContent.services as GcpContent[]).map(item => [item.slug, item]));
 const storageGcpContent = Object.fromEntries((storageContent.services as GcpContent[]).map(item => [item.slug, item]));
-export const gcpContent = { ...baseGcpContent, ...detailedGcpContent, ...aiMlGcpContent, ...appDevelopmentGcpContent, ...appHostingGcpContent, ...computeGcpContent, ...dataAnalyticsGcpContent, ...databasesGcpContent, ...hybridMulticloudGcpContent, ...industrySolutionsGcpContent, ...migrationGcpContent, ...networkingGcpContent, ...observabilityGcpContent, ...securityGcpContent, ...storageGcpContent };
+const mergedGcpContent = { ...baseGcpContent, ...detailedGcpContent, ...aiMlGcpContent, ...appDevelopmentGcpContent, ...appHostingGcpContent, ...computeGcpContent, ...dataAnalyticsGcpContent, ...databasesGcpContent, ...hybridMulticloudGcpContent, ...industrySolutionsGcpContent, ...migrationGcpContent, ...networkingGcpContent, ...observabilityGcpContent, ...securityGcpContent, ...storageGcpContent } as Record<string, GcpContent>;
+export const gcpContent = Object.fromEntries(Object.entries(mergedGcpContent).map(([slug, details]) => [slug, gcpArchitectureBoardsBySlug[slug] ? { ...details, architectureBoards: gcpArchitectureBoardsBySlug[slug] } : details])) as Record<string, GcpContent>;
 export const gcpSourceUrl = inventory.source.url;
 
 // Status is still useful for reviewed/published walkthroughs, but EL10 visuals are
