@@ -13,19 +13,40 @@ const R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/gcp-certifi
 function Board({ course, id, kind, title }: { course: GcpCourse; id: string; kind: "primary" | "companion"; title: string }) {
   const [missing, setMissing] = useState(false);
   const [open, setOpen] = useState(false);
-  useEffect(() => { setMissing(false); setOpen(false); }, [course.code, id, kind]);
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const filename = `${course.assetPrefix}-task-${id}-${kind}.webp`;
+  const sources = [
+    `${R2_BASE}/${course.assetPrefix}/${filename}`,
+    `${R2_BASE}/${course.assetPrefix}-tasks/${filename}`,
+  ];
+  const src = sources[sourceIndex];
+
+  useEffect(() => {
+    setMissing(false);
+    setOpen(false);
+    setSourceIndex(0);
+  }, [course.code, id, kind]);
+
   useEffect(() => {
     if (!open) return;
     const key = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [open]);
-  const src = `${R2_BASE}/${course.assetPrefix}-tasks/${course.assetPrefix}-task-${id}-${kind}.webp`;
+
+  const handleMissing = () => {
+    if (sourceIndex < sources.length - 1) {
+      setSourceIndex(sourceIndex + 1);
+      return;
+    }
+    setMissing(true);
+  };
+
   return <figure className="az900-board gcp-course-board">
     <figcaption>{kind === "primary" ? "PRIMARY WALKTHROUGH" : "COMPANION COVERAGE"}</figcaption>
-    {missing ? <div className="az900-board-pending"><div><strong>{kind === "primary" ? "Primary" : "Companion"} walkthrough pending</strong><small>{course.assetPrefix}-task-{id}-{kind}.webp</small></div></div> :
+    {missing ? <div className="az900-board-pending"><div><strong>{kind === "primary" ? "Primary" : "Companion"} walkthrough pending</strong><small>{filename}</small></div></div> :
       <button onClick={() => setOpen(true)} aria-label={`Open ${title} ${kind} full screen`} type="button">
-        <img src={src} alt={`${title} ${kind} walkthrough`} loading="lazy" onError={() => setMissing(true)} />
+        <img src={src} alt={`${title} ${kind} walkthrough`} loading="lazy" onError={handleMissing} />
         <span>Open full screen ↗</span>
       </button>}
     {open && <div className="az900-lightbox" role="dialog" aria-modal="true" aria-label={`${title} ${kind}`} onClick={() => setOpen(false)}>
