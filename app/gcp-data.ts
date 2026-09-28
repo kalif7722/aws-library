@@ -20,6 +20,7 @@ import { gcpArchitectureBoardsBySlug, type GcpArchitectureBoard } from "../lib/g
 import { gcpComputeArchitectureBoards } from "../lib/gcp-architecture-boards-compute";
 import { gcpNetworkingArchitectureBoards } from "../lib/gcp-architecture-boards-networking";
 import { gcpAnalyticsArchitectureBoards } from "../lib/gcp-architecture-boards-analytics";
+import { gcpDatabaseArchitectureBoards } from "../lib/gcp-architecture-boards-databases";
 
 export type GcpService = {
   slug: string; displayName: string; canonicalName: string; categorySlug: string;
@@ -58,7 +59,7 @@ const observabilityGcpContent = Object.fromEntries((observabilityContent.service
 const securityGcpContent = Object.fromEntries((securityContent.services as GcpContent[]).map(item => [item.slug, item]));
 const storageGcpContent = Object.fromEntries((storageContent.services as GcpContent[]).map(item => [item.slug, item]));
 const mergedGcpContent = { ...baseGcpContent, ...detailedGcpContent, ...aiMlGcpContent, ...appDevelopmentGcpContent, ...appHostingGcpContent, ...computeGcpContent, ...dataAnalyticsGcpContent, ...databasesGcpContent, ...hybridMulticloudGcpContent, ...industrySolutionsGcpContent, ...migrationGcpContent, ...networkingGcpContent, ...observabilityGcpContent, ...securityGcpContent, ...storageGcpContent } as Record<string, GcpContent>;
-const architectureBoardsBySlug: Record<string, GcpArchitectureBoard[]> = { ...gcpArchitectureBoardsBySlug, ...gcpComputeArchitectureBoards, ...gcpNetworkingArchitectureBoards, ...gcpAnalyticsArchitectureBoards };
+const architectureBoardsBySlug: Record<string, GcpArchitectureBoard[]> = { ...gcpArchitectureBoardsBySlug, ...gcpComputeArchitectureBoards, ...gcpNetworkingArchitectureBoards, ...gcpAnalyticsArchitectureBoards, ...gcpDatabaseArchitectureBoards };
 export const gcpContent = Object.fromEntries(Object.entries(mergedGcpContent).map(([slug, details]) => [slug, architectureBoardsBySlug[slug] ? { ...details, architectureBoards: architectureBoardsBySlug[slug] } : details])) as Record<string, GcpContent>;
 export const gcpSourceUrl = inventory.source.url;
 
