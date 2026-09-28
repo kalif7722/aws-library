@@ -36,7 +36,12 @@ const providers = [
     ["ASSOCIATE · Security Operations Analyst (SC-200)", "/courses/azure-sc-200"],
     ["Browse all Azure services", "/azure-services"],
   ] },
-  { key: "gcp", name: "Google Cloud", short: "GCP", status: "Available now", tone: "provider-gcp", description: "Study Google Cloud professional certification domains through the shared GCP service library and visual walkthrough workspace.", links: [
+  { key: "gcp", name: "Google Cloud", short: "GCP", status: "Available now", tone: "provider-gcp", description: "Study Google Cloud certification domains through the shared GCP service library and visual walkthrough workspace.", links: [
+    ["LEADER · Cloud Digital Leader (CDL)", "/courses/gcp-cloud-digital-leader"],
+    ["LEADER · Generative AI Leader (GAL)", "/courses/gcp-generative-ai-leader"],
+    ["ASSOCIATE · Cloud Engineer (ACE)", "/courses/gcp-associate-cloud-engineer"],
+    ["ASSOCIATE · Data Practitioner (ADP)", "/courses/gcp-associate-data-practitioner"],
+    ["ASSOCIATE · Google Workspace Administrator (AGWA)", "/courses/gcp-associate-google-workspace-administrator"],
     ["PROFESSIONAL · Cloud Architect (PCA)", "/courses/gcp-professional-cloud-architect"],
     ["PROFESSIONAL · Cloud Developer (PCD)", "/courses/gcp-professional-cloud-developer"],
     ["PROFESSIONAL · Data Engineer (PDE)", "/courses/gcp-professional-data-engineer"],
@@ -51,7 +56,7 @@ const providers = [
     ["Browse all Google Cloud services", "/gcp-services"],
   ] },
 ];
-const learningStats = [["225+", "visual service guides"], ["37", "certification paths"], ["3", "cloud providers"]];
+const learningStats = [["225+", "visual service guides"], ["42", "certification paths"], ["3", "cloud providers"]];
 export default function LearningHome() { return <main className="learning-shell">
   <nav className="top-nav" aria-label="Primary navigation"><span className="brand-link">Visual Learning</span></nav>
   <section className="learning-hero"><div className="hero-copy"><p className="course-kicker">AWS · Azure · GCP</p><h1>One visual study library for every cloud.</h1><p className="hero-summary">Choose a provider, then move from an official certification course into the exact service guides you need—without leaving the learning workspace.</p><div className="hero-actions"><a className="primary-action" href="/courses/aws-solutions-architect-associate">Start with AWS SAA</a><a className="secondary-action" href="/services">Browse all AWS services</a></div></div><div className="learning-map" aria-label="Learning flow"><div><span>01</span><strong>Choose a cloud</strong><small>AWS, Azure and Google Cloud</small></div><i>→</i><div><span>02</span><strong>Choose a course</strong><small>Follow the official exam domains</small></div><i>→</i><div><span>03</span><strong>Open visual guides</strong><small>Study architecture, use cases and walkthroughs</small></div></div></section>
