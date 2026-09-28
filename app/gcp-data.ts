@@ -24,6 +24,7 @@ import { gcpDatabaseArchitectureBoards } from "../lib/gcp-architecture-boards-da
 import { gcpSecurityArchitectureBoards } from "../lib/gcp-architecture-boards-security";
 import { gcpStorageArchitectureBoards } from "../lib/gcp-architecture-boards-storage";
 import { gcpObservabilityArchitectureBoards } from "../lib/gcp-architecture-boards-observability";
+import { gcpHybridArchitectureBoards, gcpMigrationArchitectureBoards, gcpIndustryArchitectureBoards } from "../lib/gcp-architecture-boards-hybrid-migration-industry";
 
 export type GcpService = {
   slug: string; displayName: string; canonicalName: string; categorySlug: string;
@@ -62,7 +63,7 @@ const observabilityGcpContent = Object.fromEntries((observabilityContent.service
 const securityGcpContent = Object.fromEntries((securityContent.services as GcpContent[]).map(item => [item.slug, item]));
 const storageGcpContent = Object.fromEntries((storageContent.services as GcpContent[]).map(item => [item.slug, item]));
 const mergedGcpContent = { ...baseGcpContent, ...detailedGcpContent, ...aiMlGcpContent, ...appDevelopmentGcpContent, ...appHostingGcpContent, ...computeGcpContent, ...dataAnalyticsGcpContent, ...databasesGcpContent, ...hybridMulticloudGcpContent, ...industrySolutionsGcpContent, ...migrationGcpContent, ...networkingGcpContent, ...observabilityGcpContent, ...securityGcpContent, ...storageGcpContent } as Record<string, GcpContent>;
-const architectureBoardsBySlug: Record<string, GcpArchitectureBoard[]> = { ...gcpArchitectureBoardsBySlug, ...gcpComputeArchitectureBoards, ...gcpNetworkingArchitectureBoards, ...gcpAnalyticsArchitectureBoards, ...gcpDatabaseArchitectureBoards, ...gcpSecurityArchitectureBoards, ...gcpStorageArchitectureBoards, ...gcpObservabilityArchitectureBoards };
+const architectureBoardsBySlug: Record<string, GcpArchitectureBoard[]> = { ...gcpArchitectureBoardsBySlug, ...gcpComputeArchitectureBoards, ...gcpNetworkingArchitectureBoards, ...gcpAnalyticsArchitectureBoards, ...gcpDatabaseArchitectureBoards, ...gcpSecurityArchitectureBoards, ...gcpStorageArchitectureBoards, ...gcpObservabilityArchitectureBoards, ...gcpHybridArchitectureBoards, ...gcpMigrationArchitectureBoards, ...gcpIndustryArchitectureBoards };
 export const gcpContent = Object.fromEntries(Object.entries(mergedGcpContent).map(([slug, details]) => [slug, architectureBoardsBySlug[slug] ? { ...details, architectureBoards: architectureBoardsBySlug[slug] } : details])) as Record<string, GcpContent>;
 export const gcpSourceUrl = inventory.source.url;
 
