@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Activity, Cloud, Database, FileText, Globe2, Laptop, Network, Server, Shield, Users } from "lucide-react";
 import { ServiceCostBoard } from "./ServiceLearningShowcase";
 import "./ServiceLearningShowcase.css";
+import "./GcpArchitectureBoard.css";
 import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
@@ -13,7 +14,7 @@ function NumberedPanel({ title, items, icon, id }: { title: string; items: strin
   </section>;
 }
 
-function GenericArchitectureIcon({ label }: { label: string }) {
+function GenericArchitectureIcon({ label, board = false }: { label: string; board?: boolean }) {
   const key = label.toLowerCase();
   const [Icon, tone] = /user|customer|buyer|approver|operator|personnel|developer|designer|owner|team|consumer/.test(key) ? [Users, "user"]
     : /database|data|warehouse|record|dataset|table/.test(key) ? [Database, "data"]
@@ -24,7 +25,36 @@ function GenericArchitectureIcon({ label }: { label: string }) {
     : /compute|runtime|cluster|kubernetes|pipeline|automation|deployment|worker|instance/.test(key) ? [Server, "compute"]
     : /web|mobile|application|client|saas|portal|console/.test(key) ? [Laptop, "app"]
     : /internet|provider|vendor|external|partner/.test(key) ? [Globe2, "internet"] : [Cloud, "cloud"];
-  return <div className={`gcp-architecture-generic tone-${tone}`}><Icon size={30} /></div>;
+  return <div className={`${board ? "gcp-architecture-board-generic" : "gcp-architecture-generic"} tone-${tone}`}><Icon size={board ? 36 : 30} /></div>;
+}
+
+function ArchitectureBoardCard({ card }: { card: NonNullable<GcpContent["architectureBoards"]>[number]["groups"][number]["cards"][number] }) {
+  const icon = findGcpArchitectureIcon(card.iconLabel || card.label);
+  return <div className={`gcp-architecture-board-card ${icon ? "official" : "generic"}`}>
+    {icon ? <div className="gcp-architecture-board-icon"><img src={icon.path} alt={`${card.label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={card.label} board />}
+    <b>{card.label}</b>
+    <small>{card.caption}</small>
+  </div>;
+}
+
+function ArchitectureBoardDiagram({ board, index }: { board: NonNullable<GcpContent["architectureBoards"]>[number]; index: number }) {
+  const groups = board.groups.slice(0, 6);
+  return <article className="gcp-architecture-board-panel">
+    <header className="gcp-architecture-board-head">
+      <div><p className="gcp-architecture-board-kicker">ARCHITECTURE {String(index).padStart(2, "0")}</p><h3>{board.title}</h3></div>
+      <p className="gcp-architecture-board-note">{board.note}</p>
+    </header>
+    {board.reference ? <div className="gcp-architecture-board-reference">Reference pattern: {board.reference}</div> : null}
+    <div className="gcp-architecture-board-flow" aria-label={`${board.title} architecture flow`}>
+      {groups.map((group, groupIndex) => <div className="gcp-architecture-board-group-wrap" key={`${group.title}-${groupIndex}`}>
+        <section className="gcp-architecture-board-group">
+          <strong>{group.title}</strong>
+          <div className="gcp-architecture-board-cards">{group.cards.slice(0, 3).map((card, cardIndex) => <ArchitectureBoardCard card={card} key={`${card.label}-${cardIndex}`} />)}</div>
+        </section>
+        {groupIndex < groups.length - 1 ? <div className="gcp-architecture-board-arrow" aria-hidden="true">→</div> : null}
+      </div>)}
+    </div>
+  </article>;
 }
 
 function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
@@ -63,6 +93,10 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
+  if (details.architectureBoards?.length) return <section className="gcp-architecture-board-section" id="architecture">
+    {details.architectureBoards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}
+  </section>;
+
   const flows = details.architectureFlows || (details.architecture || []).map((note, index) => ({
     title: `${serviceName} architecture ${index + 1}`,
     note,
