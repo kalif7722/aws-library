@@ -2,83 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { GcpCourse } from "../gcp-course-data";
-import { gcpOfficialExamDomains, type GcpExamSkill } from "../gcp-exam-objectives";
-import { gcpServices } from "../gcp-data";
+import { gcpOfficialExamDomains } from "../gcp-exam-objectives";
+import { gcpRelatedServicesForSkill } from "../gcp-course-services";
 import "./Az900CourseGuide.css";
 import "./AzureAdvancedCourseGuide.css";
 import "./GcpProfessionalCourseGuide.css";
 
 const R2_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/gcp-certification-walkthroughs";
-
-const normalize = (value: string) => value.toLowerCase().replace(/\([^)]*\)/g, " ").replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
-
-const manualAliases: Record<string, string[]> = {
-  "google kubernetes engine": ["google-kubernetes-engine"],
-  gke: ["google-kubernetes-engine"],
-  "cloud iam": ["identity-and-access-management"],
-  iam: ["identity-and-access-management"],
-  "identity and access management": ["identity-and-access-management"],
-  vpc: ["virtual-private-cloud"],
-  "virtual private cloud": ["virtual-private-cloud"],
-  "cloud logging": ["logging"],
-  "cloud monitoring": ["monitoring"],
-  "google cloud observability": ["monitoring", "logging", "trace", "error-reporting"],
-  "cloud trace": ["trace"],
-  "error reporting": ["error-reporting"],
-  "cloud kms": ["cloud-kms"],
-  "cloud key management service": ["cloud-kms"],
-  "security command center": ["security-command-center"],
-  scc: ["security-command-center"],
-  "google security operations": ["google-secops"],
-  secops: ["google-secops"],
-  "cloud ngfw": ["cloud-ngfw"],
-  "cloud next generation firewall": ["cloud-ngfw"],
-  "network connectivity center": ["network-connectivity-center"],
-  ncc: ["network-connectivity-center"],
-  "network intelligence center": ["network-intelligence-center"],
-  "cloud service mesh": ["cloud-service-mesh"],
-  "sensitive data protection": ["sensitive-data-protection"],
-  "cloud dlp": ["sensitive-data-protection"],
-  "certificate authority service": ["ca-service"],
-  "ca service": ["ca-service"],
-  "agent platform": ["gemini-enterprise-agent-platform"],
-  "gemini enterprise": ["gemini-enterprise-agent-platform"],
-  "agent search": ["gemini-enterprise-agent-platform"],
-  "model garden": ["gemini-enterprise-agent-platform"],
-  "vertex ai": ["gemini-enterprise-agent-platform"],
-  "cloud composer": ["managed-service-for-apache-airflow"],
-  "managed service for apache airflow": ["managed-service-for-apache-airflow"],
-  "memorystore for redis": ["memorystore-for-redis-cluster"],
-};
-
-function relatedServicesForSkill(skill: GcpExamSkill) {
-  const raw = `${skill.name} ${skill.tasks.join(" ")}`.toLowerCase();
-  const text = normalize(raw);
-  const scored = new Map<string, number>();
-
-  for (const service of gcpServices) {
-    const terms = [service.displayName, service.canonicalName, ...(service.aliases || []), ...(service.abbreviations || [])]
-      .map(normalize).filter(term => term.length >= 3);
-    let best = Number.POSITIVE_INFINITY;
-    for (const term of terms) {
-      const index = text.indexOf(term);
-      if (index >= 0) best = Math.min(best, index);
-    }
-    if (Number.isFinite(best)) scored.set(service.slug, best);
-  }
-
-  for (const [alias, slugs] of Object.entries(manualAliases)) {
-    const index = text.indexOf(normalize(alias));
-    if (index < 0) continue;
-    for (const slug of slugs) scored.set(slug, Math.min(scored.get(slug) ?? Number.POSITIVE_INFINITY, index));
-  }
-
-  return [...scored.entries()]
-    .sort((a, b) => a[1] - b[1])
-    .map(([slug]) => gcpServices.find(service => service.slug === slug))
-    .filter((service): service is NonNullable<typeof service> => Boolean(service))
-    .slice(0, 8);
-}
 
 function Board({ course, id, kind, title }: { course: GcpCourse; id: string; kind: "primary" | "companion"; title: string }) {
   const [missing, setMissing] = useState(false);
@@ -111,7 +41,7 @@ export default function GcpProfessionalCourseGuide({ course }: { course: GcpCour
   const [groupIndex, setGroupIndex] = useState(0);
   const domain = domains[domainIndex];
   const group = domain?.groups[groupIndex];
-  const related = useMemo(() => group ? relatedServicesForSkill(group) : [], [group]);
+  const related = useMemo(() => group ? gcpRelatedServicesForSkill(group) : [], [group]);
   const count = domains.reduce((sum, item) => sum + item.groups.length, 0);
 
   if (!domain || !group) return null;
