@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import type { GcpCourse } from "../gcp-course-data";
 import { gcpCourseSkillCount } from "../gcp-course-data";
 import { gcpCourseServices } from "../gcp-course-services";
-import { gcpAssetUrl, gcpContent, gcpIcons, type GcpContent, type GcpService } from "../gcp-data";
+import { gcpOfficialExamDomains } from "../gcp-exam-objectives";
+import { gcpAssetUrl, gcpContent, gcpIcons, type GcpService } from "../gcp-data";
 import GcpProfessionalCourseGuide from "./GcpProfessionalCourseGuide";
 import GcpSharedServiceSections from "./GcpSharedServiceSections";
 import "./GcpLibrary.css";
@@ -91,6 +92,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
   const selected = services.find(service => service.slug === selectedSlug) || services[0];
   const details = selected ? gcpContent[selected.slug] : undefined;
   const skillCount = gcpCourseSkillCount(course);
+  const domainCount = (gcpOfficialExamDomains[course.code] || []).length;
 
   return <main className="learning-shell course-page gcp-course-page">
     <nav className="top-nav" aria-label="Primary navigation">
@@ -107,7 +109,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
         <a className="scope-source" href={course.sourceUrl} target="_blank" rel="noreferrer">Official Google Cloud certification guide ↗</a>
       </div>
       <div className="course-overview">
-        <div><strong>{(gcpContent && course.code) ? (Object.keys((awaitlessDomains(course.code))).length || 0) : 0}</strong><span>exam domains</span></div>
+        <div><strong>{domainCount}</strong><span>exam domains</span></div>
         <div><strong>{skillCount}</strong><span>skill areas</span></div>
         <div><strong>{services.length}</strong><span>mapped GCP services</span></div>
       </div>
@@ -149,10 +151,4 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
       </article>}
     </section>
   </main>;
-}
-
-function awaitlessDomains(code: string) {
-  // Kept synchronous for a stable server/client render; the guide itself owns the detailed domain UI.
-  const counts: Record<string, number> = { PCA: 6, PCD: 4, PDE: 5, PCDE: 4, PMLE: 6, PCSE: 5, PCDOE: 5, PCNE: 6, PAA: 5, PSOE: 6 };
-  return Object.fromEntries(Array.from({ length: counts[code] || 0 }, (_, index) => [String(index), true]));
 }
