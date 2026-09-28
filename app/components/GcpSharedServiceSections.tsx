@@ -7,6 +7,9 @@ import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
 
+type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
+type ArchitectureCard = ArchitectureBoard["groups"][number]["cards"][number];
+
 function NumberedPanel({ title, items, icon, id }: { title: string; items: string[]; icon: string; id?: string }) {
   return <section className="service-insight-panel" id={id}>
     <div className="service-panel-title"><span>{icon}</span><h3>{title}</h3></div>
@@ -28,16 +31,17 @@ function GenericArchitectureIcon({ label, board = false }: { label: string; boar
   return <div className={`${board ? "gcp-architecture-board-generic" : "gcp-architecture-generic"} tone-${tone}`}><Icon size={board ? 36 : 30} /></div>;
 }
 
-function ArchitectureBoardCard({ card }: { card: NonNullable<GcpContent["architectureBoards"]>[number]["groups"][number]["cards"][number] }) {
-  const icon = findGcpArchitectureIcon(card.iconLabel || card.label);
+function ArchitectureBoardCard({ card }: { card: ArchitectureCard }) {
+  const iconLabel = card.iconLabel || card.label;
+  const icon = findGcpArchitectureIcon(iconLabel);
   return <div className={`gcp-architecture-board-card ${icon ? "official" : "generic"}`}>
-    {icon ? <div className="gcp-architecture-board-icon"><img src={icon.path} alt={`${card.label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={card.label} board />}
+    {icon ? <div className="gcp-architecture-board-icon"><img src={icon.path} alt={`${card.label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={iconLabel} board />}
     <b>{card.label}</b>
     <small>{card.caption}</small>
   </div>;
 }
 
-function ArchitectureBoardDiagram({ board, index }: { board: NonNullable<GcpContent["architectureBoards"]>[number]; index: number }) {
+function ArchitectureBoardDiagram({ board, index }: { board: ArchitectureBoard; index: number }) {
   const groups = board.groups.slice(0, 6);
   return <article className="gcp-architecture-board-panel">
     <header className="gcp-architecture-board-head">
@@ -55,6 +59,67 @@ function ArchitectureBoardDiagram({ board, index }: { board: NonNullable<GcpCont
       </div>)}
     </div>
   </article>;
+}
+
+function compactCaption(value: string, max = 58) {
+  const text = value.replace(/\s+/g, " ").trim();
+  if (text.length <= max) return text;
+  const shortened = text.slice(0, max - 1).replace(/\s+\S*$/, "").trim();
+  return `${shortened || text.slice(0, max - 1)}…`;
+}
+
+function serviceCaption(summary?: string) {
+  const text = (summary || "Managed Google Cloud capability").replace(/^(a|an|the)\s+/i, "");
+  return compactCaption(text.split(/\s+/).slice(0, 6).join(" "), 48);
+}
+
+function stageCard(serviceName: string, flow: NonNullable<GcpContent["architectureFlows"]>[number], step: NonNullable<GcpContent["architectureFlows"]>[number]["steps"][number]): ArchitectureCard {
+  const label = architectureStageLabel(step.title);
+  const copy = architectureStageCopy(serviceName, flow.title, step.title, step.items);
+  return { label, caption: compactCaption(copy[0] || "Architecture stage"), iconLabel: label };
+}
+
+function standardOperateGroup(audit = false): ArchitectureBoard["groups"][number] {
+  return { title: "OPERATE & GOVERN", cards: [
+    { label: "Cloud Monitoring", caption: "Metrics / alerts", iconLabel: "Cloud Monitoring" },
+    { label: audit ? "Cloud Audit Logs" : "Cloud Logging", caption: audit ? "Admin audit" : "Logs / audit", iconLabel: audit ? "Cloud Audit Logs" : "Cloud Logging" },
+    { label: "IAM controls", caption: "Least privilege", iconLabel: "IAM" }
+  ] };
+}
+
+function derivedProductionBoard(serviceName: string, details: GcpContent, flow: NonNullable<GcpContent["architectureFlows"]>[number]): ArchitectureBoard {
+  const cards = flow.steps.slice(0, 5).map(step => stageCard(serviceName, flow, step));
+  const firstLabel = cards[0]?.label.toLowerCase() || "";
+  const secondLabel = cards[1]?.label.toLowerCase() || "";
+  const tailLabels = cards.slice(3).map(card => card.label.toLowerCase()).join(" ");
+  const firstTitle = /user|client|caller|consumer|application|web|developer|viewer|operator|request/.test(firstLabel) ? "CLIENTS / APPS" : "SOURCES / INPUT";
+  const secondTitle = /edge|gateway|auth|route|network|vpc|proxy|ingress|load balancer|policy|scheduler|pub.?sub|eventarc|endpoint/.test(secondLabel) ? "ENTRY / CONTROL" : "PROCESS / CONTROL";
+  const tailTitle = /storage|table|dataset|database|bucket|state|result|output|backup|replica|warehouse|checkpoint|model|archive/.test(tailLabels) ? "DATA / RESULT" : /backend|target|destination|service|response|worker|runtime|site/.test(tailLabels) ? "DELIVERY / TARGET" : "RESULT / TARGET";
+  const groups: ArchitectureBoard["groups"] = [];
+  if (cards[0]) groups.push({ title: firstTitle, cards: [cards[0]] });
+  if (cards[1]) groups.push({ title: secondTitle, cards: [cards[1]] });
+  const coreCards: ArchitectureCard[] = [{ label: serviceName, caption: serviceCaption(details.summary), iconLabel: serviceName }];
+  if (cards[2] && cards[2].label.toLowerCase() !== serviceName.toLowerCase()) coreCards.push(cards[2]);
+  groups.push({ title: "SERVICE CAPABILITY", cards: coreCards.slice(0, 2) });
+  if (cards.length > 3) groups.push({ title: tailTitle, cards: cards.slice(3, 5) });
+  groups.push(standardOperateGroup(false));
+  return { title: flow.title, note: flow.note, reference: flow.reference, groups };
+}
+
+function derivedGovernanceBoard(serviceName: string, details: GcpContent, flow: NonNullable<GcpContent["architectureFlows"]>[number]): ArchitectureBoard {
+  const cards = flow.steps.slice(0, 5).map(step => stageCard(serviceName, flow, step));
+  const groups: ArchitectureBoard["groups"] = [];
+  if (cards[0]) groups.push({ title: "CONFIGURATION", cards: [cards[0]] });
+  if (cards[1] || cards[2]) groups.push({ title: "IDENTITY / BOUNDARY", cards: cards.slice(1, 3) });
+  groups.push({ title: "SERVICE CAPABILITY", cards: [{ label: serviceName, caption: serviceCaption(details.summary), iconLabel: serviceName }] });
+  if (cards[3] || cards[4]) groups.push({ title: "RELEASE / OPERATIONS", cards: cards.slice(3, 5) });
+  groups.push(standardOperateGroup(true));
+  return { title: flow.title, note: flow.note, reference: flow.reference, groups };
+}
+
+function deriveArchitectureBoards(serviceName: string, details: GcpContent): ArchitectureBoard[] {
+  if (!details.architectureFlows?.length) return [];
+  return details.architectureFlows.slice(0, 2).map((flow, index) => index === 0 ? derivedProductionBoard(serviceName, details, flow) : derivedGovernanceBoard(serviceName, details, flow));
 }
 
 function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
@@ -93,8 +158,9 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
-  if (details.architectureBoards?.length) return <section className="gcp-architecture-board-section" id="architecture">
-    {details.architectureBoards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}
+  const boards = details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details);
+  if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">
+    {boards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}
   </section>;
 
   const flows = details.architectureFlows || (details.architecture || []).map((note, index) => ({
