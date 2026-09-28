@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import type { GcpCourse } from "../gcp-course-data";
 import { gcpCourseSkillCount } from "../gcp-course-data";
 import { gcpCourseServices } from "../gcp-course-services";
-import { gcpOfficialExamDomains } from "../gcp-exam-objectives";
+import { gcpOfficialExamDomains } from "../gcp-all-exam-objectives";
 import { gcpAssetUrl, gcpContent, gcpIcons, type GcpService } from "../gcp-data";
 import GcpProfessionalCourseGuide from "./GcpProfessionalCourseGuide";
 import GcpSharedServiceSections from "./GcpSharedServiceSections";
@@ -122,7 +122,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
         <button className="course-sidebar-toggle" onClick={() => setSidebarCollapsed(value => !value)} aria-expanded={!sidebarCollapsed} type="button">{sidebarCollapsed ? "›" : "‹"}</button>
         {sidebarCollapsed ? <div className="course-sidebar-rail"><span>{course.code}</span><strong>Course services</strong><small>{services.length}</small></div> : <>
           <div className="course-sidebar-head"><div><p className="course-kicker">Exam-linked services</p><h2>{categories.length} service categories</h2></div><button onClick={() => setAllOpen(value => !value)} type="button">{allOpen ? "Collapse all" : "Expand all"}</button></div>
-          <p className="course-source-note">Services are matched from the supplied Google exam objectives. Selecting a service reuses the central GCP EL10, architecture, learning, and console walkthrough content.</p>
+          <p className="course-source-note">Services are matched from the supplied Google exam objectives and reviewed course coverage. Selecting a service reuses the central GCP EL10, architecture, learning, and console walkthrough content.</p>
           <div className="course-category-list">{categories.map((category, index) => <details className="course-nav-group" key={`${category.title}-${allOpen}`} open={allOpen || index === 0} style={{ "--module-accent": `hsl(${(index * 37 + 205) % 360} 78% 62%)` } as CSSProperties}>
             <summary><span>{String(index + 1).padStart(2, "0")}</span><strong>{category.title}</strong><small>{category.services.length}</small><b>⌄</b></summary>
             <div className="course-service-list">{category.services.map(service => <button key={service.slug} className={service.slug === selected?.slug ? "active" : ""} onClick={() => selectService(service)} aria-pressed={service.slug === selected?.slug} type="button"><span>{service.displayName}</span><small>GCP service page</small></button>)}</div>
@@ -145,7 +145,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
 
         {visualVisible && <CourseStudyImage path={selected.el10Path} title={`${selected.displayName} EL10 visual`} />}
 
-        {serviceDetailsVisible && details ? <div className="gcp-course-learning"><GcpSharedServiceSections serviceName={selected.displayName} details={details} consoleWalkthrough={<CourseStudyImage path={selected.primaryWalkthroughPath} title={`${selected.displayName} console walkthrough`} compact />} />
+        {serviceDetailsVisible && details ? <div className="gcp-course-learning gcp-standard-service-surface"><GcpSharedServiceSections serviceName={selected.displayName} details={details} consoleWalkthrough={<CourseStudyImage path={selected.primaryWalkthroughPath} title={`${selected.displayName} console walkthrough`} compact />} />
           {selected.companionWalkthroughPath ? <section className="gcp-course-companion"><div className="service-section-cap"><div><p>COMPANION COVERAGE</p><h3>{selected.displayName} companion walkthrough</h3></div><span>Additional console or implementation context for the selected service.</span></div><CourseStudyImage path={selected.companionWalkthroughPath} title={`${selected.displayName} companion walkthrough`} compact /></section> : null}
         </div> : null}
       </article>}
