@@ -4,12 +4,13 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const expected = ["PCA", "PCD", "PDE", "PCDE", "PMLE", "PCSE", "PCDOE", "PCNE", "PAA", "PSOE"];
+const expected = ["PCA", "PCD", "PDE", "PCDE", "PMLE", "PCSE", "PCDOE", "PCNE", "PAA", "PSOE", "ACE", "ADP", "AGWA", "GAL", "CDL"];
 const courseFile = "app/gcp-course-data.ts";
-const objectivesFile = "app/gcp-exam-objectives.ts";
+const objectiveFiles = ["app/gcp-exam-objectives.ts", "app/gcp-exam-objectives-additional.ts"];
 const syntaxFiles = [
   courseFile,
-  objectivesFile,
+  ...objectiveFiles,
+  "app/gcp-all-exam-objectives.ts",
   "app/gcp-course-services.ts",
   "app/components/GcpProfessionalCourseGuide.tsx",
   "app/components/GcpCertificationCourse.tsx",
@@ -65,7 +66,7 @@ for (const course of courseEntries) {
   if (!/^[a-z0-9-]+$/.test(course.assetPrefix)) throw new Error(`Invalid R2 asset prefix for ${course.code}: ${course.assetPrefix}`);
 }
 
-const objectiveSource = fs.readFileSync(path.join(root, objectivesFile), "utf8");
+const objectiveSource = objectiveFiles.map(file => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
 const courseHeaders = [...objectiveSource.matchAll(/^\s{2}([A-Z]+): \[/gm)].map(match => ({ code: match[1], index: match.index }));
 const objectiveCodes = courseHeaders.map(entry => entry.code);
 for (const code of expected) if (!objectiveCodes.includes(code)) throw new Error(`Missing exam objectives for ${code}`);
