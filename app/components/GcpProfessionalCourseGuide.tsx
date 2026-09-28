@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { GcpCourse } from "../gcp-course-data";
-import { gcpOfficialExamDomains } from "../gcp-exam-objectives";
+import { gcpOfficialExamDomains } from "../gcp-all-exam-objectives";
 import { gcpRelatedServicesForSkill } from "../gcp-course-services";
 import "./Az900CourseGuide.css";
 import "./AzureAdvancedCourseGuide.css";
