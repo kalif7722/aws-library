@@ -106,6 +106,10 @@ export const limitsMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Rule limits','Web ACL rule capacity and quotas constrain complex policies.','Policy/rule limits depend on Front Door or Application Gateway tier.','Policy/rule quotas and load-balancer attachment limits apply.'],
  ['Blind spots','WAF inspects configured web entry points, not every network path.','WAF covers its associated gateway/edge traffic only.','Cloud Armor covers protected backend/edge paths only.'],
  ['Tuning','Managed rules can create false positives without tuning.','Detection versus prevention mode changes enforcement.','Preconfigured rule sensitivity can create false positives.']],
+'Network firewalls':[
+ ['Traffic path','Route tables must steer intended flows through firewall endpoints; symmetric routing matters.','Routes must direct inspected traffic through the firewall in its dedicated subnet.','Firewall rules apply at policy attachment; advanced inspection requires associated endpoints.'],
+ ['Feature boundary','TLS inspection and stateful rules require certificates, rule groups and policy configuration.','Basic and Standard lack the full Premium TLS inspection and IDPS feature set.','Standard and Essentials differ from Enterprise Layer 7 inspection and IDPS.'],
+ ['Operational caveat','Uninspected paths and asymmetric flows can bypass or disrupt stateful inspection.','Forced tunneling and return paths need deliberate route design.','TLS inspection has protocol exclusions, including HTTP/2 and QUIC.']],
 'Metrics and logs':[
  ['Quota/cost','High-cardinality custom metrics and log ingestion cost grow.','Workspace ingestion, retention and query volume add cost.','Metric cardinality and log ingestion/retention add cost.'],
  ['Collection','Not every application signal appears without instrumentation.','Diagnostic settings/agents are needed for many resource logs.','Agents and sinks are needed for selected workload logs.'],

@@ -105,6 +105,10 @@ export const featureMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Attachment','AWS WAF associates with supported AWS web entry points.','Azure WAF associates with Front Door or Application Gateway.','Cloud Armor policies attach to supported load-balancing backends.'],
  ['Rules','Managed and custom rules filter HTTP requests.','Managed and custom rule sets filter HTTP requests.','Preconfigured and custom rules filter HTTP requests.'],
  ['Scope','Regional and CloudFront scopes differ.','Front Door and Application Gateway scopes differ.','Edge and regional policy behavior depends on load balancer.']],
+'Network firewalls':[
+ ['Inspection model','Stateful and stateless rule groups inspect traffic through firewall endpoints in a VPC.','A managed firewall in a dedicated subnet inspects traffic routed through it.','Distributed firewall policies govern VPC traffic; Enterprise adds inspection endpoints.'],
+ ['Policy controls','Suricata-compatible stateful rules and domain lists support deeper filtering.','Network and application rules support FQDN filtering; Premium adds IDPS.','Hierarchical and network firewall policies support rules; Enterprise adds Layer 7 and IDPS.'],
+ ['Encrypted traffic','TLS inspection can decrypt selected outbound traffic with configured certificates.','Premium supports TLS inspection for selected outbound and east-west flows.','Enterprise supports TLS inspection with configured Certificate Authority Service resources.']],
 'Metrics and logs':[
  ['Metrics','CloudWatch metrics, alarms and dashboards cover AWS resources.','Azure Monitor metrics and alerts cover Azure resources.','Cloud Monitoring metrics and alerting cover Google Cloud resources.'],
  ['Logs','CloudWatch Logs ingests, queries and retains logs.','Log Analytics workspaces store and query collected logs.','Cloud Logging ingests and queries logs in log buckets.'],

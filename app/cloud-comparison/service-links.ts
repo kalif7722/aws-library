@@ -20,7 +20,7 @@ const overrides:Record<Vendor,Record<string,string[]>>={
 const specificIcons:Record<string,string>={
  'Cloud Run functions':'/assets/gcp-icons/legacy/cloud-functions.svg','Persistent Disk / Hyperdisk':'/assets/gcp-icons/legacy/persistent-disk.svg',
  'Google Cloud Batch':'/assets/gcp-icons/legacy/batch.svg','Cloud Audit Logs':'/assets/gcp-icons/legacy/cloud-audit-logs.svg',
- 'Vertex AI':'/assets/gcp-icons/core/vertex-ai.svg'
+ 'Vertex AI':'/assets/gcp-icons/core/vertex-ai.svg','Cloud NGFW':'/assets/gcp-icons/legacy/cloud-firewall-rules.svg'
 };
 export function serviceLinks(vendor:Vendor,display:string):Link[]{
  if(vendor==='gcp'&&display==='Vertex AI')return [{name:'Vertex AI',href:'https://cloud.google.com/vertex-ai/docs',icon:specificIcons['Vertex AI'],external:true}];
@@ -43,7 +43,7 @@ export function serviceLinks(vendor:Vendor,display:string):Link[]{
     'Azure DNS':'azure-dns.svg','Azure Front Door':'azure-front-door.svg',
     'Azure ExpressRoute':'azure-expressroute.svg','Microsoft Fabric':'microsoft-fabric.svg',
     'Azure Synapse Analytics':'azure-synapse-analytics.svg','Azure Key Vault':'azure-key-vault.svg',
-    'Azure Web Application Firewall':'azure-web-application-firewall.svg',
+    'Azure Web Application Firewall':'azure-web-application-firewall.svg','Azure Firewall':'azure-firewall.svg',
     'Azure Monitor':'azure-monitor.svg','Azure Resource Manager':'azure-resource-manager.svg',
     'Azure Resource Manager templates':'azure-resource-manager.svg',
     'Azure Cosmos DB':'azure-cosmos-db.svg','Azure Database for PostgreSQL':'azure-database-for-postgresql.svg',
