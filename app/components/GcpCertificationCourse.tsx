@@ -145,9 +145,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
 
         {visualVisible && <CourseStudyImage path={selected.el10Path} title={`${selected.displayName} EL10 visual`} />}
 
-        {serviceDetailsVisible && details ? <div className="gcp-course-learning gcp-standard-service-surface"><GcpSharedServiceSections serviceName={selected.displayName} details={details} consoleWalkthrough={<CourseStudyImage path={selected.primaryWalkthroughPath} title={`${selected.displayName} console walkthrough`} compact />} />
-          {selected.companionWalkthroughPath ? <section className="gcp-course-companion"><div className="service-section-cap"><div><p>COMPANION COVERAGE</p><h3>{selected.displayName} companion walkthrough</h3></div><span>Additional console or implementation context for the selected service.</span></div><CourseStudyImage path={selected.companionWalkthroughPath} title={`${selected.displayName} companion walkthrough`} compact /></section> : null}
-        </div> : null}
+        {serviceDetailsVisible && details ? <div className="gcp-course-learning gcp-standard-service-surface"><GcpSharedServiceSections serviceName={selected.displayName} details={details} consoleWalkthrough={<CourseStudyImage path={selected.primaryWalkthroughPath} title={`${selected.displayName} console walkthrough`} compact />} /></div> : null}
       </article>}
     </section>
   </main>;
