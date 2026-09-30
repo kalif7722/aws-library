@@ -110,6 +110,50 @@ export const limitsMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Traffic path','Route tables must steer intended flows through firewall endpoints; symmetric routing matters.','Routes must direct inspected traffic through the firewall in its dedicated subnet.','Firewall rules apply at policy attachment; advanced inspection requires associated endpoints.'],
  ['Feature boundary','TLS inspection and stateful rules require certificates, rule groups and policy configuration.','Basic and Standard lack the full Premium TLS inspection and IDPS feature set.','Standard and Essentials differ from Enterprise Layer 7 inspection and IDPS.'],
  ['Operational caveat','Uninspected paths and asymmetric flows can bypass or disrupt stateful inspection.','Forced tunneling and return paths need deliberate route design.','TLS inspection has protocol exclusions, including HTTP/2 and QUIC.']],
+'Security posture and threat detection':[
+ ['Signal boundary','Security Hub aggregates findings; GuardDuty is only one detector and neither replaces prevention.','Defender coverage varies by enabled plan and does not remove the need for service-native controls.','SCC findings depend on enabled detectors, asset coverage and tier.'],
+ ['Noise','Standards and detectors require suppression, ownership and tuning.','Recommendations and alerts require prioritization and workflow ownership.','Findings require mute rules, ownership and validation to control noise.'],
+ ['Scope','Account, Region and delegated-administrator design can leave coverage gaps.','Subscription, tenant and connected-cloud scope can leave gaps.','Organization, folder/project and service activation can leave gaps.']],
+'Private service access':[
+ ['Transitivity','PrivateLink exposes a service, not general transitive network routing.','Private Link exposes a resource privately, not full VNet routing.','PSC exposes supported services, not arbitrary transitive connectivity.'],
+ ['DNS caveat','Private DNS names, endpoint policies and cross-account approvals need deliberate setup.','Private DNS zone links and split-horizon resolution are frequent failure points.','Private DNS records and producer/consumer project permissions require setup.'],
+ ['Cost/scale','Hourly endpoint and data processing charges plus endpoint quotas apply.','Endpoint, DNS and processed-data costs/limits vary by service.','Endpoint/service attachment quotas and data processing charges apply.']],
+'Organization governance':[
+ ['Permission boundary','SCPs constrain permissions but never grant them.','Policy constrains resources; RBAC still grants operator permissions.','Organization Policy constrains resources; IAM still grants access.'],
+ ['Inheritance','OU moves and policy inheritance can change effective permissions broadly.','Management-group hierarchy changes propagate policy and access effects.','Folder/project moves change inherited IAM and constraints.'],
+ ['Operational caveat','Landing-zone automation needs exception, drift and account-vending workflows.','Policy exemptions and remediation tasks need ownership.','Constraint exceptions and project provisioning need ownership.']],
+'Centralized backup':[
+ ['Coverage','Not every AWS service or feature is supported identically by AWS Backup.','Vault type and workload determine available backup features.','Supported workloads and regional availability vary.'],
+ ['Recovery proof','A successful backup job does not prove application-consistent recovery.','Protected recovery points still require restore testing.','Backup completion does not prove dependency-aware recovery.'],
+ ['Isolation','Vault lock, cross-account copies and recovery roles must be designed before compromise.','Immutability, soft delete and privileged operations need separation.','Retention locks, IAM and recovery access need separation.']],
+'Workload disaster recovery':[
+ ['RPO/RTO','Replication lag, launch time and dependencies determine achieved objectives.','Replication health, boot order and dependencies determine achieved objectives.','Objectives depend on each workload service and recovery design.'],
+ ['Failback','Failback requires planning and is not the inverse of one-click failover.','Reprotect and failback require supported topology and testing.','Failback is workload-specific and must be designed explicitly.'],
+ ['Dependency gap','DRS does not automatically recover every external dependency or data service.','Recovery plans do not guarantee application consistency for every dependency.','Backups alone do not recreate networking, identity, secrets or external integrations.']],
+'Container registry':[
+ ['Registry limit','Repository, image, pull and scan quotas can affect large fleets.','SKU controls storage, throughput, geo-replication and networking features.','Repository, request and scanning quotas apply by project/region.'],
+ ['Image trust','Scanning finds known issues; it does not prove an image is safe.','Scanning and signing require an enforced deployment policy to prevent risky pulls.','Vulnerability findings and provenance require Binary Authorization or equivalent enforcement.'],
+ ['Egress','Cross-region pulls can add latency and data-transfer cost.','Replication topology and cross-region pulls affect cost.','Repository location relative to runtime affects latency and egress.']],
+'CI/CD delivery':[
+ ['Product boundary','CodePipeline needs companion build/deploy services for execution.','Azure Pipelines is broader, but agent capacity and service connections still constrain jobs.','Cloud Build builds and deploys, while complex release promotion may need Cloud Deploy.'],
+ ['Runner risk','Build roles, third-party actions and artifacts are supply-chain trust boundaries.','Hosted/self-hosted agents and service connections are privileged boundaries.','Build service accounts, private pools and substitutions require least privilege.'],
+ ['Quota/cost','Concurrent actions, build minutes and artifact transfer affect throughput and cost.','Parallel jobs, agent capacity and retention affect throughput and cost.','Build concurrency, machine type, private pools and logs affect throughput and cost.']],
+'Managed in-memory caching':[
+ ['Durability','A cache is not the system of record; persistence options do not replace database backups.','Persistence and geo features depend on tier and are not a substitute for durable storage.','Persistence behavior varies by product and should not replace a durable database.'],
+ ['Compatibility','Valkey/Redis/Memcached features and versions differ.','Redis commands, modules and clustering features vary by tier.','Valkey and Redis products differ in commands, topology and migration path.'],
+ ['Failure behavior','Failover, resharding and maintenance can reset connections or expose stale data.','Maintenance and failover can cause connection interruption.','Maintenance, scaling and failover require client retry behavior.']],
+'Database migration':[
+ ['Engine support','Source/target combinations and CDC features are version-specific.','Online/offline support varies by engine and migration scenario.','Supported sources, targets and conversion paths are limited.'],
+ ['Schema gap','Heterogeneous migrations require explicit schema and code conversion.','DMS does not automatically resolve every schema or application incompatibility.','DMS does not convert all schema, extensions or application behavior.'],
+ ['Validation','Replication success does not prove data completeness or application correctness.','Cutover requires validation, connection updates and rollback planning.','Promotion requires validation, downtime control and rollback planning.']],
+'Bulk and online data migration':[
+ ['Bandwidth','Online transfer duration depends on usable throughput, change rate and small-file overhead.','Agent throughput and source/storage limits constrain migration windows.','Network capacity, quotas and source performance constrain online transfer.'],
+ ['Device lead time','Snow device availability, shipping and ingestion time affect deadlines.','Data Box ordering, shipping and ingestion add lead time.','Transfer Appliance availability, shipping and upload add lead time.'],
+ ['Cutover','Final deltas and source freeze still need orchestration.','Online/offline tools do not perform every application cutover step.','Transfer completion does not update applications or verify business consistency.']],
+'Distributed tracing':[
+ ['Sampling','Sampling can omit rare requests unless rules match the incident profile.','Sampling and adaptive collection can hide low-frequency failures.','Sampling can omit traces; rates must balance cost and diagnostic value.'],
+ ['Instrumentation gap','Uninstrumented hops break end-to-end trace context.','Unsupported libraries or missing propagation break dependency maps.','Missing context propagation creates partial traces.'],
+ ['Telemetry cost','Trace volume, retention and related logs/metrics contribute cost.','Application Insights ingestion and Log Analytics retention can be material.','Trace spans plus correlated logging and monitoring create ingestion cost.']],
 'Metrics and logs':[
  ['Quota/cost','High-cardinality custom metrics and log ingestion cost grow.','Workspace ingestion, retention and query volume add cost.','Metric cardinality and log ingestion/retention add cost.'],
  ['Collection','Not every application signal appears without instrumentation.','Diagnostic settings/agents are needed for many resource logs.','Agents and sinks are needed for selected workload logs.'],
