@@ -20,7 +20,10 @@ const overrides:Record<Vendor,Record<string,string[]>>={
 const specificIcons:Record<string,string>={
  'Cloud Run functions':'/assets/gcp-icons/legacy/cloud-functions.svg','Persistent Disk / Hyperdisk':'/assets/gcp-icons/legacy/persistent-disk.svg',
  'Google Cloud Batch':'/assets/gcp-icons/legacy/batch.svg','Cloud Audit Logs':'/assets/gcp-icons/legacy/cloud-audit-logs.svg',
- 'Vertex AI':'/assets/gcp-icons/core/vertex-ai.svg','Cloud NGFW':'/assets/gcp-icons/legacy/cloud-firewall-rules.svg'
+ 'Vertex AI':'/assets/gcp-icons/core/vertex-ai.svg','Cloud NGFW':'/assets/gcp-icons/legacy/cloud-firewall-rules.svg',
+ 'Resource Manager / Organization Policy':'/assets/gcp-icons/category/security-identity.svg',
+ 'Backup and DR Service':'/assets/gcp-icons/category/storage.svg',
+ 'Data Transfer Essentials / Transfer Appliance':'/assets/gcp-icons/legacy/data-transfer.svg'
 };
 export function serviceLinks(vendor:Vendor,display:string):Link[]{
  if(vendor==='gcp'&&display==='Vertex AI')return [{name:'Vertex AI',href:'https://cloud.google.com/vertex-ai/docs',icon:specificIcons['Vertex AI'],external:true}];
@@ -48,13 +51,19 @@ export function serviceLinks(vendor:Vendor,display:string):Link[]{
     'Azure Monitor':'azure-monitor.svg','Azure Resource Manager':'azure-resource-manager.svg',
     'Azure Resource Manager templates':'azure-resource-manager.svg',
     'Azure Cosmos DB':'azure-cosmos-db.svg','Azure Database for PostgreSQL':'azure-database-for-postgresql.svg',
+    'Microsoft Defender for Cloud':'microsoft-defender-for-cloud.svg','Azure Private Link':'azure-private-link.svg',
+    'Azure Backup':'azure-backup.svg','Azure Site Recovery':'azure-site-recovery.svg',
+    'Azure Container Registry':'azure-container-registry.svg','Azure Pipelines':'azure-pipelines.svg',
+    'Azure Cache for Redis':'azure-managed-redis.svg','Azure Database Migration Service':'azure-database-migration-service.svg',
+    'Azure Storage Mover':'azure-storage-mover.svg','Azure Data Box':'azure-data-box.svg',
   } as Record<string,string>)[name];
    return {name,href:`/azure-services?service=${service.slug}`,icon:icon?azureIconBase+icon:undefined};
   }
   if(name==='Firestore')return {name,href:'https://firebase.google.com/docs/firestore',icon:'/assets/gcp-icons/legacy/firestore.svg',external:true};
   const service=gcpServices.find(x=>normalize(x.displayName)===normalize(name));
   if(!service)return null;
-  const icon=specificIcons[display]||gcpIcons[service.slug]?.path;
-  return {name,href:`/gcp-services?service=${service.slug}`,icon:icon&&!gcpIcons[service.slug]?.fallback?icon:specificIcons[display]};
+  const mappedIcon=gcpIcons[service.slug];
+  const icon=specificIcons[name]||specificIcons[display]||mappedIcon?.path;
+  return {name,href:`/gcp-services?service=${service.slug}`,icon};
  }).filter(Boolean) as Link[];
 }
