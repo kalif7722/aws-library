@@ -44,6 +44,8 @@ export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
     return `${label} schedules and operates the containerized workload in this scenario, maintaining the requested replicas, service networking, rollout state, and recovery of failed application instances.`;
   if(has(context,/ec2|compute engine|virtual machine|azure vm|vm instance|instance group|virtual machines/))
     return `${label} provides the virtual-machine compute that hosts the application or worker shown here. The software on the instance handles the request or job while the platform supplies the configured CPU, memory, network, and lifecycle controls.`;
+  if(has(context,/systems manager|run command|session manager|patch manager/))
+    return `${label} provides the session access, remote command execution, and patch operations used to manage the compute resources in “${clean(input.architecture)}”.`;
   if(has(context,/s3|blob storage|cloud storage|data lake|file system|efs|fsx|managed disk|persistent disk|bucket|archive|object storage/))
     return `${label} durably stores ${sub.toLowerCase()} for this scenario. Authorized applications write or retrieve the required objects, files, or blocks according to its access, lifecycle, and resilience configuration.`;
   if(has(context,/rds|aurora|dynamodb|cosmos|sql database|cloud sql|spanner|bigtable|firestore|database|data store|system of record/))
@@ -65,8 +67,8 @@ export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
   if(has(context,/user|client|caller|producer|application users|internet users|business users|analyst|developer/))
     return `${label} represents the actor or application that initiates or consumes this scenario through ${sub.toLowerCase()}. Its request or event supplies the business context for the services shown in the architecture.`;
   if(input.position==="first")
-    return `${label} provides ${sub.toLowerCase()} at the start of the “${clean(input.architecture)}” scenario. This node represents the source, request, event, or configuration that initiates the example.`;
+    return `${label} provides ${sub.toLowerCase()} as the starting input for “${clean(input.architecture)}”.`;
   if(input.position==="last")
-    return `${label} represents ${sub.toLowerCase()} as the final consumer, stored outcome, operational evidence, or user-visible result in this scenario.`;
-  return `${label} is responsible for ${sub.toLowerCase()} within the ${clean(input.stage)} stage of this architecture. It applies that capability to the workload shown in the example.`;
+    return `${label} provides ${sub.toLowerCase()} as the final consumer or outcome of “${clean(input.architecture)}”.`;
+  return `${label} provides ${sub.toLowerCase()} within the ${clean(input.stage)} stage of “${clean(input.architecture)}”.`;
 }
