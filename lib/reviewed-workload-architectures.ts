@@ -5,6 +5,11 @@ import {reviewedMigrationArchitectures} from "./reviewed-migration-architectures
 import {reviewedTracingArchitectures} from "./reviewed-tracing-architectures";
 import {reviewedPrivateAccessArchitectures} from "./reviewed-private-access-architectures";
 import {reviewedCacheArchitectures} from "./reviewed-cache-architectures";
+import {reviewedSecretsArchitectures} from "./reviewed-secrets-architectures";
+import {reviewedContainerArchitectures} from "./reviewed-container-architectures";
+import {reviewedIdentityArchitectures} from "./reviewed-identity-architectures";
+import {reviewedReleaseArchitectures} from "./reviewed-release-architectures";
+import {reviewedDatabaseArchitectures} from "./reviewed-database-architectures";
 export type ReviewedNode={label:string;sub:string;detail:string;kind?:"user"|"app"|"data"|"security"|"storage"|"message";icon?:string};
 export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[]};
 const n=(label:string,sub:string,detail:string,kind?:ReviewedNode["kind"],icon?:string):ReviewedNode=>({label,sub,detail,kind,icon});
@@ -85,6 +90,11 @@ export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>
  ...reviewedTracingArchitectures,
  ...reviewedPrivateAccessArchitectures,
  ...reviewedCacheArchitectures,
+ ...reviewedSecretsArchitectures,
+ ...reviewedContainerArchitectures,
+ ...reviewedIdentityArchitectures,
+ ...reviewedReleaseArchitectures,
+ ...reviewedDatabaseArchitectures,
  "AWS Lambda":[awsImages,awsApi,awsQueue],
  "Amazon S3":[awsImages,awsQueue],
  "Amazon SQS":[awsQueue],

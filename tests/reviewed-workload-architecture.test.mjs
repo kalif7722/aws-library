@@ -36,7 +36,7 @@ test('tracing workflows keep application responsibilities separate from export',
 });
 
 test('every reviewed node resolves to authored copy for its exact architecture',()=>{
- assert.equal(unique.length,41);
+ assert.equal(unique.length,67);
  for(const arch of unique){
   const labels=new Set();
   for(const layer of arch.layers)for(const node of layer.nodes){
@@ -76,11 +76,49 @@ test('WAF is attached to the ingress layer, not an application backend',()=>{
  }
 });
 test('GCP adapter preserves architecture keys and every node description',()=>{
- for(const service of ['Cloud Run','Cloud Storage','Pub/Sub','Cloud Armor','Cloud Load Balancing','Cloud CDN','Cloud DNS']){
+ for(const service of Object.keys(registry)){
   const boards=reviewedGcpBoards(service);
   assert.equal(boards.length,registry[service].length);
   for(const board of boards)for(const group of board.groups)for(const card of group.cards){
    assert.equal(describe({label:card.label,sub:card.caption,architecture:board.title}),card.detail);
   }
  }
+});
+
+test('envelope encryption keeps bulk encryption local and wrapped keys durable',()=>{
+ const aws=registry['AWS KMS'][0],gcp=registry['Cloud KMS'][0];
+ assert.match(lookup(aws.title,'AWS KMS'),/plaintext data key and an encrypted copy/);
+ assert.match(lookup(aws.title,'Encrypted export object'),/plaintext data key is not written/);
+ assert.match(lookup(gcp.title,'Cloud KMS'),/wraps the small key material/);
+ assert.match(lookup(gcp.title,'Archive object store'),/discards its plaintext key/);
+});
+test('secret version creation and credential rotation are distinct operations',()=>{
+ const aws=registry['AWS Secrets Manager'][0],azure=registry['Azure Key Vault'][0],gcp=registry['Secret Manager'][0];
+ assert.match(lookup(aws.title,'Credential rotation owner'),/does not change the database password/);
+ assert.match(lookup(azure.title,'Payment credential owner'),/provider-supported credential change/);
+ assert.match(lookup(gcp.title,'Secret release owner'),/notification alone does not rotate/);
+});
+test('container pull identities remain distinct from workload data permissions',()=>{
+ const ecs=registry['Amazon ECS'][0],eks=registry['Amazon EKS'][0],aks=registry['Azure Kubernetes Service (AKS)'][0];
+ assert.match(lookup(ecs.title,'AWS Fargate'),/task execution role/);
+ assert.match(lookup(ecs.title,'AWS Fargate'),/task role/);
+ assert.match(lookup(eks.title,'Amazon ECR worker image'),/node role/);
+ assert.match(lookup(eks.title,'EKS Pod Identity'),/temporary role credentials/);
+ assert.match(lookup(aks.title,'Azure Container Registry'),/authorization mode/);
+});
+test('customer tokens authorize application identity rather than cloud IAM',()=>{
+ const flow=registry['Identity Platform'][0];
+ assert.match(lookup(flow.title,'Booking token verifier'),/not automatically a Cloud Run IAM invocation token/);
+ assert.match(lookup(flow.title,'Booking application'),/checks ownership/);
+ const entra=registry['Microsoft Entra ID (formerly Azure AD)'][0];
+ assert.match(lookup(entra.title,'Support API token validator'),/signature.*audience.*lifetime/);
+ assert.match(lookup(entra.title,'Ticket application handler'),/another employee's ticket/);
+});
+test('database examples distinguish standby, read routing and transaction retries',()=>{
+ const rds=registry['Amazon RDS'][0],aurora=registry['Amazon Aurora'][0],spanner=registry['Spanner'][0];
+ assert.match(lookup(rds.title,'Multi-AZ single standby'),/not a read-scaling endpoint/);
+ const branches=aurora.layers.find(l=>l.nodes.some(n=>n.label==='Aurora writer endpoint'));
+ assert.ok(branches.nodes.some(n=>n.label==='Aurora reader endpoint'));
+ assert.match(lookup(aurora.title,'Aurora reader endpoint'),/connection balancing rather than per-query/);
+ assert.match(lookup(spanner.title,'Booking transaction function'),/no external payment or notification call/);
 });

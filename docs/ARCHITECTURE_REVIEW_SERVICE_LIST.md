@@ -2,36 +2,51 @@
 
 Completed means the currently selected explicit replacement workflows were reviewed, not every historical diagram or possible workload. Pending means node-by-node semantic review is still required even where diagrams already exist. Counts deduplicate catalog services and exclude registry-only aliases.
 
-## AWS: 26 completed, 295 pending
+## AWS: 41 completed, 280 pending
 
 ### Completed
 
 - AWS Backup
 - AWS Budgets
 - AWS CloudTrail
+- AWS CodeBuild
+- AWS CodeDeploy
+- AWS CodePipeline
 - AWS Config
 - AWS Cost Explorer
 - AWS Database Migration Service
 - AWS Elastic Disaster Recovery
+- AWS Fargate
+- AWS IAM
+- AWS IAM Identity Center
+- AWS KMS
 - AWS Lambda
 - AWS Network Firewall
 - AWS Organizations
 - AWS PrivateLink
+- AWS Secrets Manager
 - AWS Security Hub
+- AWS Security Token Service
 - AWS Step Functions
 - AWS WAF
 - AWS X-Ray
 - Amazon API Gateway
+- Amazon Aurora
 - Amazon CloudFront
 - Amazon DynamoDB
+- Amazon ECR
+- Amazon ECS
+- Amazon EKS
 - Amazon ElastiCache
 - Amazon EventBridge
 - Amazon GuardDuty
+- Amazon RDS
 - Amazon Route 53
 - Amazon S3
 - Amazon SNS
 - Amazon SQS
 - Elastic Load Balancing
+- IAM Access Analyzer
 
 ### Pending
 
@@ -65,11 +80,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS CloudShell
 - AWS CloudTrail Lake
 - AWS CodeArtifact
-- AWS CodeBuild
 - AWS CodeCommit
 - AWS CodeConnections
-- AWS CodeDeploy
-- AWS CodePipeline
 - AWS CodeStar (Legacy)
 - AWS Compute Optimizer
 - AWS Console Mobile Application
@@ -92,7 +104,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Elemental MediaPackage
 - AWS Elemental MediaTailor
 - AWS Entity Resolution
-- AWS Fargate
 - AWS Fault Injection Service
 - AWS Firewall Manager
 - AWS Global Accelerator
@@ -104,8 +115,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Health Dashboard
 - AWS HealthLake
 - AWS HealthScribe
-- AWS IAM
-- AWS IAM Identity Center
 - AWS Infrastructure Composer
 - AWS IoT 1-Click
 - AWS IoT Core
@@ -118,7 +127,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS IoT SiteWise
 - AWS IoT Things Graph
 - AWS IoT TwinMaker
-- AWS KMS
 - AWS Lake Formation
 - AWS Lambda@Edge
 - AWS Launch Wizard
@@ -145,9 +153,7 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Resource Groups
 - AWS SAM
 - AWS Schema Conversion Tool
-- AWS Secrets Manager
 - AWS Security Agent
-- AWS Security Token Service
 - AWS Serverless Application Repository
 - AWS Service Catalog
 - AWS Service Management / AppRegistry
@@ -178,7 +184,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Application Recovery Controller
 - Amazon Athena
 - Amazon Augmented AI
-- Amazon Aurora
 - Amazon Aurora DSQL
 - Amazon Aurora Serverless
 - Amazon Aurora Serverless v2
@@ -211,11 +216,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon EC2 Auto Scaling
 - Amazon EC2 Image Builder
 - Amazon EC2 security groups
-- Amazon ECR
-- Amazon ECS
 - Amazon ECS Anywhere
 - Amazon EFS
-- Amazon EKS
 - Amazon EKS Anywhere
 - Amazon EKS Distro
 - Amazon EMR
@@ -270,7 +272,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Q Developer in chat applications
 - Amazon Quick
 - Amazon Quick Sight
-- Amazon RDS
 - Amazon RDS Proxy
 - Amazon Redshift
 - Amazon Redshift Serverless
@@ -312,7 +313,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Egress-only internet gateways
 - Elastic IP Addresses
 - FreeRTOS
-- IAM Access Analyzer
 - Integrated Private Wireless on AWS
 - Internet gateways
 - Kiro
@@ -331,27 +331,38 @@ Completed means the currently selected explicit replacement workflows were revie
 - VPC Reachability Analyzer
 - VPC peering
 
-## Azure: 19 completed, 184 pending
+## Azure: 30 completed, 173 pending
 
 ### Completed
 
 - API Management
+- App Service
 - Azure Application Gateway
 - Azure Backup
 - Azure Blob Storage
+- Azure Container Apps
+- Azure Container Instances
+- Azure Container Registry
 - Azure Cosmos DB
 - Azure DNS
 - Azure Database Migration Service
+- Azure DevOps
 - Azure Front Door
 - Azure Functions
+- Azure Key Vault
+- Azure Kubernetes Service (AKS)
 - Azure Managed Redis
 - Azure Monitor
+- Azure Pipelines
 - Azure Policy
 - Azure Private Link
+- Azure SQL Database
 - Azure Site Recovery
 - Azure Web Application Firewall
 - Logic Apps
 - Microsoft Defender for Cloud
+- Microsoft Entra External ID
+- Microsoft Entra ID (formerly Azure AD)
 - Microsoft Sentinel
 - Service Bus
 
@@ -359,7 +370,6 @@ Completed means the currently selected explicit replacement workflows were revie
 
 - AI Anomaly Detector
 - App Configuration
-- App Service
 - Archive Storage
 - Artifact Signing
 - Automation
@@ -384,9 +394,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Communication Services
 - Azure Compute Fleet
 - Azure Confidential Ledger
-- Azure Container Apps
-- Azure Container Instances
-- Azure Container Registry
 - Azure Container Storage
 - Azure Content Delivery Network
 - Azure Content Understanding in Foundry Tools
@@ -405,7 +412,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Databricks
 - Azure Dedicated Host
 - Azure Deployment Environments
-- Azure DevOps
 - Azure DevTest Labs
 - Azure Digital Twins
 - Azure Disk Storage
@@ -422,9 +428,7 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure IoT Edge
 - Azure IoT Hub
 - Azure IoT Operations
-- Azure Key Vault
 - Azure Kubernetes Fleet Manager
-- Azure Kubernetes Service (AKS)
 - Azure Lab Services
 - Azure Language in Foundry Tools
 - Azure Lighthouse
@@ -446,7 +450,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure OpenAI in Foundry Models
 - Azure Operator Nexus
 - Azure Operator Service Manager
-- Azure Pipelines
 - Azure Quantum
 - Azure Red Hat OpenShift
 - Azure Repos
@@ -454,7 +457,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Resource Manager templates
 - Azure Resource Mover
 - Azure Route Server
-- Azure SQL Database
 - Azure SQL Managed Instance
 - Azure SRE Agent
 - Azure Service Fabric
@@ -512,8 +514,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Microsoft Dev Box
 - Microsoft Energy Data Services
 - Microsoft Entra Domain Services
-- Microsoft Entra External ID
-- Microsoft Entra ID (formerly Azure AD)
 - Microsoft Entra Verified ID
 - Microsoft Fabric
 - Microsoft Foundry
@@ -542,24 +542,34 @@ Completed means the currently selected explicit replacement workflows were revie
 - Windows Server
 - Windows for IoT
 
-## GCP: 15 completed, 162 pending
+## GCP: 25 completed, 152 pending
 
 ### Completed
 
 - API Gateway
+- Artifact Registry
 - Backup and DR Service
 - Cloud Armor
+- Cloud Build
 - Cloud CDN
 - Cloud DNS
+- Cloud Deploy
+- Cloud KMS
 - Cloud Load Balancing
 - Cloud Run
 - Cloud SQL
 - Cloud Storage
 - Database Migration Service
 - Eventarc
+- Google Kubernetes Engine (GKE)
+- Identity Platform
+- Identity and Access Management (IAM)
+- Identity-Aware Proxy
 - Memorystore for Redis Cluster
 - Pub/Sub
+- Secret Manager
 - Security Command Center
+- Spanner
 - Trace
 
 ### Pending
@@ -580,7 +590,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - App Hub
 - Application Integration
 - Artifact Analysis
-- Artifact Registry
 - Assured OSS
 - Assured Workloads
 - Audit Manager
@@ -597,16 +606,13 @@ Completed means the currently selected explicit replacement workflows were revie
 - Chrome Enterprise Premium
 - Cloud Asset Inventory
 - Cloud Billing
-- Cloud Build
 - Cloud Code
 - Cloud Data Fusion
-- Cloud Deploy
 - Cloud Domains
 - Cloud Hub
 - Cloud IDS
 - Cloud Identity
 - Cloud Interconnect
-- Cloud KMS
 - Cloud Location Finder
 - Cloud Marketplace
 - Cloud NAT
@@ -651,12 +657,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Fraud Defense
 - GKE Multi-Cloud
 - Gemini Enterprise Agent Platform
-- Google Kubernetes Engine (GKE)
 - Google SecOps
 - Healthcare Data Engine
-- Identity Platform
-- Identity and Access Management (IAM)
-- Identity-Aware Proxy
 - Infra Manager
 - Integration Connectors
 - Knowledge Catalog
@@ -689,7 +691,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Profiler
 - Recommender
 - Resource Manager
-- Secret Manager
 - Secure Access Connect
 - Secure Source Manager
 - Secure Web Proxy
@@ -703,7 +704,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Shielded VMs
 - Software supply chain security
 - Sovereign Controls by Partners
-- Spanner
 - Spectrum Access System
 - Speech-to-Text
 - Talent Solutions
