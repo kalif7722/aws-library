@@ -45,59 +45,33 @@ function groupServices(services: GcpService[]) {
   return [...map.entries()].map(([title, items]) => ({ title, services: items }));
 }
 
-const gcpBadgeTitles: Record<string, string> = {
-  PCA: "Cloud Architect",
-  PCD: "Cloud Developer",
-  PDE: "Data Engineer",
-  PCDE: "Cloud Database Engineer",
-  PMLE: "Machine Learning Engineer",
-  PCSE: "Cloud Security Engineer",
-  PCDOE: "Cloud DevOps Engineer",
-  PCNE: "Cloud Network Engineer",
-  PAA: "Agentic AI Architect",
-  PSOE: "Security Operations Engineer",
-  ACE: "Cloud Engineer",
-  ADP: "Data Practitioner",
-  AGWA: "Workspace Administrator",
-  GAL: "Generative AI Leader",
-  CDL: "Cloud Digital Leader",
+const gcpCertificationBadgeFiles: Record<string, string> = {
+  PCA: "Cloud Architect.png",
+  PCD: "Cloud Developer.png",
+  PDE: "Data Engineer.png",
+  PCDE: "Cloud Database Engineer.png",
+  PMLE: "Machine Learning Engineer.png",
+  PCSE: "Cloud Security Engineer.png",
+  PCDOE: "Cloud DevOps Engineer.png",
+  PCNE: "Cloud Network Engineer.png",
+  PSOE: "Security Operations Engineer.webp",
+  ACE: "Cloud Engineer.png",
+  ADP: "Data Practitioner.png",
+  AGWA: "Workspace Administrator.png",
+  GAL: "GenAI Leader.png",
+  CDL: "Cloud Digital Leader.png",
 };
 
-function GcpCourseBadge({ course }: { course: GcpCourse }) {
-  const pathId = `gcp-badge-${course.code.toLowerCase().replace(/[^a-z0-9]/g, "")}`;
-  const badgeTitle = gcpBadgeTitles[course.code] || course.title.replace(/^(Professional|Associate)\s+/, "");
+const gcpBadgeBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/gcp-certification-badges";
 
-  return <svg className="gcp-course-badge" viewBox="0 0 160 160" role="img" aria-label={`${course.title} Google Cloud certification badge`}>
-    <defs>
-      <path id={`${pathId}-top`} d="M 25 78 A 55 55 0 0 1 135 78" />
-      <path id={`${pathId}-bottom`} d="M 20 91 A 62 62 0 0 0 140 91" />
-      <linearGradient id={`${pathId}-ring`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#f8d46a" />
-        <stop offset=".48" stopColor="#b97912" />
-        <stop offset="1" stopColor="#ffe59a" />
-      </linearGradient>
-    </defs>
-    <circle className="gcp-badge-shadow" cx="80" cy="80" r="72" />
-    <circle className="gcp-badge-face" cx="80" cy="80" r="69" />
-    <circle className="gcp-badge-edge" cx="80" cy="80" r="63" />
-    <text className="gcp-badge-title">
-      <textPath href={`#${pathId}-top`} startOffset="50%" textAnchor="middle">{badgeTitle}</textPath>
-    </text>
-    <text className="gcp-badge-caption">
-      <textPath href={`#${pathId}-bottom`} startOffset="50%" textAnchor="middle">GOOGLE CLOUD CERTIFIED · {course.level.toUpperCase()}</textPath>
-    </text>
-    <circle className="gcp-badge-ring" cx="80" cy="81" r="31" stroke={`url(#${pathId}-ring)`} />
-    <image
-      className="gcp-badge-cloud"
-      href="/assets/gcp-icons/legacy/cloud-generic.svg"
-      x="57"
-      y="58"
-      width="46"
-      height="46"
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-    />
-  </svg>;
+function GcpCourseBadge({ course }: { course: GcpCourse }) {
+  const filename = gcpCertificationBadgeFiles[course.code];
+  if (!filename) return null;
+  return <img
+    className="gcp-course-badge"
+    src={`${gcpBadgeBase}/${encodeURIComponent(filename)}`}
+    alt={`${course.title} certification badge`}
+  />;
 }
 
 export default function GcpCertificationCourse({ course }: { course: GcpCourse }) {
