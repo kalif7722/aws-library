@@ -7,5 +7,7 @@ let catalog;
 function walk(n){if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='services')catalog=new Function('return ('+n.initializer.getText(ast)+')')();ts.forEachChild(n,walk)}walk(ast);
 const seen=new Set(observedAwsConsoleStems),names=[...new Set(catalog.map(s=>s.name))].sort();
 const mappings=names.map(service=>({service,path:awsConsolePath(service),alternatives:awsConsoleStems(service),evidence:seen.has(awsConsoleStems(service)[0])?'filename shown in supplied screenshots':'convention or historical alias; object existence unverified'}));
-fs.writeFileSync('docs/AWS_CONSOLE_WALKTHROUGH_MAPPING.json',JSON.stringify({prefix:'/aws-certification-walkthroughs/',services:mappings,observedFilenames:[...seen].map(s=>s+'.webp')},null,2)+'\n');
+const azureFiles=['azure-confidential-ledger','azure-data-factory','azure-horizondb','azure-managed-instance-apache-cassandra','azure-table-storage'];
+const uploadedObjects=[...seen,...azureFiles].sort().map(stem=>({filename:stem+'.webp',path:'/aws-certification-walkthroughs/'+stem+'.webp',provider:stem.startsWith('azure-')?'azure':'aws',catalogServices:mappings.filter(m=>m.alternatives.includes(stem)).map(m=>m.service)}));
+fs.writeFileSync('docs/AWS_CONSOLE_WALKTHROUGH_MAPPING.json',JSON.stringify({prefix:'/aws-certification-walkthroughs/',services:mappings,observedFilenames:[...seen].map(s=>s+'.webp'),uploadedObjects,unverifiedServices:mappings.filter(m=>!m.evidence.startsWith('filename')).map(m=>m.service)},null,2)+'\n');
 console.log(JSON.stringify({services:names.length,observedFilenames:seen.size,primaryNamesConfirmed:mappings.filter(m=>m.evidence.startsWith('filename')).length}));

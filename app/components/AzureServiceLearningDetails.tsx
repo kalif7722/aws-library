@@ -979,12 +979,29 @@ export const azureWalkthroughUrls=(service:string,courseCode?:string,category?:s
     : [];
   const commonBases=categoryFolder?[`/azure-certification-walkthroughs/common/${categoryFolder}`]:[];
   const legacyBases=["/azure-certification-walkthroughs/common", "/azure-certification-walkthroughs"];
+  // These five portal walkthroughs were uploaded under the AWS root prefix.
+  // Keep this exact allowlist so other Azure services never use unrelated AWS images.
+  const misplacedRootFiles:Record<string,string>={
+    "azure confidential ledger":"azure-confidential-ledger",
+    "confidential ledger":"azure-confidential-ledger",
+    "azure data factory":"azure-data-factory",
+    "data factory":"azure-data-factory",
+    "azure horizondb":"azure-horizondb",
+    "horizondb":"azure-horizondb",
+    "azure managed instance for apache cassandra":"azure-managed-instance-apache-cassandra",
+    "azure managed instance apache cassandra":"azure-managed-instance-apache-cassandra",
+    "managed instance for apache cassandra":"azure-managed-instance-apache-cassandra",
+    "azure table storage":"azure-table-storage",
+    "table storage":"azure-table-storage"
+  };
+  const misplaced=misplacedRootFiles[normalizeAzureLabel(service)];
   const bases=[...scopedBases,...commonBases,...legacyBases];
-  return bases.flatMap(base=>filenames.map(filename=>{
-    const path=base+"/"+filename;
+  const uploadedRootPaths=misplaced?[`/aws-certification-walkthroughs/${misplaced}.webp`]:[];
+  const normalPaths=bases.flatMap(base=>filenames.map(filename=>base+"/"+filename));
+  return [...uploadedRootPaths,...normalPaths].map(path=>{
     const configured=assetUrl(path);
     return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured;
-  }));
+  });
 };
 
 const azureIconUrl=(file:string)=>{const path="/azure-icons/"+file;const configured=assetUrl(path);return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured};
