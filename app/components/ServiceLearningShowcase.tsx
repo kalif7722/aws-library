@@ -27,7 +27,7 @@ function WalkthroughCard({architecture,index}:{architecture:WalkArchitecture;ind
     <div className="service-walk-heading"><b>{index}</b><div><span>ARCHITECTURE WALK-THROUGH</span><h4>{architecture.title}</h4></div></div>
     <p>{architecture.note}</p>
     <div className="service-walk-flow" aria-label={`${architecture.title} flow`}>
-      {layers.map((layer,i)=><div className="service-walk-step" key={`${layer.title}-${i}`} tabIndex={0} data-architecture-detail={`Stage role: ${layer.nodes.slice(0,3).map(node => `${node.label}${node.sub ? ` — ${node.sub}` : ""}`).join("; ")}`} aria-label={`${layer.title}. ${layer.nodes.slice(0,3).map(node => `${node.label}${node.sub ? `. ${node.sub}` : ""}`).join(". ")}`}>
+      {layers.map((layer,i)=><div className="service-walk-step" key={`${layer.title}-${i}`} tabIndex={0} data-architecture-detail={`${layer.title} ${i === 0 ? "starts the flow" : `receives input from ${layers[i-1].title}`}. ${layer.nodes.slice(0,3).map(node => `${node.label} ${node.sub ? `handles ${node.sub.toLowerCase()}` : "performs this stage’s work"}`).join("; ")}${i < layers.length-1 ? `. The resulting request or data moves next to ${layers[i+1].title}.` : ". This produces the final outcome of the flow."}`} aria-label={`${layer.title}. ${layer.nodes.slice(0,3).map(node => `${node.label}${node.sub ? `. ${node.sub}` : ""}`).join(". ")}`}>
         <strong>{layer.title}</strong>
         <small>{layer.nodes.slice(0,3).map(n=>n.label).join(" • ")}</small>
         {i<layers.length-1&&<i aria-hidden="true">→</i>}
