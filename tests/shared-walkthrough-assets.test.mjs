@@ -21,3 +21,20 @@ test('alternate format candidates preserve the same service identity',()=>{
  assert.ok(urls.some(url=>url.endsWith('/aws-config.webp')));assert.ok(urls.some(url=>url.endsWith('/aws-config.png')));
  assert.ok(urls.every(url=>!url.includes('undefined')));
 });
+test('screenshot-confirmed naming differences select their exact root object keys',()=>{
+ const expected={'AWS App Runner':'amazon-app-runner','AWS HealthLake':'amazon-healthlake','Amazon FSx for NetApp ONTAP':'amazon-fsx-for-netapp','Amazon EC2 Auto Scaling':'amazon-ec2-auto-scaling','Amazon Quick':'amazon-quick-sight','Amazon Managed Workflows for Apache Airflow':'amazon-mwaa'};
+ for(const [service,stem] of Object.entries(expected))assert.equal(path(service),`/aws-certification-walkthroughs/${stem}.webp`);
+ const msk=candidates('Amazon Managed Streaming for Apache Kafka');
+ assert.ok(msk.some(src=>src.endsWith('/amazon-msk.webp')));
+});
+test('all 321 catalog services map to root service assets without task-folder leakage',()=>{
+ const inventory=JSON.parse(fs.readFileSync(new URL('../docs/AWS_CONSOLE_WALKTHROUGH_MAPPING.json',import.meta.url),'utf8'));
+ assert.equal(inventory.services.length,321);
+ for(const {service,path:expected} of inventory.services){
+  assert.equal(path(service),expected);
+  for(const url of candidates(service)){assert.doesNotMatch(url,/tasks\/|task-\d/);assert.doesNotMatch(url,/undefined|\.\.\//);}
+ }
+});
+test('renamed services retain their original same-service filename as fallback',()=>{
+ for(const [service,old] of [['AWS App Runner','aws-app-runner'],['AWS HealthLake','aws-healthlake'],['Amazon FSx for NetApp ONTAP','amazon-fsx-for-netapp-ontap']])assert.ok(candidates(service).some(url=>url.endsWith('/'+old+'.webp')));
+});

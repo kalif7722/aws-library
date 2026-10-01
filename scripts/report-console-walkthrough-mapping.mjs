@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import ts from 'typescript';
+import {loadArchitectureModule} from '../tests/load-architecture-module.mjs';
+const {awsConsolePath,observedAwsConsoleStems,awsConsoleStems}=loadArchitectureModule(new URL('../lib/aws-console-walkthrough-assets.ts',import.meta.url));
+const ast=ts.createSourceFile('services',fs.readFileSync('app/services/page.tsx','utf8'),ts.ScriptTarget.Latest,true);
+let catalog;
+function walk(n){if(ts.isVariableDeclaration(n)&&n.name.getText(ast)==='services')catalog=new Function('return ('+n.initializer.getText(ast)+')')();ts.forEachChild(n,walk)}walk(ast);
+const seen=new Set(observedAwsConsoleStems),names=[...new Set(catalog.map(s=>s.name))].sort();
+const mappings=names.map(service=>({service,path:awsConsolePath(service),alternatives:awsConsoleStems(service),evidence:seen.has(awsConsoleStems(service)[0])?'filename shown in supplied screenshots':'convention or historical alias; object existence unverified'}));
+fs.writeFileSync('docs/AWS_CONSOLE_WALKTHROUGH_MAPPING.json',JSON.stringify({prefix:'/aws-certification-walkthroughs/',services:mappings,observedFilenames:[...seen].map(s=>s+'.webp')},null,2)+'\n');
+console.log(JSON.stringify({services:names.length,observedFilenames:seen.size,primaryNamesConfirmed:mappings.filter(m=>m.evidence.startsWith('filename')).length}));
