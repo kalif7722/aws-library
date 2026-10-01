@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { assetUrl } from "../../lib/asset-url";
 import "../components/AzureLibrary.css";
-import AzureServiceLearningDetails from "../components/AzureServiceLearningDetails";
+import AzureServiceLearningDetails, { azureServiceSummary } from "../components/AzureServiceLearningDetails";
 import { azureAssetPaths, azureBranches, azureUniqueServices, type AzureService } from "../azure-data";
 
 const ready = (service: AzureService) => service.status.toLowerCase().startsWith("completed");
@@ -26,7 +26,7 @@ export default function AzureServicesPage() {
   const [expanded, setExpanded] = useState(false);
   const [menuCollapsed, setMenuCollapsed] = useState(false);
   const [visualVisible, setVisualVisible] = useState(true);
-  const [openBranch, setOpenBranch] = useState<{ index: number; top: number } | null>(null);
+  const [openedBranches, setOpenedBranches] = useState<number[]>([0]);
 
   const selected = azureUniqueServices.find((service) => service.slug === selectedSlug) || azureUniqueServices[0];
   const branch = azureBranches[selectedBranchIndex] || azureBranches[0];
@@ -75,7 +75,7 @@ export default function AzureServicesPage() {
     setSelectedBranchIndex(branchIndex);
     setQuery("");
     setExpanded(false);
-    setOpenBranch(null);
+    setOpenedBranches((current) => current.includes(branchIndex) ? current : [...current, branchIndex]);
   };
 
   const chooseSearchResult = (entry: SearchEntry) => choose(entry.service, entry.branchIndex);
@@ -90,13 +90,7 @@ export default function AzureServicesPage() {
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
         <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
         {!menuCollapsed && <>
-          <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => <div className="azure-branch-menu-item" key={item.title} onMouseEnter={(event) => { const maxHeight = Math.min(window.innerHeight * .76, 680); const rowTop = event.currentTarget.getBoundingClientRect().top; setOpenBranch({ index: branchIndex, top: Math.max(12, Math.min(rowTop, window.innerHeight - maxHeight - 12)) }); }} onFocus={() => setOpenBranch((current) => current || { index: branchIndex, top: 96 })}>
-            <button type="button" className="azure-branch-trigger" onClick={() => choose(item.services[0], branchIndex)} aria-haspopup="true"><span>{item.title}</span><small>{item.services.length}</small></button>
-          </div>)}</div>
-          {openBranch && <div className="azure-branch-popover" style={{ top: openBranch.top }} role="menu" onMouseLeave={() => setOpenBranch(null)}>
-            <div className="azure-dropdown-title">{azureBranches[openBranch.index]?.title}</div>
-            {azureBranches[openBranch.index]?.services.map((service) => <button type="button" role="menuitem" key={azureBranches[openBranch.index].title + "-" + service.slug} onClick={() => choose(service, openBranch.index)}><span>{service.name}</span><small>{ready(service) ? "Visual available" : "Visual pending"}</small></button>)}
-          </div>}
+          <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => { const expanded = openedBranches.includes(branchIndex); return <section className="azure-branch-menu-item" key={item.title}><button type="button" className="azure-branch-trigger" aria-expanded={expanded} aria-controls={`azure-branch-${branchIndex}`} onClick={() => setOpenedBranches((current) => current.includes(branchIndex) ? current.filter((index) => index !== branchIndex) : [...current, branchIndex])}><span>{expanded ? "⌄" : "›"} {item.title}</span><small>{item.services.length}</small></button>{expanded && <div className="azure-inline-services" id={`azure-branch-${branchIndex}`}>{item.services.map((service) => <button className={service.slug === selectedSlug ? "selected" : ""} type="button" aria-current={service.slug === selectedSlug ? "page" : undefined} key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><strong>{service.name}</strong><span>{azureServiceSummary(service.name)}</span></button>)}</div>}</section>; })}</div>
         </>}
       </aside>
 

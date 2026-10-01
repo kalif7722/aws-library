@@ -38,6 +38,10 @@ export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
     return `${label} protects and supplies the keys, certificates, or secrets required by authorized services in this scenario, including encryption, TLS, credential retrieval, and rotation operations.`;
   if(has(context,/cloud run|app runner|azure container apps|container app|serverless backend/))
     return `${label} runs the containerized application backend for this scenario. It receives an HTTP request or event, starts or scales instances as needed, executes the application code, and returns or persists the application's result.`;
+  if(has(context,/strands agents|bedrock agents|vertex ai agent|agent engine|agent runtime|managed agent|ai agent/))
+    return `${label} runs the agent loop for this workflow: it receives the user's goal, invokes the configured model, selects approved tools or knowledge sources, and returns the grounded response or business action produced by those calls.`;
+  if(has(context,/bedrock|vertex ai|azure openai|model endpoint|foundation model|model inference|generative ai/))
+    return `${label} performs the model inference requested by the application in this workflow, using the supplied prompt and context to generate the response that the calling service validates and returns.`;
   if(has(context,/lambda|cloud functions|azure functions|function app|serverless function/))
     return `${label} runs the event-driven function used in this scenario. The configured trigger invokes the code, which performs the application task and returns or stores the result defined by that function.`;
   if(has(context,/gke|eks|aks|kubernetes|container backend|container cluster/))
@@ -60,15 +64,35 @@ export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
     return `${label} coordinates the sequence, state, retries, and failure paths between ${previous} and ${next}. The participating services perform the work; this node controls when each step runs.`;
   if(has(context,/nat gateway|internet gateway|transit gateway|virtual network gateway|vpn gateway|cloud router|interconnect|expressroute|direct connect|private link|privatelink|private service connect/))
     return `${label} provides the configured network path between ${previous} and ${next}, applying the service's routing, address-translation, advertisement, or private-connectivity behavior.`;
+  if(has(context,/vpc|virtual network|subnet|network segment|security group|network acl/))
+    return `${label} defines the isolated network boundary used by this workload, including its address range, subnets, routes, and traffic controls for the resources placed inside it.`;
+  if(has(context,/organizations|management group|folder|landing zone|control tower|resource hierarchy/))
+    return `${label} establishes the account, subscription, or project hierarchy for this design and applies inherited governance controls to the workloads placed beneath that scope.`;
+  if(has(context,/codepipeline|cloud build|azure devops|github actions|ci\/cd|build|deploy|release pipeline/))
+    return `${label} builds, validates, and promotes the versioned application artifact through this delivery workflow, stopping or rolling back when a configured quality or deployment check fails.`;
+  if(has(context,/migration service|database migration|migration hub|transfer appliance|datasync|storage transfer/))
+    return `${label} copies the selected source data into the target service, tracks transfer progress, and supports validation or incremental synchronization before the workload is cut over.`;
+  if(has(context,/open search|opensearch|elasticsearch|search index|vector search/))
+    return `${label} indexes the records produced by this workflow and serves low-latency text, filter, or vector queries over that index to the consuming application.`;
   if(has(context,/athena|bigquery|synapse|redshift|data warehouse|analytics|query engine/))
     return `${label} runs the query or analytical operation required in this scenario against the referenced datasets, applying its execution, scaling, and result-delivery model.`;
   if(has(context,/glue|dataflow|data factory|dataproc|emr|spark|etl|transform|processing/))
     return `${label} performs the ${sub.toLowerCase()} step shown in this scenario, reading the required source records, applying the configured processing logic, and writing the defined output.`;
+  if(has(context,/ecr|artifact registry|container registry|image registry/))
+    return `${label} stores the versioned container image used by the runtime in this workflow. The deployment pulls the approved image digest from this registry before starting application instances.`;
+  if(has(context,/redis|elasticache|memorystore|cache/))
+    return `${label} serves frequently requested application data from memory so the workload can avoid repeated database or API reads. The application refreshes or invalidates entries according to its cache policy.`;
+  if(has(context,/policy engine|guardrail|organization policy|service control policy|azure policy/))
+    return `${label} evaluates the applicable request or resource configuration against the rules defined for this workflow and enforces the resulting allow, deny, or compliance decision.`;
+  if(has(context,/notification|notify|email|sms|alert|sns topic/))
+    return `${label} delivers the workflow's notification to the configured recipients or subscribers after the triggering condition occurs, using the selected channel and delivery policy.`;
+  if(has(context,/output|result|response|consumer|downstream|business application/))
+    return `${label} consumes the completed ${sub.toLowerCase()} produced by this workflow and uses it for the stated business response, user experience, or follow-on operation.`;
   if(has(context,/user|client|caller|producer|application users|internet users|business users|analyst|developer/))
     return `${label} represents the actor or application that initiates or consumes this scenario through ${sub.toLowerCase()}. Its request or event supplies the business context for the services shown in the architecture.`;
   if(input.position==="first")
-    return `${label} provides ${sub.toLowerCase()} as the starting input for “${clean(input.architecture)}”.`;
+    return `${label} initiates this workflow by supplying ${sub.toLowerCase()}. That input gives the next service the request, event, or data it needs to begin its assigned operation.`;
   if(input.position==="last")
-    return `${label} provides ${sub.toLowerCase()} as the final consumer or outcome of “${clean(input.architecture)}”.`;
-  return `${label} provides ${sub.toLowerCase()} within the ${clean(input.stage)} stage of “${clean(input.architecture)}”.`;
+    return `${label} receives or represents the completed ${sub.toLowerCase()} from this workflow, making the processed result available to its intended user or downstream system.`;
+  return `${label} executes ${sub.toLowerCase()} for the workload. Its configured resource receives the relevant request, data, or control signal and records the result required by the rest of the design.`;
 }
