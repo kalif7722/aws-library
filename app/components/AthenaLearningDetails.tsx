@@ -11,8 +11,20 @@ export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
 }
 
 const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
-const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => <div className={`arch-node ${tone}`} tabIndex={0} data-architecture-detail={sub ? `Role in this architecture: ${sub}` : `Architecture role: ${label}`} aria-label={sub ? `${label}. ${sub}` : label}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>;
-const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => <div className="aws-arch-node" tabIndex={0} data-architecture-detail={sub ? `Role in this architecture: ${sub}` : `AWS service node: ${label || icon.name}`} aria-label={sub ? `${label || icon.name}. ${sub}` : label || icon.name}><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${label || icon.name} AWS architecture icon`} loading="lazy" /></div><strong>{label || icon.name}</strong>{sub && <small>{sub}</small>}</div>;
+const athenaNodeDetail=(name:string,sub?:string)=>{
+ const key=name.toLowerCase();
+ if(key.includes("analyst")||key.includes("bi"))return "The analyst or BI client submits SQL through the console, JDBC, or ODBC and receives the completed query result.";
+ if(key.includes("federated"))return "Athena invokes the appropriate connector, pushes supported filters toward the source, combines the returned rows, and presents them through one SQL query.";
+ if(key.includes("athena"))return "Athena parses the SQL, reads table metadata from the Glue Data Catalog, scans only the required source objects, and writes query results back to Amazon S3.";
+ if(key.includes("glue"))return "The Glue Data Catalog supplies table schemas, column definitions, partitions, and S3 locations so Athena can interpret files without loading them first.";
+ if(key.includes("s3"))return "Amazon S3 stores the source files or query results. Athena reads relevant objects directly and benefits from partitioned, columnar formats such as Parquet.";
+ if(key.includes("rds"))return "The Athena connector queries the relational database, applies supported predicate pushdown, and returns matching rows without copying the whole database into S3.";
+ if(key.includes("dynamodb"))return "The Athena connector translates the SQL request into supported DynamoDB reads and returns the matching items for the federated result.";
+ if(key.includes("unified sql"))return "This output combines rows returned by the selected sources so they can be analyzed, reported, or persisted as a new dataset.";
+ return `${name} handles ${(sub||"its assigned processing step").toLowerCase()} and supplies the result to the next stage of the Athena data path.`;
+};
+const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => {const detail=athenaNodeDetail(label,sub);return <div className={`arch-node ${tone}`} tabIndex={0} data-architecture-detail={detail} aria-label={`${label}. ${detail}`}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>};
+const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => {const name=label||icon.name;const detail=athenaNodeDetail(name,sub);return <div className="aws-arch-node" tabIndex={0} data-architecture-detail={detail} aria-label={`${name}. ${detail}`}><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${name} AWS architecture icon`} loading="lazy" /></div><strong>{name}</strong>{sub && <small>{sub}</small>}</div>};
 const Arrow = ({ label }: { label?: string }) => <div className="arch-arrow"><span>→</span>{label && <small>{label}</small>}</div>;
 
 export default function AthenaLearningDetails() {
