@@ -101,7 +101,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
     </nav>
 
     <header className="course-hero compact-course-hero gcp-course-page-hero">
-      <div className="cert-mark gcp-cert-mark"><span>GOOGLE CLOUD</span><strong>{course.code}</strong></div>
+      <div className="gcp-course-badge" aria-label={`${course.title} certification badge`}><span>GOOGLE<br/>CLOUD</span><strong>{course.code}</strong><small>{course.level}</small></div>
       <div className="course-title">
         <p className="course-kicker">{course.level} certification learning path</p>
         <h1>{course.title}</h1>
