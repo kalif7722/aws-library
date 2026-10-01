@@ -1,5 +1,7 @@
 # Practical architecture learning review
 
+Superseded: the numbered table presentation described below was rejected and removed. The current renderer restores compact service cards with directional arrows, following the AWS Budgets and Cost Explorer format. See `ARCHITECTURE_DIRECTIONAL_REVIEW.md` for the replacement review and its verified scope. This document records the preceding implementation, not the current presentation.
+
 The previous topology renderer placed application traffic, investigation steps and supporting controls in the same rows and drew curved connections across them. This release replaces that layout with numbered learning stages and source-local, labeled destination links. Request/data relationships and control/evidence relationships remain distinct. Application context is shown separately and can be collapsed; the full node descriptions and official icon mappings remain available.
 
 AWS and Azure shared architecture renderers, reviewed AWS/GCP sections, and GCP architecture boards use the same responsive presentation. Layout adjacency no longer creates an automatic service-to-service arrow. The layout does not assert new integrations for legacy diagrams without authored connections.

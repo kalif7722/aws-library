@@ -1,4 +1,5 @@
 import {n,l} from "./reviewed-architecture-builders";
+import {practicalInspector,practicalReachability} from "./reviewed-practical-architectures";
 import {reviewedScale01} from "./reviewed-scale-01";
 import {reviewedScale02} from "./reviewed-scale-02";
 import {reviewedScale03} from "./reviewed-scale-03";
@@ -232,5 +233,7 @@ link(gcpData,"Cloud Data Fusion",e("Sales data access owner","Curated customer-d
 node(gcpData,"Looker","Sales warehouse load job","Load completed files and validate warehouse batch","The workflow starts the approved load job for the completed sales batch. The job uses its restricted source-read and BigQuery write identity, loads staging with explicit rerun behavior and checks row counts and sales totals before publishing the warehouse tables.","Cloud Run");
 node(gcpData,"Looker","Published sales BigQuery dataset","Reconciled warehouse tables and viewer scope","The dataset contains the accepted sales tables after load validation and promotion. The configured Looker warehouse connection has only its permitted query access, and the semantic model's row restrictions supplement the underlying dataset permissions.","BigQuery");
 link(gcpData,"Looker",e("Sales workflow coordinator","Sales warehouse load job","selected completed batch"),e("Sales warehouse load job","Sales Cloud Storage landing","read approved files"),e("Sales warehouse load job","Published sales BigQuery dataset","publish accepted load"),e("Sales data access owner","Published sales BigQuery dataset","dataset reader grants",true),e("Looker","Published sales BigQuery dataset","generated warehouse SQL"));
+awsSecurity["Amazon Inspector"]=[practicalInspector];
+awsNetwork["VPC Reachability Analyzer"]=[practicalReachability];
 export const reviewedScaleBatches=[awsNetwork,awsSecurity,awsDatabase,awsApplications,azureNetwork,azureData,azureOperations,gcpSecurity,gcpData,gcpOperations];
 export const reviewedScaleArchitectures=Object.assign({},...reviewedScaleBatches) as Record<string,ReviewedArchitecture[]>;

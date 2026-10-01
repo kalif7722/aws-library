@@ -8,18 +8,20 @@ const vite=await createServer({configFile:false,server:{middlewareMode:true,hmr:
 after(()=>vite.close());
 const {reviewedScaleArchitectures:registry}=loadArchitectureModule(new URL("../lib/reviewed-scale-architectures.ts",import.meta.url));
 const {reviewedWorkloadArchitectures:allReviewed}=loadArchitectureModule(new URL("../lib/reviewed-workload-architectures.ts",import.meta.url));
-test("all 100 service diagrams render every node and a readable connection list",async()=>{
+test("all 100 service diagrams render every node in the restored directional format",async()=>{
  const {default:Sections}=await vite.ssrLoadModule("/app/components/ReviewedArchitectureSections.tsx");
  for(const [service,architectures] of Object.entries(registry)){
   const expected=architectures[0].layers.flatMap(l=>l.nodes).length;
   const html=renderToStaticMarkup(React.createElement(Sections,{architectures,anchor:"architecture",provider:architectures[0].title.startsWith("GCP:")?"gcp":"aws"}));
   assert.equal((html.match(/data-topology-node=/g)||[]).length,expected,service);
   assert.equal((html.match(/data-architecture-detail=/g)||[]).length,expected,service);
-  assert.match(html,/Follow the numbered stages/);
+  assert.match(html,/directional architecture/);
+  assert.match(html,/v8-connector/);
+  assert.ok(!html.includes("architecture-lesson-stage"));
+  assert.ok(!html.includes("architecture-node-connections"));
   assert.ok(!html.includes("architecture-topology-edges"));
   const targets=new Set([...html.matchAll(/id="([^"]+)"/g)].map(match=>match[1]));
   for(const link of html.matchAll(/href="#([^"]+)"/g))assert.ok(targets.has(link[1]),service+": missing destination anchor");
-  for(const edge of architectures[0].connections)assert.ok(html.includes(edge.label),service+": missing connection caption");
  }
 });
 test("all 203 reviewed workflows retain every role, hover detail and learning-stage node",async()=>{

@@ -60,7 +60,7 @@ if (!renderer.includes('type Layer={title:string;nodes:Node[]}') || !renderer.in
 if (!renderer.includes('const L=(title:string,...nodes:Node[]):Layer=>({title,nodes})') || !renderer.includes('const A=(title:string,note:string,reference:string,...layers:Layer[]):Arch=>({title,note,reference,layers})')) throw new Error('AIP V8 layered architecture constructors missing');
 const inlineArchitectureRenderer=renderer.includes('v8-layers')&&renderer.includes('arch.layers.map')&&renderer.includes('layer.nodes.map');
 const lessonRenderer=fs.readFileSync('app/components/ArchitectureTopology.tsx','utf8');
-const delegatedArchitectureRenderer=renderer.includes('import ArchitectureTopology from "./ArchitectureTopology"')&&renderer.includes('<ArchitectureTopology arch={arch as ReviewedArchitecture}')&&lessonRenderer.includes('arch.layers.flatMap')&&lessonRenderer.includes('layer.nodes.map');
+const delegatedArchitectureRenderer=renderer.includes('import ArchitectureTopology from "./ArchitectureTopology"')&&renderer.includes('<ArchitectureTopology arch={arch as ReviewedArchitecture}')&&lessonRenderer.includes('arch.layers.flatMap')&&lessonRenderer.includes('layer.nodes.map')&&lessonRenderer.includes('v8-connector');
 if (!inlineArchitectureRenderer&&!delegatedArchitectureRenderer) throw new Error('AIP V8 architecture renderer missing');
 if (!renderer.includes('Reference pattern:')) throw new Error('AIP V8 reference-pattern labels missing');
 if (!renderer.includes('getAipArchitectureOverrides2(e.service,e.category)??getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category)')) throw new Error('AIP service-specific architecture overrides are not active');
