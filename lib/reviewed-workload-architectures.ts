@@ -1,4 +1,5 @@
 import {reviewedNetworkArchitectures} from "./reviewed-network-architectures";
+import {applyLearningRepairs} from "./reviewed-learning-repairs";
 import {reviewedSecurityArchitectures} from "./reviewed-security-architectures";
 import {reviewedRecoveryArchitectures} from "./reviewed-recovery-architectures";
 import {reviewedMigrationArchitectures} from "./reviewed-migration-architectures";
@@ -17,7 +18,7 @@ import {reviewedDataArchitectures} from "./reviewed-data-architectures";
 import {reviewedIntegrationArchitectures} from "./reviewed-integration-architectures";
 import {reviewedScaleArchitectures} from "./reviewed-scale-architectures";
 export type ReviewedNode={label:string;sub:string;detail:string;kind?:"user"|"app"|"data"|"security"|"storage"|"message";icon?:string};
-export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[];connections?:{from:string;to:string;label:string;control?:boolean}[]};
+export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[];learningPath?:{title:string;nodes:ReviewedNode[]}[];connections?:{from:string;to:string;label:string;control?:boolean}[]};
 const n=(label:string,sub:string,detail:string,kind?:ReviewedNode["kind"],icon?:string):ReviewedNode=>({label,sub,detail,kind,icon});
 const l=(title:string,...nodes:ReviewedNode[])=>({title,nodes});
 const a=(title:string,note:string,reference:string,...layers:ReviewedArchitecture["layers"]):ReviewedArchitecture=>({title,note,reference,layers});
@@ -121,6 +122,7 @@ export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>
  "API Gateway":[gcpApi],"Eventarc":[gcpImages],
 };
 
+applyLearningRepairs(reviewedWorkloadArchitectures);
 const uniqueArchitectures=[...new Map(Object.values(reviewedWorkloadArchitectures).flat().map(arch=>[arch.title,arch])).values()];
 export function reviewedWorkloadNodeDetail(architecture:string|undefined,label:string){
  return uniqueArchitectures.find(item=>item.title===architecture)?.layers.flatMap(item=>item.nodes).find(item=>item.label===label)?.detail;

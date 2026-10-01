@@ -19,6 +19,6 @@ export default function ReviewedArchitectureSections({architectures,anchor,provi
  return <>{architectures.map((arch,index)=><section className="v8-architecture" key={arch.title} id={index===0?anchor:`${anchor}-${index+1}`}>
   <div className="section-cap"><div><p>ARCHITECTURE {String(index+1).padStart(2,"0")}</p><h3>{arch.title}</h3></div><span>{arch.note}</span></div>
   <div className="v8-reference">Reference pattern: {arch.reference}</div>
-  {arch.connections?<ArchitectureTopology arch={arch} renderNode={node=><Node node={node} provider={provider}/>}/>:<div className="v8-layers">{arch.layers.map((layer,i)=><div className="v8-layer-wrap" key={layer.title}><div className="v8-layer"><b className="v8-layer-title">{layer.title}</b><div className="v8-layer-nodes">{layer.nodes.map(node=><Node key={node.label} node={node} provider={provider}/>)}</div></div>{i<arch.layers.length-1&&<div className="v8-connector" aria-hidden="true">→</div>}</div>)}</div>}
+  <ArchitectureTopology arch={arch} renderNode={node=><Node node={node} provider={provider}/>}/>
  </section>)}</>;
 }

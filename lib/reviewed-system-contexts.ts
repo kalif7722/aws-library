@@ -60,7 +60,7 @@ export function completeSystem(focus:ReviewedArchitecture,context:Context,bridge
   const runtime=context.layers[i],branch=focus.layers[i];
   layers.push({title:[runtime?.title,branch?.title].filter(Boolean).join(" · "),nodes:[...(runtime?.nodes||[]),...(branch?.nodes||[])].map(node=>node.icon?{...node,kind:undefined}:node)});
  }
- return {...focus,layers,connections};
+ return {...focus,layers,connections,learningPath:focus.layers};
 }
 export const connection=e;
 export const azureSalesSystem:Context={

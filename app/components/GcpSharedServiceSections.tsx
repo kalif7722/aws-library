@@ -9,6 +9,8 @@ import { architectureStageCopy, architectureStageLabel, isGenericArchitectureIte
 import {architectureNodeDetail} from "../../lib/architecture-node-detail";
 import {reviewedGcpBoards,reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
 import ReviewedArchitectureSections from "./ReviewedArchitectureSections";
+import ArchitectureTopology from "./ArchitectureTopology";
+import type {ReviewedArchitecture} from "../../lib/reviewed-workload-architectures";
 
 type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
 type ArchitectureCard = ArchitectureBoard["groups"][number]["cards"][number];
@@ -50,23 +52,12 @@ function ArchitectureBoardCard({ card, board, groupIndex }: { card: Architecture
 }
 
 function ArchitectureBoardDiagram({ board, index }: { board: ArchitectureBoard; index: number }) {
-  const groups = board.groups.slice(0, 6);
-  return <article className="gcp-architecture-board-panel">
-    <header className="gcp-architecture-board-head">
-      <div><p className="gcp-architecture-board-kicker">ARCHITECTURE {String(index).padStart(2, "0")}</p><h3>{board.title}</h3></div>
-      <p className="gcp-architecture-board-note">{board.note}</p>
-    </header>
-    {board.reference ? <div className="gcp-architecture-board-reference">Reference pattern: {board.reference}</div> : null}
-    <div className="gcp-architecture-board-flow" aria-label={`${board.title} architecture flow`}>
-      {groups.map((group, groupIndex) => <div className="gcp-architecture-board-group-wrap" key={`${group.title}-${groupIndex}`}>
-        <section className="gcp-architecture-board-group">
-          <strong>{group.title}</strong>
-          <div className="gcp-architecture-board-cards">{group.cards.slice(0, 3).map((card, cardIndex) => <ArchitectureBoardCard card={card} board={board} groupIndex={groupIndex} key={`${card.label}-${cardIndex}`} />)}</div>
-        </section>
-        {groupIndex < groups.length - 1 ? <div className="gcp-architecture-board-arrow" aria-hidden="true">→</div> : null}
-      </div>)}
-    </div>
-  </article>;
+ const arch:ReviewedArchitecture={title:board.title,note:board.note||"",reference:board.reference||"Google Cloud architecture guidance",layers:board.groups.map((group,groupIndex)=>({title:group.title,nodes:group.cards.map(card=>({label:card.label,sub:card.caption,detail:gcpBoardCardDetail(board,groupIndex,card),icon:card.iconLabel||card.label}))}))};
+ return <article className="gcp-architecture-board-panel">
+  <header className="gcp-architecture-board-head"><div><p className="gcp-architecture-board-kicker">ARCHITECTURE {String(index).padStart(2,"0")}</p><h3>{board.title}</h3></div><p className="gcp-architecture-board-note">{board.note}</p></header>
+  {board.reference?<div className="gcp-architecture-board-reference">Reference pattern: {board.reference}</div>:null}
+  <ArchitectureTopology arch={arch} renderNode={(node,groupIndex)=><ArchitectureBoardCard board={board} groupIndex={groupIndex} card={{label:node.label,caption:node.sub,iconLabel:node.icon}}/>}/>
+ </article>;
 }
 
 function compactCaption(value: string, max = 58) {
@@ -167,7 +158,7 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
   const reviewed=reviewedWorkloadArchitectures["GCP:"+serviceName]??reviewedWorkloadArchitectures[serviceName];
-  if(reviewed?.some(arch=>arch.connections))return <ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/>;
+  if(reviewed?.length)return <ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/>;
   const boards = reviewedGcpBoards(serviceName) ?? (details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details));
   if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">
     {boards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}
