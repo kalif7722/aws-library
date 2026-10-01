@@ -1,3 +1,4 @@
+import {financialNodeDetail} from "./financial-architectures";
 export type ArchitectureNodeDetailInput={
   label:string;
   sub?:string;
@@ -14,14 +15,22 @@ const clean=(value?:string)=>value?.trim().replace(/[.]+$/g,"")||"its configured
 /** Describe the node's own responsibility in the scenario. Adjacency in a
  * diagram is context, not proof that one service sends data to the next. */
 export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
+  const explicit=financialNodeDetail(input.architecture,input.label);
+  if(explicit)return explicit;
   const {label}=input;
   const sub=clean(input.sub);
   const previous=clean(input.previous||"the preceding architecture layer");
   const next=clean(input.next||"the next architecture layer");
   const name=label.toLowerCase();
-  const context=`${label} ${sub}`.toLowerCase();
+  // A subtitle such as "metrics" or "database migration" must not change
+  // the identity of a named cloud service. Generic nodes retain role matching.
+  const context=/^(?:aws |amazon |azure |google |cloud run\b|cloud functions\b|cloud sql\b|cloud storage\b|bigquery\b|elastic load balancing\b)/i.test(label)?name:`${label} ${sub}`.toLowerCase();
 
   // Official service and boundary names take precedence over subtitle inference.
+  if(has(name,/^aws budgets$/))
+    return "AWS Budgets evaluates actual or forecast cost and usage against a configured budget and sends threshold notifications to its configured recipients. Resource restrictions require a separately configured budget action and execution role; notifications alone do not cap spending.";
+  if(has(name,/^aws cost explorer$/))
+    return "Cost Explorer queries billing history using the selected dates, filters, and grouping dimensions to expose the contributors to spending changes. Supported forecast views estimate future spend; remediation is performed separately by the resource owner.";
   if(has(name,/elastic load balancing|application load balancer|network load balancer|gateway load balancer|azure load balancer|cloud load balancing/))
     return `${label} checks target health and distributes each connection or request only to eligible application targets. Listener, protocol, routing, and balancing settings determine which healthy instance, container, pod, or IP receives the traffic.`;
   if(has(name,/private wan|internet|corporate network|on-premises network|enterprise network/))

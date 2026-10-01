@@ -15,6 +15,7 @@ import "./AthenaAwsIcons.css";
 import "./AipServiceLearningDetails.css";
 import "./AipServiceLearningDetailsV8.css";
 import {architectureNodeDetail as describeArchitectureNode} from "../../lib/architecture-node-detail";
+import {financialArchitectures} from "../../lib/financial-architectures";
 import "./AipDecisionGuides.css";
 
 type Kind="user"|"internet"|"app"|"data"|"security"|"file"|"network"|"storage"|"ai"|"message"|"monitor"|"compute";
@@ -40,6 +41,7 @@ const commonOps=(service:string)=>L("Operate & govern",W("Amazon CloudWatch","Me
 const commonData=(label="Durable data")=>L("Data & state",W("Amazon S3",label),W("Amazon DynamoDB","Application state"));
 
 function architectures(service:string,category:string):Arch[]{
+ if(financialArchitectures[service])return financialArchitectures[service];
  const c=(sub:string)=>W(service,sub,parentIcon(service));
  const webEntry=L("Users & edge",P("Web / mobile users","HTTPS","user"),W("Amazon CloudFront","Edge delivery"),W("AWS WAF","Web protection"));
  const api=L("API & identity",W("Amazon API Gateway","API front door"),W("Amazon Cognito","Authentication"));

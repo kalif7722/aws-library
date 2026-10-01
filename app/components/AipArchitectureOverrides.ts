@@ -1,3 +1,4 @@
+import {financialArchitectures} from "../../lib/financial-architectures";
 export type AipArchitectureNode={label:string;sub:string;kind?:"user"|"internet"|"app"|"data"|"security"|"file"|"network"|"storage"|"ai"|"message"|"monitor"|"compute";icon?:string};
 export type AipArchitectureLayer={title:string;nodes:AipArchitectureNode[]};
 export type AipArchitecture={title:string;note:string;layers:AipArchitectureLayer[];reference:string};
@@ -212,4 +213,4 @@ const overrides:Record<string,AipArchitecture[]>={
 ]
 };
 
-export function getAipArchitectureOverrides(service:string,_category:string):AipArchitecture[]|undefined{return overrides[service];}
+export function getAipArchitectureOverrides(service:string,_category:string):AipArchitecture[]|undefined{return financialArchitectures[service]??overrides[service];}

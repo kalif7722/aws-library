@@ -22,13 +22,18 @@ type Props={
 
 const clamp3=(items:string[])=>items.filter(Boolean).slice(0,3);
 
+function layerDetail(architecture:WalkArchitecture,layers:WalkLayer[],index:number){
+ const layer=layers[index];
+ return layer.nodes.slice(0,3).map(node=>architectureNodeDetail({label:node.label,sub:node.sub,previous:layers[index-1]?.title,next:layers[index+1]?.title,stage:layer.title,architecture:architecture.title,position:index===0?"first":index===layers.length-1?"last":"middle"})).join("\n\n");
+}
+
 function WalkthroughCard({architecture,index}:{architecture:WalkArchitecture;index:number}){
   const layers=architecture.layers.slice(0,6);
   return <article className="service-walk-card">
     <div className="service-walk-heading"><b>{index}</b><div><span>ARCHITECTURE WALK-THROUGH</span><h4>{architecture.title}</h4></div></div>
     <p>{architecture.note}</p>
     <div className="service-walk-flow" aria-label={`${architecture.title} flow`}>
-      {layers.map((layer,i)=><div className="service-walk-step" key={`${layer.title}-${i}`} tabIndex={0} data-architecture-detail={architectureNodeDetail({label:layer.nodes.slice(0,3).map(node=>node.label).join(" / ")||layer.title,sub:layer.nodes.slice(0,3).map(node=>node.sub).filter(Boolean).join("; ")||layer.title,previous:layers[i-1]?.title,next:layers[i+1]?.title,stage:layer.title,architecture:architecture.title,position:i===0?"first":i===layers.length-1?"last":"middle"})} aria-label={`${layer.title}. ${layer.nodes.slice(0,3).map(node => `${node.label}${node.sub ? `. ${node.sub}` : ""}`).join(". ")}`}>
+      {layers.map((layer,i)=><div className="service-walk-step" key={`${layer.title}-${i}`} tabIndex={0} data-architecture-detail={layerDetail(architecture,layers,i)} aria-label={`${layer.title}. ${layer.nodes.slice(0,3).map(node => `${node.label}${node.sub ? `. ${node.sub}` : ""}`).join(". ")}`}>
         <strong>{layer.title}</strong>
         <small>{layer.nodes.slice(0,3).map(n=>n.label).join(" • ")}</small>
         {i<layers.length-1&&<i aria-hidden="true">→</i>}

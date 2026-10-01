@@ -12,6 +12,7 @@ import "./AthenaAwsIcons.css";
 import "./AipServiceLearningDetails.css";
 import "./AipServiceLearningDetailsV8.css";
 import {architectureNodeDetail as describeArchitectureNode} from "../../lib/architecture-node-detail";
+import {financialArchitectures} from "../../lib/financial-architectures";
 import "./AipDecisionGuides.css";
 
 type Kind="user"|"internet"|"app"|"data"|"security"|"file"|"network"|"storage"|"message"|"monitor"|"compute";
@@ -24,6 +25,7 @@ const L=(title:string,...nodes:Node[]):Layer=>({title,nodes});
 const A=(title:string,note:string,reference:string,...layers:Layer[]):Arch=>({title,note,reference,layers});
 
 function serviceArchitectures(service:string,category:string):Arch[]{
+ if(financialArchitectures[service])return financialArchitectures[service];
  const s=service.toLowerCase(); const c=(sub:string)=>W(service,sub);
  if(/direct connect|site-to-site vpn|client vpn|transit gateway|vpc peering|private link|vpc endpoint|ip address manager|ipam|route 53 resolver/.test(s)) return [
   A("Hybrid and multi-VPC connectivity",`${service} is placed where it actually controls or carries private connectivity, with routing and security kept explicit.`,"AWS hybrid and multi-VPC networking reference patterns",L("Enterprise / users",P("On-premises network","Corporate routes","network"),P("Remote users","Private access","user")),L("Connectivity edge",c("Private connectivity / routing role")),L("AWS network",W("Amazon VPC","Workload VPCs"),P("Route tables","Path selection","network")),L("Workloads",W("Amazon EC2","Applications"),W("Amazon RDS","Private data")),L("Operations",W("Amazon CloudWatch","Health / metrics"),W("AWS CloudTrail","API audit"))),
