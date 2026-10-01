@@ -24,10 +24,10 @@ test("all 100 service diagrams render every node in the restored directional for
   for(const link of html.matchAll(/href="#([^"]+)"/g))assert.ok(targets.has(link[1]),service+": missing destination anchor");
  }
 });
-test("all 203 reviewed workflows retain every role, hover detail and learning-stage node",async()=>{
+test("all 303 reviewed workflows retain every role, hover detail and learning-stage node",async()=>{
  const {default:Sections}=await vite.ssrLoadModule("/app/components/ReviewedArchitectureSections.tsx");
  const unique=[...new Map(Object.values(allReviewed).flat().map(arch=>[arch.title,arch])).values()];
- assert.equal(unique.length,203);
+ assert.equal(unique.length,303);
  for(const arch of unique){
   const html=renderToStaticMarkup(React.createElement(Sections,{architectures:[arch],anchor:"architecture",provider:arch.title.startsWith("GCP:")?"gcp":"aws"}));
   const count=arch.layers.flatMap(layer=>layer.nodes).length;

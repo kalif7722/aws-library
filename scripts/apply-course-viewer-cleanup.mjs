@@ -94,7 +94,7 @@ if(!athena.includes(enhancementImport)){
   if(!athena.includes(anchor))throw new Error('Athena icon import anchor changed');
   athena=athena.replace(anchor,`${anchor}\n${enhancementImport}`);
 }
-if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')){
+if(!athena.includes('<AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>')&&!athena.includes('<ReviewedArchitectureSections architectures={reviewedWorkloadArchitectures["Amazon Athena"]}')){
   const anchor='</div></section>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">';
   if(!athena.includes(anchor))throw new Error('Athena architecture placement anchor changed');
   athena=athena.replace(anchor,'</div></section>\n    <AnalyticsArchitectureEnhancement serviceName="Amazon Athena"/>\n    <AthenaPracticalDemo />\n    <div className="knowledge-grid three">');

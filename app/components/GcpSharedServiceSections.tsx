@@ -157,7 +157,9 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
-  const reviewed=reviewedWorkloadArchitectures["GCP:"+serviceName]??reviewedWorkloadArchitectures[serviceName];
+  const candidates=reviewedWorkloadArchitectures["GCP:"+serviceName]??reviewedWorkloadArchitectures[serviceName];
+  const matching=candidates?.filter(arch=>arch.title.startsWith("GCP:"));
+  const reviewed=matching?.length?matching:undefined;
   if(reviewed?.length)return <ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/>;
   const boards = reviewedGcpBoards(serviceName) ?? (details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details));
   if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">

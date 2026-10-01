@@ -1,3 +1,4 @@
+import {reviewedNextArchitectures} from "./reviewed-next-architectures";
 import {reviewedNetworkArchitectures} from "./reviewed-network-architectures";
 import {applyLearningRepairs} from "./reviewed-learning-repairs";
 import {reviewedSecurityArchitectures} from "./reviewed-security-architectures";
@@ -108,6 +109,7 @@ export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>
  ...reviewedDataArchitectures,
  ...reviewedIntegrationArchitectures,
  ...reviewedScaleArchitectures,
+ ...reviewedNextArchitectures,
  "AWS Lambda":[awsImages,awsApi,awsQueue],
  "Amazon S3":[awsImages,awsQueue],
  "Amazon SQS":[awsQueue],
@@ -128,5 +130,6 @@ export function reviewedWorkloadNodeDetail(architecture:string|undefined,label:s
  return uniqueArchitectures.find(item=>item.title===architecture)?.layers.flatMap(item=>item.nodes).find(item=>item.label===label)?.detail;
 }
 export function reviewedGcpBoards(service:string){
- return (reviewedWorkloadArchitectures["GCP:"+service]??reviewedWorkloadArchitectures[service])?.map(arch=>({title:arch.title,note:arch.note,reference:arch.reference,groups:arch.layers.map(layer=>({title:layer.title,cards:layer.nodes.map(node=>({label:node.label,caption:node.sub,detail:node.detail,iconLabel:node.icon||node.label}))}))}));
+ const arches=(reviewedWorkloadArchitectures["GCP:"+service]??reviewedWorkloadArchitectures[service])?.filter(arch=>arch.title.startsWith("GCP:"));
+ return arches?.length?arches.map(arch=>({title:arch.title,note:arch.note,reference:arch.reference,groups:arch.layers.map(layer=>({title:layer.title,cards:layer.nodes.map(node=>({label:node.label,caption:node.sub,detail:node.detail,iconLabel:node.icon||node.label}))}))})):undefined;
 }

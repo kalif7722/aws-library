@@ -49,7 +49,7 @@ test('tracing workflows keep application responsibilities separate from export',
 });
 
 test('every reviewed node resolves to authored copy for its exact architecture',()=>{
- assert.equal(unique.length,203);
+ assert.equal(unique.length,303);
  for(const arch of unique){
   const labels=new Set();
   for(const layer of arch.layers)for(const node of layer.nodes){
@@ -91,7 +91,9 @@ test('WAF is attached to the ingress layer, not an application backend',()=>{
 test('GCP adapter preserves architecture keys and every node description',()=>{
  for(const service of Object.keys(registry)){
   const boards=reviewedGcpBoards(service);
-  assert.equal(boards.length,registry[service].length);
+  const expected=registry[service].filter(arch=>arch.title.startsWith("GCP:"));
+  if(!expected.length){assert.equal(boards,undefined,service);continue;}
+  assert.equal(boards.length,expected.length);
   for(const board of boards)for(const group of board.groups)for(const card of group.cards){
    assert.equal(describe({label:card.label,sub:card.caption,architecture:board.title}),card.detail);
   }

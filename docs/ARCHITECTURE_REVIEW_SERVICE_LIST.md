@@ -2,61 +2,130 @@
 
 Completed means the currently selected explicit replacement workflows were reviewed, not every historical diagram or possible workload. Pending means node-by-node semantic review is still required even where diagrams already exist. Counts deduplicate catalog services and exclude registry-only aliases.
 
-## AWS: 101 completed, 220 pending
+## AWS: 201 completed, 120 pending
 
 ### Completed
 
+- AWS Account Management
+- AWS Amplify
 - AWS App Runner
+- AWS App2Container
 - AWS AppConfig
 - AWS AppSync
+- AWS Application Discovery Service
+- AWS Application Migration Service
+- AWS Artifact
 - AWS Backup
 - AWS Batch
+- AWS Billing Conductor
+- AWS Billing and Cost Management
 - AWS Budgets
+- AWS CDK
+- AWS CLI
 - AWS Certificate Manager
+- AWS Client VPN
 - AWS Cloud Map
+- AWS Cloud WAN
 - AWS CloudFormation
+- AWS CloudFormation Guard
+- AWS CloudHSM
+- AWS CloudShell
 - AWS CloudTrail
 - AWS CloudTrail Lake
 - AWS CodeArtifact
 - AWS CodeBuild
+- AWS CodeCommit
+- AWS CodeConnections
 - AWS CodeDeploy
 - AWS CodePipeline
+- AWS Compute Optimizer
 - AWS Config
 - AWS Control Tower
+- AWS Copilot
+- AWS Cost Anomaly Detection
 - AWS Cost Explorer
+- AWS Cost and Usage Reports
+- AWS Data Exchange
+- AWS DataSync
 - AWS Database Migration Service
+- AWS Device Farm
 - AWS Direct Connect
+- AWS Directory Service
 - AWS Elastic Beanstalk
 - AWS Elastic Disaster Recovery
+- AWS Elemental MediaConvert
 - AWS Fargate
+- AWS Fault Injection Service
 - AWS Firewall Manager
+- AWS Global Accelerator
 - AWS Glue
+- AWS Glue Data Quality
+- AWS Glue DataBrew
+- AWS Health
 - AWS IAM
 - AWS IAM Identity Center
+- AWS Infrastructure Composer
+- AWS IoT Core
+- AWS IoT Device Defender
+- AWS IoT Device Management
+- AWS IoT Greengrass
+- AWS IoT SiteWise
+- AWS IoT TwinMaker
 - AWS KMS
+- AWS Lake Formation
 - AWS Lambda
+- AWS Lambda@Edge
+- AWS Launch Wizard
+- AWS License Manager
+- AWS Management Console
+- AWS Migration Hub
 - AWS Network Access Analyzer
 - AWS Network Firewall
+- AWS Network Manager
 - AWS Organizations
 - AWS Private CA
 - AWS PrivateLink
+- AWS Resilience Hub
+- AWS Resource Access Manager (RAM)
+- AWS Resource Explorer
+- AWS Resource Groups
 - AWS SAM
+- AWS Schema Conversion Tool
 - AWS Secrets Manager
 - AWS Security Hub
 - AWS Security Token Service
+- AWS Serverless Application Repository
+- AWS Service Catalog
+- AWS Service Management / AppRegistry
+- AWS Service Quotas
+- AWS Shield
 - AWS Shield Advanced
 - AWS Signer
 - AWS Site-to-Site VPN
 - AWS Step Functions
+- AWS Storage Gateway
+- AWS Tools and SDKs
+- AWS Transfer Family
 - AWS Transit Gateway
+- AWS Trusted Advisor
+- AWS User Notifications
+- AWS Verified Access
 - AWS WAF
+- AWS Well-Architected Tool
 - AWS X-Ray
 - Amazon API Gateway
+- Amazon AppFlow
+- Amazon Athena
+- Amazon Augmented AI
 - Amazon Aurora
+- Amazon Bedrock
 - Amazon CloudFront
 - Amazon CloudWatch
 - Amazon Cognito
+- Amazon Comprehend
+- Amazon Comprehend Medical
 - Amazon Data Firehose
+- Amazon DataZone
 - Amazon Detective
 - Amazon DocumentDB
 - Amazon DynamoDB
@@ -65,124 +134,110 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon EBS
 - Amazon EC2
 - Amazon EC2 Auto Scaling
+- Amazon EC2 Image Builder
 - Amazon EC2 security groups
 - Amazon ECR
 - Amazon ECS
 - Amazon EFS
 - Amazon EKS
+- Amazon EMR
 - Amazon ElastiCache
 - Amazon EventBridge
 - Amazon FSx
 - Amazon FSx for Windows File Server
 - Amazon GuardDuty
 - Amazon Inspector
+- Amazon Kendra
 - Amazon Keyspaces
 - Amazon Kinesis
 - Amazon Kinesis Data Streams
+- Amazon Kinesis Video Streams
+- Amazon Lex
+- Amazon MQ
+- Amazon MWAA
 - Amazon Macie
 - Amazon Managed Streaming for Apache Kafka
 - Amazon MemoryDB
 - Amazon Neptune
+- Amazon OpenSearch Serverless
 - Amazon OpenSearch Service
+- Amazon Personalize
+- Amazon Polly
 - Amazon RDS
 - Amazon RDS Proxy
 - Amazon Redshift
+- Amazon Redshift Serverless
+- Amazon Rekognition
 - Amazon Route 53
 - Amazon S3
 - Amazon SES
 - Amazon SNS
 - Amazon SQS
+- Amazon SageMaker AI
+- Amazon SageMaker Clarify
+- Amazon SageMaker Data Wrangler
+- Amazon SageMaker Ground Truth
+- Amazon SageMaker JumpStart
+- Amazon SageMaker Model Monitor
+- Amazon SageMaker Model Registry
+- Amazon SageMaker Processing
 - Amazon Security Lake
+- Amazon Textract
+- Amazon Transcribe
+- Amazon Translate
 - Amazon VPC
+- Amazon VPC IP Address Manager (IPAM)
+- Amazon VPC Lattice
 - Amazon Verified Permissions
+- Audit Manager
 - CloudFormation StackSets
 - Egress-only internet gateways
 - Elastic IP Addresses
 - Elastic Load Balancing
 - IAM Access Analyzer
 - Internet gateways
+- Migration Evaluator
 - NAT gateways
 - Network ACLs
+- Route 53 Resolver DNS Firewall
+- Savings Plans
+- Service Control Policies
 - Systems Manager
+- VPC Endpoints
 - VPC Flow Logs
 - VPC Reachability Analyzer
 - VPC peering
 
 ### Pending
 
-- AWS Account Management
-- AWS Amplify
 - AWS App Mesh
 - AWS App Studio
-- AWS App2Container
 - AWS AppFabric
-- AWS Application Discovery Service
-- AWS Application Migration Service
-- AWS Artifact
 - AWS Auto Scaling
 - AWS B2B Data Interchange
-- AWS Billing Conductor
-- AWS Billing and Cost Management
-- AWS CDK
-- AWS CLI
 - AWS Clean Rooms
-- AWS Client VPN
-- AWS Cloud WAN
-- AWS CloudFormation Guard
-- AWS CloudHSM
-- AWS CloudShell
-- AWS CodeCommit
-- AWS CodeConnections
 - AWS CodeStar (Legacy)
-- AWS Compute Optimizer
 - AWS Console Mobile Application
-- AWS Copilot
-- AWS Cost Anomaly Detection
-- AWS Cost and Usage Reports
-- AWS Data Exchange
 - AWS Data Transfer Terminal
-- AWS DataSync
 - AWS Deadline Cloud
 - AWS DevOps Agent
-- AWS Device Farm
-- AWS Directory Service
 - AWS Elemental MediaConnect
-- AWS Elemental MediaConvert
 - AWS Elemental MediaLive
 - AWS Elemental MediaPackage
 - AWS Elemental MediaTailor
 - AWS Entity Resolution
-- AWS Fault Injection Service
-- AWS Global Accelerator
-- AWS Glue Data Quality
-- AWS Glue DataBrew
 - AWS Ground Station
-- AWS Health
 - AWS Health Dashboard
 - AWS HealthLake
 - AWS HealthScribe
-- AWS Infrastructure Composer
 - AWS IoT 1-Click
-- AWS IoT Core
-- AWS IoT Device Defender
-- AWS IoT Device Management
 - AWS IoT Events
 - AWS IoT ExpressLink
 - AWS IoT FleetWise
-- AWS IoT Greengrass
-- AWS IoT SiteWise
 - AWS IoT Things Graph
-- AWS IoT TwinMaker
-- AWS Lake Formation
-- AWS Lambda@Edge
-- AWS Launch Wizard
-- AWS License Manager
 - AWS Local Zones
 - AWS Managed Services
-- AWS Management Console
 - AWS Marketplace
-- AWS Migration Hub
-- AWS Network Manager
 - AWS OpsWorks (Legacy)
 - AWS Outposts
 - AWS Parallel Computing Service
@@ -191,42 +246,21 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Private 5G
 - AWS Private Certificate Authority
 - AWS Proton
-- AWS Resilience Hub
-- AWS Resource Access Manager (RAM)
-- AWS Resource Explorer
-- AWS Resource Groups
-- AWS Schema Conversion Tool
 - AWS Security Agent
-- AWS Serverless Application Repository
-- AWS Service Catalog
-- AWS Service Management / AppRegistry
-- AWS Service Quotas
-- AWS Shield
 - AWS Snow Family
 - AWS Snowball Edge
-- AWS Storage Gateway
 - AWS Supply Chain
 - AWS Support
-- AWS Tools and SDKs
-- AWS Transfer Family
 - AWS Transform
 - AWS Transform MGN
-- AWS Trusted Advisor
-- AWS User Notifications
-- AWS Verified Access
 - AWS Wavelength
-- AWS Well-Architected Tool
 - AWS Wickr
 - AWS re:Post Private
-- Amazon AppFlow
 - Amazon AppStream 2.0
 - Amazon Application Recovery Controller
-- Amazon Athena
-- Amazon Augmented AI
 - Amazon Aurora DSQL
 - Amazon Aurora Serverless
 - Amazon Aurora Serverless v2
-- Amazon Bedrock
 - Amazon Bedrock AgentCore
 - Amazon Bedrock Knowledge Bases
 - Amazon Bedrock Prompt Flows
@@ -236,18 +270,13 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon CloudWatch Synthetics
 - Amazon CodeGuru
 - Amazon CodeGuru Security
-- Amazon Comprehend
-- Amazon Comprehend Medical
 - Amazon Connect Customer
 - Amazon Corretto
 - Amazon Data Lifecycle Manager
-- Amazon DataZone
 - Amazon DevOps Guru
-- Amazon EC2 Image Builder
 - Amazon ECS Anywhere
 - Amazon EKS Anywhere
 - Amazon EKS Distro
-- Amazon EMR
 - Amazon Elastic Transcoder
 - Amazon FSx for Lustre
 - Amazon FSx for NetApp ONTAP
@@ -257,16 +286,11 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Fraud Detector
 - Amazon GameLift Servers
 - Amazon Interactive Video Service
-- Amazon Kendra
-- Amazon Kinesis Video Streams
-- Amazon Lex
 - Amazon Lightsail
 - Amazon Location Service
 - Amazon Lookout for Equipment
 - Amazon Lookout for Metrics
 - Amazon Lookout for Vision
-- Amazon MQ
-- Amazon MWAA
 - Amazon Managed Blockchain
 - Amazon Managed Grafana
 - Amazon Managed Service for Apache Flink
@@ -276,11 +300,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon MemoryDB for Redis
 - Amazon Neptune Analytics
 - Amazon Nova
-- Amazon OpenSearch Serverless
 - Amazon PartyRock
-- Amazon Personalize
 - Amazon Pinpoint
-- Amazon Polly
 - Amazon Q
 - Amazon Q Business
 - Amazon Q Business Apps
@@ -288,48 +309,27 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Q Developer in chat applications
 - Amazon Quick
 - Amazon Quick Sight
-- Amazon Redshift Serverless
-- Amazon Rekognition
 - Amazon S3 Glacier
 - Amazon S3 Tables
-- Amazon SageMaker AI
-- Amazon SageMaker Clarify
-- Amazon SageMaker Data Wrangler
-- Amazon SageMaker Ground Truth
-- Amazon SageMaker JumpStart
-- Amazon SageMaker Model Monitor
-- Amazon SageMaker Model Registry
 - Amazon SageMaker Neo
-- Amazon SageMaker Processing
 - Amazon SageMaker Unified Studio
 - Amazon Simple Workflow Service
-- Amazon Textract
 - Amazon Timestream
 - Amazon Titan
-- Amazon Transcribe
-- Amazon Translate
-- Amazon VPC IP Address Manager (IPAM)
 - Amazon VPC IPAM
-- Amazon VPC Lattice
 - Amazon WorkMail
 - Amazon WorkSpaces
 - Amazon WorkSpaces Applications
 - Amazon WorkSpaces Core
 - Amazon WorkSpaces Secure Browser
 - Amazon WorkSpaces Thin Client
-- Audit Manager
 - Automated Forensics Orchestrator for Amazon EC2
 - FreeRTOS
 - Integrated Private Wireless on AWS
 - Kiro
-- Migration Evaluator
 - Red Hat OpenShift Service on AWS (ROSA)
-- Route 53 Resolver DNS Firewall
-- Savings Plans
-- Service Control Policies
 - Strands Agents
 - VMware Cloud on AWS
-- VPC Endpoints
 
 ## Azure: 76 completed, 127 pending
 
