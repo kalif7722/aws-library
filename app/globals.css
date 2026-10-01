@@ -305,6 +305,16 @@ html[data-theme="light"] [data-architecture-detail]::before{border-color:#c87500
   [data-architecture-detail]::after{max-width:240px;font-size:.72rem}
 }
 
+/* Portaled architecture tooltip: fixed to the viewport so card, panel and
+   horizontal-scroll overflow can never truncate it. */
+[data-architecture-detail]::before,[data-architecture-detail]::after{display:none!important}
+.architecture-tooltip{position:fixed;z-index:2147483000;width:min(390px,calc(100vw - 24px));box-sizing:border-box;padding:13px 15px;border:1px solid #c87500;border-radius:12px;background:#ff9900;color:#111;font:700 .78rem/1.48 "Amazon Ember","Helvetica Neue",Arial,sans-serif;letter-spacing:.002em;text-align:left;box-shadow:0 18px 46px #02081770,0 0 0 1px #ffd27a inset;pointer-events:none;animation:architecture-tooltip-in .14s ease both}
+.architecture-tooltip.is-above{transform:translateY(-100%)}
+.architecture-tooltip-azure{border-color:#69b9ff;background:#1473e6;color:#fff;box-shadow:0 18px 46px #02081770,0 0 0 1px #8fd0ff inset}
+.architecture-tooltip-gcp{border-color:#fbbc04;background:#1a73e8;color:#fff;box-shadow:0 18px 46px #02081770,0 0 0 1px #8ab4f8 inset}
+@keyframes architecture-tooltip-in{from{opacity:0;filter:blur(2px)}to{opacity:1;filter:blur(0)}}
+@media(max-width:700px){.architecture-tooltip{padding:11px 13px;font-size:.72rem}}
+
 
 /* multi-cloud-architecture-node-details-v1 */
 [data-architecture-provider="azure"]::after,

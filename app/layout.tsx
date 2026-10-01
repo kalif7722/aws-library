@@ -6,6 +6,7 @@ import "./components/ServiceLearningGridAlignment.css";
 import "./components/AthenaThemePolish.css";
 import "./components/ServiceTypographyPolish.css";
 import ThemeToggle from "./components/ThemeToggle";
+import ArchitectureTooltip from "./components/ArchitectureTooltip";
 
 export const metadata: Metadata = {
   title: "Visual Learning",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="antialiased"><ThemeToggle/>{children}</body>
+      <body className="antialiased"><ThemeToggle/>{children}<ArchitectureTooltip/></body>
     </html>
   );
 }

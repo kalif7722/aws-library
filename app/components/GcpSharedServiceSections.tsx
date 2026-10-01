@@ -6,6 +6,7 @@ import "./GcpArchitectureBoard.css";
 import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
+import {architectureNodeDetail} from "../../lib/architecture-node-detail";
 
 type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
 type ArchitectureCard = ArchitectureBoard["groups"][number]["cards"][number];
@@ -33,10 +34,7 @@ function GenericArchitectureIcon({ label, board = false }: { label: string; boar
 
 const gcpGroupNames=(group:ArchitectureBoard["groups"][number]|undefined)=>group?.cards.slice(0,3).map(card=>card.label).join(" and ")||"the surrounding workload";
 function gcpBoardCardDetail(board:ArchitectureBoard,groupIndex:number,card:ArchitectureCard){
-  const previous=gcpGroupNames(board.groups[groupIndex-1]);const next=gcpGroupNames(board.groups[groupIndex+1]);const stage=board.groups[groupIndex]?.title.toLowerCase()||"architecture";
-  if(groupIndex===0)return `${card.label} starts the “${board.title}” flow by providing ${card.caption.toLowerCase()}. Its output moves to ${next}.`;
-  if(groupIndex===board.groups.length-1)return `${card.label} receives the result from ${previous} and uses it for ${card.caption.toLowerCase()}. This completes the ${stage} stage.`;
-  return `${card.label} takes input from ${previous}, performs ${card.caption.toLowerCase()} in the ${stage} stage, and supplies the result to ${next}.`;
+  return architectureNodeDetail({label:card.label,sub:card.caption,previous:gcpGroupNames(board.groups[groupIndex-1]),next:gcpGroupNames(board.groups[groupIndex+1]),stage:board.groups[groupIndex]?.title,architecture:board.title,position:groupIndex===0?"first":groupIndex===board.groups.length-1?"last":"middle"});
 }
 function ArchitectureBoardCard({ card, board, groupIndex }: { card: ArchitectureCard; board: ArchitectureBoard; groupIndex: number }) {
   const iconLabel = card.iconLabel || card.label;
@@ -154,7 +152,7 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
           <div className="gcp-architecture-layer">
             <b>{step.title}</b>
             <div className="gcp-architecture-nodes">
-              <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} detail={`${stageLabel} ${stepIndex === 0 ? "starts this flow" : `receives input from ${visibleSteps[stepIndex-1].title}`}. It ${stageCopy.join("; ").toLowerCase()}${stepIndex < visibleSteps.length-1 ? `, then supplies the result to ${visibleSteps[stepIndex+1].title}.` : ", producing the final outcome of the flow."}`} />
+              <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} detail={architectureNodeDetail({label:stageLabel,sub:stageCopy.join("; "),previous:visibleSteps[stepIndex-1]?.title,next:visibleSteps[stepIndex+1]?.title,stage:step.title,architecture:flow.title,position:stepIndex===0?"first":stepIndex===visibleSteps.length-1?"last":"middle"})} />
               {childItems.map((item) => <ArchitectureNode label={item} key={item} detail={`${item} supports ${stageLabel} during the ${step.title.toLowerCase()} stage${stepIndex < visibleSteps.length-1 ? ` before the flow continues to ${visibleSteps[stepIndex+1].title}` : " and contributes to the final architecture outcome"}.`} />)}
             </div>
           </div>
