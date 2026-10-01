@@ -49,7 +49,7 @@ test('tracing workflows keep application responsibilities separate from export',
 });
 
 test('every reviewed node resolves to authored copy for its exact architecture',()=>{
- assert.equal(unique.length,106);
+ assert.equal(unique.length,203);
  for(const arch of unique){
   const labels=new Set();
   for(const layer of arch.layers)for(const node of layer.nodes){

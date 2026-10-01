@@ -2,14 +2,22 @@
 
 Completed means the currently selected explicit replacement workflows were reviewed, not every historical diagram or possible workload. Pending means node-by-node semantic review is still required even where diagrams already exist. Counts deduplicate catalog services and exclude registry-only aliases.
 
-## AWS: 61 completed, 260 pending
+## AWS: 101 completed, 220 pending
 
 ### Completed
 
+- AWS App Runner
+- AWS AppConfig
+- AWS AppSync
 - AWS Backup
+- AWS Batch
 - AWS Budgets
+- AWS Certificate Manager
+- AWS Cloud Map
 - AWS CloudFormation
 - AWS CloudTrail
+- AWS CloudTrail Lake
+- AWS CodeArtifact
 - AWS CodeBuild
 - AWS CodeDeploy
 - AWS CodePipeline
@@ -18,19 +26,26 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Cost Explorer
 - AWS Database Migration Service
 - AWS Direct Connect
+- AWS Elastic Beanstalk
 - AWS Elastic Disaster Recovery
 - AWS Fargate
+- AWS Firewall Manager
 - AWS Glue
 - AWS IAM
 - AWS IAM Identity Center
 - AWS KMS
 - AWS Lambda
+- AWS Network Access Analyzer
 - AWS Network Firewall
 - AWS Organizations
+- AWS Private CA
 - AWS PrivateLink
+- AWS SAM
 - AWS Secrets Manager
 - AWS Security Hub
 - AWS Security Token Service
+- AWS Shield Advanced
+- AWS Signer
 - AWS Site-to-Site VPN
 - AWS Step Functions
 - AWS Transit Gateway
@@ -42,9 +57,15 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon CloudWatch
 - Amazon Cognito
 - Amazon Data Firehose
+- Amazon Detective
+- Amazon DocumentDB
 - Amazon DynamoDB
+- Amazon DynamoDB Accelerator (DAX)
+- Amazon DynamoDB Streams
 - Amazon EBS
 - Amazon EC2
+- Amazon EC2 Auto Scaling
+- Amazon EC2 security groups
 - Amazon ECR
 - Amazon ECS
 - Amazon EFS
@@ -54,51 +75,62 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon FSx
 - Amazon FSx for Windows File Server
 - Amazon GuardDuty
+- Amazon Inspector
+- Amazon Keyspaces
 - Amazon Kinesis
 - Amazon Kinesis Data Streams
+- Amazon Macie
+- Amazon Managed Streaming for Apache Kafka
+- Amazon MemoryDB
+- Amazon Neptune
+- Amazon OpenSearch Service
 - Amazon RDS
+- Amazon RDS Proxy
+- Amazon Redshift
 - Amazon Route 53
 - Amazon S3
 - Amazon SES
 - Amazon SNS
 - Amazon SQS
+- Amazon Security Lake
+- Amazon VPC
+- Amazon Verified Permissions
 - CloudFormation StackSets
+- Egress-only internet gateways
+- Elastic IP Addresses
 - Elastic Load Balancing
 - IAM Access Analyzer
+- Internet gateways
 - NAT gateways
+- Network ACLs
 - Systems Manager
+- VPC Flow Logs
+- VPC Reachability Analyzer
+- VPC peering
 
 ### Pending
 
 - AWS Account Management
 - AWS Amplify
 - AWS App Mesh
-- AWS App Runner
 - AWS App Studio
 - AWS App2Container
-- AWS AppConfig
 - AWS AppFabric
-- AWS AppSync
 - AWS Application Discovery Service
 - AWS Application Migration Service
 - AWS Artifact
 - AWS Auto Scaling
 - AWS B2B Data Interchange
-- AWS Batch
 - AWS Billing Conductor
 - AWS Billing and Cost Management
 - AWS CDK
 - AWS CLI
-- AWS Certificate Manager
 - AWS Clean Rooms
 - AWS Client VPN
-- AWS Cloud Map
 - AWS Cloud WAN
 - AWS CloudFormation Guard
 - AWS CloudHSM
 - AWS CloudShell
-- AWS CloudTrail Lake
-- AWS CodeArtifact
 - AWS CodeCommit
 - AWS CodeConnections
 - AWS CodeStar (Legacy)
@@ -114,7 +146,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS DevOps Agent
 - AWS Device Farm
 - AWS Directory Service
-- AWS Elastic Beanstalk
 - AWS Elemental MediaConnect
 - AWS Elemental MediaConvert
 - AWS Elemental MediaLive
@@ -122,7 +153,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Elemental MediaTailor
 - AWS Entity Resolution
 - AWS Fault Injection Service
-- AWS Firewall Manager
 - AWS Global Accelerator
 - AWS Glue Data Quality
 - AWS Glue DataBrew
@@ -152,7 +182,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Management Console
 - AWS Marketplace
 - AWS Migration Hub
-- AWS Network Access Analyzer
 - AWS Network Manager
 - AWS OpsWorks (Legacy)
 - AWS Outposts
@@ -160,14 +189,12 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Partner Device Catalog
 - AWS Payment Cryptography
 - AWS Private 5G
-- AWS Private CA
 - AWS Private Certificate Authority
 - AWS Proton
 - AWS Resilience Hub
 - AWS Resource Access Manager (RAM)
 - AWS Resource Explorer
 - AWS Resource Groups
-- AWS SAM
 - AWS Schema Conversion Tool
 - AWS Security Agent
 - AWS Serverless Application Repository
@@ -175,8 +202,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Service Management / AppRegistry
 - AWS Service Quotas
 - AWS Shield
-- AWS Shield Advanced
-- AWS Signer
 - AWS Snow Family
 - AWS Snowball Edge
 - AWS Storage Gateway
@@ -217,14 +242,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Corretto
 - Amazon Data Lifecycle Manager
 - Amazon DataZone
-- Amazon Detective
 - Amazon DevOps Guru
-- Amazon DocumentDB
-- Amazon DynamoDB Accelerator (DAX)
-- Amazon DynamoDB Streams
-- Amazon EC2 Auto Scaling
 - Amazon EC2 Image Builder
-- Amazon EC2 security groups
 - Amazon ECS Anywhere
 - Amazon EKS Anywhere
 - Amazon EKS Distro
@@ -237,10 +256,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon FinSpace
 - Amazon Fraud Detector
 - Amazon GameLift Servers
-- Amazon Inspector
 - Amazon Interactive Video Service
 - Amazon Kendra
-- Amazon Keyspaces
 - Amazon Kinesis Video Streams
 - Amazon Lex
 - Amazon Lightsail
@@ -250,21 +267,16 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Lookout for Vision
 - Amazon MQ
 - Amazon MWAA
-- Amazon Macie
 - Amazon Managed Blockchain
 - Amazon Managed Grafana
 - Amazon Managed Service for Apache Flink
 - Amazon Managed Service for Prometheus
-- Amazon Managed Streaming for Apache Kafka
 - Amazon Managed Workflows for Apache Airflow
 - Amazon Mechanical Turk
-- Amazon MemoryDB
 - Amazon MemoryDB for Redis
-- Amazon Neptune
 - Amazon Neptune Analytics
 - Amazon Nova
 - Amazon OpenSearch Serverless
-- Amazon OpenSearch Service
 - Amazon PartyRock
 - Amazon Personalize
 - Amazon Pinpoint
@@ -276,8 +288,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Q Developer in chat applications
 - Amazon Quick
 - Amazon Quick Sight
-- Amazon RDS Proxy
-- Amazon Redshift
 - Amazon Redshift Serverless
 - Amazon Rekognition
 - Amazon S3 Glacier
@@ -292,18 +302,15 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon SageMaker Neo
 - Amazon SageMaker Processing
 - Amazon SageMaker Unified Studio
-- Amazon Security Lake
 - Amazon Simple Workflow Service
 - Amazon Textract
 - Amazon Timestream
 - Amazon Titan
 - Amazon Transcribe
 - Amazon Translate
-- Amazon VPC
 - Amazon VPC IP Address Manager (IPAM)
 - Amazon VPC IPAM
 - Amazon VPC Lattice
-- Amazon Verified Permissions
 - Amazon WorkMail
 - Amazon WorkSpaces
 - Amazon WorkSpaces Applications
@@ -312,14 +319,10 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon WorkSpaces Thin Client
 - Audit Manager
 - Automated Forensics Orchestrator for Amazon EC2
-- Egress-only internet gateways
-- Elastic IP Addresses
 - FreeRTOS
 - Integrated Private Wireless on AWS
-- Internet gateways
 - Kiro
 - Migration Evaluator
-- Network ACLs
 - Red Hat OpenShift Service on AWS (ROSA)
 - Route 53 Resolver DNS Firewall
 - Savings Plans
@@ -327,49 +330,71 @@ Completed means the currently selected explicit replacement workflows were revie
 - Strands Agents
 - VMware Cloud on AWS
 - VPC Endpoints
-- VPC Flow Logs
-- VPC Reachability Analyzer
-- VPC peering
 
-## Azure: 46 completed, 157 pending
+## Azure: 76 completed, 127 pending
 
 ### Completed
 
 - API Management
 - App Service
+- Archive Storage
 - Automation
+- Azure Advisor
+- Azure App Configuration
 - Azure Application Gateway
+- Azure Arc
+- Azure Artifacts
 - Azure Backup
+- Azure Bastion
 - Azure Blob Storage
 - Azure Container Apps
 - Azure Container Instances
 - Azure Container Registry
 - Azure Cosmos DB
+- Azure DDoS Protection
 - Azure DNS
+- Azure Data Explorer
 - Azure Data Factory
 - Azure Data Lake Storage
 - Azure Database Migration Service
+- Azure Database for MySQL Flexible Server
+- Azure Database for PostgreSQL Flexible Server
+- Azure Databricks
 - Azure DevOps
 - Azure Disk Storage
+- Azure ExpressRoute
 - Azure Files
+- Azure Firewall
 - Azure Front Door
 - Azure Functions
 - Azure Key Vault
 - Azure Kubernetes Service (AKS)
+- Azure Load Balancer
 - Azure Managed Redis
 - Azure Monitor
 - Azure NAT Gateway
+- Azure NetApp Files
+- Azure Network Watcher
 - Azure Pipelines
 - Azure Policy
 - Azure Private Link
+- Azure Repos
 - Azure Resource Manager
 - Azure Resource Manager templates
+- Azure Route Server
 - Azure SQL Database
+- Azure SQL Managed Instance
+- Azure SignalR Service
 - Azure Site Recovery
 - Azure Stream Analytics
 - Azure Synapse Analytics
+- Azure Table Storage
+- Azure Traffic Manager
 - Azure VPN Gateway
+- Azure Virtual Network
+- Azure Virtual WAN
 - Azure Web Application Firewall
+- Azure Web PubSub
 - Event Grid
 - Event Hubs
 - Linux Virtual Machines
@@ -377,30 +402,29 @@ Completed means the currently selected explicit replacement workflows were revie
 - Microsoft Defender for Cloud
 - Microsoft Entra External ID
 - Microsoft Entra ID (formerly Azure AD)
+- Microsoft Fabric
 - Microsoft Sentinel
 - Queue Storage
 - Service Bus
+- Static Web Apps
+- Storage Accounts
+- Update management center
+- Virtual Machine Scale Sets
 - Virtual Machines
 
 ### Pending
 
 - AI Anomaly Detector
 - App Configuration
-- Archive Storage
 - Artifact Signing
 - Azure AI Bot Service
 - Azure AI Custom Vision
 - Azure AI Immersive Reader
 - Azure AI Search
 - Azure AI Video Indexer
-- Azure Advisor
 - Azure Analysis Services
-- Azure App Configuration
 - Azure App Testing
-- Azure Arc
-- Azure Artifacts
 - Azure Automanage
-- Azure Bastion
 - Azure Blueprints
 - Azure Boards
 - Azure Cache for Redis
@@ -413,16 +437,11 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Content Delivery Network
 - Azure Content Understanding in Foundry Tools
 - Azure Copilot
-- Azure DDoS Protection
 - Azure Data Box
-- Azure Data Explorer
 - Azure Data Share
 - Azure Database for MariaDB
 - Azure Database for MySQL
-- Azure Database for MySQL Flexible Server
 - Azure Database for PostgreSQL
-- Azure Database for PostgreSQL Flexible Server
-- Azure Databricks
 - Azure Dedicated Host
 - Azure Deployment Environments
 - Azure DevTest Labs
@@ -430,8 +449,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Document Intelligence in Foundry Tools
 - Azure Elastic SAN
 - Azure Enclave
-- Azure ExpressRoute
-- Azure Firewall
 - Azure Firewall Manager
 - Azure Health Data Services
 - Azure Information Protection
@@ -444,7 +461,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Language in Foundry Tools
 - Azure Lighthouse
 - Azure Linux
-- Azure Load Balancer
 - Azure Local
 - Azure Machine Learning
 - Azure Managed Applications
@@ -453,22 +469,16 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Maps
 - Azure Migrate
 - Azure Multicloud Interconnect
-- Azure NetApp Files
 - Azure Network Function Manager
-- Azure Network Watcher
 - Azure Open Datasets
 - Azure OpenAI in Foundry Models
 - Azure Operator Nexus
 - Azure Operator Service Manager
 - Azure Quantum
 - Azure Red Hat OpenShift
-- Azure Repos
 - Azure Resource Mover
-- Azure Route Server
-- Azure SQL Managed Instance
 - Azure SRE Agent
 - Azure Service Fabric
-- Azure SignalR Service
 - Azure Speech in Foundry Tools
 - Azure Sphere
 - Azure Spot Virtual Machines
@@ -478,18 +488,13 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Storage Actions
 - Azure Storage Discovery
 - Azure Storage Mover
-- Azure Table Storage
 - Azure Test Plans
-- Azure Traffic Manager
 - Azure Translator in Foundry Tools
 - Azure VM Image Builder
 - Azure VMware Solution
 - Azure Virtual Desktop
-- Azure Virtual Network
 - Azure Virtual Network Manager
-- Azure Virtual WAN
 - Azure Vision in Foundry Tools
-- Azure Web PubSub
 - Batch
 - Cloud Services
 - Cloud Shell
@@ -517,7 +522,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Microsoft Energy Data Services
 - Microsoft Entra Domain Services
 - Microsoft Entra Verified ID
-- Microsoft Fabric
 - Microsoft Foundry
 - Microsoft Graph Data Connect
 - Microsoft Planetary Computer Pro
@@ -532,56 +536,82 @@ Completed means the currently selected explicit replacement workflows were revie
 - Power BI Embedded
 - SDKs
 - SQL Server on Azure Virtual Machines
-- Static Web Apps
-- Storage Accounts
 - Storage Explorer
-- Update management center
-- Virtual Machine Scale Sets
 - Visual Studio
 - Visual Studio Code
 - Windows Server
 - Windows for IoT
 
-## GCP: 37 completed, 140 pending
+## GCP: 67 completed, 110 pending
 
 ### Completed
 
 - API Gateway
+- AlloyDB
+- App Engine
+- Artifact Analysis
 - Artifact Registry
 - Backup and DR Service
+- Batch
 - BigQuery
+- Bigtable
+- Binary Authorization
+- Certificate Manager
 - Cloud Armor
+- Cloud Asset Inventory
 - Cloud Build
 - Cloud CDN
 - Cloud DNS
+- Cloud Data Fusion
 - Cloud Deploy
+- Cloud IDS
+- Cloud Interconnect
 - Cloud KMS
 - Cloud Load Balancing
 - Cloud NAT
+- Cloud NGFW
 - Cloud Router
 - Cloud Run
 - Cloud SQL
 - Cloud Scheduler
+- Cloud Service Mesh
 - Cloud Storage
 - Cloud Tasks
 - Cloud VPN
 - Compute Engine
 - Database Migration Service
 - Dataflow
+- Dataform
+- Dataproc Metastore
+- Datastream
+- Error Reporting
 - Eventarc
 - Filestore
+- Firestore in Datastore mode
 - Google Kubernetes Engine (GKE)
 - Identity Platform
 - Identity and Access Management (IAM)
 - Identity-Aware Proxy
+- Infra Manager
+- Logging
+- Looker
+- Managed Service for Apache Spark
 - Memorystore for Redis Cluster
 - Monitoring
+- Network Connectivity Center (NCC)
+- Profiler
 - Pub/Sub
+- Recommender
 - Resource Manager
 - Secret Manager
 - Security Command Center
+- Sensitive Data Protection
+- Service Directory
 - Spanner
 - Trace
+- VM Manager
+- VPC Service Controls
+- Virtual Private Cloud (VPC)
 - Workflows
 
 ### Pending
@@ -593,42 +623,29 @@ Completed means the currently selected explicit replacement workflows were revie
 - Access Transparency
 - Advisory Notifications
 - Agent Platform Vision
-- AlloyDB
 - AlloyDB Omni
 - Anti Money Laundering AI (AML AI)
 - Apigee
 - App Design Center
-- App Engine
 - App Hub
 - Application Integration
-- Artifact Analysis
 - Assured OSS
 - Assured Workloads
 - Audit Manager
-- Batch
-- Bigtable
-- Binary Authorization
 - Blockchain Analytics
 - Blockchain Node Engine
 - Buildpacks
 - CA Service
 - Capacity Planner
-- Certificate Manager
 - Chrome Enterprise Premium
-- Cloud Asset Inventory
 - Cloud Billing
 - Cloud Code
-- Cloud Data Fusion
 - Cloud Domains
 - Cloud Hub
-- Cloud IDS
 - Cloud Identity
-- Cloud Interconnect
 - Cloud Location Finder
 - Cloud Marketplace
-- Cloud NGFW
 - Cloud Quotas
-- Cloud Service Mesh
 - Cloud Shell
 - Cloud Source Repositories
 - Cloud TPU
@@ -643,9 +660,6 @@ Completed means the currently selected explicit replacement workflows were revie
 - Cortex Framework
 - Data Studio
 - Data Transfer Essentials
-- Dataform
-- Dataproc Metastore
-- Datastream
 - Deep Learning Containers
 - Deep Learning VM
 - Developer Connect
@@ -654,27 +668,21 @@ Completed means the currently selected explicit replacement workflows were revie
 - DocAI
 - Dual Run
 - Enterprise Knowledge Graph
-- Error Reporting
-- Firestore in Datastore mode
 - Firestore with MongoDB compatibility
 - Fraud Defense
 - GKE Multi-Cloud
 - Gemini Enterprise Agent Platform
 - Google SecOps
 - Healthcare Data Engine
-- Infra Manager
 - Integration Connectors
 - Knowledge Catalog
 - Lakehouse
 - Live Stream API
-- Logging
-- Looker
 - Mainframe Assessment Tool
 - Mainframe Connector
 - Managed Microsoft AD
 - Managed Service for Apache Airflow
 - Managed Service for Apache Kafka
-- Managed Service for Apache Spark
 - Manufacturing Data Engine
 - Media CDN
 - Memorystore for Valkey
@@ -683,21 +691,16 @@ Completed means the currently selected explicit replacement workflows were revie
 - Migration Center
 - Model Armor
 - NetApp Volumes
-- Network Connectivity Center (NCC)
 - Network Intelligence Center
 - Network Security Integration
 - Network Service Tiers
 - Oracle on Google Cloud Compute
 - Policy Controller
 - Policy Intelligence
-- Profiler
-- Recommender
 - Secure Access Connect
 - Secure Source Manager
 - Secure Web Proxy
-- Sensitive Data Protection
 - Service Catalog
-- Service Directory
 - Service Extensions
 - Service Health
 - Service Infrastructure
@@ -715,12 +718,9 @@ Completed means the currently selected explicit replacement workflows were revie
 - Transcoder API
 - Translation
 - Unified Maintenance
-- VM Manager
 - VMware Engine
-- VPC Service Controls
 - Video Intelligence API
 - Video Stitcher API
-- Virtual Private Cloud (VPC)
 - Vision API
 - Vision API Product Search
 - Web Risk

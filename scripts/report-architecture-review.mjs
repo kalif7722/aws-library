@@ -34,7 +34,8 @@ const summary={reviewedWorkflows:arches.length,explicitNodes:arches.flatMap(a=>a
 let doc='# Architecture walkthrough review status\n\nCompleted means the currently selected explicit replacement workflows were reviewed, not every historical diagram or possible workload. Pending means node-by-node semantic review is still required even where diagrams already exist. Counts deduplicate catalog services and exclude registry-only aliases.\n';
 for(const [cloud,names] of Object.entries(catalogs)){
  const all=[...new Set(names)].sort();
- const completed=all.filter(n=>reviewedNames.has(n)),pending=all.filter(n=>!reviewedNames.has(n));
+ const isReviewed=n=>reviewedNames.has(cloud+":"+n)||reviewedNames.has(n);
+ const completed=all.filter(isReviewed),pending=all.filter(n=>!isReviewed(n));
  summary.clouds[cloud]={total:all.length,completed:completed.length,pending:pending.length};
  doc+=`\n## ${cloud}: ${completed.length} completed, ${pending.length} pending\n\n### Completed\n\n${completed.map(n=>'- '+n).join('\n')}\n\n### Pending\n\n${pending.map(n=>'- '+n).join('\n')}\n`;
 }

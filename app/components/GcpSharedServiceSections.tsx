@@ -7,7 +7,8 @@ import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
 import {architectureNodeDetail} from "../../lib/architecture-node-detail";
-import {reviewedGcpBoards} from "../../lib/reviewed-workload-architectures";
+import {reviewedGcpBoards,reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
+import ReviewedArchitectureSections from "./ReviewedArchitectureSections";
 
 type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
 type ArchitectureCard = ArchitectureBoard["groups"][number]["cards"][number];
@@ -165,6 +166,8 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
+  const reviewed=reviewedWorkloadArchitectures["GCP:"+serviceName]??reviewedWorkloadArchitectures[serviceName];
+  if(reviewed?.some(arch=>arch.connections))return <ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/>;
   const boards = reviewedGcpBoards(serviceName) ?? (details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details));
   if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">
     {boards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}

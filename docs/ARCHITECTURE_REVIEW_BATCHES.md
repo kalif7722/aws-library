@@ -19,4 +19,4 @@ Validation: the production build and 20 focused architecture tests pass, includi
 
 Overall explicit registry coverage is now 106 workflows and 515 node occurrences, plus four financial workflows with 21 node occurrences. Catalog service coverage is AWS 61/321, Azure 46/203 and GCP 37/177. The remaining 557 catalog services still require individual semantic review.
 
-See [completed and pending service list](ARCHITECTURE_REVIEW_SERVICE_LIST.md). An authored workflow does not certify every historical example or possible architecture for that service.
+These totals describe the five-batch release. The subsequent [100-service release](ARCHITECTURE_REVIEW_NEXT_100.md) and [completed and pending service list](ARCHITECTURE_REVIEW_SERVICE_LIST.md) contain current coverage. An authored workflow does not certify every historical example or possible architecture for that service.

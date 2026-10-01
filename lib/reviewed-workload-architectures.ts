@@ -15,8 +15,9 @@ import {reviewedHybridArchitectures} from "./reviewed-hybrid-architectures";
 import {reviewedOperationsArchitectures} from "./reviewed-operations-architectures";
 import {reviewedDataArchitectures} from "./reviewed-data-architectures";
 import {reviewedIntegrationArchitectures} from "./reviewed-integration-architectures";
+import {reviewedScaleArchitectures} from "./reviewed-scale-architectures";
 export type ReviewedNode={label:string;sub:string;detail:string;kind?:"user"|"app"|"data"|"security"|"storage"|"message";icon?:string};
-export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[]};
+export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[];connections?:{from:string;to:string;label:string;control?:boolean}[]};
 const n=(label:string,sub:string,detail:string,kind?:ReviewedNode["kind"],icon?:string):ReviewedNode=>({label,sub,detail,kind,icon});
 const l=(title:string,...nodes:ReviewedNode[])=>({title,nodes});
 const a=(title:string,note:string,reference:string,...layers:ReviewedArchitecture["layers"]):ReviewedArchitecture=>({title,note,reference,layers});
@@ -105,6 +106,7 @@ export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>
  ...reviewedOperationsArchitectures,
  ...reviewedDataArchitectures,
  ...reviewedIntegrationArchitectures,
+ ...reviewedScaleArchitectures,
  "AWS Lambda":[awsImages,awsApi,awsQueue],
  "Amazon S3":[awsImages,awsQueue],
  "Amazon SQS":[awsQueue],
@@ -124,5 +126,5 @@ export function reviewedWorkloadNodeDetail(architecture:string|undefined,label:s
  return uniqueArchitectures.find(item=>item.title===architecture)?.layers.flatMap(item=>item.nodes).find(item=>item.label===label)?.detail;
 }
 export function reviewedGcpBoards(service:string){
- return reviewedWorkloadArchitectures[service]?.map(arch=>({title:arch.title,note:arch.note,reference:arch.reference,groups:arch.layers.map(layer=>({title:layer.title,cards:layer.nodes.map(node=>({label:node.label,caption:node.sub,detail:node.detail,iconLabel:node.icon||node.label}))}))}));
+ return (reviewedWorkloadArchitectures["GCP:"+service]??reviewedWorkloadArchitectures[service])?.map(arch=>({title:arch.title,note:arch.note,reference:arch.reference,groups:arch.layers.map(layer=>({title:layer.title,cards:layer.nodes.map(node=>({label:node.label,caption:node.sub,detail:node.detail,iconLabel:node.icon||node.label}))}))}));
 }
