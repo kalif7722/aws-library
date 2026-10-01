@@ -31,10 +31,18 @@ function GenericArchitectureIcon({ label, board = false }: { label: string; boar
   return <div className={`${board ? "gcp-architecture-board-generic" : "gcp-architecture-generic"} tone-${tone}`}><Icon size={board ? 36 : 30} /></div>;
 }
 
-function ArchitectureBoardCard({ card }: { card: ArchitectureCard }) {
+const gcpGroupNames=(group:ArchitectureBoard["groups"][number]|undefined)=>group?.cards.slice(0,3).map(card=>card.label).join(" and ")||"the surrounding workload";
+function gcpBoardCardDetail(board:ArchitectureBoard,groupIndex:number,card:ArchitectureCard){
+  const previous=gcpGroupNames(board.groups[groupIndex-1]);const next=gcpGroupNames(board.groups[groupIndex+1]);const stage=board.groups[groupIndex]?.title.toLowerCase()||"architecture";
+  if(groupIndex===0)return `${card.label} starts the “${board.title}” flow by providing ${card.caption.toLowerCase()}. Its output moves to ${next}.`;
+  if(groupIndex===board.groups.length-1)return `${card.label} receives the result from ${previous} and uses it for ${card.caption.toLowerCase()}. This completes the ${stage} stage.`;
+  return `${card.label} takes input from ${previous}, performs ${card.caption.toLowerCase()} in the ${stage} stage, and supplies the result to ${next}.`;
+}
+function ArchitectureBoardCard({ card, board, groupIndex }: { card: ArchitectureCard; board: ArchitectureBoard; groupIndex: number }) {
   const iconLabel = card.iconLabel || card.label;
   const icon = findGcpArchitectureIcon(iconLabel);
-  return <div className={`gcp-architecture-board-card ${icon ? "official" : "generic"}`}>
+  const detail=gcpBoardCardDetail(board,groupIndex,card);
+  return <div className={`gcp-architecture-board-card ${icon ? "official" : "generic"}`} tabIndex={0} data-architecture-provider="gcp" data-architecture-detail={detail} aria-label={`${card.label}. ${detail}`}>
     {icon ? <div className="gcp-architecture-board-icon"><img src={icon.path} alt={`${card.label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={iconLabel} board />}
     <b>{card.label}</b>
     <small>{card.caption}</small>
@@ -53,7 +61,7 @@ function ArchitectureBoardDiagram({ board, index }: { board: ArchitectureBoard; 
       {groups.map((group, groupIndex) => <div className="gcp-architecture-board-group-wrap" key={`${group.title}-${groupIndex}`}>
         <section className="gcp-architecture-board-group">
           <strong>{group.title}</strong>
-          <div className="gcp-architecture-board-cards">{group.cards.slice(0, 3).map((card, cardIndex) => <ArchitectureBoardCard card={card} key={`${card.label}-${cardIndex}`} />)}</div>
+          <div className="gcp-architecture-board-cards">{group.cards.slice(0, 3).map((card, cardIndex) => <ArchitectureBoardCard card={card} board={board} groupIndex={groupIndex} key={`${card.label}-${cardIndex}`} />)}</div>
         </section>
         {groupIndex < groups.length - 1 ? <div className="gcp-architecture-board-arrow" aria-hidden="true">→</div> : null}
       </div>)}
@@ -122,9 +130,9 @@ function deriveArchitectureBoards(serviceName: string, details: GcpContent): Arc
   return details.architectureFlows.slice(0, 2).map((flow, index) => index === 0 ? derivedProductionBoard(serviceName, details, flow) : derivedGovernanceBoard(serviceName, details, flow));
 }
 
-function ArchitectureNode({ label, sub }: { label: string; sub?: string }) {
+function ArchitectureNode({ label, sub, detail }: { label: string; sub?: string; detail: string }) {
   const icon = findGcpArchitectureIcon(label);
-  return <div className={`gcp-architecture-node ${icon ? "official" : "generic"}`}>
+  return <div className={`gcp-architecture-node ${icon ? "official" : "generic"}`} tabIndex={0} data-architecture-provider="gcp" data-architecture-detail={detail} aria-label={`${label}. ${detail}`}>
     {icon ? <div className="gcp-architecture-icon"><img src={icon.path} alt={`${label} Google Cloud architecture icon`} loading="lazy" /></div> : <GenericArchitectureIcon label={label} />}
     <strong>{label}</strong>{sub ? <small>{sub}</small> : null}
   </div>;
@@ -146,8 +154,8 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
           <div className="gcp-architecture-layer">
             <b>{step.title}</b>
             <div className="gcp-architecture-nodes">
-              <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} />
-              {childItems.map((item) => <ArchitectureNode label={item} key={item} />)}
+              <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} detail={`${stageLabel} ${stepIndex === 0 ? "starts this flow" : `receives input from ${visibleSteps[stepIndex-1].title}`}. It ${stageCopy.join("; ").toLowerCase()}${stepIndex < visibleSteps.length-1 ? `, then supplies the result to ${visibleSteps[stepIndex+1].title}.` : ", producing the final outcome of the flow."}`} />
+              {childItems.map((item) => <ArchitectureNode label={item} key={item} detail={`${item} supports ${stageLabel} during the ${step.title.toLowerCase()} stage${stepIndex < visibleSteps.length-1 ? ` before the flow continues to ${visibleSteps[stepIndex+1].title}` : " and contributes to the final architecture outcome"}.`} />)}
             </div>
           </div>
           {stepIndex < visibleSteps.length - 1 ? <div className="gcp-architecture-arrow" aria-hidden="true">→</div> : null}
