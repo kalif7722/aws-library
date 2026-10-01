@@ -87,12 +87,16 @@ function GcpCourseBadge({ course }: { course: GcpCourse }) {
       <textPath href={`#${pathId}-bottom`} startOffset="50%" textAnchor="middle">GOOGLE CLOUD CERTIFIED · {course.level.toUpperCase()}</textPath>
     </text>
     <circle className="gcp-badge-ring" cx="80" cy="81" r="31" stroke={`url(#${pathId}-ring)`} />
-    <g className="gcp-badge-cloud" aria-hidden="true">
-      <path d="M58 85a23 23 0 0 1 39-17" stroke="#4285f4" />
-      <path d="M97 68a23 23 0 0 1 8 18" stroke="#ea4335" />
-      <path d="M105 86a17 17 0 0 1-17 17" stroke="#fbbc04" />
-      <path d="M88 103H68a16 16 0 0 1-10-28" stroke="#34a853" />
-    </g>
+    <image
+      className="gcp-badge-cloud"
+      href="/assets/gcp-icons/legacy/cloud-generic.svg"
+      x="57"
+      y="58"
+      width="46"
+      height="46"
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+    />
   </svg>;
 }
 
