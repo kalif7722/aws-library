@@ -5,6 +5,19 @@ const {reviewedWorkloadArchitectures:registry,reviewedWorkloadNodeDetail:lookup,
 const {architectureNodeDetail:describe}=loadArchitectureModule(new URL('../lib/architecture-node-detail.ts',import.meta.url));
 const unique=[...new Map(Object.values(registry).flat().map(arch=>[arch.title,arch])).values()];
 
+test('five new batches preserve service boundaries and failure semantics',()=>{
+ const nodes=key=>registry[key].flatMap(a=>a.layers.flatMap(l=>l.nodes));
+ const detail=(key,label)=>nodes(key).find(n=>n.label===label)?.detail;
+ assert.match(detail('Cloud VPN','Cloud Router'),/control plane rather than a packet-processing hop/);
+ assert.match(detail('AWS Glue','AWS Glue Data Catalog'),/not a copied dataset/);
+ assert.match(detail('Queue Storage','Warehouse pick worker'),/deletes the message.*only after durable completion/);
+ assert.match(detail('Cloud Tasks','Export worker on Cloud Run'),/stores the result and completion state before returning/);
+ assert.match(detail('Amazon SES','Amazon SES'),/Acceptance is not proof of recipient delivery/);
+ assert.match(detail('Amazon Cognito','Order history API'),/signature, issuer, expiration/);
+ assert.match(detail('Event Grid','Event Grid'),/does not validate supplier fields/);
+ assert.match(detail('Workflows','Workflows'),/branches away from enrichment when the document is rejected/);
+});
+
 test('Security Hub response requires approval and targets routed egress',()=>{
  const flow=registry['AWS Security Hub'].find(a=>a.title==='AWS: contain a confirmed malicious outbound destination');
  assert.ok(flow);
@@ -36,7 +49,7 @@ test('tracing workflows keep application responsibilities separate from export',
 });
 
 test('every reviewed node resolves to authored copy for its exact architecture',()=>{
- assert.equal(unique.length,67);
+ assert.equal(unique.length,106);
  for(const arch of unique){
   const labels=new Set();
   for(const layer of arch.layers)for(const node of layer.nodes){
