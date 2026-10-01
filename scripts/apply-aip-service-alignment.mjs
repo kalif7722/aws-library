@@ -29,7 +29,8 @@ if (!renderer.includes(decisionCssImport)) {
 const oldArches = 'const arches=architectures(e.service,e.category);';
 const previousArches = 'const arches=getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
 const newArches = 'const arches=getAipArchitectureOverrides2(e.service,e.category)??getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
-if (!renderer.includes(newArches)) {
+const requestedArches = 'const arches=getAipArchitectureOverrides2(serviceName,e.category)??getAipArchitectureOverrides2(e.service,e.category)??getAipArchitectureOverrides(e.service,e.category)??architectures(e.service,e.category);';
+if (!renderer.includes(newArches) && !renderer.includes(requestedArches)) {
   if (renderer.includes(previousArches)) renderer = renderer.replace(previousArches, newArches);
   else if (renderer.includes(oldArches)) renderer = renderer.replace(oldArches, newArches);
   else throw new Error('AIP V8 architecture selection hook missing');

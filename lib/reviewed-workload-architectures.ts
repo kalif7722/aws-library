@@ -1,3 +1,4 @@
+import {reviewedFinalArchitectures} from "./reviewed-final-architectures";
 import {reviewedNextArchitectures} from "./reviewed-next-architectures";
 import {reviewedNetworkArchitectures} from "./reviewed-network-architectures";
 import {applyLearningRepairs} from "./reviewed-learning-repairs";
@@ -125,6 +126,7 @@ export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>
 };
 
 applyLearningRepairs(reviewedWorkloadArchitectures);
+Object.assign(reviewedWorkloadArchitectures,reviewedFinalArchitectures);
 const uniqueArchitectures=[...new Map(Object.values(reviewedWorkloadArchitectures).flat().map(arch=>[arch.title,arch])).values()];
 export function reviewedWorkloadNodeDetail(architecture:string|undefined,label:string){
  return uniqueArchitectures.find(item=>item.title===architecture)?.layers.flatMap(item=>item.nodes).find(item=>item.label===label)?.detail;

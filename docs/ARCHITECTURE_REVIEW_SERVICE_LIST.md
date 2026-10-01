@@ -2,19 +2,24 @@
 
 Completed means the currently selected explicit replacement workflows were reviewed, not every historical diagram or possible workload. Pending means node-by-node semantic review is still required even where diagrams already exist. Counts deduplicate catalog services and exclude registry-only aliases.
 
-## AWS: 201 completed, 120 pending
+## AWS: 321 completed, 0 pending
 
 ### Completed
 
 - AWS Account Management
 - AWS Amplify
+- AWS App Mesh
 - AWS App Runner
+- AWS App Studio
 - AWS App2Container
 - AWS AppConfig
+- AWS AppFabric
 - AWS AppSync
 - AWS Application Discovery Service
 - AWS Application Migration Service
 - AWS Artifact
+- AWS Auto Scaling
+- AWS B2B Data Interchange
 - AWS Backup
 - AWS Batch
 - AWS Billing Conductor
@@ -23,6 +28,7 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS CDK
 - AWS CLI
 - AWS Certificate Manager
+- AWS Clean Rooms
 - AWS Client VPN
 - AWS Cloud Map
 - AWS Cloud WAN
@@ -38,22 +44,32 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS CodeConnections
 - AWS CodeDeploy
 - AWS CodePipeline
+- AWS CodeStar (Legacy)
 - AWS Compute Optimizer
 - AWS Config
+- AWS Console Mobile Application
 - AWS Control Tower
 - AWS Copilot
 - AWS Cost Anomaly Detection
 - AWS Cost Explorer
 - AWS Cost and Usage Reports
 - AWS Data Exchange
+- AWS Data Transfer Terminal
 - AWS DataSync
 - AWS Database Migration Service
+- AWS Deadline Cloud
+- AWS DevOps Agent
 - AWS Device Farm
 - AWS Direct Connect
 - AWS Directory Service
 - AWS Elastic Beanstalk
 - AWS Elastic Disaster Recovery
+- AWS Elemental MediaConnect
 - AWS Elemental MediaConvert
+- AWS Elemental MediaLive
+- AWS Elemental MediaPackage
+- AWS Elemental MediaTailor
+- AWS Entity Resolution
 - AWS Fargate
 - AWS Fault Injection Service
 - AWS Firewall Manager
@@ -61,15 +77,24 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Glue
 - AWS Glue Data Quality
 - AWS Glue DataBrew
+- AWS Ground Station
 - AWS Health
+- AWS Health Dashboard
+- AWS HealthLake
+- AWS HealthScribe
 - AWS IAM
 - AWS IAM Identity Center
 - AWS Infrastructure Composer
+- AWS IoT 1-Click
 - AWS IoT Core
 - AWS IoT Device Defender
 - AWS IoT Device Management
+- AWS IoT Events
+- AWS IoT ExpressLink
+- AWS IoT FleetWise
 - AWS IoT Greengrass
 - AWS IoT SiteWise
+- AWS IoT Things Graph
 - AWS IoT TwinMaker
 - AWS KMS
 - AWS Lake Formation
@@ -77,14 +102,25 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Lambda@Edge
 - AWS Launch Wizard
 - AWS License Manager
+- AWS Local Zones
+- AWS Managed Services
 - AWS Management Console
+- AWS Marketplace
 - AWS Migration Hub
 - AWS Network Access Analyzer
 - AWS Network Firewall
 - AWS Network Manager
+- AWS OpsWorks (Legacy)
 - AWS Organizations
+- AWS Outposts
+- AWS Parallel Computing Service
+- AWS Partner Device Catalog
+- AWS Payment Cryptography
+- AWS Private 5G
 - AWS Private CA
+- AWS Private Certificate Authority
 - AWS PrivateLink
+- AWS Proton
 - AWS Resilience Hub
 - AWS Resource Access Manager (RAM)
 - AWS Resource Explorer
@@ -92,6 +128,7 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS SAM
 - AWS Schema Conversion Tool
 - AWS Secrets Manager
+- AWS Security Agent
 - AWS Security Hub
 - AWS Security Token Service
 - AWS Serverless Application Repository
@@ -102,31 +139,58 @@ Completed means the currently selected explicit replacement workflows were revie
 - AWS Shield Advanced
 - AWS Signer
 - AWS Site-to-Site VPN
+- AWS Snow Family
+- AWS Snowball Edge
 - AWS Step Functions
 - AWS Storage Gateway
+- AWS Supply Chain
+- AWS Support
 - AWS Tools and SDKs
 - AWS Transfer Family
+- AWS Transform
+- AWS Transform MGN
 - AWS Transit Gateway
 - AWS Trusted Advisor
 - AWS User Notifications
 - AWS Verified Access
 - AWS WAF
+- AWS Wavelength
 - AWS Well-Architected Tool
+- AWS Wickr
 - AWS X-Ray
+- AWS re:Post Private
 - Amazon API Gateway
 - Amazon AppFlow
+- Amazon AppStream 2.0
+- Amazon Application Recovery Controller
 - Amazon Athena
 - Amazon Augmented AI
 - Amazon Aurora
+- Amazon Aurora DSQL
+- Amazon Aurora Serverless
+- Amazon Aurora Serverless v2
 - Amazon Bedrock
+- Amazon Bedrock AgentCore
+- Amazon Bedrock Knowledge Bases
+- Amazon Bedrock Prompt Flows
+- Amazon Bedrock Prompt Management
+- Amazon Braket
+- Amazon Chime SDK
 - Amazon CloudFront
 - Amazon CloudWatch
+- Amazon CloudWatch Synthetics
+- Amazon CodeGuru
+- Amazon CodeGuru Security
 - Amazon Cognito
 - Amazon Comprehend
 - Amazon Comprehend Medical
+- Amazon Connect Customer
+- Amazon Corretto
 - Amazon Data Firehose
+- Amazon Data Lifecycle Manager
 - Amazon DataZone
 - Amazon Detective
+- Amazon DevOps Guru
 - Amazon DocumentDB
 - Amazon DynamoDB
 - Amazon DynamoDB Accelerator (DAX)
@@ -138,31 +202,66 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon EC2 security groups
 - Amazon ECR
 - Amazon ECS
+- Amazon ECS Anywhere
 - Amazon EFS
 - Amazon EKS
+- Amazon EKS Anywhere
+- Amazon EKS Distro
 - Amazon EMR
 - Amazon ElastiCache
+- Amazon Elastic Transcoder
 - Amazon EventBridge
 - Amazon FSx
+- Amazon FSx for Lustre
+- Amazon FSx for NetApp ONTAP
+- Amazon FSx for OpenZFS
 - Amazon FSx for Windows File Server
+- Amazon File Cache
+- Amazon FinSpace
+- Amazon Fraud Detector
+- Amazon GameLift Servers
 - Amazon GuardDuty
 - Amazon Inspector
+- Amazon Interactive Video Service
 - Amazon Kendra
 - Amazon Keyspaces
 - Amazon Kinesis
 - Amazon Kinesis Data Streams
 - Amazon Kinesis Video Streams
 - Amazon Lex
+- Amazon Lightsail
+- Amazon Location Service
+- Amazon Lookout for Equipment
+- Amazon Lookout for Metrics
+- Amazon Lookout for Vision
 - Amazon MQ
 - Amazon MWAA
 - Amazon Macie
+- Amazon Managed Blockchain
+- Amazon Managed Grafana
+- Amazon Managed Service for Apache Flink
+- Amazon Managed Service for Prometheus
 - Amazon Managed Streaming for Apache Kafka
+- Amazon Managed Workflows for Apache Airflow
+- Amazon Mechanical Turk
 - Amazon MemoryDB
+- Amazon MemoryDB for Redis
 - Amazon Neptune
+- Amazon Neptune Analytics
+- Amazon Nova
 - Amazon OpenSearch Serverless
 - Amazon OpenSearch Service
+- Amazon PartyRock
 - Amazon Personalize
+- Amazon Pinpoint
 - Amazon Polly
+- Amazon Q
+- Amazon Q Business
+- Amazon Q Business Apps
+- Amazon Q Developer
+- Amazon Q Developer in chat applications
+- Amazon Quick
+- Amazon Quick Sight
 - Amazon RDS
 - Amazon RDS Proxy
 - Amazon Redshift
@@ -170,6 +269,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon Rekognition
 - Amazon Route 53
 - Amazon S3
+- Amazon S3 Glacier
+- Amazon S3 Tables
 - Amazon SES
 - Amazon SNS
 - Amazon SQS
@@ -180,29 +281,48 @@ Completed means the currently selected explicit replacement workflows were revie
 - Amazon SageMaker JumpStart
 - Amazon SageMaker Model Monitor
 - Amazon SageMaker Model Registry
+- Amazon SageMaker Neo
 - Amazon SageMaker Processing
+- Amazon SageMaker Unified Studio
 - Amazon Security Lake
+- Amazon Simple Workflow Service
 - Amazon Textract
+- Amazon Timestream
+- Amazon Titan
 - Amazon Transcribe
 - Amazon Translate
 - Amazon VPC
 - Amazon VPC IP Address Manager (IPAM)
+- Amazon VPC IPAM
 - Amazon VPC Lattice
 - Amazon Verified Permissions
+- Amazon WorkMail
+- Amazon WorkSpaces
+- Amazon WorkSpaces Applications
+- Amazon WorkSpaces Core
+- Amazon WorkSpaces Secure Browser
+- Amazon WorkSpaces Thin Client
 - Audit Manager
+- Automated Forensics Orchestrator for Amazon EC2
 - CloudFormation StackSets
 - Egress-only internet gateways
 - Elastic IP Addresses
 - Elastic Load Balancing
+- FreeRTOS
 - IAM Access Analyzer
+- Integrated Private Wireless on AWS
 - Internet gateways
+- Kiro
 - Migration Evaluator
 - NAT gateways
 - Network ACLs
+- Red Hat OpenShift Service on AWS (ROSA)
 - Route 53 Resolver DNS Firewall
 - Savings Plans
 - Service Control Policies
+- Strands Agents
 - Systems Manager
+- VMware Cloud on AWS
 - VPC Endpoints
 - VPC Flow Logs
 - VPC Reachability Analyzer
@@ -210,221 +330,35 @@ Completed means the currently selected explicit replacement workflows were revie
 
 ### Pending
 
-- AWS App Mesh
-- AWS App Studio
-- AWS AppFabric
-- AWS Auto Scaling
-- AWS B2B Data Interchange
-- AWS Clean Rooms
-- AWS CodeStar (Legacy)
-- AWS Console Mobile Application
-- AWS Data Transfer Terminal
-- AWS Deadline Cloud
-- AWS DevOps Agent
-- AWS Elemental MediaConnect
-- AWS Elemental MediaLive
-- AWS Elemental MediaPackage
-- AWS Elemental MediaTailor
-- AWS Entity Resolution
-- AWS Ground Station
-- AWS Health Dashboard
-- AWS HealthLake
-- AWS HealthScribe
-- AWS IoT 1-Click
-- AWS IoT Events
-- AWS IoT ExpressLink
-- AWS IoT FleetWise
-- AWS IoT Things Graph
-- AWS Local Zones
-- AWS Managed Services
-- AWS Marketplace
-- AWS OpsWorks (Legacy)
-- AWS Outposts
-- AWS Parallel Computing Service
-- AWS Partner Device Catalog
-- AWS Payment Cryptography
-- AWS Private 5G
-- AWS Private Certificate Authority
-- AWS Proton
-- AWS Security Agent
-- AWS Snow Family
-- AWS Snowball Edge
-- AWS Supply Chain
-- AWS Support
-- AWS Transform
-- AWS Transform MGN
-- AWS Wavelength
-- AWS Wickr
-- AWS re:Post Private
-- Amazon AppStream 2.0
-- Amazon Application Recovery Controller
-- Amazon Aurora DSQL
-- Amazon Aurora Serverless
-- Amazon Aurora Serverless v2
-- Amazon Bedrock AgentCore
-- Amazon Bedrock Knowledge Bases
-- Amazon Bedrock Prompt Flows
-- Amazon Bedrock Prompt Management
-- Amazon Braket
-- Amazon Chime SDK
-- Amazon CloudWatch Synthetics
-- Amazon CodeGuru
-- Amazon CodeGuru Security
-- Amazon Connect Customer
-- Amazon Corretto
-- Amazon Data Lifecycle Manager
-- Amazon DevOps Guru
-- Amazon ECS Anywhere
-- Amazon EKS Anywhere
-- Amazon EKS Distro
-- Amazon Elastic Transcoder
-- Amazon FSx for Lustre
-- Amazon FSx for NetApp ONTAP
-- Amazon FSx for OpenZFS
-- Amazon File Cache
-- Amazon FinSpace
-- Amazon Fraud Detector
-- Amazon GameLift Servers
-- Amazon Interactive Video Service
-- Amazon Lightsail
-- Amazon Location Service
-- Amazon Lookout for Equipment
-- Amazon Lookout for Metrics
-- Amazon Lookout for Vision
-- Amazon Managed Blockchain
-- Amazon Managed Grafana
-- Amazon Managed Service for Apache Flink
-- Amazon Managed Service for Prometheus
-- Amazon Managed Workflows for Apache Airflow
-- Amazon Mechanical Turk
-- Amazon MemoryDB for Redis
-- Amazon Neptune Analytics
-- Amazon Nova
-- Amazon PartyRock
-- Amazon Pinpoint
-- Amazon Q
-- Amazon Q Business
-- Amazon Q Business Apps
-- Amazon Q Developer
-- Amazon Q Developer in chat applications
-- Amazon Quick
-- Amazon Quick Sight
-- Amazon S3 Glacier
-- Amazon S3 Tables
-- Amazon SageMaker Neo
-- Amazon SageMaker Unified Studio
-- Amazon Simple Workflow Service
-- Amazon Timestream
-- Amazon Titan
-- Amazon VPC IPAM
-- Amazon WorkMail
-- Amazon WorkSpaces
-- Amazon WorkSpaces Applications
-- Amazon WorkSpaces Core
-- Amazon WorkSpaces Secure Browser
-- Amazon WorkSpaces Thin Client
-- Automated Forensics Orchestrator for Amazon EC2
-- FreeRTOS
-- Integrated Private Wireless on AWS
-- Kiro
-- Red Hat OpenShift Service on AWS (ROSA)
-- Strands Agents
-- VMware Cloud on AWS
 
-## Azure: 76 completed, 127 pending
+
+## Azure: 203 completed, 0 pending
 
 ### Completed
 
+- AI Anomaly Detector
 - API Management
+- App Configuration
 - App Service
 - Archive Storage
-- Automation
-- Azure Advisor
-- Azure App Configuration
-- Azure Application Gateway
-- Azure Arc
-- Azure Artifacts
-- Azure Backup
-- Azure Bastion
-- Azure Blob Storage
-- Azure Container Apps
-- Azure Container Instances
-- Azure Container Registry
-- Azure Cosmos DB
-- Azure DDoS Protection
-- Azure DNS
-- Azure Data Explorer
-- Azure Data Factory
-- Azure Data Lake Storage
-- Azure Database Migration Service
-- Azure Database for MySQL Flexible Server
-- Azure Database for PostgreSQL Flexible Server
-- Azure Databricks
-- Azure DevOps
-- Azure Disk Storage
-- Azure ExpressRoute
-- Azure Files
-- Azure Firewall
-- Azure Front Door
-- Azure Functions
-- Azure Key Vault
-- Azure Kubernetes Service (AKS)
-- Azure Load Balancer
-- Azure Managed Redis
-- Azure Monitor
-- Azure NAT Gateway
-- Azure NetApp Files
-- Azure Network Watcher
-- Azure Pipelines
-- Azure Policy
-- Azure Private Link
-- Azure Repos
-- Azure Resource Manager
-- Azure Resource Manager templates
-- Azure Route Server
-- Azure SQL Database
-- Azure SQL Managed Instance
-- Azure SignalR Service
-- Azure Site Recovery
-- Azure Stream Analytics
-- Azure Synapse Analytics
-- Azure Table Storage
-- Azure Traffic Manager
-- Azure VPN Gateway
-- Azure Virtual Network
-- Azure Virtual WAN
-- Azure Web Application Firewall
-- Azure Web PubSub
-- Event Grid
-- Event Hubs
-- Linux Virtual Machines
-- Logic Apps
-- Microsoft Defender for Cloud
-- Microsoft Entra External ID
-- Microsoft Entra ID (formerly Azure AD)
-- Microsoft Fabric
-- Microsoft Sentinel
-- Queue Storage
-- Service Bus
-- Static Web Apps
-- Storage Accounts
-- Update management center
-- Virtual Machine Scale Sets
-- Virtual Machines
-
-### Pending
-
-- AI Anomaly Detector
-- App Configuration
 - Artifact Signing
+- Automation
 - Azure AI Bot Service
 - Azure AI Custom Vision
 - Azure AI Immersive Reader
 - Azure AI Search
 - Azure AI Video Indexer
+- Azure Advisor
 - Azure Analysis Services
+- Azure App Configuration
 - Azure App Testing
+- Azure Application Gateway
+- Azure Arc
+- Azure Artifacts
 - Azure Automanage
+- Azure Backup
+- Azure Bastion
+- Azure Blob Storage
 - Azure Blueprints
 - Azure Boards
 - Azure Cache for Redis
@@ -433,52 +367,91 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Communication Services
 - Azure Compute Fleet
 - Azure Confidential Ledger
+- Azure Container Apps
+- Azure Container Instances
+- Azure Container Registry
 - Azure Container Storage
 - Azure Content Delivery Network
 - Azure Content Understanding in Foundry Tools
 - Azure Copilot
+- Azure Cosmos DB
+- Azure DDoS Protection
+- Azure DNS
 - Azure Data Box
+- Azure Data Explorer
+- Azure Data Factory
+- Azure Data Lake Storage
 - Azure Data Share
+- Azure Database Migration Service
 - Azure Database for MariaDB
 - Azure Database for MySQL
+- Azure Database for MySQL Flexible Server
 - Azure Database for PostgreSQL
+- Azure Database for PostgreSQL Flexible Server
+- Azure Databricks
 - Azure Dedicated Host
 - Azure Deployment Environments
+- Azure DevOps
 - Azure DevTest Labs
 - Azure Digital Twins
+- Azure Disk Storage
 - Azure Document Intelligence in Foundry Tools
 - Azure Elastic SAN
 - Azure Enclave
+- Azure ExpressRoute
+- Azure Files
+- Azure Firewall
 - Azure Firewall Manager
+- Azure Front Door
+- Azure Functions
 - Azure Health Data Services
 - Azure Information Protection
 - Azure IoT Central
 - Azure IoT Edge
 - Azure IoT Hub
 - Azure IoT Operations
+- Azure Key Vault
 - Azure Kubernetes Fleet Manager
+- Azure Kubernetes Service (AKS)
 - Azure Lab Services
 - Azure Language in Foundry Tools
 - Azure Lighthouse
 - Azure Linux
+- Azure Load Balancer
 - Azure Local
 - Azure Machine Learning
 - Azure Managed Applications
 - Azure Managed Grafana
 - Azure Managed Lustre
+- Azure Managed Redis
 - Azure Maps
 - Azure Migrate
+- Azure Monitor
 - Azure Multicloud Interconnect
+- Azure NAT Gateway
+- Azure NetApp Files
 - Azure Network Function Manager
+- Azure Network Watcher
 - Azure Open Datasets
 - Azure OpenAI in Foundry Models
 - Azure Operator Nexus
 - Azure Operator Service Manager
+- Azure Pipelines
+- Azure Policy
+- Azure Private Link
 - Azure Quantum
 - Azure Red Hat OpenShift
+- Azure Repos
+- Azure Resource Manager
+- Azure Resource Manager templates
 - Azure Resource Mover
+- Azure Route Server
+- Azure SQL Database
+- Azure SQL Managed Instance
 - Azure SRE Agent
 - Azure Service Fabric
+- Azure SignalR Service
+- Azure Site Recovery
 - Azure Speech in Foundry Tools
 - Azure Sphere
 - Azure Spot Virtual Machines
@@ -488,13 +461,22 @@ Completed means the currently selected explicit replacement workflows were revie
 - Azure Storage Actions
 - Azure Storage Discovery
 - Azure Storage Mover
+- Azure Stream Analytics
+- Azure Synapse Analytics
+- Azure Table Storage
 - Azure Test Plans
+- Azure Traffic Manager
 - Azure Translator in Foundry Tools
 - Azure VM Image Builder
 - Azure VMware Solution
+- Azure VPN Gateway
 - Azure Virtual Desktop
+- Azure Virtual Network
 - Azure Virtual Network Manager
+- Azure Virtual WAN
 - Azure Vision in Foundry Tools
+- Azure Web Application Firewall
+- Azure Web PubSub
 - Batch
 - Cloud Services
 - Cloud Shell
@@ -504,6 +486,8 @@ Completed means the currently selected explicit replacement workflows were revie
 - Data Science Virtual Machines
 - Defender External Attack Surface Management
 - DevOps tool integrations
+- Event Grid
+- Event Hubs
 - Foundry Agent Service
 - Foundry Control Plane
 - Foundry IQ
@@ -515,144 +499,125 @@ Completed means the currently selected explicit replacement workflows were revie
 - Github Enterprise
 - HDInsight
 - Health Bot
+- Linux Virtual Machines
+- Logic Apps
 - Microsoft Azure Attestation
 - Microsoft Cost Management
 - Microsoft Defender External Attack Surface Management
+- Microsoft Defender for Cloud
 - Microsoft Dev Box
 - Microsoft Energy Data Services
 - Microsoft Entra Domain Services
+- Microsoft Entra External ID
+- Microsoft Entra ID (formerly Azure AD)
 - Microsoft Entra Verified ID
+- Microsoft Fabric
 - Microsoft Foundry
 - Microsoft Graph Data Connect
 - Microsoft Planetary Computer Pro
 - Microsoft Playwright Testing
 - Microsoft Purview
 - Microsoft Security Copilot
+- Microsoft Sentinel
 - Notification Hubs
 - Nutanix Cloud Clusters
 - Observability in Foundry Control Plane
 - Phi open models
 - Power BI
 - Power BI Embedded
+- Queue Storage
 - SDKs
 - SQL Server on Azure Virtual Machines
+- Service Bus
+- Static Web Apps
+- Storage Accounts
 - Storage Explorer
+- Update management center
+- Virtual Machine Scale Sets
+- Virtual Machines
 - Visual Studio
 - Visual Studio Code
 - Windows Server
 - Windows for IoT
 
-## GCP: 67 completed, 110 pending
+### Pending
+
+
+
+## GCP: 177 completed, 0 pending
 
 ### Completed
 
-- API Gateway
-- AlloyDB
-- App Engine
-- Artifact Analysis
-- Artifact Registry
-- Backup and DR Service
-- Batch
-- BigQuery
-- Bigtable
-- Binary Authorization
-- Certificate Manager
-- Cloud Armor
-- Cloud Asset Inventory
-- Cloud Build
-- Cloud CDN
-- Cloud DNS
-- Cloud Data Fusion
-- Cloud Deploy
-- Cloud IDS
-- Cloud Interconnect
-- Cloud KMS
-- Cloud Load Balancing
-- Cloud NAT
-- Cloud NGFW
-- Cloud Router
-- Cloud Run
-- Cloud SQL
-- Cloud Scheduler
-- Cloud Service Mesh
-- Cloud Storage
-- Cloud Tasks
-- Cloud VPN
-- Compute Engine
-- Database Migration Service
-- Dataflow
-- Dataform
-- Dataproc Metastore
-- Datastream
-- Error Reporting
-- Eventarc
-- Filestore
-- Firestore in Datastore mode
-- Google Kubernetes Engine (GKE)
-- Identity Platform
-- Identity and Access Management (IAM)
-- Identity-Aware Proxy
-- Infra Manager
-- Logging
-- Looker
-- Managed Service for Apache Spark
-- Memorystore for Redis Cluster
-- Monitoring
-- Network Connectivity Center (NCC)
-- Profiler
-- Pub/Sub
-- Recommender
-- Resource Manager
-- Secret Manager
-- Security Command Center
-- Sensitive Data Protection
-- Service Directory
-- Spanner
-- Trace
-- VM Manager
-- VPC Service Controls
-- Virtual Private Cloud (VPC)
-- Workflows
-
-### Pending
-
 - AI Commerce Search
 - AI Hypercomputer
+- API Gateway
 - Access Approval
 - Access Context Manager
 - Access Transparency
 - Advisory Notifications
 - Agent Platform Vision
+- AlloyDB
 - AlloyDB Omni
 - Anti Money Laundering AI (AML AI)
 - Apigee
 - App Design Center
+- App Engine
 - App Hub
 - Application Integration
+- Artifact Analysis
+- Artifact Registry
 - Assured OSS
 - Assured Workloads
 - Audit Manager
+- Backup and DR Service
+- Batch
+- BigQuery
+- Bigtable
+- Binary Authorization
 - Blockchain Analytics
 - Blockchain Node Engine
 - Buildpacks
 - CA Service
 - Capacity Planner
+- Certificate Manager
 - Chrome Enterprise Premium
+- Cloud Armor
+- Cloud Asset Inventory
 - Cloud Billing
+- Cloud Build
+- Cloud CDN
 - Cloud Code
+- Cloud DNS
+- Cloud Data Fusion
+- Cloud Deploy
 - Cloud Domains
 - Cloud Hub
+- Cloud IDS
 - Cloud Identity
+- Cloud Interconnect
+- Cloud KMS
+- Cloud Load Balancing
 - Cloud Location Finder
 - Cloud Marketplace
+- Cloud NAT
+- Cloud NGFW
 - Cloud Quotas
+- Cloud Router
+- Cloud Run
+- Cloud SQL
+- Cloud Scheduler
+- Cloud Service Mesh
 - Cloud Shell
 - Cloud Source Repositories
+- Cloud Storage
 - Cloud TPU
+- Cloud Tasks
+- Cloud VPN
 - Cloud Workstations
 - Cluster Director
 - Cluster Toolkit
 - Colab Enterprise
+- Compute Engine
 - Config Connector
 - Config Controller
 - Config Sync
@@ -660,6 +625,11 @@ Completed means the currently selected explicit replacement workflows were revie
 - Cortex Framework
 - Data Studio
 - Data Transfer Essentials
+- Database Migration Service
+- Dataflow
+- Dataform
+- Dataproc Metastore
+- Datastream
 - Deep Learning Containers
 - Deep Learning VM
 - Developer Connect
@@ -668,39 +638,62 @@ Completed means the currently selected explicit replacement workflows were revie
 - DocAI
 - Dual Run
 - Enterprise Knowledge Graph
+- Error Reporting
+- Eventarc
+- Filestore
+- Firestore in Datastore mode
 - Firestore with MongoDB compatibility
 - Fraud Defense
 - GKE Multi-Cloud
 - Gemini Enterprise Agent Platform
+- Google Kubernetes Engine (GKE)
 - Google SecOps
 - Healthcare Data Engine
+- Identity Platform
+- Identity and Access Management (IAM)
+- Identity-Aware Proxy
+- Infra Manager
 - Integration Connectors
 - Knowledge Catalog
 - Lakehouse
 - Live Stream API
+- Logging
+- Looker
 - Mainframe Assessment Tool
 - Mainframe Connector
 - Managed Microsoft AD
 - Managed Service for Apache Airflow
 - Managed Service for Apache Kafka
+- Managed Service for Apache Spark
 - Manufacturing Data Engine
 - Media CDN
+- Memorystore for Redis Cluster
 - Memorystore for Valkey
 - Migrate to Containers
 - Migrate to VMs
 - Migration Center
 - Model Armor
+- Monitoring
 - NetApp Volumes
+- Network Connectivity Center (NCC)
 - Network Intelligence Center
 - Network Security Integration
 - Network Service Tiers
 - Oracle on Google Cloud Compute
 - Policy Controller
 - Policy Intelligence
+- Profiler
+- Pub/Sub
+- Recommender
+- Resource Manager
+- Secret Manager
 - Secure Access Connect
 - Secure Source Manager
 - Secure Web Proxy
+- Security Command Center
+- Sensitive Data Protection
 - Service Catalog
+- Service Directory
 - Service Extensions
 - Service Health
 - Service Infrastructure
@@ -708,6 +701,7 @@ Completed means the currently selected explicit replacement workflows were revie
 - Shielded VMs
 - Software supply chain security
 - Sovereign Controls by Partners
+- Spanner
 - Spectrum Access System
 - Speech-to-Text
 - Talent Solutions
@@ -715,17 +709,26 @@ Completed means the currently selected explicit replacement workflows were revie
 - Telecom Subscriber Insights API
 - TensorFlow Enterprise
 - Text-to-Speech
+- Trace
 - Transcoder API
 - Translation
 - Unified Maintenance
+- VM Manager
 - VMware Engine
+- VPC Service Controls
 - Video Intelligence API
 - Video Stitcher API
+- Virtual Private Cloud (VPC)
 - Vision API
 - Vision API Product Search
 - Web Risk
+- Workflows
 - Workload Manager
 - gcloud CLI
+
+### Pending
+
+
 
 ## Catalog gaps
 

@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Foundry Agent Service",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "answer an employee question through an authorized retrieval tool",
+    "input": "The employee asks a bounded question and the application selects its permitted agent configuration.",
+    "action": "Agent Service coordinates the configured model and supported tools for the agent. Retrieval or action tools use their assigned identities; the application limits data scope and validates tool authorization.",
+    "output": "The application presents the retrieved answer with available evidence and routes unsupported actions for approval.",
+    "check": "Test tool denial, prompt injection, run failure and cross-user data isolation before release.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/agents/overview",
+    "legacy": false
+  },
+  {
+    "service": "Foundry Control Plane",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "govern model and agent deployments before application release",
+    "input": "The platform owner selects the actual supported Foundry project, deployment and governance controls.",
+    "action": "The configured Foundry management capabilities govern supported model or agent resources and their access or policy settings. The runtime deployment executes inference; the control configuration bounds how applications can use it.",
+    "output": "The application team releases only the approved deployment and records its model, identity and policy settings.",
+    "check": "Verify effective permissions, policy enforcement and the actual runtime behavior rather than relying on a dashboard label.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry",
+    "legacy": false
+  },
+  {
+    "service": "Foundry IQ",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "retrieve enterprise knowledge for an authorized agent answer",
+    "input": "The agent application supplies a bounded question and configured enterprise knowledge sources.",
+    "action": "Foundry IQ's supported knowledge capabilities connect and retrieve information from configured sources. Identity, connector scope and source permissions determine accessible evidence; application code validates the generated response.",
+    "output": "The agent presents permitted citations or source results to the employee for the requested task.",
+    "check": "Test source ACLs, stale content, irrelevant retrieval and unavailable connectors before enabling enterprise answers.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry",
+    "legacy": false
+  },
+  {
+    "service": "Foundry Models",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "invoke an approved model deployment for document classification",
+    "input": "The application submits permitted document content with a validated output schema.",
+    "action": "The selected Foundry model deployment performs the supported inference operation using its configured endpoint and model settings. Deployment access and model capabilities bound the request; the application validates the classification.",
+    "output": "The document handler accepts supported labels and queues uncertain output for review.",
+    "check": "Evaluate representative classes, invalid output, model-version changes and input privacy before production use.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview",
+    "legacy": false
+  },
+  {
+    "service": "Foundry Tools",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "compose an application with a selected language analysis API",
+    "input": "The developer chooses the actual supported tool API and approved input scope.",
+    "action": "The selected Foundry tool provides its documented operation, such as language extraction, speech recognition or vision analysis. The application calls that specific API and interprets its response; the tool collection is not one universal processor.",
+    "output": "The application uses the validated tool response for its defined business task and handles unsupported inputs explicitly.",
+    "check": "Test the chosen API's schema, permissions, error behavior and quality against task-specific samples.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/what-are-ai-services",
+    "legacy": false
+  },
+  {
+    "service": "GitHub Advanced Security",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "triage repository security findings before release",
+    "input": "The maintainer enables the permitted code, dependency and secret-scanning features for the repository.",
+    "action": "Advanced Security's configured scanners identify supported code vulnerabilities, dependency alerts or secret exposure. Repository policy determines required checks; developers investigate findings and rotate real exposed credentials.",
+    "output": "The release owner accepts the repaired revision after required security checks and application tests pass.",
+    "check": "Verify alert applicability, fix coverage and secret revocation without assuming dismissal removes a vulnerability.",
+    "reference": "https://docs.github.com/en/code-security",
+    "legacy": false
+  },
+  {
+    "service": "GitHub Advanced Security for Azure DevOps",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "gate an Azure repository change on validated security findings",
+    "input": "The maintainer configures supported security scanning for the approved Azure DevOps repository.",
+    "action": "The security integration analyzes supported code, dependencies and secrets under its configured checks. Findings inform release decisions; application owners validate exploitability and fix confirmed issues.",
+    "output": "The Azure pipeline promotes only the revision meeting its configured security and quality gates.",
+    "check": "Test scanning coverage, pull-request checks, finding permissions and remediation validation before enforcing the gate.",
+    "reference": "https://learn.microsoft.com/en-us/azure/devops/repos/security/github-advanced-security-security-overview",
+    "legacy": false
+  },
+  {
+    "service": "GitHub Copilot",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "implement a reviewed testable feature with coding assistance",
+    "input": "The developer supplies approved repository context and the requested feature requirements.",
+    "action": "Copilot assists with supported code completion and development tasks in the configured environment. Suggested code remains a proposed change; the developer checks behavior, dependency use and repository policy.",
+    "output": "The maintainer reviews the diff and submits it through normal build, test and pull-request gates.",
+    "check": "Verify acceptance requirements, secret handling and unintended code changes before merging assisted implementation.",
+    "reference": "https://docs.github.com/en/copilot",
+    "legacy": false
+  },
+  {
+    "service": "Github Enterprise",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "control a repository release through enterprise access policy",
+    "input": "The organization assigns repository roles and defines the approved branch and release controls.",
+    "action": "GitHub Enterprise provides the organization's configured source collaboration and enterprise policy capabilities. Repository workflows build or deploy code only when configured; enterprise access governs who can trigger or approve them.",
+    "output": "The release owner promotes the reviewed commit with linked workflow and approval evidence.",
+    "check": "Test branch protection, workflow credentials, offboarding and deployment approvals using the intended enterprise policy.",
+    "reference": "https://docs.github.com/en/enterprise-cloud@latest",
+    "legacy": false
+  },
+  {
+    "service": "HDInsight",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "run a supported distributed analytical job over enterprise data",
+    "input": "The engineer selects a supported cluster type, job code and authorized storage dataset.",
+    "action": "HDInsight supplies the selected supported distributed analytics cluster. Spark or other configured engine workers execute the submitted job; cluster compatibility and data permissions govern successful processing.",
+    "output": "The job writes accepted output partitions for the reporting consumer.",
+    "check": "Check supported engine versions, partition counts, retry behavior and required cluster lifecycle migration before scheduling production.",
+    "reference": "https://learn.microsoft.com/en-us/azure/hdinsight/hdinsight-overview",
+    "legacy": false
+  }
+]

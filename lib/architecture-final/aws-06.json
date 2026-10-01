@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Amazon Aurora Serverless v2",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "scale database capacity during a retail traffic peak",
+    "input": "The retailer configures a supported Aurora engine, capacity range and application connection strategy.",
+    "action": "Aurora Serverless v2 adjusts database capacity within configured limits while Aurora executes the SQL workload. The application manages transactions and connection reuse; capacity scaling is not request-level load balancing.",
+    "output": "The checkout backend commits order rows and retrieves them without changing its SQL endpoint during normal scaling.",
+    "check": "Exercise peak load, capacity ceilings and failover; verify engine-specific idle and scaling settings.",
+    "reference": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Bedrock AgentCore",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "run an agent that retrieves authorized order status",
+    "input": "The developer deploys an agent with explicit tool permissions and a bounded customer-support task.",
+    "action": "AgentCore supplies configured agent infrastructure capabilities such as runtime, identity and tool connectivity. Agent code invokes the approved order-status tool with the permitted identity and enforces customer ownership.",
+    "output": "The agent returns the retrieved order status with relevant evidence; write tools require their separate authorization policy.",
+    "check": "Test cross-customer denial, tool authentication, timeout and untrusted tool-output handling before enabling the agent.",
+    "reference": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Bedrock Knowledge Bases",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "answer a policy question with retrieved document evidence",
+    "input": "The user asks a policy question against an approved, indexed document collection.",
+    "action": "Knowledge Bases retrieves relevant chunks from its configured source and vector store and can invoke a selected model for retrieval-augmented answers. Ingestion updates and document permissions determine the available evidence.",
+    "output": "The application presents the answer and citations and sends unsupported questions to the policy owner.",
+    "check": "Test stale documents, irrelevant retrieval and access boundaries; verify citations support each accepted answer.",
+    "reference": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Bedrock Prompt Flows",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "orchestrate a document classification and extraction flow",
+    "input": "The builder defines a versioned flow with permitted document input and branch conditions.",
+    "action": "Bedrock Flows connects configured prompt, model and supported integration nodes, using defined inputs and conditions. Each node performs its own operation; flow wiring controls ordering and branch selection.",
+    "output": "The document application invokes the published flow and stores only the validated classification and extracted fields.",
+    "check": "Test every condition branch, missing fields and downstream failures using the published flow version.",
+    "reference": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Bedrock Prompt Management",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "release a tested customer-support prompt version",
+    "input": "The prompt owner defines variables, model settings and representative support questions.",
+    "action": "Prompt Management stores and versions reusable prompts with their supported model configuration. The release selects an accepted version; runtime model invocation happens through the application or its configured flow.",
+    "output": "The application invokes the selected prompt version with validated variables and returns the model response for its support task.",
+    "check": "Compare prompt versions against the evaluation set and verify rollback to the accepted version.",
+    "reference": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Braket",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "run a quantum experiment with reviewed classical preparation",
+    "input": "The researcher prepares a supported circuit and selects simulator or available quantum-device execution.",
+    "action": "Braket submits the quantum task to the chosen supported simulator or device and returns task results. Classical experiment code prepares inputs and interprets measurement statistics; device execution is not deterministic application inference.",
+    "output": "The research notebook compares measured distributions across repeated runs and retains the experiment configuration.",
+    "check": "Check device availability, circuit support, task status and statistical uncertainty before drawing conclusions.",
+    "reference": "https://docs.aws.amazon.com/braket/latest/developerguide/what-is-braket.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Chime SDK",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "join an authorized customer-support audio session",
+    "input": "The customer application requests a support meeting after validating the case identity.",
+    "action": "Chime SDK APIs create the meeting and attendee credentials for the application's communications session. Client SDKs exchange real-time media through the supported meeting infrastructure; the application controls participant assignment.",
+    "output": "The authorized customer and agent communicate within the assigned session while the backend protects meeting credentials.",
+    "check": "Test attendee authorization, reconnect behavior and meeting cleanup; prevent reuse of another customer's join credentials.",
+    "reference": "https://docs.aws.amazon.com/chime-sdk/latest/dg/what-is-chime-sdk.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon CloudWatch Synthetics",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "detect a broken checkout path before customers report it",
+    "input": "The operator configures a scheduled canary using a restricted test account and nonproduction transaction identifiers.",
+    "action": "CloudWatch Synthetics runs the configured API or browser checks and records execution results and artifacts. The canary exercises the selected checkout steps; it does not repair a failed application.",
+    "output": "The on-call team examines the failed step and opens a checkout incident with the captured evidence.",
+    "check": "Deliberately break a test endpoint, verify the alarm and ensure the canary cannot place uncontrolled real purchases.",
+    "reference": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon CodeGuru",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "review a code change for supported quality issues",
+    "input": "The developer submits a repository revision with its supported language and review context.",
+    "action": "CodeGuru's selected review or profiling capability analyzes supported code or runtime evidence. A code review produces recommendations; a profiling integration examines runtime behavior, so the owner chooses the relevant feature explicitly.",
+    "output": "The developer validates relevant recommendations and updates the code through normal review.",
+    "check": "Reproduce the issue and run regression tests; recommendations alone do not establish the application's correctness.",
+    "reference": "https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/welcome.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon CodeGuru Security",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "triage supported code-security findings before deployment",
+    "input": "The security-enabled build supplies source artifacts within the approved scanning scope.",
+    "action": "CodeGuru Security analyzes supported code to identify security findings and associated remediation guidance. The scan reports potential issues; it neither deploys the application nor automatically fixes every vulnerability.",
+    "output": "The maintainer validates exploitability, repairs confirmed issues and decides release eligibility under the repository policy.",
+    "check": "Run a follow-up scan and application tests against the repaired revision before accepting the finding resolution.",
+    "reference": "https://docs.aws.amazon.com/codeguru/latest/security-ug/what-is-codeguru-security.html",
+    "legacy": false
+  }
+]

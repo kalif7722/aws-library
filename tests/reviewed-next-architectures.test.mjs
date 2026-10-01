@@ -20,7 +20,7 @@ test('ten batches add 100 distinct selected service workflows with connected aut
  }
 });
 test('new AWS Audit Manager cannot replace the GCP service of the same name',()=>{
- assert.match(registry['Audit Manager'][0].title,/^AWS:/);assert.equal(reviewedGcpBoards('Audit Manager'),undefined);
+ assert.match(registry['Audit Manager'][0].title,/^AWS:/);assert.match(reviewedGcpBoards('Audit Manager')[0].title,/^GCP:/);
 });
 test('Athena selects its authored replacement on service and course pages',()=>{
  const source=fs.readFileSync(new URL('../app/components/AthenaLearningDetails.tsx',import.meta.url),'utf8');

@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Azure IoT Hub",
+    "cloud": "Azure",
+    "mode": "edge",
+    "title": "receive authenticated equipment telemetry and route accepted events",
+    "input": "The device publishes permitted sensor telemetry using its provisioned device identity.",
+    "action": "IoT Hub authenticates the device connection and routes accepted messages to configured endpoints. Message routing selects the destination; a downstream application validates and interprets the sensor measurements.",
+    "output": "The telemetry handler stores accepted measurements and the authorized operator uses the separate command path when needed.",
+    "check": "Test invalid identities, routing filters, duplicate messages and device-command permissions.",
+    "reference": "https://learn.microsoft.com/en-us/azure/iot-hub/iot-concepts-and-iot-hub",
+    "legacy": false
+  },
+  {
+    "service": "Azure IoT Operations",
+    "cloud": "Azure",
+    "mode": "edge",
+    "title": "ingest factory telemetry through an edge MQTT architecture",
+    "input": "The factory team configures supported edge infrastructure, asset sources and authorized MQTT clients.",
+    "action": "IoT Operations supplies supported edge data components including MQTT messaging and configured dataflows. Dataflow configuration maps accepted asset telemetry to destinations; plant application code determines business or control decisions.",
+    "output": "The enterprise ingestion application consumes the selected stream and the factory retains local operational ownership.",
+    "check": "Validate MQTT authentication, dataflow mappings, disconnected behavior and least-privilege source and destination credentials.",
+    "reference": "https://learn.microsoft.com/en-us/azure/iot-operations/overview-iot-operations",
+    "legacy": false
+  },
+  {
+    "service": "Azure Kubernetes Fleet Manager",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "roll out a reviewed update across member Kubernetes clusters",
+    "input": "The platform owner selects member clusters, update groups and rollout order.",
+    "action": "Fleet Manager coordinates supported fleet-wide Kubernetes operations such as update orchestration across registered members. Each member cluster runs its own workloads; fleet configuration determines rollout coordination.",
+    "output": "The platform team advances the update only after the selected member group passes workload readiness checks.",
+    "check": "Test staged rollout, failed-member handling, version compatibility and workload availability before updating all members.",
+    "reference": "https://learn.microsoft.com/en-us/azure/kubernetes-fleet/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Lab Services",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "preserve an existing classroom lab during platform transition",
+    "input": "The instructor inventories lab images, student assignments and the required learning software.",
+    "action": "Lab Services supplies existing managed classroom lab VMs under its supported lifecycle. Transition planning recreates the image and assignment behavior on the approved replacement rather than treating historical provisioning as indefinitely available.",
+    "output": "Students use the accepted replacement lab and save required work in the designated persistent location.",
+    "check": "Test student access, software licensing, schedules and retention of existing student work before cutover.",
+    "reference": "https://learn.microsoft.com/en-us/azure/lab-services/lab-services-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Language in Foundry Tools",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "extract support-ticket entities for a reviewed routing decision",
+    "input": "The support application submits authorized ticket text and selects the required language feature.",
+    "action": "The selected Language API performs supported text analysis such as entity extraction, sentiment or classification. The application maps validated analysis to its routing policy; the model does not independently assign business access.",
+    "output": "The ticket backend proposes a queue and retains the original text for authorized review.",
+    "check": "Check unsupported language, ambiguous entities, routing errors and sensitive-text retention before production use.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Lighthouse",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "delegate bounded operations across customer subscriptions",
+    "input": "The customer approves a delegation defining provider principals, roles and resource scope.",
+    "action": "Lighthouse enables the delegated provider identities to manage supported customer resources under the registered scope. It grants management access according to the delegation; the customer still owns the subscription and resources.",
+    "output": "The provider performs an approved maintenance task and the customer retains its audit and revocation controls.",
+    "check": "Test permitted actions, denied scopes and delegation removal with the exact provider identities.",
+    "reference": "https://learn.microsoft.com/en-us/azure/lighthouse/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Linux",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "run a container worker on a maintained Linux host",
+    "input": "The platform owner selects a supported Azure Linux image and required container runtime configuration.",
+    "action": "Azure Linux supplies the host operating system and packages for the selected environment. Its kernel and runtime execute the configured containers; application services and orchestration are separately deployed components.",
+    "output": "The worker executes its accepted application job and writes results to the approved data destination.",
+    "check": "Test kernel/runtime compatibility, patch rollout, image integrity and application recovery after host replacement.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-linux/intro-azure-linux",
+    "legacy": false
+  },
+  {
+    "service": "Azure Local",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "run a local business workload on Azure-connected infrastructure",
+    "input": "The site owner provisions supported local infrastructure and identifies workloads requiring on-site execution.",
+    "action": "Azure Local supplies the supported local virtualization and infrastructure management platform with Azure integration. Local VMs or supported workloads execute the business application; cloud connectivity requirements follow the chosen configuration.",
+    "output": "Local clients access the application through the site's approved network and protected storage path.",
+    "check": "Test node failure, local storage recovery, updates and the configured behavior during cloud-connection disruption.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-local/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Machine Learning",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "train and release a validated demand forecasting model",
+    "input": "The ML engineer selects permitted training data, experiment code and an evaluation set.",
+    "action": "Azure Machine Learning coordinates the selected training job, compute, artifacts and model registration. Training code learns the model; the accepted model is deployed through a configured endpoint or batch path.",
+    "output": "The forecasting application consumes the selected model's predictions only after evaluation and release approval.",
+    "check": "Compare forecast errors, data leakage, endpoint identity and rollback to the previous accepted model.",
+    "reference": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning",
+    "legacy": false
+  },
+  {
+    "service": "Azure Managed Applications",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "deploy a governed vendor application into a bounded resource group",
+    "input": "The buyer reviews the application definition, publisher permissions and required deployment inputs.",
+    "action": "Managed Applications deploys the configured application resources and establishes the selected management access and deny settings. Deployed application components provide the business function; the managed-app wrapper defines resource ownership and access boundaries.",
+    "output": "The vendor or assigned operator performs only the permitted maintenance while the customer uses the application.",
+    "check": "Verify effective permissions, deny assignments, support responsibility and deletion behavior before accepting the deployment.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/overview",
+    "legacy": false
+  }
+]

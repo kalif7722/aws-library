@@ -11,6 +11,7 @@ export function loadArchitectureModule(input){
  const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
  const require=specifier=>{
   if(!specifier.startsWith('.'))throw new Error(`Unexpected dependency in architecture data: ${specifier}`);
+  if(specifier.endsWith('.json'))return {default:JSON.parse(fs.readFileSync(path.resolve(path.dirname(file),specifier),'utf8'))};
   return loadArchitectureModule(path.resolve(path.dirname(file),specifier+'.ts'));
  };
  new Function('exports','require',code)(exports,require);
