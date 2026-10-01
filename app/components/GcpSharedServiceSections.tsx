@@ -153,7 +153,7 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
             <b>{step.title}</b>
             <div className="gcp-architecture-nodes">
               <ArchitectureNode label={stageLabel} sub={stageCopy.join(" • ")} detail={architectureNodeDetail({label:stageLabel,sub:stageCopy.join("; "),previous:visibleSteps[stepIndex-1]?.title,next:visibleSteps[stepIndex+1]?.title,stage:step.title,architecture:flow.title,position:stepIndex===0?"first":stepIndex===visibleSteps.length-1?"last":"middle"})} />
-              {childItems.map((item) => <ArchitectureNode label={item} key={item} detail={`${item} supports ${stageLabel} during the ${step.title.toLowerCase()} stage${stepIndex < visibleSteps.length-1 ? ` before the flow continues to ${visibleSteps[stepIndex+1].title}` : " and contributes to the final architecture outcome"}.`} />)}
+              {childItems.map((item) => <ArchitectureNode label={item} key={item} detail={architectureNodeDetail({label:item,sub:`supporting capability for ${stageLabel}`,stage:step.title,architecture:flow.title,position:"middle"})} />)}
             </div>
           </div>
           {stepIndex < visibleSteps.length - 1 ? <div className="gcp-architecture-arrow" aria-hidden="true">→</div> : null}
@@ -186,7 +186,7 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
         <div className="service-walk-heading"><b>{flowIndex + 1}</b><div><span>ARCHITECTURE WALK-THROUGH</span><h4>{flow.title}</h4></div></div>
         <p>{flow.note}</p>
         <div className="service-walk-flow" aria-label={`${flow.title} flow`}>
-          {flow.steps.slice(0, 6).map((step, stepIndex) => <div className="service-walk-step" key={`${step.title}-${stepIndex}`} tabIndex={0} data-architecture-provider="gcp" data-architecture-detail={`${step.title} ${stepIndex === 0 ? "starts this flow" : `receives input from ${flow.steps[stepIndex-1].title}`}. It handles ${step.items.slice(0,3).join(", ").toLowerCase()}${stepIndex < flow.steps.length-1 ? ` and passes the result to ${flow.steps[stepIndex+1].title}.` : " and produces the final architecture outcome."}`}>
+          {flow.steps.slice(0, 6).map((step, stepIndex) => <div className="service-walk-step" key={`${step.title}-${stepIndex}`} tabIndex={0} data-architecture-provider="gcp" data-architecture-detail={architectureNodeDetail({label:architectureStageLabel(step.title),sub:architectureStageCopy(serviceName,flow.title,step.title,step.items).join("; "),stage:step.title,architecture:flow.title,position:stepIndex===0?"first":stepIndex===flow.steps.slice(0,6).length-1?"last":"middle"})}>
             <strong>{step.title}</strong><small>{step.items.slice(0, 3).join(" • ")}</small>{stepIndex < flow.steps.length - 1 && <i aria-hidden="true">→</i>}
           </div>)}
         </div>

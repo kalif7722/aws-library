@@ -5,6 +5,7 @@ import "./AthenaAwsIcons.css";
 import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
 import { AnalyticsArchitectureEnhancement, AnalyticsCostEnhancement } from "./AnalyticsMiddleEnhancements";
 import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
+import {architectureNodeDetail} from "../../lib/architecture-node-detail";
 
 export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
   return <SharedServiceWalkthrough serviceName={serviceName} />;
@@ -21,7 +22,7 @@ const athenaNodeDetail=(name:string,sub?:string)=>{
  if(key.includes("rds"))return "The Athena connector queries the relational database, applies supported predicate pushdown, and returns matching rows without copying the whole database into S3.";
  if(key.includes("dynamodb"))return "The Athena connector translates the SQL request into supported DynamoDB reads and returns the matching items for the federated result.";
  if(key.includes("unified sql"))return "This output combines rows returned by the selected sources so they can be analyzed, reported, or persisted as a new dataset.";
- return `${name} handles ${(sub||"its assigned processing step").toLowerCase()} and supplies the result to the next stage of the Athena data path.`;
+ return architectureNodeDetail({label:name,sub:sub||"its assigned capability",architecture:"Athena data path",position:"middle"});
 };
 const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => {const detail=athenaNodeDetail(label,sub);return <div className={`arch-node ${tone}`} tabIndex={0} data-architecture-detail={detail} aria-label={`${label}. ${detail}`}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>};
 const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => {const name=label||icon.name;const detail=athenaNodeDetail(name,sub);return <div className="aws-arch-node" tabIndex={0} data-architecture-detail={detail} aria-label={`${name}. ${detail}`}><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${name} AWS architecture icon`} loading="lazy" /></div><strong>{name}</strong>{sub && <small>{sub}</small>}</div>};
