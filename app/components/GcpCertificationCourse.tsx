@@ -45,6 +45,57 @@ function groupServices(services: GcpService[]) {
   return [...map.entries()].map(([title, items]) => ({ title, services: items }));
 }
 
+const gcpBadgeTitles: Record<string, string> = {
+  PCA: "Cloud Architect",
+  PCD: "Cloud Developer",
+  PDE: "Data Engineer",
+  PCDE: "Cloud Database Engineer",
+  PMLE: "Machine Learning Engineer",
+  PCSE: "Cloud Security Engineer",
+  PCDOE: "Cloud DevOps Engineer",
+  PCNE: "Cloud Network Engineer",
+  PAA: "Agentic AI Architect",
+  PSOE: "Security Operations Engineer",
+  ACE: "Cloud Engineer",
+  ADP: "Data Practitioner",
+  AGWA: "Workspace Administrator",
+  GAL: "Generative AI Leader",
+  CDL: "Cloud Digital Leader",
+};
+
+function GcpCourseBadge({ course }: { course: GcpCourse }) {
+  const pathId = `gcp-badge-${course.code.toLowerCase().replace(/[^a-z0-9]/g, "")}`;
+  const badgeTitle = gcpBadgeTitles[course.code] || course.title.replace(/^(Professional|Associate)\s+/, "");
+
+  return <svg className="gcp-course-badge" viewBox="0 0 160 160" role="img" aria-label={`${course.title} Google Cloud certification badge`}>
+    <defs>
+      <path id={`${pathId}-top`} d="M 25 78 A 55 55 0 0 1 135 78" />
+      <path id={`${pathId}-bottom`} d="M 20 91 A 62 62 0 0 0 140 91" />
+      <linearGradient id={`${pathId}-ring`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#f8d46a" />
+        <stop offset=".48" stopColor="#b97912" />
+        <stop offset="1" stopColor="#ffe59a" />
+      </linearGradient>
+    </defs>
+    <circle className="gcp-badge-shadow" cx="80" cy="80" r="72" />
+    <circle className="gcp-badge-face" cx="80" cy="80" r="69" />
+    <circle className="gcp-badge-edge" cx="80" cy="80" r="63" />
+    <text className="gcp-badge-title">
+      <textPath href={`#${pathId}-top`} startOffset="50%" textAnchor="middle">{badgeTitle}</textPath>
+    </text>
+    <text className="gcp-badge-caption">
+      <textPath href={`#${pathId}-bottom`} startOffset="50%" textAnchor="middle">GOOGLE CLOUD CERTIFIED · {course.level.toUpperCase()}</textPath>
+    </text>
+    <circle className="gcp-badge-ring" cx="80" cy="81" r="31" stroke={`url(#${pathId}-ring)`} />
+    <g className="gcp-badge-cloud" aria-hidden="true">
+      <path d="M58 85a23 23 0 0 1 39-17" stroke="#4285f4" />
+      <path d="M97 68a23 23 0 0 1 8 18" stroke="#ea4335" />
+      <path d="M105 86a17 17 0 0 1-17 17" stroke="#fbbc04" />
+      <path d="M88 103H68a16 16 0 0 1-10-28" stroke="#34a853" />
+    </g>
+  </svg>;
+}
+
 export default function GcpCertificationCourse({ course }: { course: GcpCourse }) {
   const services = useMemo(() => gcpCourseServices(course.code), [course.code]);
   const categories = useMemo(() => groupServices(services), [services]);
@@ -101,7 +152,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
     </nav>
 
     <header className="course-hero compact-course-hero gcp-course-page-hero">
-      <div className="gcp-course-badge" aria-label={`${course.title} certification badge`}><span>GOOGLE<br/>CLOUD</span><strong>{course.code}</strong><small>{course.level}</small></div>
+      <GcpCourseBadge course={course} />
       <div className="course-title">
         <p className="course-kicker">{course.level} certification learning path</p>
         <h1>{course.title}</h1>
