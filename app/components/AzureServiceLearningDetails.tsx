@@ -7,6 +7,7 @@ import "./AzureServiceLearning.css";
 import "./AipServiceLearningDetails.css";
 import "./AipServiceLearningDetailsV8.css";
 import {architectureNodeDetail as describeArchitectureNode} from "../../lib/architecture-node-detail";
+import {reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
 import "./ServiceLearningShowcase.css";
 
 type Kind="user"|"data"|"security"|"network"|"storage"|"ai"|"monitor"|"app"|"compute"|"file"|"internet";
@@ -989,6 +990,9 @@ export const azureWalkthroughUrls=(service:string,courseCode?:string,category?:s
 const azureIconUrl=(file:string)=>{const path="/azure-icons/"+file;const configured=assetUrl(path);return configured===path?"https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev"+path:configured};
 function Icon({kind}:{kind:Kind}){const C=kind==="user"?Users:kind==="data"?Database:kind==="security"?Shield:kind==="network"?Network:kind==="storage"?HardDrive:kind==="ai"?BrainCircuit:kind==="monitor"?Activity:kind==="app"?Laptop:kind==="compute"?Server:kind==="file"?FileText:kind==="internet"?Globe2:Cloud;return <div className={"azure-node-icon azure-node-"+kind}><C size={28}/></div>}
 const azureNodeNames=(nodes:Node[]|undefined)=>nodes?.map(item=>item.label).join(" and ")||"the surrounding workload";
+for(const [service,architectures] of Object.entries(reviewedWorkloadArchitectures)){
+ if(D[service])D[service].architectures=architectures;
+}
 export const azureServiceSummary=(serviceName:string)=>D[serviceName]?.summary||"A managed Microsoft Azure cloud service for building and operating production workloads.";
 function azureNodeDetail(arch:Architecture,layerIndex:number,node:Node){
  return describeArchitectureNode({label:node.label,sub:node.sub,previous:azureNodeNames(arch.layers[layerIndex-1]?.nodes),next:azureNodeNames(arch.layers[layerIndex+1]?.nodes),stage:arch.layers[layerIndex]?.title,architecture:arch.title,position:layerIndex===0?"first":layerIndex===arch.layers.length-1?"last":"middle"});

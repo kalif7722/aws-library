@@ -1,4 +1,5 @@
 import {financialNodeDetail} from "./financial-architectures";
+import {reviewedWorkloadNodeDetail} from "./reviewed-workload-architectures";
 export type ArchitectureNodeDetailInput={
   label:string;
   sub?:string;
@@ -15,6 +16,8 @@ const clean=(value?:string)=>value?.trim().replace(/[.]+$/g,"")||"its configured
 /** Describe the node's own responsibility in the scenario. Adjacency in a
  * diagram is context, not proof that one service sends data to the next. */
 export function architectureNodeDetail(input:ArchitectureNodeDetailInput){
+  const workloadDetail=reviewedWorkloadNodeDetail(input.architecture,input.label);
+  if(workloadDetail)return workloadDetail;
   const explicit=financialNodeDetail(input.architecture,input.label);
   if(explicit)return explicit;
   const {label}=input;

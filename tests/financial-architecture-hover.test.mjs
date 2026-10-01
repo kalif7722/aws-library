@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
+import {loadArchitectureModule} from './load-architecture-module.mjs';
 const source=fs.readFileSync(new URL('../lib/financial-architectures.ts',import.meta.url),'utf8');
 const compiled=ts.transpile(source,{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022});
 const exports={};
@@ -29,9 +30,7 @@ test('cost dimensions are report attributes rather than execution services',()=>
  assert.equal(financialNodeDetail('unreviewed flow','AWS Budgets'),undefined);
 });
 test('shared resolver selects financial flow copy before role heuristics',()=>{
- const resolverSource=fs.readFileSync(new URL('../lib/architecture-node-detail.ts',import.meta.url),'utf8');
- const resolver={};
- new Function('exports','require',ts.transpile(resolverSource,{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}))(resolver,()=>exports);
+ const resolver=loadArchitectureModule(new URL('../lib/architecture-node-detail.ts',import.meta.url));
  const describe=resolver.architectureNodeDetail;
  assert.equal(describe({label:'AWS Budgets',sub:'Managed AWS capability',architecture:'Monthly project spend alert'}),financialNodeDetail('Monthly project spend alert','AWS Budgets'));
  assert.match(describe({label:'AWS Budgets',sub:'Metrics / logs'}),/actual or forecast cost/);

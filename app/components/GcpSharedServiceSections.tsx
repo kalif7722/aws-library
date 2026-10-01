@@ -7,6 +7,7 @@ import type { GcpContent } from "../gcp-data";
 import { findGcpArchitectureIcon } from "../../lib/gcp-architecture-icons";
 import { architectureStageCopy, architectureStageLabel, isGenericArchitectureItem } from "../../lib/gcp-architecture-stage-copy";
 import {architectureNodeDetail} from "../../lib/architecture-node-detail";
+import {reviewedGcpBoards} from "../../lib/reviewed-workload-architectures";
 
 type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
 type ArchitectureCard = ArchitectureBoard["groups"][number]["cards"][number];
@@ -164,7 +165,7 @@ function ArchitectureDiagram({ serviceName, flow, index }: { serviceName: string
 }
 
 function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: string; details: GcpContent }) {
-  const boards = details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details);
+  const boards = reviewedGcpBoards(serviceName) ?? (details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details));
   if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">
     {boards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}
   </section>;

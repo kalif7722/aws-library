@@ -1,4 +1,5 @@
 import type { AipArchitecture, AipArchitectureNode, AipArchitectureLayer } from "./AipArchitectureOverrides";
+import {reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
 
 const P=(label:string,sub:string,kind:AipArchitectureNode["kind"]):AipArchitectureNode=>({label,sub,kind});
 const W=(label:string,sub:string,icon?:string):AipArchitectureNode=>({label,sub,icon});
@@ -65,4 +66,4 @@ const overrides2:Record<string,AipArchitecture[]>={
 ]
 };
 
-export function getAipArchitectureOverrides2(service:string,_category:string):AipArchitecture[]|undefined{return overrides2[service];}
+export function getAipArchitectureOverrides2(service:string,_category:string):AipArchitecture[]|undefined{return reviewedWorkloadArchitectures[service]??overrides2[service];}

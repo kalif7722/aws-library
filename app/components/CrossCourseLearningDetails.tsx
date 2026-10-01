@@ -13,6 +13,7 @@ import "./AipServiceLearningDetails.css";
 import "./AipServiceLearningDetailsV8.css";
 import {architectureNodeDetail as describeArchitectureNode} from "../../lib/architecture-node-detail";
 import {financialArchitectures} from "../../lib/financial-architectures";
+import {reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
 import "./AipDecisionGuides.css";
 
 type Kind="user"|"internet"|"app"|"data"|"security"|"file"|"network"|"storage"|"message"|"monitor"|"compute";
@@ -25,6 +26,7 @@ const L=(title:string,...nodes:Node[]):Layer=>({title,nodes});
 const A=(title:string,note:string,reference:string,...layers:Layer[]):Arch=>({title,note,reference,layers});
 
 function serviceArchitectures(service:string,category:string):Arch[]{
+ if(reviewedWorkloadArchitectures[service])return reviewedWorkloadArchitectures[service];
  if(financialArchitectures[service])return financialArchitectures[service];
  const s=service.toLowerCase(); const c=(sub:string)=>W(service,sub);
  if(/direct connect|site-to-site vpn|client vpn|transit gateway|vpc peering|private link|vpc endpoint|ip address manager|ipam|route 53 resolver/.test(s)) return [

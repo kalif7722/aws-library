@@ -8,10 +8,12 @@ Status: in progress. Catalog coverage and successful builds are not evidence of 
 - AWS Cost Explorer: interactive FinOps analysis and post-anomaly investigation. Explicit descriptions for all 10 node occurrences, including report dimensions and ownership.
 - Shared walkthrough summaries: resolve descriptions per node instead of combining different services into one classifier input.
 - Named cloud services: subtitle keywords no longer override service identity.
+- Added 23 explicitly authored cross-cloud workflows with 124 node occurrence descriptions in `lib/reviewed-workload-architectures.ts`, `lib/reviewed-network-architectures.ts`, and `lib/reviewed-security-architectures.ts`. These cover uploads, request handling, queues, protected ingress, CDN origins, security findings, and policy guardrails. Registry aliases are not additional reviewed services.
+- AWS, Azure, and GCP renderers select these reviewed workflows before older category templates. Hover lookup uses the exact architecture title and node label.
 
 ## Remaining semantic review
 
-All other AWS, Azure, and GCP architecture sources remain pending node-by-node verification. Previous service-family rules are not counted as individually reviewed descriptions.
+Architectures outside the financial and explicit reviewed registries remain pending node-by-node verification. Previous service-family rules are not counted as individually reviewed descriptions. This is a staged rollout, not a complete catalog sign-off.
 
 Run `node scripts/audit-architecture-semantics.mjs` to inventory literal/dynamic nodes and generic copy candidates. This discovers source expressions, not all runtime diagrams; it must not be used as a semantic sign-off.
 
@@ -32,4 +34,4 @@ Run `node scripts/audit-architecture-semantics.mjs` to inventory literal/dynamic
 - https://docs.aws.amazon.com/cost-management/latest/userguide/ce-filtering.html
 - https://docs.aws.amazon.com/cost-management/latest/userguide/ce-modify.html
 
-Verification: `node --test tests/financial-architecture-hover.test.mjs` asserts explicit descriptions for 21 financial node occurrences and different Budgets explanations by flow. Full production build is also required.
+Verification: `node --test tests/financial-architecture-hover.test.mjs tests/reviewed-workload-architecture.test.mjs` checks exact hover lookup, distinct Cloud Run responsibilities, queue acknowledgements, storage reads, WAF placement, and GCP adapters. The production build passed after integrating all three reviewed modules.
