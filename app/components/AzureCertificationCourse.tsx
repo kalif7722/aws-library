@@ -32,6 +32,26 @@ const findAzureService = (name: string) => {
 };
 const findBranchIndex = (service: AzureService | undefined) => service ? azureBranches.findIndex((branch) => branch.services.some((item) => item.slug === service.slug)) : -1;
 
+const azureCertificationBadgeFiles: Record<string, string> = {
+  "AZ-900": "Azure Fundamentals.png",
+  "AZ-104": "Azure Administrator.png",
+  "AZ-305": "Azure Solutions Architect.png",
+  "AZ-700": "Azure Network Engineer.png",
+  "AZ-400": "Azure DevOps Engineer.png",
+  "AI-901": "Azure AI Fundamentals.png",
+  "AI-103": "Azure AI Apps and Agents Developer.webp",
+  "DP-900": "Azure Data Fundamentals.png",
+  "DP-300": "Azure Database Administrator.png",
+  "DP-600": "Azure Fabrics Analytics Engineer.png",
+  "AZ-140": "Azure Virtual Desktop.png",
+  "AZ-120": "Azure For SAP Workloads.png",
+  "SC-900": "Azure Security Compliance and Identity.png",
+  "SC-300": "Azure Identity and Access Administrator.png",
+  "SC-200": "Azure Security Operations Analyst.png",
+};
+
+const azureBadgeBase = `${azureR2Base}/azure-certification-badges`;
+
 type Props = { course: AzureCourse };
 
 export default function AzureCertificationCourse({ course }: Props) {
@@ -87,7 +107,7 @@ export default function AzureCertificationCourse({ course }: Props) {
 
   return <main className="learning-shell course-page">
     <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" href={`/courses/azure-${course.code.toLowerCase()}`}>{course.code}</a><a href="/azure-services">Browse all Azure services</a></div></nav>
-    <header className="course-hero compact-course-hero"><div className="cert-mark"><span>AZURE</span><strong>{course.code}</strong></div><div className="course-title"><p className="course-kicker">{course.level} certification learning path</p><h1>{course.title}</h1><p>{course.description}</p><a className="scope-source" href={course.sourceUrl} target="_blank" rel="noreferrer">Official Microsoft Learn study guide ↗</a></div><div className="course-overview"><div><strong>{course.scope.length}</strong><span>scope categories</span></div><div><strong>{new Set(allServices.map((service) => service.name)).size}</strong><span>mapped services</span></div><div><strong>{allServices.length}</strong><span>scope references</span></div></div></header>
+    <header className="course-hero compact-course-hero"><img className="azure-course-badge" src={`${azureBadgeBase}/${encodeURIComponent(azureCertificationBadgeFiles[course.code])}`} alt={`${course.title} certification badge`} /><div className="course-title"><p className="course-kicker">{course.level} certification learning path</p><h1>{course.title}</h1><p>{course.description}</p><a className="scope-source" href={course.sourceUrl} target="_blank" rel="noreferrer">Official Microsoft Learn study guide ↗</a></div><div className="course-overview"><div><strong>{course.scope.length}</strong><span>scope categories</span></div><div><strong>{new Set(allServices.map((service) => service.name)).size}</strong><span>mapped services</span></div><div><strong>{allServices.length}</strong><span>scope references</span></div></div></header>
     <section className="scope-note compact-scope-note"><div><strong>Tracker aligned</strong><span>Service names and Direct/Related classifications come from the attached certification tracker.</span></div><div><strong>{connected} central pages connected</strong><span>Each selected service reuses the shared Azure EL10 and service-learning renderer.</span></div><div><strong>{pending} catalog mappings pending</strong><span>Unmatched tracker rows remain visible for review instead of being silently dropped.</span></div></section>
     {["AZ-104", "AZ-305", "AZ-700", "AZ-400", "AZ-120", "AZ-140", "DP-600", "SC-200", "SC-300", "SC-900"].includes(course.code) && <AzureAdvancedCourseGuide course={course} />}
     {course.code === "AZ-900" && <Az900CourseGuide course={course} />}
