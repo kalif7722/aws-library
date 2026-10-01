@@ -1,5 +1,10 @@
 import {reviewedNetworkArchitectures} from "./reviewed-network-architectures";
 import {reviewedSecurityArchitectures} from "./reviewed-security-architectures";
+import {reviewedRecoveryArchitectures} from "./reviewed-recovery-architectures";
+import {reviewedMigrationArchitectures} from "./reviewed-migration-architectures";
+import {reviewedTracingArchitectures} from "./reviewed-tracing-architectures";
+import {reviewedPrivateAccessArchitectures} from "./reviewed-private-access-architectures";
+import {reviewedCacheArchitectures} from "./reviewed-cache-architectures";
 export type ReviewedNode={label:string;sub:string;detail:string;kind?:"user"|"app"|"data"|"security"|"storage"|"message";icon?:string};
 export type ReviewedArchitecture={title:string;note:string;reference:string;layers:{title:string;nodes:ReviewedNode[]}[]};
 const n=(label:string,sub:string,detail:string,kind?:ReviewedNode["kind"],icon?:string):ReviewedNode=>({label,sub,detail,kind,icon});
@@ -75,15 +80,23 @@ const gcpQueue=a("GCP: queued receipt generation","Pub/Sub pushes authorized rec
 export const reviewedWorkloadArchitectures:Record<string,ReviewedArchitecture[]>={
  ...reviewedNetworkArchitectures,
  ...reviewedSecurityArchitectures,
+ ...reviewedRecoveryArchitectures,
+ ...reviewedMigrationArchitectures,
+ ...reviewedTracingArchitectures,
+ ...reviewedPrivateAccessArchitectures,
+ ...reviewedCacheArchitectures,
  "AWS Lambda":[awsImages,awsApi,awsQueue],
  "Amazon S3":[awsImages,awsQueue],
  "Amazon SQS":[awsQueue],
+ "Amazon API Gateway":[awsApi],"Amazon DynamoDB":[awsApi],
  "Azure Functions":[azureImages,azureApi,azureQueue],
  "Azure Blob Storage":[azureImages],
  "Azure Service Bus":[azureQueue],
+ "Service Bus":[azureQueue],"API Management":[azureApi],"Azure API Management":[azureApi],"Azure Cosmos DB":[azureApi,azureQueue],
  "Cloud Run":[gcpImages,gcpApi,gcpQueue],
  "Cloud Storage":[gcpImages,gcpQueue],
  "Pub/Sub":[gcpQueue],
+ "API Gateway":[gcpApi],"Eventarc":[gcpImages],
 };
 
 const uniqueArchitectures=[...new Map(Object.values(reviewedWorkloadArchitectures).flat().map(arch=>[arch.title,arch])).values()];

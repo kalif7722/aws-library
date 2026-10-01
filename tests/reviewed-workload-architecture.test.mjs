@@ -5,8 +5,38 @@ const {reviewedWorkloadArchitectures:registry,reviewedWorkloadNodeDetail:lookup,
 const {architectureNodeDetail:describe}=loadArchitectureModule(new URL('../lib/architecture-node-detail.ts',import.meta.url));
 const unique=[...new Map(Object.values(registry).flat().map(arch=>[arch.title,arch])).values()];
 
+test('Security Hub response requires approval and targets routed egress',()=>{
+ const flow=registry['AWS Security Hub'].find(a=>a.title==='AWS: contain a confirmed malicious outbound destination');
+ assert.ok(flow);
+ assert.match(lookup(flow.title,'AWS Step Functions'),/approval callback/);
+ assert.match(lookup(flow.title,'Firewall remediation Lambda'),/update token/);
+ assert.match(lookup(flow.title,'AWS Network Firewall'),/bypasses the endpoints/);
+ assert.match(lookup(flow.title,'Incident responder'),/does not remove malware/);
+ assert.ok(registry['AWS Network Firewall'].includes(flow));
+});
+test('Service Bus catalog name uses the reviewed fulfillment flow',()=>{
+ assert.deepEqual(registry['Service Bus'],registry['Azure Service Bus']);
+ assert.match(registry['Service Bus'][0].title,/fulfillment/);
+});
+test('recovery and migration distinguish restore, traffic cutover and promotion',()=>{
+ assert.match(registry['AWS Backup'][0].title,/restore/);
+ const dr=registry['AWS Elastic Disaster Recovery'][0];
+ assert.match(lookup(dr.title,'Recovery coordinator'),/does not perform the traffic failover itself/);
+ const migration=registry['Database Migration Service'][0];
+ assert.match(lookup(migration.title,'Migration operator'),/stops source application writes/);
+ assert.match(lookup(migration.title,'Migration operator'),/disconnects the destination/);
+});
+test('tracing workflows keep application responsibilities separate from export',()=>{
+ for(const key of ['AWS X-Ray','Azure Monitor','Trace']){
+  const flow=registry[key][0];
+  assert.ok(flow.layers[0].nodes.length===2);
+  assert.ok(flow.layers[0].nodes.every(n=>n.kind==='app'||n.kind==='data'));
+  assert.match(flow.layers.flatMap(l=>l.nodes).find(n=>n.label===key).detail,/engineer/);
+ }
+});
+
 test('every reviewed node resolves to authored copy for its exact architecture',()=>{
- assert.equal(unique.length,23);
+ assert.equal(unique.length,41);
  for(const arch of unique){
   const labels=new Set();
   for(const layer of arch.layers)for(const node of layer.nodes){

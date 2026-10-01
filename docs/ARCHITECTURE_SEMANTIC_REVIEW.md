@@ -8,7 +8,9 @@ Status: in progress. Catalog coverage and successful builds are not evidence of 
 - AWS Cost Explorer: interactive FinOps analysis and post-anomaly investigation. Explicit descriptions for all 10 node occurrences, including report dimensions and ownership.
 - Shared walkthrough summaries: resolve descriptions per node instead of combining different services into one classifier input.
 - Named cloud services: subtitle keywords no longer override service identity.
-- Added 23 explicitly authored cross-cloud workflows with 124 node occurrence descriptions in `lib/reviewed-workload-architectures.ts`, `lib/reviewed-network-architectures.ts`, and `lib/reviewed-security-architectures.ts`. These cover uploads, request handling, queues, protected ingress, CDN origins, security findings, and policy guardrails. Registry aliases are not additional reviewed services.
+- Added 41 explicitly authored cross-cloud workflows with 217 node occurrence descriptions across `lib/reviewed-*-architectures.ts`. These cover uploads, request handling, queues, protected ingress, CDN origins, security findings, policy guardrails, backup, recovery, migration, tracing, private access and cache-aside workloads. Registry aliases are not additional reviewed services.
+- Security Hub now includes a GuardDuty finding response with validation, analyst approval, a concurrency-safe Network Firewall rule update and containment verification. Finding routing and firewall traffic enforcement are distinct stages.
+- The Service Bus catalog name now maps to its reviewed fulfillment workflow. API Gateway, database and orchestration service pages select relevant explicitly authored workflows rather than their previous category templates.
 - AWS, Azure, and GCP renderers select these reviewed workflows before older category templates. Hover lookup uses the exact architecture title and node label.
 
 ## Remaining semantic review
@@ -16,6 +18,8 @@ Status: in progress. Catalog coverage and successful builds are not evidence of 
 Architectures outside the financial and explicit reviewed registries remain pending node-by-node verification. Previous service-family rules are not counted as individually reviewed descriptions. This is a staged rollout, not a complete catalog sign-off.
 
 Run `node scripts/audit-architecture-semantics.mjs` to inventory literal/dynamic nodes and generic copy candidates. This discovers source expressions, not all runtime diagrams; it must not be used as a semantic sign-off.
+
+Run `node scripts/report-architecture-review.mjs` to regenerate `docs/ARCHITECTURE_REVIEW_SERVICE_LIST.md`. Current catalog coverage: AWS 26/321, Azure 19/203, GCP 15/177. All 641 other catalog services remain pending individual semantic review. These counts are not a claim that every supporting-service node has a fully reviewed standalone service page.
 
 ## Acceptance criteria for each architecture
 
