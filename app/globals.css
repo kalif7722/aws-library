@@ -243,3 +243,64 @@ button,input,select,textarea{font-family:inherit}
 .course-kicker,.eyebrow,.az900-kicker,.service-section-cap p,.knowledge-kicker{font-size:max(.75rem,12px)}
 .course-source-note,.course-service-list button small,.viewer-head small{font-size:max(.75rem,12px)}
 .course-service-list button span{font-size:max(.86rem,14px)}
+
+
+/* aws-architecture-node-details-v1 */
+[data-architecture-detail]{position:relative;cursor:help;outline:none}
+[data-architecture-detail]::after{
+  content:attr(data-architecture-detail);
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 13px);
+  z-index:120;
+  width:max-content;
+  max-width:min(290px,78vw);
+  padding:11px 13px 12px;
+  border:1px solid #ffb84d;
+  border-radius:12px;
+  background:linear-gradient(145deg,#121b2e,#1a2740);
+  color:#eef6ff;
+  box-shadow:0 16px 38px #02081799,0 0 0 1px #ffffff0c inset;
+  font:650 .74rem/1.48 "Segoe UI Variable Text","Segoe UI",Inter,ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.005em;
+  text-align:left;
+  white-space:normal;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translate(-50%,7px) scale(.97);
+  transform-origin:50% 100%;
+  transition:opacity .16s ease,transform .16s ease,visibility .16s;
+}
+[data-architecture-detail]::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 7px);
+  z-index:121;
+  width:11px;
+  height:11px;
+  border-right:1px solid #ffb84d;
+  border-bottom:1px solid #ffb84d;
+  background:#17233a;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateX(-50%) rotate(45deg);
+  transition:opacity .16s ease,visibility .16s;
+}
+[data-architecture-detail]:hover::after,
+[data-architecture-detail]:focus-visible::after,
+[data-architecture-detail]:focus::after,
+[data-architecture-detail]:hover::before,
+[data-architecture-detail]:focus-visible::before,
+[data-architecture-detail]:focus::before{opacity:1;visibility:visible}
+[data-architecture-detail]:hover::after,
+[data-architecture-detail]:focus-visible::after,
+[data-architecture-detail]:focus::after{transform:translate(-50%,0) scale(1)}
+[data-architecture-detail]:focus-visible{box-shadow:0 0 0 3px #ffb84dcc,0 10px 24px #0208174d!important}
+html[data-theme="light"] [data-architecture-detail]::after{border-color:#cc7200;background:linear-gradient(145deg,#fffdf8,#fff5df);color:#25364a;box-shadow:0 16px 34px #213b5b2e,0 0 0 1px #fff inset}
+html[data-theme="light"] [data-architecture-detail]::before{border-color:#cc7200;background:#fff7e7}
+@media(max-width:700px){
+  [data-architecture-detail]::after{max-width:240px;font-size:.72rem}
+}
