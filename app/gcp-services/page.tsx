@@ -26,6 +26,13 @@ function StudyImage({ path, status, title, discover = false }: { path: string; s
   </> : <div className="gcp-pending"><strong>{failed ? "Visual not uploaded yet" : "Visual in preparation"}</strong><p>{failed ? "No image was found at the mapped R2 path yet. Upload the correctly named file and it will appear automatically after refresh/deploy cache expiry." : "This service is mapped. Its reviewed study visual will appear here when published."}</p></div>}</section>;
 }
 
+const menuDescriptions:Record<string,string>={
+ "Access Approval":"Approve Google personnel data access",
+ "Cloud Hub":"Application health and operations",
+ "Cluster Director":"Deploy and operate AI/HPC clusters",
+ "Container-Optimized OS":"Secure host OS for containers",
+ "Compute Engine":"Virtual machines, GPUs and persistent disks",
+};
 const sections: { key: keyof GcpContent; title: string }[] = [
   { key: "concepts", title: "Core concepts" }, { key: "applicationFit", title: "Application fit" },
   { key: "architecture", title: "Architecture walkthrough" }, { key: "security", title: "Security & governance" },
@@ -66,7 +73,7 @@ export default function GcpServicesPage() {
             const services = filtered.filter(service => service.categorySlug === category.slug);
             if (!services.length) return null;
             const expanded = Boolean(query.trim()) || opened.includes(category.slug);
-            return <section key={category.slug}><button className="gcp-category" type="button" aria-expanded={expanded} aria-controls={"category-" + category.slug} onClick={() => setOpened(current => current.includes(category.slug) ? current.filter(item => item !== category.slug) : [...current, category.slug])}><span>{expanded ? "⌄" : "›"} {category.name}</span><small>{services.length}</small></button>{expanded && <div id={"category-" + category.slug} className="gcp-service-list">{services.map(service => <button key={service.slug} type="button" aria-current={service.slug === slug ? "page" : undefined} onClick={() => choose(service.slug)}><strong>{service.displayName}</strong><span>{service.description || `Google Cloud ${service.officialCategory} service.`}</span></button>)}</div>}</section>;
+            return <section key={category.slug}><button className="gcp-category" type="button" aria-expanded={expanded} aria-controls={"category-" + category.slug} onClick={() => setOpened(current => current.includes(category.slug) ? current.filter(item => item !== category.slug) : [...current, category.slug])}><span>{expanded ? "⌄" : "›"} {category.name}</span><small>{services.length}</small></button>{expanded && <div id={"category-" + category.slug} className="gcp-service-list">{services.map(service => <button key={service.slug} type="button" aria-current={service.slug === slug ? "page" : undefined} onClick={() => choose(service.slug)}><strong>{service.displayName}</strong><span>{menuDescriptions[service.displayName] || service.description || `Google Cloud ${service.officialCategory} service.`}</span></button>)}</div>}</section>;
           })}{filtered.length === 0 && <p>No matching services. Try another name or abbreviation.</p>}</div></>}
       </aside>
       {selected && <article className="gcp-main" key={selected.slug}><header className="gcp-service-heading"><p className="course-kicker">{selected.officialCategory}</p><div className="gcp-service-title">{gcpIcons[selected.slug]?.path && <img src={gcpIcons[selected.slug].path || ""} alt={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName + " icon"} title={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName} />}<h2>{selected.displayName}</h2></div>{details?.summary || selected.description ? <p>{details?.summary || selected.description}</p> : <p>Explore {selected.displayName} in the official Google Cloud documentation.</p>}{selected.documentationUrl && <a href={selected.documentationUrl} target="_blank" rel="noreferrer">Official documentation ↗</a>}</header>
