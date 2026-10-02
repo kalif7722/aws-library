@@ -57,7 +57,7 @@ export default function GcpServicesPage() {
     window.history.replaceState(null, "", url);
   };
   return <main className="workspace gcp-workspace">
-    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a href="/services">AWS services</a><a href="/azure-services">Azure services</a><a className="active" href="/gcp-services">Google Cloud</a></div></nav>
+    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a href="/services">AWS services</a><a href="/azure-services">Azure services</a><a className="active" aria-current="page" href="/gcp-services">GCP services</a><a href="/cloud-comparison">Cloud comparison</a></div></nav>
     <header className="gcp-heading"><div><p className="course-kicker">Google Cloud service library</p><h1>Explore Google Cloud, service by service.</h1><p>Browse the official product categories. Study guides and visuals are being prepared.</p></div><a href={gcpSourceUrl} target="_blank" rel="noreferrer">Official product catalog ↗</a></header>
     <div className={"gcp-shell" + (railCollapsed ? " gcp-collapsed" : "")}>
       <aside className="gcp-rail" aria-label="Google Cloud categories"><div className="gcp-rail-title">{!railCollapsed && <strong>Service categories</strong>}<button type="button" onClick={() => setRailCollapsed(value => !value)} aria-expanded={!railCollapsed} aria-label={railCollapsed ? "Expand categories" : "Collapse categories"}>{railCollapsed ? "›" : "‹"}</button></div>

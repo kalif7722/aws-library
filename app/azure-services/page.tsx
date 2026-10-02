@@ -81,10 +81,7 @@ export default function AzureServicesPage() {
   const chooseSearchResult = (entry: SearchEntry) => choose(entry.service, entry.branchIndex);
 
   return <main className="workspace azure-workspace">
-    <nav className="top-nav" aria-label="Primary navigation">
-      <a className="brand-link" href="/">Visual Learning</a>
-      <div><a className="home-button" href="/">Home</a><a className="active" href="/azure-services">Azure services</a><a href="/services">AWS services</a></div>
-    </nav>
+    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a href="/services">AWS services</a><a className="active" aria-current="page" href="/azure-services">Azure services</a><a href="/gcp-services">GCP services</a><a href="/cloud-comparison">Cloud comparison</a></div></nav>
 
     <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">

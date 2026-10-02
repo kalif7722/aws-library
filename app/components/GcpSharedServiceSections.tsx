@@ -10,6 +10,7 @@ import {architectureNodeDetail} from "../../lib/architecture-node-detail";
 import {reviewedGcpBoards,reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
 import ReviewedArchitectureSections from "./ReviewedArchitectureSections";
 import ArchitectureTopology from "./ArchitectureTopology";
+import "./GcpReviewedArchitecture.css";
 import type {ReviewedArchitecture} from "../../lib/reviewed-workload-architectures";
 
 type ArchitectureBoard = NonNullable<GcpContent["architectureBoards"]>[number];
@@ -160,7 +161,7 @@ function ArchitectureWalkthroughs({ serviceName, details }: { serviceName: strin
   const candidates=reviewedWorkloadArchitectures["GCP:"+serviceName]??reviewedWorkloadArchitectures[serviceName];
   const matching=candidates?.filter(arch=>arch.title.startsWith("GCP:"));
   const reviewed=matching?.length?matching:undefined;
-  if(reviewed?.length)return <ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/>;
+  if(reviewed?.length)return <div className="service-knowledge aip-v8 gcp-reviewed-architectures"><ReviewedArchitectureSections architectures={reviewed} anchor="architecture" provider="gcp"/></div>;
   const boards = reviewedGcpBoards(serviceName) ?? (details.architectureBoards?.length ? details.architectureBoards : deriveArchitectureBoards(serviceName, details));
   if (boards.length) return <section className="gcp-architecture-board-section" id="architecture">
     {boards.slice(0, 3).map((board, boardIndex) => <ArchitectureBoardDiagram board={board} index={boardIndex + 1} key={board.title} />)}

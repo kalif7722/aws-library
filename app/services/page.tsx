@@ -390,7 +390,7 @@ export default function ServicesLibrary() {
   useEffect(() => { const key = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); }; window.addEventListener("keydown", key); return () => window.removeEventListener("keydown", key); }, []);
   const choose = (index: number, branch: number) => { setSelected(index); setBranchIndex(branch); setQuery(""); setOpenedBranches((current) => current.includes(branch) ? current : [...current, branch]); setExpanded(false); setVisualVisible(true); };
   return <main className="workspace azure-workspace aws-services-library">
-    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" href="/services">AWS services</a><a href="/azure-services">Azure services</a></div></nav>
+    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" aria-current="page" href="/services">AWS services</a><a href="/azure-services">Azure services</a><a href="/gcp-services">GCP services</a><a href="/cloud-comparison">Cloud comparison</a></div></nav>
     <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="AWS service branches">
         <div className="azure-menu-heading"><span>AWS branches</span><button type="button" aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"} onClick={() => setMenuCollapsed((value) => !value)}>{menuCollapsed ? "›" : "‹"}</button></div>
