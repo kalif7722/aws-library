@@ -11,7 +11,7 @@ export const limitsMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Payload and scale','Payload size and account/region concurrency quotas can require S3 or a queue.','Plan, trigger and regional quota govern instance scale and event handling.','Request size, instance/concurrency quotas and trigger type constrain scale.'],
  ['Long work caveat','Use Step Functions, a queue or container jobs when work exceeds the applicable timeout.','Use Durable Functions or asynchronous processing for long HTTP work.','Use Cloud Run jobs or asynchronous orchestration for work beyond trigger timeouts.']],
 'Managed containers':[
- ['Runtime boundary','App Runner targets web services; ECS on Fargate supports broader task patterns.','Container Apps supports apps and jobs; feature limits depend on environment/plan.','Cloud Run services handle requests; Cloud Run jobs handle finite tasks.'],
+ ['Runtime boundary','ECS on Fargate supports services and finite tasks. App Runner is closed to new customers.','Container Apps supports apps and jobs; feature limits depend on environment/plan.','Cloud Run services handle requests; Cloud Run jobs handle finite tasks.'],
  ['Scale limit','Fargate task size, service quotas and subnet IP capacity bound expansion.','Replica, CPU/memory and regional environment limits apply.','Instance, CPU/memory and request concurrency limits apply by region.'],
  ['Operational caveat','Fargate removes host management, not task, image or network design.','Environment networking and revisions need deliberate deployment design.','Request timeouts and stateless instance behavior affect long-lived work.']],
 'Kubernetes':[
@@ -59,9 +59,9 @@ export const limitsMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Scale limit','Instance size, storage and connection ceilings still apply.','Service tier, vCores, storage and connection ceilings apply.','Machine tier, storage and connection quotas apply.'],
  ['HA caveat','Multi-AZ does not replace cross-region disaster recovery.','Zone redundancy does not replace geo-recovery design.','Regional HA does not replace cross-region recovery planning.']],
 'Global relational':[
- ['Write topology','Aurora Global Database normally writes in a primary region.','Distributed PostgreSQL writes depend on shard/coordinator design.','Spanner multi-region configuration supports distributed transactions.'],
- ['Compatibility','Aurora version and engine behavior require migration tests.','PostgreSQL extension and distributed-query support require tests.','Spanner dialect and transaction semantics require application tests.'],
- ['Cost/latency','Cross-region replication and failover add design and cost.','Shard placement and cross-region access affect latency.','Strong consistency across distant regions affects latency and cost.']],
+ ['Write topology','Aurora Global Database normally writes in a primary region.','A primary database accepts writes; asynchronous geo-replication can lose recent writes during forced failover.','Spanner multi-region configuration supports distributed transactions.'],
+ ['Compatibility','Aurora version and engine behavior require migration tests.','SQL Server/T-SQL compatibility and geo-failover behavior require tests.','Spanner dialect and transaction semantics require application tests.'],
+ ['Cost/latency','Cross-region replication and failover add design and cost.','Geo-secondary compute, replication lag and cross-region access affect cost and recovery.','Strong consistency across distant regions affects latency and cost.']],
 'Document databases':[
  ['API limit','DocumentDB MongoDB compatibility is version/feature specific.','Cosmos DB MongoDB API compatibility varies by offering/version.','Firestore is not MongoDB API compatible.'],
  ['Query boundary','Indexes and aggregation support must be validated.','Partition key, RU charge and query support affect design.','Composite indexes and query rules affect design.'],
@@ -148,7 +148,7 @@ export const limitsMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Validation','Replication success does not prove data completeness or application correctness.','Cutover requires validation, connection updates and rollback planning.','Promotion requires validation, downtime control and rollback planning.']],
 'Bulk and online data migration':[
  ['Bandwidth','Online transfer duration depends on usable throughput, change rate and small-file overhead.','Agent throughput and source/storage limits constrain migration windows.','Network capacity, quotas and source performance constrain online transfer.'],
- ['Device lead time','Snow device availability, shipping and ingestion time affect deadlines.','Data Box ordering, shipping and ingestion add lead time.','Transfer Appliance availability, shipping and upload add lead time.'],
+ ['Device lead time','Snowball Edge is restricted to existing customers; terminal/partner availability and transfer logistics affect new offline designs.','Data Box ordering, shipping and ingestion add lead time.','Transfer Appliance availability, shipping and upload add lead time.'],
  ['Cutover','Final deltas and source freeze still need orchestration.','Online/offline tools do not perform every application cutover step.','Transfer completion does not update applications or verify business consistency.']],
 'Distributed tracing':[
  ['Sampling','Sampling can omit rare requests unless rules match the incident profile.','Sampling and adaptive collection can hide low-frequency failures.','Sampling can omit traces; rates must balance cost and diagnostic value.'],

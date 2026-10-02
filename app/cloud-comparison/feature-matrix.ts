@@ -10,9 +10,9 @@ export const featureMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Events','AWS services invoke functions through event sources, queues and schedules.','Azure triggers and bindings connect functions to services and data.','Eventarc and Google Cloud events can invoke functions.'],
  ['Scaling watch','Concurrency controls and execution limits shape burst behavior.','Hosting plan affects scale, networking and cold-start characteristics.','Cloud Run concurrency and instance settings affect scaling and latency.']],
 'Managed containers':[
- ['Service model','App Runner simplifies web apps; ECS on Fargate manages tasks without EC2 hosts.','Container Apps runs apps and jobs with revisions and managed scaling.','Cloud Run runs container services and jobs with managed scaling.'],
+ ['Service model','ECS defines container tasks and services; Fargate supplies their compute without EC2 host management.','Container Apps runs apps and jobs with revisions and managed scaling.','Cloud Run runs container services and jobs with managed scaling.'],
  ['Control','ECS exposes task definitions and richer AWS network choices.','Container Apps exposes environments, ingress and revision controls.','Cloud Run exposes service, instance and concurrency controls.'],
- ['Workload fit','App Runner targets simple HTTP apps; ECS fits more customized services.','Strong fit for Azure microservices and event-driven workloads.','Strong fit for stateless HTTP services and containerized jobs.']],
+ ['Workload fit','ECS on Fargate fits APIs, workers and finite tasks; existing App Runner users retain their web-app service.','Strong fit for Azure microservices and event-driven workloads.','Strong fit for stateless HTTP services and containerized jobs.']],
 'Kubernetes':[
  ['Control plane','EKS manages the Kubernetes control plane in AWS.','AKS manages the Kubernetes control plane in Azure.','GKE manages the Kubernetes control plane in Google Cloud.'],
  ['Node operation','EC2 nodes or Fargate profiles alter operational ownership.','Node pools and managed modes alter cluster operations.','Standard and Autopilot modes alter node management.'],
@@ -58,9 +58,9 @@ export const featureMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Operations','RDS manages provisioning, backups and patching within engine choices.','Azure managed databases handle platform tasks with engine-specific features.','Cloud SQL manages platform tasks with engine-specific features.'],
  ['Scale','Instance, storage and replica features depend on engine and edition.','Compute tier, storage and replicas depend on selected Azure product.','Machine tier, storage and replicas depend on engine and edition.']],
 'Global relational':[
- ['Topology','Aurora Global Database uses a primary region with cross-region replicas.','Cosmos DB for PostgreSQL distributes PostgreSQL via coordinator and worker nodes.','Spanner supports relational data with distributed transactions across selected configurations.'],
- ['Writes','Primary-region writes are the common Aurora Global Database model.','Writes follow the PostgreSQL distribution and cluster design.','Multi-region configurations can serve globally distributed transactional workloads.'],
- ['Compatibility','Aurora is MySQL or PostgreSQL compatible by edition.','PostgreSQL extension and sharding compatibility need validation.','Spanner SQL dialect and application semantics need validation.']],
+ ['Topology','Aurora Global Database uses a primary region with cross-region replicas.','Azure SQL active geo-replication maintains readable geo-secondaries; failover groups provide coordinated recovery.','Spanner supports relational data with distributed transactions across selected configurations.'],
+ ['Writes','Primary-region writes are the common Aurora Global Database model.','Writes go to the primary database; geo-secondaries replicate asynchronously until promotion.','Multi-region configurations can serve globally distributed transactional workloads.'],
+ ['Compatibility','Aurora is MySQL or PostgreSQL compatible by edition.','Azure SQL uses SQL Server/T-SQL semantics; it is not a distributed PostgreSQL service.','Spanner SQL dialect and application semantics need validation.']],
 'Document databases':[
  ['Data model','DocumentDB stores JSON-like documents with MongoDB compatibility.','Cosmos DB MongoDB APIs offer document access on Azure.','Firestore stores documents in collections.'],
  ['Query API','MongoDB API compatibility varies by supported version and feature.','MongoDB API and feature compatibility vary by offering.','Firestore has its own query and SDK model.'],
@@ -138,7 +138,7 @@ export const featureMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Source and artifacts','Code connections and S3/ECR artifacts connect source to AWS targets.','Azure Repos, GitHub and artifacts integrate with broad Azure and external targets.','Cloud Build connects repositories and publishes to Artifact Registry or deployment targets.'],
  ['Governance','IAM, approvals, artifact encryption and CloudTrail govern delivery.','Environments, approvals, service connections and Entra permissions govern delivery.','IAM, private pools, Binary Authorization and provenance support governed delivery.']],
 'Managed in-memory caching':[
- ['Engines','ElastiCache offers Valkey, Redis OSS and Memcached options.','Azure Cache for Redis offers Redis-compatible tiers and enterprise options subject to lifecycle.','Memorystore offers Valkey and Redis Cluster/Redis variants.'],
+ ['Engines','ElastiCache offers Valkey, Redis OSS and Memcached options.','Azure Managed Redis provides managed Redis capabilities; existing Azure Cache for Redis deployments have a retirement migration path.','Memorystore offers Valkey and Redis Cluster/Redis variants.'],
  ['Scaling','Node groups, replicas, serverless options and engine choice shape scaling.','Tier, clustering, shard count and replica design shape scaling.','Cluster or instance tier, shards, replicas and regional settings shape scaling.'],
  ['Resilience','Multi-AZ, replicas and automatic failover depend on engine and topology.','Zone redundancy, replicas and persistence depend on tier.','Regional availability, replicas and persistence depend on selected Memorystore product.']],
 'Database migration':[
@@ -146,8 +146,8 @@ export const featureMatrix:Record<string,[FeatureRow,FeatureRow,FeatureRow]>={
  ['Assessment','Migration Evaluator, Schema Conversion Tool or DMS Schema Conversion help plan selected migrations.','Azure Migrate and database assessment tooling identify compatibility issues.','Migration Center and engine-specific conversion tooling support assessment.'],
  ['Cutover','Replication lag, validation and target readiness govern cutover.','Migration mode and source/target support determine downtime.','Connectivity, conversion, replication lag and promotion determine downtime.']],
 'Bulk and online data migration':[
- ['Online transfer','DataSync agents move file/object data over network links with scheduling and verification.','Storage Mover agents move supported file data into Azure Storage.','Data Transfer Essentials and Storage Transfer Service cover managed online movement patterns.'],
- ['Offline transfer','Snow Family provides devices for disconnected or bandwidth-constrained transfers.','Data Box appliances support offline bulk data import/export.','Transfer Appliance supports offline upload into Cloud Storage.'],
+ ['Online transfer','DataSync agents move file/object data over network links with scheduling and verification.','Storage Mover agents move supported file data into Azure Storage.','Storage Transfer Service moves supported file and object data into or between Cloud Storage buckets.'],
+ ['Offline transfer','Existing Snowball Edge customers can use devices; new customers should assess Data Transfer Terminal or partners.','Data Box appliances support offline bulk data import/export.','Transfer Appliance supports offline upload into Cloud Storage.'],
  ['Decision','Use online transfer for repeatable deltas; use devices when the network window is impractical.','Choose Storage Mover for online migration and Data Box for offline scale.','Choose managed online transfer or Transfer Appliance by source, bandwidth and deadline.']],
 'Distributed tracing':[
  ['Telemetry','X-Ray records traces, segments, subsegments, annotations and service maps.','Application Insights captures distributed traces, dependencies, requests and application maps through Azure Monitor.','Cloud Trace collects latency data and traces across supported and instrumented services.'],
