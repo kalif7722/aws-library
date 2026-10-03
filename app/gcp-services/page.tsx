@@ -47,6 +47,7 @@ export default function GcpServicesPage() {
   const [slug, setSlug] = useState(defaultService?.slug || "");
   const [query, setQuery] = useState("");
   const [railCollapsed, setRailCollapsed] = useState(false);
+  const [visualVisible, setVisualVisible] = useState(true);
   const [opened, setOpened] = useState<string[]>([defaultService?.categorySlug || ""]);
   useEffect(() => {
     const match = gcpServices.find(service => service.slug === requested);
@@ -77,7 +78,8 @@ export default function GcpServicesPage() {
           })}{filtered.length === 0 && <p>No matching services. Try another name or abbreviation.</p>}</div></>}
       </aside>
       {selected && <article className="gcp-main" key={selected.slug}><header className="gcp-service-heading"><p className="course-kicker">{selected.officialCategory}</p><div className="gcp-service-title">{gcpIcons[selected.slug]?.path && <img src={gcpIcons[selected.slug].path || ""} alt={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName + " icon"} title={gcpIcons[selected.slug].fallback ? gcpIcons[selected.slug].label + " category icon" : selected.displayName} />}<h2>{selected.displayName}</h2></div>{details?.summary || selected.description ? <p>{details?.summary || selected.description}</p> : <p>Explore {selected.displayName} in the official Google Cloud documentation.</p>}{selected.documentationUrl && <a href={selected.documentationUrl} target="_blank" rel="noreferrer">Official documentation ↗</a>}</header>
-        <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} discover />
+        <button className="visual-toggle" type="button" aria-expanded={visualVisible} aria-controls="gcp-el10-visual" onClick={() => setVisualVisible(visible => !visible)}>{visualVisible ? "Hide EL10 ↑" : "Show EL10 ↓"}</button>
+        <div id="gcp-el10-visual">{visualVisible && <StudyImage path={selected.el10Path} status={selected.el10Status} title={selected.displayName + " visual guide"} discover />}</div>
         {details ? <GcpSharedServiceSections serviceName={selected.displayName} details={details} consoleWalkthrough={<StudyImage path={selected.primaryWalkthroughPath} status={selected.primaryWalkthroughStatus} title={selected.displayName + " console walkthrough"} discover />} /> : <section className="gcp-content-card"><h3>Service guide in preparation</h3><p>This catalog entry is available for browsing. The complete service explanation, architecture, operations, and study walkthrough are still being prepared.</p><StudyImage path={selected.primaryWalkthroughPath} title={selected.displayName + " console walkthrough"} discover /></section>}
         {gcpAssetReady(selected.companionWalkthroughStatus) && <StudyImage path={selected.companionWalkthroughPath} status={selected.companionWalkthroughStatus} title={selected.displayName + " companion walkthrough"} />}
         {details?.relatedServices?.length ? <section className="gcp-content-card"><h3>Related services</h3><div className="gcp-related">{details.relatedServices.map(relatedSlug => { const service = gcpServices.find(item => item.slug === relatedSlug); return service ? <a key={relatedSlug} href={"/gcp-services?service=" + service.slug}>{service.displayName}</a> : null; })}</div></section> : null}
