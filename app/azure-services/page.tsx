@@ -15,6 +15,17 @@ const azureAssetUrl = (path: string) => {
   return configured === path ? azureR2Base + path : configured;
 };
 
+const compactAzureMenuSummary = (serviceName: string) => {
+  const summary = azureServiceSummary(serviceName)
+    .replace(/^(a|an|the)\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const sentence = summary.split(/[.!?]/)[0] || summary;
+  const words = sentence.split(" ");
+  const compact = words.slice(0, 8).join(" ").replace(/[,:;]$/, "");
+  return words.length > 8 ? compact + "…" : compact;
+};
+
 type SearchEntry = { service: AzureService; branchTitle: string; branchIndex: number };
 
 export default function AzureServicesPage() {
@@ -87,7 +98,7 @@ export default function AzureServicesPage() {
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">
         <div className="azure-menu-heading"><span>Azure branches</span><button type="button" onClick={() => setMenuCollapsed((collapsed) => !collapsed)} aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"}>{menuCollapsed ? "›" : "‹"}</button></div>
         {!menuCollapsed && <>
-          <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => { const expanded = openedBranches.includes(branchIndex); return <section className="azure-branch-menu-item" key={item.title}><button type="button" className="azure-branch-trigger" aria-expanded={expanded} aria-controls={`azure-branch-${branchIndex}`} onClick={() => setOpenedBranches((current) => current.includes(branchIndex) ? current.filter((index) => index !== branchIndex) : [...current, branchIndex])}><span>{expanded ? "⌄" : "›"} {item.title}</span><small>{item.services.length}</small></button>{expanded && <div className="azure-inline-services" id={`azure-branch-${branchIndex}`}>{item.services.map((service) => { const summary = azureServiceSummary(service.name); return <button className={service.slug === selectedSlug ? "selected" : ""} type="button" aria-current={service.slug === selectedSlug ? "page" : undefined} key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><strong>{service.name}</strong><span title={summary} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}>{summary}</span></button>; })}</div>}</section>; })}</div>
+          <div className="azure-branch-list">{azureBranches.map((item, branchIndex) => { const expanded = openedBranches.includes(branchIndex); return <section className="azure-branch-menu-item" key={item.title}><button type="button" className="azure-branch-trigger" aria-expanded={expanded} aria-controls={`azure-branch-${branchIndex}`} onClick={() => setOpenedBranches((current) => current.includes(branchIndex) ? current.filter((index) => index !== branchIndex) : [...current, branchIndex])}><span>{expanded ? "⌄" : "›"} {item.title}</span><small>{item.services.length}</small></button>{expanded && <div className="azure-inline-services" id={`azure-branch-${branchIndex}`}>{item.services.map((service) => { const summary = compactAzureMenuSummary(service.name); return <button className={service.slug === selectedSlug ? "selected" : ""} type="button" aria-current={service.slug === selectedSlug ? "page" : undefined} key={item.title + "-" + service.slug} onClick={() => choose(service, branchIndex)}><strong>{service.name}</strong><span title={azureServiceSummary(service.name)}>{summary}</span></button>; })}</div>}</section>; })}</div>
         </>}
       </aside>
 
