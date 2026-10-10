@@ -31,13 +31,13 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
           "Launch compute instances and choose zonal Persistent Disk, regional Persistent Disk, or Hyperdisk.",
           "Create autoscaled managed instance groups from instance templates and configure OS Login and VM Manager.",
           "Use Spot VMs and custom machine types.",
-          "Deploy GKE clusters including Autopilot, regional, and private clusters and deploy containerized applications.",
+          "Deploy GKE clusters including Autopilot, regional, private, and GKE Enterprise configurations; use kubectl to deploy and manage containerized applications.",
           "Deploy serverless applications that process Pub/Sub, Cloud Storage, or Eventarc events.",
           "Identify when to use GPUs or TPUs."
         ] },
         { id: "2-2", name: "Planning and implementing storage and data solutions", tasks: [
-          "Choose and deploy Cloud SQL, BigQuery, Firestore, Spanner, Bigtable, AlloyDB, Dataflow, Pub/Sub, Managed Service for Apache Kafka, and Memorystore.",
-          "Choose and deploy Cloud Storage, Filestore, NetApp Volumes, and Managed Lustre and select Cloud Storage classes.",
+          "Choose and deploy Cloud SQL, BigQuery, Firestore, Spanner, Bigtable, AlloyDB, Dataflow, Pub/Sub, Managed Service for Apache Kafka, and Memorystore according to workload requirements.",
+          "Choose and deploy Cloud Storage, Filestore, NetApp Volumes, and Managed Lustre; select Standard, Nearline, Coldline, or Archive storage classes based on access needs.",
           "Load data using command-line tools, Cloud Storage, and Storage Transfer Service.",
           "Maintain multi-region redundancy across data solutions."
         ] },
@@ -48,7 +48,7 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
           "Choose and deploy load balancers and differentiate Network Service Tiers."
         ] },
         { id: "2-4", name: "Planning and implementing resources using tooling", tasks: [
-          "Use Infrastructure as Code tooling such as Fabric FAST, Config Connector, Terraform, and Helm.",
+          "Use Infrastructure as Code tooling such as Cloud Foundation Toolkit, Config Connector, Terraform, and Helm.",
           "Use AI-assisted planning and implementation tools such as Gemini CLI, Google Antigravity, Gemini Cloud Assist, and Application Design Center."
         ] }
       ]
@@ -376,9 +376,9 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
           "Assess data quality and clean data using Cloud Data Fusion, BigQuery, SQL, or Dataflow."
         ] },
         { id: "1-2", name: "Extract and load data into appropriate Google Cloud storage systems", tasks: [
-          "Identify CSV, JSON, Parquet, Avro, and structured table formats.",
+          "Identify CSV, JSON, Apache Parquet, Apache Avro, and structured database table formats; distinguish structured, semi-structured, and unstructured data.",
           "Choose Dataflow, BigQuery Data Transfer Service, Database Migration Service, or Cloud Data Fusion for extraction.",
-          "Choose Cloud Storage, BigQuery, Cloud SQL, Firestore, Bigtable, or Spanner and select regional, dual-region, multi-region, or zonal placement.",
+          "Choose Cloud Storage, BigQuery, Cloud SQL, Firestore, Bigtable, Spanner, or AlloyDB and select regional, dual-region, multi-region, or zonal placement as appropriate.",
           "Load data with gcloud, bq CLI, Storage Transfer Service, BigQuery Data Transfer Service, or client libraries."
         ] }
       ]
