@@ -111,7 +111,7 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
       groups: [
         { id: "1-1", name: "Describe core generative AI concepts and use cases", tasks: [
           "Define AI, NLP, machine learning, generative AI, foundation models, multimodal models, diffusion models, prompt tuning, prompt engineering, and LLMs.",
-          "Describe supervised, unsupervised, and reinforcement learning approaches and the ML lifecycle.",
+          "Describe supervised, unsupervised, and reinforcement learning approaches; identify ML lifecycle stages such as data ingestion, data preparation, model training, deployment, and model management, and recognize Google Cloud tools used at each stage.",
           "Choose a foundation model based on modality, context, security, availability, reliability, cost, performance, tuning, and customization.",
           "Identify create, summarize, discover, automate, code, image, video, data-analysis, and personalization use cases."
         ] },
