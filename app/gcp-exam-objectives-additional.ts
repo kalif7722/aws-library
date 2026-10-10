@@ -198,96 +198,168 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
   CDL: [
     {
       name: "Digital Transformation with Google Cloud",
-      weight: "~18%",
+      weight: "~17%",
       groups: [
-        { id: "1-1", name: "Explain why and how the cloud is revolutionizing businesses", tasks: [
-          "Define cloud, agentic AI, infrastructure, digital transformation, open source, and open standards.",
-          "Explain scalability, cost effectiveness, agility, speed, flexibility, security, global reach, high availability, data-driven insights, and strategic value.",
-          "Describe transformation drivers, challenges, and risks of not adopting cloud.",
-          "Recognize Google Cloud differentiators including AI, openness, AI Hypercomputer, AI-ready data platform, security, and global networking."
+        { id: "1-1", name: "Explain why and how cloud technology is transforming businesses", tasks: [
+          "Define cloud, cloud technology, data, digital transformation, cloud-native, open source, and open standards.",
+          "Compare cloud technology with traditional or on-premises technology.",
+          "Explain business benefits of cloud adoption: scalability, flexibility, agility, security, cost effectiveness, and strategic value.",
+          "Compare on-premises, public cloud, private cloud, hybrid cloud, and multicloud environments.",
+          "Describe Google Cloud's business transformation benefits: intelligence, freedom, collaboration, trust, and sustainability.",
+          "Explain the risks of not adopting new technology and the drivers and challenges of digital transformation.",
+          "Describe how the transformation cloud supports application and infrastructure modernization, data democratization, people connections, and trusted transactions."
         ] },
-        { id: "1-2", name: "Describe fundamental cloud concepts", tasks: [
-          "Compare private, hybrid, and multicloud architectures.",
-          "Explain IP, DNS, latency, bandwidth, regions, zones, and edge locations.",
-          "Compare IaaS, PaaS, and SaaS service models."
+        { id: "1-2", name: "Explain fundamental cloud concepts", tasks: [
+          "Apply flexibility, scalability, reliability, elasticity, agility, and total cost of ownership (TCO) to business scenarios.",
+          "Explain the shift from capital expenditure (CapEx) to operational expenditure (OpEx) and its effect on TCO.",
+          "Identify when private, hybrid, or multicloud infrastructure best fits a business use case.",
+          "Define IP address, internet service provider (ISP), DNS, regions, zones, fiber optics, subsea cables, network edge data centers, latency, and bandwidth.",
+          "Explain how Google's global infrastructure and connected data centers support fast, reliable cloud services."
+        ] },
+        { id: "1-3", name: "Explain cloud computing models and shared responsibility", tasks: [
+          "Define infrastructure as a service (IaaS), platform as a service (PaaS), and software as a service (SaaS).",
+          "Compare IaaS, PaaS, and SaaS by total cost of ownership, flexibility, management responsibility, staffing, and required technical expertise.",
+          "Choose the appropriate service model for a business scenario and explain its tradeoffs.",
+          "Compare provider and customer responsibilities in on-premises environments and across IaaS, PaaS, and SaaS."
         ] }
       ]
     },
     {
       name: "Exploring Data Transformation with Google Cloud",
-      weight: "~18%",
+      weight: "~16%",
       groups: [
-        { id: "2-1", name: "Describe the intrinsic role data plays in digital transformation", tasks: [
-          "Explain the value of data, databases, data warehouses, data lakes, data types, data supply chains, governance, openness, and interoperability."
+        { id: "2-1", name: "Explain the intrinsic role data plays in digital transformation", tasks: [
+          "Explain how data generates business insights, improves decisions, and creates new value.",
+          "Differentiate databases, data warehouses, and data lakes.",
+          "Explain how organizations create value from existing data, newly collected data, and external data sources.",
+          "Describe how cloud services unlock value from structured and unstructured data.",
+          "Explain key data value-chain concepts and terminology.",
+          "Describe why data governance is essential to a successful data journey."
         ] },
-        { id: "2-2", name: "Determine which Google Cloud data management products apply to business use cases", tasks: [
-          "Match Cloud Storage, Spanner, Cloud SQL, AlloyDB, Bigtable, BigQuery, and Firestore to business use cases.",
-          "Compare relational, non-relational, object, SQL, and NoSQL data models.",
-          "Differentiate Cloud Storage Standard, Nearline, Coldline, Archive, and Autoclass.",
-          "Describe database migration and modernization approaches."
+        { id: "2-2", name: "Choose Google Cloud data management solutions for business use cases", tasks: [
+          "Match Cloud Storage, Cloud Spanner, Cloud SQL, Cloud Bigtable, BigQuery, and Firestore to data types and business use cases.",
+          "Define relational, non-relational, object storage, SQL, and NoSQL concepts.",
+          "Explain BigQuery as a serverless, managed data warehouse and analytics engine, including multicloud use cases.",
+          "Compare Cloud Storage Standard, Nearline, Coldline, and Archive classes by cost and access frequency.",
+          "Describe approaches for migrating or modernizing existing databases in the cloud."
         ] },
-        { id: "2-3", name: "Discuss smart analytics, business intelligence, and streaming analytics", tasks: [
-          "Explain Looker and BigQuery-based analytics and visualization.",
-          "Explain real-time streaming analytics and products including Pub/Sub, Dataflow, and Managed Service for Apache Spark."
+        { id: "2-3", name: "Explain how to make data useful and accessible", tasks: [
+          "Describe how Looker supports self-service business intelligence and data democratization.",
+          "Explain how BigQuery data can be analyzed and visualized in Looker for reports, dashboards, and workflow integration.",
+          "Explain the business value of real-time streaming analytics.",
+          "Identify how Pub/Sub and Dataflow modernize data pipelines."
         ] }
       ]
     },
     {
       name: "Innovating with Google Cloud Artificial Intelligence",
-      weight: "~18%",
+      weight: "~16%",
       groups: [
-        { id: "3-1", name: "Describe fundamental AI and ML concepts and how they create business value", tasks: [
-          "Define AI, ML, gen AI, analytics, BI, agentic AI, common ML business use cases, data quality, explainable AI, and responsible AI."
+        { id: "3-1", name: "Explain AI and machine learning fundamentals", tasks: [
+          "Define artificial intelligence (AI) and machine learning (ML).",
+          "Differentiate AI and ML from data analytics and business intelligence.",
+          "Identify types of problems that machine learning can solve.",
+          "Explain ML business value, including working with large datasets, scaling decisions, and unlocking unstructured data.",
+          "Explain why high-quality, accurate data is essential for successful ML models.",
+          "Describe explainable AI and responsible AI."
         ] },
-        { id: "3-2", name: "Explain how Google Cloud AI offerings create business value", tasks: [
-          "Describe Gemini Enterprise Agent Platform business use cases and match pre-trained APIs and foundation models to workloads.",
-          "Explain Agent Studio, AutoML on Agent Platform, AI Hypercomputer, GPUs, TPUs, and flexible consumption models.",
-          "Explain BigQuery ML using standard SQL."
+        { id: "3-2", name: "Select Google Cloud AI and ML solutions for business use cases", tasks: [
+          "Evaluate AI/ML solution choices and tradeoffs, including speed, effort, differentiation, and required expertise.",
+          "Choose among pre-trained APIs, AutoML, and custom-model approaches for a given business scenario."
+        ] },
+        { id: "3-3", name: "Explain how Google Cloud AI and ML solutions create business value", tasks: [
+          "Use business scenarios to select Natural Language, Vision, Cloud Translation, Speech-to-Text, or Text-to-Speech APIs.",
+          "Explain how BigQuery ML creates and runs models using standard SQL.",
+          "Describe how AutoML can use an organization's data to train custom ML models.",
+          "Explain how Vertex AI custom models can enable business differentiation.",
+          "Recognize TensorFlow as an open-source toolset for building and training ML models and TPUs as Google's ML-optimized hardware."
         ] }
       ]
     },
     {
-      name: "Modernize Infrastructure and Applications with Google Cloud",
-      weight: "~18%",
+      name: "Modernizing Infrastructure and Applications with Google Cloud",
+      weight: "~17%",
       groups: [
-        { id: "4-1", name: "Describe how Google Cloud helps organizations transition to the cloud", tasks: [
-          "Define discovery, assessment, retire, retain, rehost, replatform, refactor, and reimagine migration strategies.",
-          "Define VMs, containers, applications, microservices, serverless, Spot VMs, Kubernetes, autoscaling, load balancing, and managed services."
+        { id: "4-1", name: "Explain cloud modernization and migration", tasks: [
+          "Explain the business benefits of infrastructure and application modernization on Google Cloud.",
+          "Define workload, retire, retain, rehost, lift and shift, replatform, move and improve, refactor, and reimagine.",
+          "Choose a suitable migration path based on application requirements and constraints."
         ] },
-        { id: "4-2", name: "Describe functionality and business value of Google Cloud infrastructure offerings", tasks: [
-          "Explain Compute Engine, GKE, Cloud Run, and Cloud Run functions business value.",
-          "Recognize multicloud and hybrid products including AlloyDB Omni, BigQuery Omni, GKE Enterprise, Cloud SQL, and Looker."
+        { id: "4-2", name: "Explain computing options in the cloud", tasks: [
+          "Define virtual machines, containerization, containers, microservices, serverless computing, preemptible VMs, Kubernetes, autoscaling, and load balancing.",
+          "Explain the benefits and business value of running compute workloads in the cloud.",
+          "Compare compute options and their constraints for different scenarios.",
+          "Explain the business value of Compute Engine virtual machines.",
+          "Describe when rehosting is suitable for specialized legacy applications."
         ] },
-        { id: "4-3", name: "Describe the business value of APIs", tasks: [
-          "Define APIs, API monetization opportunities, and the business value of Apigee API Management."
+        { id: "4-3", name: "Explain serverless computing", tasks: [
+          "Describe the benefits of serverless computing for application modernization.",
+          "Explain the business value and use cases of Cloud Run, App Engine, and Cloud Functions."
+        ] },
+        { id: "4-4", name: "Explain containers in the cloud", tasks: [
+          "Describe the advantages of modern cloud application development.",
+          "Differentiate virtual machines from containers.",
+          "Explain how containers and microservices support application modernization.",
+          "Describe the business value of deploying containers with Google Kubernetes Engine (GKE) and Cloud Run."
+        ] },
+        { id: "4-5", name: "Explain the business value of APIs", tasks: [
+          "Define application programming interfaces (APIs).",
+          "Explain how exposing and monetizing public-facing APIs can create business opportunities.",
+          "Describe the business value of Apigee API Management."
+        ] },
+        { id: "4-6", name: "Explain hybrid and multicloud strategies", tasks: [
+          "Describe business reasons and use cases for hybrid cloud and multicloud strategies.",
+          "Explain the business value of Anthos for managing hybrid and multicloud infrastructure."
         ] }
       ]
     },
     {
       name: "Trust and Security with Google Cloud",
-      weight: "~18%",
+      weight: "~17%",
       groups: [
-        { id: "5-1", name: "Describe fundamental cloud security concepts", tasks: [
-          "Explain threats, cloud versus on-premises security, confidentiality, integrity, availability, least privilege, zero trust, posture, resilience, firewalls, encryption, authentication, authorization, auditing, and SecOps."
+        { id: "5-1", name: "Explain fundamental cloud security concepts", tasks: [
+          "Describe major cybersecurity threats and their business implications.",
+          "Compare cloud security with traditional on-premises security.",
+          "Explain control, compliance, confidentiality, integrity, and availability in a cloud security model.",
+          "Define key cloud security terms and concepts."
         ] },
-        { id: "5-2", name: "Describe the business value of Google's defense-in-depth security approach", tasks: [
-          "Recognize security across the AI stack, Google Threat Intelligence, Security Command Center, and Google Security Operations.",
-          "Recognize secure-by-design infrastructure and AI security offerings including Gemini in Security Operations, AI Protection, and Model Armor.",
-          "Recognize VPC, VPN, Interconnect, firewalls, Cloud Armor, Cloud Logging, IAM, Sensitive Data Protection, Confidential Computing, Certificate Manager, and Identity-Aware Proxy.",
-          "Explain trust, transparency, audits, sovereignty, data residency, and compliance."
+        { id: "5-2", name: "Explain Google's trusted infrastructure and defense-in-depth security", tasks: [
+          "Describe the security benefits of Google's data centers, purpose-built servers, networking, and custom security hardware and software.",
+          "Explain how encryption protects data in different states.",
+          "Differentiate authentication, authorization, and auditing.",
+          "Describe the benefits of two-step verification (2SV) and Identity and Access Management (IAM).",
+          "Explain how Google Cloud Armor helps protect against network attacks, including distributed denial-of-service (DDoS).",
+          "Define cloud Security Operations (SecOps) and explain its business benefits."
+        ] },
+        { id: "5-3", name: "Explain Google Cloud trust principles and compliance", tasks: [
+          "Explain Google's trust principles and shared responsibility for protecting and managing cloud data.",
+          "Describe how transparency reports and independent third-party audits support customer trust.",
+          "Explain data sovereignty and data residency requirements and how organizations control where data is stored.",
+          "Describe how the Google Cloud Compliance Resource Center and Compliance Reports Manager support industry and regional compliance needs."
         ] }
       ]
     },
     {
       name: "Scaling with Google Cloud Operations",
-      weight: "~10%",
+      weight: "~17%",
       groups: [
-        { id: "6-1", name: "Recognize how Google Cloud supports cloud cost control", tasks: [
-          "Explain CapEx to OpEx, TCO, financial governance, resource hierarchy, quotas, budgets, billing reports, Dynamic Workload Scheduler, and Spot VMs."
+        { id: "6-1", name: "Explain financial governance and cloud cost management", tasks: [
+          "Describe how cloud financial governance provides predictability and control over resources.",
+          "Define key cloud cost-management terms and concepts.",
+          "Explain how the resource hierarchy supports access control.",
+          "Describe how quotas and budget threshold rules help control cloud consumption.",
+          "Explain how Cloud Billing Reports help visualize cost data."
         ] },
-        { id: "6-2", name: "Describe modern operations, reliability, and resilience", tasks: [
-          "Use Cloud Monitoring, Cloud Logging, Cloud Trace, Cloud Profiler, and Error Reporting concepts.",
-          "Explain operational excellence, reliability, high availability, redundancy, replication, scalability, backups, latency, traffic, saturation, errors, DevOps, SRE, SLIs, SLOs, and SLAs."
+        { id: "6-2", name: "Explain operational excellence, reliability, and resilience at scale", tasks: [
+          "Describe the benefits of modernizing cloud operations.",
+          "Define important cloud operations terminology.",
+          "Explain resilient, fault-tolerant, and scalable designs for high availability and disaster recovery.",
+          "Define cloud reliability, DevOps, and site reliability engineering (SRE) terms.",
+          "Describe how Google Cloud Customer Care supports cloud adoption and explain the lifecycle of a support case."
+        ] },
+        { id: "6-3", name: "Explain sustainability with Google Cloud", tasks: [
+          "Describe Google's commitment to sustainability and reducing environmental impact.",
+          "Explain how Google Cloud products can help organizations meet sustainability goals."
         ] }
       ]
     }
