@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AwsSecurityCourseGuide.css";
 type Task={title:string;ask:string;focus:string[];services:string[];flow:string[];visual:{kind:string;title:string;subtitle:string;nodes:string[];explanation:string;cue:string}};
 type Domain={number:string;title:string;weight:string;outcome:string;flow:string[];tasks:Task[]};
@@ -61,6 +61,15 @@ function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onS
 export default function AwsSecurityCourseGuide() {
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const requestedDomainIndex = domains.findIndex((item) => item.tasks.some((task) => id(task.title) === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    const requestedTaskIndex = domains[requestedDomainIndex].tasks.findIndex((task) => id(task.title) === requestedTask);
+    setDomainIndex(requestedDomainIndex);
+    if (requestedTaskIndex >= 0) setTaskIndex(requestedTaskIndex);
+  }, []);
   const domain = domains[domainIndex];
   const task = domain.tasks[taskIndex];
   const selectDomain = (index: number) => { setDomainIndex(index); setTaskIndex(0); };
