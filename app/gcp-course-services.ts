@@ -23,13 +23,14 @@ const manualAliases: Record<string, string[]> = {
   "cloud interconnect": ["cloud-interconnect"], "cloud vpn": ["cloud-vpn"], "cloud router": ["cloud-router"], "cloud nat": ["cloud-nat"], "cloud dns": ["cloud-dns"], "cloud armor": ["cloud-armor"], "secure web proxy": ["secure-web-proxy"],
   "cloud storage": ["cloud-storage"], gcs: ["cloud-storage"], filestore: ["filestore"], "netapp volumes": ["netapp-volumes"],
   "backup and dr": ["backup-and-dr-service"], "backup and dr service": ["backup-and-dr-service"],
-  "cloud run functions": ["cloud-run-functions"], "cloud functions": ["cloud-run-functions"],
+  "cloud run functions": ["cloud-run"], "cloud functions": ["cloud-run"],
   "cloud load balancing": ["cloud-load-balancing"], "load balancer": ["cloud-load-balancing"], "load balancing": ["cloud-load-balancing"],
   "private service connect": ["private-service-connect"],
   "vpc service controls": ["vpc-service-controls"],
   "identity aware proxy": ["identity-aware-proxy"], iap: ["identity-aware-proxy"],
   "secret manager": ["secret-manager"], "artifact registry": ["artifact-registry"], "cloud build": ["cloud-build"], "cloud deploy": ["cloud-deploy"],
-  "migration center": ["migration-center"], "database migration service": ["database-migration-service"], "storage transfer service": ["storage-transfer-service"],
+  "migration center": ["migration-center"], "database migration service": ["database-migration-service"], "storage transfer service": ["cloud-storage"], "transfer appliance": ["cloud-storage"], "bigquery data transfer service": ["bigquery"],
+  dataproc: ["managed-service-for-apache-spark"], "dataproc workflow templates": ["managed-service-for-apache-spark"], "analytics hub": ["bigquery"], "bigquery sharing": ["bigquery"], "looker studio": ["data-studio"], automl: ["gemini-enterprise-agent-platform"], "model registry": ["gemini-enterprise-agent-platform"], "google llm": ["gemini-enterprise-agent-platform"], "google llms": ["gemini-enterprise-agent-platform"],
   "cloud data fusion": ["cloud-data-fusion"], dataflow: ["dataflow"], dataproc: ["dataproc"], "pub sub": ["pub-sub"], "pub/sub": ["pub-sub"],
   looker: ["looker"], bigquery: ["bigquery"], "cloud sql": ["cloud-sql"], alloydb: ["alloydb"], spanner: ["spanner"], firestore: ["firestore"], bigtable: ["bigtable"],
   apigee: ["apigee"], eventarc: ["eventarc"], workflows: ["workflows"], "cloud scheduler": ["cloud-scheduler"], "cloud tasks": ["cloud-tasks"],
@@ -89,8 +90,9 @@ const courseRequiredTerms: Record<string, string[]> = {
     "Identity and Access Management", "Cloud Identity", "Cloud Asset Inventory", "Cloud KMS", "Monitoring", "Logging", "Trace", "Profiler", "Service Health"
   ],
   ADP: [
-    "Cloud Storage", "BigQuery", "Cloud SQL", "Firestore", "Bigtable", "Spanner", "Storage Transfer Service", "Database Migration Service", "Cloud Data Fusion", "Dataflow", "Dataproc",
-    "Managed Service for Apache Airflow", "Dataform", "Cloud Scheduler", "Workflows", "Pub/Sub", "Eventarc", "Looker", "Analytics Hub", "Identity and Access Management", "Cloud KMS", "Monitoring", "Logging"
+    "Cloud Storage", "BigQuery", "Cloud SQL", "Firestore", "Bigtable", "Spanner", "AlloyDB", "Storage Transfer Service", "Transfer Appliance", "BigQuery Data Transfer Service", "Database Migration Service",
+    "Cloud Data Fusion", "Dataflow", "Dataproc", "Managed Service for Apache Spark", "Managed Service for Apache Airflow", "Dataform", "Cloud Scheduler", "Workflows", "Pub/Sub", "Eventarc", "Cloud Run", "Cloud Functions",
+    "Looker", "Looker Studio", "Data Studio", "Analytics Hub", "BigQuery sharing", "Colab Enterprise", "AutoML", "Model Registry", "Gemini Enterprise Agent Platform", "Identity and Access Management", "Cloud KMS", "Monitoring", "Logging", "Backup and DR Service", "Sensitive Data Protection"
   ],
   GAL: [
     "Gemini Enterprise Agent Platform", "Cloud Storage", "Cloud Run", "Cloud Run functions", "BigQuery", "Cloud SQL", "AlloyDB", "Firestore", "Spanner", "Bigtable",
@@ -115,14 +117,14 @@ const conceptRules: Array<{ pattern: RegExp; terms: string[] }> = [
   { pattern: /kubernetes|container orchestration|gke/i, terms: ["Google Kubernetes Engine"] },
   { pattern: /serverless|cloud run|function/i, terms: ["Cloud Run", "Cloud Run functions"] },
   { pattern: /network|vpc|subnet|routing|hybrid|multicloud/i, terms: ["Virtual Private Cloud", "Cloud Load Balancing", "Cloud DNS", "Cloud NAT", "Cloud VPN", "Cloud Interconnect", "Cloud Router"] },
-  { pattern: /database|relational|sql|nosql/i, terms: ["Cloud SQL", "AlloyDB", "Spanner", "Firestore", "Bigtable"] },
-  { pattern: /warehouse|analytics|bigquery|data analysis/i, terms: ["BigQuery", "Looker"] },
-  { pattern: /pipeline|streaming|data processing|etl|elt/i, terms: ["Pub/Sub", "Dataflow", "Dataproc"] },
-  { pattern: /monitor|observability|logging|trace|profil|alert/i, terms: ["Monitoring", "Logging", "Trace", "Profiler", "Error Reporting"] },
-  { pattern: /iam|identity|access|least privilege|service account/i, terms: ["Identity and Access Management", "Cloud Identity"] },
-  { pattern: /encrypt|key management|cmek|kms|secret/i, terms: ["Cloud KMS", "Secret Manager"] },
-  { pattern: /security|threat|posture|soc|secops/i, terms: ["Security Command Center", "Sensitive Data Protection"] },
-  { pattern: /agent|generative ai|gen ai|gemini|model garden|rag/i, terms: ["Gemini Enterprise Agent Platform", "Model Armor"] },
+  { pattern: /database|relational|\bnosql\b/i, terms: ["Cloud SQL", "AlloyDB", "Spanner", "Firestore", "Bigtable"] },
+  { pattern: /warehouse|business intelligence|dashboard|lookml|looker/i, terms: ["BigQuery", "Looker"] },
+  { pattern: /pipeline|streaming|data processing|\betl\b|\belt\b/i, terms: ["Pub/Sub", "Dataflow", "Dataproc"] },
+  { pattern: /monitor|observability|logging|alert/i, terms: ["Monitoring", "Logging"] },
+  { pattern: /\biam\b|identity|least privilege|service account|access control|permissions/i, terms: ["Identity and Access Management", "Cloud Identity"] },
+  { pattern: /encrypt|key management|cmek|kms/i, terms: ["Cloud KMS"] },
+  { pattern: /threat|posture|\bsoc\b|secops|sensitive data|privacy regulation/i, terms: ["Sensitive Data Protection"] },
+  { pattern: /\bagent\b|generative ai|gen ai|gemini|model garden|\brag\b/i, terms: ["Gemini Enterprise Agent Platform", "Model Armor"] },
 ];
 
 function resolveTerm(term: string): GcpService[] {
