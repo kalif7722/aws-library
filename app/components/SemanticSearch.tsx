@@ -461,7 +461,7 @@ export default function SemanticSearch() {
   const rankedResults = useMemo(() => {
     const q = normalize(query);
     const aiAccuracyTroubleshootingIntent = /(inaccurate|hallucin|factuality|grounding|answer quality|response quality|model evaluation|rag evaluation|retrieval quality|ai answers|wrong answers|incorrect answers|troubleshoot generative ai|ai troubleshooting)/.test(q);
-    const explicitAip52Intent = /((aip|aip c01|task 5 2|5 2))/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q);
+    const explicitAip52Intent = /(task 5 2|5 2)/.test(q) || (/((aip|aip c01))/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q));
     return searchableItems.map(item => {
       const baseScore = score(item, query);
       // Keep the exact AWS AIP troubleshooting objective visible for AI answer-quality
@@ -479,7 +479,7 @@ export default function SemanticSearch() {
     const diversified = diversifyResults(rankedTasks, query, 6);
     const q = normalize(query);
     const aiAccuracyTroubleshootingIntent = /(inaccurate|hallucin|factuality|grounding|answer quality|response quality|model evaluation|rag evaluation|retrieval quality|ai answers|wrong answers|incorrect answers|troubleshoot generative ai|ai troubleshooting)/.test(q);
-    const explicitAip52Intent = /((aip|aip c01|task 5 2|5 2))/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q);
+    const explicitAip52Intent = /(task 5 2|5 2)/.test(q) || (/((aip|aip c01))/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q));
     if (!aiAccuracyTroubleshootingIntent && !explicitAip52Intent) return diversified;
     const mustInclude = rankedTasks.filter(entry =>
       entry.item.courseCode === "AIP" &&
