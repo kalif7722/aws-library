@@ -10,7 +10,7 @@ type Domain = { number: string; title: string; weight: string; outcome: string; 
 const V = (kind: string, title: string, subtitle: string, nodes: string[], explanation: string, cue: string): Visual => ({ kind, title, subtitle, nodes, explanation, cue });
 const id = (title: string) => { const match = title.match(/Task (\d+)\.(\d+)/); return match ? match[1] + "-" + match[2] : ""; };
 
-const domains: Domain[] = [
+export const domains: Domain[] = [
   {
     number: "01", title: "Development with AWS Services", weight: "32%", outcome: "Build, integrate, and persist application behavior with AWS APIs, compute, and data services.", flow: ["Design the application boundary", "Implement the runtime", "Persist and retrieve data", "Prove the behavior"],
     tasks: [
