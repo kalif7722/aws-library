@@ -104,7 +104,7 @@ const aliases: Record<string, string[]> = {
   s3: ["simple storage service", "object storage"],
   vpc: ["virtual private cloud", "private network"],
   vnet: ["virtual network", "private network"],
-  "k8s": ["kubernetes", "containers"], k8s: ["kubernetes", "containers"],
+  k8s: ["kubernetes", "containers"],
   rag: ["retrieval augmented generation", "knowledge bases", "semantic search"],
   genai: ["generative ai"], "gen ai": ["generative ai"],
   llm: ["large language model", "foundation model", "generative ai"],
@@ -176,7 +176,6 @@ export default function SemanticSearch() {
     const variants = expandedTerms(query);
     return items.map(item => {
       const title = normalize(item.title);
-      const terms = normalize([item.title, item.terms].join(" "));
       const exactAlias = variants.some(term => term !== q && title.includes(term));
       const startsWith = title.startsWith(q) || title.split(" ").some(word => word.startsWith(q));
       return { item, score: (startsWith ? 50 : 0) + (exactAlias ? 40 : 0) + score(item, query) };
@@ -190,7 +189,7 @@ export default function SemanticSearch() {
       <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
     </button>
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
-      <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && results[0]) window.location.href = results[0].item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
+      <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && (autocomplete[0] || results[0])) window.location.href = (autocomplete[0] || results[0]).item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
       <p className="semantic-search-hint">Try a goal or plain-English question—not just a product name.</p>
       <div className="semantic-search-suggestions">{["GAL", "CDL", "PCA", "private app connectivity", "reduce cloud costs", "AI agents and RAG"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
       {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
