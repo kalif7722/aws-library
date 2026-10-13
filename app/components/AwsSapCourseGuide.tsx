@@ -108,6 +108,16 @@ function SapVisual({ task }: { task: SapTask }) {
 export default function AwsSapCourseGuide() {
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const taskIdFor = (title: string) => title.match(/Task\s+(\d+)\.(\d+)/i)?.slice(1).join("-") || "";
+    const requestedDomainIndex = sapDomains.findIndex((item) => item.tasks.some((task) => taskIdFor(task.title) === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    setDomainIndex(requestedDomainIndex);
+    const requestedTaskIndex = sapDomains[requestedDomainIndex].tasks.findIndex((task) => taskIdFor(task.title) === requestedTask);
+    if (requestedTaskIndex >= 0) setTaskIndex(requestedTaskIndex);
+  }, []);
   const domain = sapDomains[domainIndex];
   const task = domain.tasks[taskIndex] || domain.tasks[0];
   return <section className="aws-sap-guide" id="sap-exam-guide">
