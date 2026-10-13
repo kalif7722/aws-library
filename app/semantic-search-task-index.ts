@@ -146,30 +146,24 @@ const gcpTaskItems: SearchTaskItem[] = Object.entries(gcpOfficialExamDomains).fl
   );
 });
 
-const groupCourseCodes = new Set(["AI-901", "AI-103", "DP-900", "DP-300"]);
 const azureCourseRoutes = new Set(["AI-901", "AI-103", "AZ-104", "AZ-120", "AZ-140", "AZ-305", "AZ-400", "AZ-700", "AZ-900", "DP-300", "DP-600", "DP-900", "SC-200", "SC-300", "SC-900"]);
-const allAzureExamDomains = { ...azureOfficialExamDomains, ...azureNewExamDomains };
 const azureTaskItems: SearchTaskItem[] = Object.entries(allAzureExamDomains).flatMap(([code, domains]) => {
   if (!azureCourseRoutes.has(code)) return [];
-  return domains.flatMap((domain, domainIndex) => domain.groups.flatMap((group, groupIndex) => {
-    const isGroupCourse = groupCourseCodes.has(code);
-    const tasks = isGroupCourse ? [{ title: group.name, text: group.tasks.join(" "), id: `${domainIndex + 1}-${groupIndex + 1}` }] : group.tasks.map((task, taskIndex) => ({
-      title: task,
-      text: task,
-      id: task.toLowerCase().replace(/\([^)]*\)/g, " ").replace(/formerly azure ad/g, "entra id").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-    }));
-    return tasks.map((task) => ({
-      title: task.title,
-      description: `${domain.name} · ${task.text.slice(0, 220)} · Primary + companion walkthroughs`,
-      href: `/courses/azure-${code.toLowerCase()}?task=${encodeURIComponent(task.id)}`,
+  return domains.flatMap((domain, domainIndex) => domain.groups.map((group, groupIndex) => {
+    const taskText = group.tasks.join(" ");
+    const taskId = `${domainIndex + 1}-${groupIndex + 1}`;
+    return {
+      title: group.name,
+      description: `${domain.name} · ${taskText.slice(0, 220)} · Primary + companion walkthroughs`,
+      href: `/courses/azure-${code.toLowerCase()}?task=${encodeURIComponent(taskId)}`,
       provider: "Azure" as const,
-      terms: `${code} Microsoft Azure ${domain.name} ${group.name} ${task.title} ${task.text} primary walkthrough companion walkthrough architecture visual business problem ${scenarioTermsFor(`${domain.name} ${group.name} ${task.text}`)}`,
+      terms: `${code} Microsoft Azure ${domain.name} ${group.name} ${taskText} primary walkthrough companion walkthrough architecture visual business problem ${scenarioTermsFor(`${domain.name} ${group.name} ${taskText}`)}`,
       kind: "Course task" as const,
       courseCode: code,
       domain: domain.name,
-      taskId: task.id,
+      taskId,
       walkthroughs: ["primary", "companion"] as ["primary", "companion"],
-    }));
+    };
   }));
 });
 
