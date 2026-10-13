@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { findGuide } from "./CertificationCourse";
 import "./AwsSecurityCourseGuide.css";
 import "./AwsExamTaskGuide.css";
@@ -31,6 +31,15 @@ function TaskVisuals({ code, task }: { code: string; task: ExamTask }) {
 export default function AwsExamTaskGuide({ guide, scopeServices }: { guide: ExamGuide; scopeServices: string[] }) {
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const requestedDomainIndex = guide.domains.findIndex((item) => item.tasks.some((task) => task.id === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    setDomainIndex(requestedDomainIndex);
+    const requestedTaskIndex = guide.domains[requestedDomainIndex].tasks.findIndex((task) => task.id === requestedTask);
+    if (requestedTaskIndex >= 0) setTaskIndex(requestedTaskIndex);
+  }, [guide]);
   const domain = guide.domains[domainIndex];
   const task = domain.tasks[taskIndex];
   const selectable = task.services.filter(service => scopeServices.includes(service) && !!findGuide(service));
