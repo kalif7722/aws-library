@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./SemanticSearch.css";
 import catalogItems from "../semantic-search-index.json";
+import { semanticSearchTaskItems } from "../semantic-search-task-index";
 
 type SearchItem = {
   title: string;
@@ -10,6 +11,10 @@ type SearchItem = {
   href: string;
   provider: "AWS" | "Azure" | "Google Cloud" | "Multi-cloud" | "Certification";
   terms: string;
+  kind?: "Service" | "Certification" | "Course task";
+  courseCode?: string;
+  domain?: string;
+  taskId?: string;
 };
 
 const curatedItems: SearchItem[] = [
@@ -114,7 +119,7 @@ const certificationItems: SearchItem[] = [
   { title: "Google Cloud Professional Security Operations Engineer (PSOE)", description: "Design and operate security monitoring and response with Google Cloud SecOps.", href: "/courses/gcp-professional-security-operations-engineer", provider: "Certification", terms: "psoe professional security operations engineer google cloud secops" },
 ];
 
-const items: SearchItem[] = [...curatedItems, ...certificationItems, ...(catalogItems as SearchItem[])];
+const items: SearchItem[] = [...curatedItems, ...certificationItems, ...(catalogItems as SearchItem[]), ...semanticSearchTaskItems];
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
@@ -354,11 +359,11 @@ export default function SemanticSearch() {
       <div className="semantic-search-suggestions">{["GAL", "CDL", "PCA", "private app connectivity", "reduce cloud costs", "AI agents and RAG"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
       {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
         <span className="semantic-search-section-label">Suggestions · choose a match</span>
-        {autocomplete.map(({ item }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
+        {autocomplete.map(({ item }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
       </div>}
       {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Search results">
         <span className="semantic-search-section-label">Best matching learning content</span>
-        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small></a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
+        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small>{item.kind === "Course task" && <small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small>}</a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
       </div>}
       <div className="semantic-search-footer"><span>Searches concepts, aliases, use cases, and service names</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
     </div>}
