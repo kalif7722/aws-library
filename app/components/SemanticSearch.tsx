@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import "./SemanticSearch.css";
+import catalogItems from "../semantic-search-index.json";
 
 type SearchItem = {
   title: string;
@@ -11,7 +12,7 @@ type SearchItem = {
   terms: string;
 };
 
-const items: SearchItem[] = [
+const curatedItems: SearchItem[] = [
   { title: "Amazon EC2", description: "Virtual machines, compute capacity, and scalable workloads.", href: "/services?service=Amazon%20EC2", provider: "AWS", terms: "virtual machine vm server compute instance linux windows host lift and shift" },
   { title: "AWS Lambda", description: "Run code without managing servers; event-driven serverless compute.", href: "/services?service=AWS%20Lambda", provider: "AWS", terms: "serverless functions event trigger pay per use backend automation" },
   { title: "Amazon S3", description: "Object storage for backups, static assets, data lakes, and archives.", href: "/services?service=Amazon%20S3", provider: "AWS", terms: "object storage files backup archive static website data lake bucket" },
@@ -66,6 +67,8 @@ const items: SearchItem[] = [
   { title: "Data lakes and analytics", description: "Explore object storage, ingestion, data lakes, warehouses, and analytical queries.", href: "/gcp-services?service=bigquery", provider: "Multi-cloud", terms: "data lake warehouse analytics etl ingestion object storage sql bigquery glue" },
   { title: "Resilience and disaster recovery", description: "Learn redundancy, multi-zone design, failover, backup, recovery objectives, and continuity.", href: "/cloud-comparison", provider: "Multi-cloud", terms: "resilience reliability high availability fault tolerance disaster recovery rto rpo failover multi az multi region backup business continuity" },
 ];
+
+const items: SearchItem[] = [...curatedItems, ...(catalogItems as SearchItem[])];
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 const synonyms: Record<string, string[]> = {
