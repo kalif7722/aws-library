@@ -369,6 +369,16 @@ function score(item: SearchItem, query: string) {
   for (const rule of capabilityBoosts) {
     if (rule.query.test(q) && rule.service.test(searchable)) total += rule.boost;
   }
+  // Business-problem queries should favor tasks that teach diagnosis and remediation,
+  // not just the product/service pages that happen to contain the same keywords.
+  if (item.kind === "Course task") {
+    if (/(analytics|report|reporting|dashboard|warehouse|business intelligence)/.test(q) &&
+        /(analytics|report|dashboard|warehouse|query|performance|data pipeline|ingestion|power bi|bigquery|redshift|synapse|fabric|quick.?sight|athena)/.test(searchable)) total += 34;
+    if (/(slow|latency|bottleneck|performance|timeout|lag|delayed)/.test(q) &&
+        /(performance|optimi[sz]|latency|query|bottleneck|slow|throughput|monitor|metrics|processing|ingestion)/.test(searchable)) total += 24;
+    if (/(troubleshoot|diagnos|investigat|root cause|fix|resolve)/.test(q) &&
+        /(troubleshoot|diagnos|investigat|monitor|metrics|logs|performance|query|remediat|root cause)/.test(searchable)) total += 22;
+  }
   return total;
 }
 
@@ -450,7 +460,7 @@ export default function SemanticSearch() {
         <span className="semantic-search-section-label">Best matching learning content</span>
         {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small>{item.kind === "Course task" && <small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small>}{item.kind === "Course task" && item.walkthroughs && <small className="semantic-result-context">Primary walkthrough + companion coverage · opens the exact task</small>}</a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
       </div>}
-      <div className="semantic-search-footer"><span>Searches concepts, aliases, use cases, and service names</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
+      <div className="semantic-search-footer"><span>{taskIndexFailed ? "Course task index failed to load; service and certification search remains available." : taskItems.length ? "Searches business problems, exact course tasks, primary + companion walkthroughs, and services" : query.trim() ? "Loading cross-cloud course-task matches…" : "Search business problems, course tasks, services, and certifications"}</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
     </div>}
   </div>;
 }
