@@ -13,7 +13,7 @@ const taskId = (title: string) => {
   return match ? match[1] + "-" + match[2] : "";
 };
 
-const domains: Domain[] = [
+export const domains: Domain[] = [
   {
     "number": "01",
     "title": "Cloud Concepts",
