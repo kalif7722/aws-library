@@ -15,6 +15,7 @@ type SearchItem = {
   courseCode?: string;
   domain?: string;
   taskId?: string;
+  walkthroughs?: ["primary", "companion"];
 };
 
 const curatedItems: SearchItem[] = [
@@ -391,7 +392,7 @@ export default function SemanticSearch() {
       </div>}
       {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Search results">
         <span className="semantic-search-section-label">Best matching learning content</span>
-        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small>{item.kind === "Course task" && <small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small>}</a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
+        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small>{item.kind === "Course task" && <small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small>}{item.kind === "Course task" && item.walkthroughs && <small className="semantic-result-context">Primary walkthrough + companion coverage · opens the exact task</small>}</a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
       </div>}
       <div className="semantic-search-footer"><span>Searches concepts, aliases, use cases, and service names</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
     </div>}
