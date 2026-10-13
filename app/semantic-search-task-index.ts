@@ -15,24 +15,28 @@ export type SearchTaskItem = {
   taskId: string;
 };
 
-const businessProblemTerms = [
-  "business problem business requirement real world scenario architecture decision solution design",
-  "high availability resilient fault tolerant disaster recovery region failure failover recovery point recovery time",
-  "reduce cost optimize spend cost effective budget right sizing pay as you go",
-  "secure data prevent data breach least privilege encryption key management audit compliance",
-  "connect on premises data center hybrid cloud private connectivity vpn dedicated connection",
-  "analyze large datasets data warehouse analytics etl elt reporting dashboards business intelligence",
-  "migrate legacy application database cloud modernization rehost replatform refactor",
-  "scale application handle traffic spikes autoscaling performance latency throughput",
-  "monitor production troubleshoot incidents logs metrics traces alerts observability",
-  "deploy application safely ci cd rollback canary blue green infrastructure as code",
-  "protect public application from attacks ddos web application firewall threat detection incident response",
-  "build ai assistant chatbot agent rag retrieval augmented generation ground answers enterprise documents",
-  "govern multiple accounts projects subscriptions policies landing zone guardrails",
-  "stream real time events data ingestion event driven messaging asynchronous processing",
-  "identity authentication authorization sso mfa zero trust workload identity",
-  "backup restore business continuity ransomware immutable backup",
-].join(" ");
+const scenarioRules: Array<{ pattern: RegExp; terms: string }> = [
+  { pattern: /database|sql|nosql|data warehouse|bigquery|redshift|spanner|dynamodb|storage engine/i, terms: "database design database capacity query performance relational nosql data warehouse data analytics reporting" },
+  { pattern: /data|analytics|etl|pipeline|stream|warehouse|business intelligence|report/i, terms: "data analytics data lake data warehouse etl elt data pipeline business intelligence dashboard reporting streaming ingestion" },
+  { pattern: /security|threat|identity|access|encryption|key management|compliance|audit|vulnerability|incident/i, terms: "cloud security threat detection least privilege encryption compliance audit incident response zero trust data protection" },
+  { pattern: /network|connect|vpc|vnet|subnet|routing|dns|hybrid|on.?premises|interconnect|expressroute|vpn/i, terms: "hybrid cloud private connectivity on premises data center network routing subnet vpc vnet vpn direct connect expressroute interconnect dns" },
+  { pattern: /availability|resilien|disaster recovery|failover|backup|restore|region|multi.?region|continuity/i, terms: "high availability fault tolerance region failure failover disaster recovery backup restore business continuity rto rpo" },
+  { pattern: /cost|billing|budget|pricing|optimi[sz]|right.?siz|spend/i, terms: "reduce cloud costs cost optimization finops budget billing right sizing cost effective" },
+  { pattern: /migrat|moderni[sz]|transfer|rehost|replatform|refactor/i, terms: "cloud migration legacy application database migration modernization rehost replatform refactor data transfer" },
+  { pattern: /scale|autoscal|performance|latency|throughput|capacity|load balanc/i, terms: "scale application traffic spikes autoscaling performance latency throughput capacity load balancing" },
+  { pattern: /monitor|observab|logging|logs|metrics|trace|alert|troubleshoot|incident/i, terms: "production monitoring troubleshooting logs metrics traces alerts observability incident operations" },
+  { pattern: /deploy|release|ci.?cd|pipeline|rollback|infrastructure as code|terraform/i, terms: "safe deployment ci cd continuous delivery rollback canary blue green infrastructure as code" },
+  { pattern: /ai|machine learning|model|generative|agent|llm|rag|prompt|foundation model/i, terms: "artificial intelligence machine learning generative ai ai agent chatbot rag retrieval augmented generation model training inference prompt grounding" },
+  { pattern: /govern|organization polic|landing zone|guardrail|resource hierarchy|project|subscription/i, terms: "cloud governance multiple accounts projects subscriptions policies landing zone guardrails compliance resource hierarchy" },
+  { pattern: /event|message|queue|stream|pub.?sub|kafka|asynchronous|workflow|orchestrat/i, terms: "real time event streaming data ingestion event driven messaging asynchronous queue workflow orchestration" },
+  { pattern: /identity|authentication|authorization|iam|sso|mfa|federat|principal|role/i, terms: "identity authentication authorization sso mfa zero trust workload identity federation least privilege iam" },
+  { pattern: /container|kubernetes|gke|eks|aks|pod|cluster|orchestrat/i, terms: "container kubernetes orchestration microservices cluster deployment autoscaling" },
+  { pattern: /api|application integration|service mesh|gateway/i, terms: "secure api api gateway api management application integration service mesh authentication" },
+];
+
+function scenarioTermsFor(text: string): string {
+  return scenarioRules.filter((rule) => rule.pattern.test(text)).map((rule) => rule.terms).join(" ");
+}
 
 const gcpRoutes = new Map(gcpCourses.map((course) => [course.code, course.route]));
 
@@ -48,7 +52,7 @@ const gcpTaskItems: SearchTaskItem[] = Object.entries(gcpOfficialExamDomains).fl
         description: `${domain.name} · ${group.tasks.slice(0, 2).join(" ")}`,
         href: `/courses/${route}#exam-objectives`,
         provider: "Google Cloud" as const,
-        terms: `${code} ${course.title} ${domain.name} ${group.name} ${taskText} ${businessProblemTerms}`,
+        terms: `${code} ${course.title} ${domain.name} ${group.name} ${taskText} ${scenarioTermsFor(`${domain.name} ${group.name} ${taskText}`)}`,
         kind: "Course task" as const,
         courseCode: code,
         domain: domain.name,
@@ -67,7 +71,7 @@ const azureTaskItems: SearchTaskItem[] = Object.entries(azureOfficialExamDomains
         description: `${domain.name} · ${group.tasks.slice(0, 2).join(" ")}`,
         href: `/courses/azure-${code.toLowerCase()}#exam-objectives`,
         provider: "Azure" as const,
-        terms: `${code} Microsoft Azure ${domain.name} ${group.name} ${taskText} ${businessProblemTerms}`,
+        terms: `${code} Microsoft Azure ${domain.name} ${group.name} ${taskText} ${scenarioTermsFor(`${domain.name} ${group.name} ${taskText}`)}`,
         kind: "Course task" as const,
         courseCode: code,
         domain: domain.name,
@@ -83,7 +87,7 @@ const awsAipTaskItems: SearchTaskItem[] = aipC01Domains.flatMap((domain) =>
     description: `${domain.title} · ${task.focus.slice(0, 2).join(" ")}`,
     href: `/courses/aws-ai-practitioner?task=${encodeURIComponent(task.id)}#aip-c01-objectives`,
     provider: "AWS" as const,
-    terms: `AIP AIP-C01 AWS AI Practitioner ${domain.title} ${task.title} ${task.focus.join(" ")} ${task.services.join(" ")} ${businessProblemTerms}`,
+    terms: `AIP AIP-C01 AWS AI Practitioner ${domain.title} ${task.title} ${task.focus.join(" ")} ${task.services.join(" ")} ${scenarioTermsFor(`${domain.title} ${task.title} ${task.focus.join(" ")}`)}`,
     kind: "Course task" as const,
     courseCode: "AIP",
     domain: domain.title,
