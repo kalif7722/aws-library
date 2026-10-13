@@ -10,7 +10,7 @@ type Domain = { number: string; title: string; weight: string; outcome: string; 
 const V = (kind: string, title: string, subtitle: string, nodes: string[], explanation: string, cue: string): Visual =>
   ({ kind, title, subtitle, nodes, explanation, cue });
 
-const domains: Domain[] = [
+export const domains: Domain[] = [
   {
     number: "01", title: "Network Design", weight: "30%",
     outcome: "Design global, DNS, load-balancing, observability, hybrid, multi-account, multi-Region, and multi-VPC architectures.",
