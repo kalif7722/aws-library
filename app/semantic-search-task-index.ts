@@ -4,6 +4,10 @@ import { azureNewExamDomains } from "./azure-new-exam-objectives";
 import { gcpOfficialExamDomains } from "./gcp-all-exam-objectives";
 import { gcpCourses } from "./gcp-course-data";
 import { cloudOpsGuide, dataEngineerGuide, machineLearningGuide, devOpsGuide } from "./components/AwsNewExamGuides";
+import {
+  awsSaaDomains, awsSapDomains, awsAdvancedNetworkingDomains, awsSecurityDomains,
+  awsDeveloperDomains, awsCloudPractitionerDomains, awsAiPractitionerDomains,
+} from "./aws-semantic-task-data";
 
 export type SearchTaskItem = {
   title: string;
@@ -101,6 +105,13 @@ const awsTaskItems: SearchTaskItem[] = [
   taskId: task.id,
   walkthroughs: ["primary", "companion"] as ["primary", "companion"],
 }))),
+  ...makeAwsTaskItems("SAA", "Solutions Architect Associate", "aws-solutions-architect-associate", awsSaaDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("SAP", "Solutions Architect Professional", "aws-solutions-architect-professional", awsSapDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("ANS", "Advanced Networking Specialty", "aws-advanced-networking-specialty", awsAdvancedNetworkingDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("SCS", "Security Specialty", "aws-security-specialty", awsSecurityDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("DVA", "Developer Associate", "aws-developer-associate", awsDeveloperDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("CLF", "Cloud Practitioner", "aws-cloud-practitioner", awsCloudPractitionerDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("AIF", "AI Practitioner", "aws-ai-practitioner", awsAiPractitionerDomains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("SOA", "CloudOps Engineer Associate", "aws-cloudops-engineer-associate", cloudOpsGuide.domains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("DEA", "Data Engineer Associate", "aws-data-engineer-associate", dataEngineerGuide.domains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("MLA", "Machine Learning Engineer Associate", "aws-machine-learning-engineer-associate", machineLearningGuide.domains as unknown as GenericDomain[]),
