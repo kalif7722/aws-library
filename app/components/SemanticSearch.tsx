@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import "./SemanticSearch.css";
 import catalogItems from "../semantic-search-index.json";
 
+type ProblemSuggestion = { label: string; query: string; description: string };
+
 type SearchItem = {
   title: string;
   description: string;
@@ -120,6 +122,29 @@ const certificationItems: SearchItem[] = [
 ];
 
 const items: SearchItem[] = [...curatedItems, ...certificationItems, ...(catalogItems as SearchItem[])];
+
+const problemSuggestions: ProblemSuggestion[] = [
+  { label: "Analytics reports are slow", query: "analytics reports are slow", description: "Query performance, data warehouses, ingestion, and reporting pipelines" },
+  { label: "Data pipelines are delayed", query: "data pipeline delayed ingestion processing", description: "Batch vs streaming, orchestration, and data processing bottlenecks" },
+  { label: "Database queries are slow", query: "database queries slow query performance", description: "Indexes, database sizing, caching, and query troubleshooting" },
+  { label: "Cloud costs keep increasing", query: "cloud costs increasing cost optimization", description: "Find rightsizing, budgets, idle resources, and FinOps tasks" },
+  { label: "Application is unavailable", query: "application unavailable high availability failover", description: "Reliability, health checks, redundancy, and disaster recovery" },
+  { label: "Traffic spikes cause latency", query: "traffic spikes latency autoscaling performance", description: "Autoscaling, load balancing, caching, and capacity planning" },
+  { label: "Hybrid cloud connection is unreliable", query: "hybrid cloud connectivity troubleshooting", description: "VPNs, dedicated links, routing, DNS, and private connectivity" },
+  { label: "Users get access denied", query: "access denied IAM role permissions troubleshooting", description: "Identity, RBAC, least privilege, and policy evaluation" },
+  { label: "Suspicious activity needs investigation", query: "suspicious activity threat detection incident response", description: "Logs, detections, SIEM/SOAR, and incident response" },
+  { label: "AI answers are inaccurate", query: "AI hallucinations RAG grounding evaluation", description: "Retrieval, grounding, evaluation, and responsible AI" },
+  { label: "Deployments cause outages", query: "deployment rollout rollback CI CD reliability", description: "Canary, blue/green, rollback, and release automation" },
+  { label: "Need faster real-time insights", query: "real time analytics streaming dashboards", description: "Streaming ingestion, event processing, analytics, and visualization" },
+  { label: "Sensitive data may be exposed", query: "sensitive data exposure privacy classification encryption", description: "Data discovery, masking, encryption, and retention controls" },
+  { label: "Backups do not meet recovery targets", query: "backup restore RTO RPO disaster recovery", description: "Recovery objectives, restore testing, replication, and continuity" },
+  { label: "Cloud configuration keeps drifting", query: "configuration drift governance compliance automation", description: "Policy enforcement, audit trails, remediation, and guardrails" },
+  { label: "APIs are throttled or failing", query: "API throttling rate limiting retries troubleshooting", description: "Gateway policies, quotas, retries, and service integration" },
+  { label: "Container workloads do not scale", query: "Kubernetes container autoscaling capacity", description: "Cluster scaling, workload limits, observability, and reliability" },
+  { label: "Cloud migration is risky", query: "cloud migration assessment database migration cutover", description: "Discovery, migration strategy, validation, and cutover" },
+  { label: "Fleet patching is inconsistent", query: "patch management fleet automation compliance", description: "Maintenance windows, runbooks, patch baselines, and drift" },
+  { label: "Need secure multi-account governance", query: "multi account cloud governance landing zone guardrails", description: "Organizations, policies, landing zones, and centralized controls" },
+];
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
@@ -350,6 +375,34 @@ function score(item: SearchItem, query: string) {
 export default function SemanticSearch() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [taskItems, setTaskItems] = useState<SearchItem[]>([]);
+  const [taskIndexFailed, setTaskIndexFailed] = useState(false);
+
+  // Load the large cross-cloud task index only after the user starts searching.
+  // This keeps the shared layout from eagerly loading all exam-objective data.
+  useEffect(() => {
+    if (!query.trim() || taskItems.length || taskIndexFailed) return;
+    let active = true;
+    import("../semantic-search-task-index")
+      .then(module => { if (active) setTaskItems(module.semanticSearchTaskItems as SearchItem[]); })
+      .catch(() => { if (active) setTaskIndexFailed(true); });
+    return () => { active = false; };
+  }, [query, taskItems.length, taskIndexFailed]);
+
+  const searchableItems = useMemo(() => [...items, ...taskItems], [taskItems]);
+  const matchedProblemSuggestions = useMemo(() => {
+    const q = normalize(query);
+    if (!q) return problemSuggestions.slice(0, 6);
+    const tokens = q.split(" ").filter(token => token.length > 1);
+    return problemSuggestions.map(suggestion => {
+      const haystack = normalize([suggestion.label, suggestion.query, suggestion.description].join(" "));
+      const matched = tokens.filter(token => haystack.includes(token)).length;
+      return { suggestion, matched, starts: normalize(suggestion.label).startsWith(q) };
+    }).filter(entry => entry.matched > 0)
+      .sort((a, b) => Number(b.starts) - Number(a.starts) || b.matched - a.matched)
+      .slice(0, 4)
+      .map(entry => entry.suggestion);
+  }, [query]);
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
@@ -361,13 +414,13 @@ export default function SemanticSearch() {
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
   }, []);
-  const rankedResults = useMemo(() => items.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [query]);
+  const rankedResults = useMemo(() => searchableItems.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [searchableItems, query]);
   const results = diversifyResults(rankedResults, query, 9);
   const autocomplete = useMemo(() => {
     const q = normalize(query);
     if (!q) return [];
     const variants = expandedTerms(query);
-    const ranked = items.map(item => {
+    const ranked = searchableItems.map(item => {
       const title = normalize(item.title);
       const exactAlias = variants.some(term => term !== q && title.includes(term));
       const startsWith = title.startsWith(q) || title.split(" ").some(word => word.startsWith(q));
@@ -376,15 +429,19 @@ export default function SemanticSearch() {
       .sort((a,b) => b.score - a.score)
       .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index);
     return diversifyResults(ranked, query, 6);
-  }, [query]);
+  }, [searchableItems, query]);
   return <div className="semantic-search">
     <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
       <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
     </button>
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
       <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && (autocomplete[0] || results[0])) window.location.href = (autocomplete[0] || results[0]).item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
-      <p className="semantic-search-hint">Try a goal or plain-English question—not just a product name.</p>
-      <div className="semantic-search-suggestions">{["GAL", "CDL", "PCA", "private app connectivity", "reduce cloud costs", "AI agents and RAG"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
+      <p className="semantic-search-hint">Describe the business problem in plain English. Choose a suggestion to search course tasks and their primary + companion walkthroughs—not just services.</p>
+      <div className="semantic-search-suggestions">{["Analytics reports are slow", "Database queries are slow", "Cloud costs keep increasing", "Application is unavailable", "AI answers are inaccurate", "Hybrid connectivity"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
+      {matchedProblemSuggestions.length > 0 && <div className="semantic-search-autocomplete semantic-problem-autocomplete" role="listbox" aria-label="Business problem suggestions">
+        <span className="semantic-search-section-label">{query.trim() ? "Business problems you may mean" : "Start with a business problem"}</span>
+        {matchedProblemSuggestions.map(suggestion => <button type="button" role="option" key={suggestion.label} onClick={() => setQuery(suggestion.query)}><span className="semantic-autocomplete-icon" aria-hidden="true">⌕</span><span><strong>{suggestion.label}</strong><small>{suggestion.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></button>)}
+      </div>
       {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
         <span className="semantic-search-section-label">Suggestions · choose a match</span>
         {autocomplete.map(({ item }) => <a role="option" key={`${item.provider}-${item.courseCode || ""}-${item.taskId || ""}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
