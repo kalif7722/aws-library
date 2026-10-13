@@ -3,14 +3,6 @@ import { azureOfficialExamDomains } from "./azure-exam-objectives";
 import { azureNewExamDomains } from "./azure-new-exam-objectives";
 import { gcpOfficialExamDomains } from "./gcp-all-exam-objectives";
 import { gcpCourses } from "./gcp-course-data";
-import { domains as aifDomains } from "./components/AwsAiPractitionerCourseGuide";
-import { domains as clfDomains } from "./components/AwsCloudPractitionerCourseGuide";
-import { domains as dvaDomains } from "./components/AwsDeveloperAssociateCourseGuide";
-import { domains as ansDomains } from "./components/AwsAdvancedNetworkingCourseGuide";
-import { saaDomains } from "./components/AwsSaaCourseGuide";
-import { sapDomains } from "./components/AwsSapCourseGuide";
-import { domains as securityDomains } from "./components/AwsSecurityCourseGuide";
-import { cloudOpsGuide, dataEngineerGuide, machineLearningGuide, devOpsGuide } from "./components/AwsNewExamGuides";
 
 export type SearchTaskItem = {
   title: string;
@@ -95,31 +87,18 @@ function makeAwsTaskItems(
   }));
 }
 
-const awsTaskItems: SearchTaskItem[] = [
-  ...makeAwsTaskItems("AIF", "AWS Certified AI Practitioner", "aws-ai-practitioner", aifDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("CLF", "AWS Certified Cloud Practitioner", "aws-cloud-practitioner", clfDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("DVA", "AWS Certified Developer Associate", "aws-developer-associate", dvaDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("ANS", "AWS Certified Advanced Networking Specialty", "aws-advanced-networking-specialty", ansDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("SAA", "AWS Certified Solutions Architect Associate", "aws-solutions-architect-associate", saaDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("SAP", "AWS Certified Solutions Architect Professional", "aws-solutions-architect-professional", sapDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("SCS", "AWS Certified Security Specialty", "aws-security-specialty", securityDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems(cloudOpsGuide.code, cloudOpsGuide.title, "aws-cloudops-engineer-associate", cloudOpsGuide.domains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems(dataEngineerGuide.code, dataEngineerGuide.title, "aws-data-engineer-associate", dataEngineerGuide.domains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems(machineLearningGuide.code, machineLearningGuide.title, "aws-machine-learning-engineer-associate", machineLearningGuide.domains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems(devOpsGuide.code, devOpsGuide.title, "aws-devops-engineer-professional", devOpsGuide.domains as unknown as GenericDomain[]),
-  ...aipC01Domains.flatMap((domain) => domain.tasks.map((task) => ({
-    title: `Task ${task.id.replace(/-/g, ".")} · ${task.title}`,
-    description: `${domain.title} · ${task.focus.slice(0, 2).join(" ")} · Primary + companion walkthroughs`,
-    href: `/courses/aws-generative-ai-developer-professional?task=${encodeURIComponent(task.id)}#aip-c01-objectives`,
-    provider: "AWS" as const,
-    terms: `AWS AIP AIP-C01 Generative AI Developer Professional ${domain.title} ${task.title} ${task.focus.join(" ")} ${task.services.join(" ")} primary walkthrough companion walkthrough architecture visual business problem ${scenarioTermsFor(`${domain.title} ${task.title} ${task.focus.join(" ")}`)}`,
-    kind: "Course task" as const,
-    courseCode: "AIP",
-    domain: domain.title,
-    taskId: task.id,
-    walkthroughs: ["primary", "companion"] as ["primary", "companion"],
-  }))),
-];
+const awsTaskItems: SearchTaskItem[] = aipC01Domains.flatMap((domain) => domain.tasks.map((task) => ({
+  title: `Task ${task.id.replace(/-/g, ".")} · ${task.title}`,
+  description: `${domain.title} · ${task.focus.slice(0, 2).join(" ")} · Primary + companion walkthroughs`,
+  href: `/courses/aws-generative-ai-developer-professional?task=${encodeURIComponent(task.id)}#aip-c01-objectives`,
+  provider: "AWS" as const,
+  terms: `AWS AIP AIP-C01 Generative AI Developer Professional ${domain.title} ${task.title} ${task.focus.join(" ")} ${task.services.join(" ")} primary walkthrough companion walkthrough architecture visual business problem ${scenarioTermsFor(`${domain.title} ${task.title} ${task.focus.join(" ")}`)}`,
+  kind: "Course task" as const,
+  courseCode: "AIP",
+  domain: domain.title,
+  taskId: task.id,
+  walkthroughs: ["primary", "companion"] as ["primary", "companion"],
+})));
 
 const gcpRoutes = new Map(gcpCourses.map((course) => [course.code, course.route]));
 const gcpTaskItems: SearchTaskItem[] = Object.entries(gcpOfficialExamDomains).flatMap(([code, domains]) => {
