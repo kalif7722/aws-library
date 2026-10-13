@@ -272,7 +272,7 @@ function hasExplicitProvider(query: string) {
 }
 
 function diversifyResults<T extends { item: SearchItem; score: number }>(entries: T[], query: string, limit: number): T[] {
-  const problemIntent = /(slow|latency|bottleneck|troubleshoot|diagnos|investigat|reports?|reporting|dashboard|analytics|warehouse|pipeline|delayed|unavailable|outage|failover|costs? keep|increasing|access denied|suspicious|hallucination|deployment|traffic spikes|connectivity|data exposure|backup|restore|configuration drift|throttl|migration|patching|governance|real time|real-time)/.test(normalize(query));
+  const problemIntent = /(slow|latency|bottleneck|troubleshoot|diagnos|investigat|reports?|reporting|dashboard|analytics|warehouse|pipeline|delayed|unavailable|outage|failover|costs? keep|increasing|access denied|suspicious|hallucin|inaccurate|factuality|grounding|answer quality|response quality|model evaluation|rag evaluation|retrieval quality|ai answers|wrong answers|incorrect answers|deployment|traffic spikes|connectivity|data exposure|backup|restore|configuration drift|throttl|migration|patching|governance|real time|real-time)/.test(normalize(query));
   if (problemIntent && !hasExplicitProvider(query)) {
     const providers = ["AWS", "Azure", "Google Cloud"] as const;
     const taskBuckets: Record<(typeof providers)[number], T[]> = { AWS: [], Azure: [], "Google Cloud": [] };
@@ -458,8 +458,43 @@ export default function SemanticSearch() {
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
   }, []);
-  const rankedResults = useMemo(() => searchableItems.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [searchableItems, query]);
-  const taskResults = diversifyResults(rankedResults.filter(entry => entry.item.kind === "Course task"), query, 6);
+  const rankedResults = useMemo(() => {
+    const q = normalize(query);
+    const aiAccuracyTroubleshootingIntent = /(inaccurate|hallucin|factuality|grounding|answer quality|response quality|model evaluation|rag evaluation|retrieval quality|ai answers|wrong answers|incorrect answers|troubleshoot generative ai|ai troubleshooting)/.test(q);
+    const explicitAip52Intent = /\\b(aip|aip c01|task 5 2|5 2)\\b/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q);
+    return searchableItems.map(item => {
+      const baseScore = score(item, query);
+      // Keep the exact AWS AIP troubleshooting objective visible for AI answer-quality
+      // and GenAI troubleshooting queries; diversification must not hide this task.
+      const isAipTroubleshootingTask = item.kind === "Course task" && item.courseCode === "AIP" && item.taskId === "5-2";
+      const isAipEvaluationTask = item.kind === "Course task" && item.courseCode === "AIP" && item.taskId === "5-1";
+      const boostedScore = (isAipTroubleshootingTask && (aiAccuracyTroubleshootingIntent || explicitAip52Intent))
+        ? Math.max(baseScore, 240)
+        : (isAipEvaluationTask && aiAccuracyTroubleshootingIntent ? Math.max(baseScore, 180) : baseScore);
+      return { item, score: boostedScore };
+    }).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score);
+  }, [searchableItems, query]);
+  const taskResults = useMemo(() => {
+    const rankedTasks = rankedResults.filter(entry => entry.item.kind === "Course task");
+    const diversified = diversifyResults(rankedTasks, query, 6);
+    const q = normalize(query);
+    const aiAccuracyTroubleshootingIntent = /(inaccurate|hallucin|factuality|grounding|answer quality|response quality|model evaluation|rag evaluation|retrieval quality|ai answers|wrong answers|incorrect answers|troubleshoot generative ai|ai troubleshooting)/.test(q);
+    const explicitAip52Intent = /\\b(aip|aip c01|task 5 2|5 2)\\b/.test(q) && /(troubleshoot|generative ai|hallucin|inaccurate|rag|retrieval|answer|model)/.test(q);
+    if (!aiAccuracyTroubleshootingIntent && !explicitAip52Intent) return diversified;
+    const mustInclude = rankedTasks.filter(entry =>
+      entry.item.courseCode === "AIP" &&
+      ((entry.item.taskId === "5-2" && (aiAccuracyTroubleshootingIntent || explicitAip52Intent)) ||
+       (entry.item.taskId === "5-1" && aiAccuracyTroubleshootingIntent))
+    );
+    const combined = [...mustInclude, ...diversified];
+    const seen = new Set<string>();
+    return combined.filter(entry => {
+      const key = `${entry.item.provider}:${entry.item.courseCode}:${entry.item.taskId}:${entry.item.title}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 6);
+  }, [rankedResults, query]);
   const serviceResults = useMemo(() => {
     const candidates = rankedResults.filter(entry =>
       entry.item.kind !== "Course task" &&
