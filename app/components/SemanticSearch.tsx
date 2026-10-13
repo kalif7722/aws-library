@@ -473,7 +473,7 @@ export default function SemanticSearch() {
       {matchedProblemSuggestions.length > 0 && <div className="semantic-search-autocomplete semantic-problem-autocomplete" role="listbox" aria-label="Business problem suggestions">
         <span className="semantic-search-section-label">{query.trim() ? "Business problems you may mean" : "Start with a business problem"}</span>
         {matchedProblemSuggestions.map(suggestion => <button type="button" role="option" key={suggestion.label} onClick={() => setQuery(suggestion.query)}><span className="semantic-autocomplete-icon" aria-hidden="true">⌕</span><span><strong>{suggestion.label}</strong><small>{suggestion.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></button>)}
-      </div>
+      </div>}
       {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
         <span className="semantic-search-section-label">Suggestions · choose a match</span>
         {autocomplete.map(({ item }) => <a role="option" key={`${item.provider}-${item.courseCode || ""}-${item.taskId || ""}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
