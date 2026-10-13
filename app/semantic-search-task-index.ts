@@ -82,7 +82,7 @@ function makeAwsTaskItems(
     return {
       title: `Task ${id.replace(/-/g, ".")} · ${cleanTitle}`,
       description: `${domainName} · ${task.ask || task.description || (task.focus || []).slice(0, 2).join(" ")} · Primary + companion walkthroughs`,
-      href: `/courses/${route}?task=${encodeURIComponent(id)}#${courseCode.toLowerCase()}-exam-guide`,
+      href: `/courses/${route}?task=${encodeURIComponent(id)}#${courseCode === "SAA" ? "exam-guide" : `${courseCode.toLowerCase()}-exam-guide`}`,
       provider: "AWS" as const,
       terms: `AWS ${courseCode} ${courseTitle} ${domainName} ${rawTitle} ${cleanTitle} ${focus} primary walkthrough companion walkthrough architecture visual practical solution business problem ${scenarioTermsFor(`${domainName} ${rawTitle} ${focus}`)}`,
       kind: "Course task" as const,
@@ -154,12 +154,12 @@ const azureTaskItems: SearchTaskItem[] = Object.entries(azureOfficialExamDomains
     const tasks = isGroupCourse ? [{ title: group.name, text: group.tasks.join(" "), id: `${domainIndex + 1}-${groupIndex + 1}` }] : group.tasks.map((task, taskIndex) => ({
       title: task,
       text: task,
-      id: task.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+      id: task.toLowerCase().replace(/\\([^)]*\\)/g, " ").replace(/formerly azure ad/g, "entra id").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
     }));
     return tasks.map((task) => ({
       title: task.title,
       description: `${domain.name} · ${task.text.slice(0, 220)} · Primary + companion walkthroughs`,
-      href: `/courses/azure-${code.toLowerCase()}?task=${encodeURIComponent(task.id)}#console-walkthroughs`,
+      href: `/courses/azure-${code.toLowerCase()}?task=${encodeURIComponent(task.id)}`,
       provider: "Azure" as const,
       terms: `${code} Microsoft Azure ${domain.name} ${group.name} ${task.title} ${task.text} primary walkthrough companion walkthrough architecture visual business problem ${scenarioTermsFor(`${domain.name} ${group.name} ${task.text}`)}`,
       kind: "Course task" as const,
