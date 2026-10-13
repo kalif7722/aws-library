@@ -113,7 +113,7 @@ export default function SemanticSearch() {
   const results = useMemo(() => items.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score).slice(0, 7), [query]);
   return <div className="semantic-search">
     <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
-      <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>⌘ K</kbd>
+      <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
     </button>
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
       <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && results[0]) window.location.href = results[0].item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
