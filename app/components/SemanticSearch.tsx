@@ -243,7 +243,8 @@ function hasExplicitProvider(query: string) {
 
 function diversifyResults<T extends { item: SearchItem; score: number }>(entries: T[], query: string, limit: number): T[] {
   if (hasExplicitProvider(query)) return entries.slice(0, limit);
-  const buckets: Record<"AWS" | "Azure" | "Google Cloud", T[]> = {
+  const providers = ["AWS", "Azure", "Google Cloud"] as const;
+  const buckets: Record<(typeof providers)[number], T[]> = {
     AWS: [], Azure: [], "Google Cloud": [],
   };
   const other: T[] = [];
@@ -252,22 +253,49 @@ function diversifyResults<T extends { item: SearchItem; score: number }>(entries
     if (group === "Other") other.push(entry);
     else buckets[group].push(entry);
   }
-  // Round-robin the leading matches so a generic query doesn't get monopolized by one provider's catalog.
+
+  // Within each cloud, keep both problem-solving tasks and service pages discoverable.
+  // A task is included only when its score indicates a meaningful content match.
+  const selected: Record<(typeof providers)[number], T[]> = {
+    AWS: [], Azure: [], "Google Cloud": [],
+  };
+  for (const provider of providers) {
+    const ranked = buckets[provider];
+    const services = ranked.filter((entry) => entry.item.kind !== "Course task");
+    const tasks = ranked.filter((entry) => entry.item.kind === "Course task" && entry.score >= 20);
+    const first = ranked[0];
+    if (first) selected[provider].push(first);
+    const alternate = first?.item.kind === "Course task" ? services[0] : tasks[0];
+    if (alternate && alternate.item.title !== first?.item.title && alternate.score >= Math.max(20, (first?.score || 0) * 0.42)) {
+      selected[provider].push(alternate);
+    }
+    for (const entry of ranked) {
+      if (selected[provider].length >= 3) break;
+      const key = `${entry.item.provider}:${entry.item.courseCode || ""}:${entry.item.kind || ""}:${entry.item.title}`;
+      if (!selected[provider].some((chosen) => `${chosen.item.provider}:${chosen.item.courseCode || ""}:${chosen.item.kind || ""}:${chosen.item.title}` === key)) {
+        selected[provider].push(entry);
+      }
+    }
+  }
+
   const diversified: T[] = [];
   const seen = new Set<string>();
   for (let rank = 0; rank < 3; rank++) {
-    for (const group of ["AWS", "Azure", "Google Cloud"] as const) {
-      const entry = buckets[group][rank];
-      if (entry && !seen.has(entry.item.title)) {
+    for (const provider of providers) {
+      const entry = selected[provider][rank];
+      if (!entry) continue;
+      const key = `${entry.item.provider}:${entry.item.courseCode || ""}:${entry.item.kind || ""}:${entry.item.title}`;
+      if (!seen.has(key)) {
         diversified.push(entry);
-        seen.add(entry.item.title);
+        seen.add(key);
       }
     }
   }
   for (const entry of [...entries, ...other]) {
-    if (!seen.has(entry.item.title)) {
+    const key = `${entry.item.provider}:${entry.item.courseCode || ""}:${entry.item.kind || ""}:${entry.item.title}`;
+    if (!seen.has(key)) {
       diversified.push(entry);
-      seen.add(entry.item.title);
+      seen.add(key);
     }
     if (diversified.length >= limit) break;
   }
