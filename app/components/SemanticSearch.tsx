@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./SemanticSearch.css";
 import catalogItems from "../semantic-search-index.json";
-import { semanticSearchTaskItems } from "../semantic-search-task-index";
 
 type SearchItem = {
   title: string;
@@ -120,7 +119,7 @@ const certificationItems: SearchItem[] = [
   { title: "Google Cloud Professional Security Operations Engineer (PSOE)", description: "Design and operate security monitoring and response with Google Cloud SecOps.", href: "/courses/gcp-professional-security-operations-engineer", provider: "Certification", terms: "psoe professional security operations engineer google cloud secops" },
 ];
 
-const items: SearchItem[] = [...curatedItems, ...certificationItems, ...(catalogItems as SearchItem[]), ...semanticSearchTaskItems];
+const items: SearchItem[] = [...curatedItems, ...certificationItems, ...(catalogItems as SearchItem[])];
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
