@@ -153,6 +153,22 @@ const aliases: Record<string, string[]> = {
   az900: ["azure fundamentals"], az104: ["azure administrator associate"], az700: ["azure network engineer"], az400: ["azure devops engineer"],
   ai901: ["azure ai fundamentals"], ai103: ["azure ai apps and agents"], dp900: ["azure data fundamentals"], dp300: ["azure database administrator"], dp600: ["fabric analytics engineer"], az140: ["azure virtual desktop"], az120: ["azure sap workloads"], sc900: ["security compliance identity fundamentals"], sc300: ["identity and access administrator"], sc200: ["security operations analyst"],
   "az 104": ["azure administrator associate", "azure administration"],
+  // Cross-cloud concept synonyms: deliberately map generic terms to equivalent capabilities on all providers.
+  data: ["data analytics", "data engineering", "data lake", "data warehouse", "etl", "data pipelines", "business intelligence", "analytics"],
+  analytics: ["data analytics", "data engineering", "data lake", "data warehouse", "etl", "data pipelines", "business intelligence", "bigquery", "athena", "synapse analytics", "fabric"],
+  warehouse: ["data warehouse", "analytics", "sql", "bigquery", "amazon redshift", "azure synapse analytics", "fabric"],
+  etl: ["data integration", "data pipelines", "aws glue", "azure data factory", "google cloud dataflow"],
+  database: ["relational database", "nosql", "managed database", "amazon rds", "azure sql database", "cloud sql", "alloydb"],
+  security: ["cloud security", "identity security", "threat detection", "security posture", "key management", "firewall", "defender for cloud", "security command center"],
+  networking: ["cloud networking", "virtual network", "vpc", "vnet", "hybrid connectivity", "load balancing", "cloud interconnect", "expressroute", "direct connect"],
+  compute: ["virtual machines", "compute engine", "azure virtual machines", "amazon ec2", "serverless compute", "containers"],
+  storage: ["object storage", "blob storage", "cloud storage", "amazon s3", "backup", "data lake"],
+  monitoring: ["observability", "logs", "metrics", "alerts", "cloudwatch", "azure monitor", "cloud monitoring", "cloud logging"],
+  ai: ["artificial intelligence", "machine learning", "generative ai", "foundation models", "ai agents", "vertex ai", "azure ai foundry", "amazon bedrock"],
+  migration: ["cloud migration", "database migration", "modernization", "aws migration", "azure migrate", "google cloud migration"],
+  governance: ["cloud governance", "policy controls", "compliance", "landing zone", "management groups", "organization policies"],
+  containers: ["kubernetes", "amazon eks", "azure kubernetes service", "google kubernetes engine", "gke", "aks"],
+  serverless: ["serverless compute", "aws lambda", "azure functions", "cloud run", "event driven applications"],
   gcp: ["google cloud platform", "google cloud"],
   aws: ["amazon web services"],
   vm: ["virtual machine", "compute"], vms: ["virtual machine", "compute"],
@@ -186,6 +202,53 @@ function expandedTerms(query: string) {
     (aliases[token] || []).forEach(term => terms.add(normalize(term)));
   });
   return [...terms].filter(Boolean);
+}
+
+function providerGroup(item: SearchItem): "AWS" | "Azure" | "Google Cloud" | "Other" {
+  const href = item.href.toLowerCase();
+  if (href.startsWith("/courses/aws-") || href.startsWith("/services")) return href.startsWith("/services") ? "AWS" : "AWS";
+  if (href.startsWith("/courses/azure-") || href.startsWith("/azure-services")) return "Azure";
+  if (href.startsWith("/courses/gcp-") || href.startsWith("/gcp-services")) return "Google Cloud";
+  if (item.provider === "AWS" || item.provider === "Azure" || item.provider === "Google Cloud") return item.provider;
+  return "Other";
+}
+
+function hasExplicitProvider(query: string) {
+  const q = normalize(query);
+  return /(^| )(aws|amazon|azure|microsoft|gcp|google cloud|google|gke|aks|eks)( |$)/.test(q);
+}
+
+function diversifyResults<T extends { item: SearchItem; score: number }>(entries: T[], query: string, limit: number): T[] {
+  if (hasExplicitProvider(query)) return entries.slice(0, limit);
+  const buckets: Record<"AWS" | "Azure" | "Google Cloud", T[]> = {
+    AWS: [], Azure: [], "Google Cloud": [],
+  };
+  const other: T[] = [];
+  for (const entry of entries) {
+    const group = providerGroup(entry.item);
+    if (group === "Other") other.push(entry);
+    else buckets[group].push(entry);
+  }
+  // Round-robin the leading matches so a generic query doesn't get monopolized by one provider's catalog.
+  const diversified: T[] = [];
+  const seen = new Set<string>();
+  for (let rank = 0; rank < 3; rank++) {
+    for (const group of ["AWS", "Azure", "Google Cloud"] as const) {
+      const entry = buckets[group][rank];
+      if (entry && !seen.has(entry.item.title)) {
+        diversified.push(entry);
+        seen.add(entry.item.title);
+      }
+    }
+  }
+  for (const entry of [...entries, ...other]) {
+    if (!seen.has(entry.item.title)) {
+      diversified.push(entry);
+      seen.add(entry.item.title);
+    }
+    if (diversified.length >= limit) break;
+  }
+  return diversified.slice(0, limit);
 }
 
 function score(item: SearchItem, query: string) {
@@ -225,20 +288,20 @@ export default function SemanticSearch() {
     return () => window.removeEventListener("keydown", handleShortcut);
   }, []);
   const rankedResults = useMemo(() => items.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [query]);
-  const results = rankedResults.slice(0, 7);
+  const results = diversifyResults(rankedResults, query, 9);
   const autocomplete = useMemo(() => {
     const q = normalize(query);
     if (!q) return [];
     const variants = expandedTerms(query);
-    return items.map(item => {
+    const ranked = items.map(item => {
       const title = normalize(item.title);
       const exactAlias = variants.some(term => term !== q && title.includes(term));
       const startsWith = title.startsWith(q) || title.split(" ").some(word => word.startsWith(q));
       return { item, score: (startsWith ? 50 : 0) + (exactAlias ? 40 : 0) + score(item, query) };
     }).filter(entry => entry.score > 0)
       .sort((a,b) => b.score - a.score)
-      .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index)
-      .slice(0, 5);
+      .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index);
+    return diversifyResults(ranked, query, 6);
   }, [query]);
   return <div className="semantic-search">
     <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
