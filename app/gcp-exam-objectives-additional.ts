@@ -392,11 +392,11 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
         ] },
         { id: "2-2", name: "Visualize data and create dashboards in Looker", tasks: [
           "Create, modify, and share dashboards.",
-          "Compare Looker and Looker Studio and manipulate simple LookML parameters."
+          "Compare Looker and Looker Studio (now called Data Studio) for different analytics use cases and manipulate simple LookML parameters."
         ] },
         { id: "2-3", name: "Define, train, evaluate, and use ML models", tasks: [
-          "Use BigQuery ML and AutoML for ML use cases and remote connections to Google LLMs.",
-          "Plan ML projects, create and evaluate BigQuery ML models, perform inference, and organize models in Model Registry."
+          "Use BigQuery ML and AutoML for appropriate ML use cases, including remote connections to pretrained Google LLMs through BigQuery.",
+          "Plan a standard ML project (data collection, model training, model evaluation, and prediction); create, train, and evaluate BigQuery ML models, perform inference, and organize models in Model Registry."
         ] }
       ]
     },
@@ -419,8 +419,8 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
       weight: "~25%",
       groups: [
         { id: "4-1", name: "Configure access control and governance", tasks: [
-          "Apply least privilege with IAM for BigQuery and Cloud Storage.",
-          "Compare Cloud Storage public, private, and uniform access and determine when to share data with Analytics Hub."
+          "Apply least privilege with IAM; distinguish basic roles, predefined roles, and permissions for BigQuery and Cloud Storage.",
+          "Compare Cloud Storage public/private access and uniform bucket-level access, and determine when to share data using Analytics Hub (now BigQuery sharing)."
         ] },
         { id: "4-2", name: "Configure lifecycle management", tasks: [
           "Choose Cloud Storage classes based on access and retention.",
@@ -430,7 +430,7 @@ export const gcpAdditionalExamDomains: Record<string, GcpExamDomain[]> = {
           "Compare Google-managed backup and recovery, replication, and primary versus secondary placement for Cloud Storage and Cloud SQL."
         ] },
         { id: "4-4", name: "Apply security measures and ensure compliance with data privacy regulations", tasks: [
-          "Compare CMEK, CSEK, and Google-managed encryption keys.",
+          "Compare customer-managed (CMEK), customer-supplied (CSEK), and Google-managed encryption keys (GMEK), and identify their use cases.",
           "Use Cloud KMS and distinguish encryption in transit from encryption at rest."
         ] }
       ]
