@@ -23,7 +23,7 @@ const scenarios: Scenario[] = [
     services: [
       { name: "Amazon VPC", href: "/services?service=Amazon%20VPC" },
       { name: "AWS Network Firewall", href: "/services?service=AWS%20Network%20Firewall" },
-      { name: "Azure Network Watcher", href: "/azure-services?service=network-watcher" },
+      { name: "Azure Network Watcher", href: "/azure-services?service=azure-network-watcher" },
       { name: "Google Cloud Network Intelligence Center", href: "/gcp-services?service=network-intelligence-center" },
     ],
     steps: [
@@ -68,7 +68,7 @@ const scenarios: Scenario[] = [
       { name: "Amazon Bedrock Knowledge Bases", href: "/services?service=Amazon%20Bedrock%20Knowledge%20Bases" },
       { name: "Amazon OpenSearch Service", href: "/services?service=Amazon%20OpenSearch%20Service" },
       { name: "Azure AI Foundry", href: "/azure-services?service=microsoft-foundry" },
-      { name: "Vertex AI", href: "/courses/gcp-professional-machine-learning-engineer" },
+      { name: "Vertex AI / Gemini Enterprise Agent Platform", href: "/gcp-services?service=gemini-enterprise-agent-platform" },
     ],
     steps: [
       { title: "Reproduce with a known document", why: "Use a specific updated policy and a question whose expected answer is unambiguous.", evidence: "The assistant returns a citation to an older policy version for a question about the newly published rule.", action: "Record the question, expected source/version, returned citations, model configuration, and request trace." },
@@ -89,7 +89,7 @@ const scenarios: Scenario[] = [
     services: [
       { name: "AWS Cost Explorer", href: "/services?service=AWS%20Cost%20Explorer" },
       { name: "AWS CloudWatch", href: "/services?service=Amazon%20CloudWatch" },
-      { name: "Azure Cost Management", href: "/azure-services?service=azure-cost-management" },
+      { name: "Azure Cost Management", href: "/azure-services?service=microsoft-cost-management" },
       { name: "Google Cloud Billing", href: "/gcp-services?service=cloud-billing" },
     ],
     steps: [
