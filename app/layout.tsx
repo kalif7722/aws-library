@@ -7,7 +7,6 @@ import "./components/AthenaThemePolish.css";
 import "./components/ServiceTypographyPolish.css";
 import ThemeToggle from "./components/ThemeToggle";
 import ArchitectureTooltip from "./components/ArchitectureTooltip";
-import SemanticSearch from "./components/SemanticSearch";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aws-library.kalifs.workers.dev"),
@@ -46,7 +45,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="antialiased"><ThemeToggle/>{children}<SemanticSearch/><ArchitectureTooltip/></body>
+      <body className="antialiased"><ThemeToggle/>{children}<ArchitectureTooltip/></body>
     </html>
   );
 }
