@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
 import "./AwsSaaCourseGuide.css";
 
@@ -158,6 +158,16 @@ function ObjectiveVisual({ visual, taskTitle, ask, focus, services }: { visual: 
 
 export default function AwsSaaCourseGuide() {
   const [domainIndex, setDomainIndex] = useState(0); const [taskIndex, setTaskIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const taskIdFor = (title: string) => title.match(/^Task\s+([0-9.]+)/i)?.[1].replace(".", "-") || "";
+    const requestedDomainIndex = saaDomains.findIndex((item) => item.tasks.some((task) => taskIdFor(task.title) === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    setDomainIndex(requestedDomainIndex);
+    const requestedTaskIndex = saaDomains[requestedDomainIndex].tasks.findIndex((task) => taskIdFor(task.title) === requestedTask);
+    if (requestedTaskIndex >= 0) setTaskIndex(requestedTaskIndex);
+  }, []);
   const domain = saaDomains[domainIndex]; const task = domain.tasks[taskIndex] || domain.tasks[0];
   return <section className="aws-saa-guide" id="exam-guide">
     <div className="aws-saa-guide-head"><div><p className="aws-saa-eyebrow">SAA-C03 · EXAM GUIDE LEARNING PATH</p><h2>Design the architecture, not just the service.</h2><p>Follow the four official domains in exam order. Select one domain, then one exact task statement to see what AWS expects, what to practise, and which visual or console route fits the objective.</p><div className="aws-saa-coverage-note"><b>14 GUIDE TASKS CONNECTED</b><span>Each task combines the official exam ask, a decision visual, related service review, and objective-specific console walkthroughs.</span></div><a href="https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-associate-03/saa-03-exam-guide.html" target="_blank" rel="noreferrer">Open the official AWS SAA-C03 exam guide ↗</a></div><div className="aws-saa-stats"><strong>04</strong><span>exam domains</span><strong>14</strong><span>official tasks</span><strong>720</strong><span>passing scaled score</span></div></div>
