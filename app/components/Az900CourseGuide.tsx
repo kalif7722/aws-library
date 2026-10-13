@@ -46,6 +46,14 @@ function ExistingObjectiveVisual({ objective }: { objective: string }) {
 
 export default function Az900CourseGuide({ course }: { course: AzureCourse }) {
   const [domainIndex, setDomainIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const [domainPart, taskPart] = requestedTask.split("-").map(Number);
+    if (!domainPart || !taskPart || !guide[domainPart - 1]?.tasks[taskPart - 1]) return;
+    setDomainIndex(domainPart - 1);
+    setTaskIndex(taskPart - 1);
+  }, []);
   const [taskIndex, setTaskIndex] = useState(0);
   const domain = guide[domainIndex];
   const group = domain.groups[taskIndex];
