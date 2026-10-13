@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AWS, Azure & Google Cloud Certification Learning",
+  description:
+    "Explore visual AWS, Azure, and Google Cloud service guides, certification learning paths, architecture walkthroughs, and cross-cloud comparisons.",
+};
+
 const providers = [
   {
     key: "aws", name: "Amazon Web Services", short: "AWS", status: "Available now", tone: "provider-aws",
