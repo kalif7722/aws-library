@@ -32,7 +32,7 @@ const manualAliases: Record<string, string[]> = {
   "migration center": ["migration-center"], "database migration service": ["database-migration-service"], "storage transfer service": ["cloud-storage"], "transfer appliance": ["cloud-storage"], "bigquery data transfer service": ["bigquery"],
   dataproc: ["managed-service-for-apache-spark"], "dataproc workflow templates": ["managed-service-for-apache-spark"], "analytics hub": ["bigquery"], "bigquery sharing": ["bigquery"], "looker studio": ["data-studio"], automl: ["gemini-enterprise-agent-platform"], "model registry": ["gemini-enterprise-agent-platform"], "google llm": ["gemini-enterprise-agent-platform"], "google llms": ["gemini-enterprise-agent-platform"],
   "cloud data fusion": ["cloud-data-fusion"], dataflow: ["dataflow"], dataproc: ["managed-service-for-apache-spark"], "pub sub": ["pub-sub"], "pub/sub": ["pub-sub"],
-  looker: ["looker"], bigquery: ["bigquery"], "cloud sql": ["cloud-sql"], alloydb: ["alloydb"], spanner: ["spanner"], firestore: ["firestore"], bigtable: ["bigtable"],
+  looker: ["looker"], bigquery: ["bigquery"], "cloud sql": ["cloud-sql"], alloydb: ["alloydb"], spanner: ["spanner"], firestore: ["firestore-in-datastore-mode", "firestore-with-mongodb-compatibility"], bigtable: ["bigtable"],
   apigee: ["apigee"], eventarc: ["eventarc"], workflows: ["workflows"], "cloud scheduler": ["cloud-scheduler"], "cloud tasks": ["cloud-tasks"],
   "model armor": ["model-armor"], "cloud identity": ["cloud-identity"], "cloud asset inventory": ["cloud-asset-inventory"],
 };
