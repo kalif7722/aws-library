@@ -50,7 +50,7 @@ export default function Az900CourseGuide({ course }: { course: AzureCourse }) {
     const requestedTask = new URLSearchParams(window.location.search).get("task");
     if (!requestedTask) return;
     const [domainPart, taskPart] = requestedTask.split("-").map(Number);
-    if (!domainPart || !taskPart || !guide[domainPart - 1]?.tasks[taskPart - 1]) return;
+    if (!domainPart || !taskPart || !guide[domainPart - 1]?.groups[taskPart - 1]) return;
     setDomainIndex(domainPart - 1);
     setTaskIndex(taskPart - 1);
   }, []);
