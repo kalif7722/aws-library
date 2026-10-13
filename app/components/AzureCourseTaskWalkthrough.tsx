@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { AzureCourse, AzureCourseService, AzureCourseScope } from "../azure-course-data";
 import { azureOfficialExamDomains, type AzureExamDomain } from "../azure-exam-objectives";
+import { azureNewExamDomains } from "../azure-new-exam-objectives";
 import "./AzureCourseTaskWalkthrough.css";
 
 const r2Base = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/azure-certification-walkthroughs";
@@ -201,7 +202,7 @@ export default function AzureCourseTaskWalkthrough({ course }: { course: AzureCo
   const scopes = course.scope;
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
-  const official = azureOfficialExamDomains[course.code];
+  const official = azureOfficialExamDomains[course.code] || azureNewExamDomains[course.code];
   const groupCourse = groupCourseCodes.has(course.code);
   const domainBuckets = useMemo<DomainBucket[]>(() => official
     ? official.map((domain, domainIndex) => ({ meta: domain, scopes: [], tasks: groupCourse
