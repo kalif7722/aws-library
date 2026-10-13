@@ -267,6 +267,28 @@ function hasExplicitProvider(query: string) {
 }
 
 function diversifyResults<T extends { item: SearchItem; score: number }>(entries: T[], query: string, limit: number): T[] {
+  const problemIntent = /(slow|latency|bottleneck|troubleshoot|diagnos|investigat|reports?|reporting|dashboard|analytics|warehouse|pipeline|delayed|unavailable|outage|failover|costs? keep|increasing|access denied|suspicious|hallucination|deployment|traffic spikes|connectivity|data exposure|backup|restore|configuration drift|throttl|migration|patching|governance|real time|real-time)/.test(normalize(query));
+  if (problemIntent && !hasExplicitProvider(query)) {
+    const providers = ["AWS", "Azure", "Google Cloud"] as const;
+    const taskBuckets: Record<(typeof providers)[number], T[]> = { AWS: [], Azure: [], "Google Cloud": [] };
+    for (const entry of entries) {
+      if (entry.item.kind !== "Course task" || entry.score < 20) continue;
+      const provider = providerGroup(entry.item);
+      if (provider !== "Other") taskBuckets[provider].push(entry);
+    }
+    const taskFirst: T[] = [];
+    const chosen = new Set<string>();
+    for (let rank = 0; rank < 3; rank++) {
+      for (const provider of providers) {
+        const entry = taskBuckets[provider][rank];
+        if (!entry) continue;
+        const key = `${entry.item.provider}:${entry.item.courseCode || ""}:${entry.item.taskId || ""}:${entry.item.title}`;
+        if (!chosen.has(key)) { taskFirst.push(entry); chosen.add(key); }
+      }
+    }
+    const remainder = entries.filter(entry => !chosen.has(`${entry.item.provider}:${entry.item.courseCode || ""}:${entry.item.taskId || ""}:${entry.item.title}`));
+    return [...taskFirst, ...remainder].slice(0, limit);
+  }
   if (hasExplicitProvider(query)) return entries.slice(0, limit);
   const providers = ["AWS", "Azure", "Google Cloud"] as const;
   const buckets: Record<(typeof providers)[number], T[]> = {
