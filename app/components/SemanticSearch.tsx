@@ -71,28 +71,86 @@ const curatedItems: SearchItem[] = [
 const items: SearchItem[] = [...curatedItems, ...(catalogItems as SearchItem[])];
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-const synonyms: Record<string, string[]> = {
-  vm: ["virtual machine", "compute"], vms: ["virtual machine", "compute"], "k8s": ["kubernetes", "containers"], "rag": ["retrieval augmented generation", "knowledge bases", "semantic search"],
-  "genai": ["generative ai"], "gen ai": ["generative ai"], llm: ["foundation model", "generative ai"], "sso": ["single sign on", "identity"],
-  "dr": ["disaster recovery"], ha: ["high availability"], "finops": ["cost optimization"], "cdn": ["content delivery", "edge caching"],
-  "db": ["database"], "sql": ["relational database", "analytics"], "iam": ["identity access management"], "soc": ["security operations", "incident response"],
-  "vpn": ["private connectivity", "hybrid network"], "on prem": ["on premises", "hybrid cloud"], "on premise": ["on premises", "hybrid cloud"],
+
+// Certification acronyms, common abbreviations, alternate spellings, and cloud jargon.
+const aliases: Record<string, string[]> = {
+  gal: ["generative ai leader", "google cloud generative ai leader"],
+  "generative ai leader": ["gal", "google cloud generative ai leader"],
+  cdl: ["cloud digital leader", "google cloud digital leader"],
+  pca: ["professional cloud architect", "google cloud professional cloud architect"],
+  ace: ["associate cloud engineer", "google cloud associate cloud engineer"],
+  adp: ["associate data practitioner", "google cloud associate data practitioner"],
+  pcde: ["professional cloud developer", "google cloud professional cloud developer"],
+  pde: ["professional data engineer", "google cloud professional data engineer"],
+  pmle: ["professional machine learning engineer", "google cloud professional machine learning engineer"],
+  pcse: ["professional cloud security engineer", "google cloud professional cloud security engineer"],
+  pcdoe: ["professional cloud devops engineer", "google cloud professional cloud devops engineer"],
+  paa: ["professional cloud database engineer", "professional application architect"],
+  pcne: ["professional cloud network engineer", "google cloud professional cloud network engineer"],
+  psoe: ["professional security operations engineer", "google cloud professional security operations engineer"],
+  saa: ["solutions architect associate", "aws solutions architect associate"],
+  sap: ["solutions architect professional", "aws solutions architect professional"],
+  aip: ["ai practitioner", "aws ai practitioner"],
+  aif: ["ai foundation", "aws ai practitioner"],
+  clf: ["cloud practitioner", "aws certified cloud practitioner"],
+  ans: ["advanced networking specialty", "aws advanced networking"],
+  dva: ["developer associate", "aws developer associate"],
+  "az 305": ["azure solutions architect expert", "designing microsoft azure infrastructure solutions"],
+  "az 104": ["azure administrator associate", "azure administration"],
+  gcp: ["google cloud platform", "google cloud"],
+  aws: ["amazon web services"],
+  vm: ["virtual machine", "compute"], vms: ["virtual machine", "compute"],
+  ec2: ["elastic compute cloud", "virtual machine"],
+  s3: ["simple storage service", "object storage"],
+  vpc: ["virtual private cloud", "private network"],
+  vnet: ["virtual network", "private network"],
+  "k8s": ["kubernetes", "containers"], k8s: ["kubernetes", "containers"],
+  rag: ["retrieval augmented generation", "knowledge bases", "semantic search"],
+  genai: ["generative ai"], "gen ai": ["generative ai"],
+  llm: ["large language model", "foundation model", "generative ai"],
+  sso: ["single sign on", "identity"], dr: ["disaster recovery"],
+  ha: ["high availability"], finops: ["cost optimization"], cdn: ["content delivery", "edge caching"],
+  db: ["database"], sql: ["relational database", "analytics"],
+  iam: ["identity access management", "permissions"], soc: ["security operations", "incident response"],
+  vpn: ["private connectivity", "hybrid network"], "on prem": ["on premises", "hybrid cloud"],
+  "on premise": ["on premises", "hybrid cloud"], mfa: ["multi factor authentication", "identity security"],
+  waf: ["web application firewall", "application security"], ids: ["intrusion detection", "network security"],
+  ips: ["intrusion prevention", "network security"], tls: ["transport layer security", "encryption"],
+  kpi: ["key performance indicator", "business metrics"], pii: ["personal data", "data protection"],
 };
+
+function expandedTerms(query: string) {
+  const normalized = normalize(query);
+  const terms = new Set<string>([normalized]);
+  for (const [abbr, expansions] of Object.entries(aliases)) {
+    if (normalized === normalize(abbr)) expansions.forEach(term => terms.add(normalize(term)));
+  }
+  // Expand acronyms inside multi-word searches too, e.g. "GCP GAL" or "AWS DR".
+  normalized.split(" ").forEach(token => {
+    (aliases[token] || []).forEach(term => terms.add(normalize(term)));
+  });
+  return [...terms].filter(Boolean);
+}
 
 function score(item: SearchItem, query: string) {
   const q = normalize(query);
   if (!q) return 0;
-  const corpus = normalize([item.title, item.description, item.provider, item.terms].join(" "));
   const phrase = normalize(item.title);
-  let total = phrase === q ? 100 : phrase.includes(q) ? 24 : corpus.includes(q) ? 14 : 0;
+  const corpus = normalize([item.title, item.description, item.provider, item.terms].join(" "));
+  const variants = expandedTerms(query);
+  let total = phrase === q ? 120 : phrase.startsWith(q) ? 35 : phrase.includes(q) ? 26 : corpus.includes(q) ? 16 : 0;
+  for (const variant of variants) {
+    if (variant === q) continue;
+    if (phrase === variant) total = Math.max(total, 105);
+    else if (phrase.includes(variant)) total += 30;
+    else if (corpus.includes(variant)) total += 16;
+  }
   const tokens = [...new Set(q.split(" ").filter(token => token.length > 1))];
   for (const token of tokens) {
     if (phrase.split(" ").includes(token)) total += 8;
     else if (phrase.includes(token)) total += 5;
     else if (corpus.split(" ").includes(token)) total += 3;
   }
-  const expanded = synonyms[q] || [];
-  for (const term of expanded) if (corpus.includes(normalize(term))) total += 10;
   return total;
 }
 
@@ -110,7 +168,23 @@ export default function SemanticSearch() {
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
   }, []);
-  const results = useMemo(() => items.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score).slice(0, 7), [query]);
+  const rankedResults = useMemo(() => items.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [query]);
+  const results = rankedResults.slice(0, 7);
+  const autocomplete = useMemo(() => {
+    const q = normalize(query);
+    if (!q) return [];
+    const variants = expandedTerms(query);
+    return items.map(item => {
+      const title = normalize(item.title);
+      const terms = normalize([item.title, item.terms].join(" "));
+      const exactAlias = variants.some(term => term !== q && title.includes(term));
+      const startsWith = title.startsWith(q) || title.split(" ").some(word => word.startsWith(q));
+      return { item, score: (startsWith ? 50 : 0) + (exactAlias ? 40 : 0) + score(item, query) };
+    }).filter(entry => entry.score > 0)
+      .sort((a,b) => b.score - a.score)
+      .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index)
+      .slice(0, 5);
+  }, [query]);
   return <div className="semantic-search">
     <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
       <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
@@ -118,9 +192,14 @@ export default function SemanticSearch() {
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
       <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && results[0]) window.location.href = results[0].item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
       <p className="semantic-search-hint">Try a goal or plain-English question—not just a product name.</p>
-      <div className="semantic-search-suggestions">{["private app connectivity", "reduce cloud costs", "AI agents and RAG", "disaster recovery"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
+      <div className="semantic-search-suggestions">{["GAL", "CDL", "PCA", "private app connectivity", "reduce cloud costs", "AI agents and RAG"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
+      {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
+        <span className="semantic-search-section-label">Suggestions · choose a match</span>
+        {autocomplete.map(({ item }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
+      </div>}
       {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Search results">
-        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small></a>) : <p className="semantic-no-results">No close match yet. Try a service name, “security”, “serverless”, “RAG”, or “cost optimization”.</p>}
+        <span className="semantic-search-section-label">Best matching learning content</span>
+        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small></a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
       </div>}
       <div className="semantic-search-footer"><span>Searches concepts, aliases, use cases, and service names</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
     </div>}
