@@ -1,6 +1,5 @@
 import { aipC01Domains } from "./aip-c01-data";
 import { azureOfficialExamDomains } from "./azure-exam-objectives";
-import { azureNewExamDomains } from "./azure-new-exam-objectives";
 import { gcpOfficialExamDomains } from "./gcp-all-exam-objectives";
 import { gcpCourses } from "./gcp-course-data";
 import { cloudOpsGuide, dataEngineerGuide, machineLearningGuide, devOpsGuide } from "./components/AwsNewExamGuides";
@@ -145,7 +144,7 @@ const gcpTaskItems: SearchTaskItem[] = Object.entries(gcpOfficialExamDomains).fl
 });
 
 const azureCourseRoutes = new Set(["AI-901", "AI-103", "AZ-104", "AZ-120", "AZ-140", "AZ-305", "AZ-400", "AZ-700", "AZ-900", "DP-300", "DP-600", "DP-900", "SC-200", "SC-300", "SC-900"]);
-const azureTaskItems: SearchTaskItem[] = Object.entries(allAzureExamDomains).flatMap(([code, domains]) => {
+const azureTaskItems: SearchTaskItem[] = Object.entries(azureOfficialExamDomains).flatMap(([code, domains]) => {
   if (!azureCourseRoutes.has(code)) return [];
   return domains.flatMap((domain, domainIndex) => domain.groups.map((group, groupIndex) => {
     const taskText = group.tasks.join(" ");
