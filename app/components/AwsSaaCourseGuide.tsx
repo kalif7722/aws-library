@@ -90,7 +90,7 @@ function AwsSaaTaskWalkthrough({ asset, companionAsset, title }: { asset: string
   </>;
 }
 
-const saaDomains: SAADomain[] = [
+export const saaDomains: SAADomain[] = [
   {
     number: "01", title: "Design Secure Architectures", weight: "30%", outcome: "Build identity, network, application, and data controls around the workload boundary.", flow: ["Identity", "Network", "Application", "Data"],
     tasks: [
