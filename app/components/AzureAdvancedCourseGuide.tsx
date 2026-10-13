@@ -15,6 +15,14 @@ function Board({code,id,kind,title}:{code:string;id:string;kind:"primary"|"compa
 export default function AzureAdvancedCourseGuide({course}:{course:AzureCourse}) {
   const domains=azureOfficialExamDomains[course.code]||[];
   const [domainIndex,setDomainIndex]=useState(0),[groupIndex,setGroupIndex]=useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const [domainPart, groupPart] = requestedTask.split("-").map(Number);
+    if (!domainPart || !groupPart || !domains[domainPart - 1]?.groups[groupPart - 1]) return;
+    setDomainIndex(domainPart - 1);
+    setGroupIndex(groupPart - 1);
+  }, [course.code, domains]);
   const domain=domains[domainIndex],group=domain?.groups[groupIndex];if(!domain||!group)return null;
   const id=`${domainIndex+1}-${groupIndex+1}`;
   const scope=[...new Set(course.scope.flatMap(c=>c.services.map(s=>s.name)))];
