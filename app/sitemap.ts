@@ -55,12 +55,17 @@ const publicPaths = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return publicPaths.map((path) => ({
-    url: new URL(path, siteUrl).toString(),
-    changeFrequency: path === "/" ? "weekly" : "monthly",
-    priority:
-      path === "/" ? 1 :
-      path === "/cloud-comparison" || path.endsWith("-services") ? 0.8 :
-      path.startsWith("/courses/") ? 0.7 : 0.8,
-  }));
+  return publicPaths.map((path) => {
+    const changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] =
+      path === "/" ? "weekly" : "monthly";
+
+    return {
+      url: new URL(path, siteUrl).toString(),
+      changeFrequency,
+      priority:
+        path === "/" ? 1 :
+        path === "/cloud-comparison" || path.endsWith("-services") ? 0.8 :
+        path.startsWith("/courses/") ? 0.7 : 0.8,
+    };
+  });
 }
