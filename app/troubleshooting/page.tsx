@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./troubleshooting.css";
 
 type Step = { title: string; why: string; evidence: string; action: string; };
@@ -170,6 +170,7 @@ export default function TroubleshootingPage() {
     return matchesCategory && matchesProvider && haystack.includes(query.toLowerCase().trim());
   }), [query, category, provider]);
   const active = filtered.find((s) => s.id === activeId) ?? filtered[0];
+  useEffect(() => { if (filtered.length > 0 && !filtered.some((s) => s.id === activeId)) { setActiveId(filtered[0].id); setRevealed(0); setShowRootCause(false); } }, [filtered, activeId]);
   const selectScenario = (id: string) => { setActiveId(id); setRevealed(0); setShowRootCause(false); };
   return <main className="troubleshooting-shell">
     <nav className="trouble-nav"><a className="trouble-brand" href="/">Visual Cloud Learning</a><div><a href="/services">Services</a><a href="/cloud-comparison">Cloud comparison</a><a className="trouble-nav-active" href="/troubleshooting">Troubleshooting</a></div></nav>
