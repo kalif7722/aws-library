@@ -388,7 +388,7 @@ export default function SemanticSearch() {
       <div className="semantic-search-suggestions">{["GAL", "CDL", "PCA", "private app connectivity", "reduce cloud costs", "AI agents and RAG"].map(value => <button key={value} type="button" onClick={() => setQuery(value)}>{value}</button>)}</div>
       {query.trim() && autocomplete.length > 0 && <div className="semantic-search-autocomplete" role="listbox" aria-label="Autocomplete suggestions">
         <span className="semantic-search-section-label">Suggestions · choose a match</span>
-        {autocomplete.map(({ item }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
+        {autocomplete.map(({ item }) => <a role="option" key={`${item.provider}-${item.courseCode || ""}-${item.taskId || ""}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
       </div>}
       {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Search results">
         <span className="semantic-search-section-label">Best matching learning content</span>
