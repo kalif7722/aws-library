@@ -69,6 +69,7 @@ function makeAwsTaskItems(
   courseTitle: string,
   route: string,
   domains: GenericDomain[],
+  anchor = `${courseCode.toLowerCase()}-exam-guide`,
 ): SearchTaskItem[] {
   return domains.flatMap((domain, domainIndex) => domain.tasks.map((task, taskIndex) => {
     const rawTitle = task.title || task.name || `Task ${domainIndex + 1}.${taskIndex + 1}`;
@@ -80,7 +81,7 @@ function makeAwsTaskItems(
     return {
       title: `Task ${id.replace(/-/g, ".")} · ${cleanTitle}`,
       description: `${domainName} · ${task.ask || task.description || (task.focus || []).slice(0, 2).join(" ")} · Primary + companion walkthroughs`,
-      href: `/courses/${route}?task=${encodeURIComponent(id)}#${courseCode === "SAA" ? "exam-guide" : `${courseCode.toLowerCase()}-exam-guide`}`,
+      href: `/courses/${route}?task=${encodeURIComponent(id)}#${anchor}`,
       provider: "AWS" as const,
       terms: `AWS ${courseCode} ${courseTitle} ${domainName} ${rawTitle} ${cleanTitle} ${focus} primary walkthrough companion walkthrough architecture visual practical solution business problem ${scenarioTermsFor(`${domainName} ${rawTitle} ${focus}`)}`,
       kind: "Course task" as const,
@@ -105,10 +106,10 @@ const awsTaskItems: SearchTaskItem[] = [
   taskId: task.id,
   walkthroughs: ["primary", "companion"] as ["primary", "companion"],
 }))),
-  ...makeAwsTaskItems("SAA", "Solutions Architect Associate", "aws-solutions-architect-associate", awsSaaDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("SAA", "Solutions Architect Associate", "aws-solutions-architect-associate", awsSaaDomains as unknown as GenericDomain[], "exam-guide"),
   ...makeAwsTaskItems("SAP", "Solutions Architect Professional", "aws-solutions-architect-professional", awsSapDomains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("ANS", "Advanced Networking Specialty", "aws-advanced-networking-specialty", awsAdvancedNetworkingDomains as unknown as GenericDomain[]),
-  ...makeAwsTaskItems("SCS", "Security Specialty", "aws-security-specialty", awsSecurityDomains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("SCS", "Security Specialty", "aws-security-specialty", awsSecurityDomains as unknown as GenericDomain[], "security-exam-guide"),
   ...makeAwsTaskItems("DVA", "Developer Associate", "aws-developer-associate", awsDeveloperDomains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("CLF", "Cloud Practitioner", "aws-cloud-practitioner", awsCloudPractitionerDomains as unknown as GenericDomain[]),
   ...makeAwsTaskItems("AIF", "AI Practitioner", "aws-ai-practitioner", awsAiPractitionerDomains as unknown as GenericDomain[]),
