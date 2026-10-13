@@ -10,7 +10,7 @@ type SapDomain = { number: string; title: string; weight: string; outcome: strin
 
 const V = (kind: string, title: string, subtitle: string, nodes: string[], explanation: string, cue: string): SapVisual => ({ kind, title, subtitle, nodes, explanation, cue });
 
-const sapDomains: SapDomain[] = [
+export const sapDomains: SapDomain[] = [
   {
     number: "01", title: "Design Solutions for Organizational Complexity", weight: "26%", outcome: "Design governance, connectivity, security, resilience, and cost visibility across a complex AWS organization.", flow: ["Connect", "Control", "Recover", "Govern", "Measure"],
     tasks: [
