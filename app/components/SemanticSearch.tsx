@@ -447,7 +447,25 @@ export default function SemanticSearch() {
     return () => window.removeEventListener("keydown", handleShortcut);
   }, []);
   const rankedResults = useMemo(() => searchableItems.map(item => ({ item, score: score(item, query) })).filter(entry => entry.score > 0).sort((a,b) => b.score - a.score), [searchableItems, query]);
-  const results = diversifyResults(rankedResults, query, 9);
+  const taskResults = diversifyResults(rankedResults.filter(entry => entry.item.kind === "Course task"), query, 6);
+  const serviceResults = useMemo(() => {
+    const candidates = rankedResults.filter(entry =>
+      entry.item.kind !== "Course task" &&
+      entry.item.provider !== "Certification" &&
+      entry.item.provider !== "Multi-cloud" &&
+      ["AWS", "Azure", "Google Cloud"].includes(entry.item.provider)
+    );
+    const providers = ["AWS", "Azure", "Google Cloud"] as const;
+    const selected: typeof candidates = [];
+    for (const provider of providers) {
+      const matches = candidates.filter(entry => providerGroup(entry.item) === provider);
+      // Show the strongest service matches for each cloud, rather than letting
+      // one provider dominate the service section.
+      selected.push(...matches.slice(0, 2));
+    }
+    return selected.sort((a, b) => b.score - a.score).slice(0, 6);
+  }, [rankedResults]);
+  const results = [...taskResults, ...serviceResults];
   const autocomplete = useMemo(() => {
     const q = normalize(query);
     if (!q) return [];
@@ -478,10 +496,15 @@ export default function SemanticSearch() {
         <span className="semantic-search-section-label">Suggestions · choose a match</span>
         {autocomplete.map(({ item }) => <a role="option" key={`${item.provider}-${item.courseCode || ""}-${item.taskId || ""}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-autocomplete-icon" aria-hidden="true">↳</span><span><strong>{item.title}</strong><small>{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {item.description}</small></span><span className="semantic-autocomplete-arrow" aria-hidden="true">↗</span></a>)}
       </div>}
-      {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Search results">
-        <span className="semantic-search-section-label">Best matching learning content</span>
-        {results.length ? results.map(({ item, score: relevance }) => <a role="option" key={item.title} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · {item.kind || (item.provider === "Certification" ? "Certification" : "Service")} · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small>{item.kind === "Course task" && <small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small>}{item.kind === "Course task" && item.walkthroughs && <small className="semantic-result-context">Primary walkthrough + companion coverage · opens the exact task</small>}</a>) : <p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p>}
+      {query.trim() && <div className="semantic-search-results" role="listbox" aria-label="Matching course tasks">
+        <span className="semantic-search-section-label">Relevant course tasks · primary + companion walkthroughs</span>
+        {taskResults.length ? taskResults.map(({ item, score: relevance }) => <a role="option" key={`task-${item.provider}-${item.courseCode || ""}-${item.taskId || ""}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · Course task · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small><small className="semantic-result-context">Course {item.courseCode} · {item.domain}</small><small className="semantic-result-context">Primary walkthrough + companion coverage · opens the exact task</small></a>) : <p className="semantic-no-results">No close course-task match found. Relevant service matches, if available, are listed below.</p>}
       </div>}
+      {query.trim() && serviceResults.length > 0 && <div className="semantic-search-results semantic-search-service-results" role="listbox" aria-label="Relevant cloud services">
+        <span className="semantic-search-section-label">Related cloud services · AWS, Azure, and Google Cloud</span>
+        {serviceResults.map(({ item, score: relevance }) => <a role="option" key={`service-${item.provider}-${item.title}`} href={item.href} onClick={() => setOpen(false)}><span className="semantic-result-provider">{item.provider} · Service · {relevance >= 24 ? "Strong match" : "Related topic"}</span><strong>{item.title}</strong><small>{item.description}</small></a>)}
+      </div>}
+      {query.trim() && taskResults.length === 0 && serviceResults.length === 0 && <div className="semantic-search-results"><p className="semantic-no-results">No close match yet. Try an abbreviation (GAL, CDL, PCA), service name, or concept like “security” or “disaster recovery”.</p></div>}
       <div className="semantic-search-footer"><span>{taskIndexFailed ? "Course task index failed to load; service and certification search remains available." : taskItems.length ? "Searches business problems, exact course tasks, primary + companion walkthroughs, and services" : query.trim() ? "Loading cross-cloud course-task matches…" : "Search business problems, course tasks, services, and certifications"}</span><button type="button" onClick={() => { setQuery(""); setOpen(false); }}>Close</button></div>
     </div>}
   </div>;
