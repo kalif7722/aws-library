@@ -13,7 +13,7 @@ const taskId = (title: string) => {
   return match ? match[1] + "-" + match[2] : "";
 };
 
-const domains: Domain[] = [
+export const domains: Domain[] = [
   {
     number: "01", title: "Fundamentals of AI and ML", weight: "20%", outcome: "Recognize core AI and ML concepts, practical use cases, and the lifecycle from data to production.", flow: ["Define the AI problem", "Choose the learning approach", "Match the use case", "Measure business value"],
     tasks: [
