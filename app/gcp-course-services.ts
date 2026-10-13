@@ -119,7 +119,7 @@ const conceptRules: Array<{ pattern: RegExp; terms: string[] }> = [
   { pattern: /network|vpc|subnet|routing|hybrid|multicloud/i, terms: ["Virtual Private Cloud", "Cloud Load Balancing", "Cloud DNS", "Cloud NAT", "Cloud VPN", "Cloud Interconnect", "Cloud Router"] },
   { pattern: /database|relational|\bnosql\b/i, terms: ["Cloud SQL", "AlloyDB", "Spanner", "Firestore", "Bigtable"] },
   { pattern: /warehouse|business intelligence|dashboard|lookml|looker/i, terms: ["BigQuery", "Looker"] },
-  { pattern: /pipeline|streaming|data processing|\betl\b|\belt\b/i, terms: ["Pub/Sub", "Dataflow", "Dataproc"] },
+  { pattern: /pipeline|streaming|data processing/i, terms: ["Pub/Sub", "Dataflow", "Dataproc"] },
   { pattern: /monitor|observability|logging|alert/i, terms: ["Monitoring", "Logging"] },
   { pattern: /\biam\b|identity|least privilege|service account|access control|permissions/i, terms: ["Identity and Access Management", "Cloud Identity"] },
   { pattern: /encrypt|key management|cmek|kms/i, terms: ["Cloud KMS"] },
