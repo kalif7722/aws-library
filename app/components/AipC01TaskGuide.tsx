@@ -24,6 +24,15 @@ export default function AipC01TaskGuide() {
   const [expanded, setExpanded] = useState<{ src: string; alt: string } | null>(null);
   const domain = aipC01Domains[domainIndex];
   const task = useMemo(() => domain.tasks.find((item) => item.id === taskId) || domain.tasks[0], [domain, taskId]);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const requestedDomainIndex = aipC01Domains.findIndex((item) => item.tasks.some((task) => task.id === requestedTask));
+    if (requestedDomainIndex >= 0) {
+      setDomainIndex(requestedDomainIndex);
+      setTaskId(requestedTask);
+    }
+  }, []);
   useEffect(() => { const onKey = (event: KeyboardEvent) => event.key === "Escape" && setExpanded(null); window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
   return <section className="aip-c01-guide" id="aip-c01-objectives">
     <div className="aip-c01-hero"><div><p className="aip-c01-kicker">OFFICIAL EXAM OBJECTIVE PRACTICE · AIP-C01</p><h2>Follow every Generative AI Developer Professional task</h2><p>Study the exact 20 tasks from the AWS exam guide. Each task connects its design decision, required skills, related in-course services, and two task-specific visual walkthroughs.</p></div><div className="aip-c01-stats"><div><strong>5</strong><span>domains</span></div><div><strong>{aipC01TaskCount}</strong><span>official tasks</span></div><div><strong>98</strong><span>skill areas</span></div></div></div>
