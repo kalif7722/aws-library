@@ -60,6 +60,15 @@ export default function GcpProfessionalCourseGuide({ course }: { course: GcpCour
   const domains = gcpOfficialExamDomains[course.code] || [];
   const [domainIndex, setDomainIndex] = useState(0);
   const [groupIndex, setGroupIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const requestedDomainIndex = domains.findIndex((item, domainIndex) => item.groups.some((group, groupIndex) => (group.id || `${domainIndex + 1}-${groupIndex + 1}`) === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    const requestedGroupIndex = domains[requestedDomainIndex].groups.findIndex((group, groupIndex) => (group.id || `${requestedDomainIndex + 1}-${groupIndex + 1}`) === requestedTask);
+    setDomainIndex(requestedDomainIndex);
+    if (requestedGroupIndex >= 0) setGroupIndex(requestedGroupIndex);
+  }, [course.code, domains]);
   const domain = domains[domainIndex];
   const group = domain?.groups[groupIndex];
   const related = useMemo(() => group ? gcpRelatedServicesForSkill(group) : [], [group]);
