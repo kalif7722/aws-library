@@ -3,6 +3,7 @@ import { azureOfficialExamDomains } from "./azure-exam-objectives";
 import { azureNewExamDomains } from "./azure-new-exam-objectives";
 import { gcpOfficialExamDomains } from "./gcp-all-exam-objectives";
 import { gcpCourses } from "./gcp-course-data";
+import { cloudOpsGuide, dataEngineerGuide, machineLearningGuide, devOpsGuide } from "./components/AwsNewExamGuides";
 
 export type SearchTaskItem = {
   title: string;
@@ -87,7 +88,8 @@ function makeAwsTaskItems(
   }));
 }
 
-const awsTaskItems: SearchTaskItem[] = aipC01Domains.flatMap((domain) => domain.tasks.map((task) => ({
+const awsTaskItems: SearchTaskItem[] = [
+  ...aipC01Domains.flatMap((domain) => domain.tasks.map((task) => ({
   title: `Task ${task.id.replace(/-/g, ".")} · ${task.title}`,
   description: `${domain.title} · ${task.focus.slice(0, 2).join(" ")} · Primary + companion walkthroughs`,
   href: `/courses/aws-generative-ai-developer-professional?task=${encodeURIComponent(task.id)}#aip-c01-objectives`,
@@ -98,7 +100,12 @@ const awsTaskItems: SearchTaskItem[] = aipC01Domains.flatMap((domain) => domain.
   domain: domain.title,
   taskId: task.id,
   walkthroughs: ["primary", "companion"] as ["primary", "companion"],
-})));
+}))),
+  ...makeAwsTaskItems("SOA", "CloudOps Engineer Associate", "aws-cloudops-engineer-associate", cloudOpsGuide.domains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("DEA", "Data Engineer Associate", "aws-data-engineer-associate", dataEngineerGuide.domains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("MLA", "Machine Learning Engineer Associate", "aws-machine-learning-engineer-associate", machineLearningGuide.domains as unknown as GenericDomain[]),
+  ...makeAwsTaskItems("DOP", "DevOps Engineer Professional", "aws-devops-engineer-professional", devOpsGuide.domains as unknown as GenericDomain[]),
+];
 
 const gcpRoutes = new Map(gcpCourses.map((course) => [course.code, course.route]));
 const gcpTaskItems: SearchTaskItem[] = Object.entries(gcpOfficialExamDomains).flatMap(([code, domains]) => {
