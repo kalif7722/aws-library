@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AwsSecurityCourseGuide.css";
 
 type Visual = { kind: string; title: string; subtitle: string; nodes: string[]; explanation: string; cue: string };
@@ -725,6 +725,15 @@ function TaskCard({ task, active, onSelect }: { task: Task; active: boolean; onS
 export default function AwsCloudPractitionerCourseGuide() {
   const [domainIndex, setDomainIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
+  useEffect(() => {
+    const requestedTask = new URLSearchParams(window.location.search).get("task");
+    if (!requestedTask) return;
+    const requestedDomainIndex = domains.findIndex((item) => item.tasks.some((task) => taskId(task.title) === requestedTask));
+    if (requestedDomainIndex < 0) return;
+    const requestedTaskIndex = domains[requestedDomainIndex].tasks.findIndex((task) => taskId(task.title) === requestedTask);
+    setDomainIndex(requestedDomainIndex);
+    if (requestedTaskIndex >= 0) setTaskIndex(requestedTaskIndex);
+  }, []);
   const domain = domains[domainIndex];
   const task = domain.tasks[taskIndex];
   const selectDomain = (index: number) => { setDomainIndex(index); setTaskIndex(0); };
