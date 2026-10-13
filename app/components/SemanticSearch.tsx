@@ -529,6 +529,7 @@ export default function SemanticSearch() {
   const visibleSolutionResults = selectedTypes.includes("Solutions") ? solutionResults : [];
   const visibleCertificationResults = selectedTypes.includes("Certifications") ? certificationResults : [];
   const hasVisibleResults = visibleTaskResults.length + visibleServiceResults.length + visibleSolutionResults.length + visibleCertificationResults.length > 0;
+  const results = [...visibleTaskResults, ...visibleServiceResults, ...visibleSolutionResults, ...visibleCertificationResults];
   const autocomplete = useMemo(() => {
     const q = normalize(query);
     if (!q) return [];
