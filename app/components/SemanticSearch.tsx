@@ -269,6 +269,24 @@ function diversifyResults<T extends { item: SearchItem; score: number }>(entries
   return diversified.slice(0, limit);
 }
 
+const capabilityBoosts: Array<{ query: RegExp; service: RegExp; boost: number }> = [
+  { query: /data|analytics|warehouse|etl|elt|business intelligence/, service: /redshift|athena|aws glue|lake formation|synapse|fabric|data factory|databricks|bigquery|dataflow|dataform|looker|data fusion|dataproc|data firehose/, boost: 28 },
+  { query: /database|sql|nosql|relational|dynamodb/, service: /rds|aurora|dynamodb|documentdb|neptune|redshift|sql database|cosmos db|cloud sql|alloydb|spanner|bigtable|firestore|memorystore/, boost: 24 },
+  { query: /security|threat|firewall|compliance|siem|soc|waf|encryption/, service: /security hub|guardduty|inspector|macie|sentinel|defender|security command|network firewall|firewall|key vault|kms|cloud armor|security center|security operations|waf|shield|iam|identity center/, boost: 22 },
+  { query: /network|connectivity|routing|vpc|vnet|dns|load balanc/, service: /vpc|virtual network|transit gateway|direct connect|expressroute|interconnect|load balanc|route 53|cloud dns|azure dns|cloud vpn|private link|front door|cloudfront|network manager/, boost: 22 },
+  { query: /compute|virtual machine|server|instance/, service: /ec2|virtual machine|compute engine|vm scale|instance group|batch|lightsail/, boost: 20 },
+  { query: /storage|object storage|file storage|block storage|archive|backup/, service: /s3|blob storage|cloud storage|efs|fsx|persistent disk|filestore|backup|archive|data lake/, boost: 20 },
+  { query: /monitor|observability|logging|logs|metrics|tracing|alert/, service: /cloudwatch|azure monitor|application insights|cloud monitoring|cloud logging|managed prometheus|grafana|opensearch/, boost: 20 },
+  { query: /ai|generative|machine learning|llm|model|rag|agent/, service: /bedrock|sagemaker|vertex ai|azure ai|azure openai|machine learning|cognitive services|foundation model|model garden/, boost: 20 },
+  { query: /migration|modernization|transfer|disaster recovery/, service: /migration|migrate|transfer|database migration|disaster recovery|backup|application discovery/, boost: 20 },
+  { query: /container|kubernetes|k8s|orchestration/, service: /eks|aks|gke|kubernetes|container apps|fargate|cloud run|artifact registry/, boost: 20 },
+  { query: /serverless|function|event driven/, service: /lambda|azure functions|cloud functions|cloud run|eventbridge|step functions|logic apps|api gateway/, boost: 20 },
+  { query: /identity|iam|access|sso|mfa|authentication|authorization/, service: /iam|identity center|entra|active directory|cloud identity|workload identity|cognito|identity platform/, boost: 20 },
+  { query: /api|integration|workflow|message|queue|event|streaming/, service: /api gateway|apigee|logic apps|service bus|event grid|eventbridge|step functions|sqs|sns|pub sub|kinesis|event hubs|dataflow|workflows/, boost: 18 },
+  { query: /cost|billing|finops|budget|pricing/, service: /cost|billing|budgets|pricing|finops|resource graph|cloudability/, boost: 18 },
+  { query: /devops|ci cd|deployment|pipeline|infrastructure as code|terraform/, service: /codebuild|codepipeline|azure devops|cloud build|cloud deploy|deployment manager|cloudformation|resource manager/, boost: 18 },
+];
+
 function score(item: SearchItem, query: string) {
   const q = normalize(query);
   if (!q) return 0;
@@ -287,6 +305,11 @@ function score(item: SearchItem, query: string) {
     if (phrase.split(" ").includes(token)) total += 8;
     else if (phrase.includes(token)) total += 5;
     else if (corpus.split(" ").includes(token)) total += 3;
+  }
+  // Keep key services visible when a feature/category query has more matches than the short result list.
+  const searchable = normalize([item.title, item.description, item.terms].join(" "));
+  for (const rule of capabilityBoosts) {
+    if (rule.query.test(q) && rule.service.test(searchable)) total += rule.boost;
   }
   return total;
 }
