@@ -154,7 +154,7 @@ const azureTaskItems: SearchTaskItem[] = Object.entries(azureOfficialExamDomains
     const tasks = isGroupCourse ? [{ title: group.name, text: group.tasks.join(" "), id: `${domainIndex + 1}-${groupIndex + 1}` }] : group.tasks.map((task, taskIndex) => ({
       title: task,
       text: task,
-      id: task.toLowerCase().replace(/\\([^)]*\\)/g, " ").replace(/formerly azure ad/g, "entra id").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+      id: task.toLowerCase().replace(/\([^)]*\)/g, " ").replace(/formerly azure ad/g, "entra id").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
     }));
     return tasks.map((task) => ({
       title: task.title,
