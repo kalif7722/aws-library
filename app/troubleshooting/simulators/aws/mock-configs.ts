@@ -35,12 +35,17 @@ const commonResources: AwsMockResource[] = [
   {
     id: "i-0a12b345c678d9012", service: "EC2", name: "api-prod-01", region: "eu-west-1", status: "running",
     attributes: { instanceType: "t3.medium", privateIp: "10.20.2.17", publicIp: "", systemStatus: "passed", instanceStatus: "passed", sshService: "listening" },
-    relationships: { vpc: ["vpc-0123abcd4567ef890"], subnet: ["subnet-0123abcd4567ef890"], securityGroups: ["sg-0ab12cd34ef56ab78"], iamRoles: ["EC2-Production-Role"], targetGroups: ["tg-api-prod"] }
+    relationships: { vpc: ["vpc-0123abcd4567ef890"], subnet: ["subnet-0123abcd4567ef890"], securityGroups: ["sg-0ab12cd34ef56ab78"], iamRoles: ["EC2-Production-Role"], targetGroups: ["tg-payments-api"] }
   },
   {
     id: "sg-0ab12cd34ef56ab78", service: "VPC", name: "sg-api-prod", region: "eu-west-1", status: "in-use",
     attributes: { description: "Application API ingress", vpcId: "vpc-0123abcd4567ef890", inboundRules: 2, outboundRules: 1 },
     relationships: { instances: ["i-0a12b345c678d9012"], vpc: ["vpc-0123abcd4567ef890"] }
+  },
+  {
+    id: "sg-0f55aa11bb22cc33", service: "VPC", name: "sg-bastion-prod", region: "eu-west-1", status: "in-use",
+    attributes: { description: "Approved bastion administrator access", vpcId: "vpc-0123abcd4567ef890", inboundRules: 1, outboundRules: 1 },
+    relationships: { vpc: ["vpc-0123abcd4567ef890"], sourceForSecurityGroups: ["sg-0ab12cd34ef56ab78"] }
   },
   {
     id: "rtb-0123abcd4567ef890", service: "VPC", name: "rtb-prod-private-a", region: "eu-west-1", status: "active",
@@ -55,10 +60,10 @@ const commonResources: AwsMockResource[] = [
   {
     id: "alb-0123payments", service: "Elastic Load Balancing", name: "alb-payments-prod", region: "eu-west-1", status: "active",
     attributes: { type: "application", scheme: "internal", ipAddressType: "ipv4", listenerPorts: "443", dnsName: "internal-alb-payments-123.eu-west-1.elb.amazonaws.com" },
-    relationships: { vpc: ["vpc-0123abcd4567ef890"], targetGroups: ["tg-api-prod", "tg-payments-prod"], securityGroups: ["sg-alb-prod"] }
+    relationships: { vpc: ["vpc-0123abcd4567ef890"], targetGroups: ["tg-payments-api", "tg-payments-admin"], securityGroups: ["sg-alb-prod"] }
   },
   {
-    id: "tg-api-prod", service: "Elastic Load Balancing", name: "tg-api-prod", region: "eu-west-1", status: "healthy",
+    id: "tg-payments-api", service: "Elastic Load Balancing", name: "tg-payments-api", region: "eu-west-1", status: "healthy",
     attributes: { protocol: "HTTP", port: 8080, targetType: "instance", healthCheckPath: "/health", healthyTargets: 1, unhealthyTargets: 0 },
     relationships: { loadBalancers: ["alb-0123payments"], targets: ["i-0a12b345c678d9012"] }
   },
@@ -90,7 +95,7 @@ const commonResources: AwsMockResource[] = [
   {
     id: "payments-5xx-rate", service: "CloudWatch", name: "payments-5xx-rate", region: "eu-west-1", status: "ALARM",
     attributes: { namespace: "AWS/ApplicationELB", metric: "HTTPCode_Target_5XX_Count", threshold: 20, evaluationPeriods: 3, periodSeconds: 60 },
-    relationships: { loadBalancers: ["alb-0123payments"], targetGroups: ["tg-api-prod"] }
+    relationships: { loadBalancers: ["alb-0123payments"], targetGroups: ["tg-payments-api"] }
   },
   {
     id: "Z0456EXAMPLEDEF", service: "Route 53", name: "example.com", region: "global", status: "private/public-zone",
