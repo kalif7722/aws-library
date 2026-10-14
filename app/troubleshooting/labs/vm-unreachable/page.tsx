@@ -43,7 +43,7 @@ const labSteps: Record<Provider, LabStep[]> = {
     },
     {
       title: "Inspect the security group", objective: "Check the effective ingress policy for TCP/22 and the expected administrator source.",
-      consolePath: "EC2 › Security Groups › sg-0ab12cd34ef56gh78 › Inbound rules",
+      consolePath: "EC2 › Security Groups › sg-0ab12cd34ef56ab78 › Inbound rules",
       resource: "sg-api-prod · attached to api-prod-01",
       rows: [{label:"TCP / 22",value:"No matching allow rule",status:"bad"},{label:"HTTPS / 443",value:"10.40.0.0/16 allowed",status:"good"},{label:"Expected admin source",value:"198.51.100.24/32",status:"neutral"},{label:"Network ACL",value:"No deny observed in sample",status:"good"}],
       clue: "The instance is healthy, but this security group has no inbound allow for SSH from the approved admin IP. Do not open port 22 to 0.0.0.0/0.",
@@ -53,7 +53,7 @@ const labSteps: Record<Provider, LabStep[]> = {
         {label:"HTTPS / 443 is allowed from the application CIDR",correct:false,feedback:"That rule applies to a different port and source range; it does not grant SSH access."},
         {label:"The instance is in eu-west-1a",correct:false,feedback:"An Availability Zone is not itself evidence of an SSH policy denial."},
       ],
-      command:"aws ec2 describe-security-groups --group-ids sg-0ab12cd34ef56gh78",
+      command:"aws ec2 describe-security-groups --group-ids sg-0ab12cd34ef56ab78",
       commandOutput:"Inbound permissions: TCP/443 from 10.40.0.0/16\nNo TCP/22 rule matches 198.51.100.24/32",
     },
     {
