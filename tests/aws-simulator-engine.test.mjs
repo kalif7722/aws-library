@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -140,4 +140,24 @@ test('instance tag edits validate keys and update the selected instance only',()
   assert.equal(deleted.error,null);
   assert.equal(getAwsInstances(deleted.state)[1].tags.CostCenter,undefined);
   assert.match(deleteAwsInstanceTag(deleted.state,launched.instance.id,'Name').error,/required/);
+});
+
+
+test('security group ingress rules support validated create edit and delete',()=>{
+  const initial=createInitialAwsLabState();
+  const groupId='sg-0ab12cd34ef56ab78';
+  const added=addSecurityGroupIngressRule(initial,groupId,{protocol:'TCP',fromPort:8080,toPort:8080,sourceType:'IPv4',source:'198.51.100.24/32',description:'Temporary application test'});
+  assert.equal(added.error,null);
+  assert.ok(added.rule);
+  assert.equal(added.state.securityGroups[0].ingress.length,initial.securityGroups[0].ingress.length+1);
+  assert.match(addSecurityGroupIngressRule(added.state,groupId,{protocol:'TCP',fromPort:8080,toPort:8080,sourceType:'IPv4',source:'198.51.100.24/32',description:'Duplicate'}).error,/already exists/);
+  assert.match(addSecurityGroupIngressRule(initial,groupId,{protocol:'TCP',fromPort:8081,toPort:8080,sourceType:'IPv4',source:'198.51.100.24/32',description:'Invalid range'}).error,/port range/);
+  assert.match(addSecurityGroupIngressRule(initial,groupId,{protocol:'TCP',fromPort:8080,toPort:8080,sourceType:'IPv4',source:'10.0.0.0/33',description:'Invalid CIDR'}).error,/CIDR/);
+  const edited=updateSecurityGroupIngressRule(added.state,groupId,added.rule.id,{protocol:'TCP',fromPort:8443,toPort:8443,sourceType:'IPv4',source:'198.51.100.24/32',description:'Updated application test'});
+  assert.equal(edited.error,null);
+  assert.equal(edited.state.securityGroups[0].ingress.find(rule=>rule.id===added.rule.id).fromPort,8443);
+  const deleted=deleteSecurityGroupIngressRule(edited.state,groupId,added.rule.id);
+  assert.equal(deleted.deleted,true);
+  assert.ok(!deleted.state.securityGroups[0].ingress.some(rule=>rule.id===added.rule.id));
+  assert.equal(initial.securityGroups[0].ingress.some(rule=>rule.id===added.rule.id),false);
 });
