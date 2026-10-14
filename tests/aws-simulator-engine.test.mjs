@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -75,4 +75,20 @@ test('network ACL rule creation validates priority, ports, and IPv4 CIDR',()=>{
   assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:32767,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'allow'}).error,/between 1 and 32766/);
   assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'70000',source:'10.40.0.0/16',action:'allow'}).error,/port/);
   assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'443',source:'10.40.0.0/33',action:'allow'}).error,/CIDR/);
+});
+
+
+test('network ACL rules can be edited, renumbered, and deleted immutably',()=>{
+  const initial=createInitialAwsLabState();
+  const edited=updateNetworkAclRule(initial,'inbound',110,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'deny'});
+  assert.equal(edited.error,null);
+  assert.ok(edited.state.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===120&&rule.action==='deny'));
+  assert.ok(!edited.state.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===110));
+  assert.ok(initial.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===110));
+  const duplicate=updateNetworkAclRule(initial,'inbound',110,{direction:'inbound',ruleNumber:100,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'deny'});
+  assert.match(duplicate.error,/already used/);
+  const deleted=deleteNetworkAclRule(edited.state,'inbound',120);
+  assert.equal(deleted.deleted,true);
+  assert.ok(!deleted.state.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===120));
+  assert.equal(deleteNetworkAclRule(deleted.state,'inbound',120).deleted,false);
 });
