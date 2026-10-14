@@ -155,6 +155,64 @@ const categories = [
   { name: "Cost & governance", icon: "◈", color: "amber" },
 ];
 
+type GuidedCheckpoint = { label: string; stage: number };
+const guidedCheckpoints: Record<string, GuidedCheckpoint[]> = {
+  "private-connectivity": [{ label: "The application starts", stage: 0 }, { label: "The database name resolves", stage: 1 }, { label: "The database port connects", stage: 2 }],
+  "access-denied": [{ label: "The pipeline starts", stage: 0 }, { label: "The caller identity is known", stage: 1 }, { label: "The target resource is reachable", stage: 2 }],
+  "database-slowdown": [{ label: "Requests reach the application", stage: 0 }, { label: "The request reaches the database", stage: 1 }, { label: "The database is healthy", stage: 2 }],
+  "stale-data": [{ label: "The source data is current", stage: 0 }, { label: "Ingestion completed", stage: 1 }, { label: "Warehouse data is current", stage: 2 }],
+  "rag-stale-answers": [{ label: "The source document is updated", stage: 0 }, { label: "Ingestion completed", stage: 1 }, { label: "Retrieval returns current text", stage: 2 }],
+  "cloud-cost-spike": [{ label: "Traffic is roughly normal", stage: 0 }, { label: "No major deployment changed", stage: 1 }, { label: "The expensive service is identified", stage: 2 }],
+};
+
+function GuidedTroubleshooting({ scenario }: { scenario: Scenario }) {
+  const [checkpoint, setCheckpoint] = useState<number | null>(null);
+  const [stage, setStage] = useState(0);
+  const [failed, setFailed] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [complete, setComplete] = useState(false);
+  const checkpoints = guidedCheckpoints[scenario.id] ?? [];
+  const current = scenario.steps[Math.min(stage, scenario.steps.length - 1)];
+  const advance = () => {
+    setFailed(false);
+    setExpanded(false);
+    if (stage >= scenario.steps.length - 1) setComplete(true);
+    else setStage((value) => Math.min(value + 1, scenario.steps.length - 1));
+  };
+
+  return <section className="trouble-guided-console" aria-label="Guided troubleshooting flow">
+    <header className="trouble-guided-header">
+      <div><span className="trouble-guided-kicker">Dynamic guided flow</span><strong>{complete ? "Recovery verification" : "Start from the last confirmed checkpoint"}</strong></div>
+      <span className="trouble-guided-count">{complete ? scenario.steps.length : Math.min(stage + 1, scenario.steps.length)} / {scenario.steps.length}</span>
+    </header>
+    <div className="trouble-guided-progress"><span style={{ width: complete ? "100%" : `${((stage + 1) / scenario.steps.length) * 100}%` }} /></div>
+    <div className="trouble-guided-body">
+      {checkpoint === null && !complete ? <>
+        <h4>What is working right now?</h4>
+        <p className="trouble-guided-muted">Choose the latest checkpoint you have actually confirmed. Earlier checks are skipped.</p>
+        <div className="trouble-guided-options">{checkpoints.map((item, index) => <button key={item.label} className="trouble-guided-option" onClick={() => { setCheckpoint(index); setStage(item.stage); }}><span>{["✓", "⌁", "↗"][index]}</span>{item.label}</button>)}</div>
+      </> : <>
+        <div className="trouble-guided-flow-caption"><span>LIVE ARCHITECTURE PATH</span><span>{failed ? "Attention needed" : complete ? "Path reviewed" : "Glowing node = current check"}</span></div>
+        <div className="trouble-guided-flow">{scenario.architecture.map((node, index) => <div className="trouble-guided-hop" key={node}>
+          <div className={`trouble-guided-node ${index < stage ? "done" : index === Math.min(stage, scenario.architecture.length - 1) && !complete ? "current" : ""}`}><span>{index < stage ? "✓" : String(index + 1).padStart(2, "0")}</span><strong>{node}</strong></div>
+          {index < scenario.architecture.length - 1 && <span className={`trouble-guided-arrow ${index < stage ? "passed" : ""}`}>➜</span>}
+        </div>)}</div>
+        {complete ? <div className="trouble-guided-resolution"><strong>✓ Diagnostic path completed</strong><p>{scenario.rootCause}</p><strong>Verify and prevent recurrence</strong><p>{scenario.prevention}</p><p>Confirm the original symptom is gone and monitor the relevant health signal. This is a simulation; no cloud resources were changed.</p></div> : <div className="trouble-guided-check">
+          <span className="trouble-guided-kicker">{failed ? "FAILURE PATH · INVESTIGATE BEFORE CHANGING" : `NEXT CHECK · STEP ${stage + 1}`}</span>
+          <h4>{current.title}</h4>
+          <p>{current.why}</p>
+          {failed && <div className="trouble-guided-evidence"><strong>Evidence to inspect</strong><p>{current.evidence}</p><strong>Recommended safe action</strong><p>{current.action}</p>{expanded && <div className="trouble-guided-deeper"><strong>If it still fails</strong><p>Compare the expected and observed values at this boundary, check the adjacent upstream and downstream layer, and change one variable at a time. Preserve the current configuration and use the normal approval and rollback process before any production change.</p></div>}</div>}
+          <div className="trouble-guided-actions">
+            <button className="trouble-guided-pass" onClick={advance}>{failed ? "Retest passes — continue" : stage === scenario.steps.length - 1 ? "✓ Check passes — verify recovery" : "✓ This works — continue"}</button>
+            {!failed ? <button className="trouble-guided-fail" onClick={() => { setFailed(true); setExpanded(false); }}>✕ This fails</button> : <button className="trouble-guided-fail" onClick={() => setExpanded((value) => !value)}>{expanded ? "Hide deeper checks" : "Still failing — show deeper checks"}</button>}
+          </div>
+        </div>}
+        <button className="trouble-guided-reset" onClick={() => { setCheckpoint(null); setStage(0); setFailed(false); setExpanded(false); setComplete(false); }}>↺ Start this incident again</button>
+      </>}
+    </div>
+  </section>;
+}
+
 export default function TroubleshootingPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All incidents");
@@ -197,11 +255,13 @@ export default function TroubleshootingPage() {
         <div className="trouble-architecture"><div className="trouble-block-heading"><strong>Follow the request / data path</strong><span>Illustrative architecture</span></div><div className="trouble-flow">{active.architecture.map((node, i) => <div className="trouble-flow-wrap" key={node}><div className={`trouble-flow-node ${i === active.architecture.length - 2 ? "focus" : ""}`}><small>{String(i + 1).padStart(2, "0")}</small><strong>{node}</strong></div>{i < active.architecture.length - 1 && <span className="trouble-flow-arrow">→</span>}</div>)}</div></div>
         <div className="trouble-mode-switch"><div><strong>Learning mode</strong><small>Choose how much guidance you want</small></div><div className="trouble-mode-options">{(["Learn", "Guided", "Challenge"] as const).map((m) => <button key={m} onClick={() => { setMode(m); setRevealed(m === "Learn" ? active.steps.length - 1 : 0); setShowRootCause(m === "Learn"); }} className={mode === m ? "active" : ""}>{m}</button>)}</div></div>
         {mode === "Challenge" && <div className="trouble-challenge-note"><strong>Challenge mode</strong><span>Work from evidence first. The root cause stays hidden until you reveal it. Select each check and explain what the evidence proves before moving on.</span></div>}
+        {mode === "Guided" ? <GuidedTroubleshooting key={active.id} scenario={active} /> : <>
         <div className="trouble-diagnostic-heading"><div><p className="trouble-eyebrow">DIAGNOSTIC WORKFLOW</p><h4>Investigate in order</h4></div><span>{Math.min(revealed + 1, active.steps.length)} / {active.steps.length} checks</span></div>
         <div className="trouble-step-list">{active.steps.map((step, i) => { const open = mode === "Learn" || i <= revealed; return <div key={step.title} className={`trouble-step ${open ? "revealed" : "locked"}`}><button className="trouble-step-trigger" onClick={() => { if (mode === "Learn" || i <= revealed + 1) setRevealed(i); }} disabled={mode !== "Learn" && i > revealed + 1}><span className="trouble-step-number">{open ? "✓" : String(i + 1).padStart(2, "0")}</span><span><strong>{step.title}</strong><small>{open ? "Evidence available" : "Complete the previous check first"}</small></span><b>{open ? "−" : "+"}</b></button>{open && <div className="trouble-step-content"><p><strong>Why this check matters</strong>{step.why}</p><div className="trouble-evidence"><span>OBSERVED EVIDENCE</span><p>{step.evidence}</p></div><p><strong>Recommended action</strong>{step.action}</p></div>}</div>; })}</div>
         {mode !== "Learn" && revealed < active.steps.length - 1 && <button className="trouble-next-step" onClick={() => setRevealed((v) => Math.min(v + 1, active.steps.length - 1))}>Reveal next diagnostic check <span>→</span></button>}
         {revealed >= active.steps.length - 1 && <button className="trouble-root-toggle" onClick={() => setShowRootCause((v) => !v)}>{showRootCause ? "Hide root cause & prevention" : "Reveal root cause & prevention"} <span>{showRootCause ? "−" : "+"}</span></button>}
         {showRootCause && <div className="trouble-root-cause"><p className="trouble-eyebrow">ROOT CAUSE & LEARNING</p><h4>What the evidence supports</h4><p>{active.rootCause}</p><h4>Prevent recurrence</h4><p>{active.prevention}</p></div>}
+        </>}
         <div className="trouble-related-services"><div><p className="trouble-eyebrow">CONTINUE LEARNING</p><h4>Services & tools connected to this incident</h4></div><div className="trouble-service-links">{active.services.map((service) => <a key={service.name} href={service.href}><span>{service.name}</span><b>↗</b></a>)}</div></div>
       </article> : <div className="trouble-no-selection">No incident matches your current filters. Clear the search or select another category.</div>}
       </div>
