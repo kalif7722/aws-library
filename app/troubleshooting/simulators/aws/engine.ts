@@ -18,7 +18,7 @@ export type AwsLabState = {
   vpcs?: AwsVpc[];
   subnets?: AwsSubnet[];
   routeTables?: AwsRouteTable[];
-  securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[] }[];
+  securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[]; egress?: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
   s3Buckets: { name: string; region: string; blockPublicAccess: boolean; versioningEnabled: boolean; encryption: "SSE-S3" | "SSE-KMS"; }[];
@@ -464,4 +464,29 @@ export function deleteAwsRoute(state: AwsLabState, routeTableId: string, destina
   if (existing.target === "local") return { state, error: "The VPC local route cannot be deleted." };
   const updated = routeTables.map(item => item.id === routeTableId ? { ...item, routes: item.routes.filter(route => route.destination !== destination) } : item);
   return { state: withRouteTableRoutes(state, updated, routeTableId), error: null };
+}
+
+
+function withEgressAsIngress(state: AwsLabState, groupId: string): AwsLabState {
+  return { ...state, securityGroups: state.securityGroups.map(group => group.id === groupId ? { ...group, ingress: group.egress ?? [] } : group) };
+}
+
+function restoreEgressFromProxy(original: AwsLabState, proxy: AwsLabState, groupId: string): AwsLabState {
+  const changed = proxy.securityGroups.find(group => group.id === groupId);
+  return changed ? { ...original, securityGroups: original.securityGroups.map(group => group.id === groupId ? { ...group, egress: changed.ingress } : group) } : original;
+}
+
+export function addSecurityGroupEgressRule(state: AwsLabState, groupId: string, input: Omit<AwsIngressRule, "id">): { state: AwsLabState; rule: AwsIngressRule | null; error: string | null } {
+  const result = addSecurityGroupIngressRule(withEgressAsIngress(state, groupId), groupId, input);
+  return { state: result.error ? state : restoreEgressFromProxy(state, result.state, groupId), rule: result.rule, error: result.error };
+}
+
+export function updateSecurityGroupEgressRule(state: AwsLabState, groupId: string, ruleId: string, input: Omit<AwsIngressRule, "id">): { state: AwsLabState; error: string | null } {
+  const result = updateSecurityGroupIngressRule(withEgressAsIngress(state, groupId), groupId, ruleId, input);
+  return { state: result.error ? state : restoreEgressFromProxy(state, result.state, groupId), error: result.error };
+}
+
+export function deleteSecurityGroupEgressRule(state: AwsLabState, groupId: string, ruleId: string): { state: AwsLabState; deleted: boolean } {
+  const result = deleteSecurityGroupIngressRule(withEgressAsIngress(state, groupId), groupId, ruleId);
+  return { state: result.deleted ? restoreEgressFromProxy(state, result.state, groupId) : state, deleted: result.deleted };
 }
