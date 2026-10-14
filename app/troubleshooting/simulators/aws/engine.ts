@@ -161,3 +161,26 @@ export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["network
   return { state: { ...state, networkAcl }, error: null };
 }
 
+
+
+export function updateNetworkAclRule(
+  state: AwsLabState,
+  direction: "inbound" | "outbound",
+  originalRuleNumber: number,
+  updatedRule: AwsLabState["networkAcl"][number]
+): { state: AwsLabState; error: string | null } {
+  const exists = state.networkAcl.some(rule => rule.direction === direction && rule.ruleNumber === originalRuleNumber);
+  if (!exists) return { state, error: "The rule no longer exists. Refresh the ACL and try again." };
+  if (updatedRule.direction !== direction) return { state, error: "A rule cannot be moved between inbound and outbound in this editor." };
+  const withoutOriginal = { ...state, networkAcl: state.networkAcl.filter(rule => !(rule.direction === direction && rule.ruleNumber === originalRuleNumber)) };
+  return addNetworkAclRule(withoutOriginal, updatedRule);
+}
+
+export function deleteNetworkAclRule(
+  state: AwsLabState,
+  direction: "inbound" | "outbound",
+  ruleNumber: number
+): { state: AwsLabState; deleted: boolean } {
+  const networkAcl = state.networkAcl.filter(rule => !(rule.direction === direction && rule.ruleNumber === ruleNumber));
+  return { state: networkAcl.length === state.networkAcl.length ? state : { ...state, networkAcl }, deleted: networkAcl.length !== state.networkAcl.length };
+}
