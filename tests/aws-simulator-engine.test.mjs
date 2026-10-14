@@ -195,3 +195,12 @@ test('legacy saved state migration preserves existing route faults and supplies 
   assert.equal(getAwsRouteTables(migrated)[0].routes.find(route=>route.target==='local').state,'blackhole');
   assert.equal(migrated.instance.tags.Name,migrated.instance.name);
 });
+
+
+test('migration restores required graph resources from empty arrays',()=>{
+  const initial=createInitialAwsLabState();
+  const migrated=migrateAwsLabState({...initial,vpcs:[],subnets:[],routeTables:[],instances:[]});
+  assert.ok(getAwsVpcs(migrated).length>0);
+  assert.ok(getAwsSubnets(migrated).length>0);
+  assert.ok(getAwsRouteTables(migrated).length>0);
+});
