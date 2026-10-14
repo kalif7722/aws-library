@@ -86,7 +86,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 
 - [x] Show a selectable inventory of seeded security groups.
 - [x] Show rules for the selected security group.
-- [ ] Add rule create/edit/delete flows with validation.
+- [ ] Add general rule create/edit/delete flows with validation (current SSH helper now correctly targets the selected group).
 - [ ] Show inbound/outbound rules and resource associations clearly.
 - [ ] Verify security-group edits immediately affect shared reachability evaluation.
 
