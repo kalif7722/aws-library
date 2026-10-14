@@ -53,7 +53,7 @@ export default function AwsSimulatorPage() {
             ...savedState.securityGroups,
             ...baseline.securityGroups.filter(group => !savedState.securityGroups.some(savedGroup => savedGroup.id === group.id))
           ];
-          setState({ ...baseline, ...savedState, securityGroups, networkAcl: (savedState.networkAcl ?? baseline.networkAcl).map((rule, index) => ({ ...rule, ruleNumber: Number.isFinite(rule.ruleNumber) ? rule.ruleNumber : rule.direction === "inbound" ? (rule.ports === "22" ? 100 : 110) : (rule.ports === "1024-65535" ? 100 : 110) + index * 0 })), s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets, iamRoles: savedState.iamRoles ?? baseline.iamRoles });
+          setState({ ...baseline, ...savedState, securityGroups, networkAcl: (savedState.networkAcl ?? baseline.networkAcl).map(rule => ({ ...rule, ruleNumber: Number.isFinite(rule.ruleNumber) ? rule.ruleNumber : rule.direction === "inbound" ? (rule.ports === "22" ? 100 : 110) : (rule.ports === "1024-65535" ? 100 : 110) })), s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets, iamRoles: savedState.iamRoles ?? baseline.iamRoles });
         }
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
         if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
