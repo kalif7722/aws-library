@@ -173,6 +173,8 @@ function GuidedTroubleshooting({ scenario }: { scenario: Scenario }) {
   const [complete, setComplete] = useState(false);
   const checkpoints = guidedCheckpoints[scenario.id] ?? [];
   const current = scenario.steps[Math.min(stage, scenario.steps.length - 1)];
+  // Diagnostic steps and architecture nodes are different-sized sequences; map proportionally.
+  const architectureStage = Math.round(stage * (scenario.architecture.length - 1) / Math.max(1, scenario.steps.length - 1));
   const advance = () => {
     setFailed(false);
     setExpanded(false);
@@ -194,8 +196,8 @@ function GuidedTroubleshooting({ scenario }: { scenario: Scenario }) {
       </> : <>
         <div className="trouble-guided-flow-caption"><span>LIVE ARCHITECTURE PATH</span><span>{failed ? "Attention needed" : complete ? "Path reviewed" : "Glowing node = current check"}</span></div>
         <div className="trouble-guided-flow">{scenario.architecture.map((node, index) => <div className="trouble-guided-hop" key={node}>
-          <div className={`trouble-guided-node ${index < stage ? "done" : index === Math.min(stage, scenario.architecture.length - 1) && !complete ? "current" : ""}`}><span>{index < stage ? "✓" : String(index + 1).padStart(2, "0")}</span><strong>{node}</strong></div>
-          {index < scenario.architecture.length - 1 && <span className={`trouble-guided-arrow ${index < stage ? "passed" : ""}`}>➜</span>}
+          <div className={`trouble-guided-node ${index < architectureStage || complete ? "done" : index === architectureStage ? "current" : ""}`}><span>{index < architectureStage || complete ? "✓" : String(index + 1).padStart(2, "0")}</span><strong>{node}</strong></div>
+          {index < scenario.architecture.length - 1 && <span className={`trouble-guided-arrow ${index < architectureStage || complete ? "passed" : ""}`}>➜</span>}
         </div>)}</div>
         {complete ? <div className="trouble-guided-resolution"><strong>✓ Diagnostic path completed</strong><p>{scenario.rootCause}</p><strong>Verify and prevent recurrence</strong><p>{scenario.prevention}</p><p>Confirm the original symptom is gone and monitor the relevant health signal. This is a simulation; no cloud resources were changed.</p></div> : <div className="trouble-guided-check">
           <span className="trouble-guided-kicker">{failed ? "FAILURE PATH · INVESTIGATE BEFORE CHANGING" : `NEXT CHECK · STEP ${stage + 1}`}</span>
