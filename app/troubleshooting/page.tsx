@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import "./troubleshooting.css";
+import EvidencePanel from "./EvidencePanel";
 
 type Step = { title: string; why: string; evidence: string; action: string; };
 type Scenario = {
@@ -165,7 +166,7 @@ const guidedCheckpoints: Record<string, GuidedCheckpoint[]> = {
   "cloud-cost-spike": [{ label: "Traffic is roughly normal", stage: 0 }, { label: "No major deployment changed", stage: 1 }, { label: "The expensive service is identified", stage: 2 }],
 };
 
-function GuidedTroubleshooting({ scenario }: { scenario: Scenario }) {
+function GuidedTroubleshooting({ scenario, provider }: { scenario: Scenario; provider: string }) {
   const [checkpoint, setCheckpoint] = useState<number | null>(null);
   const [stage, setStage] = useState(0);
   const [failed, setFailed] = useState(false);
@@ -203,6 +204,7 @@ function GuidedTroubleshooting({ scenario }: { scenario: Scenario }) {
           <span className="trouble-guided-kicker">{failed ? "FAILURE PATH · INVESTIGATE BEFORE CHANGING" : `NEXT CHECK · STEP ${stage + 1}`}</span>
           <h4>{current.title}</h4>
           <p>{current.why}</p>
+          <EvidencePanel scenarioId={scenario.id} stepIndex={Math.min(stage, scenario.steps.length - 1)} provider={provider} />
           {failed && <div className="trouble-guided-evidence"><strong>Evidence to inspect</strong><p>{current.evidence}</p><strong>Recommended safe action</strong><p>{current.action}</p>{expanded && <div className="trouble-guided-deeper"><strong>If it still fails</strong><p>Compare the expected and observed values at this boundary, check the adjacent upstream and downstream layer, and change one variable at a time. Preserve the current configuration and use the normal approval and rollback process before any production change.</p></div>}</div>}
           <div className="trouble-guided-actions">
             <button className="trouble-guided-pass" onClick={advance}>{failed ? "Retest passes — continue" : stage === scenario.steps.length - 1 ? "✓ Check passes — verify recovery" : "✓ This works — continue"}</button>
@@ -257,9 +259,9 @@ export default function TroubleshootingPage() {
         <div className="trouble-architecture"><div className="trouble-block-heading"><strong>Follow the request / data path</strong><span>Illustrative architecture</span></div><div className="trouble-flow">{active.architecture.map((node, i) => <div className="trouble-flow-wrap" key={node}><div className={`trouble-flow-node ${i === active.architecture.length - 2 ? "focus" : ""}`}><small>{String(i + 1).padStart(2, "0")}</small><strong>{node}</strong></div>{i < active.architecture.length - 1 && <span className="trouble-flow-arrow">→</span>}</div>)}</div></div>
         <div className="trouble-mode-switch"><div><strong>Learning mode</strong><small>Choose how much guidance you want</small></div><div className="trouble-mode-options">{(["Learn", "Guided", "Challenge"] as const).map((m) => <button key={m} onClick={() => { setMode(m); setRevealed(m === "Learn" ? active.steps.length - 1 : 0); setShowRootCause(m === "Learn"); }} className={mode === m ? "active" : ""}>{m}</button>)}</div></div>
         {mode === "Challenge" && <div className="trouble-challenge-note"><strong>Challenge mode</strong><span>Work from evidence first. The root cause stays hidden until you reveal it. Select each check and explain what the evidence proves before moving on.</span></div>}
-        {mode === "Guided" ? <GuidedTroubleshooting key={active.id} scenario={active} /> : <>
+        {mode === "Guided" ? <GuidedTroubleshooting key={active.id} scenario={active} provider={provider === "All clouds" ? "AWS" : provider} /> : <>
         <div className="trouble-diagnostic-heading"><div><p className="trouble-eyebrow">DIAGNOSTIC WORKFLOW</p><h4>Investigate in order</h4></div><span>{Math.min(revealed + 1, active.steps.length)} / {active.steps.length} checks</span></div>
-        <div className="trouble-step-list">{active.steps.map((step, i) => { const open = mode === "Learn" || i <= revealed; return <div key={step.title} className={`trouble-step ${open ? "revealed" : "locked"}`}><button className="trouble-step-trigger" onClick={() => { if (mode === "Learn" || i <= revealed + 1) setRevealed(i); }} disabled={mode !== "Learn" && i > revealed + 1}><span className="trouble-step-number">{open ? "✓" : String(i + 1).padStart(2, "0")}</span><span><strong>{step.title}</strong><small>{open ? "Evidence available" : "Complete the previous check first"}</small></span><b>{open ? "−" : "+"}</b></button>{open && <div className="trouble-step-content"><p><strong>Why this check matters</strong>{step.why}</p><div className="trouble-evidence"><span>OBSERVED EVIDENCE</span><p>{step.evidence}</p></div><p><strong>Recommended action</strong>{step.action}</p></div>}</div>; })}</div>
+        <div className="trouble-step-list">{active.steps.map((step, i) => { const open = mode === "Learn" || i <= revealed; return <div key={step.title} className={`trouble-step ${open ? "revealed" : "locked"}`}><button className="trouble-step-trigger" onClick={() => { if (mode === "Learn" || i <= revealed + 1) setRevealed(i); }} disabled={mode !== "Learn" && i > revealed + 1}><span className="trouble-step-number">{open ? "✓" : String(i + 1).padStart(2, "0")}</span><span><strong>{step.title}</strong><small>{open ? "Evidence available" : "Complete the previous check first"}</small></span><b>{open ? "−" : "+"}</b></button>{open && <div className="trouble-step-content"><p><strong>Why this check matters</strong>{step.why}</p><div className="trouble-evidence"><span>OBSERVED EVIDENCE</span><p>{step.evidence}</p></div><EvidencePanel scenarioId={active.id} stepIndex={i} provider={provider === "All clouds" ? "AWS" : provider} /><p><strong>Recommended action</strong>{step.action}</p></div>}</div>; })}</div>
         {mode !== "Learn" && revealed < active.steps.length - 1 && <button className="trouble-next-step" onClick={() => setRevealed((v) => Math.min(v + 1, active.steps.length - 1))}>Reveal next diagnostic check <span>→</span></button>}
         {revealed >= active.steps.length - 1 && <button className="trouble-root-toggle" onClick={() => setShowRootCause((v) => !v)}>{showRootCause ? "Hide root cause & prevention" : "Reveal root cause & prevention"} <span>{showRootCause ? "−" : "+"}</span></button>}
         {showRootCause && <div className="trouble-root-cause"><p className="trouble-eyebrow">ROOT CAUSE & LEARNING</p><h4>What the evidence supports</h4><p>{active.rootCause}</p><h4>Prevent recurrence</h4><p>{active.prevention}</p></div>}
