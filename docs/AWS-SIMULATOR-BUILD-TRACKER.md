@@ -108,7 +108,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Edit existing rules, including rule-number changes with direction-local duplicate validation.
 - [x] Reorder rules by changing rule numbers while preventing direction-local duplicates.
 - [x] Delete rules with clear feedback.
-- [ ] Tighten Network ACL protocol-specific validation (ports/CIDR/priority are validated; protocol semantics and wildcard-port behavior need more coverage).
+- [x] Validate supported NACL protocols and wildcard ports for all-traffic rules; expand coverage if additional protocol families are modeled.
 - [ ] Verify inbound and return-path outbound rules both affect reachability.
 
 ### 2F. Reachability and cross-resource consistency
