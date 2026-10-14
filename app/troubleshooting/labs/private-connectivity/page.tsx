@@ -102,7 +102,7 @@ function screenFor(provider: Provider, stage: number, fixed: boolean): Screen {
     if (stage === 1) return { service: "EC2", path: "EC2 › Security Groups › sg-db-prod › Inbound rules", resource: "sg-db-prod · Inbound rules", kind: "rules", columns: ["Name", "Security group rule ID", "IP version", "Type", "Protocol", "Port range", "Source"], rows: [
       { Name: "—", "Security group rule ID": "sgr-0db123456789abcd1", "IP version": "IPv4", Type: "PostgreSQL", Protocol: "TCP", "Port range": "5432", Source: "sg-0c0ffee1234567890 (monitoring)" }
     ] };
-    if (stage === 2) return { service: "Amazon VPC", path: "VPC › Route tables › rtb-db-private › Routes", resource: "rtb-db-private · Routes", kind: "routes", columns: ["Destination", "Target", "Status", "Propagated"], rows: [
+    if (stage === 2) return { service: "Amazon VPC", path: "VPC › Route tables › rtb-0123abcd4567ef890 › Routes", resource: "rtb-0123abcd4567ef890 · Routes", kind: "routes", columns: ["Destination", "Target", "Status", "Propagated"], rows: [
       { Destination: "10.20.0.0/16", Target: "local", Status: "Active", Propagated: "No" }
     ] };
     return { service: "EC2", path: "EC2 › Security Groups › sg-db-prod › Inbound rules", resource: "sg-db-prod · Inbound rules" + (fixed ? " · simulated corrected state" : ""), kind: "rules", columns: ["Name", "Security group rule ID", "IP version", "Type", "Protocol", "Port range", "Source"], rows: [
