@@ -12,6 +12,7 @@ export type AwsLabState = {
   securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
+  s3Buckets: { name: string; region: string; blockPublicAccess: boolean; versioningEnabled: boolean; encryption: "SSE-S3" | "SSE-KMS"; }[];
 };
 export type AwsReachabilityResult = {
   reachable: boolean;
@@ -31,6 +32,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { direction: "inbound", protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
     { direction: "outbound", protocol: "TCP", ports: "1024-65535", source: "0.0.0.0/0", action: "allow" },
     { direction: "outbound", protocol: "TCP", ports: "22", source: "0.0.0.0/0", action: "allow" }
+  ],
+  s3Buckets: [
+    { name: "prod-app-artifacts", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
+    { name: "prod-app-logs", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-S3" },
+    { name: "data-lake-curated", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: false, encryption: "SSE-KMS" }
   ]
 });
 export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup"): AwsLabState {
@@ -88,4 +94,16 @@ export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bast
   return { reachable: !failed, blockedAt: failed ? map[failed.name as keyof typeof map] : null,
     summary: failed ? "Traffic is blocked at " + failed.name.toLowerCase() + ": " + failed.detail : "The simulated path allows TCP/22 from the approved administrator source. A real SSH login still requires separate authentication verification.",
     checks };
+}
+
+export function updateS3BucketSetting(
+  state: AwsLabState,
+  bucketName: string,
+  setting: "blockPublicAccess" | "versioningEnabled",
+  value: boolean
+): AwsLabState {
+  return {
+    ...state,
+    s3Buckets: state.s3Buckets.map(bucket => bucket.name === bucketName ? { ...bucket, [setting]: value } : bucket)
+  };
 }
