@@ -104,9 +104,9 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Display numbered rules in numeric priority order.
 - [x] Evaluate the lowest-numbered matching rule first, with implicit deny when nothing matches.
 - [x] Create-rule editor with validation for number, duplicate direction/number, port/range and IPv4 CIDR.
-- [ ] Edit existing rules.
-- [ ] Reorder rules by changing rule numbers while preventing direction-local duplicates.
-- [ ] Delete rules with clear feedback.
+- [x] Edit existing rules, including rule-number changes with direction-local duplicate validation.
+- [x] Reorder rules by changing rule numbers while preventing direction-local duplicates.
+- [x] Delete rules with clear feedback.
 - [ ] Add protocol/port/CIDR/action validation aligned with the simulator's supported behavior.
 - [ ] Verify inbound and return-path outbound rules both affect reachability.
 
