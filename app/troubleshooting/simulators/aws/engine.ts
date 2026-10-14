@@ -184,3 +184,53 @@ export function deleteNetworkAclRule(
   const networkAcl = state.networkAcl.filter(rule => !(rule.direction === direction && rule.ruleNumber === ruleNumber));
   return { state: networkAcl.length === state.networkAcl.length ? state : { ...state, networkAcl }, deleted: networkAcl.length !== state.networkAcl.length };
 }
+
+
+export function getAwsInstances(state: AwsLabState): AwsInstance[] {
+  return state.instances?.length ? state.instances : [state.instance];
+}
+
+export type LaunchAwsInstanceInput = {
+  name: string;
+  instanceType: string;
+  subnetId: string;
+  securityGroupIds: string[];
+  imageId?: string;
+  availabilityZone?: string;
+  tags?: Record<string, string>;
+};
+
+export function launchAwsInstance(state: AwsLabState, input: LaunchAwsInstanceInput): { state: AwsLabState; instance: AwsInstance | null; error: string | null } {
+  const name = input.name.trim();
+  if (!name) return { state, instance: null, error: "Enter an instance name." };
+  if (getAwsInstances(state).some(instance => instance.name.toLowerCase() === name.toLowerCase())) {
+    return { state, instance: null, error: "An instance with that name already exists." };
+  }
+  if (!input.subnetId.trim()) return { state, instance: null, error: "Choose a subnet." };
+  if (!input.securityGroupIds.length || input.securityGroupIds.some(id => !state.securityGroups.some(group => group.id === id))) {
+    return { state, instance: null, error: "Choose at least one valid security group." };
+  }
+  const currentInstances = getAwsInstances(state);
+  const sequence = currentInstances.length + 1;
+  const id = "i-0a12b345c678d9" + sequence.toString(16).padStart(3, "0");
+  const instance: AwsInstance = {
+    id, name, state: "running", systemStatus: "passed", instanceStatus: "passed",
+    privateIp: "10.20.2." + (17 + currentInstances.length), subnetId: input.subnetId,
+    securityGroupIds: [...input.securityGroupIds], guestSsh: "listening",
+    instanceType: input.instanceType, availabilityZone: input.availabilityZone ?? "eu-west-1a",
+    imageId: input.imageId ?? "ami-0a1b2c3d4e5f67890", tags: { Name: name, ...(input.tags ?? {}) }
+  };
+  return { state: { ...state, instances: [...currentInstances, instance] }, instance, error: null };
+}
+
+export function setAwsInstanceState(state: AwsLabState, instanceId: string, nextState: "running" | "stopped"): AwsLabState {
+  const instances = getAwsInstances(state).map(instance => instance.id === instanceId ? { ...instance, state: nextState } : instance);
+  const primary = instances.find(instance => instance.id === state.instance.id) ?? instances[0];
+  return { ...state, instance: primary, instances };
+}
+
+export function rebootAwsInstance(state: AwsLabState, instanceId: string): AwsLabState {
+  const instances = getAwsInstances(state).map(instance => instance.id === instanceId ? { ...instance, state: "running" as const, systemStatus: "passed" as const, instanceStatus: "passed" as const } : instance);
+  const primary = instances.find(instance => instance.id === state.instance.id) ?? instances[0];
+  return { ...state, instance: primary, instances };
+}
