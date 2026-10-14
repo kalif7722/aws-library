@@ -36,7 +36,7 @@ const steps: Record<Provider, Step[]> = {
       { label: "The DB security group has no inbound PostgreSQL 5432 rule from sg-app-prod", correct: true, feedback: "Correct. Security groups are stateful, but the database still needs an inbound allow from the intended app identity. Infer the gap from the listed rules; do not add a fake missing-rule row." },
       { label: "The monitoring security group can reach TCP/5432", correct: false, feedback: "That rule grants access to a different source identity and does not permit the application workload." },
       { label: "The database security group has an outbound rule", correct: false, feedback: "Outbound access does not create the missing inbound permission on the database security group." }
-    ], command: "aws ec2 describe-security-groups --group-ids sg-db-prod", output: "Configured inbound rule: PostgreSQL TCP/5432 from sg-monitoring\nNo inbound rule from sg-app-prod is configured" },
+    ], command: "aws ec2 describe-security-groups --filters Name=group-name,Values=sg-db-prod", output: "Configured inbound rule: PostgreSQL TCP/5432 from sg-monitoring\nNo inbound rule from sg-app-prod is configured" },
     { title: "Validate route and name resolution", objective: "Rule out a wrong endpoint, DNS failure, or missing private route before editing the database security group.", question: "What does the path evidence support?", choices: [
       { label: "DNS resolves to the private DB address and the VPC route is active; keep routing unchanged", correct: true, feedback: "Correct. The private route and endpoint are consistent. The database security-group rule remains the supported cause." },
       { label: "Add a default route to the internet", correct: false, feedback: "The database uses a private endpoint; a broad internet route is not justified." },
@@ -74,7 +74,7 @@ const steps: Record<Provider, Step[]> = {
     { title: "Confirm the database VM and private endpoint", objective: "Verify the database VM state, internal IP, zone, VPC, and network tag before checking firewall policy.", question: "What is the correct baseline conclusion?", choices: [
       { label: "The VM is RUNNING and has the expected internal IP and db-prod network tag", correct: true, feedback: "Correct. Record the database VM's internal IP and target tag, then inspect the VPC firewall rules that apply to the VM." },
       { label: "Enable a public IP and authorize all networks", correct: false, feedback: "That weakens the intended private architecture and is not required for diagnosis." },
-      { label: "Delete and recreate the Cloud SQL instance", correct: false, feedback: "The instance is RUNNABLE; there is no evidence that recreation is necessary." }
+      { label: "Delete and recreate the database VM", correct: false, feedback: "The instance is RUNNABLE; there is no evidence that recreation is necessary." }
     ], command: "gcloud compute instances describe db-prod --zone=europe-west1-b --format='yaml(status,networkInterfaces.networkIP,tags.items)'", output: "status: RUNNING\ninternal IP: 10.20.3.10\nnetwork tag: db-prod\nnetwork: vpc-prod" },
     { title: "Inspect configured VPC firewall rules", objective: "Check direction, priority, source ranges, target tags/service accounts, and TCP/5432.", question: "What explains the failed flow in the configured rule list?", choices: [
       { label: "No configured ingress allow matches the app subnet, db-prod target, and TCP/5432", correct: true, feedback: "Correct. Infer the missing allow from the actual list and the required flow. Google Cloud's implied ingress deny is behavior, not a listed firewall rule." },
@@ -132,19 +132,19 @@ function screenFor(provider: Provider, stage: number, fixed: boolean): Screen {
     ] };
   }
   if (stage === 0) return { service: "Compute Engine", path: "Compute Engine › VM instances › db-prod › Details", resource: "db-prod · prod-app", kind: "details", rows: [
-    { Field: "Status", Value: "RUNNING" }, { Field: "Internal IP", Value: "10.20.3.10" }, { Field: "Zone", Value: "europe-west1-b" }, { Field: "Network", Value: "vpc-prod" }, { Field: "Network tags", Value: "db-prod" }, { Field: "Database port", Value: "5432 · PostgreSQL listener in this lab scenario" }
+    { Field: "Status", Value: "RUNNING" }, { Field: "Internal IP", Value: "10.20.3.10" }, { Field: "Zone", Value: "europe-west1-b" }, { Field: "Network", Value: "vpc-prod" }, { Field: "Network tags", Value: "db-prod" }, { Field: "Machine type", Value: "e2-standard-2" }
   ] };
-  if (stage === 1) return { service: "VPC network", path: "VPC network › Firewall", resource: "vpc-prod · configured firewall rules", kind: "rules", columns: ["Name", "Network", "Direction", "Priority", "Action", "Targets", "Source filters", "Protocols / ports"], rows: [
-    { Name: "allow-app-https", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "app-prod", "Source filters": "10.20.1.0/24", "Protocols / ports": "tcp:443" },
-    { Name: "allow-iap-admin", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "admin", "Source filters": "35.235.240.0/20", "Protocols / ports": "tcp:22" }
+  if (stage === 1) return { service: "VPC network", path: "VPC network › Firewall", resource: "vpc-prod · configured firewall rules", kind: "rules", columns: ["Name", "Network", "Direction", "Priority", "Action", "Targets", "Filters", "Protocols / ports"], rows: [
+    { Name: "allow-app-https", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "app-prod", "Filters": "Source IPv4 ranges: 10.20.1.0/24", "Protocols / ports": "tcp:443" },
+    { Name: "allow-iap-admin", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "admin", "Filters": "Source IPv4 ranges: 35.235.240.0/20", "Protocols / ports": "tcp:22" }
   ] };
   if (stage === 2) return { service: "Network Intelligence Center", path: "Network Intelligence Center › Connectivity Tests", resource: "app-to-checkout-db · test results", kind: "test", columns: ["Check", "Result"], rows: [
     { Check: "Source endpoint", Result: "10.20.1.12" }, { Check: "Destination endpoint", Result: "10.20.3.10:5432" }, { Check: "Route", Result: "Resolved" }, { Check: "Firewall stage", Result: "Blocked · implied ingress deny" }, { Check: "Trace result", Result: "Unreachable" }
   ] };
-  return { service: "VPC network", path: "VPC network › Firewall", resource: "vpc-prod · configured firewall rules" + (fixed ? " · simulated corrected state" : ""), kind: "rules", columns: ["Name", "Network", "Direction", "Priority", "Action", "Targets", "Source filters", "Protocols / ports"], rows: [
-    ...(fixed ? [{ Name: "allow-app-to-db", Network: "vpc-prod", Direction: "INGRESS", Priority: "900", Action: "ALLOW", Targets: "db-prod", "Source filters": "10.20.1.0/24", "Protocols / ports": "tcp:5432" }] : []),
-    { Name: "allow-app-https", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "app-prod", "Source filters": "10.20.1.0/24", "Protocols / ports": "tcp:443" },
-    { Name: "allow-iap-admin", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "admin", "Source filters": "35.235.240.0/20", "Protocols / ports": "tcp:22" }
+  return { service: "VPC network", path: "VPC network › Firewall", resource: "vpc-prod · configured firewall rules" + (fixed ? " · simulated corrected state" : ""), kind: "rules", columns: ["Name", "Network", "Direction", "Priority", "Action", "Targets", "Filters", "Protocols / ports"], rows: [
+    ...(fixed ? [{ Name: "allow-app-to-db", Network: "vpc-prod", Direction: "INGRESS", Priority: "900", Action: "ALLOW", Targets: "db-prod", "Filters": "Source IPv4 ranges: 10.20.1.0/24", "Protocols / ports": "tcp:5432" }] : []),
+    { Name: "allow-app-https", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "app-prod", "Filters": "Source IPv4 ranges: 10.20.1.0/24", "Protocols / ports": "tcp:443" },
+    { Name: "allow-iap-admin", Network: "vpc-prod", Direction: "INGRESS", Priority: "1000", Action: "ALLOW", Targets: "admin", "Filters": "Source IPv4 ranges: 35.235.240.0/20", "Protocols / ports": "tcp:22" }
   ] };
 }
 
