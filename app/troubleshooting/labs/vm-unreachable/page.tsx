@@ -55,7 +55,7 @@ const labSteps: Record<Provider, LabStep[]> = {
         {label:"The instance is in eu-west-1a",correct:false,feedback:"An Availability Zone is not itself evidence of an SSH policy denial."},
       ],
       command:"aws ec2 describe-security-groups --group-ids sg-0ab12cd34ef56ab78",
-      commandOutput:"Inbound permissions: TCP/443 from 10.40.0.0/16\nNo TCP/22 rule matches 198.51.100.24/32",
+      commandOutput:"SECURITY GROUP RULES\nTCP 443  10.40.0.0/16\nTCP 8443 sg-0f55aa11bb22cc33",
     },
     {
       title: "Validate the route and network path", objective: "Check that the subnet has a viable return path and no earlier network boundary explains the timeout.",
