@@ -83,7 +83,7 @@ export default function AwsSimulatorPage() {
   const go = (next: Screen, resource?: string) => {
     setScreen(next);
     setSelectedResource(resource ?? null);
-    setTab("Details");
+    setTab(next === "Security Groups" ? "Inbound rules" : next === "Route Tables" ? "Routes" : next === "Network ACLs" ? "Inbound rules" : next === "IAM" ? "Roles" : next === "CloudWatch" ? "Alarms" : "Details");
     setSearch("");
     setShowServices(false);
     setToast("");
