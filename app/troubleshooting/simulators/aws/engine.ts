@@ -367,3 +367,32 @@ export function toggleAwsRouteState(state: AwsLabState, routeTableId: string, de
   const effectiveRoutes = instanceSubnet?.routeTableId === routeTableId ? updatedTables.find(item => item.id === routeTableId)!.routes : state.routes;
   return { state: { ...state, routeTables: updatedTables, routes: effectiveRoutes }, error: null };
 }
+
+
+export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | undefined): AwsLabState {
+  const baseline = createInitialAwsLabState();
+  if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
+  const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }) };
+  const securityGroups = [
+    ...savedState.securityGroups,
+    ...baseline.securityGroups.filter(group => !savedState.securityGroups!.some(savedGroup => savedGroup.id === group.id))
+  ];
+  const networkAcl = (savedState.networkAcl ?? baseline.networkAcl).map(rule => ({
+    ...rule,
+    ruleNumber: Number.isFinite(rule.ruleNumber) ? rule.ruleNumber : rule.direction === "inbound" ? (rule.ports === "22" ? 100 : 110) : (rule.ports === "1024-65535" ? 100 : 110)
+  }));
+  const vpcs = savedState.vpcs ?? baseline.vpcs;
+  let subnets = savedState.subnets ?? baseline.subnets ?? [];
+  if (!subnets.some(subnet => subnet.id === instance.subnetId)) {
+    subnets = [...subnets, { id: instance.subnetId, name: "migrated-training-subnet", vpcId: instance.subnetId === baseline.instance.subnetId ? "vpc-0123abcd4567ef890" : (vpcs?.[0]?.id ?? "vpc-0123abcd4567ef890"), cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" }];
+  }
+  const routes = savedState.routes ?? baseline.routes;
+  const routeTables = savedState.routeTables ?? (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
+  const instances = savedState.instances?.map(item => ({ ...item, tags: item.tags ?? { Name: item.name } }));
+  return {
+    ...baseline, ...savedState, instance, instances, securityGroups, networkAcl,
+    s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets,
+    iamRoles: savedState.iamRoles ?? baseline.iamRoles,
+    vpcs, subnets, routeTables, routes
+  };
+}
