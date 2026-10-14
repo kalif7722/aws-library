@@ -77,8 +77,8 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 
 ### 2B. VPC and subnet inventory
 
-- [ ] Replace single-resource/static presentation with a coherent VPC inventory.
-- [ ] Add subnet inventory with CIDR, Availability Zone, route table association and relevant status fields.
+- [ ] Replace single-resource/static presentation with a coherent VPC inventory (engine model now includes VPCs and two connected subnets).
+- [ ] Render the modeled subnet inventory with CIDR, Availability Zone, route table association and status fields.
 - [ ] Support selecting a VPC/subnet and navigating to related resources.
 - [ ] Ensure resource IDs, CIDRs and associations agree across VPC, Subnets, Route Tables, NACLs, EC2 and Reachability Analyzer.
 - [ ] Add safe state migration for any expanded resource collections.
@@ -95,8 +95,8 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 
 - [x] Show route-table route and association/tag tabs.
 - [x] Route state participates in shared reachability evaluation.
-- [ ] Implement subnet association editing and validation.
-- [ ] Implement route create/edit/delete flows and route-target validation.
+- [x] Add validated subnet-to-route-table association engine helper; console wiring and route-table selection remain.
+- [ ] Implement route create/edit/delete flows and route-target validation (current route state toggle now updates the selected table model).
 - [ ] Ensure the selected subnet's effective route table is the one evaluated.
 - [ ] Show meaningful route state (including unavailable/blackhole target cases where modeled).
 
