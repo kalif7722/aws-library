@@ -13,6 +13,7 @@ export type AwsLabState = {
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
   s3Buckets: { name: string; region: string; blockPublicAccess: boolean; versioningEnabled: boolean; encryption: "SSE-S3" | "SSE-KMS"; }[];
+  iamRoles: { name: string; lastActivity: string; trustedService: string; attachedPolicies: string[] }[];
 };
 export type AwsReachabilityResult = {
   reachable: boolean;
@@ -37,6 +38,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "prod-app-artifacts", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
     { name: "prod-app-logs", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-S3" },
     { name: "data-lake-curated", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: false, encryption: "SSE-KMS" }
+  ],
+  iamRoles: [
+    { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
+    { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
+    { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess"] }
   ]
 });
 export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup"): AwsLabState {
@@ -105,5 +111,16 @@ export function updateS3BucketSetting(
   return {
     ...state,
     s3Buckets: state.s3Buckets.map(bucket => bucket.name === bucketName ? { ...bucket, [setting]: value } : bucket)
+  };
+}
+
+export function toggleIamRolePolicy(state: AwsLabState, roleName: string, policyName: string): AwsLabState {
+  return {
+    ...state,
+    iamRoles: state.iamRoles.map(role => {
+      if (role.name !== roleName) return role;
+      const attached = role.attachedPolicies.includes(policyName);
+      return { ...role, attachedPolicies: attached ? role.attachedPolicies.filter(policy => policy !== policyName) : [...role.attachedPolicies, policyName] };
+    })
   };
 }
