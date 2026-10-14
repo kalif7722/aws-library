@@ -265,3 +265,49 @@ export function deleteAwsInstanceTag(state: AwsLabState, instanceId: string, key
   const primary = updatedInstances.find(instance => instance.id === state.instance.id) ?? updatedInstances[0];
   return { state: { ...state, instance: primary, instances: updatedInstances }, error: null };
 }
+
+
+function validateSecurityGroupIngressRule(state: AwsLabState, rule: Omit<AwsIngressRule, "id">): string | null {
+  if (!["TCP", "UDP", "ALL"].includes(rule.protocol)) return "Choose TCP, UDP, or all traffic.";
+  if (!Number.isInteger(rule.fromPort) || !Number.isInteger(rule.toPort) || rule.fromPort < 0 || rule.toPort > 65535 || rule.fromPort > rule.toPort) return "Enter a valid port range from 0 to 65535.";
+  if (!rule.description || rule.description.trim().length > 255) return "Enter a rule description of 1 to 255 characters.";
+  if (rule.sourceType === "SecurityGroup") {
+    if (!state.securityGroups.some(group => group.id === rule.source || group.name === rule.source)) return "Choose an existing source security group.";
+  } else {
+    const parts = rule.source.trim().split("/");
+    const prefix = Number(parts[1]);
+    if (parts.length !== 2 || ipv4ToNumber(parts[0]) === null || !/^\\d+$/.test(parts[1] ?? "") || !Number.isInteger(prefix) || prefix < 0 || prefix > 32) return "Enter a valid IPv4 CIDR such as 198.51.100.24/32.";
+  }
+  return null;
+}
+
+function normalizeSecurityGroupRuleSource(state: AwsLabState, rule: Omit<AwsIngressRule, "id">): Omit<AwsIngressRule, "id"> {
+  return { ...rule, source: rule.sourceType === "SecurityGroup" ? state.securityGroups.find(group => group.id === rule.source || group.name === rule.source)?.id ?? rule.source : rule.source.trim(), description: rule.description.trim() };
+}
+
+export function addSecurityGroupIngressRule(state: AwsLabState, groupId: string, input: Omit<AwsIngressRule, "id">): { state: AwsLabState; rule: AwsIngressRule | null; error: string | null } {
+  const group = state.securityGroups.find(item => item.id === groupId);
+  if (!group) return { state, rule: null, error: "Security group not found." };
+  const error = validateSecurityGroupIngressRule(state, input);
+  if (error) return { state, rule: null, error };
+  const normalized = normalizeSecurityGroupRuleSource(state, input);
+  if (group.ingress.some(rule => rule.protocol === normalized.protocol && rule.fromPort === normalized.fromPort && rule.toPort === normalized.toPort && rule.sourceType === normalized.sourceType && rule.source === normalized.source)) return { state, rule: null, error: "An equivalent ingress rule already exists." };
+  const rule: AwsIngressRule = { ...normalized, id: "sgr-sim-" + (group.ingress.length + 1).toString(36) };
+  return { state: { ...state, securityGroups: state.securityGroups.map(item => item.id === groupId ? { ...item, ingress: [...item.ingress, rule] } : item) }, rule, error: null };
+}
+
+export function updateSecurityGroupIngressRule(state: AwsLabState, groupId: string, ruleId: string, input: Omit<AwsIngressRule, "id">): { state: AwsLabState; error: string | null } {
+  const group = state.securityGroups.find(item => item.id === groupId);
+  if (!group || !group.ingress.some(rule => rule.id === ruleId)) return { state, error: "Security group rule not found. Refresh and try again." };
+  const error = validateSecurityGroupIngressRule(state, input);
+  if (error) return { state, error };
+  const normalized = normalizeSecurityGroupRuleSource(state, input);
+  if (group.ingress.some(rule => rule.id !== ruleId && rule.protocol === normalized.protocol && rule.fromPort === normalized.fromPort && rule.toPort === normalized.toPort && rule.sourceType === normalized.sourceType && rule.source === normalized.source)) return { state, error: "An equivalent ingress rule already exists." };
+  return { state: { ...state, securityGroups: state.securityGroups.map(item => item.id === groupId ? { ...item, ingress: item.ingress.map(rule => rule.id === ruleId ? { ...normalized, id: rule.id } : rule) } : item) }, error: null };
+}
+
+export function deleteSecurityGroupIngressRule(state: AwsLabState, groupId: string, ruleId: string): { state: AwsLabState; deleted: boolean } {
+  const group = state.securityGroups.find(item => item.id === groupId);
+  if (!group || !group.ingress.some(rule => rule.id === ruleId)) return { state, deleted: false };
+  return { state: { ...state, securityGroups: state.securityGroups.map(item => item.id === groupId ? { ...item, ingress: item.ingress.filter(rule => rule.id !== ruleId) } : item) }, deleted: true };
+}
