@@ -274,11 +274,9 @@ export default function VmUnreachableLab() {
     { id: "allow-health-checks", name: "allow-health-checks", network: "vpc-prod", direction: "INGRESS", priority: "1000", source: "130.211.0.0/22, 35.191.0.0/16", target: "api-prod", ports: "tcp:80,443", action: "ALLOW", detail: "Ingress health-check traffic to instances tagged api-prod." },
     { id: "allow-internal", name: "allow-internal", network: "vpc-prod", direction: "INGRESS", priority: "65534", source: "10.40.0.0/16", target: "api-prod", ports: "tcp:0-65535, udp:0-65535, icmp", action: "ALLOW", detail: "Internal VPC traffic for matching target instances." }
   ];
-  const selectedRuleData = ruleRows.find((rule) => rule.id === selectedRule);
 
   const consoleScreen = useMemo(() => {
     const port = protocol === "SSH" ? "22" : "3389";
-    const protoName = protocol === "SSH" ? "SSH" : "RDP";
     const source = "198.51.100.24";
     const healthyGuest = [
       { label: protocol === "SSH" ? "sshd" : "TermService", value: protocol === "SSH" ? "active (running)" : "Running", status: "good" as const },
