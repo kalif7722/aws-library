@@ -3,27 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { addSshIngressRule, createInitialAwsLabState, evaluateAwsSshReachability, updateS3BucketSetting, toggleIamRolePolicy, type AwsLabState } from "./engine";
 import "./simulator.css";
+import { AWS_SERVICE_DIRECTORY, type AwsServiceDirectoryEntry } from "./service-directory";
 
-type Service = { name: string; category: string; icon: string; description: string; count: string; };
 type Screen = "Console Home" | "EC2 Dashboard" | "Instances" | "Instance details" | "Security Groups" | "Route Tables" | "Network ACLs" | "VPCs" | "Load Balancers" | "Target Groups" | "S3" | "IAM" | "RDS" | "Lambda" | "CloudWatch" | "Route 53" | "DynamoDB" | "Cost Explorer" | "Reachability Analyzer";
-const services: Service[] = [
-  { name: "EC2", category: "Compute", icon: "▣", description: "Virtual servers in the cloud", count: "1 instance" },
-  { name: "VPC", category: "Networking & Content Delivery", icon: "◇", description: "Isolated virtual networks and routing", count: "1 VPC" },
-  { name: "Security Groups", category: "Networking & Security", icon: "⬡", description: "Stateful traffic controls for resources", count: "2 security groups" },
-  { name: "Route Tables", category: "Networking & Security", icon: "⇄", description: "Subnet routing configuration", count: "3 route tables" },
-  { name: "Network ACLs", category: "Networking & Security", icon: "▤", description: "Stateless subnet traffic controls", count: "2 network ACLs" },
-  { name: "Load Balancers", category: "Networking & Content Delivery", icon: "⇋", description: "Distribute application traffic", count: "1 load balancer" },
-  { name: "Target Groups", category: "Networking & Content Delivery", icon: "◎", description: "Register targets for load balancers", count: "2 target groups" },
-  { name: "S3", category: "Storage", icon: "▰", description: "Object storage", count: "3 buckets" },
-  { name: "IAM", category: "Security, Identity & Compliance", icon: "♙", description: "Users, roles, policies, and permissions", count: "4 roles · 3 policies" },
-  { name: "RDS", category: "Database", icon: "▤", description: "Managed relational databases", count: "1 database" },
-  { name: "Lambda", category: "Compute", icon: "λ", description: "Run code without managing servers", count: "3 functions" },
-  { name: "CloudWatch", category: "Management & Governance", icon: "◷", description: "Metrics, logs, alarms, and events", count: "8 alarms" },
-  { name: "Route 53", category: "Networking & Content Delivery", icon: "⌘", description: "DNS and health checks", count: "2 hosted zones" },
-  { name: "DynamoDB", category: "Database", icon: "▦", description: "Managed NoSQL database", count: "2 tables" },
-  { name: "Cost Explorer", category: "Cloud Financial Management", icon: "$", description: "Explore usage and spending", count: "Current month" },
-  { name: "Reachability Analyzer", category: "Network & Security", icon: "⌁", description: "Analyze paths between network resources", count: "Available" }
-];
+const services: AwsServiceDirectoryEntry[] = AWS_SERVICE_DIRECTORY;
 const navGroups: { title: string; items: Screen[] }[] = [
   { title: "RECENTLY VISITED", items: ["Instances", "Security Groups", "Route Tables"] },
   { title: "COMPUTE", items: ["EC2 Dashboard", "Instances", "Lambda"] },
@@ -54,6 +37,7 @@ export default function AwsSimulatorPage() {
   const [selectedResource, setSelectedResource] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [showServices, setShowServices] = useState(false);
+  const [pinnedServices, setPinnedServices] = useState<string[]>([]);
   const [showRuleEditor, setShowRuleEditor] = useState(false);
   const [sourceType, setSourceType] = useState<"SecurityGroup" | "IPv4">("SecurityGroup");
   const [source, setSource] = useState("sg-bastion-prod");
@@ -65,17 +49,18 @@ export default function AwsSimulatorPage() {
     try {
       const saved = window.localStorage.getItem("aws-console-simulator-state-v2");
       if (saved) {
-        const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen };
+        const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen; pinnedServices?: string[] };
         if (parsed.state?.instance && parsed.state.securityGroups && parsed.state.routes) { const baseline = createInitialAwsLabState(); setState({ ...baseline, ...parsed.state, s3Buckets: parsed.state.s3Buckets ?? baseline.s3Buckets, iamRoles: parsed.state.iamRoles ?? baseline.iamRoles }); }
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
+        if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
       }
     } catch { /* Start with the seeded training account if storage is unavailable. */ }
     setHydrated(true);
   }, []);
   useEffect(() => {
     if (!hydrated) return;
-    try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen })); } catch { /* Storage is optional. */ }
-  }, [hydrated, state, screen]);
+    try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen, pinnedServices })); } catch { /* Storage is optional. */ }
+  }, [hydrated, state, screen, pinnedServices]);
 
   const filteredServices = useMemo(() => services.filter(service => (service.name + " " + service.category + " " + service.description).toLowerCase().includes(search.toLowerCase())), [search]);
   const group = state.securityGroups[0];
@@ -98,6 +83,7 @@ export default function AwsSimulatorPage() {
   }
   function resetAccount() {
     setState(createInitialAwsLabState());
+    setPinnedServices([]);
     setScreen("Console Home");
     setSelectedResource(null);
     setShowRuleEditor(false);
@@ -110,6 +96,13 @@ export default function AwsSimulatorPage() {
   function openService(name: string) {
     const map: Record<string, Screen> = { EC2:"EC2 Dashboard", VPC:"VPCs", "Security Groups":"Security Groups", "Route Tables":"Route Tables", "Network ACLs":"Network ACLs", "Load Balancers":"Load Balancers", "Target Groups":"Target Groups", S3:"S3", IAM:"IAM", RDS:"RDS", Lambda:"Lambda", CloudWatch:"CloudWatch", "Route 53":"Route 53", DynamoDB:"DynamoDB", "Cost Explorer":"Cost Explorer", "Reachability Analyzer":"Reachability Analyzer" };
     go(map[name] ?? "Console Home");
+  }
+  function selectService(service: AwsServiceDirectoryEntry) {
+    if (service.implemented) { openService(service.name); return; }
+    setPinnedServices(current => current.includes(service.name) ? current : [...current, service.name]);
+    setSearch("");
+    setShowServices(false);
+    notify(`${service.name} added to pinned services. Its detailed console screen will be built in a later service review.`);
   }
   const resourceCount = screen === "Instances" ? "1 instance" : screen === "Security Groups" ? "2 security groups" : screen === "Route Tables" ? "3 route tables" : screen === "Network ACLs" ? "2 network ACLs" : screen === "VPCs" ? "1 VPC" : screen === "S3" ? "3 buckets" : screen === "IAM" ? "7 resources" : screen === "RDS" ? "1 database" : screen === "Lambda" ? "3 functions" : screen === "CloudWatch" ? "8 alarms" : screen === "Route 53" ? "2 hosted zones" : screen === "DynamoDB" ? "2 tables" : screen === "Load Balancers" ? "1 load balancer" : screen === "Target Groups" ? "2 target groups" : "Resources";
   const screenDescription: Record<Screen, string> = {
@@ -148,12 +141,13 @@ export default function AwsSimulatorPage() {
     <div className="aws-sim-subbar"><span>SIMULATED AWS ACCOUNT</span><span>Region: eu-west-1</span><span>Account: 123456789012</span><span className="aws-sim-subbar-state">Local training environment</span><button onClick={resetAccount}>Reset account</button></div>
     {(showServices || search) && <div className="aws-sim-service-search">
       <div className="aws-sim-service-search-head"><b>{search ? "Search results" : "Services"}</b><button onClick={() => { setShowServices(false); setSearch(""); }}>Close ×</button></div>
-      {filteredServices.length ? <div className="aws-sim-service-grid">{filteredServices.map(service => <button key={service.name} onClick={() => openService(service.name)}><span>{service.icon}</span><div><b>{service.name}</b><small>{service.description}</small></div><i>›</i></button>) : <p className="aws-sim-no-results">No matching services in this training console.</p>}
+      {filteredServices.length ? <div className="aws-sim-service-grid">{filteredServices.map(service => <button key={service.name} onClick={() => selectService(service)}><span>{service.icon}</span><div><b>{service.name}</b><small>{service.description}</small><em>{service.implemented ? `Simulated · ${service.count}` : pinnedServices.includes(service.name) ? "Pinned · detailed simulator planned" : "Catalog service · add to navigation"}</em></div><i>{service.implemented ? "›" : pinnedServices.includes(service.name) ? "✓" : "+"}</i></button>) : <p className="aws-sim-no-results">No matching AWS services in the catalog.</p>}
     </div>}
     <div className="aws-sim-layout">
       <aside className="aws-sim-sidebar">
         <button className="aws-sim-home-link" onClick={() => go("Console Home")}>⌂ <span>Console Home</span></button>
         {navGroups.map(section => <section key={section.title}><h2>{section.title}</h2>{section.items.map(navButton)}</section>)}
+        {pinnedServices.length > 0 && <section className="aws-sim-pinned-services"><h2>PINNED SERVICES</h2>{pinnedServices.map(name => { const service = services.find(item => item.name === name); return <button key={name} onClick={() => notify(`${name} is in the service backlog. Its full console workflow is not implemented yet.`)}><span className="aws-sim-nav-icon">{service?.icon ?? "◇"}</span><span>{name}</span><i>+</i></button>; })}</section>}
         <div className="aws-sim-sidebar-note"><b>Training environment</b><p>This is a local simulation. Configuration changes persist in this browser only. No AWS API calls are made.</p></div>
       </aside>
       <section className="aws-sim-content">
@@ -166,8 +160,8 @@ export default function AwsSimulatorPage() {
           <div className="aws-sim-home-welcome"><div><span className="aws-sim-eyebrow">AWS MANAGEMENT CONSOLE</span><h2>Welcome to your training account</h2><p>Browse resources, follow relationships between services, and inspect the current configuration. Nothing is preselected as an incident.</p></div><div className="aws-sim-home-account"><small>Account ID</small><b>1234-5678-9012</b><small>Default Region</small><b>eu-west-1</b></div></div>
           <div className="aws-sim-section-heading"><h2>Recently visited</h2><span>Training account resources</span></div>
           <div className="aws-sim-recent-grid">{[{name:"Instances",icon:"▣",meta:"EC2 · eu-west-1"},{name:"Security Groups",icon:"⬡",meta:"VPC · eu-west-1"},{name:"Route Tables",icon:"⇄",meta:"VPC · eu-west-1"},{name:"CloudWatch",icon:"◷",meta:"Monitoring"}].map(item=><button key={item.name} onClick={() => go(item.name as Screen)}><span>{item.icon}</span><div><b>{item.name}</b><small>{item.meta}</small></div><i>›</i></button>)}</div>
-          <div className="aws-sim-section-heading"><h2>All services</h2><span>{services.length} simulated service areas</span></div>
-          <div className="aws-sim-service-grid aws-sim-home-services">{services.map(service=><button key={service.name} onClick={() => openService(service.name)}><span>{service.icon}</span><div><b>{service.name}</b><small>{service.description}</small><em>{service.count}</em></div><i>›</i></button>)}</div>
+          <div className="aws-sim-section-heading"><h2>All services</h2><span>{services.filter(service => service.implemented).length} simulated · {services.filter(service => !service.implemented).length} catalog services to add</span></div>
+          <div className="aws-sim-service-grid aws-sim-home-services">{services.map(service=><button key={service.name} onClick={() => selectService(service)}><span>{service.icon}</span><div><b>{service.name}</b><small>{service.description}</small><em>{service.implemented ? `Simulated · ${service.count}` : pinnedServices.includes(service.name) ? "Pinned · detailed simulator planned" : "Catalog service · add to navigation"}</em></div><i>{service.implemented ? "›" : pinnedServices.includes(service.name) ? "✓" : "+"}</i></button>)}</div>
           <div className="aws-sim-panel aws-sim-resource-panel"><div className="aws-sim-panel-title"><div><h2>Resources in this account</h2><p>Example inventory across the selected Region</p></div></div><div className="aws-sim-resource-summary"><button onClick={() => go("Instances")}><b>1</b><span>EC2 instance</span></button><button onClick={() => go("VPCs")}><b>1</b><span>VPC</span></button><button onClick={() => go("S3")}><b>3</b><span>S3 buckets</span></button><button onClick={() => go("RDS")}><b>1</b><span>RDS database</span></button><button onClick={() => go("Lambda")}><b>3</b><span>Lambda functions</span></button></div></div>
         </>}
 
