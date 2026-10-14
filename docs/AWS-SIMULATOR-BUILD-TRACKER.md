@@ -117,7 +117,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Reachability Analyzer uses the shared configuration engine.
 - [x] Add tests for multiple instances, subnet-specific route tables, attached security groups and selected-resource relationships.
 - [x] Add tests for route association changes and Security Group edits changing reachability; continue expanding NACL/VPC edge-case coverage.
-- [ ] Keep the normal console free of an incident picker or pre-revealed root cause; expose evaluation through the relevant diagnostic tool only.
+- [x] Keep the normal console free of an incident picker or pre-revealed root cause; expose path evaluation only through Reachability Analyzer.
 - [ ] Verify every configuration change is reflected consistently across inventory, details and diagnostic screens in a browser session.
 
 ### Phase 2 exit gate — required before moving on
