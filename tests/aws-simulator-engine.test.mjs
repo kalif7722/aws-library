@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -63,4 +63,16 @@ test('IAM policy attachment changes are scoped to the selected role',()=>{
   const detached=toggleIamRolePolicy(updated,'Lambda-Payments-Role','CloudWatchAgentServerPolicy');
   assert.ok(!detached.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies.includes('CloudWatchAgentServerPolicy'));
   assert.deepEqual(detached.iamRoles.find(role=>role.name==='EC2-Production-Role').attachedPolicies,['CloudWatchAgentServerPolicy']);
+});
+
+test('network ACL rule creation validates priority, ports, and IPv4 CIDR',()=>{
+  const initial=createInitialAwsLabState();
+  const valid=addNetworkAclRule(initial,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'allow'});
+  assert.equal(valid.error,null);
+  assert.ok(valid.state.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===120&&rule.ports==='443'));
+  assert.equal(initial.networkAcl.some(rule=>rule.ruleNumber===120),false);
+  assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:100,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'allow'}).error,/already used/);
+  assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:32767,protocol:'TCP',ports:'443',source:'10.40.0.0/16',action:'allow'}).error,/between 1 and 32766/);
+  assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'70000',source:'10.40.0.0/16',action:'allow'}).error,/port/);
+  assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'443',source:'10.40.0.0/33',action:'allow'}).error,/CIDR/);
 });
