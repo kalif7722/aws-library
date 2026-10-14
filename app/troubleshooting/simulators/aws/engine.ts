@@ -406,3 +406,62 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     vpcs, subnets, routeTables, routes
   };
 }
+
+
+function validateAwsRoute(state: AwsLabState, routeTableId: string, destinationInput: string, targetInput: string): { destination: string; target: string; error: string | null } {
+  const destination = destinationInput.trim();
+  const target = targetInput.trim();
+  const parts = destination.split("/");
+  const prefix = Number(parts[1]);
+  if (parts.length !== 2 || ipv4ToNumber(parts[0]) === null || parts[1] === "" || !Number.isInteger(prefix) || String(prefix) !== parts[1] || prefix < 0 || prefix > 32) {
+    return { destination, target, error: "Enter a valid IPv4 destination CIDR, such as 10.20.0.0/16." };
+  }
+  const table = getAwsRouteTables(state).find(item => item.id === routeTableId);
+  if (!table) return { destination, target, error: "Route table not found." };
+  const vpc = getAwsVpcs(state).find(item => item.id === table.vpcId);
+  const knownTargets = ["local", "nat-0123abcd4567ef890", "igw-0123abcd4567ef890"];
+  if (!knownTargets.includes(target)) return { destination, target, error: "Choose a known target: local, the seeded NAT gateway, or the seeded internet gateway." };
+  if (target === "local" && destination !== vpc?.cidr) return { destination, target, error: "The local route destination must match the VPC CIDR." };
+  return { destination, target, error: null };
+}
+
+function withRouteTableRoutes(state: AwsLabState, routeTables: AwsRouteTable[], routeTableId: string): AwsLabState {
+  const subnet = getAwsSubnets(state).find(item => item.id === state.instance.subnetId);
+  const activeTable = routeTables.find(item => item.id === routeTableId);
+  const routes = subnet?.routeTableId === routeTableId ? activeTable?.routes ?? state.routes : state.routes;
+  return { ...state, routeTables, routes };
+}
+
+export function addAwsRoute(state: AwsLabState, routeTableId: string, destinationInput: string, targetInput: string): { state: AwsLabState; error: string | null } {
+  const routeTables = getAwsRouteTables(state);
+  const table = routeTables.find(item => item.id === routeTableId);
+  if (!table) return { state, error: "Route table not found." };
+  const validated = validateAwsRoute(state, routeTableId, destinationInput, targetInput);
+  if (validated.error) return { state, error: validated.error };
+  if (table.routes.some(route => route.destination === validated.destination)) return { state, error: "A route for this destination already exists." };
+  const updated = routeTables.map(item => item.id === routeTableId ? { ...item, routes: [...item.routes, { destination: validated.destination, target: validated.target, state: "active" as const }] } : item);
+  return { state: withRouteTableRoutes(state, updated, routeTableId), error: null };
+}
+
+export function updateAwsRoute(state: AwsLabState, routeTableId: string, originalDestination: string, destinationInput: string, targetInput: string): { state: AwsLabState; error: string | null } {
+  const routeTables = getAwsRouteTables(state);
+  const table = routeTables.find(item => item.id === routeTableId);
+  const existing = table?.routes.find(route => route.destination === originalDestination);
+  if (!table || !existing) return { state, error: "Route not found. Refresh and try again." };
+  if (existing.target === "local") return { state, error: "The VPC local route cannot be edited in this simulator." };
+  const validated = validateAwsRoute(state, routeTableId, destinationInput, targetInput);
+  if (validated.error) return { state, error: validated.error };
+  if (table.routes.some(route => route.destination !== originalDestination && route.destination === validated.destination)) return { state, error: "A route for this destination already exists." };
+  const updated = routeTables.map(item => item.id === routeTableId ? { ...item, routes: item.routes.map(route => route.destination === originalDestination ? { ...route, destination: validated.destination, target: validated.target, state: "active" as const } : route) } : item);
+  return { state: withRouteTableRoutes(state, updated, routeTableId), error: null };
+}
+
+export function deleteAwsRoute(state: AwsLabState, routeTableId: string, destination: string): { state: AwsLabState; error: string | null } {
+  const routeTables = getAwsRouteTables(state);
+  const table = routeTables.find(item => item.id === routeTableId);
+  const existing = table?.routes.find(route => route.destination === destination);
+  if (!table || !existing) return { state, error: "Route not found. Refresh and try again." };
+  if (existing.target === "local") return { state, error: "The VPC local route cannot be deleted." };
+  const updated = routeTables.map(item => item.id === routeTableId ? { ...item, routes: item.routes.filter(route => route.destination !== destination) } : item);
+  return { state: withRouteTableRoutes(state, updated, routeTableId), error: null };
+}
