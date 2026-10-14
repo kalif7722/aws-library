@@ -68,6 +68,11 @@ const commonResources: AwsMockResource[] = [
     relationships: { vpc: ["vpc-0123abcd4567ef890"], securityGroups: ["sg-rds-orders"], subnetGroup: ["orders-private-subnets"], monitoringAlarms: ["orders-db-connections"] }
   },
   {
+    id: "sg-rds-orders", service: "VPC", name: "sg-rds-orders", region: "eu-west-1", status: "in-use",
+    attributes: { description: "Orders database ingress", vpcId: "vpc-0123abcd4567ef890", inboundRules: 1, allowedTcpPort: 5432, allowedSourceSecurityGroup: "sg-0ab12cd34ef56ab78" },
+    relationships: { databases: ["orders-prod"], vpc: ["vpc-0123abcd4567ef890"] }
+  },
+  {
     id: "prod-app-artifacts", service: "S3", name: "prod-app-artifacts", region: "eu-west-1", status: "available",
     attributes: { blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS", objectOwnership: "BucketOwnerEnforced" },
     relationships: { iamRoles: ["EC2-Production-Role", "Lambda-Payments-Role"], kmsKeys: ["alias/prod-artifacts"] }
@@ -98,14 +103,13 @@ export const AWS_MOCK_PROFILES: AwsMockProfile[] = [
   { id: "baseline-production", label: "Production baseline", purpose: "Coherent cross-service seed configuration for the console simulator.", resources: commonResources },
   {
     id: "private-db-connectivity-lab", label: "Private database connectivity lab", purpose: "Future lab overlay: app-to-RDS connectivity across DNS, routing, and security controls.",
-    resources: [
-      ...commonResources.map(resource => ({ ...resource, attributes: { ...resource.attributes }, relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]])) })),
-      {
-        id: "sg-rds-orders", service: "VPC", name: "sg-rds-orders", region: "eu-west-1", status: "in-use",
-        attributes: { description: "Orders database ingress", vpcId: "vpc-0123abcd4567ef890", inboundRules: 1, allowedTcpPort: 5432, allowedSourceSecurityGroup: "sg-legacy-app" },
-        relationships: { databases: ["orders-prod"], vpc: ["vpc-0123abcd4567ef890"] }
-      }
-    ]
+    resources: commonResources.map(resource => ({
+      ...resource,
+      attributes: resource.id === "sg-rds-orders"
+        ? { ...resource.attributes, allowedSourceSecurityGroup: "sg-legacy-app" }
+        : { ...resource.attributes },
+      relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]]))
+    }))
   },
   {
     id: "iam-access-denied-lab", label: "IAM access-denied lab", purpose: "Future lab overlay: effective permissions across identity policies, boundaries, and resource policies.",
