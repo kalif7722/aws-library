@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -91,4 +91,25 @@ test('network ACL rules can be edited, renumbered, and deleted immutably',()=>{
   assert.equal(deleted.deleted,true);
   assert.ok(!deleted.state.networkAcl.some(rule=>rule.direction==='inbound'&&rule.ruleNumber===120));
   assert.equal(deleteNetworkAclRule(deleted.state,'inbound',120).deleted,false);
+});
+
+
+test('launching instances supports a legacy single-instance state and validates configuration',()=>{
+  const initial=createInitialAwsLabState();
+  const invalid=launchAwsInstance(initial,{name:'api-prod-01',instanceType:'t3.small',subnetId:initial.instance.subnetId,securityGroupIds:initial.instance.securityGroupIds});
+  assert.match(invalid.error,/already exists/);
+  const noGroup=launchAwsInstance(initial,{name:'worker-02',instanceType:'t3.small',subnetId:initial.instance.subnetId,securityGroupIds:['sg-missing']});
+  assert.match(noGroup.error,/valid security group/);
+  const launched=launchAwsInstance(initial,{name:'worker-02',instanceType:'t3.small',subnetId:initial.instance.subnetId,securityGroupIds:initial.instance.securityGroupIds,tags:{Environment:'test'}});
+  assert.equal(launched.error,null);
+  assert.equal(getAwsInstances(launched.state).length,2);
+  assert.equal(getAwsInstances(launched.state)[1].name,'worker-02');
+  assert.equal(getAwsInstances(launched.state)[1].tags.Environment,'test');
+  assert.equal(initial.instances,undefined);
+  const stopped=setAwsInstanceState(launched.state,launched.instance.id,'stopped');
+  assert.equal(getAwsInstances(stopped)[1].state,'stopped');
+  assert.equal(stopped.instance.state,'running');
+  const rebooted=rebootAwsInstance(stopped,launched.instance.id);
+  assert.equal(getAwsInstances(rebooted)[1].state,'running');
+  assert.equal(getAwsInstances(rebooted)[1].instanceStatus,'passed');
 });
