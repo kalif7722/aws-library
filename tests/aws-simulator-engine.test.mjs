@@ -129,6 +129,10 @@ test('instance tag edits validate keys and update the selected instance only',()
   const updated=updateAwsInstanceTag(launched.state,launched.instance.id,'CostCenter','CC-42');
   assert.equal(updated.error,null);
   assert.equal(getAwsInstances(updated.state)[1].tags.CostCenter,'CC-42');
+  const renamed=updateAwsInstanceTag(updated.state,launched.instance.id,'Name','worker-renamed');
+  assert.equal(getAwsInstances(renamed.state)[1].name,'worker-renamed');
+  assert.equal(getAwsInstances(renamed.state)[1].tags.Name,'worker-renamed');
+  assert.match(updateAwsInstanceTag(renamed.state,launched.instance.id,'Name','').error,/cannot be empty/);
   assert.equal(getAwsInstances(updated.state)[0].tags.CostCenter,undefined);
   assert.match(updateAwsInstanceTag(updated.state,launched.instance.id,'aws:reserved','x').error,/reserved/);
   assert.match(updateAwsInstanceTag(updated.state,launched.instance.id,'','x').error,/required/);
