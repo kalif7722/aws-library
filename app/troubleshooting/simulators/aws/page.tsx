@@ -30,14 +30,21 @@ export default function AwsSimulatorPage() {
   const [showServices, setShowServices] = useState(false);
   const [pinnedServices, setPinnedServices] = useState<string[]>([]);
   const [showRuleEditor, setShowRuleEditor] = useState(false);
-  const [showAclRuleEditor, setShowAclRuleEditor] = useState(false);\n  const [aclEditingRule, setAclEditingRule] = useState<{ direction: "inbound" | "outbound"; ruleNumber: number } | null>(null);
+  const [showAclRuleEditor, setShowAclRuleEditor] = useState(false);
+  const [aclEditingRule, setAclEditingRule] = useState<{ direction: "inbound" | "outbound"; ruleNumber: number } | null>(null);
   const [aclRuleNumber, setAclRuleNumber] = useState("120");
   const [aclProtocol, setAclProtocol] = useState("TCP");
   const [aclPorts, setAclPorts] = useState("443");
   const [aclSource, setAclSource] = useState("10.40.0.0/16");
   const [aclAction, setAclAction] = useState<"allow" | "deny">("allow");
   const [aclRuleError, setAclRuleError] = useState("");
-  const [showInstanceActions, setShowInstanceActions] = useState(false);\n  const [showLaunchEditor, setShowLaunchEditor] = useState(false);\n  const [launchName, setLaunchName] = useState("worker-02");\n  const [launchType, setLaunchType] = useState("t3.small");\n  const [launchSubnet, setLaunchSubnet] = useState("subnet-0123abcd4567ef890");\n  const [launchSecurityGroup, setLaunchSecurityGroup] = useState("sg-0ab12cd34ef56ab78");\n  const [launchError, setLaunchError] = useState("");
+  const [showInstanceActions, setShowInstanceActions] = useState(false);
+  const [showLaunchEditor, setShowLaunchEditor] = useState(false);
+  const [launchName, setLaunchName] = useState("worker-02");
+  const [launchType, setLaunchType] = useState("t3.small");
+  const [launchSubnet, setLaunchSubnet] = useState("subnet-0123abcd4567ef890");
+  const [launchSecurityGroup, setLaunchSecurityGroup] = useState("sg-0ab12cd34ef56ab78");
+  const [launchError, setLaunchError] = useState("");
   const [instanceSearch, setInstanceSearch] = useState("");
   const [instanceStateFilter, setInstanceStateFilter] = useState("all");
   const [selectedInstanceIds, setSelectedInstanceIds] = useState<string[]>([]);
@@ -83,7 +90,10 @@ export default function AwsSimulatorPage() {
     })).filter(section => section.entries.length > 0);
   }, []);
   const group = state.securityGroups.find(item => item.id === selectedResource || item.name === selectedResource) ?? state.securityGroups[0];
-  const instances = getAwsInstances(state);\n  const instance = instances.find(item => item.id === selectedResource) ?? state.instance;\n  const visibleInstances = instances.filter(item => (item.name + " " + item.id + " " + item.privateIp).toLowerCase().includes(instanceSearch.toLowerCase()) && (instanceStateFilter === "all" || instanceStateFilter === item.state));\n  const instanceSelected = selectedInstanceIds.length > 0;
+  const instances = getAwsInstances(state);
+  const instance = instances.find(item => item.id === selectedResource) ?? state.instance;
+  const visibleInstances = instances.filter(item => (item.name + " " + item.id + " " + item.privateIp).toLowerCase().includes(instanceSearch.toLowerCase()) && (instanceStateFilter === "all" || instanceStateFilter === item.state));
+  const instanceSelected = selectedInstanceIds.length > 0;
   const go = (next: Screen, resource?: string) => {
     setScreen(next);
     setSelectedResource(resource ?? null);
