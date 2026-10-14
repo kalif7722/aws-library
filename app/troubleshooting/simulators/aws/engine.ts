@@ -68,7 +68,7 @@ function aclAllows(state: AwsLabState, direction: "inbound" | "outbound", port: 
 export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bastion-prod"): AwsReachabilityResult {
   const groups = state.securityGroups.filter(item => state.instance.securityGroupIds.includes(item.id));
   const instanceHealthy = state.instance.state === "running" && state.instance.systemStatus === "passed" && state.instance.instanceStatus === "passed";
-  const ruleAllows = groups.some(group => group.ingress.some(rule => rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22) &&
+  const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) &&
     ((rule.sourceType === "SecurityGroup" && rule.source === source) || (rule.sourceType === "IPv4" && cidrContains(rule.source, "198.51.100.24")))));
   const routeHealthy = state.routes.some(route => cidrContains(route.destination, state.instance.privateIp) && route.target === "local" && route.state === "active");
   const inboundAclAllows = aclAllows(state, "inbound", 22, "198.51.100.24");
