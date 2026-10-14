@@ -7,15 +7,6 @@ import { AWS_SERVICE_DIRECTORY, type AwsServiceDirectoryEntry } from "./service-
 
 type Screen = "Console Home" | "EC2 Dashboard" | "Instances" | "Instance details" | "Security Groups" | "Route Tables" | "Network ACLs" | "VPCs" | "Load Balancers" | "Target Groups" | "S3" | "IAM" | "RDS" | "Lambda" | "CloudWatch" | "Route 53" | "DynamoDB" | "Cost Explorer" | "Reachability Analyzer";
 const services: AwsServiceDirectoryEntry[] = AWS_SERVICE_DIRECTORY;
-const navGroups: { title: string; items: Screen[] }[] = [
-  { title: "RECENTLY VISITED", items: ["Instances", "Security Groups", "Route Tables"] },
-  { title: "COMPUTE", items: ["EC2 Dashboard", "Instances", "Lambda"] },
-  { title: "NETWORKING & CONTENT DELIVERY", items: ["VPCs", "Security Groups", "Route Tables", "Network ACLs", "Load Balancers", "Target Groups", "Route 53", "Reachability Analyzer"] },
-  { title: "STORAGE", items: ["S3"] },
-  { title: "DATABASE", items: ["RDS", "DynamoDB"] },
-  { title: "SECURITY, IDENTITY & COMPLIANCE", items: ["IAM"] },
-  { title: "MANAGEMENT & GOVERNANCE", items: ["CloudWatch", "Cost Explorer"] }
-];
 const titleFor: Record<Screen, string> = {
   "Console Home":"Console Home", "EC2 Dashboard":"EC2", Instances:"Instances", "Instance details":"Instance details",
   "Security Groups":"Security Groups", "Route Tables":"Route tables", "Network ACLs":"Network ACLs", VPCs:"Your VPCs",
@@ -154,8 +145,6 @@ export default function AwsSimulatorPage() {
     "Cost Explorer":"Explore simulated usage and cost breakdowns.",
     "Reachability Analyzer":"Create a path analysis between supported network resources."
   };
-
-  const navButton = (item: Screen) => <button key={item} className={screen === item ? "selected" : ""} onClick={() => go(item)}><span className="aws-sim-nav-icon">{item === "Instances" ? "▣" : item.includes("Group") ? "⬡" : item.includes("Route") ? "⇄" : item.includes("ACL") ? "▤" : item === "VPCs" ? "◇" : item === "Lambda" ? "λ" : item === "S3" ? "▰" : item === "IAM" ? "♙" : item === "CloudWatch" ? "◷" : "⌂"}</span><span>{item}</span>{screen === item && <i />}</button>;
 
   return <main className="aws-sim aws-console-sim">
     <header className="aws-sim-global">
