@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -220,4 +220,23 @@ test('reachability analysis uses the target instance subnet and attached securit
   const blockedByRoute=evaluateAwsSshReachability(brokenRoute.state,'sg-bastion-prod',launched.instance.id);
   assert.equal(blockedByRoute.reachable,false);
   assert.equal(blockedByRoute.blockedAt,'route');
+});
+
+
+test('route CRUD validates destinations targets duplicates and immutable local routes',()=>{
+  const initial=createInitialAwsLabState();
+  const added=addAwsRoute(initial,'rtb-0123abcd4567ef890','172.16.0.0/16','nat-0123abcd4567ef890');
+  assert.equal(added.error,null);
+  assert.ok(getAwsRouteTables(added.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.some(route=>route.destination==='172.16.0.0/16'));
+  assert.match(addAwsRoute(added.state,'rtb-0123abcd4567ef890','172.16.0.0/16','nat-0123abcd4567ef890').error,/already exists/);
+  assert.match(addAwsRoute(initial,'rtb-0123abcd4567ef890','172.16.0.0/33','nat-0123abcd4567ef890').error,/valid IPv4/);
+  assert.match(addAwsRoute(initial,'rtb-0123abcd4567ef890','172.16.0.0/16','nat-does-not-exist').error,/known target/);
+  const edited=updateAwsRoute(added.state,'rtb-0123abcd4567ef890','172.16.0.0/16','172.17.0.0/16','igw-0123abcd4567ef890');
+  assert.equal(edited.error,null);
+  assert.equal(getAwsRouteTables(edited.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.find(route=>route.destination==='172.17.0.0/16').target,'igw-0123abcd4567ef890');
+  assert.match(updateAwsRoute(initial,'rtb-0123abcd4567ef890','10.20.0.0/16','10.20.0.0/16','nat-0123abcd4567ef890').error,/local route cannot be edited/);
+  const deleted=deleteAwsRoute(edited.state,'rtb-0123abcd4567ef890','172.17.0.0/16');
+  assert.equal(deleted.error,null);
+  assert.ok(!getAwsRouteTables(deleted.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.some(route=>route.destination==='172.17.0.0/16'));
+  assert.match(deleteAwsRoute(initial,'rtb-0123abcd4567ef890','10.20.0.0/16').error,/local route cannot be deleted/);
 });
