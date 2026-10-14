@@ -26,7 +26,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Service catalog | **Complete for current catalog scope** | 89 unique catalog entries; catalog entries are not all functional simulators |
 | EC2 inventory and lifecycle | **Implemented; validation pending** | Launch workflow, multi-instance inventory, scoped lifecycle actions, bulk start/stop/reboot and tag CRUD; browser/build verification remains |
 | Security Groups | **Inbound rule CRUD implemented; validation pending** | Selectable inventory; inbound rule create/edit/delete and source/port validation; outbound editing and end-to-end verification remain |
-| VPC / subnets / route tables | **Connected resource model and UI implemented; validation pending** | One VPC, public/private subnets, two route tables, selectable inventories, subnet association editor and per-table route state |
+| VPC / subnets / route tables | **Core CRUD wired; validation pending** | One VPC, public/private subnets, two route tables, selectable inventories, subnet association editor, route create/edit/delete and state model |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared reachability evaluation | **Expanded; validation pending** | Selected source/destination instance, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks |
 | S3 and IAM examples | **Basic state flows implemented** | Bucket public-access/versioning settings and role policy attachments; not the current focus |
@@ -96,7 +96,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Show route-table route and association/tag tabs.
 - [x] Route state participates in shared reachability evaluation.
 - [x] Add validated subnet-to-route-table association helper, route-table inventory/selection, and subnet association controls; browser validation pending.
-- [ ] Implement route create/edit/delete flows and route-target validation (current route state toggle now updates the selected table model).
+- [x] Implement route create/edit/delete flows with destination CIDR, known-target, duplicate-destination, and protected-local-route validation.
 - [x] Resolve the selected destination instance's subnet route table in Reachability Analyzer; primary-instance legacy route state remains compatible.
 - [x] Show active/blackhole route state and allow toggling it in the selected route table; route create/edit/delete still remain.
 
@@ -181,6 +181,6 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Change log
 
-- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
+- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
 
 - **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
