@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -266,4 +266,15 @@ test('network ACL protocol validation supports all-traffic wildcard ports',()=>{
   assert.equal(allTraffic.error,null);
   assert.ok(allTraffic.state.networkAcl.some(rule=>rule.ruleNumber===130&&rule.protocol==='ALL'&&rule.ports==='-1'));
   assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:131,protocol:'ICMP',ports:'ALL',source:'10.20.0.0/16',action:'allow'}).error,/Choose TCP/);
+});
+
+
+test('subnet creation validates CIDR overlap and route table VPC',()=>{
+  const initial=createInitialAwsLabState();
+  const created=createAwsSubnet(initial,{name:'application-subnet',cidr:'10.20.3.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'});
+  assert.equal(created.error,null);
+  assert.ok(getAwsSubnets(created.state).some(subnet=>subnet.id===created.subnet.id&&subnet.cidr==='10.20.3.0/24'));
+  assert.ok(getAwsRouteTables(created.state).find(table=>table.id==='rtb-0123abcd4567ef890').associatedSubnetIds.includes(created.subnet.id));
+  assert.match(createAwsSubnet(initial,{name:'overlap-subnet',cidr:'10.20.2.128/25',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'}).error,/overlaps/);
+  assert.match(createAwsSubnet(initial,{name:'wrong-table-subnet',cidr:'10.20.3.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-wrong-vpc'}).error,/route table in the selected VPC/);
 });
