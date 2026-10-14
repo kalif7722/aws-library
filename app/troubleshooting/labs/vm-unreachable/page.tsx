@@ -378,16 +378,16 @@ export default function VmUnreachableLab() {
     || (provider === "Azure" && ["Run command", "Serial console"].includes(activeConsoleTab))
     || (provider === "Google Cloud" && ["SSH troubleshooting", "Serial port 1 output"].includes(activeConsoleTab));
   const terminalText = provider === "AWS" && activeConsoleTab === "System log"
-    ? "[    0.000000] Linux version 6.1.0 (amzn2023)\n[  OK  ] Reached target Network.\ncloud-init: Cloud-init completed successfully."
+    ? protocol === "SSH" ? "[    0.000000] Linux version 6.1.0 (amzn2023)\n[  OK  ] Reached target Network.\ncloud-init: Cloud-init completed successfully." : "EC2Launch v2: initializing instance\nWindows is ready to use\nEC2Launch: initialization completed."
     : provider === "AWS" && (activeConsoleTab === "Systems Manager" || activeConsoleTab === "EC2 Serial Console")
       ? protocol === "SSH" ? "sh-5.2$ systemctl is-active sshd\nactive\nsh-5.2$ ss -lntp | grep ':22'\nLISTEN 0 128 0.0.0.0:22\nsh-5.2$" : "PS C:\\> Get-Service TermService\nStatus   Name          DisplayName\nRunning  TermService   Remote Desktop Services\nPS C:\\>"
       : provider === "Azure" && activeConsoleTab === "Run command"
         ? protocol === "SSH" ? "$ sudo systemctl is-active sshd\nactive\n$ sudo ss -lntp | grep ':22'\nLISTEN 0 128 0.0.0.0:22" : "PS C:\\> Get-Service TermService\nStatus   Name          DisplayName\nRunning  TermService   Remote Desktop Services"
         : provider === "Azure" && activeConsoleTab === "Serial console"
-          ? "Ubuntu 22.04 LTS api-prod-01 ttyS0\napi-prod-01 login: authorized-operator\nLast login: maintenance session\n$"
+          ? protocol === "SSH" ? "Ubuntu 22.04 LTS api-prod-01 ttyS0\napi-prod-01 login: authorized-operator\nLast login: maintenance session\n$" : "Windows Server SAC\nSAC> cmd\nC:\\> Get-Service TermService\nRunning  TermService"
           : provider === "Google Cloud" && activeConsoleTab === "Serial port 1 output"
-            ? "[    0.000000] Linux version 6.1.0\nsystemd[1]: Reached target Network.\ngoogle_guest_agent: service started.\ncloud-init: finished successfully."
-            : "user@api-prod-01:~$ systemctl is-active sshd\nactive\nuser@api-prod-01:~$ ss -lntp | grep ':22'\nLISTEN 0 128 0.0.0.0:22";
+            ? protocol === "SSH" ? "[    0.000000] Linux version 6.1.0\nsystemd[1]: Reached target Network.\ngoogle_guest_agent: service started.\ncloud-init: finished successfully." : "Windows Boot Manager\nGoogle guest agent started\nWindows is ready to use."
+            : protocol === "SSH" ? "user@api-prod-01:~$ systemctl is-active sshd\nactive\nuser@api-prod-01:~$ ss -lntp | grep ':22'\nLISTEN 0 128 0.0.0.0:22" : "PS C:\\> Get-Service TermService\nStatus   Name          DisplayName\nRunning  TermService   Remote Desktop Services";
   const detailHeader = provider === "AWS" && step === 0 && activeConsoleTab === "Status checks"
     ? ["Status check", "Status"]
     : activeConsoleTab === "Monitoring" || activeConsoleTab === "Observability"
