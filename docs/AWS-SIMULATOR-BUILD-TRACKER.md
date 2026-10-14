@@ -25,7 +25,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Console shell and service discovery | **Mostly complete** | Home, categorized navigation, search, account/Region context, simulated/planned labels |
 | Service catalog | **Complete for current catalog scope** | 89 unique catalog entries; catalog entries are not all functional simulators |
 | EC2 inventory and lifecycle | **Implemented; validation pending** | Launch workflow, multi-instance inventory, scoped lifecycle actions, bulk start/stop/reboot and tag CRUD; browser/build verification remains |
-| Security Groups | **Inbound rule CRUD implemented; validation pending** | Selectable inventory; inbound rule create/edit/delete and source/port validation; outbound editing and end-to-end verification remain |
+| Security Groups | **Ingress/egress CRUD implemented; validation pending** | Selectable inventory; inbound and outbound rule create/edit/delete with shared validation; end-to-end verification remains |
 | VPC / subnets / route tables | **Core CRUD wired; validation pending** | One VPC, public/private subnets, two route tables, selectable inventories, subnet association editor, route create/edit/delete and state model |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared reachability evaluation | **Expanded; validation pending** | Selected source/destination instance, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks |
@@ -88,7 +88,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Show a selectable inventory of seeded security groups.
 - [x] Show rules for the selected security group.
 - [x] Add inbound rule create/edit/delete flows with port, protocol, CIDR/source-group and duplicate validation. Outbound rule editing remains to be added.
-- [ ] Complete outbound-rule editing and verify both directions and resource associations in the running console.
+- [x] Add outbound-rule create/edit/delete and default egress state; end-to-end verification of both directions and resource associations remains.
 - [x] Wire Security Group edits into shared state and add selected-instance reachability regression coverage; run tests before treating as verified.
 
 ### 2D. Route Tables
@@ -181,6 +181,6 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Change log
 
-- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
+- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
 
 - **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
