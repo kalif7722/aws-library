@@ -204,3 +204,20 @@ test('migration restores required graph resources from empty arrays',()=>{
   assert.ok(getAwsSubnets(migrated).length>0);
   assert.ok(getAwsRouteTables(migrated).length>0);
 });
+
+
+test('reachability analysis uses the target instance subnet and attached security groups',()=>{
+  const initial=createInitialAwsLabState();
+  const launched=launchAwsInstance(initial,{name:'public-worker',instanceType:'t3.small',subnetId:'subnet-0fedcba9876543210',securityGroupIds:['sg-0ab12cd34ef56ab78']});
+  assert.equal(launched.error,null);
+  const blocked=evaluateAwsSshReachability(launched.state,'sg-bastion-prod',launched.instance.id);
+  assert.equal(blocked.reachable,false);
+  assert.equal(blocked.blockedAt,'security-group');
+  const allowedRule=addSecurityGroupIngressRule(launched.state,'sg-0ab12cd34ef56ab78',{protocol:'TCP',fromPort:22,toPort:22,sourceType:'SecurityGroup',source:'sg-bastion-prod',description:'Admin SSH'});
+  const allowed=evaluateAwsSshReachability(allowedRule.state,'sg-bastion-prod',launched.instance.id);
+  assert.equal(allowed.reachable,true);
+  const brokenRoute=toggleAwsRouteState(allowedRule.state,'rtb-0fedcba9876543210','10.20.0.0/16');
+  const blockedByRoute=evaluateAwsSshReachability(brokenRoute.state,'sg-bastion-prod',launched.instance.id);
+  assert.equal(blockedByRoute.reachable,false);
+  assert.equal(blockedByRoute.blockedAt,'route');
+});
