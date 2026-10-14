@@ -69,7 +69,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Start, stop and reboot update shared simulated state.
 - [x] Instance detail tabs and related-resource navigation.
 - [ ] Implement a functional **Launch instance** workflow (configuration/review/launch).
-- [ ] Support more than one instance in the resource model and UI without breaking existing saved state.
+- [x] Add a backward-compatible engine collection for multiple instances and lifecycle helpers; UI launch/inventory wiring remains.
 - [ ] Implement useful tags, tag editing and bulk actions for selected instances.
 - [ ] Make empty states, validation, pending/terminal states and action feedback consistent with the rest of the console.
 - [ ] Verify lifecycle actions affect dependent views and reachability outcomes.
