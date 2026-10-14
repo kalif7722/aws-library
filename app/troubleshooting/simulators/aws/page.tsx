@@ -52,7 +52,7 @@ export default function AwsSimulatorPage() {
     <div className="aws-sim-subbar"><span>SIMULATED CONSOLE</span><span>Region: eu-west-1</span><span>Account: 123456789012</span><button onClick={reset}>Reset scenario</button></div>
     <div className="aws-sim-layout">
       <aside className="aws-sim-sidebar">
-        <a href="/troubleshooting">← Troubleshooting Hub</a>
+        <a href="/troubleshooting">← Troubleshooting Hub</a><a href="/troubleshooting/labs/vm-unreachable">Open guided VM-unreachable lab ↗</a>
         {navigation.map(section => <section key={section.section}><h2>{section.section}</h2>{section.items.map(item => <button key={item} className={screen === item ? "selected" : ""} onClick={() => setScreen(item)}><span className="aws-sim-nav-icon">{item === "Instances" ? "▣" : item === "Security Groups" ? "◇" : item === "Route Tables" ? "⇄" : item === "Network ACLs" ? "▤" : item === "Reachability Analyzer" ? "⌁" : "⌂"}</span><span>{item}</span>{screen === item && <i />}</button>)}</section>)}
         <div className="aws-sim-sidebar-note"><b>Training environment</b><p>Changes affect this scenario only. No AWS API calls are made.</p></div>
       </aside>
