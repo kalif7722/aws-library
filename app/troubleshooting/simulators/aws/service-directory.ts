@@ -13,16 +13,17 @@ export type AwsServiceDirectoryEntry = {
   count: string;
   implemented: boolean;
   screen?: string;
+  kind?: "service" | "console-page";
 };
 
 export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
   { name: "EC2", category: "Compute", icon: "▣", description: "Virtual servers in the cloud", count: "1 instance", implemented: true, screen: "EC2 Dashboard" },
   { name: "VPC", category: "Networking & Content Delivery", icon: "◇", description: "Isolated virtual networks and routing", count: "1 VPC", implemented: true, screen: "VPCs" },
-  { name: "Security Groups", category: "Networking & Security", icon: "⬡", description: "Stateful traffic controls for resources", count: "2 security groups", implemented: true, screen: "Security Groups" },
-  { name: "Route Tables", category: "Networking & Security", icon: "⇄", description: "Subnet routing configuration", count: "1 route table", implemented: true, screen: "Route Tables" },
-  { name: "Network ACLs", category: "Networking & Security", icon: "▤", description: "Stateless subnet traffic controls", count: "1 network ACL", implemented: true, screen: "Network ACLs" },
-  { name: "Load Balancers", category: "Networking & Content Delivery", icon: "⇋", description: "Distribute application traffic", count: "1 load balancer", implemented: true, screen: "Load Balancers" },
-  { name: "Target Groups", category: "Networking & Content Delivery", icon: "◎", description: "Register targets for load balancers", count: "2 target groups", implemented: true, screen: "Target Groups" },
+  { name: "Security Groups", category: "Networking & Security", icon: "⬡", description: "Stateful traffic controls for resources", count: "2 security groups", implemented: true, screen: "Security Groups", kind: "console-page" },
+  { name: "Route Tables", category: "Networking & Security", icon: "⇄", description: "Subnet routing configuration", count: "1 route table", implemented: true, screen: "Route Tables", kind: "console-page" },
+  { name: "Network ACLs", category: "Networking & Security", icon: "▤", description: "Stateless subnet traffic controls", count: "1 network ACL", implemented: true, screen: "Network ACLs", kind: "console-page" },
+  { name: "Load Balancers", category: "Networking & Content Delivery", icon: "⇋", description: "Distribute application traffic", count: "1 load balancer", implemented: true, screen: "Load Balancers", kind: "console-page" },
+  { name: "Target Groups", category: "Networking & Content Delivery", icon: "◎", description: "Register targets for load balancers", count: "2 target groups", implemented: true, screen: "Target Groups", kind: "console-page" },
   { name: "S3", category: "Storage", icon: "▰", description: "Object storage", count: "3 buckets", implemented: true, screen: "S3" },
   { name: "IAM", category: "Security, Identity & Compliance", icon: "♙", description: "Users, roles, policies, and permissions", count: "3 roles · sample policies", implemented: true, screen: "IAM" },
   { name: "RDS", category: "Database", icon: "▤", description: "Managed relational databases", count: "1 database", implemented: true, screen: "RDS" },
@@ -31,7 +32,7 @@ export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
   { name: "Route 53", category: "Networking & Content Delivery", icon: "⌘", description: "DNS and health checks", count: "2 hosted zones", implemented: true, screen: "Route 53" },
   { name: "DynamoDB", category: "Database", icon: "▦", description: "Managed NoSQL database", count: "2 tables", implemented: true, screen: "DynamoDB" },
   { name: "Cost Explorer", category: "Cloud Financial Management", icon: "$", description: "Explore usage and spending", count: "Current month", implemented: true, screen: "Cost Explorer" },
-  { name: "Reachability Analyzer", category: "Network & Security", icon: "⌁", description: "Analyze paths between network resources", count: "Available", implemented: true, screen: "Reachability Analyzer" },
+  { name: "Reachability Analyzer", category: "Network & Security", icon: "⌁", description: "Analyze paths between network resources", count: "Available", implemented: true, screen: "Reachability Analyzer", kind: "console-page" },
   { name: "CloudTrail", category: "Management & Governance", icon: "≋", description: "Audit API activity and account events", count: "2 trails", implemented: false },
   { name: "Elastic Load Balancing", category: "Networking & Content Delivery", icon: "⇋", description: "Application, network, and gateway load balancers", count: "Catalog entry", implemented: false },
   { name: "Auto Scaling", category: "Compute", icon: "↗", description: "Scale compute capacity to demand", count: "Catalog entry", implemented: false },
