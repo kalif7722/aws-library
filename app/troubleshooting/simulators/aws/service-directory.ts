@@ -42,7 +42,6 @@ export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
   { name: "ECS", category: "Containers", icon: "▦", description: "Run and manage containers", count: "Catalog entry", implemented: false },
   { name: "EKS", category: "Containers", icon: "◈", description: "Managed Kubernetes", count: "Catalog entry", implemented: false },
   { name: "ECR", category: "Containers", icon: "▤", description: "Store and distribute container images", count: "Catalog entry", implemented: false },
-  { name: "API Gateway", category: "Application Integration", icon: "⇆", description: "Create and manage application APIs", count: "Catalog entry", implemented: false },
   { name: "Step Functions", category: "Application Integration", icon: "⌘", description: "Coordinate distributed workflows", count: "Catalog entry", implemented: false },
   { name: "SQS", category: "Application Integration", icon: "☰", description: "Managed message queues", count: "Catalog entry", implemented: false },
   { name: "SNS", category: "Application Integration", icon: "◉", description: "Managed pub/sub notifications", count: "Catalog entry", implemented: false },
