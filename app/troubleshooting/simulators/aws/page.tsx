@@ -146,6 +146,8 @@ export default function AwsSimulatorPage() {
     "Reachability Analyzer":"Create a path analysis between supported network resources."
   };
 
+  const navButton = (item: Screen) => <button key={item} className={screen === item ? "selected" : ""} onClick={() => go(item)}><span className="aws-sim-nav-icon">{item === "Instances" ? "▣" : item.includes("Group") ? "⬡" : item.includes("Route") ? "⇄" : item.includes("ACL") ? "▤" : item === "VPCs" ? "◇" : item === "Lambda" ? "λ" : item === "S3" ? "▰" : item === "IAM" ? "♙" : item === "CloudWatch" ? "◷" : "⌂"}</span><span>{item}</span>{screen === item && <i />}</button>;
+
   return <main className="aws-sim aws-console-sim">
     <header className="aws-sim-global">
       <button className="aws-sim-menu" aria-label="Open services menu" onClick={() => setShowServices(value => !value)}>☰</button>
