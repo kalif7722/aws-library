@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,evaluateAwsSshReachability}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,evaluateAwsSshReachability,updateS3BucketSetting}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -33,4 +33,14 @@ test('SSH reachability evaluates inbound and return-path network ACL rules',()=>
   const outboundResult=evaluateAwsSshReachability(outboundBroken);
   assert.equal(outboundResult.reachable,false);
   assert.equal(outboundResult.blockedAt,'network-acl');
+});
+
+test('S3 configuration changes update only the selected bucket and remain in shared state',()=>{
+  const initial=createInitialAwsLabState();
+  const updated=updateS3BucketSetting(initial,'data-lake-curated','versioningEnabled',true);
+  assert.equal(updated.s3Buckets.find(bucket=>bucket.name==='data-lake-curated').versioningEnabled,true);
+  assert.equal(updated.s3Buckets.find(bucket=>bucket.name==='prod-app-artifacts').versioningEnabled,true);
+  assert.equal(initial.s3Buckets.find(bucket=>bucket.name==='data-lake-curated').versioningEnabled,false);
+  const publicAccessChanged=updateS3BucketSetting(updated,'prod-app-artifacts','blockPublicAccess',false);
+  assert.equal(publicAccessChanged.s3Buckets.find(bucket=>bucket.name==='prod-app-artifacts').blockPublicAccess,false);
 });
