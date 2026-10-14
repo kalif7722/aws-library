@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -239,4 +239,22 @@ test('route CRUD validates destinations targets duplicates and immutable local r
   assert.equal(deleted.error,null);
   assert.ok(!getAwsRouteTables(deleted.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.some(route=>route.destination==='172.17.0.0/16'));
   assert.match(deleteAwsRoute(initial,'rtb-0123abcd4567ef890','10.20.0.0/16').error,/local route cannot be deleted/);
+});
+
+
+test('security group egress CRUD keeps outbound rules separate from ingress',()=>{
+  const initial=createInitialAwsLabState();
+  const groupId='sg-0ab12cd34ef56ab78';
+  const initialGroup=initial.securityGroups.find(group=>group.id===groupId);
+  assert.equal(initialGroup.egress.length,1);
+  const added=addSecurityGroupEgressRule(initial,groupId,{protocol:'TCP',fromPort:443,toPort:443,sourceType:'IPv4',source:'203.0.113.0/24',description:'Outbound HTTPS to partner'});
+  assert.equal(added.error,null);
+  assert.equal(added.state.securityGroups.find(group=>group.id===groupId).egress.length,2);
+  assert.equal(added.state.securityGroups.find(group=>group.id===groupId).ingress.length,initialGroup.ingress.length);
+  const edited=updateSecurityGroupEgressRule(added.state,groupId,added.rule.id,{protocol:'TCP',fromPort:8443,toPort:8443,sourceType:'IPv4',source:'203.0.113.0/24',description:'Updated partner traffic'});
+  assert.equal(edited.error,null);
+  assert.equal(edited.state.securityGroups.find(group=>group.id===groupId).egress.find(rule=>rule.id===added.rule.id).fromPort,8443);
+  const deleted=deleteSecurityGroupEgressRule(edited.state,groupId,added.rule.id);
+  assert.equal(deleted.deleted,true);
+  assert.equal(deleted.state.securityGroups.find(group=>group.id===groupId).egress.length,1);
 });
