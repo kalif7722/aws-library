@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -160,4 +160,38 @@ test('security group ingress rules support validated create edit and delete',()=
   assert.equal(deleted.deleted,true);
   assert.ok(!deleted.state.securityGroups[0].ingress.some(rule=>rule.id===added.rule.id));
   assert.equal(initial.securityGroups[0].ingress.some(rule=>rule.id===added.rule.id),false);
+});
+
+
+test('route table association updates the subnet graph and effective routes',()=>{
+  const initial=createInitialAwsLabState();
+  const moved=associateSubnetWithRouteTable(initial,'subnet-0123abcd4567ef890','rtb-0fedcba9876543210');
+  assert.equal(moved.error,null);
+  assert.equal(getAwsSubnets(moved.state).find(subnet=>subnet.id==='subnet-0123abcd4567ef890').routeTableId,'rtb-0fedcba9876543210');
+  assert.ok(getAwsRouteTables(moved.state).find(table=>table.id==='rtb-0fedcba9876543210').associatedSubnetIds.includes('subnet-0123abcd4567ef890'));
+  assert.ok(!getAwsRouteTables(moved.state).find(table=>table.id==='rtb-0123abcd4567ef890').associatedSubnetIds.includes('subnet-0123abcd4567ef890'));
+  assert.ok(moved.state.routes.some(route=>route.target==='igw-0123abcd4567ef890'));
+  const invalid=associateSubnetWithRouteTable(initial,'subnet-0123abcd4567ef890','rtb-does-not-exist');
+  assert.match(invalid.error,/Route table not found/);
+  assert.equal(getAwsVpcs(initial).length,1);
+  assert.equal(getAwsSubnets(initial).length,2);
+});
+
+test('route edits stay in the selected route table and update effective reachability routes',()=>{
+  const initial=createInitialAwsLabState();
+  const updated=toggleAwsRouteState(initial,'rtb-0123abcd4567ef890','10.20.0.0/16');
+  assert.equal(updated.error,null);
+  assert.equal(updated.state.routes.find(route=>route.destination==='10.20.0.0/16').state,'blackhole');
+  assert.equal(getAwsRouteTables(updated.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.find(route=>route.destination==='10.20.0.0/16').state,'blackhole');
+  const publicRoute=toggleAwsRouteState(initial,'rtb-0fedcba9876543210','0.0.0.0/0');
+  assert.equal(publicRoute.state.routes.find(route=>route.destination==='0.0.0.0/0').target,'nat-0123abcd4567ef890');
+});
+
+test('legacy saved state migration preserves existing route faults and supplies subnet relationships',()=>{
+  const initial=createInitialAwsLabState();
+  const legacy={...initial,vpcs:undefined,subnets:undefined,routeTables:undefined,instances:undefined,routes:initial.routes.map(route=>route.target==='local'?{...route,state:'blackhole'}:route)};
+  const migrated=migrateAwsLabState(legacy);
+  assert.equal(getAwsSubnets(migrated).find(subnet=>subnet.id===migrated.instance.subnetId).routeTableId,'rtb-0123abcd4567ef890');
+  assert.equal(getAwsRouteTables(migrated)[0].routes.find(route=>route.target==='local').state,'blackhole');
+  assert.equal(migrated.instance.tags.Name,migrated.instance.name);
 });
