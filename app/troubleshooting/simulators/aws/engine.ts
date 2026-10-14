@@ -143,7 +143,7 @@ export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["network
   }
   const portText = rule.ports.trim();
   const portParts = portText.split("-");
-  if (!portText || portParts.length > 2 || portParts.some(part => !/^\\d+$/.test(part))) {
+  if (!portText || portParts.length > 2 || portParts.some(part => !/^\d+$/.test(part))) {
     return { state, error: "Enter a port or port range between 0 and 65535." };
   }
   const ports = portParts.map(Number);
@@ -154,8 +154,8 @@ export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["network
   const octets = (cidrParts[0] ?? "").split(".");
   const prefix = Number(cidrParts[1]);
   if (cidrParts.length !== 2 || octets.length !== 4 ||
-      octets.some(part => !/^\\d+$/.test(part) || Number(part) > 255) ||
-      !/^\\d+$/.test(cidrParts[1] ?? "") || prefix < 0 || prefix > 32) {
+      octets.some(part => !/^\d+$/.test(part) || Number(part) > 255) ||
+      !/^\d+$/.test(cidrParts[1] ?? "") || prefix < 0 || prefix > 32) {
     return { state, error: "Enter a valid IPv4 CIDR such as 10.20.0.0/16." };
   }
   const networkAcl = [...state.networkAcl, { ...rule, ports: portText, source: rule.source.trim() }]
@@ -276,7 +276,7 @@ function validateSecurityGroupIngressRule(state: AwsLabState, rule: Omit<AwsIngr
   } else {
     const parts = rule.source.trim().split("/");
     const prefix = Number(parts[1]);
-    if (parts.length !== 2 || ipv4ToNumber(parts[0]) === null || !/^\\d+$/.test(parts[1] ?? "") || !Number.isInteger(prefix) || prefix < 0 || prefix > 32) return "Enter a valid IPv4 CIDR such as 198.51.100.24/32.";
+    if (parts.length !== 2 || ipv4ToNumber(parts[0]) === null || !/^\d+$/.test(parts[1] ?? "") || !Number.isInteger(prefix) || prefix < 0 || prefix > 32) return "Enter a valid IPv4 CIDR such as 198.51.100.24/32.";
   }
   return null;
 }
