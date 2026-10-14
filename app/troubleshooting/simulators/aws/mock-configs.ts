@@ -98,11 +98,29 @@ export const AWS_MOCK_PROFILES: AwsMockProfile[] = [
   { id: "baseline-production", label: "Production baseline", purpose: "Coherent cross-service seed configuration for the console simulator.", resources: commonResources },
   {
     id: "private-db-connectivity-lab", label: "Private database connectivity lab", purpose: "Future lab overlay: app-to-RDS connectivity across DNS, routing, and security controls.",
-    resources: commonResources.map(resource => ({ ...resource, attributes: { ...resource.attributes }, relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]])) }))
+    resources: [
+      ...commonResources.map(resource => ({ ...resource, attributes: { ...resource.attributes }, relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]])) })),
+      {
+        id: "sg-rds-orders", service: "VPC", name: "sg-rds-orders", region: "eu-west-1", status: "in-use",
+        attributes: { description: "Orders database ingress", vpcId: "vpc-0123abcd4567ef890", inboundRules: 1, allowedTcpPort: 5432, allowedSourceSecurityGroup: "sg-legacy-app" },
+        relationships: { databases: ["orders-prod"], vpc: ["vpc-0123abcd4567ef890"] }
+      }
+    ]
   },
   {
     id: "iam-access-denied-lab", label: "IAM access-denied lab", purpose: "Future lab overlay: effective permissions across identity policies, boundaries, and resource policies.",
-    resources: commonResources.map(resource => ({ ...resource, attributes: { ...resource.attributes }, relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]])) }))
+    resources: [
+      ...commonResources.map(resource => resource.id !== "Lambda-Payments-Role" ? ({ ...resource, attributes: { ...resource.attributes }, relationships: Object.fromEntries(Object.entries(resource.relationships).map(([key, values]) => [key, [...values]])) }) : ({
+        ...resource,
+        attributes: { ...resource.attributes, attachedPolicies: ["PaymentsReadOnly"], permissionsBoundary: "Boundary-ApplicationRuntime", lastDeniedAction: "s3:PutObject" },
+        relationships: { ...resource.relationships, policies: ["PaymentsReadOnly", "Boundary-ApplicationRuntime"] }
+      })),
+      {
+        id: "Boundary-ApplicationRuntime", service: "IAM", name: "Boundary-ApplicationRuntime", region: "global", status: "attached",
+        attributes: { policyType: "permissions-boundary", allowsS3PutObject: false, allowedActions: ["s3:GetObject", "rds:Describe*"] },
+        relationships: { roles: ["Lambda-Payments-Role"] }
+      }
+    ]
   }
 ];
 
