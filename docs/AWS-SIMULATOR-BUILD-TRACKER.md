@@ -68,9 +68,10 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Refresh action/timestamp.
 - [x] Start, stop and reboot update shared simulated state.
 - [x] Instance detail tabs and related-resource navigation.
-- [ ] Implement a functional **Launch instance** workflow (configuration/review/launch).
+- [x] Implement a functional **Launch instance** workflow with name/type/subnet/security-group validation and local resource creation.
 - [x] Add a backward-compatible engine collection for multiple instances and lifecycle helpers; UI launch/inventory wiring remains.
-- [ ] Implement useful tags, tag editing and bulk actions for selected instances.
+- [x] Implement instance tag editing with key/value validation and selected-instance scoping.
+- [x] Add safe bulk start/stop/reboot actions for selected instances; bulk termination remains intentionally disabled.
 - [ ] Make empty states, validation, pending/terminal states and action feedback consistent with the rest of the console.
 - [ ] Verify lifecycle actions affect dependent views and reachability outcomes.
 
@@ -180,4 +181,4 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Change log
 
-- **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory/basic lifecycle actions, selectable Security Groups, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
+- **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
