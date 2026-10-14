@@ -27,14 +27,22 @@ test('SSH reachability detects a blackhole local route after the security group 
 
 test('SSH reachability evaluates inbound and return-path network ACL rules',()=>{
   const fixed=addSshIngressRule(createInitialAwsLabState(),'sg-bastion-prod','SecurityGroup');
-  const inboundBroken={...fixed,networkAcl:[{direction:'inbound',protocol:'TCP',ports:'22',source:'0.0.0.0/0',action:'deny'},...fixed.networkAcl]};
+  const inboundBroken={...fixed,networkAcl:[...fixed.networkAcl,{direction:'inbound',ruleNumber:90,protocol:'TCP',ports:'22',source:'0.0.0.0/0',action:'deny'}]};
   const inboundResult=evaluateAwsSshReachability(inboundBroken);
   assert.equal(inboundResult.reachable,false);
   assert.equal(inboundResult.blockedAt,'network-acl');
-  const outboundBroken={...fixed,networkAcl:[{direction:'outbound',protocol:'TCP',ports:'49152-65535',source:'0.0.0.0/0',action:'deny'},...fixed.networkAcl]};
+  const outboundBroken={...fixed,networkAcl:[...fixed.networkAcl,{direction:'outbound',ruleNumber:90,protocol:'TCP',ports:'49152-65535',source:'0.0.0.0/0',action:'deny'}]};
   const outboundResult=evaluateAwsSshReachability(outboundBroken);
   assert.equal(outboundResult.reachable,false);
   assert.equal(outboundResult.blockedAt,'network-acl');
+});
+
+test('network ACL evaluation follows numeric rule priority rather than array order',()=>{
+  const fixed=addSshIngressRule(createInitialAwsLabState(),'sg-bastion-prod','SecurityGroup');
+  const lowerPriorityDeny={...fixed,networkAcl:[...fixed.networkAcl,{direction:'inbound',ruleNumber:120,protocol:'TCP',ports:'22',source:'0.0.0.0/0',action:'deny'}]};
+  assert.equal(evaluateAwsSshReachability(lowerPriorityDeny).reachable,true);
+  const higherPriorityDeny={...fixed,networkAcl:[...fixed.networkAcl,{direction:'inbound',ruleNumber:90,protocol:'TCP',ports:'22',source:'0.0.0.0/0',action:'deny'}]};
+  assert.equal(evaluateAwsSshReachability(higherPriorityDeny).reachable,false);
 });
 
 test('S3 configuration changes update only the selected bucket and remain in shared state',()=>{
