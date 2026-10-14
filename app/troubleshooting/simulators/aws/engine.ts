@@ -7,10 +7,17 @@ export type AwsIngressRule = {
   source: string;
   description: string;
 };
+export type AwsVpc = { id: string; name: string; cidr: string; state: "available" | "pending"; isDefault: boolean };
+export type AwsSubnet = { id: string; name: string; vpcId: string; cidr: string; availabilityZone: string; state: "available" | "pending"; routeTableId: string; networkAclId: string };
+export type AwsRoute = { destination: string; target: string; state: "active" | "blackhole" };
+export type AwsRouteTable = { id: string; name: string; vpcId: string; routes: AwsRoute[]; associatedSubnetIds: string[]; isMain: boolean; tags: Record<string, string> };
 export type AwsInstance = { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped"; instanceType?: string; availabilityZone?: string; imageId?: string; tags?: Record<string, string> };
 export type AwsLabState = {
   instance: AwsInstance;
   instances?: AwsInstance[];
+  vpcs?: AwsVpc[];
+  subnets?: AwsSubnet[];
+  routeTables?: AwsRouteTable[];
   securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
@@ -34,6 +41,15 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     ]
   }],
   routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }],
+  vpcs: [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }],
+  subnets: [
+    { id: "subnet-0123abcd4567ef890", name: "private-admin-subnet", vpcId: "vpc-0123abcd4567ef890", cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" },
+    { id: "subnet-0fedcba9876543210", name: "public-web-subnet", vpcId: "vpc-0123abcd4567ef890", cidr: "10.20.1.0/24", availabilityZone: "eu-west-1b", state: "available", routeTableId: "rtb-0fedcba9876543210", networkAclId: "acl-0123abcd4567ef890" }
+  ],
+  routeTables: [
+    { id: "rtb-0123abcd4567ef890", name: "rtb-production-private", vpcId: "vpc-0123abcd4567ef890", routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }], associatedSubnetIds: ["subnet-0123abcd4567ef890"], isMain: false, tags: { Name: "rtb-production-private", Environment: "production" } },
+    { id: "rtb-0fedcba9876543210", name: "rtb-production-public", vpcId: "vpc-0123abcd4567ef890", routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "igw-0123abcd4567ef890", state: "active" }], associatedSubnetIds: ["subnet-0fedcba9876543210"], isMain: false, tags: { Name: "rtb-production-public", Environment: "production" } }
+  ],
   networkAcl: [
     { direction: "inbound", ruleNumber: 110, protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
     { direction: "inbound", ruleNumber: 100, protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
@@ -312,4 +328,42 @@ export function deleteSecurityGroupIngressRule(state: AwsLabState, groupId: stri
   const group = state.securityGroups.find(item => item.id === groupId);
   if (!group || !group.ingress.some(rule => rule.id === ruleId)) return { state, deleted: false };
   return { state: { ...state, securityGroups: state.securityGroups.map(item => item.id === groupId ? { ...item, ingress: item.ingress.filter(rule => rule.id !== ruleId) } : item) }, deleted: true };
+}
+
+
+export function getAwsVpcs(state: AwsLabState): AwsVpc[] {
+  return state.vpcs ?? [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }];
+}
+
+export function getAwsSubnets(state: AwsLabState): AwsSubnet[] {
+  return state.subnets ?? [{ id: "subnet-0123abcd4567ef890", name: "private-admin-subnet", vpcId: "vpc-0123abcd4567ef890", cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" }];
+}
+
+export function getAwsRouteTables(state: AwsLabState): AwsRouteTable[] {
+  return state.routeTables ?? [{ id: "rtb-0123abcd4567ef890", name: "rtb-production-private", vpcId: "vpc-0123abcd4567ef890", routes: state.routes, associatedSubnetIds: [state.instance.subnetId], isMain: false, tags: { Name: "rtb-production-private" } }];
+}
+
+export function associateSubnetWithRouteTable(state: AwsLabState, subnetId: string, routeTableId: string): { state: AwsLabState; error: string | null } {
+  const subnets = getAwsSubnets(state);
+  const routeTables = getAwsRouteTables(state);
+  const subnet = subnets.find(item => item.id === subnetId);
+  const routeTable = routeTables.find(item => item.id === routeTableId);
+  if (!subnet) return { state, error: "Subnet not found." };
+  if (!routeTable) return { state, error: "Route table not found." };
+  if (subnet.vpcId !== routeTable.vpcId) return { state, error: "A subnet can only be associated with a route table in the same VPC." };
+  const updatedSubnets = subnets.map(item => item.id === subnetId ? { ...item, routeTableId } : item);
+  const updatedTables = routeTables.map(item => ({ ...item, associatedSubnetIds: item.id === routeTableId ? [...new Set([...item.associatedSubnetIds.filter(id => id !== subnetId), subnetId])] : item.associatedSubnetIds.filter(id => id !== subnetId) }));
+  const effectiveRoutes = subnetId === state.instance.subnetId ? routeTable.routes : state.routes;
+  return { state: { ...state, subnets: updatedSubnets, routeTables: updatedTables, routes: effectiveRoutes }, error: null };
+}
+
+export function toggleAwsRouteState(state: AwsLabState, routeTableId: string, destination: string): { state: AwsLabState; error: string | null } {
+  const routeTables = getAwsRouteTables(state);
+  const table = routeTables.find(item => item.id === routeTableId);
+  if (!table) return { state, error: "Route table not found." };
+  if (!table.routes.some(route => route.destination === destination)) return { state, error: "Route not found." };
+  const updatedTables = routeTables.map(item => item.id === routeTableId ? { ...item, routes: item.routes.map(route => route.destination === destination ? { ...route, state: route.state === "active" ? "blackhole" as const : "active" as const } : route) } : item);
+  const instanceSubnet = getAwsSubnets(state).find(item => item.id === state.instance.subnetId);
+  const effectiveRoutes = instanceSubnet?.routeTableId === routeTableId ? updatedTables.find(item => item.id === routeTableId)!.routes : state.routes;
+  return { state: { ...state, routeTables: updatedTables, routes: effectiveRoutes }, error: null };
 }
