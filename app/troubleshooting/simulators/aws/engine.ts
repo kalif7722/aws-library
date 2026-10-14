@@ -224,18 +224,24 @@ export function launchAwsInstance(state: AwsLabState, input: LaunchAwsInstanceIn
   if (getAwsInstances(state).some(instance => instance.name.toLowerCase() === name.toLowerCase())) {
     return { state, instance: null, error: "An instance with that name already exists." };
   }
-  if (!input.subnetId.trim()) return { state, instance: null, error: "Choose a subnet." };
+  const subnet = getAwsSubnets(state).find(item => item.id === input.subnetId);
+  if (!input.subnetId.trim() || (state.subnets?.length && !subnet)) return { state, instance: null, error: "Choose a valid subnet." };
   if (!input.securityGroupIds.length || input.securityGroupIds.some(id => !state.securityGroups.some(group => group.id === id))) {
     return { state, instance: null, error: "Choose at least one valid security group." };
+  }
+  if (subnet && input.securityGroupIds.some(id => state.securityGroups.find(group => group.id === id)?.vpcId !== subnet.vpcId)) {
+    return { state, instance: null, error: "The selected security groups must belong to the subnet's VPC." };
   }
   const currentInstances = getAwsInstances(state);
   const sequence = currentInstances.length + 1;
   const id = "i-0a12b345c678d9" + sequence.toString(16).padStart(3, "0");
+  const subnetOctets = subnet?.cidr.split("/")[0].split(".");
+  const privateIp = subnetOctets?.length === 4 ? subnetOctets.slice(0, 3).join(".") + "." + (18 + currentInstances.length) : "10.20.2." + (17 + currentInstances.length);
   const instance: AwsInstance = {
     id, name, state: "running", systemStatus: "passed", instanceStatus: "passed",
-    privateIp: "10.20.2." + (17 + currentInstances.length), subnetId: input.subnetId,
+    privateIp, subnetId: input.subnetId,
     securityGroupIds: [...input.securityGroupIds], guestSsh: "listening",
-    instanceType: input.instanceType, availabilityZone: input.availabilityZone ?? "eu-west-1a",
+    instanceType: input.instanceType, availabilityZone: input.availabilityZone ?? subnet?.availabilityZone ?? "eu-west-1a",
     imageId: input.imageId ?? "ami-0a1b2c3d4e5f67890", tags: { Name: name, ...(input.tags ?? {}) }
   };
   return { state: { ...state, instances: [...currentInstances, instance] }, instance, error: null };
