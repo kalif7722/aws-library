@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { addNetworkAclRule, updateNetworkAclRule, deleteNetworkAclRule, addSshIngressRule, createInitialAwsLabState, evaluateAwsSshReachability, updateS3BucketSetting, toggleIamRolePolicy, type AwsLabState } from "./engine";
+import { addNetworkAclRule, updateNetworkAclRule, deleteNetworkAclRule, addSshIngressRule, createInitialAwsLabState, getAwsInstances, launchAwsInstance, setAwsInstanceState, rebootAwsInstance, evaluateAwsSshReachability, updateS3BucketSetting, toggleIamRolePolicy, type AwsLabState } from "./engine";
 import "./simulator.css";
 import { AWS_SERVICE_DIRECTORY, type AwsServiceDirectoryEntry } from "./service-directory";
 
@@ -37,10 +37,10 @@ export default function AwsSimulatorPage() {
   const [aclSource, setAclSource] = useState("10.40.0.0/16");
   const [aclAction, setAclAction] = useState<"allow" | "deny">("allow");
   const [aclRuleError, setAclRuleError] = useState("");
-  const [showInstanceActions, setShowInstanceActions] = useState(false);
+  const [showInstanceActions, setShowInstanceActions] = useState(false);\n  const [showLaunchEditor, setShowLaunchEditor] = useState(false);\n  const [launchName, setLaunchName] = useState("worker-02");\n  const [launchType, setLaunchType] = useState("t3.small");\n  const [launchSubnet, setLaunchSubnet] = useState("subnet-0123abcd4567ef890");\n  const [launchSecurityGroup, setLaunchSecurityGroup] = useState("sg-0ab12cd34ef56ab78");\n  const [launchError, setLaunchError] = useState("");
   const [instanceSearch, setInstanceSearch] = useState("");
   const [instanceStateFilter, setInstanceStateFilter] = useState("all");
-  const [instanceSelected, setInstanceSelected] = useState(false);
+  const [selectedInstanceIds, setSelectedInstanceIds] = useState<string[]>([]);
   const [lastRefreshed, setLastRefreshed] = useState("Just now");
   const [sourceType, setSourceType] = useState<"SecurityGroup" | "IPv4">("SecurityGroup");
   const [source, setSource] = useState("sg-bastion-prod");
@@ -83,7 +83,7 @@ export default function AwsSimulatorPage() {
     })).filter(section => section.entries.length > 0);
   }, []);
   const group = state.securityGroups.find(item => item.id === selectedResource || item.name === selectedResource) ?? state.securityGroups[0];
-  const instance = state.instance;
+  const instances = getAwsInstances(state);\n  const instance = instances.find(item => item.id === selectedResource) ?? state.instance;\n  const visibleInstances = instances.filter(item => (item.name + " " + item.id + " " + item.privateIp).toLowerCase().includes(instanceSearch.toLowerCase()) && (instanceStateFilter === "all" || instanceStateFilter === item.state));\n  const instanceSelected = selectedInstanceIds.length > 0;
   const go = (next: Screen, resource?: string) => {
     setScreen(next);
     setSelectedResource(resource ?? null);
@@ -101,14 +101,26 @@ export default function AwsSimulatorPage() {
     notify("Inbound rule saved in the simulated account.");
   }
   function changeInstanceState(next: "running" | "stopped") {
-    setState(current => ({ ...current, instance: { ...current.instance, state: next } }));
+    const targets = selectedInstanceIds.length ? selectedInstanceIds : [instance.id];
+    setState(current => targets.reduce((updated, id) => setAwsInstanceState(updated, id, next), current));
     setShowInstanceActions(false);
-    notify(`Instance ${next === "running" ? "started" : "stopped"} in the simulated account.`);
+    notify(`${targets.length} instance(s) ${next === "running" ? "started" : "stopped"} in the simulated account.`);
   }
   function rebootInstance() {
-    setState(current => ({ ...current, instance: { ...current.instance, state: "running", systemStatus: "passed", instanceStatus: "passed" } }));
+    const targets = selectedInstanceIds.length ? selectedInstanceIds : [instance.id];
+    setState(current => targets.reduce((updated, id) => rebootAwsInstance(updated, id), current));
     setShowInstanceActions(false);
-    notify("Instance reboot simulated; status checks are healthy.");
+    notify(`${targets.length} instance(s) rebooted; status checks are healthy.`);
+  }
+  function launchInstance() {
+    const result = launchAwsInstance(state, { name: launchName, instanceType: launchType, subnetId: launchSubnet, securityGroupIds: [launchSecurityGroup], tags: { Environment: "training", ManagedBy: "simulator" } });
+    if (result.error || !result.instance) { setLaunchError(result.error ?? "Unable to launch this instance."); return; }
+    setState(result.state);
+    setShowLaunchEditor(false);
+    setLaunchError("");
+    setSelectedResource(result.instance.id);
+    setSelectedInstanceIds([result.instance.id]);
+    notify(`Instance ${result.instance.id} launched in the simulated account.`);
   }
   function resetAccount() {
     setState(createInitialAwsLabState());
@@ -119,7 +131,7 @@ export default function AwsSimulatorPage() {
     setShowInstanceActions(false);
     setInstanceSearch("");
     setInstanceStateFilter("all");
-    setInstanceSelected(false);
+    setSelectedInstanceIds([]);
     setLastRefreshed("Just now");
     setAnalysis(null);
     setSourceType("SecurityGroup");
@@ -201,9 +213,9 @@ export default function AwsSimulatorPage() {
         </>}
 
         {(screen === "EC2 Dashboard" || screen === "Instances" || screen === "Instance details") && <div className="aws-sim-panel">
-          {screen !== "Instance details" ? <div className="aws-sim-panel-title"><div><h2>{screen === "Instances" ? "Instances (1)" : "EC2 resources"}</h2><p>{screen === "Instances" ? `Instances in eu-west-1 · refreshed ${lastRefreshed}` : "Compute resources in this account"}</p></div><div className="aws-sim-toolbar-actions">{screen === "Instances" && instanceSelected && <button onClick={() => setShowInstanceActions(value => !value)}>Instance state ⌄</button>}<button onClick={() => { setLastRefreshed(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })); notify("Instance inventory refreshed from the simulated account state."); }}>↻ Refresh</button><button onClick={() => notify("Launch workflow is the next EC2 build item; no instance has been created.")}>Launch instances</button></div></div> : <div className="aws-sim-panel-title"><div><h2>{instance.name} <span className={"aws-sim-status " + (instance.state === "running" ? "good" : "")}>● {instance.state === "running" ? "Running" : "Stopped"}</span></h2><p>{instance.id}</p></div><button onClick={() => setShowInstanceActions(value => !value)}>Instance state ⌄</button></div>}
+          {screen !== "Instance details" ? <div className="aws-sim-panel-title"><div><h2>{screen === "Instances" ? "Instances (1)" : "EC2 resources"}</h2><p>{screen === "Instances" ? `Instances in eu-west-1 · refreshed ${lastRefreshed}` : "Compute resources in this account"}</p></div><div className="aws-sim-toolbar-actions">{screen === "Instances" && instanceSelected && <button onClick={() => setShowInstanceActions(value => !value)}>Instance state ⌄</button>}<button onClick={() => { setLastRefreshed(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })); notify("Instance inventory refreshed from the simulated account state."); }}>↻ Refresh</button><button className="primary" onClick={() => { setShowLaunchEditor(value => !value); setLaunchError(""); }}>Launch instances</button></div></div> : <div className="aws-sim-panel-title"><div><h2>{instance.name} <span className={"aws-sim-status " + (instance.state === "running" ? "good" : "")}>● {instance.state === "running" ? "Running" : "Stopped"}</span></h2><p>{instance.id}</p></div><button onClick={() => setShowInstanceActions(value => !value)}>Instance state ⌄</button></div>}
           {showInstanceActions && <div className="aws-sim-instance-actions"><b>Instance state</b>{instance.state === "running" ? <button onClick={() => changeInstanceState("stopped")}>Stop instance</button> : <button onClick={() => changeInstanceState("running")}>Start instance</button>}{instance.state === "running" && <button onClick={rebootInstance}>Reboot instance</button>}<button onClick={() => { setShowInstanceActions(false); notify("Terminate workflow is intentionally not enabled yet."); }}>Terminate instance</button></div>}
-          {screen !== "Instance details" && <><div className="aws-sim-instance-filters"><label>Find instances<input aria-label="Find instances" placeholder="Search by name, ID or private IP" value={instanceSearch} onChange={event => setInstanceSearch(event.target.value)} /></label><label>Instance state<select aria-label="Filter by instance state" value={instanceStateFilter} onChange={event => setInstanceStateFilter(event.target.value)}><option value="all">All states</option><option value="running">Running</option><option value="stopped">Stopped</option></select></label><span>{(instance.name + " " + instance.id + " " + instance.privateIp).toLowerCase().includes(instanceSearch.toLowerCase()) && (instanceStateFilter === "all" || instanceStateFilter === instance.state) ? "1 instance" : "0 instances"} displayed</span></div><div className="aws-sim-table-wrap"><table><thead><tr><th><input aria-label="Select all instances" type="checkbox" checked={instanceSelected} onChange={event => setInstanceSelected(event.target.checked)} /></th><th>Name</th><th>Instance ID</th><th>Instance state</th><th>Instance type</th><th>Status check</th><th>Availability Zone</th><th>Private IPv4</th></tr></thead><tbody>{(instance.name + " " + instance.id + " " + instance.privateIp).toLowerCase().includes(instanceSearch.toLowerCase()) && (instanceStateFilter === "all" || instanceStateFilter === instance.state) ? <tr className={"aws-sim-click-row " + (instanceSelected ? "selected-row" : "")} onClick={() => setInstanceSelected(value => !value)}><td><input aria-label={"Select " + instance.name} type="checkbox" checked={instanceSelected} onClick={event => event.stopPropagation()} onChange={event => setInstanceSelected(event.target.checked)} /></td><td><button className="aws-sim-text-link" onClick={event => { event.stopPropagation(); go("Instance details", instance.id); }}>{instance.name}</button><small>Production API</small></td><td className="mono">{instance.id}</td><td><span className={"aws-sim-status " + (instance.state === "running" ? "good" : "")}>● {instance.state === "running" ? "Running" : "Stopped"}</span></td><td>t3.medium</td><td><span className={"aws-sim-status " + (instance.state === "running" ? "good" : "")}>{instance.state === "running" ? "2/2 checks passed" : "—"}</span></td><td>eu-west-1a</td><td className="mono">{instance.privateIp}</td></tr> : <tr><td colSpan={8} className="aws-sim-empty-cell">No instances match the current filters.</td></tr>}</tbody></table></div></>}
+          {showLaunchEditor && screen !== "Instance details" && <div className="aws-sim-editor"><h3>Launch an instance</h3><p>Configure a training instance. This creates a local simulated resource only.</p><div className="aws-sim-form-grid"><label>Instance name<input value={launchName} onChange={event=>setLaunchName(event.target.value)} placeholder="e.g. worker-02" /></label><label>Instance type<select value={launchType} onChange={event=>setLaunchType(event.target.value)}><option value="t3.micro">t3.micro</option><option value="t3.small">t3.small</option><option value="t3.medium">t3.medium</option><option value="m7i.large">m7i.large</option></select></label><label>VPC subnet<select value={launchSubnet} onChange={event=>setLaunchSubnet(event.target.value)}><option value="subnet-0123abcd4567ef890">private-admin-subnet · 10.20.2.0/24</option></select></label><label>Security group<select value={launchSecurityGroup} onChange={event=>setLaunchSecurityGroup(event.target.value)}>{state.securityGroups.map(item=><option key={item.id} value={item.id}>{item.name} · {item.id}</option>)}</select></label></div>{launchError&&<p className="aws-sim-error" role="alert">{launchError}</p>}<div className="aws-sim-editor-actions"><button onClick={()=>{setShowLaunchEditor(false);setLaunchError("");}}>Cancel</button><button className="primary" onClick={launchInstance}>Launch instance</button></div></div>}{screen !== "Instance details" && <><div className="aws-sim-instance-filters"><label>Find instances<input aria-label="Find instances" placeholder="Search by name, ID or private IP" value={instanceSearch} onChange={event => setInstanceSearch(event.target.value)} /></label><label>Instance state<select aria-label="Filter by instance state" value={instanceStateFilter} onChange={event => setInstanceStateFilter(event.target.value)}><option value="all">All states</option><option value="running">Running</option><option value="stopped">Stopped</option></select></label><span>{visibleInstances.length} instance(s) displayed</span></div><div className="aws-sim-table-wrap"><table><thead><tr><th><input aria-label="Select all visible instances" type="checkbox" checked={visibleInstances.length>0&&visibleInstances.every(item=>selectedInstanceIds.includes(item.id))} onChange={event=>setSelectedInstanceIds(event.target.checked?Array.from(new Set([...selectedInstanceIds,...visibleInstances.map(item=>item.id)])):selectedInstanceIds.filter(id=>!visibleInstances.some(item=>item.id===id))} /></th><th>Name</th><th>Instance ID</th><th>Instance state</th><th>Instance type</th><th>Status check</th><th>Availability Zone</th><th>Private IPv4</th></tr></thead><tbody>{visibleInstances.length ? visibleInstances.map(item=><tr key={item.id} className={"aws-sim-click-row "+(selectedInstanceIds.includes(item.id)?"selected-row":"")} onClick={()=>setSelectedInstanceIds(current=>current.includes(item.id)?current.filter(id=>id!==item.id):[...current,item.id])}><td><input aria-label={"Select "+item.name} type="checkbox" checked={selectedInstanceIds.includes(item.id)} onClick={event=>event.stopPropagation()} onChange={event=>setSelectedInstanceIds(current=>event.target.checked?[...new Set([...current,item.id])]:current.filter(id=>id!==item.id))}/></td><td><button className="aws-sim-text-link" onClick={event=>{event.stopPropagation();go("Instance details",item.id);}}>{item.name}</button><small>{item.tags?.Environment ?? "Training instance"}</small></td><td className="mono">{item.id}</td><td><span className={"aws-sim-status "+(item.state==="running"?"good":"")}>● {item.state==="running"?"Running":"Stopped"}</span></td><td>{item.instanceType ?? (item.id===state.instance.id?"t3.medium":"t3.small")}</td><td><span className={"aws-sim-status "+(item.state==="running"?"good":"")}>{item.state==="running"?"2/2 checks passed":"—"}</span></td><td>{item.availabilityZone ?? "eu-west-1a"}</td><td className="mono">{item.privateIp}</td></tr>) : <tr><td colSpan={8} className="aws-sim-empty-cell">No instances match the current filters.</td></tr>}</tbody></table></div></>}}
           {screen === "EC2 Dashboard" && <div className="aws-sim-detail-grid"><div><span>Instances</span><button className="aws-sim-text-link" onClick={() => go("Instances")}>View instances (1)</button></div><div><span>Security groups</span><button className="aws-sim-text-link" onClick={() => go("Security Groups")}>View security groups (2)</button></div><div><span>Load balancers</span><button className="aws-sim-text-link" onClick={() => go("Load Balancers")}>View load balancers (1)</button></div><div><span>Target groups</span><button className="aws-sim-text-link" onClick={() => go("Target Groups")}>View target groups (2)</button></div></div>}
           {screen === "Instance details" && <>
             <div className="aws-sim-detail-grid"><div><span>Instance state</span><b>{instance.state}</b></div><div><span>Instance type</span><b>t3.medium</b></div><div><span>Availability Zone</span><b>eu-west-1a</b></div><div><span>Private IPv4 address</span><b>{instance.privateIp}</b></div><div><span>VPC ID</span><button className="aws-sim-text-link" onClick={() => go("VPCs","vpc-0123abcd4567ef890")}>vpc-0123abcd4567ef890</button></div><div><span>Subnet ID</span><button className="aws-sim-text-link" onClick={() => go("VPCs",instance.subnetId)}>{instance.subnetId}</button></div><div><span>Security groups</span><button className="aws-sim-text-link" onClick={() => go("Security Groups",group.id)}>{group.name}</button></div><div><span>IAM role</span><button className="aws-sim-text-link" onClick={() => go("IAM","EC2-Production-Role")}>EC2-Production-Role</button></div></div>
