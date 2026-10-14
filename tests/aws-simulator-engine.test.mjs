@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,evaluateAwsSshReachability,updateS3BucketSetting}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -43,4 +43,14 @@ test('S3 configuration changes update only the selected bucket and remain in sha
   assert.equal(initial.s3Buckets.find(bucket=>bucket.name==='data-lake-curated').versioningEnabled,false);
   const publicAccessChanged=updateS3BucketSetting(updated,'prod-app-artifacts','blockPublicAccess',false);
   assert.equal(publicAccessChanged.s3Buckets.find(bucket=>bucket.name==='prod-app-artifacts').blockPublicAccess,false);
+});
+
+test('IAM policy attachment changes are scoped to the selected role',()=>{
+  const initial=createInitialAwsLabState();
+  const updated=toggleIamRolePolicy(initial,'Lambda-Payments-Role','CloudWatchAgentServerPolicy');
+  assert.ok(updated.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies.includes('CloudWatchAgentServerPolicy'));
+  assert.ok(!initial.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies.includes('CloudWatchAgentServerPolicy'));
+  const detached=toggleIamRolePolicy(updated,'Lambda-Payments-Role','CloudWatchAgentServerPolicy');
+  assert.ok(!detached.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies.includes('CloudWatchAgentServerPolicy'));
+  assert.deepEqual(detached.iamRoles.find(role=>role.name==='EC2-Production-Role').attachedPolicies,['CloudWatchAgentServerPolicy']);
 });
