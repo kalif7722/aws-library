@@ -16,6 +16,9 @@ test('AWS service directory separates implemented screens from catalog-only serv
   assert.ok(entries.some(service => service.category === 'Artificial Intelligence'));
   assert.ok(entries.some(service => service.category === 'Front-End Web & Mobile'));
   assert.equal(new Set(entries.map(service => service.name)).size, entries.length);
+  assert.ok(entries.some(service => service.name === 'Security Groups' && service.kind === 'console-page'));
+  assert.ok(entries.some(service => service.name === 'Route Tables' && service.kind === 'console-page'));
+  assert.ok(entries.filter(service => service.kind === 'console-page').length >= 6);
 });
 
 test('AWS mock baseline includes connected resources across core services', () => {
