@@ -113,3 +113,11 @@ test('launching instances supports a legacy single-instance state and validates 
   assert.equal(getAwsInstances(rebooted)[1].state,'running');
   assert.equal(getAwsInstances(rebooted)[1].instanceStatus,'passed');
 });
+
+
+test('SSH ingress rule targets the selected security group rather than always the primary attachment',()=>{
+  const initial=createInitialAwsLabState();
+  const updated=addSshIngressRule(initial,'198.51.100.24/32','IPv4','sg-0f55aa11bb22cc33');
+  assert.ok(updated.securityGroups.find(group=>group.id==='sg-0f55aa11bb22cc33').ingress.some(rule=>rule.source==='198.51.100.24/32'));
+  assert.ok(!updated.securityGroups.find(group=>group.id==='sg-0ab12cd34ef56ab78').ingress.some(rule=>rule.source==='198.51.100.24/32'));
+});
