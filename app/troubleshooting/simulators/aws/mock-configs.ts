@@ -54,7 +54,7 @@ const commonResources: AwsMockResource[] = [
   },
   {
     id: "alb-0123payments", service: "Elastic Load Balancing", name: "alb-payments-prod", region: "eu-west-1", status: "active",
-    attributes: { type: "application", scheme: "internal", ipAddressType: "ipv4", listenerPorts: [443], dnsName: "internal-alb-payments-123.eu-west-1.elb.amazonaws.com" },
+    attributes: { type: "application", scheme: "internal", ipAddressType: "ipv4", listenerPorts: "443", dnsName: "internal-alb-payments-123.eu-west-1.elb.amazonaws.com" },
     relationships: { vpc: ["vpc-0123abcd4567ef890"], targetGroups: ["tg-api-prod", "tg-payments-prod"], securityGroups: ["sg-alb-prod"] }
   },
   {
