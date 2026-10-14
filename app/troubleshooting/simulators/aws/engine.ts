@@ -131,3 +131,33 @@ export function toggleIamRolePolicy(state: AwsLabState, roleName: string, policy
     })
   };
 }
+
+export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["networkAcl"][number]): { state: AwsLabState; error: string | null } {
+  if (!Number.isInteger(rule.ruleNumber) || rule.ruleNumber < 1 || rule.ruleNumber > 32766) {
+    return { state, error: "Rule number must be between 1 and 32766." };
+  }
+  if (state.networkAcl.some(item => item.direction === rule.direction && item.ruleNumber === rule.ruleNumber)) {
+    return { state, error: "That rule number is already used in this direction." };
+  }
+  const portText = rule.ports.trim();
+  const portParts = portText.split("-");
+  if (!portText || portParts.length > 2 || portParts.some(part => !/^\\d+$/.test(part))) {
+    return { state, error: "Enter a port or port range between 0 and 65535." };
+  }
+  const ports = portParts.map(Number);
+  if (ports.some(port => port < 0 || port > 65535) || (ports.length === 2 && ports[0] > ports[1])) {
+    return { state, error: "Enter a valid port range between 0 and 65535." };
+  }
+  const cidrParts = rule.source.trim().split("/");
+  const octets = (cidrParts[0] ?? "").split(".");
+  const prefix = Number(cidrParts[1]);
+  if (cidrParts.length !== 2 || octets.length !== 4 ||
+      octets.some(part => !/^\\d+$/.test(part) || Number(part) > 255) ||
+      !/^\\d+$/.test(cidrParts[1] ?? "") || prefix < 0 || prefix > 32) {
+    return { state, error: "Enter a valid IPv4 CIDR such as 10.20.0.0/16." };
+  }
+  const networkAcl = [...state.networkAcl, { ...rule, ports: portText, source: rule.source.trim() }]
+    .sort((a, b) => a.direction.localeCompare(b.direction) || a.ruleNumber - b.ruleNumber);
+  return { state: { ...state, networkAcl }, error: null };
+}
+
