@@ -258,3 +258,12 @@ test('security group egress CRUD keeps outbound rules separate from ingress',()=
   assert.equal(deleted.deleted,true);
   assert.equal(deleted.state.securityGroups.find(group=>group.id===groupId).egress.length,1);
 });
+
+
+test('network ACL protocol validation supports all-traffic wildcard ports',()=>{
+  const initial=createInitialAwsLabState();
+  const allTraffic=addNetworkAclRule(initial,{direction:'inbound',ruleNumber:130,protocol:'ALL',ports:'-1',source:'10.20.0.0/16',action:'allow'});
+  assert.equal(allTraffic.error,null);
+  assert.ok(allTraffic.state.networkAcl.some(rule=>rule.ruleNumber===130&&rule.protocol==='ALL'&&rule.ports==='-1'));
+  assert.match(addNetworkAclRule(initial,{direction:'inbound',ruleNumber:131,protocol:'ICMP',ports:'ALL',source:'10.20.0.0/16',action:'allow'}).error,/Choose TCP/);
+});
