@@ -72,6 +72,14 @@ export default function AwsSimulatorPage() {
   }, [hydrated, state, screen, pinnedServices]);
 
   const filteredServices = useMemo(() => services.filter(service => (service.name + " " + service.category + " " + service.description).toLowerCase().includes(search.toLowerCase())), [search]);
+  const serviceCategories = useMemo(() => {
+    const order = ["Analytics", "Application Integration", "Artificial Intelligence", "Cloud Financial Management", "Compute", "Containers", "Database", "Front-End Web & Mobile", "Internet of Things", "Management & Governance", "Media Services", "Migration & Transfer", "Networking & Content Delivery", "Security, Identity & Compliance", "Storage"];
+    const normalized = (category: string) => category === "Networking & Security" || category === "Network & Security" ? "Networking & Content Delivery" : category;
+    return order.map(category => ({
+      category,
+      entries: services.filter(service => normalized(service.category) === category)
+    })).filter(section => section.entries.length > 0);
+  }, []);
   const group = state.securityGroups[0];
   const instance = state.instance;
   const go = (next: Screen, resource?: string) => {
@@ -166,7 +174,8 @@ export default function AwsSimulatorPage() {
     <div className="aws-sim-layout">
       <aside className="aws-sim-sidebar">
         <button className="aws-sim-home-link" onClick={() => go("Console Home")}>⌂ <span>Console Home</span></button>
-        {navGroups.map(section => <section key={section.title}><h2>{section.title}</h2>{section.items.map(navButton)}</section>)}
+        {<section className="aws-sim-recent"><h2>RECENTLY VISITED</h2>{(["Instances", "Security Groups", "Route Tables"] as Screen[]).map(navButton)}</section>}
+        <section className="aws-sim-catalog-nav"><h2>ALL SERVICES</h2>{serviceCategories.map(section => <details key={section.category} className="aws-sim-service-category"><summary>{section.category}<span>{section.entries.length}</span></summary><div>{section.entries.map(service => <button key={service.name} className={service.implemented && service.screen === screen ? "selected" : ""} onClick={() => selectService(service)} title={service.implemented ? service.description : "Catalog entry only — detailed console screen is planned"}><span className="aws-sim-nav-icon">{service.icon}</span><span>{service.name}</span>{service.implemented ? <i>›</i> : <small>•</small>}</button>)}</div></details>)}</section>}
         {pinnedServices.length > 0 && <section className="aws-sim-pinned-services"><h2>PINNED SERVICES</h2>{pinnedServices.map(name => { const service = services.find(item => item.name === name); return <button key={name} onClick={() => notify(`${name} is in the service backlog. Its full console workflow is not implemented yet.`)}><span className="aws-sim-nav-icon">{service?.icon ?? "◇"}</span><span>{name}</span><i>+</i></button>; })}</section>}
         <div className="aws-sim-sidebar-note"><b>Training environment</b><p>This is a local simulation. Configuration changes persist in this browser only. No AWS API calls are made.</p></div>
       </aside>
