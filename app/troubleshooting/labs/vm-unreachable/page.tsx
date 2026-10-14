@@ -367,7 +367,7 @@ export default function VmUnreachableLab() {
     || (provider === "Google Cloud" && step === 2 && activeConsoleTab === "Routes");
   const routeTableRows: Record<string, string>[] = provider === "AWS"
     ? [{ Destination: consoleScreen.rows.find(r => r.label === "Destination")?.value || "—", Target: consoleScreen.rows.find(r => r.label === "Target")?.value || "—", State: consoleScreen.rows.find(r => r.label === "State")?.value || "—", Association: consoleScreen.rows.find(r => r.label === "Association")?.value || "—" }]
-    : consoleScreen.rows.filter(r => /^\\d/.test(r.label)).map(r => {
+    : consoleScreen.rows.filter(r => /^\d/.test(r.label)).map(r => {
         const parts = r.value.split(" · ");
         return provider === "Azure"
           ? { "Address prefix": r.label, "Next hop type": parts[0] || "—", State: parts[1] || "—" }
