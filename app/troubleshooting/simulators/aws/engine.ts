@@ -161,14 +161,21 @@ export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["network
   if (state.networkAcl.some(item => item.direction === rule.direction && item.ruleNumber === rule.ruleNumber)) {
     return { state, error: "That rule number is already used in this direction." };
   }
-  const portText = rule.ports.trim();
-  const portParts = portText.split("-");
-  if (!portText || portParts.length > 2 || portParts.some(part => !/^\d+$/.test(part))) {
-    return { state, error: "Enter a port or port range between 0 and 65535." };
+  if (!["TCP", "UDP", "ALL", "6", "17", "-1"].includes(rule.protocol)) {
+    return { state, error: "Choose TCP, UDP, or all traffic." };
   }
-  const ports = portParts.map(Number);
-  if (ports.some(port => port < 0 || port > 65535) || (ports.length === 2 && ports[0] > ports[1])) {
-    return { state, error: "Enter a valid port range between 0 and 65535." };
+  const portText = rule.ports.trim();
+  if ((rule.protocol === "ALL" || rule.protocol === "-1") && (portText === "ALL" || portText === "-1")) {
+    // AWS network ACL all-protocol rules do not use a numeric port range.
+  } else {
+    const portParts = portText.split("-");
+    if (!portText || portParts.length > 2 || portParts.some(part => !/^\d+$/.test(part))) {
+      return { state, error: "Enter a port or port range between 0 and 65535." };
+    }
+    const ports = portParts.map(Number);
+    if (ports.some(port => port < 0 || port > 65535) || (ports.length === 2 && ports[0] > ports[1])) {
+      return { state, error: "Enter a valid port range between 0 and 65535." };
+    }
   }
   const cidrParts = rule.source.trim().split("/");
   const octets = (cidrParts[0] ?? "").split(".");
@@ -296,6 +303,7 @@ export function deleteAwsInstanceTag(state: AwsLabState, instanceId: string, key
 function validateSecurityGroupIngressRule(state: AwsLabState, rule: Omit<AwsIngressRule, "id">): string | null {
   if (!["TCP", "UDP", "ALL"].includes(rule.protocol)) return "Choose TCP, UDP, or all traffic.";
   if (!Number.isInteger(rule.fromPort) || !Number.isInteger(rule.toPort) || rule.fromPort < 0 || rule.toPort > 65535 || rule.fromPort > rule.toPort) return "Enter a valid port range from 0 to 65535.";
+  if (rule.protocol === "ALL" && (rule.fromPort !== 0 || rule.toPort !== 65535)) return "All traffic rules must cover ports 0 through 65535.";
   if (!rule.description || rule.description.trim().length > 255) return "Enter a rule description of 1 to 255 characters.";
   if (rule.sourceType === "SecurityGroup") {
     if (!state.securityGroups.some(group => group.id === rule.source || group.name === rule.source)) return "Choose an existing source security group.";
