@@ -9,7 +9,9 @@ test('SSH reachability uses the current attached security-group rules',()=>{
   const blocked=evaluateAwsSshReachability(initial);
   assert.equal(blocked.reachable,false);
   assert.equal(blocked.blockedAt,'security-group');
+  assert.ok(initial.securityGroups.some(group => group.id === 'sg-0f55aa11bb22cc33' && group.name === 'sg-bastion-prod'));
   const updated=addSshIngressRule(initial,'sg-bastion-prod','SecurityGroup');
+  assert.equal(updated.securityGroups[0].ingress.find(rule => rule.id === 'sgr-sim-ssh-admin').source, 'sg-0f55aa11bb22cc33');
   const reachable=evaluateAwsSshReachability(updated);
   assert.equal(reachable.reachable,true);
   assert.ok(reachable.checks.every(check=>check.result==='passed'));
