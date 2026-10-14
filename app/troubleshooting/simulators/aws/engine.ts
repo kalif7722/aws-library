@@ -67,12 +67,13 @@ function aclAllows(state: AwsLabState, direction: "inbound" | "outbound", port: 
 }
 export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bastion-prod"): AwsReachabilityResult {
   const groups = state.securityGroups.filter(item => state.instance.securityGroupIds.includes(item.id));
+  const sourceIp = source === "sg-bastion-prod" ? "10.20.1.10" : source.split("/")[0];
   const instanceHealthy = state.instance.state === "running" && state.instance.systemStatus === "passed" && state.instance.instanceStatus === "passed";
   const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) &&
-    ((rule.sourceType === "SecurityGroup" && rule.source === source) || (rule.sourceType === "IPv4" && cidrContains(rule.source, "198.51.100.24")))));
+    ((rule.sourceType === "SecurityGroup" && rule.source === source) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
   const routeHealthy = state.routes.some(route => cidrContains(route.destination, state.instance.privateIp) && route.target === "local" && route.state === "active");
-  const inboundAclAllows = aclAllows(state, "inbound", 22, "198.51.100.24");
-  const outboundAclAllows = aclAllows(state, "outbound", 49152, "198.51.100.24");
+  const inboundAclAllows = aclAllows(state, "inbound", 22, sourceIp);
+  const outboundAclAllows = aclAllows(state, "outbound", 49152, sourceIp);
   const guestHealthy = state.instance.guestSsh === "listening";
   const checks = [
     { name: "EC2 instance status", result: instanceHealthy ? "passed" as const : "blocked" as const, detail: instanceHealthy ? "Instance is running; both status checks passed." : "Instance state or status checks are not healthy." },
