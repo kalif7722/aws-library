@@ -242,12 +242,13 @@ export function updateAwsInstanceTag(state: AwsLabState, instanceId: string, key
   const key = keyInput.trim();
   const value = valueInput.trim();
   if (!key) return { state, error: "Tag key is required." };
+  if (key === "Name" && !value) return { state, error: "The Name tag cannot be empty." };
   if (key.length > 128) return { state, error: "Tag keys must be 128 characters or fewer." };
   if (value.length > 256) return { state, error: "Tag values must be 256 characters or fewer." };
   if (key.toLowerCase().startsWith("aws:")) return { state, error: "Tag keys beginning with aws: are reserved." };
   const instances = getAwsInstances(state);
   if (!instances.some(instance => instance.id === instanceId)) return { state, error: "Instance not found. Refresh the inventory and try again." };
-  const updatedInstances = instances.map(instance => instance.id === instanceId ? { ...instance, tags: { ...(instance.tags ?? {}), [key]: value, ...(key === "Name" ? {} : { Name: instance.name }) } } : instance);
+  const updatedInstances = instances.map(instance => instance.id === instanceId ? { ...instance, ...(key === "Name" ? { name: value } : {}), tags: { ...(instance.tags ?? {}), [key]: value, ...(key === "Name" ? {} : { Name: instance.name }) } } : instance);
   const primary = updatedInstances.find(instance => instance.id === state.instance.id) ?? updatedInstances[0];
   return { state: { ...state, instance: primary, instances: updatedInstances }, error: null };
 }
