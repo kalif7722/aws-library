@@ -106,7 +106,7 @@ export default function AwsSimulatorPage() {
   function addRule() {
     const trimmed = source.trim();
     if (!trimmed) return;
-    setState(current => addSshIngressRule(current, trimmed, sourceType));
+    setState(current => addSshIngressRule(current, trimmed, sourceType, group.id));
     setShowRuleEditor(false);
     notify("Inbound rule saved in the simulated account.");
   }
