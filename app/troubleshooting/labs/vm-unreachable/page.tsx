@@ -5,6 +5,7 @@ import "./lab.css";
 
 type Provider = "AWS" | "Azure" | "Google Cloud";
 type Choice = { label: string; correct: boolean; feedback: string };
+type ConsoleRule = { id: string; name: string; action: string; detail: string; priority?: string; source?: string; destination?: string; service?: string; protocol?: string; port?: string; target?: string; network?: string; direction?: string; ports?: string; };
 type LabStep = {
   title: string;
   objective: string;
@@ -250,7 +251,7 @@ export default function VmUnreachableLab() {
   const reset = () => { setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); };
   const tabOptions = step === 1 ? ["Inbound rules", "Outbound rules", "Details"] : step === 2 ? (provider === "AWS" ? ["Routes", "Network ACLs"] : provider === "Azure" ? ["Effective routes", "Effective security rules"] : ["Routes", "Connectivity tests"]) : ["Overview", "Monitoring", "Diagnostics", "Activity log"];
   const activeConsoleTab = step === 1 && consoleTab === "Overview" ? "Inbound rules" : consoleTab;
-  const ruleRows = provider === "AWS" ? [
+  const ruleRows: ConsoleRule[] = provider === "AWS" ? [
     { id: "sgr-0123abcd4567ef890", name: "HTTPS", protocol: "TCP", port: "443", source: "10.40.0.0/16", target: "sg-api-prod", action: "Allow", detail: "Inbound TCP/443 from the internal application CIDR." },
     { id: "sgr-0f55aa11bb22cc33", name: "Custom TCP", protocol: "TCP", port: "8443", source: "sg-0f55aa11bb22cc33", target: "sg-api-prod", action: "Allow", detail: "Inbound TCP/8443 from the approved peer security group." }
   ] : provider === "Azure" ? [
