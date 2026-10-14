@@ -87,7 +87,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 
 - [x] Show a selectable inventory of seeded security groups.
 - [x] Show rules for the selected security group.
-- [ ] Add general rule create/edit/delete flows with validation (current SSH helper now correctly targets the selected group).
+- [x] Add inbound rule create/edit/delete flows with port, protocol, CIDR/source-group and duplicate validation. Outbound rule editing remains to be added.
 - [ ] Show inbound/outbound rules and resource associations clearly.
 - [ ] Verify security-group edits immediately affect shared reachability evaluation.
 
@@ -181,4 +181,4 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Change log
 
-- **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
+- **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
