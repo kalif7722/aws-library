@@ -292,7 +292,9 @@ export function addSecurityGroupIngressRule(state: AwsLabState, groupId: string,
   if (error) return { state, rule: null, error };
   const normalized = normalizeSecurityGroupRuleSource(state, input);
   if (group.ingress.some(rule => rule.protocol === normalized.protocol && rule.fromPort === normalized.fromPort && rule.toPort === normalized.toPort && rule.sourceType === normalized.sourceType && rule.source === normalized.source)) return { state, rule: null, error: "An equivalent ingress rule already exists." };
-  const rule: AwsIngressRule = { ...normalized, id: "sgr-sim-" + (group.ingress.length + 1).toString(36) };
+  let sequence = 1;
+  while (group.ingress.some(rule => rule.id === "sgr-sim-" + sequence.toString(36))) sequence += 1;
+  const rule: AwsIngressRule = { ...normalized, id: "sgr-sim-" + sequence.toString(36) };
   return { state: { ...state, securityGroups: state.securityGroups.map(item => item.id === groupId ? { ...item, ingress: [...item.ingress, rule] } : item) }, rule, error: null };
 }
 
