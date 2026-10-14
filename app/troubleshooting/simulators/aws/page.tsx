@@ -50,7 +50,15 @@ export default function AwsSimulatorPage() {
       const saved = window.localStorage.getItem("aws-console-simulator-state-v2");
       if (saved) {
         const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen; pinnedServices?: string[] };
-        if (parsed.state?.instance && parsed.state.securityGroups && parsed.state.routes) { const baseline = createInitialAwsLabState(); setState({ ...baseline, ...parsed.state, s3Buckets: parsed.state.s3Buckets ?? baseline.s3Buckets, iamRoles: parsed.state.iamRoles ?? baseline.iamRoles }); }
+        const savedState = parsed.state;
+        if (savedState?.instance && savedState.securityGroups && savedState.routes) {
+          const baseline = createInitialAwsLabState();
+          const securityGroups = [
+            ...savedState.securityGroups,
+            ...baseline.securityGroups.filter(group => !savedState.securityGroups.some(savedGroup => savedGroup.id === group.id))
+          ];
+          setState({ ...baseline, ...savedState, securityGroups, s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets, iamRoles: savedState.iamRoles ?? baseline.iamRoles });
+        }
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
         if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
       }
