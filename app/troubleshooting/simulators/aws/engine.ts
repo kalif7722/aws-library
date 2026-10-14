@@ -338,15 +338,15 @@ export function deleteSecurityGroupIngressRule(state: AwsLabState, groupId: stri
 
 
 export function getAwsVpcs(state: AwsLabState): AwsVpc[] {
-  return state.vpcs ?? [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }];
+  return state.vpcs?.length ? state.vpcs : [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }];
 }
 
 export function getAwsSubnets(state: AwsLabState): AwsSubnet[] {
-  return state.subnets ?? [{ id: "subnet-0123abcd4567ef890", name: "private-admin-subnet", vpcId: "vpc-0123abcd4567ef890", cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" }];
+  return state.subnets?.length ? state.subnets : [{ id: "subnet-0123abcd4567ef890", name: "private-admin-subnet", vpcId: "vpc-0123abcd4567ef890", cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" }];
 }
 
 export function getAwsRouteTables(state: AwsLabState): AwsRouteTable[] {
-  return state.routeTables ?? [{ id: "rtb-0123abcd4567ef890", name: "rtb-production-private", vpcId: "vpc-0123abcd4567ef890", routes: state.routes, associatedSubnetIds: [state.instance.subnetId], isMain: false, tags: { Name: "rtb-production-private" } }];
+  return state.routeTables?.length ? state.routeTables : [{ id: "rtb-0123abcd4567ef890", name: "rtb-production-private", vpcId: "vpc-0123abcd4567ef890", routes: state.routes, associatedSubnetIds: [state.instance.subnetId], isMain: false, tags: { Name: "rtb-production-private" } }];
 }
 
 export function associateSubnetWithRouteTable(state: AwsLabState, subnetId: string, routeTableId: string): { state: AwsLabState; error: string | null } {
@@ -387,13 +387,13 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     ...rule,
     ruleNumber: Number.isFinite(rule.ruleNumber) ? rule.ruleNumber : rule.direction === "inbound" ? (rule.ports === "22" ? 100 : 110) : (rule.ports === "1024-65535" ? 100 : 110)
   }));
-  const vpcs = savedState.vpcs ?? baseline.vpcs;
-  let subnets = savedState.subnets ?? baseline.subnets ?? [];
+  const vpcs = savedState.vpcs?.length ? savedState.vpcs : baseline.vpcs;
+  let subnets = savedState.subnets?.length ? savedState.subnets : baseline.subnets ?? [];
   if (!subnets.some(subnet => subnet.id === instance.subnetId)) {
     subnets = [...subnets, { id: instance.subnetId, name: "migrated-training-subnet", vpcId: instance.subnetId === baseline.instance.subnetId ? "vpc-0123abcd4567ef890" : (vpcs?.[0]?.id ?? "vpc-0123abcd4567ef890"), cidr: "10.20.2.0/24", availabilityZone: "eu-west-1a", state: "available", routeTableId: "rtb-0123abcd4567ef890", networkAclId: "acl-0123abcd4567ef890" }];
   }
   const routes = savedState.routes ?? baseline.routes;
-  const routeTables = savedState.routeTables ?? (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
+  const routeTables = savedState.routeTables?.length ? savedState.routeTables : (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
   const instances = savedState.instances?.map(item => ({ ...item, tags: item.tags ?? { Name: item.name } }));
   return {
     ...baseline, ...savedState, instance, instances, securityGroups, networkAcl,
