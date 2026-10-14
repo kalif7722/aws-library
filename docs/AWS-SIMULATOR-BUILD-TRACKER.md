@@ -24,11 +24,11 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 |---|---|---|
 | Console shell and service discovery | **Mostly complete** | Home, categorized navigation, search, account/Region context, simulated/planned labels |
 | Service catalog | **Complete for current catalog scope** | 89 unique catalog entries; catalog entries are not all functional simulators |
-| EC2 inventory and basic actions | **Partially complete** | Search, state filter, selection, refresh timestamp, start/stop/reboot; launch flow remains |
-| Security Groups | **Basic inventory complete** | Seeded group selection/rules; expand editing and consistency checks |
-| VPC / subnets / route tables | **Partially complete** | Shared network model and route view; richer inventories and association editor remain |
-| Network ACLs | **Partially complete** | Numeric rule priority and create-rule editor/validation; edit, reorder and delete remain |
-| Shared reachability evaluation | **Implemented; needs broader regression coverage** | EC2 health, SG ingress, routes, inbound/return-path NACL checks; Reachability Analyzer uses shared engine |
+| EC2 inventory and lifecycle | **Implemented; validation pending** | Launch workflow, multi-instance inventory, scoped lifecycle actions, bulk start/stop/reboot and tag CRUD; browser/build verification remains |
+| Security Groups | **Inbound rule CRUD implemented; validation pending** | Selectable inventory; inbound rule create/edit/delete and source/port validation; outbound editing and end-to-end verification remain |
+| VPC / subnets / route tables | **Connected resource model and UI implemented; validation pending** | One VPC, public/private subnets, two route tables, selectable inventories, subnet association editor and per-table route state |
+| Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
+| Shared reachability evaluation | **Expanded; validation pending** | Selected source/destination instance, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks |
 | S3 and IAM examples | **Basic state flows implemented** | Bucket public-access/versioning settings and role policy attachments; not the current focus |
 | Automated validation / build | **Not verified** | No PR-triggered workflow runs or commit status checks were reported for the latest reviewed commit |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
@@ -69,36 +69,36 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Start, stop and reboot update shared simulated state.
 - [x] Instance detail tabs and related-resource navigation.
 - [x] Implement a functional **Launch instance** workflow with name/type/subnet/security-group validation and local resource creation.
-- [x] Add a backward-compatible engine collection for multiple instances and lifecycle helpers; UI launch/inventory wiring remains.
+- [x] Add a backward-compatible multi-instance collection, launch workflow, inventory, selection, and per-instance lifecycle helpers; browser/build verification remains.
 - [x] Implement instance tag editing with key/value validation and selected-instance scoping.
 - [x] Add safe bulk start/stop/reboot actions for selected instances; bulk termination remains intentionally disabled.
-- [ ] Make empty states, validation, pending/terminal states and action feedback consistent with the rest of the console.
-- [ ] Verify lifecycle actions affect dependent views and reachability outcomes.
+- [ ] Make empty states, validation, pending/terminal states and action feedback consistent with the rest of the console (pending/terminal lifecycle states are not modeled yet).
+- [ ] Verify lifecycle actions affect dependent views and reachability outcomes in a running browser session.
 
 ### 2B. VPC and subnet inventory
 
-- [ ] Replace single-resource/static presentation with a coherent VPC inventory (engine model now includes VPCs and two connected subnets).
-- [ ] Render the modeled subnet inventory with CIDR, Availability Zone, route table association and status fields.
-- [ ] Support selecting a VPC/subnet and navigating to related resources.
-- [ ] Ensure resource IDs, CIDRs and associations agree across VPC, Subnets, Route Tables, NACLs, EC2 and Reachability Analyzer.
-- [ ] Add safe state migration for any expanded resource collections.
+- [x] Replace the static VPC presentation with a shared inventory for the seeded VPC and connected subnets.
+- [x] Render subnet inventory with CIDR, Availability Zone, route table association and status fields.
+- [x] Support selecting VPCs/subnets and navigating to related resources.
+- [ ] Verify resource IDs, CIDRs and associations agree across VPC, Subnets, Route Tables, NACLs, EC2 and Reachability Analyzer through browser walkthroughs.
+- [x] Add safe migration for legacy single-instance/network state and missing resource collections; regression tests added, runtime verification pending.
 
 ### 2C. Security Groups
 
 - [x] Show a selectable inventory of seeded security groups.
 - [x] Show rules for the selected security group.
 - [x] Add inbound rule create/edit/delete flows with port, protocol, CIDR/source-group and duplicate validation. Outbound rule editing remains to be added.
-- [ ] Show inbound/outbound rules and resource associations clearly.
-- [ ] Verify security-group edits immediately affect shared reachability evaluation.
+- [ ] Complete outbound-rule editing and verify both directions and resource associations in the running console.
+- [x] Wire Security Group edits into shared state and add selected-instance reachability regression coverage; run tests before treating as verified.
 
 ### 2D. Route Tables
 
 - [x] Show route-table route and association/tag tabs.
 - [x] Route state participates in shared reachability evaluation.
-- [x] Add validated subnet-to-route-table association engine helper; console wiring and route-table selection remain.
+- [x] Add validated subnet-to-route-table association helper, route-table inventory/selection, and subnet association controls; browser validation pending.
 - [ ] Implement route create/edit/delete flows and route-target validation (current route state toggle now updates the selected table model).
-- [ ] Ensure the selected subnet's effective route table is the one evaluated.
-- [ ] Show meaningful route state (including unavailable/blackhole target cases where modeled).
+- [x] Resolve the selected destination instance's subnet route table in Reachability Analyzer; primary-instance legacy route state remains compatible.
+- [x] Show active/blackhole route state and allow toggling it in the selected route table; route create/edit/delete still remain.
 
 ### 2E. Network ACLs
 
@@ -108,7 +108,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Edit existing rules, including rule-number changes with direction-local duplicate validation.
 - [x] Reorder rules by changing rule numbers while preventing direction-local duplicates.
 - [x] Delete rules with clear feedback.
-- [ ] Add protocol/port/CIDR/action validation aligned with the simulator's supported behavior.
+- [ ] Tighten Network ACL protocol-specific validation (ports/CIDR/priority are validated; protocol semantics and wildcard-port behavior need more coverage).
 - [ ] Verify inbound and return-path outbound rules both affect reachability.
 
 ### 2F. Reachability and cross-resource consistency
@@ -118,7 +118,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Add tests for multiple instances, subnet-specific route tables, attached security groups and selected-resource relationships.
 - [x] Add tests for route association changes and Security Group edits changing reachability; continue expanding NACL/VPC edge-case coverage.
 - [ ] Keep the normal console free of an incident picker or pre-revealed root cause; expose evaluation through the relevant diagnostic tool only.
-- [ ] Ensure each configuration change is reflected consistently across inventory, details and diagnostic screens.
+- [ ] Verify every configuration change is reflected consistently across inventory, details and diagnostic screens in a browser session.
 
 ### Phase 2 exit gate — required before moving on
 
@@ -169,16 +169,18 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Current next actions (ordered)
 
-1. [ ] Inspect package scripts and establish the exact local test/build commands.
-2. [ ] Implement EC2 Launch Instance flow and decide/implement a backward-compatible multi-instance state shape.
-3. [ ] Add tag editing and safe bulk actions for EC2.
-4. [ ] Expand VPC/subnet inventories and resource selection.
-5. [ ] Add Route Table subnet association editing.
-6. [ ] Add NACL edit/reorder/delete.
-7. [ ] Add Security Group rule editing and cross-resource consistency tests.
+1. [x] Inspect package scripts and document commands: `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build + tests); execution is still pending.
+2. [x] Implement EC2 Launch Instance flow and backward-compatible multi-instance state/UI.
+3. [x] Add instance tag editing and safe bulk start/stop/reboot actions.
+4. [x] Wire VPC/subnet inventories, resource selection and related navigation.
+5. [x] Add route-table inventory and subnet association editing.
+6. [x] Add NACL edit/renumber/delete.
+7. [ ] Complete outbound Security Group rule editing and broader cross-resource regression coverage.
 8. [ ] Run tests/build and record actual results.
 9. [ ] Complete the Phase 2 exit gate review before adding another service family.
 
 ## Change log
+
+- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
 
 - **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
