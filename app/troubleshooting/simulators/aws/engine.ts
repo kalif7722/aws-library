@@ -35,10 +35,10 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
     { id: "sgr-0b844311223344557", protocol: "TCP", fromPort: 8443, toPort: 8443, sourceType: "SecurityGroup", source: "sg-0f55aa11bb22cc33", description: "Internal service traffic" }
-  ] }, {
+  ], egress: [{ id: "sgr-egress-default", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }] }, {
     id: "sg-0f55aa11bb22cc33", name: "sg-bastion-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
       { id: "sgr-0c944311223344558", protocol: "TCP", fromPort: 22, toPort: 22, sourceType: "IPv4", source: "10.20.0.0/16", description: "Approved administrator access" }
-    ]
+    ], egress: [{ id: "sgr-egress-default", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }]
   }],
   routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }],
   vpcs: [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }],
