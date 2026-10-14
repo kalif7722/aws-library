@@ -172,6 +172,7 @@ export default function PrivateConnectivityLab() {
         <div><span>01 · SOURCE</span><strong>Application workload · app-prod</strong><small>{provider==="AWS"?"Security identity: sg-app-prod":provider==="Azure"?"Source: approved application subnet / NSG":"Source: approved application subnet or network tag"}</small></div>
         <div className="path-arrow" aria-hidden="true">→</div>
         <div><span>02 · DESTINATION</span><strong>Private database · checkout-db-prod</strong><small>{provider==="AWS"?"RDS private endpoint in the app VPC":provider==="Azure"?"Azure Database for PostgreSQL private endpoint":"Cloud SQL private IP / private service path"}</small></div>
+        <div className="path-arrow" aria-hidden="true">→</div>
         <div><span>03 · TRANSPORT</span><strong>TCP / 5432 (PostgreSQL)</strong><small>DNS → route → network policy → listener → database readiness</small></div>
       </div>
       <div className="private-lab-path-foot"><span><b>Failure symptom</b> Application-to-database connection timeout; app targets remain healthy</span><span><b>Expected result</b> TCP/5432 reachable only from the approved application source; database stays private</span></div>
