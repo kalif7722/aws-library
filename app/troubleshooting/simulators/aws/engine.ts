@@ -236,3 +236,31 @@ export function rebootAwsInstance(state: AwsLabState, instanceId: string): AwsLa
   const primary = instances.find(instance => instance.id === state.instance.id) ?? instances[0];
   return { ...state, instance: primary, instances };
 }
+
+
+export function updateAwsInstanceTag(state: AwsLabState, instanceId: string, keyInput: string, valueInput: string): { state: AwsLabState; error: string | null } {
+  const key = keyInput.trim();
+  const value = valueInput.trim();
+  if (!key) return { state, error: "Tag key is required." };
+  if (key.length > 128) return { state, error: "Tag keys must be 128 characters or fewer." };
+  if (value.length > 256) return { state, error: "Tag values must be 256 characters or fewer." };
+  if (key.toLowerCase().startsWith("aws:")) return { state, error: "Tag keys beginning with aws: are reserved." };
+  const instances = getAwsInstances(state);
+  if (!instances.some(instance => instance.id === instanceId)) return { state, error: "Instance not found. Refresh the inventory and try again." };
+  const updatedInstances = instances.map(instance => instance.id === instanceId ? { ...instance, tags: { ...(instance.tags ?? {}), [key]: value, ...(key === "Name" ? {} : { Name: instance.name }) } } : instance);
+  const primary = updatedInstances.find(instance => instance.id === state.instance.id) ?? updatedInstances[0];
+  return { state: { ...state, instance: primary, instances: updatedInstances }, error: null };
+}
+
+export function deleteAwsInstanceTag(state: AwsLabState, instanceId: string, key: string): { state: AwsLabState; error: string | null } {
+  if (key === "Name") return { state, error: "The Name tag is required in this training console." };
+  const instances = getAwsInstances(state);
+  const target = instances.find(instance => instance.id === instanceId);
+  if (!target) return { state, error: "Instance not found. Refresh the inventory and try again." };
+  const tags = { ...(target.tags ?? {}) };
+  if (!(key in tags)) return { state, error: "Tag not found." };
+  delete tags[key];
+  const updatedInstances = instances.map(instance => instance.id === instanceId ? { ...instance, tags } : instance);
+  const primary = updatedInstances.find(instance => instance.id === state.instance.id) ?? updatedInstances[0];
+  return { state: { ...state, instance: primary, instances: updatedInstances }, error: null };
+}
