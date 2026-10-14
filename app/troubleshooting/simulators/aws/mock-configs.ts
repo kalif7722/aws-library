@@ -63,8 +63,18 @@ const commonResources: AwsMockResource[] = [
     relationships: { vpc: ["vpc-0123abcd4567ef890"], targetGroups: ["tg-payments-api", "tg-payments-admin"], securityGroups: ["sg-alb-prod"] }
   },
   {
+    id: "sg-alb-prod", service: "VPC", name: "sg-alb-prod", region: "eu-west-1", status: "in-use",
+    attributes: { description: "Internal application load balancer ingress", vpcId: "vpc-0123abcd4567ef890", inboundRules: 1, allowedTcpPort: 443, allowedSourceCidr: "10.40.0.0/16" },
+    relationships: { loadBalancers: ["alb-0123payments"], vpc: ["vpc-0123abcd4567ef890"] }
+  },
+  {
     id: "tg-payments-api", service: "Elastic Load Balancing", name: "tg-payments-api", region: "eu-west-1", status: "healthy",
     attributes: { protocol: "HTTP", port: 8080, targetType: "instance", healthCheckPath: "/health", healthyTargets: 1, unhealthyTargets: 0 },
+    relationships: { loadBalancers: ["alb-0123payments"], targets: ["i-0a12b345c678d9012"] }
+  },
+  {
+    id: "tg-payments-admin", service: "Elastic Load Balancing", name: "tg-payments-admin", region: "eu-west-1", status: "healthy",
+    attributes: { protocol: "HTTP", port: 8443, targetType: "instance", healthCheckPath: "/healthz", healthyTargets: 1, unhealthyTargets: 0 },
     relationships: { loadBalancers: ["alb-0123payments"], targets: ["i-0a12b345c678d9012"] }
   },
   {
@@ -96,6 +106,11 @@ const commonResources: AwsMockResource[] = [
     id: "payments-5xx-rate", service: "CloudWatch", name: "payments-5xx-rate", region: "eu-west-1", status: "ALARM",
     attributes: { namespace: "AWS/ApplicationELB", metric: "HTTPCode_Target_5XX_Count", threshold: 20, evaluationPeriods: 3, periodSeconds: 60 },
     relationships: { loadBalancers: ["alb-0123payments"], targetGroups: ["tg-payments-api"] }
+  },
+  {
+    id: "Z0123EXAMPLEABC", service: "Route 53", name: "example.internal", region: "global", status: "private-zone",
+    attributes: { zoneType: "private", recordCount: 12, domainName: "example.internal." },
+    relationships: { vpc: ["vpc-0123abcd4567ef890"] }
   },
   {
     id: "Z0456EXAMPLEDEF", service: "Route 53", name: "example.com", region: "global", status: "private/public-zone",
