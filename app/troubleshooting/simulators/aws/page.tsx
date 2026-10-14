@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { addNetworkAclRule, updateNetworkAclRule, deleteNetworkAclRule, addSshIngressRule, createInitialAwsLabState, getAwsInstances, launchAwsInstance, setAwsInstanceState, rebootAwsInstance, evaluateAwsSshReachability, updateS3BucketSetting, toggleIamRolePolicy, type AwsLabState } from "./engine";
+import { addNetworkAclRule, updateNetworkAclRule, deleteNetworkAclRule, addSshIngressRule, createInitialAwsLabState, getAwsInstances, launchAwsInstance, setAwsInstanceState, rebootAwsInstance, evaluateAwsSshReachability, updateS3BucketSetting, toggleIamRolePolicy, updateAwsInstanceTag, deleteAwsInstanceTag, type AwsLabState } from "./engine";
 import "./simulator.css";
 import { AWS_SERVICE_DIRECTORY, type AwsServiceDirectoryEntry } from "./service-directory";
 
@@ -45,6 +45,10 @@ export default function AwsSimulatorPage() {
   const [launchSubnet, setLaunchSubnet] = useState("subnet-0123abcd4567ef890");
   const [launchSecurityGroup, setLaunchSecurityGroup] = useState("sg-0ab12cd34ef56ab78");
   const [launchError, setLaunchError] = useState("");
+  const [showTagEditor, setShowTagEditor] = useState(false);
+  const [tagKey, setTagKey] = useState("");
+  const [tagValue, setTagValue] = useState("");
+  const [tagError, setTagError] = useState("");
   const [instanceSearch, setInstanceSearch] = useState("");
   const [instanceStateFilter, setInstanceStateFilter] = useState("all");
   const [selectedInstanceIds, setSelectedInstanceIds] = useState<string[]>([]);
@@ -235,7 +239,7 @@ export default function AwsSimulatorPage() {
             {tab === "Storage" && <div className="aws-sim-property-grid"><div><span>Root device</span><b>/dev/xvda</b></div><div><span>Volume ID</span><b>vol-0a12bc34de56f7890</b></div><div><span>Volume type</span><b>gp3</b></div><div><span>Encrypted</span><b>Yes · simulated KMS key</b></div></div>}
             {tab === "Status checks" && <div className="aws-sim-property-grid"><div><span>System status check</span><b>2/2 checks passed</b></div><div><span>Instance reachability</span><b>Passed</b></div><div><span>Guest service</span><b>{instance.guestSsh === "listening" ? "SSH listener running" : "SSH listener stopped"}</b></div></div>}
             {tab === "Monitoring" && <div className="aws-sim-property-grid"><div><span>CPU utilization</span><b>18.4%</b></div><div><span>Network in</span><b>1.8 MB</b></div><div><span>Network out</span><b>2.2 MB</b></div><div><span>Detailed monitoring</span><b>Disabled</b></div></div>}
-            {tab === "Tags" && <div className="aws-sim-table-wrap"><table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td>{instance.name}</td></tr><tr><td>Environment</td><td>production</td></tr><tr><td>Application</td><td>payments-api</td></tr><tr><td>Owner</td><td>platform-engineering</td></tr></tbody></table></div>}
+            {tab === "Tags" && <div className="aws-sim-panel-title compact"><h3>Instance tags</h3><button onClick={()=>{setTagKey("");setTagValue("");setTagError("");setShowTagEditor(value=>!value);}}>{showTagEditor?"Cancel":"Manage tags"}</button></div><div className="aws-sim-table-wrap"><table><thead><tr><th>Key</th><th>Value</th><th>Actions</th></tr></thead><tbody>{Object.entries(instance.tags ?? {Name:instance.name}).map(([key,value])=><tr key={key}><td>{key}</td><td>{value}</td><td><button className="aws-sim-text-link" onClick={()=>{setTagKey(key);setTagValue(value);setTagError("");setShowTagEditor(true);}}>Edit</button> {key!=="Name"&&<button className="aws-sim-text-link" onClick={()=>{const result=deleteAwsInstanceTag(state,instance.id,key);if(result.error){setTagError(result.error);return;}setState(result.state);notify("Instance tag deleted.");}}>Delete</button>}</td></tr>)}</tbody></table></div>{showTagEditor&&<div className="aws-sim-editor"><h3>Add or edit tag</h3><div className="aws-sim-form-grid"><label>Tag key<input value={tagKey} onChange={event=>setTagKey(event.target.value)} maxLength={128}/></label><label>Tag value<input value={tagValue} onChange={event=>setTagValue(event.target.value)} maxLength={256}/></label></div>{tagError&&<p className="aws-sim-error" role="alert">{tagError}</p>}<div className="aws-sim-editor-actions"><button onClick={()=>setShowTagEditor(false)}>Cancel</button><button className="primary" onClick={()=>{const result=updateAwsInstanceTag(state,instance.id,tagKey,tagValue);if(result.error){setTagError(result.error);return;}setState(result.state);setShowTagEditor(false);setTagError("");notify("Instance tag saved.");}}>Save tag</button></div></div>}
             {tab === "Details" && <div className="aws-sim-property-grid"><div><span>AMI ID</span><b>{instance.imageId ?? "ami-0a1b2c3d4e5f67890"}</b></div><div><span>Platform details</span><b>Linux/UNIX</b></div><div><span>Key pair name</span><b>prod-admin-key</b></div><div><span>Launch time</span><b>2026-10-12 09:24 UTC</b></div></div>}
           </>}
         </div>}
