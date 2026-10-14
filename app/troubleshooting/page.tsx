@@ -236,7 +236,7 @@ export default function TroubleshootingPage() {
     <nav className="trouble-nav"><a className="trouble-brand" href="/">Visual Cloud Learning</a><div><a href="/services">Services</a><a href="/cloud-comparison">Cloud comparison</a><a className="trouble-nav-active" href="/troubleshooting">Troubleshooting</a></div></nav>
     <section className="trouble-hero">
       <div className="trouble-hero-copy"><p className="trouble-eyebrow">AWS · AZURE · GOOGLE CLOUD</p><h1>Learn to diagnose.<br /><span>Not just memorize.</span></h1><p>Realistic cloud incidents, evidence-led diagnostic paths, safe remediation, and cross-cloud service mapping—all in one hands-on learning workspace.</p>
-        <div className="trouble-hero-actions"><a href="#incident-workspace" className="trouble-primary-cta">Start investigating <span>↘</span></a><a href="/troubleshooting/labs/vm-unreachable" className="trouble-secondary-cta">Try interactive VM lab ↗</a><a href="/troubleshooting/labs/private-connectivity" className="trouble-secondary-cta">Try private database lab ↗</a><a href="#incident-catalog" className="trouble-secondary-cta">Browse incident library</a></div>
+        <div className="trouble-hero-actions"><a href="#incident-workspace" className="trouble-primary-cta">Start investigating <span>↘</span></a><a href="/troubleshooting/labs/vm-unreachable" className="trouble-secondary-cta">Try interactive VM lab ↗</a><a href="/troubleshooting/labs/private-connectivity" className="trouble-secondary-cta">Try private database lab ↗</a><a href="/troubleshooting/labs/access-denied" className="trouble-secondary-cta">Try AccessDenied lab ↗</a><a href="#incident-catalog" className="trouble-secondary-cta">Browse incident library</a></div>
       </div>
       <div className="trouble-hero-visual" aria-label="Illustrative incident flow">
         <div className="signal-orbit orbit-one"></div><div className="signal-orbit orbit-two"></div>
@@ -264,7 +264,7 @@ export default function TroubleshootingPage() {
         {revealed >= active.steps.length - 1 && <button className="trouble-root-toggle" onClick={() => setShowRootCause((v) => !v)}>{showRootCause ? "Hide root cause & prevention" : "Reveal root cause & prevention"} <span>{showRootCause ? "−" : "+"}</span></button>}
         {showRootCause && <div className="trouble-root-cause"><p className="trouble-eyebrow">ROOT CAUSE & LEARNING</p><h4>What the evidence supports</h4><p>{active.rootCause}</p><h4>Prevent recurrence</h4><p>{active.prevention}</p></div>}
         </>}
-        <div className="trouble-related-services"><div><p className="trouble-eyebrow">CONTINUE LEARNING</p><h4>Services & tools connected to this incident</h4></div><div className="trouble-service-links">{active.services.map((service) => <a key={service.name} href={service.href}><span>{service.name}</span><b>↗</b></a>)}</div></div>
+        <div className="trouble-related-services"><div><p className="trouble-eyebrow">CONTINUE LEARNING</p><h4>Services & tools connected to this incident</h4></div><div className="trouble-service-links">{active.services.map((service) => <a key={service.name} href={service.href}><span>{service.name}</span><b>↗</b></a>)}</div>{active.id === "access-denied" && <a className="trouble-secondary-cta" href="/troubleshooting/labs/access-denied">Open interactive AccessDenied lab ↗</a>}</div>
       </article> : <div className="trouble-no-selection">No incident matches your current filters. Clear the search or select another category.</div>}
       </div>
     </section>
