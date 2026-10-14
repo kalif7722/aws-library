@@ -498,3 +498,39 @@ export function deleteSecurityGroupEgressRule(state: AwsLabState, groupId: strin
   const result = deleteSecurityGroupIngressRule(withEgressAsIngress(state, groupId), groupId, ruleId);
   return { state: result.deleted ? restoreEgressFromProxy(state, result.state, groupId) : state, deleted: result.deleted };
 }
+
+
+export function createAwsSubnet(
+  state: AwsLabState,
+  input: { name: string; cidr: string; availabilityZone: string; vpcId: string; routeTableId: string }
+): { state: AwsLabState; subnet: AwsSubnet | null; error: string | null } {
+  const name = input.name.trim();
+  const cidr = input.cidr.trim();
+  if (!name) return { state, subnet: null, error: "Subnet name is required." };
+  const subnets = getAwsSubnets(state);
+  if (subnets.some(subnet => subnet.name.toLowerCase() === name.toLowerCase())) return { state, subnet: null, error: "A subnet with that name already exists." };
+  const parts = cidr.split("/");
+  const prefix = Number(parts[1]);
+  const networkIp = parts[0] ?? "";
+  if (parts.length !== 2 || ipv4ToNumber(networkIp) === null || parts[1] === "" || !Number.isInteger(prefix) || String(prefix) !== parts[1] || prefix < 16 || prefix > 28) {
+    return { state, subnet: null, error: "Enter a valid subnet IPv4 CIDR with a prefix between /16 and /28." };
+  }
+  const vpc = getAwsVpcs(state).find(item => item.id === input.vpcId);
+  const routeTable = getAwsRouteTables(state).find(item => item.id === input.routeTableId);
+  if (!vpc) return { state, subnet: null, error: "Choose an existing VPC." };
+  if (!routeTable || routeTable.vpcId !== vpc.id) return { state, subnet: null, error: "Choose a route table in the selected VPC." };
+  if (!cidrContains(vpc.cidr, networkIp) || Number(vpc.cidr.split("/")[1]) > prefix) return { state, subnet: null, error: "The subnet CIDR must fit inside the VPC CIDR." };
+  const overlaps = (left: string, right: string) => {
+    const leftBase = left.split("/")[0], rightBase = right.split("/")[0];
+    return cidrContains(left, rightBase) || cidrContains(right, leftBase);
+  };
+  if (subnets.some(subnet => subnet.vpcId === vpc.id && overlaps(subnet.cidr, cidr))) return { state, subnet: null, error: "The subnet CIDR overlaps an existing subnet in this VPC." };
+  const subnet: AwsSubnet = {
+    id: "subnet-0f0000000000000" + (subnets.length + 1).toString(16).padStart(2, "0"),
+    name, vpcId: vpc.id, cidr, availabilityZone: input.availabilityZone,
+    state: "available", routeTableId: routeTable.id,
+    networkAclId: subnets.find(item => item.vpcId === vpc.id)?.networkAclId ?? "acl-0123abcd4567ef890"
+  };
+  const routeTables = getAwsRouteTables(state).map(table => table.id === routeTable.id ? { ...table, associatedSubnetIds: [...new Set([...table.associatedSubnetIds, subnet.id])] } : table);
+  return { state: { ...state, subnets: [...subnets, subnet], routeTables }, subnet, error: null };
+}
