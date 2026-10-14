@@ -51,8 +51,8 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess"] }
   ]
 });
-export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup"): AwsLabState {
-  const groupId = state.instance.securityGroupIds[0];
+export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup", targetGroupId = state.instance.securityGroupIds[0]): AwsLabState {
+  const groupId = targetGroupId;
   const normalizedSource = sourceType === "SecurityGroup"
     ? state.securityGroups.find(group => group.id === source || group.name === source)?.id ?? source
     : source;
