@@ -26,7 +26,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
     { id: "sgr-0b844311223344557", protocol: "TCP", fromPort: 8443, toPort: 8443, sourceType: "SecurityGroup", source: "sg-0f55aa11bb22cc33", description: "Internal service traffic" }
-  ] }],
+  ] }, {
+    id: "sg-0f55aa11bb22cc33", name: "sg-bastion-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
+      { id: "sgr-0c944311223344558", protocol: "TCP", fromPort: 22, toPort: 22, sourceType: "IPv4", source: "10.20.0.0/16", description: "Approved administrator access" }
+    ]
+  }],
   routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }],
   networkAcl: [
     { direction: "inbound", protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
@@ -47,8 +51,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
 });
 export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup"): AwsLabState {
   const groupId = state.instance.securityGroupIds[0];
+  const normalizedSource = sourceType === "SecurityGroup"
+    ? state.securityGroups.find(group => group.id === source || group.name === source)?.id ?? source
+    : source;
   return { ...state, securityGroups: state.securityGroups.map(group => group.id !== groupId ? group : {
-    ...group, ingress: [...group.ingress.filter(rule => !(rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22 && rule.sourceType === sourceType && rule.source === source)), { id: "sgr-sim-ssh-admin", protocol: "TCP", fromPort: 22, toPort: 22, sourceType, source, description: "Approved administrator SSH access (simulated)" }]
+    ...group, ingress: [...group.ingress.filter(rule => !(rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22 && rule.sourceType === sourceType && rule.source === normalizedSource)), { id: "sgr-sim-ssh-admin", protocol: "TCP", fromPort: 22, toPort: 22, sourceType, source: normalizedSource, description: "Approved administrator SSH access (simulated)" }]
   }) };
 }
 function portMatches(ports: string, port: number): boolean {
@@ -82,7 +89,7 @@ export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bast
   const sourceIp = source === "sg-bastion-prod" ? "10.20.1.10" : source.split("/")[0];
   const instanceHealthy = state.instance.state === "running" && state.instance.systemStatus === "passed" && state.instance.instanceStatus === "passed";
   const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) &&
-    ((rule.sourceType === "SecurityGroup" && rule.source === source) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
+    ((rule.sourceType === "SecurityGroup" && (rule.source === source || state.securityGroups.some(sourceGroup => sourceGroup.name === source && sourceGroup.id === rule.source))) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
   const routeHealthy = state.routes.some(route => cidrContains(route.destination, state.instance.privateIp) && route.target === "local" && route.state === "active");
   const inboundAclAllows = aclAllows(state, "inbound", 22, sourceIp);
   const outboundAclAllows = aclAllows(state, "outbound", 49152, sourceIp);
