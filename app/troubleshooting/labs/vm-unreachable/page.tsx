@@ -220,11 +220,27 @@ const labSteps: Record<Provider, LabStep[]> = {
 
 export default function VmUnreachableLab() {
   const [provider, setProvider] = useState<Provider>("AWS");
+  const [protocol, setProtocol] = useState<"SSH" | "RDP">("SSH");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showCommand, setShowCommand] = useState(false);
   const steps = labSteps[provider];
-  const current = steps[step];
+  const baseStep = steps[step];
+  const current = useMemo<LabStep>(() => {
+    if (protocol === "SSH") return baseStep;
+    const adapt = (value: string) => value
+      .replaceAll("SSH", "RDP").replaceAll("ssh", "RDP")
+      .replaceAll("TCP/22", "TCP/3389").replaceAll("TCP / 22", "TCP / 3389")
+      .replaceAll("tcp:22", "tcp:3389").replaceAll(":22", ":3389")
+      .replaceAll("port 22", "port 3389").replaceAll("sshd", "Remote Desktop Services (TermService)")
+      .replaceAll("SSH authentication", "RDP session authentication").replaceAll("SSH session", "RDP session")
+      .replaceAll("ssh login", "RDP login").replaceAll("SSH logs", "RDP / Security logs")
+      .replaceAll("ssh-to-api-prod", "rdp-to-api-prod").replaceAll("SSH / RDP", "RDP");
+    const mapped: LabStep = { ...baseStep, title: adapt(baseStep.title), objective: adapt(baseStep.objective), consolePath: adapt(baseStep.consolePath), resource: adapt(baseStep.resource), rows: baseStep.rows.map(row => ({ ...row, label: adapt(row.label), value: adapt(row.value) })), clue: adapt(baseStep.clue), question: adapt(baseStep.question), choices: baseStep.choices.map(choice => ({ ...choice, label: adapt(choice.label), feedback: adapt(choice.feedback) })), command: adapt(baseStep.command), commandOutput: adapt(baseStep.commandOutput) };
+    if (step === 3) { mapped.command = "Get-Service TermService; Get-NetTCPConnection -LocalPort 3389 -State Listen"; mapped.commandOutput = "TermService: Running\\nLISTENING on TCP/3389\\nNo matching RDP attempt reached the guest"; }
+    if (step === 4) { mapped.command = "Test-NetConnection <vm-address> -Port 3389  # after approved change"; mapped.commandOutput = "Expected post-change result: TCP connection succeeds; approved RDP session succeeds; guest Security logs confirm the expected administrator."; }
+    return mapped;
+  }, [baseStep, protocol, step]);
   const answerKey = provider + ":" + step;
   const selected = answers[answerKey];
   const passed = selected !== undefined && current.choices[selected]?.correct;
@@ -240,10 +256,10 @@ export default function VmUnreachableLab() {
   return <main className="vm-lab-shell">
     <header className="vm-lab-top"><a href="/troubleshooting">← Troubleshooting library</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
     <section className="vm-lab-hero">
-      <div><p className="vm-lab-kicker">NETWORK TROUBLESHOOTING · LAB 01</p><h1>VM unreachable over <em>SSH / RDP</em></h1><p>Follow the evidence through the cloud console. Inspect the resource, choose what the evidence proves, and unlock the next diagnostic step. No live cloud resources are accessed or changed.</p></div>
+      <div><p className="vm-lab-kicker">NETWORK TROUBLESHOOTING · LAB 01</p><h1>VM unreachable over <em>{protocol}</em></h1><p>Follow the evidence through the cloud console. Inspect the resource, choose what the evidence proves, and unlock the next diagnostic step. No live cloud resources are accessed or changed.</p></div>
       <div className="vm-lab-score"><span>YOUR INVESTIGATION</span><strong>{progress}%</strong><div><i style={{width: progress + "%"}} /></div><small>{Object.keys(answers).filter(k=>k.startsWith(provider+":") && labSteps[provider][Number(k.split(":")[1])]?.choices[answers[k]]?.correct).length} of {steps.length} checks verified</small></div>
     </section>
-    <section className="vm-lab-provider"><div><span className="vm-lab-section-label">01 / CHOOSE YOUR CLOUD</span><p>Same incident pattern. Vendor-specific console, rules, and diagnostics.</p></div><div className="vm-lab-provider-buttons">{(["AWS","Azure","Google Cloud"] as Provider[]).map(p=><button key={p} className={provider===p?"active "+p.toLowerCase().replace(" ","-"):""} onClick={()=>{setProvider(p);setStep(0);setShowCommand(false);}}><span className={"vm-cloud-mark "+p.toLowerCase().replace(" ","-")}>{p==="AWS"?"aws":p==="Azure"?"Az":"G"}</span><strong>{p}</strong><small>{providerNames[p].product}</small></button>)}</div></section>
+    <section className="vm-lab-provider"><div><span className="vm-lab-section-label">01 / CHOOSE YOUR CLOUD</span><p>Same incident pattern. Vendor-specific console, rules, and diagnostics.</p><div className="vm-lab-protocol-switch" aria-label="Remote access protocol"><button className={protocol === "SSH" ? "active" : ""} onClick={() => { setProtocol("SSH"); setStep(0); setAnswers({}); setShowCommand(false); }}>SSH · TCP/22</button><button className={protocol === "RDP" ? "active" : ""} onClick={() => { setProtocol("RDP"); setStep(0); setAnswers({}); setShowCommand(false); }}>RDP · TCP/3389</button></div></div><div className="vm-lab-provider-buttons">{(["AWS","Azure","Google Cloud"] as Provider[]).map(p=><button key={p} className={provider===p?"active "+p.toLowerCase().replace(" ","-"):""} onClick={()=>{setProvider(p);setStep(0);setShowCommand(false);}}><span className={"vm-cloud-mark "+p.toLowerCase().replace(" ","-")}>{p==="AWS"?"aws":p==="Azure"?"Az":"G"}</span><strong>{p}</strong><small>{providerNames[p].product}</small></button>)}</div></section>
     <section className="vm-lab-workspace">
       <aside className="vm-lab-step-rail"><div className="vm-lab-rail-head"><span>DIAGNOSTIC PATH</span><strong>{step+1} / {steps.length}</strong></div>{steps.map((s,i)=><button key={s.title} className={i===step?"active":answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"complete":i>step?"locked":""} onClick={()=>{if(i<=step || (i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)){setStep(i);setShowCommand(false);}}} disabled={i>step && !(i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)}><span>{answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"✓":String(i+1).padStart(2,"0")}</span><strong>{s.title}</strong><small>{i===step?"Current check":i<step?"Reviewed":"Locked until verified"}</small></button>)}</aside>
       <div className="vm-lab-main">
