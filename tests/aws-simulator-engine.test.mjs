@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
@@ -120,4 +120,20 @@ test('SSH ingress rule targets the selected security group rather than always th
   const updated=addSshIngressRule(initial,'198.51.100.24/32','IPv4','sg-0f55aa11bb22cc33');
   assert.ok(updated.securityGroups.find(group=>group.id==='sg-0f55aa11bb22cc33').ingress.some(rule=>rule.source==='198.51.100.24/32'));
   assert.ok(!updated.securityGroups.find(group=>group.id==='sg-0ab12cd34ef56ab78').ingress.some(rule=>rule.source==='198.51.100.24/32'));
+});
+
+
+test('instance tag edits validate keys and update the selected instance only',()=>{
+  const initial=createInitialAwsLabState();
+  const launched=launchAwsInstance(initial,{name:'worker-02',instanceType:'t3.small',subnetId:initial.instance.subnetId,securityGroupIds:initial.instance.securityGroupIds});
+  const updated=updateAwsInstanceTag(launched.state,launched.instance.id,'CostCenter','CC-42');
+  assert.equal(updated.error,null);
+  assert.equal(getAwsInstances(updated.state)[1].tags.CostCenter,'CC-42');
+  assert.equal(getAwsInstances(updated.state)[0].tags.CostCenter,undefined);
+  assert.match(updateAwsInstanceTag(updated.state,launched.instance.id,'aws:reserved','x').error,/reserved/);
+  assert.match(updateAwsInstanceTag(updated.state,launched.instance.id,'','x').error,/required/);
+  const deleted=deleteAwsInstanceTag(updated.state,launched.instance.id,'CostCenter');
+  assert.equal(deleted.error,null);
+  assert.equal(getAwsInstances(deleted.state)[1].tags.CostCenter,undefined);
+  assert.match(deleteAwsInstanceTag(deleted.state,launched.instance.id,'Name').error,/required/);
 });
