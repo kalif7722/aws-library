@@ -414,6 +414,7 @@ export default function VmUnreachableLab() {
         <div><span>01 · SOURCE</span><strong>{provider==="AWS"?"Approved bastion / admin host":provider==="Azure"?"Approved administrator or Bastion path":"Approved bastion / admin host"}</strong><small>{provider==="AWS"?"Expected identity: sg-bastion-prod":provider==="Azure"?"Expected source: approved admin path / bastion subnet":"Expected source: approved admin host or bastion"}</small></div>
         <div className="path-arrow" aria-hidden="true">→</div>
         <div><span>02 · DESTINATION</span><strong>{provider==="AWS"?"EC2 · api-prod-01":provider==="Azure"?"Virtual machine · api-prod-01":"Compute Engine · api-prod-01"}</strong><small>Target: selected VM network interface and guest OS</small></div>
+        <div className="path-arrow" aria-hidden="true">→</div>
         <div><span>03 · TRANSPORT</span><strong>TCP / {protocol==="SSH"?"22 (SSH)": "3389 (RDP)"}</strong><small>Expected outcome: TCP handshake, then guest authentication</small></div>
       </div>
       <div className="vm-lab-path-foot"><span><b>Failure symptom</b> {protocol==="SSH"?"SSH connection times out or is refused":"RDP connection times out or is refused"}</span><span><b>Investigation order</b> Instance health → effective network rules → routes / return path → guest listener → connection re-test</span></div>
