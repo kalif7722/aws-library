@@ -11,7 +11,7 @@ export type AwsLabState = {
   instance: { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped" };
   securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
-  networkAcl: { direction: "inbound" | "outbound"; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
+  networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
   s3Buckets: { name: string; region: string; blockPublicAccess: boolean; versioningEnabled: boolean; encryption: "SSE-S3" | "SSE-KMS"; }[];
   iamRoles: { name: string; lastActivity: string; trustedService: string; attachedPolicies: string[] }[];
 };
@@ -33,10 +33,10 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   }],
   routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }],
   networkAcl: [
-    { direction: "inbound", protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
-    { direction: "inbound", protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
-    { direction: "outbound", protocol: "TCP", ports: "1024-65535", source: "0.0.0.0/0", action: "allow" },
-    { direction: "outbound", protocol: "TCP", ports: "22", source: "0.0.0.0/0", action: "allow" }
+    { direction: "inbound", ruleNumber: 110, protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
+    { direction: "inbound", ruleNumber: 100, protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
+    { direction: "outbound", ruleNumber: 100, protocol: "TCP", ports: "1024-65535", source: "0.0.0.0/0", action: "allow" },
+    { direction: "outbound", ruleNumber: 110, protocol: "TCP", ports: "22", source: "0.0.0.0/0", action: "allow" }
   ],
   s3Buckets: [
     { name: "prod-app-artifacts", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
@@ -79,8 +79,8 @@ function cidrContains(cidr: string, ip: string): boolean {
   return (network & mask) === (address & mask);
 }
 function aclAllows(state: AwsLabState, direction: "inbound" | "outbound", port: number, sourceIp: string): boolean {
-  const rules = state.networkAcl.filter(rule => rule.direction === direction && (rule.protocol === "TCP" || rule.protocol === "6" || rule.protocol === "-1" || rule.protocol === "ALL") && portMatches(rule.ports, port) && cidrContains(rule.source, sourceIp));
-  // The training model preserves the displayed rule order: first matching rule wins.
+  const rules = state.networkAcl.filter(rule => rule.direction === direction && (rule.protocol === "TCP" || rule.protocol === "6" || rule.protocol === "-1" || rule.protocol === "ALL") && portMatches(rule.ports, port) && cidrContains(rule.source, sourceIp)).sort((a, b) => a.ruleNumber - b.ruleNumber);
+  // AWS evaluates the lowest matching rule number first; default is implicit deny.
   const first = rules[0];
   return !!first && first.action === "allow";
 }
