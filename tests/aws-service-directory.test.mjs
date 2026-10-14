@@ -7,9 +7,14 @@ const mocks = loadArchitectureModule(new URL('../app/troubleshooting/simulators/
 
 test('AWS service directory separates implemented screens from catalog-only services', () => {
   const entries = directory.AWS_SERVICE_DIRECTORY;
-  assert.ok(entries.length >= 40);
+  assert.ok(entries.length >= 80);
   assert.ok(entries.some(service => service.name === 'EC2' && service.implemented && service.screen === 'EC2 Dashboard'));
   assert.ok(entries.some(service => service.name === 'CloudTrail' && !service.implemented));
+  assert.ok(entries.some(service => service.name === 'Transit Gateway' && !service.implemented));
+  assert.ok(entries.some(service => service.name === 'Network Firewall' && !service.implemented));
+  assert.ok(entries.some(service => service.name === 'CloudFormation' && !service.implemented));
+  assert.ok(entries.some(service => service.category === 'Artificial Intelligence'));
+  assert.ok(entries.some(service => service.category === 'Front-End Web & Mobile'));
   assert.equal(new Set(entries.map(service => service.name)).size, entries.length);
 });
 
