@@ -49,6 +49,7 @@ const serviceFor: Record<Screen, string> = {
 
 export default function AwsSimulatorPage() {
   const [state, setState] = useState<AwsLabState>(() => createInitialAwsLabState());
+  const [hydrated, setHydrated] = useState(false);
   const [screen, setScreen] = useState<Screen>("Console Home");
   const [selectedResource, setSelectedResource] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -69,10 +70,12 @@ export default function AwsSimulatorPage() {
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
       }
     } catch { /* Start with the seeded training account if storage is unavailable. */ }
+    setHydrated(true);
   }, []);
   useEffect(() => {
+    if (!hydrated) return;
     try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen })); } catch { /* Storage is optional. */ }
-  }, [state, screen]);
+  }, [hydrated, state, screen]);
 
   const filteredServices = useMemo(() => services.filter(service => (service.name + " " + service.category + " " + service.description).toLowerCase().includes(search.toLowerCase())), [search]);
   const group = state.securityGroups[0];
