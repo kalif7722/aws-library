@@ -185,4 +185,6 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 - **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
 
+- **2026-10-15:** Added an EC2 lifecycle regression test covering per-instance stop/reboot scoping, synchronization of the legacy primary-instance view, and immutability of the prior state. Test suite execution remains pending.
+
 - **2026-10-15:** Fixed the TSX parser error reported by the Cloudflare build (`Expected ',' or ')' but found '}'`) by closing the `setSelectedInstanceIds(...)` call in the EC2 select-all handler. Commit: [`994ad21`](https://github.com/kalif7722/aws-library/commit/994ad2165af7bc308588e6afab299498967856e6). The previous failure is explained by this syntax defect; a fresh production build and test run are still required before marking validation complete.
