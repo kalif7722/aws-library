@@ -34,11 +34,11 @@ jobs:
 
           anchor = '  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },\n];'
           replacement = '''  { name: "Amazon Titan", file: "/el10/ai/titan.webp", accent: "#a855f7", summary: "Amazon foundation models for generative AI applications" },
-  { name: "AWS Management Console", file: "/el10/aws-management-console.webp", accent: "#2563eb", summary: "Web interface for accessing and managing AWS services" },
-  { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
-  { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
-  { name: "Savings Plans", file: "/el10/svgsavings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
-];'''
+            { name: "AWS Management Console", file: "/el10/aws-management-console.webp", accent: "#2563eb", summary: "Web interface for accessing and managing AWS services" },
+            { name: "AWS CLI", file: "/el10/aws-cli.webp", accent: "#f97316", summary: "Unified command-line interface for AWS services" },
+            { name: "AWS AppConfig", file: "/el10/appconfig.webp", accent: "#db2777", summary: "Safely deploy feature flags and dynamic application configuration" },
+            { name: "Savings Plans", file: "/el10/svgsavings-plans.webp", accent: "#16a34a", summary: "Commitment-based pricing for lower eligible AWS usage costs" },
+          ];'''
           assert s.count(anchor) == 1, 'services array anchor changed; refusing unsafe patch'
           s = s.replace(anchor, replacement)
 
@@ -54,18 +54,18 @@ jobs:
 
           branch_anchor = '  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },\n];'
           branch_replacement = '''  { title: "Other Services", start: 196, end: 215, accent: "#14b8a6", copies: [181, 226, 227, 228] },
-  { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 246] },
-];'''
+            { title: "Cloud Financial Management", start: 0, end: 0, accent: "#16a34a", copies: [23, 24, 25, 9, 13, 215, 216, 246] },
+          ];'''
           assert s.count(branch_anchor) == 1, 'branch array anchor changed'
           s = s.replace(branch_anchor, branch_replacement)
 
           alias_anchor = '  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",\n};'
           alias_replacement = '''  "Audit Manager": "audit evidence compliance", "AWS CloudFormation": "infrastructure as code IaC", "AWS CodePipeline": "CI CD continuous delivery deployment",
-  "AWS Management Console": "console browser web interface access AWS services",
-  "AWS CLI": "command line terminal developer tools automation",
-  "AWS AppConfig": "feature flags dynamic configuration deployment systems manager",
-  "Savings Plans": "cost savings commitment pricing cloud financial management",
-};'''
+            "AWS Management Console": "console browser web interface access AWS services",
+            "AWS CLI": "command line terminal developer tools automation",
+            "AWS AppConfig": "feature flags dynamic configuration deployment systems manager",
+            "Savings Plans": "cost savings commitment pricing cloud financial management",
+          };'''
           assert s.count(alias_anchor) == 1, 'semantic alias anchor changed'
           s = s.replace(alias_anchor, alias_replacement)
 
@@ -73,8 +73,8 @@ jobs:
           # Keep the counter tied to unique canonical service names as a guard against future duplicates.
           counter_anchor = '  const service = selected === null ? null : services[selected];\n  const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);'
           counter_replacement = '''  const service = selected === null ? null : services[selected];
-  const uniqueServiceCount = new Set(services.map((item) => normalize(item.name))).size;
-  const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);'''
+            const uniqueServiceCount = new Set(services.map((item) => normalize(item.name))).size;
+            const allCollapsed = branches.every((branch) => collapsedBranches[branch.title]);'''
           assert s.count(counter_anchor) == 1, 'counter anchor changed'
           s = s.replace(counter_anchor, counter_replacement)
           assert s.count('<strong>{services.length}</strong><span>services mapped</span>') == 1, 'counter markup anchor changed'
