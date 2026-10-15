@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,updateAwsDnsRecordTarget,setAwsInstanceListenerState}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
   const initial=createInitialAwsLabState();
@@ -298,4 +298,95 @@ test('subnet creation validates CIDR overlap and route table VPC',()=>{
   assert.ok(getAwsRouteTables(created.state).find(table=>table.id==='rtb-0123abcd4567ef890').associatedSubnetIds.includes(created.subnet.id));
   assert.match(createAwsSubnet(initial,{name:'overlap-subnet',cidr:'10.20.2.128/25',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'}).error,/overlaps/);
   assert.match(createAwsSubnet(initial,{name:'wrong-table-subnet',cidr:'10.20.3.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-wrong-vpc'}).error,/route table in the selected VPC/);
+});
+
+
+test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda, DynamoDB and alarms',()=>{
+  const state=createInitialAwsLabState();
+  assert.equal(state.schemaVersion,3);
+  assert.equal(getAwsLoadBalancers(state)[0].listeners[0].targetGroupId,'tg-payments-api');
+  assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
+  assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,true);
+  assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-admin').healthy,false);
+  assert.equal(evaluateAwsDatabaseConnectivity(state,state.instance.id,'orders-prod').healthy,true);
+  assert.equal(evaluateAwsDnsRecord(state,'record-api').healthy,true);
+  assert.equal(getAwsDynamoTables(state).length,2);
+  assert.equal(getAwsLambdaFunctions(state).length,2);
+  assert.equal(evaluateAwsLambdaReadiness(state,'payments-authorizer').healthy,true);
+  assert.equal(evaluateAwsLambdaReadiness(state,'orders-event-handler').healthy,false);
+  assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['OK','OK','ALARM']);
+});
+
+test('target health-check configuration changes health and the related CloudWatch alarm',()=>{
+  const initial=createInitialAwsLabState();
+  const broken=updateAwsTargetGroupHealthCheck(initial,'tg-payments-api','/ready');
+  assert.equal(broken.error,null);
+  assert.equal(evaluateAwsTargetGroupHealth(broken.state,'tg-payments-api').healthy,false);
+  assert.equal(getAwsCloudWatchAlarms(broken.state).find(alarm=>alarm.name==='payments-target-health').state,'ALARM');
+  const restored=updateAwsTargetGroupHealthCheck(broken.state,'tg-payments-api','/health');
+  assert.equal(restored.error,null);
+  assert.equal(evaluateAwsTargetGroupHealth(restored.state,'tg-payments-api').healthy,true);
+  assert.match(updateAwsTargetGroupHealthCheck(initial,'tg-payments-api','bad path').error,/start with/);
+});
+
+test('application listener state drives target group and load balancer health',()=>{
+  const initial=createInitialAwsLabState();
+  const stopped=setAwsInstanceListenerState(initial,initial.instance.id,8080,'stopped');
+  assert.equal(stopped.error,null);
+  assert.equal(evaluateAwsTargetGroupHealth(stopped.state,'tg-payments-api').healthy,false);
+  assert.equal(evaluateAwsLoadBalancerHealth(stopped.state,'alb-payments-prod').healthy,false);
+  const restored=setAwsInstanceListenerState(stopped.state,initial.instance.id,8080,'listening');
+  assert.equal(evaluateAwsLoadBalancerHealth(restored.state,'alb-payments-prod').healthy,true);
+});
+
+test('RDS availability and database security rules drive private application connectivity',()=>{
+  const initial=createInitialAwsLabState();
+  const stopped=setAwsDatabaseStatus(initial,'orders-prod','stopped');
+  assert.equal(stopped.error,null);
+  assert.equal(evaluateAwsDatabaseConnectivity(stopped.state,initial.instance.id,'orders-prod').healthy,false);
+  assert.equal(getAwsCloudWatchAlarms(stopped.state).find(alarm=>alarm.name==='orders-db-connections').state,'ALARM');
+  const fixedSg={...initial,securityGroups:initial.securityGroups.map(group=>group.id==='sg-rds-orders'?{...group,ingress:[]}:group)};
+  assert.equal(evaluateAwsDatabaseConnectivity(fixedSg,initial.instance.id,'orders-prod').healthy,false);
+  assert.equal(evaluateAwsDatabaseConnectivity(initial,initial.instance.id,'orders-prod').healthy,true);
+});
+
+test('Route 53 records resolve through resource references and surface stale targets',()=>{
+  const initial=createInitialAwsLabState();
+  assert.equal(evaluateAwsDnsRecord(initial,'record-api').healthy,true);
+  const changed=updateAwsDnsRecordTarget(initial,'record-api','database','orders-prod');
+  assert.equal(changed.error,null);
+  assert.equal(evaluateAwsDnsRecord(changed.state,'record-api').healthy,false);
+  const restored=updateAwsDnsRecordTarget(changed.state,'record-api','load-balancer','alb-payments-prod');
+  assert.equal(evaluateAwsDnsRecord(restored.state,'record-api').healthy,true);
+});
+
+test('Lambda role policy state affects readiness and the CloudWatch alarm',()=>{
+  const initial=createInitialAwsLabState();
+  assert.equal(evaluateAwsLambdaReadiness(initial,'orders-event-handler').healthy,false);
+  const fixed=toggleIamRolePolicy(initial,'Lambda-Payments-Role','DynamoDBOrdersWrite');
+  assert.equal(evaluateAwsLambdaReadiness(fixed,'orders-event-handler').healthy,true);
+  assert.equal(getAwsCloudWatchAlarms(fixed).find(alarm=>alarm.name==='orders-event-handler-errors').state,'OK');
+});
+
+test('legacy account migration adds new service graph once and preserves later target health faults',()=>{
+  const initial=createInitialAwsLabState();
+  const old={...initial};
+  delete old.schemaVersion;
+  delete old.loadBalancers;
+  delete old.targetGroups;
+  delete old.databases;
+  delete old.dnsRecords;
+  delete old.lambdaFunctions;
+  delete old.dynamoTables;
+  delete old.cloudWatchAlarmDefinitions;
+  old.securityGroups=old.securityGroups.filter(group=>group.id!=='sg-alb-payments'&&group.id!=='sg-rds-orders').map(group=>group.id==='sg-0ab12cd34ef56ab78'?{...group,ingress:group.ingress.filter(rule=>rule.id!=='sgr-alb-8080')}:group);
+  delete old.instance.listeners;
+  delete old.instance.healthCheckPaths;
+  const migrated=migrateAwsLabState(old);
+  assert.equal(migrated.schemaVersion,3);
+  assert.ok(getAwsLoadBalancers(migrated).length>0);
+  assert.ok(migrated.securityGroups.find(group=>group.id==='sg-0ab12cd34ef56ab78').ingress.some(rule=>rule.id==='sgr-alb-8080'));
+  const broken=updateAwsTargetGroupHealthCheck(migrated,'tg-payments-api','/ready').state;
+  const reloaded=migrateAwsLabState(broken);
+  assert.equal(evaluateAwsTargetGroupHealth(reloaded,'tg-payments-api').healthy,false);
 });
