@@ -179,6 +179,14 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 8. [ ] Run tests/build and record actual results.
 9. [ ] Complete the Phase 2 exit gate review before adding another service family.
 
+## Latest verification update — 2026-10-15
+
+- GitHub PR #5 is still **open and draft**; head is `9f011bfc4c0ad8305ce6f3110b1a809f39ccbdb6`.
+- The Cloudflare deployment status attached to the latest PR discussion reports **deployment failed** for commit `9f011bfc` at 2026-10-15 04:54 UTC. This supersedes any assumption that the prior syntax correction made the build/deployment healthy.
+- GitHub Actions PR-triggered workflow runs and commit status checks are empty for this head. They do not establish a passing build.
+- `package.json` defines `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build followed by tests). These commands have not been executed here: the GitHub connector provides repository reads/writes but no runnable checkout, and a network clone was unavailable. Do not mark the Phase 2 gate passed.
+- Next blocking action: inspect the Cloudflare build log for commit `9f011bfc`, fix the specific current failure, then run the exact commands above in a working checkout and record their outputs before further service expansion.
+
 ## Change log
 
 - **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
