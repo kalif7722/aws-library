@@ -21,7 +21,7 @@ const stages: Stage[] = [
     title: "Reproduce the failure",
     objective: "Run the same model request before changing configuration. Capture the operation, timestamp, Region, and full response.",
     evidenceTitle: "Request context",
-    evidence: ["Service: Amazon Bedrock Runtime", "Operation: Converse", "Model: Claude 3.5 Sonnet (simulated)", "Caller: assumed role AI-Platform-Operator", "Region: us-east-1"],
+    evidence: ["Service: Amazon Bedrock Runtime", "Operation: Converse", "Model: Nova Lite (simulated)", "Caller: assumed role AI-Platform-Operator", "Region: eu-west-1"],
     question: "Which evidence should you preserve before making a change?",
     choices: [
       { label: "Full error, caller identity, operation, model/Region and timestamp", correct: true, feedback: "Correct. Preserve the original request context so it can be correlated with the audit event." },
@@ -108,6 +108,8 @@ export default function AwsAiAccessDeniedLab() {
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState<"guided" | "challenge">("guided");
   const [sideBySide, setSideBySide] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(220);
+  const [consoleWidth, setConsoleWidth] = useState(520);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState<Record<number, boolean>>({});
   const consoleFrame = useRef<HTMLIFrameElement>(null);
@@ -151,7 +153,7 @@ export default function AwsAiAccessDeniedLab() {
           <div className="lab-error-title"><span className="lab-error-dot" /> Simulated API response <span className="lab-http">HTTP 403</span></div>
           <code>AccessDeniedException</code>
           <p>The request was denied. Capture the full response and inspect the matching CloudTrail event to identify the cause.</p>
-          <small>Training note: AWS can return an enhanced authorization message naming the denied action and policy reason, but the wording varies by API, authorization layer and context. This lab reveals the specific IAM hypothesis only after you inspect the evidence.</small>
+          <small>Training note: AWS can return an enhanced authorization message naming the denied action and policy reason, but the wording varies by API, authorization layer and context. The lab shows an illustrative error, then records a local simulated audit event when you invoke the model. It does not create real AWS CloudTrail events.</small>
         </div>
         <Architecture step={step} />
         <p className="lab-source-note">Error behavior reference: <a href="https://repost.aws/knowledge-center/bedrock-invokemodel-api-error" target="_blank" rel="noreferrer">AWS guidance on Bedrock InvokeModel errors ↗</a></p>
@@ -163,10 +165,11 @@ export default function AwsAiAccessDeniedLab() {
           <button className={mode === "challenge" ? "active" : ""} onClick={() => setMode("challenge")}>Challenge mode</button>
         </div>
         <label className="lab-split-toggle"><input type="checkbox" checked={sideBySide} onChange={e => setSideBySide(e.target.checked)} /> Try side-by-side console</label>
+        {sideBySide && <div className="lab-pane-controls" aria-label="Adjust side-by-side pane widths"><label>Investigation sidebar <strong>{sidebarWidth}px</strong><input type="range" min="170" max="340" step="10" value={sidebarWidth} onChange={e => setSidebarWidth(Number(e.target.value))} /></label><label>Console pane <strong>{consoleWidth}px</strong><input type="range" min="360" max="900" step="20" value={consoleWidth} onChange={e => setConsoleWidth(Number(e.target.value))} /></label></div>}
       </div>
       <p className="lab-mode-description">{mode === "guided" ? "Guided mode explains what to inspect, why it matters, and how to verify the result." : "Challenge mode hides the suggested action and explanation. Use the simulator and evidence to decide your next move; reveal the walkthrough when you need a hint."}</p>
 
-      <section className={"lab-layout " + (sideBySide ? "split-layout" : "")}>
+      <section className={"lab-layout " + (sideBySide ? "split-layout" : "")} style={sideBySide ? { gridTemplateColumns: `${sidebarWidth}px minmax(320px, 1fr) minmax(360px, ${consoleWidth}px)` } : undefined}>
         <aside className="lab-steps" aria-label="Lab progress">
           <h2>Investigation path</h2>
           {stages.map((item, i) => <button key={item.title} className={i === step ? "active" : checked[i] && item.choices[answers[i]]?.correct ? "complete" : ""} onClick={() => goTo(i)}><span>{checked[i] && item.choices[answers[i]]?.correct ? "✓" : String(i + 1).padStart(2, "0")}</span><strong>{item.title}</strong><small>{checked[i] ? item.choices[answers[i]]?.correct ? "Passed" : "Review answer" : "Not completed"}</small></button>)}
@@ -177,7 +180,7 @@ export default function AwsAiAccessDeniedLab() {
         <article className="lab-workspace">
           <div className="lab-stage-head"><span>CHECKPOINT {step + 1} OF {stages.length}</span><h2>{current.title}</h2><p>{current.objective}</p></div>
           <div className="lab-evidence-card"><div className="lab-evidence-head"><span>{mode === "guided" ? "INVESTIGATION EVIDENCE" : "CASE FILE"}</span><strong>{current.evidenceTitle}</strong></div>{current.evidence.map((line) => <div className="lab-evidence-row" key={line}><span>{line.split(":")[0]}</span><strong>{line.includes(":") ? line.slice(line.indexOf(":") + 1).trim() : line}</strong></div>)}</div>
-          {step === 0 && <details className="lab-raw-error" open={mode === "guided"}><summary>Full simulated API error response · HTTP 403</summary><code>AccessDeniedException: User: arn:aws:sts::123456789012:assumed-role/AI-Platform-Operator/lab-session is not authorized to perform: bedrock:InvokeModel on resource: arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0 because no identity-based policy allows the bedrock:InvokeModel action.</code><p>This is a valid AWS-style enhanced authorization message for a missing identity-based allow. AWS does sometimes return this level of detail; other denials may be generic or identify an explicit deny, SCP, model-access prerequisite, or another cause. Use the complete error and CloudTrail evidence rather than assuming every AccessDenied has this cause.</p><a href="https://repost.aws/knowledge-center/bedrock-invokemodel-api-error" target="_blank" rel="noreferrer">AWS reference for Bedrock API errors ↗</a></details>}
+          {step === 0 && <details className="lab-raw-error" open={mode === "guided"}><summary>Full simulated API error response · HTTP 403</summary><code>AccessDeniedException: User: arn:aws:sts::123456789012:assumed-role/AI-Platform-Operator/lab-session is not authorized to perform: bedrock:InvokeModel on resource: arn:aws:bedrock:eu-west-1::foundation-model/amazon.nova-lite-v1:0 because no identity-based policy allows the bedrock:InvokeModel action.</code><p>Illustrative simulated response only—not captured from AWS. Real AWS error wording varies by API and authorization layer. The lab simulator records a local training event; it does not write to your AWS account or real CloudTrail.</p><a href="https://repost.aws/knowledge-center/bedrock-invokemodel-api-error" target="_blank" rel="noreferrer">AWS reference for Bedrock API errors ↗</a></details>}
           {mode === "guided" ? <div className="lab-instruction"><h3>Visual walkthrough · {current.consolePage}</h3><p>{current.action}</p><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open AWS Console Simulator in a new tab ↗</a></div> : <details className="lab-hint"><summary>Reveal guided walkthrough</summary><p>{current.action}</p><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open AWS Console Simulator ↗</a></details>}
           <div className="lab-verify"><h3>Evidence-based verification</h3><p>{mode === "guided" ? current.verify : "What evidence would confirm or reject your hypothesis? Check the request result and the matching CloudTrail event before moving on."}</p></div>
           <div className="lab-question"><h3>Decision checkpoint</h3><p>{current.question}</p><div className="lab-choices">{current.choices.map((item, i) => <button key={item.label} className={submitted && choice === i ? item.correct ? "right" : "wrong" : choice === i ? "selected" : ""} onClick={() => { setAnswers(old => ({ ...old, [step]: i })); setChecked(old => ({ ...old, [step]: false })); }}><span>{String.fromCharCode(65 + i)}</span>{item.label}</button>)}</div>
