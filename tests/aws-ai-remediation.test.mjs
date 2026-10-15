@@ -91,7 +91,7 @@ test('Comprehend KMS permission failure does not write output and succeeds after
   assert.equal(denied.job.status, 'FAILED');
   assert.equal(denied.job.outputKey, null);
   assert.equal(denied.state.cloudTrailEvents[0].errorCode, 'AccessDeniedException');
-  assert.equal(denied.state.s3Objects.some(object => object.key === 'comprehend/output/ci-kms-remediation-sentiment-job-20261015/sentiment-results.json'), false);
+  assert.equal(denied.state.s3Objects.some(object => object.key === 'comprehend/output/ci-kms-remediation-sentiment-job-20261015-retry/sentiment-results.json'), false);
 
   const repaired = {
     ...denied.state,
@@ -99,10 +99,11 @@ test('Comprehend KMS permission failure does not write output and succeeds after
       ? { ...role, attachedPolicies: [...role.attachedPolicies, 'KMSAIArtifactAccess'] }
       : role),
   };
-  const retried = runAwsAiProcessingJob(repaired, input);
+  const retryInput = { ...input, name: input.name + '-retry', outputPrefix: input.outputPrefix.replace(input.name, input.name + '-retry') };
+  const retried = runAwsAiProcessingJob(repaired, retryInput);
   assert.equal(retried.success, true);
   assert.equal(retried.job.status, 'SUCCEEDED');
   assert.ok(retried.state.s3Objects.some(object => object.key === 'comprehend/output/ci-kms-remediation-sentiment-job-20261015/sentiment-results.json'));
   assert.equal(retried.state.cloudTrailEvents[0].errorCode, null);
-  assert.equal(getAwsAiProcessingJobs(retried.state, 'Comprehend').some(job => job.name === input.name && job.status === 'SUCCEEDED'), true);
+  assert.equal(getAwsAiProcessingJobs(retried.state, 'Comprehend').some(job => job.name === retryInput.name && job.status === 'SUCCEEDED'), true);
 });
