@@ -190,6 +190,195 @@ export function toggleIamRolePolicy(state: AwsLabState, roleName: string, policy
   };
 }
 
+
+export function getAwsLoadBalancers(state: AwsLabState): AwsLoadBalancer[] {
+  return state.loadBalancers ?? [];
+}
+export function getAwsTargetGroups(state: AwsLabState): AwsTargetGroup[] {
+  return state.targetGroups ?? [];
+}
+export function getAwsDatabases(state: AwsLabState): AwsDatabase[] {
+  return state.databases ?? [];
+}
+export function getAwsDnsRecords(state: AwsLabState): AwsDnsRecord[] {
+  return state.dnsRecords ?? [];
+}
+export function getAwsLambdaFunctions(state: AwsLabState): AwsLambdaFunction[] {
+  return state.lambdaFunctions ?? [];
+}
+export function getAwsDynamoTables(state: AwsLabState): AwsDynamoTable[] {
+  return state.dynamoTables ?? [];
+}
+
+export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupId: string, pathInput: string): { state: AwsLabState; error: string | null } {
+  const path = pathInput.trim();
+  if (!path.startsWith("/") || path.length > 128 || /\\s/.test(path)) {
+    return { state, error: "Health-check path must start with /, contain no spaces, and be 128 characters or fewer." };
+  }
+  if (!getAwsTargetGroups(state).some(group => group.id === targetGroupId)) return { state, error: "Target group not found." };
+  return { state: { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path } : group) }, error: null };
+}
+
+export function setAwsInstanceListenerState(state: AwsLabState, instanceId: string, port: number, nextState: "listening" | "stopped"): { state: AwsLabState; error: string | null } {
+  if (!Number.isInteger(port) || port < 1 || port > 65535) return { state, error: "Listener port must be between 1 and 65535." };
+  const instances = getAwsInstances(state);
+  const target = instances.find(instance => instance.id === instanceId);
+  if (!target) return { state, error: "Instance not found." };
+  const listeners = [...(target.listeners ?? [])];
+  const existingIndex = listeners.findIndex(listener => listener.port === port && listener.protocol === "TCP");
+  if (existingIndex >= 0) listeners[existingIndex] = { ...listeners[existingIndex], state: nextState };
+  else listeners.push({ port, protocol: "TCP", state: nextState });
+  const updatedInstances = instances.map(instance => instance.id === instanceId ? { ...instance, listeners } : instance);
+  const primary = updatedInstances.find(instance => instance.id === state.instance.id) ?? updatedInstances[0];
+  return { state: { ...state, instance: primary, instances: updatedInstances }, error: null };
+}
+
+export function evaluateAwsTargetGroupHealth(state: AwsLabState, targetGroupId: string): AwsServiceHealthResult {
+  const group = getAwsTargetGroups(state).find(item => item.id === targetGroupId);
+  if (!group) return { healthy: false, checks: [{ name: "Target group exists", result: "blocked", detail: "Target group was not found in the simulated account." }] };
+  const loadBalancers = getAwsLoadBalancers(state).filter(lb => lb.listeners.some(listener => listener.targetGroupId === group.id));
+  const targetIds = group.targetInstanceIds;
+  const checks: AwsServiceCheck[] = [
+    { name: "Load balancer listener association", result: loadBalancers.length ? "passed" : "blocked", detail: loadBalancers.length ? "At least one load balancer listener forwards to this target group." : "No load balancer listener forwards to this target group." },
+    { name: "Registered targets", result: targetIds.length ? "passed" : "blocked", detail: targetIds.length ? `${targetIds.length} target(s) registered.` : "No targets are registered." }
+  ];
+  for (const instanceId of targetIds) {
+    const target = getAwsInstances(state).find(item => item.id === instanceId);
+    if (!target) {
+      checks.push({ name: `Target ${instanceId}`, result: "blocked", detail: "The registered instance no longer exists." });
+      continue;
+    }
+    const running = target.state === "running" && target.systemStatus === "passed" && target.instanceStatus === "passed";
+    checks.push({ name: `${target.name} instance health`, result: running ? "passed" : "blocked", detail: running ? "Target instance is running and status checks pass." : "Target instance is stopped or has an impaired status check." });
+    const listener = target.listeners?.find(item => item.port === group.port && item.protocol === "TCP");
+    const listening = listener?.state === "listening";
+    checks.push({ name: `${target.name} application listener :${group.port}`, result: listening ? "passed" : "blocked", detail: listening ? `An application listener accepts TCP on port ${group.port}.` : `No running TCP listener is configured on target port ${group.port}.` });
+    const pathReady = (target.healthCheckPaths ?? []).includes(group.healthCheckPath) && group.healthCheckPath === group.healthyPath;
+    checks.push({ name: `${target.name} health check ${group.healthCheckPath}`, result: pathReady ? "passed" : "blocked", detail: pathReady ? `The health-check path returns the configured success matcher ${group.matcher}.` : `The target does not return the expected success response for ${group.healthCheckPath}.` });
+    const linkedLbGroups = loadBalancers.flatMap(lb => lb.securityGroupIds);
+    const policyAllows = target.securityGroupIds.some(id => state.securityGroups.find(sg => sg.id === id)?.ingress.some(rule =>
+      (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= group.port && rule.toPort >= group.port)) &&
+      rule.sourceType === "SecurityGroup" && linkedLbGroups.includes(rule.source)) ?? false);
+    checks.push({ name: `${target.name} security-group path`, result: policyAllows ? "passed" : "blocked", detail: policyAllows ? `An attached target security group allows port ${group.port} from the load balancer security group.` : `No attached target security group allows port ${group.port} from the load balancer security group.` });
+  }
+  return { healthy: checks.every(check => check.result === "passed"), checks };
+}
+
+export function evaluateAwsLoadBalancerHealth(state: AwsLabState, loadBalancerId: string): AwsServiceHealthResult {
+  const lb = getAwsLoadBalancers(state).find(item => item.id === loadBalancerId);
+  if (!lb) return { healthy: false, checks: [{ name: "Load balancer exists", result: "blocked", detail: "Load balancer was not found." }] };
+  const checks: AwsServiceCheck[] = [
+    { name: "Load balancer state", result: lb.state === "active" ? "passed" : "blocked", detail: lb.state === "active" ? "Load balancer is active." : `Load balancer state is ${lb.state}.` },
+    { name: "Listener configuration", result: lb.listeners.length > 0 && lb.listeners.every(listener => getAwsTargetGroups(state).some(group => group.id === listener.targetGroupId)) ? "passed" : "blocked", detail: lb.listeners.length ? "Configured listeners reference existing target groups." : "No listeners are configured." }
+  ];
+  for (const listener of lb.listeners) {
+    const health = evaluateAwsTargetGroupHealth(state, listener.targetGroupId);
+    checks.push({ name: `Listener ${listener.protocol}:${listener.port} targets`, result: health.healthy ? "passed" : "blocked", detail: health.healthy ? "All target-group health checks pass." : health.checks.filter(check => check.result === "blocked").map(check => check.name + ": " + check.detail).join(" ") });
+  }
+  return { healthy: checks.every(check => check.result === "passed"), checks };
+}
+
+export function evaluateAwsDatabaseConnectivity(state: AwsLabState, instanceId: string, databaseId: string): AwsServiceHealthResult {
+  const instance = getAwsInstances(state).find(item => item.id === instanceId);
+  const database = getAwsDatabases(state).find(item => item.id === databaseId);
+  if (!instance || !database) return { healthy: false, checks: [{ name: "Resources exist", result: "blocked", detail: "The source instance or database does not exist." }] };
+  const subnet = getAwsSubnets(state).find(item => item.id === instance.subnetId);
+  const sameVpc = subnet?.vpcId === database.vpcId;
+  const routeTable = subnet ? getAwsRouteTables(state).find(item => item.id === subnet.routeTableId) : undefined;
+  const routeReady = sameVpc && !!routeTable?.routes.some(route => route.target === "local" && route.state === "active" && cidrContains(route.destination, database.privateIp));
+  const running = instance.state === "running" && instance.systemStatus === "passed" && instance.instanceStatus === "passed";
+  const dbAvailable = database.status === "available";
+  const sgAllows = database.securityGroupIds.some(id => state.securityGroups.find(sg => sg.id === id)?.ingress.some(rule =>
+    (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= database.port && rule.toPort >= database.port)) &&
+    ((rule.sourceType === "SecurityGroup" && instance.securityGroupIds.includes(rule.source)) || (rule.sourceType === "IPv4" && cidrContains(rule.source, instance.privateIp)))) ?? false);
+  const checks: AwsServiceCheck[] = [
+    { name: "Application instance", result: running ? "passed" : "blocked", detail: running ? "Application instance is running and healthy." : "Application instance is stopped or impaired." },
+    { name: "VPC and route", result: routeReady ? "passed" : "blocked", detail: routeReady ? "An active VPC local route covers the database address." : "The instance subnet does not have an active route to the database in the same VPC." },
+    { name: "Database status", result: dbAvailable ? "passed" : "blocked", detail: dbAvailable ? `Database is available on TCP/${database.port}.` : `Database status is ${database.status}.` },
+    { name: "Database security group", result: sgAllows ? "passed" : "blocked", detail: sgAllows ? `Database ingress allows TCP/${database.port} from an attached application security group.` : `Database security groups do not allow TCP/${database.port} from the application's security groups.` }
+  ];
+  return { healthy: checks.every(check => check.result === "passed"), checks };
+}
+
+export function evaluateAwsDnsRecord(state: AwsLabState, recordId: string): AwsServiceHealthResult {
+  const record = getAwsDnsRecords(state).find(item => item.id === recordId);
+  if (!record) return { healthy: false, checks: [{ name: "DNS record exists", result: "blocked", detail: "Record was not found in the simulated hosted zone." }] };
+  const targetExists = record.targetResourceType === "load-balancer"
+    ? getAwsLoadBalancers(state).some(lb => lb.id === record.targetResourceId)
+    : record.targetResourceType === "database"
+      ? getAwsDatabases(state).some(db => db.id === record.targetResourceId)
+      : !!record.targetResourceId.trim();
+  const targetTypeMatches = record.targetResourceType === record.expectedResourceType && record.targetResourceId === record.expectedResourceId;
+  const targetHealthy = record.targetResourceType === "load-balancer"
+    ? evaluateAwsLoadBalancerHealth(state, record.targetResourceId).healthy
+    : record.targetResourceType === "database"
+      ? getAwsDatabases(state).some(db => db.id === record.targetResourceId && db.status === "available")
+      : false;
+  const checks: AwsServiceCheck[] = [
+    { name: "Record enabled", result: record.enabled ? "passed" : "blocked", detail: record.enabled ? "Record is enabled in the simulated hosted zone." : "The record is disabled." },
+    { name: "Target reference", result: targetExists ? "passed" : "blocked", detail: targetExists ? "Record points to an existing resource." : "Record target does not exist." },
+    { name: "Expected application target", result: targetTypeMatches ? "passed" : "blocked", detail: targetTypeMatches ? "Record matches the expected application resource." : "Record points to a different target than the application is configured to use." },
+    { name: "Target health", result: targetHealthy ? "passed" : "blocked", detail: targetHealthy ? "The target resource is healthy." : "The target resource is unhealthy or cannot be resolved to a healthy service." }
+  ];
+  return { healthy: checks.every(check => check.result === "passed"), checks };
+}
+
+export function updateAwsDnsRecordTarget(state: AwsLabState, recordId: string, targetResourceType: AwsDnsRecord["targetResourceType"], targetResourceId: string): { state: AwsLabState; error: string | null } {
+  const record = getAwsDnsRecords(state).find(item => item.id === recordId);
+  if (!record) return { state, error: "DNS record not found." };
+  const target = targetResourceId.trim();
+  if (!target) return { state, error: "Choose a DNS target." };
+  if (targetResourceType === "load-balancer" && !getAwsLoadBalancers(state).some(item => item.id === target)) return { state, error: "Choose an existing load balancer." };
+  if (targetResourceType === "database" && !getAwsDatabases(state).some(item => item.id === target)) return { state, error: "Choose an existing database." };
+  return { state: { ...state, dnsRecords: getAwsDnsRecords(state).map(item => item.id === recordId ? { ...item, targetResourceType, targetResourceId: target } : item) }, error: null };
+}
+
+export function setAwsDatabaseStatus(state: AwsLabState, databaseId: string, status: AwsDatabase["status"]): { state: AwsLabState; error: string | null } {
+  if (!getAwsDatabases(state).some(item => item.id === databaseId)) return { state, error: "Database not found." };
+  return { state: { ...state, databases: getAwsDatabases(state).map(db => db.id === databaseId ? { ...db, status } : db) }, error: null };
+}
+
+export function evaluateAwsLambdaReadiness(state: AwsLabState, functionName: string): AwsServiceHealthResult {
+  const fn = getAwsLambdaFunctions(state).find(item => item.name === functionName);
+  if (!fn) return { healthy: false, checks: [{ name: "Function exists", result: "blocked", detail: "Lambda function was not found." }] };
+  const role = state.iamRoles.find(item => item.name === fn.roleName);
+  const active = fn.state === "active";
+  const trusted = !!role && role.trustedService === "lambda.amazonaws.com";
+  const permissions = !!role && (!fn.requiredPolicy || role.attachedPolicies.includes(fn.requiredPolicy));
+  return { healthy: active && trusted && permissions && fn.errorCount === 0, checks: [
+    { name: "Function state", result: active ? "passed" : "blocked", detail: active ? "Function is active." : "Function is inactive." },
+    { name: "Execution role trust", result: trusted ? "passed" : "blocked", detail: trusted ? "Execution role trusts Lambda." : "Execution role is missing or does not trust Lambda." },
+    { name: "Execution role permissions", result: permissions ? "passed" : "blocked", detail: permissions ? "The required data-service policy is attached." : `The execution role is missing required policy ${fn.requiredPolicy}.` },
+    { name: "Recent invocations", result: fn.errorCount === 0 ? "passed" : "blocked", detail: fn.errorCount === 0 ? "No recent function errors are recorded." : `${fn.errorCount} recent invocation errors are recorded.` }
+  ] };
+}
+
+export function getAwsCloudWatchAlarms(state: AwsLabState): { name: string; state: "OK" | "ALARM"; metric: string; namespace: string; value: number; threshold: number; detail: string }[] {
+  return (state.cloudWatchAlarmDefinitions ?? []).map(alarm => {
+    let value = 0;
+    let okay = false;
+    let detail = "";
+    if (alarm.resourceType === "target-group") {
+      const health = evaluateAwsTargetGroupHealth(state, alarm.resourceId);
+      value = health.healthy ? 1 : 0;
+      okay = value >= alarm.threshold;
+      detail = health.healthy ? "HealthyHostCount meets the minimum." : "At least one required target health check is blocked.";
+    } else if (alarm.resourceType === "database") {
+      const database = getAwsDatabases(state).find(item => item.id === alarm.resourceId);
+      value = database?.connections ?? 0;
+      okay = !!database && database.status === "available" && value < alarm.threshold;
+      detail = !database ? "Database dimension is missing." : database.status !== "available" ? `Database status is ${database.status}.` : value >= alarm.threshold ? "Database connection count exceeds the threshold." : "Database connection count is within threshold.";
+    } else {
+      const fn = getAwsLambdaFunctions(state).find(item => item.name === alarm.resourceId);
+      value = fn?.errorCount ?? 0;
+      const readiness = evaluateAwsLambdaReadiness(state, alarm.resourceId);
+      okay = !!fn && readiness.healthy && value < alarm.threshold;
+      detail = !fn ? "Function dimension is missing." : !readiness.healthy ? "Function configuration or recent invocation health needs attention." : value >= alarm.threshold ? "Function errors exceed the threshold." : "Function errors are within threshold.";
+    }
+    return { name: alarm.name, state: okay ? "OK" as const : "ALARM" as const, metric: alarm.metric, namespace: alarm.namespace, value, threshold: alarm.threshold, detail };
+  });
+}
+
 export function addNetworkAclRule(state: AwsLabState, rule: AwsLabState["networkAcl"][number]): { state: AwsLabState; error: string | null } {
   if (!Number.isInteger(rule.ruleNumber) || rule.ruleNumber < 1 || rule.ruleNumber > 32766) {
     return { state, error: "Rule number must be between 1 and 32766." };
