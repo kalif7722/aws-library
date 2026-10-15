@@ -194,6 +194,8 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - This is a source-level TSX parse failure, not a dependency-install failure. Build output confirms the catalog/Azure/GCP validators ran before the app transform failed. The npm `allow-scripts` messages are warnings, not the terminating error shown in these logs.
 - **Current blocker:** resolve the exact current TSX parser location against the exact commit Cloudflare built. Do not infer that the earlier EC2 select-all fix resolved all syntax errors. Re-run Cloudflare build, then run `npm run build`, `node --test tests/*.test.mjs`, and `npm test` in a working checkout; only mark the gate green with actual successful output.
 
+- **2026-10-15 follow-up:** Inspected the current AWS simulator TSX and found the concrete malformed JSX in the EC2 **Tags** tab: two sibling `<div>` panels were emitted directly from one `&&` expression without a fragment/closing expression. Wrapped the tag header, table, and editor in a fragment. Commit: [`f40f0e1`](https://github.com/kalif7722/aws-library/commit/f40f0e19cf250045efd4377c433043f81c9dee5f). This is a source-level fix matching the reported parser class; the Cloudflare rebuild and automated test suite are still pending, so the gate remains **not verified**.
+
 ## Change log
 
 - **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
