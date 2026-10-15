@@ -71,12 +71,12 @@ test('Comprehend KMS permission failure does not write output and succeeds after
   const initial = createInitialAwsLabState();
   const input = {
     service: 'Comprehend',
-    name: 'remediation-sentiment-job',
+    name: 'ci-kms-remediation-sentiment-job-20261015',
     jobType: 'Sentiment analysis',
     inputBucketName: 'ai-workloads',
     inputKey: 'comprehend/reviews/batch-01.txt',
     outputBucketName: 'ai-workloads',
-    outputPrefix: 'comprehend/output/remediation-sentiment-job/',
+    outputPrefix: 'comprehend/output/ci-kms-remediation-sentiment-job-20261015/',
   };
   const broken = {
     ...initial,
@@ -91,7 +91,7 @@ test('Comprehend KMS permission failure does not write output and succeeds after
   assert.equal(denied.job.status, 'FAILED');
   assert.equal(denied.job.outputKey, null);
   assert.equal(denied.state.cloudTrailEvents[0].errorCode, 'AccessDeniedException');
-  assert.equal(denied.state.s3Objects.some(object => object.key === 'comprehend/output/remediation-sentiment-job/sentiment-results.json'), false);
+  assert.equal(denied.state.s3Objects.some(object => object.key === 'comprehend/output/ci-kms-remediation-sentiment-job-20261015/sentiment-results.json'), false);
 
   const repaired = {
     ...denied.state,
@@ -102,7 +102,7 @@ test('Comprehend KMS permission failure does not write output and succeeds after
   const retried = runAwsAiProcessingJob(repaired, input);
   assert.equal(retried.success, true);
   assert.equal(retried.job.status, 'SUCCEEDED');
-  assert.ok(retried.state.s3Objects.some(object => object.key === 'comprehend/output/remediation-sentiment-job/sentiment-results.json'));
+  assert.ok(retried.state.s3Objects.some(object => object.key === 'comprehend/output/ci-kms-remediation-sentiment-job-20261015/sentiment-results.json'));
   assert.equal(retried.state.cloudTrailEvents[0].errorCode, null);
   assert.equal(getAwsAiProcessingJobs(retried.state, 'Comprehend').some(job => job.name === input.name && job.status === 'SUCCEEDED'), true);
 });
