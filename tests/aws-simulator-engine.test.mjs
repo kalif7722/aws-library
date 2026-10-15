@@ -195,7 +195,7 @@ test('route table association updates the subnet graph and effective routes',()=
   const invalid=associateSubnetWithRouteTable(initial,'subnet-0123abcd4567ef890','rtb-does-not-exist');
   assert.match(invalid.error,/Route table not found/);
   assert.equal(getAwsVpcs(initial).length,1);
-  assert.equal(getAwsSubnets(initial).length,2);
+  assert.equal(getAwsSubnets(initial).length,4);
 });
 
 test('route edits stay in the selected route table and update effective reachability routes',()=>{
@@ -292,12 +292,12 @@ test('network ACL protocol validation supports all-traffic wildcard ports',()=>{
 
 test('subnet creation validates CIDR overlap and route table VPC',()=>{
   const initial=createInitialAwsLabState();
-  const created=createAwsSubnet(initial,{name:'application-subnet',cidr:'10.20.3.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'});
+  const created=createAwsSubnet(initial,{name:'application-subnet',cidr:'10.20.5.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'});
   assert.equal(created.error,null);
-  assert.ok(getAwsSubnets(created.state).some(subnet=>subnet.id===created.subnet.id&&subnet.cidr==='10.20.3.0/24'));
+  assert.ok(getAwsSubnets(created.state).some(subnet=>subnet.id===created.subnet.id&&subnet.cidr==='10.20.5.0/24'));
   assert.ok(getAwsRouteTables(created.state).find(table=>table.id==='rtb-0123abcd4567ef890').associatedSubnetIds.includes(created.subnet.id));
   assert.match(createAwsSubnet(initial,{name:'overlap-subnet',cidr:'10.20.2.128/25',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'}).error,/overlaps/);
-  assert.match(createAwsSubnet(initial,{name:'wrong-table-subnet',cidr:'10.20.3.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-wrong-vpc'}).error,/route table in the selected VPC/);
+  assert.match(createAwsSubnet(initial,{name:'wrong-table-subnet',cidr:'10.20.5.0/24',availabilityZone:'eu-west-1a',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-wrong-vpc'}).error,/route table in the selected VPC/);
 });
 
 
