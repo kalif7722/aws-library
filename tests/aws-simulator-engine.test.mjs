@@ -4,6 +4,27 @@ import {loadArchitectureModule} from './load-architecture-module.mjs';
 
 const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
+test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
+  const initial=createInitialAwsLabState();
+  const launched=launchAwsInstance(initial,{name:'lifecycle-worker',instanceType:'t3.small',subnetId:initial.instance.subnetId,securityGroupIds:initial.instance.securityGroupIds});
+  assert.equal(launched.error,null);
+  assert.ok(launched.instance);
+  const stopped=setAwsInstanceState(launched.state,launched.instance.id,'stopped');
+  assert.equal(getAwsInstances(stopped).find(item=>item.id===launched.instance.id).state,'stopped');
+  assert.equal(stopped.instance.id,initial.instance.id);
+  assert.equal(stopped.instance.state,initial.instance.state);
+  const rebooted=rebootAwsInstance(stopped,launched.instance.id);
+  const worker=getAwsInstances(rebooted).find(item=>item.id===launched.instance.id);
+  assert.equal(worker.state,'running');
+  assert.equal(worker.systemStatus,'passed');
+  assert.equal(worker.instanceStatus,'passed');
+  assert.equal(rebooted.instance.id,initial.instance.id);
+  const primaryStopped=setAwsInstanceState(rebooted,initial.instance.id,'stopped');
+  assert.equal(primaryStopped.instance.state,'stopped');
+  assert.equal(getAwsInstances(primaryStopped).find(item=>item.id===initial.instance.id).state,'stopped');
+  assert.equal(getAwsInstances(rebooted).find(item=>item.id===initial.instance.id).state,'running');
+});
+
 test('SSH reachability uses the current attached security-group rules',()=>{
   const initial=createInitialAwsLabState();
   const blocked=evaluateAwsSshReachability(initial);
