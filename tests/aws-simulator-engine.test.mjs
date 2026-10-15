@@ -443,3 +443,17 @@ test('Cost Explorer usage rows surface the seeded NAT data-processing spike',()=
   assert.ok(spike);
   assert.ok(spike.amount>spike.baselineAmount*1.5);
 });
+
+test('Glue job permission failure can be diagnosed and repaired through IAM policy attachment',()=>{
+  const initial=createInitialAwsLabState();
+  const noPolicy={...initial,iamRoles:initial.iamRoles.map(role=>role.name==='DataPipeline-Role'?{...role,attachedPolicies:role.attachedPolicies.filter(policy=>policy!=='DataLakeCuratedWrite')}:role)};
+  const uploaded=putAwsS3Object(noPolicy,{bucketName:'data-lake-raw',key:'orders/day=2026-10-15/part-000.json',sizeBytes:78342});
+  assert.equal(uploaded.error,null);
+  const denied=runAwsGlueJob(uploaded.state,'orders-daily-curation');
+  assert.equal(denied.success,false);
+  assert.ok(getAwsCloudTrailEvents(denied.state).some(event=>event.errorCode==='AccessDeniedException'&&event.eventSource==='glue.amazonaws.com'));
+  const repaired=toggleIamRolePolicy(denied.state,'DataPipeline-Role','DataLakeCuratedWrite');
+  const success=runAwsGlueJob(repaired,'orders-daily-curation');
+  assert.equal(success.success,true);
+  assert.equal(evaluateAwsGlueJob(success.state,'orders-daily-curation').healthy,true);
+});
