@@ -212,7 +212,7 @@ export function getAwsDynamoTables(state: AwsLabState): AwsDynamoTable[] {
 
 export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupId: string, pathInput: string): { state: AwsLabState; error: string | null } {
   const path = pathInput.trim();
-  if (!path.startsWith("/") || path.length > 128 || /\\s/.test(path)) {
+  if (!path.startsWith("/") || path.length > 128 || /\s/.test(path)) {
     return { state, error: "Health-check path must start with /, contain no spaces, and be 128 characters or fewer." };
   }
   if (!getAwsTargetGroups(state).some(group => group.id === targetGroupId)) return { state, error: "Target group not found." };
