@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,updateAwsDnsRecordTarget,setAwsInstanceListenerState}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
   const initial=createInitialAwsLabState();
@@ -364,12 +364,19 @@ test('Route 53 records resolve through resource references and surface stale tar
   assert.equal(evaluateAwsDnsRecord(restored.state,'record-api').healthy,true);
 });
 
-test('Lambda role policy state affects readiness and the CloudWatch alarm',()=>{
+test('Lambda policy repair plus successful invocation clears error count and CloudWatch alarm',()=>{
   const initial=createInitialAwsLabState();
   assert.equal(evaluateAwsLambdaReadiness(initial,'orders-event-handler').healthy,false);
-  const fixed=toggleIamRolePolicy(initial,'Lambda-Payments-Role','DynamoDBOrdersWrite');
-  assert.equal(evaluateAwsLambdaReadiness(fixed,'orders-event-handler').healthy,true);
-  assert.equal(getAwsCloudWatchAlarms(fixed).find(alarm=>alarm.name==='orders-event-handler-errors').state,'OK');
+  assert.equal(getAwsCloudWatchAlarms(initial).find(alarm=>alarm.name==='orders-event-handler-errors').state,'ALARM');
+  const failed=invokeAwsLambdaFunction(initial,'orders-event-handler');
+  assert.equal(failed.success,false);
+  assert.equal(failed.state.lambdaFunctions.find(fn=>fn.name==='orders-event-handler').errorCount,13);
+  const fixed=toggleIamRolePolicy(failed.state,'Lambda-Payments-Role','DynamoDBOrdersWrite');
+  assert.equal(evaluateAwsLambdaReadiness(fixed,'orders-event-handler').healthy,false);
+  const invoked=invokeAwsLambdaFunction(fixed,'orders-event-handler');
+  assert.equal(invoked.success,true);
+  assert.equal(evaluateAwsLambdaReadiness(invoked.state,'orders-event-handler').healthy,true);
+  assert.equal(getAwsCloudWatchAlarms(invoked.state).find(alarm=>alarm.name==='orders-event-handler-errors').state,'OK');
 });
 
 test('legacy account migration adds new service graph once and preserves later target health faults',()=>{
