@@ -348,6 +348,10 @@ test('RDS availability and database security rules drive private application con
   const fixedSg={...initial,securityGroups:initial.securityGroups.map(group=>group.id==='sg-rds-orders'?{...group,ingress:[]}:group)};
   assert.equal(evaluateAwsDatabaseConnectivity(fixedSg,initial.instance.id,'orders-prod').healthy,false);
   assert.equal(evaluateAwsDatabaseConnectivity(initial,initial.instance.id,'orders-prod').healthy,true);
+  const aclBlocked={...initial,networkAcl:[...initial.networkAcl,{direction:'inbound',ruleNumber:90,protocol:'TCP',ports:'5432',source:'10.20.0.0/16',action:'deny'}]};
+  const aclResult=evaluateAwsDatabaseConnectivity(aclBlocked,initial.instance.id,'orders-prod');
+  assert.equal(aclResult.healthy,false);
+  assert.equal(aclResult.checks.find(check=>check.name==='Network ACL database request').result,'blocked');
 });
 
 test('Route 53 records resolve through resource references and surface stale targets',()=>{
