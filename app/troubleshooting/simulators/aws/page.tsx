@@ -63,7 +63,7 @@ export default function AwsSimulatorPage() {
   const [routeError, setRouteError] = useState("");
   const [showSubnetEditor, setShowSubnetEditor] = useState(false);
   const [subnetName, setSubnetName] = useState("application-subnet");
-  const [subnetCidr, setSubnetCidr] = useState("10.20.3.0/24");
+  const [subnetCidr, setSubnetCidr] = useState("10.20.5.0/24");
   const [subnetAz, setSubnetAz] = useState("eu-west-1a");
   const [subnetVpcId, setSubnetVpcId] = useState("vpc-0123abcd4567ef890");
   const [subnetRouteTableId, setSubnetRouteTableId] = useState("rtb-0123abcd4567ef890");
