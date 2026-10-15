@@ -1,0 +1,55 @@
+name: AWS simulator validation
+
+on:
+  push:
+    branches:
+      - feature/troubleshooting-guided-flow
+    paths:
+      - "app/troubleshooting/simulators/aws/**"
+      - "tests/aws-simulator-engine.test.mjs"
+      - "tests/load-architecture-module.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/build-verified.sh"
+      - ".github/workflows/aws-simulator-validation.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "app/troubleshooting/simulators/aws/**"
+      - "tests/aws-simulator-engine.test.mjs"
+      - "tests/load-architecture-module.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - "scripts/build-verified.sh"
+      - ".github/workflows/aws-simulator-validation.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aws-simulator-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulator:
+    name: Engine tests and production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Run engine and repository regression tests
+        run: node --test tests/*.test.mjs
+      - name: Run verified production build
+        env:
+          SITES_BUILD_TIMEOUT: "6m"
+          SITES_BUILD_KILL_AFTER: "15s"
+        run: npm run build

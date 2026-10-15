@@ -233,3 +233,10 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Add a CloudWatch alarm driven by Glue freshness/job state; assert that uploading the missing source partition and rerunning Glue moves the alarm from ALARM to OK.
 
 - [x] Upgrade persisted account schema to v5 and merge missing default alarm definitions into previously saved accounts without removing user-edited alarm definitions or resource state.
+
+
+## Automated validation workflow — 2026-10-15
+
+- [x] Add `.github/workflows/aws-simulator-validation.yml` to run engine tests and the production build whenever simulator code, test helpers, dependency manifests, or the validation workflow changes on `feature/troubleshooting-guided-flow`.
+- [ ] Check the first workflow run for the current simulator head and fix any actual failure before adding additional service features.
+- [ ] Record engine-test and production-build outcomes separately from Cloudflare deployment status.
