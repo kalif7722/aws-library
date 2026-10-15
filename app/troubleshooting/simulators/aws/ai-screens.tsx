@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   createAwsSageMakerTrainingJob,
   getAwsAiProcessingJobs,
@@ -45,7 +45,7 @@ const Status = ({ value, good }: { value: string; good?: boolean }) => (
   <span className={"aws-sim-status " + (good ? "good" : ["Available", "ACTIVE", "READY", "Completed", "InService", "SUCCEEDED", "Active", "Pro"].includes(value) ? "good" : "bad")}>{value}</span>
 );
 
-const PanelTitle = ({ title, detail, action }: { title: string; detail?: string; action?: React.ReactNode }) => (
+const PanelTitle = ({ title, detail, action }: { title: string; detail?: string; action?: ReactNode }) => (
   <div className="aws-sim-panel-title"><div><h2>{title}</h2>{detail && <p>{detail}</p>}</div>{action}</div>
 );
 
@@ -166,7 +166,7 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
         <div className="aws-sim-form-grid"><label className="wide">Foundation model<select value={selectedModel?.modelId ?? ""} onChange={event => { setSelectedModelId(event.target.value); setInferenceOutput(""); setInferenceError(""); }}>{aiModels.map(model => <option key={model.modelId} value={model.modelId}>{model.name} · {model.accessStatus}</option>)}</select></label><label className="wide">Prompt<input value={prompt} onChange={event => setPrompt(event.target.value)} maxLength={8000} placeholder="Enter a prompt" /></label></div>
         {inferenceError && <p className="aws-sim-error" role="alert">{inferenceError}</p>}
         <div className="aws-sim-editor-actions"><button className="primary" onClick={invokeBedrock}>Run inference</button></div>
-        {inferenceOutput && <div className="aws-sim-ai-output"><b>Simulated inference output</b><p>{inferenceOutput}</p><small>No live foundation-model API was called. Invocation state and audit history were updated locally.</small></div>}
+        {inferenceOutput && <div className="aws-sim-ai-output"><b>Model response</b><p>{inferenceOutput}</p><small>No live foundation-model API was called. Invocation state and audit history were updated locally.</small></div>}
       </>}
       {tab === "Knowledge bases" && <>
         <PanelTitle title={"Knowledge bases (" + knowledgeBases.length + ")"} detail="Knowledge bases link an S3 data source, an embedding model, and a vector store." />
@@ -193,7 +193,7 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
       </>}
       {tab === "Training jobs" && <>
         <PanelTitle title={"Training jobs (" + trainingJobs.length + ")"} detail="Create a training job with an existing S3 input object and an execution role." action={<button onClick={() => { setTrainingError(""); setTrainingJobName("churn-risk-training-new-" + (trainingJobs.length + 1)); }}>New training job</button>} />
-        <div className="aws-sim-editor"><h3>Configure training job</h3><div className="aws-sim-form-grid"><label>Job name<input value={trainingJobName} onChange={event => setTrainingJobName(event.target.value)} maxLength={63} /></label><label>Algorithm<select value={trainingAlgorithm} onChange={event => setTrainingAlgorithm(event.target.value)}><option>XGBoost</option><option>Linear Learner</option><option>Random Cut Forest</option></select></label><label>Training data (S3 object)<select value={trainingInputKey} onChange={event => setTrainingInputKey(event.target.value)}>{aiObjects.filter(object => object.bucketName === "ai-workloads" && object.key.startsWith("training/")).map(object => <option key={object.key} value={object.key}>{object.key}</option>)}</select></label><label>Training instance type<select value={trainingInstanceType} onChange={event => setTrainingInstanceType(event.target.value)}><option>ml.m5.large</option><option>ml.m5.xlarge</option><option>ml.m5.2xlarge</option></select></label><label>Instance count<input type="number" min="1" max="10" value={trainingInstanceCount} onChange={event => setTrainingInstanceCount(event.target.value)} /></label><label>Execution role<input value="SageMakerExecutionRole" readOnly /></label></div>{trainingError && <p className="aws-sim-error" role="alert">{trainingError}</p>}<div className="aws-sim-editor-actions"><button className="primary" onClick={createTrainingJob}>Create training job</button></div><small>Simulation note: successful training jobs complete immediately and add a model artifact in the training account.</small></div>
+        <div className="aws-sim-editor"><h3>Configure training job</h3><div className="aws-sim-form-grid"><label>Job name<input value={trainingJobName} onChange={event => setTrainingJobName(event.target.value)} maxLength={63} /></label><label>Algorithm<select value={trainingAlgorithm} onChange={event => setTrainingAlgorithm(event.target.value)}><option>XGBoost</option><option>Linear Learner</option><option>Random Cut Forest</option></select></label><label>Training data (S3 object)<select value={trainingInputKey} onChange={event => setTrainingInputKey(event.target.value)}>{aiObjects.filter(object => object.bucketName === "ai-workloads" && object.key.startsWith("training/")).map(object => <option key={object.key} value={object.key}>{object.key}</option>)}</select></label><label>Training instance type<select value={trainingInstanceType} onChange={event => setTrainingInstanceType(event.target.value)}><option>ml.m5.large</option><option>ml.m5.xlarge</option><option>ml.m5.2xlarge</option></select></label><label>Instance count<input type="number" min="1" max="10" value={trainingInstanceCount} onChange={event => setTrainingInstanceCount(event.target.value)} /></label><label>Execution role<input value="SageMakerExecutionRole" readOnly /></label></div>{trainingError && <p className="aws-sim-error" role="alert">{trainingError}</p>}<div className="aws-sim-editor-actions"><button className="primary" onClick={createTrainingJob}>Create training job</button></div></div>
         <div className="aws-sim-table-wrap"><table><thead><tr><th>Job name</th><th>Status</th><th>Algorithm</th><th>Input data</th><th>Output path</th><th>Instance config</th><th>Model</th><th>Created</th></tr></thead><tbody>{trainingJobs.map(job => <tr key={job.name}><td>{job.name}</td><td><Status value={job.status} /></td><td>{job.algorithm}</td><td>s3://{job.inputBucketName}/{job.inputKey}</td><td>s3://{job.outputBucketName}/{job.outputPrefix}</td><td>{job.instanceType} × {job.instanceCount}</td><td>{job.modelName ?? "—"}{job.failureReason && <small>{job.failureReason}</small>}</td><td>{new Date(job.createdAt).toLocaleString()}</td></tr>)}</tbody></table></div>
       </>}
       {tab === "Endpoints" && <>
@@ -215,7 +215,7 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
         <div className="aws-sim-ai-job-toolbar"><label>{isComprehend ? "Input text object" : "Input document"}<select value={selectedInput} onChange={event => setSelectedInput(event.target.value)}>{sources.map(object => <option key={object.key} value={object.key}>{object.key}</option>)}</select></label>{!isComprehend && <label>Analysis type<select value={textractJobType} onChange={event => setTextractJobType(event.target.value)}><option>Expense analysis</option><option>Text detection</option></select></label>}<button className="primary" onClick={() => runProcessingJob(screen)}>{isComprehend ? "Start sentiment detection job" : textractJobType === "Expense analysis" ? "Start expense analysis" : "Start text detection"}</button></div>
         <div className="aws-sim-section-heading inside"><h2>Analysis jobs ({jobs.length})</h2><span>Job results are written to the configured S3 output path.</span></div>
         <div className="aws-sim-table-wrap"><table><thead><tr><th>Job name</th><th>Status</th><th>Operation</th><th>Input document</th><th>Output location</th><th>Execution role</th><th>Created</th><th>Result</th></tr></thead><tbody>{jobs.map(job => <tr key={job.id}><td>{job.name}</td><td><Status value={job.status} /></td><td>{job.jobType}</td><td>s3://{job.inputBucketName}/{job.inputKey}</td><td>s3://{job.outputBucketName}/{job.outputPrefix}</td><td>{job.executionRole}</td><td>{new Date(job.createdAt).toLocaleString()}</td><td>{job.outputKey ? <button className="aws-sim-text-link" onClick={() => notify("Result object: s3://" + job.outputBucketName + "/" + job.outputKey)}>View result location</button> : job.failureReason}</td></tr>)}</tbody></table></div>
-        <small className="aws-sim-ai-note">Simulation note: batch jobs complete synchronously here. Input and output objects, job state, and CloudTrail events are stored in the shared training account.</small>
+        
       </div>
     );
   }
@@ -224,7 +224,7 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
     <div className="aws-sim-panel">
       <PanelTitle title="Amazon Q Business" detail="Manage the application index and data sources used to ground enterprise answers." />
       <div className="aws-sim-table-wrap"><table><thead><tr><th>Application</th><th>Application ID</th><th>Status</th><th>Identity provider</th><th>Index</th><th>S3 data source</th><th>Indexed objects</th><th>Last sync</th><th>Actions</th></tr></thead><tbody>{qBusinessApps.map(app => <tr key={app.id}><td>{app.name}</td><td className="mono">{app.id}</td><td><Status value={app.status} /></td><td>{app.identityProvider}</td><td>{app.indexName}</td><td>s3://{app.sourceBucketName}/{app.sourcePrefix}</td><td>{app.documentsIndexed}</td><td>{new Date(app.lastSyncTime).toLocaleString()} · {app.syncStatus}</td><td><button className="aws-sim-text-link" onClick={() => syncQBusiness(app.id)}>Sync data source</button></td></tr>)}</tbody></table></div>
-      <div className="aws-sim-related"><b>Related resources</b><button onClick={() => notify("The data-source execution role is QBusinessDataSourceRole; inspect its trust and S3/KMS policies under IAM → Roles.")}>IAM execution role: QBusinessDataSourceRole</button><button onClick={() => notify("Open S3 and inspect the ai-workloads/qbusiness/handbook/ prefix.")}>Amazon S3 data source ↗</button><button onClick={() => notify("Open CloudTrail Event history to review StartDataSourceSyncJob events.")}>CloudTrail event history ↗</button></div>
+      
     </div>
   );
 
