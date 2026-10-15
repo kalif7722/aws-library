@@ -4,9 +4,19 @@
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
 **Status:** In progress — console-realism cleanup and first AI service family implemented; production build passed with 103/103 tests; browser workflow verification and deployed-revision smoke test remain pending  
-**Last reviewed:** 2026-10-15 (AI screens and shared state added; production build and 103 regression tests passed; browser/deployment smoke test pending)
+**Last reviewed:** 2026-10-15 (AI foundation audit reopened; prior tool-created blobs were not committed to the working branch, so implementation status must be verified from branch contents and CI before claiming completion)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
+
+## Delivery and validation gate (added 2026-10-15)
+
+- [ ] Confirm every change is committed to `feature/troubleshooting-guided-flow`; a Git blob alone is not a branch commit.
+- [ ] Confirm the commit SHA is reachable from the branch and the expected paths contain the new implementation.
+- [ ] Run the production build and all relevant automated tests against that commit; record exact result and failing step.
+- [ ] Keep deployment status separate from GitHub commit and CI status; smoke-test the deployed revision only after deployment completes.
+- [ ] For each AI service, test one successful path and at least one actionable failure path (identity/IAM, resource policy or trust, data source, KMS where applicable, and async result/state handling).
+- [ ] Do not describe simulated inference as a live AWS API call. Label local simulation clearly.
+- [ ] Do not mark a service “lab-ready” until a learner can trigger a fault, observe realistic evidence, apply a fix, and verify recovery.
 
 ## Product rules (must remain true)
 
