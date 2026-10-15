@@ -143,7 +143,7 @@ test('Bedrock knowledge-base sync checks its role and S3 source; guardrail edits
   };
   const failed = syncAwsBedrockKnowledgeBase(broken, kbId);
   assert.equal(failed.success, false);
-  assert.match(failed.error, /S3 data-source read/);
+  assert.match(failed.error, /S3 or KMS data-source permissions/);
   assert.equal(failed.state.cloudTrailEvents[0].errorCode, 'AccessDeniedException');
 
   const guardrailId = 'gr-payments-assistant';
