@@ -258,3 +258,11 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Change the rendered HTML test to assert real production title/description/application-name metadata rather than environment-specific preview metadata.
 - [x] Import `tw-animate-css` in the global stylesheet so animation utilities are emitted by the Tailwind v4 production build.
 - [ ] Run a new CI pass and verify all tests and production build succeed; no green status is claimed yet.
+
+
+## Latest CI correction — 2026-10-15
+
+- The next `npm test` run built successfully and executed 91 tests: 89 passed, 2 failed.
+- The production-metadata regex expected the wrong wording for the existing page description. Corrected it to match the actual metadata output.
+- The CSS assertion checked the obsolete `scroll-fade-reveal-b` class and an unused `tw-shimmer` selector. The current message-scroller uses `scroll-fade-b`; added a Tailwind v4 `@utility` for its bottom fade mask and changed the assertion to verify the real generated class. Animation variables, scrollbar rules and reduced-motion CSS had already passed in this run.
+- [ ] Re-run production build + all tests on the new head. No passing status is claimed until this run completes.

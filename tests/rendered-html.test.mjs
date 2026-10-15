@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 const productionDescription =
-  /<meta(?=[^>]*\bname=["']description["'])(?=[^>]*\bcontent=["']Explore visual cloud service guides)/i;
+  /<meta(?=[^>]*\bname=["']description["'])(?=[^>]*\bcontent=["']Explore visual AWS, Azure, and Google Cloud service guides)/i;
 const productionAppName =
   /<meta(?=[^>]*\bname=["']application-name["'])(?=[^>]*\bcontent=["']Visual Cloud Learning["'])[^>]*>/i;
 
