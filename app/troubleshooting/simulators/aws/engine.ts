@@ -260,6 +260,9 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     ]},
     { bucketName: "data-lake-curated", statements: [
       { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "S3 object requests must use secure transport (TLS)." }
+    ]},
+    { bucketName: "ai-workloads", statements: [
+      { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "AI training data, documents, and model artifacts must use secure transport (TLS)." }
     ]}
   ],
   glueJobs: [
