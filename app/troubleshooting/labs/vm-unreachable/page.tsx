@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./lab.css";
 
 type Provider = "AWS" | "Azure" | "Google Cloud";
@@ -227,6 +227,14 @@ export default function VmUnreachableLab() {
   const [showCommand, setShowCommand] = useState(false);
   const [consoleTab, setConsoleTab] = useState("Overview");
   const [selectedRule, setSelectedRule] = useState<string | null>(null);
+  const [showAwsConsole, setShowAwsConsole] = useState(true);
+  const [awsConsoleWidth, setAwsConsoleWidth] = useState(900);
+  const awsConsoleFrame = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    if (provider !== "AWS") return;
+    const screen = step === 0 ? "EC2" : step === 1 ? "Security Groups" : step === 2 ? (consoleTab === "Network ACLs" ? "Network ACLs" : consoleTab === "Reachability Analyzer" ? "Reachability Analyzer" : "Route Tables") : step === 3 ? "EC2" : "Security Groups";
+    awsConsoleFrame.current?.contentWindow?.postMessage({ type: "aws-sim-navigate", screen }, window.location.origin);
+  }, [provider, step, consoleTab, showAwsConsole]);
   const steps = labSteps[provider];
   const baseStep = steps[step];
   const current = useMemo<LabStep>(() => {
@@ -419,6 +427,21 @@ export default function VmUnreachableLab() {
       </div>
       <div className="vm-lab-path-foot"><span><b>Failure symptom</b> {protocol==="SSH"?"SSH connection times out or is refused":"RDP connection times out or is refused"}</span><span><b>Investigation order</b> Instance health → effective network rules → routes / return path → guest listener → connection re-test</span></div>
     </section>
+    {provider === "AWS" && <section className="vm-topology-card" aria-label="AWS VM connectivity topology">
+      <div className="vm-topology-heading"><div><span className="vm-lab-section-label">NETWORK TOPOLOGY · AWS</span><h2>Trace the packet path before changing anything</h2></div><p>Expected admin flow: bastion → VPC controls → private subnet → EC2 network interface → guest listener. The seeded fault is a missing, source-scoped inbound rule—not a proven route failure.</p></div>
+      <div className="vm-topology-flow">
+        <div className={step===0?"focus":""}><span className="topology-icon">01</span><strong>Admin / bastion</strong><small>sg-bastion-prod</small><small>Source: approved admin path</small></div><span className="topology-arrow">→</span>
+        <div className={step===1?"focus":""}><span className="topology-icon">02</span><strong>Security group</strong><small>sg-api-prod</small><small>{protocol==="SSH"?"TCP/22":"TCP/3389"} inbound rule absent</small></div><span className="topology-arrow">→</span>
+        <div className={step===2?"focus":""}><span className="topology-icon">03</span><strong>VPC path</strong><small>Route table + NACL</small><small>Check forward + return path</small></div><span className="topology-arrow">→</span>
+        <div className={step===3?"focus":""}><span className="topology-icon">04</span><strong>EC2 guest</strong><small>api-prod-01 · 10.20.2.17</small><small>{protocol==="SSH"?"sshd :22":"TermService :3389"}</small></div>
+      </div>
+      <div className="vm-topology-legend"><span><i className="topology-dot ok"/> Healthy evidence</span><span><i className="topology-dot fault"/> Suspected fault: inbound allow missing</span><span><i className="topology-dot neutral"/> Verify, don’t assume</span></div>
+    </section>}
+    {provider === "AWS" && <section className="vm-real-console">
+      <div className="vm-real-console-head"><div><span className="vm-lab-section-label">INTERACTIVE TRAINING CONSOLE</span><h2>AWS Console Simulator</h2><p>Use the console navigation and inspect the real-style resource screens. Lab guidance stays separate; this simulator does not access your AWS account or create real CloudTrail events.</p></div><label><input type="checkbox" checked={showAwsConsole} onChange={e=>setShowAwsConsole(e.target.checked)}/> Show console</label></div>
+      {showAwsConsole && <><div className="vm-console-sizing"><label>Console pane width <strong>{awsConsoleWidth}px</strong><input aria-label="Console pane width" type="range" min="620" max="1400" step="40" value={awsConsoleWidth} onChange={e=>setAwsConsoleWidth(Number(e.target.value))}/></label><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open simulator in full tab ↗</a></div>
+      <div className="vm-real-console-frame" style={{maxWidth:awsConsoleWidth+"px"}}><iframe ref={awsConsoleFrame} title="Interactive AWS console simulator for VM unreachable lab" src="/troubleshooting/simulators/aws" loading="lazy"/></div></>}
+    </section>}
     <section className="vm-lab-provider"><div><span className="vm-lab-section-label">01 / CHOOSE YOUR CLOUD</span><p>Same incident pattern. Vendor-specific console, rules, and diagnostics.</p><div className="vm-lab-protocol-switch" aria-label="Remote access protocol"><button className={protocol === "SSH" ? "active" : ""} onClick={() => { setProtocol("SSH"); setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); }}>SSH · TCP/22</button><button className={protocol === "RDP" ? "active" : ""} onClick={() => { setProtocol("RDP"); setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); }}>RDP · TCP/3389</button></div></div><div className="vm-lab-provider-buttons">{(["AWS","Azure","Google Cloud"] as Provider[]).map(p=><button key={p} className={provider===p?"active "+p.toLowerCase().replace(" ","-"):""} onClick={()=>{setProvider(p);setStep(0);setShowCommand(false);setConsoleTab("Overview");setSelectedRule(null);}}><span className={"vm-cloud-mark "+p.toLowerCase().replace(" ","-")}>{p==="AWS"?"aws":p==="Azure"?"Az":"G"}</span><strong>{p}</strong><small>{providerNames[p].product}</small></button>)}</div></section>
     <section className="vm-lab-workspace">
       <aside className="vm-lab-step-rail"><div className="vm-lab-rail-head"><span>DIAGNOSTIC PATH</span><strong>{step+1} / {steps.length}</strong></div>{steps.map((s,i)=><button key={s.title} className={i===step?"active":answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"complete":i>step?"locked":""} onClick={()=>{if(i<=step || (i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)){setStep(i);setShowCommand(false);setConsoleTab(i===1?"Inbound rules":i===2?(provider==="AWS"?"Routes":provider==="Azure"?"Effective routes":"Routes"):"Overview");setSelectedRule(null);}}} disabled={i>step && !(i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)}><span>{answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"✓":String(i+1).padStart(2,"0")}</span><strong>{s.title}</strong><small>{i===step?"Current check":i<step?"Reviewed":"Locked until verified"}</small></button>)}</aside>
