@@ -615,9 +615,15 @@ export function toggleAwsRouteState(state: AwsLabState, routeTableId: string, de
 export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | undefined): AwsLabState {
   const baseline = createInitialAwsLabState();
   if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
-  const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }) };
+  const graphUpgrade = (savedState.schemaVersion ?? 0) < 3;
+  const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }), listeners: savedState.instance.listeners ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.listeners : undefined), healthCheckPaths: savedState.instance.healthCheckPaths ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.healthCheckPaths : undefined) };
   const securityGroups = [
-    ...savedState.securityGroups,
+    ...savedState.securityGroups.map(savedGroup => {
+      const seededGroup = baseline.securityGroups.find(group => group.id === savedGroup.id);
+      if (!seededGroup) return savedGroup;
+      const newIngressRules = graphUpgrade ? seededGroup.ingress.filter(rule => rule.id === "sgr-alb-8080" && !savedGroup.ingress.some(savedRule => savedRule.id === rule.id)) : [];
+      return { ...seededGroup, ...savedGroup, ingress: [...savedGroup.ingress, ...newIngressRules], egress: savedGroup.egress ?? seededGroup.egress };
+    }),
     ...baseline.securityGroups.filter(group => !savedState.securityGroups!.some(savedGroup => savedGroup.id === group.id))
   ];
   const networkAcl = (savedState.networkAcl ?? baseline.networkAcl).map(rule => ({
@@ -631,15 +637,25 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   }
   const routes = savedState.routes ?? baseline.routes;
   const routeTables = savedState.routeTables?.length ? savedState.routeTables : (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
-  const instances = savedState.instances?.map(item => ({ ...item, tags: item.tags ?? { Name: item.name } }));
+  const baseInstances = getAwsInstances(baseline);
+  const instances = savedState.instances?.map(item => {
+    const seeded = baseInstances.find(base => base.id === item.id);
+    return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
+  });
   return {
-    ...baseline, ...savedState, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 3, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets,
     iamRoles: savedState.iamRoles ?? baseline.iamRoles,
+    loadBalancers: savedState.loadBalancers ?? baseline.loadBalancers,
+    targetGroups: savedState.targetGroups ?? baseline.targetGroups,
+    databases: savedState.databases ?? baseline.databases,
+    dnsRecords: savedState.dnsRecords ?? baseline.dnsRecords,
+    lambdaFunctions: savedState.lambdaFunctions ?? baseline.lambdaFunctions,
+    dynamoTables: savedState.dynamoTables ?? baseline.dynamoTables,
+    cloudWatchAlarmDefinitions: savedState.cloudWatchAlarmDefinitions ?? baseline.cloudWatchAlarmDefinitions,
     vpcs, subnets, routeTables, routes
   };
 }
-
 
 function validateAwsRoute(state: AwsLabState, routeTableId: string, destinationInput: string, targetInput: string): { destination: string; target: string; error: string | null } {
   const destination = destinationInput.trim();
