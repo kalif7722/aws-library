@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — S3 access visibility, subnet lifecycle, and global search launcher fixes passed CI; browser/deployed revision verification remain  
-**Last reviewed:** 2026-10-15 (CI run 38716475709 passed 94/94 tests; browser/deployed revision verification pending)
+**Status:** In progress — console-realism cleanup in progress; S3 authorization teaching moved to the standalone lab; fresh validation required  
+**Last reviewed:** 2026-10-15 (S3 access tester removed from console; fresh validation pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -29,7 +29,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | VPC / subnets / route tables | **Create/delete workflows implemented; CI pending** | Dedicated Subnets navigation, CIDR/VPC validation, route-table associations, guarded delete for unused subnets, and deletion blocked while EC2/ALB/RDS/Lambda resources remain attached |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
-| S3 | **Access simulation implemented; UI visibility fix added** | Test object access is moved above the bucket inventory so the access panel is visible without scrolling past the tables; IAM-role GetObject/PutObject, explicit TLS and immutable-release denies, CloudTrail outcomes; latest UI fix still needs CI/browser check |
+| S3 | **Bucket/object console view; diagnosis moved to lab** | S3 object authorization is taught in the standalone Access Denied lab; engine-policy tests remain separate from the console UI |
 | IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact; S3 read/write test permissions are attachable from the IAM role view |
 | Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
 | RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
@@ -40,7 +40,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Passed on current simulator revision** | Run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) built the production app and passed 94/94 tests on commit 1a110a16927fb867ce574494b9e606db3833acf5; Cloudflare deployment and browser smoke tests remain unverified |
+| Automated validation / build | **Previous revision passed; this cleanup needs CI** | Run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) passed 94/94 tests before this UI/lab update; fresh build/test and separate browser/deployment verification remain required |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Phase 0 — Architecture and working discipline
@@ -296,3 +296,13 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Add a global search launcher hide/show control, persist the preference locally, and keep Ctrl+K / ⌘K and Escape behavior independent of launcher visibility.
 - [x] CI run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) passed the production build and all 94 regression tests on commit `1a110a16927fb867ce574494b9e606db3833acf5`.
 - [ ] Confirm the deployed website serves this branch's revision and smoke-test the S3 and subnet screens in a browser.
+
+
+## Console realism audit — 2026-10-15
+
+- [x] Remove the S3 **Test object access** panel from the AWS console surface.
+- [x] Move the role/object/TLS/immutable-prefix AccessDenied scenario to the standalone Access Denied lab.
+- [x] Move sandbox disclosure/reset outside the AWS console chrome; remove the in-console training banner, subbar, training sidebar notice and footer.
+- [x] Hide catalog-only and planned services from AWS service search/home.
+- [ ] Remove remaining synthetic diagnostic cards, teaching overlays and placeholder operations across individual service pages.
+- [ ] Run a fresh production build and the full regression suite; browser/deployed revision verification remains separate.
