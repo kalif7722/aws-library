@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — S3 access visibility, subnet lifecycle, and global search launcher fixes implemented; validation and deployed revision verification remain  
-**Last reviewed:** 2026-10-15 (S3 visibility, subnet lifecycle, global search launcher)
+**Status:** In progress — S3 access visibility, subnet lifecycle, and global search launcher fixes passed CI; browser/deployed revision verification remain  
+**Last reviewed:** 2026-10-15 (CI run 38716475709 passed 94/94 tests; browser/deployed revision verification pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -40,7 +40,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Previous revision passed; new fix-batch gate pending** | Run 38711526340 built the production app and passed 93/93 tests on code commit d89dcb77ca0bdfb808b05d34a88b60334c5da396; the current UI/subnet-delete batch still requires CI, and Cloudflare deployment/browser checks remain unverified |
+| Automated validation / build | **Passed on current simulator revision** | Run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) built the production app and passed 94/94 tests on commit 1a110a16927fb867ce574494b9e606db3833acf5; Cloudflare deployment and browser smoke tests remain unverified |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Phase 0 — Architecture and working discipline
@@ -294,5 +294,5 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Promote **Test object access** to the top of the S3 screen, before bucket inventory, so the role/action/object-key workflow is discoverable immediately.
 - [x] Add a dedicated **Subnets** navigation target and inventory with Create/Delete actions; empty subnet deletion updates route-table associations and deletion is blocked while EC2, load balancer, RDS, or Lambda resources still depend on the subnet.
 - [x] Add a global search launcher hide/show control, persist the preference locally, and keep Ctrl+K / ⌘K and Escape behavior independent of launcher visibility.
-- [ ] Run the simulator CI workflow against this change set and confirm the build/tests result.
+- [x] CI run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) passed the production build and all 94 regression tests on commit `1a110a16927fb867ce574494b9e606db3833acf5`.
 - [ ] Confirm the deployed website serves this branch's revision and smoke-test the S3 and subnet screens in a browser.
