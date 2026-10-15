@@ -187,6 +187,13 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - `package.json` defines `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build followed by tests). These commands have not been executed here: the GitHub connector provides repository reads/writes but no runnable checkout, and a network clone was unavailable. Do not mark the Phase 2 gate passed.
 - Next blocking action: inspect the Cloudflare build log for commit `9f011bfc`, fix the specific current failure, then run the exact commands above in a working checkout and record their outputs before further service expansion.
 
+## Cloudflare failure evidence supplied — 2026-10-15
+
+- The repeated Cloudflare build logs supplied by the project owner show dependency installation and all catalog validators completing, then the production build failing during Vite/Rolldown transform of `app/troubleshooting/simulators/aws/page.tsx`.
+- Latest supplied error (2026-10-15 04:54 UTC): **`Expected `}` but found `Identifier``**, location reported as `page.tsx at 35381..35390`. Earlier retry logs show the same parser failure at the same location. A previous 2026-10-14 build reported a separate missing `,` or `)` around offsets 29715–29897; subsequent commits changed that area, but the newer error remains.
+- This is a source-level TSX parse failure, not a dependency-install failure. Build output confirms the catalog/Azure/GCP validators ran before the app transform failed. The npm `allow-scripts` messages are warnings, not the terminating error shown in these logs.
+- **Current blocker:** resolve the exact current TSX parser location against the exact commit Cloudflare built. Do not infer that the earlier EC2 select-all fix resolved all syntax errors. Re-run Cloudflare build, then run `npm run build`, `node --test tests/*.test.mjs`, and `npm test` in a working checkout; only mark the gate green with actual successful output.
+
 ## Change log
 
 - **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
