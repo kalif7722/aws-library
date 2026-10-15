@@ -3,7 +3,7 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — shared AWS application/data/identity graph; current head awaits build/test validation  
+**Status:** In progress — base revision passed the full CI gate; S3 role-level access evaluator is the next change awaiting validation  
 **Last reviewed:** 2026-10-15 (build-blocker correction recorded)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
@@ -29,8 +29,8 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | VPC / subnets / route tables | **Core model wired; validation pending** | One VPC, four public/private subnets across two AZs, two route tables, subnet associations, route create/edit/delete, connected target subnets and RDS/ALB placements |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
-| S3 | **Basic config flows implemented** | Three bucket records; public-access block, versioning, encryption and shared-state updates. Object-level workflows and policy evaluation remain future work |
-| IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact |
+| S3 | **Object inventory/upload and access simulation implemented in source; validation pending** | Four buckets, sample objects, IAM-role GetObject/PutObject evaluation, explicit bucket-policy denies for TLS and immutable release prefixes, CloudTrail outcomes and IAM repair buttons |
+| IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact; S3 read/write test permissions are attachable from the IAM role view |
 | Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
 | RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
 | Route 53 | **Shared record targeting implemented** | Public/private example zones, records to ALB/RDS, resource-target mismatch detection and stale-target exercise |
@@ -266,3 +266,11 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - The production-metadata regex expected the wrong wording for the existing page description. Corrected it to match the actual metadata output.
 - The CSS assertion checked the obsolete `scroll-fade-reveal-b` class and an unused `tw-shimmer` selector. The current message-scroller uses `scroll-fade-b`; added a Tailwind v4 `@utility` for its bottom fade mask and changed the assertion to verify the real generated class. Animation variables, scrollbar rules and reduced-motion CSS had already passed in this run.
 - [ ] Re-run production build + all tests on the new head. No passing status is claimed until this run completes.
+
+
+## Latest verified baseline and next validation — 2026-10-15
+
+- [x] GitHub Actions run [38707769473](https://github.com/kalif7722/aws-library/actions/runs/38707769473) passed `npm test`: production build completed and the full suite reported **91 passed, 0 failed** at commit `4857a4268235d6ae9f0ae6eb93489c314ead19ac`.
+- The current source adds S3 role-level GetObject/PutObject simulation, explicit bucket Deny policy checks, CloudTrail success/failure events, IAM permission remediation controls and schema-v6 migration. These additions still need their own full CI run.
+- [ ] Verify missing role permission → attach S3 read permission → allowed GetObject; insecure transport and immutable release-artifact writes remain denied by bucket policy.
+- [ ] Check the full CI result for the new S3 access tests before continuing to other features.

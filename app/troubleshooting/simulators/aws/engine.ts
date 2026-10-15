@@ -20,6 +20,10 @@ export type AwsLambdaFunction = { name: string; runtime: string; handler: string
 export type AwsDynamoTable = { name: string; status: "active" | "updating"; partitionKey: string; capacityMode: "on-demand" | "provisioned"; encryption: string; itemCount: number; throttledRequests: number; pointInTimeRecovery: boolean };
 export type AwsCloudWatchAlarm = { name: string; metric: string; namespace: string; threshold: number; evaluationPeriods: number; resourceType: "target-group" | "database" | "lambda" | "glue"; resourceId: string; comparison: "minimum" | "maximum"; };
 export type AwsS3Object = { bucketName: string; key: string; sizeBytes: number; lastModified: string; versionId: string; storageClass: string; encryption: "SSE-S3" | "SSE-KMS" };
+export type AwsS3AccessAction = "GetObject" | "PutObject";
+export type AwsS3BucketPolicyStatement = { sid: string; effect: "Deny"; principal: "*" | string; actions: AwsS3AccessAction[]; keyPrefix: string; condition?: "insecure-transport"; detail: string };
+export type AwsS3BucketPolicy = { bucketName: string; statements: AwsS3BucketPolicyStatement[] };
+export type AwsS3AccessSimulationResult = { state: AwsLabState; success: boolean; errorCode: string | null; detail: string; checks: AwsServiceCheck[] };
 export type AwsGlueJob = { name: string; state: "SUCCEEDED" | "FAILED" | "RUNNING"; sourceBucketName: string; sourcePrefix: string; targetBucketName: string; targetPrefix: string; expectedPartition: string; latestSourcePartition: string; latestTargetPartition: string; roleName: string; requiredPolicy: string; bookmarkEnabled: boolean; lastRunTime: string; recordsRead: number; recordsWritten: number; errorMessage: string | null };
 export type AwsCloudTrailEvent = { id: string; eventTime: string; eventName: string; eventSource: string; userIdentity: string; resource: string; region: string; errorCode: string | null; detail: string };
 export type AwsCostUsageLine = { service: string; region: string; usageType: string; resourceId: string; amount: number; baselineAmount: number; owner: string };
@@ -45,6 +49,7 @@ export type AwsLabState = {
   dynamoTables?: AwsDynamoTable[];
   cloudWatchAlarmDefinitions?: AwsCloudWatchAlarm[];
   s3Objects?: AwsS3Object[];
+  s3BucketPolicies?: AwsS3BucketPolicy[];
   glueJobs?: AwsGlueJob[];
   cloudTrailEvents?: AwsCloudTrailEvent[];
   costUsage?: AwsCostUsageLine[];
@@ -56,7 +61,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 5,
+  schemaVersion: 6,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -120,6 +125,21 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { bucketName: "prod-app-logs", key: "application/2026/10/15/api-2026-10-15.log", sizeBytes: 2981042, lastModified: "2026-10-15T05:02:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-S3" },
     { bucketName: "data-lake-raw", key: "orders/day=2026-10-14/part-000.json", sizeBytes: 78342, lastModified: "2026-10-14T23:56:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
     { bucketName: "data-lake-curated", key: "orders/day=2026-10-14/part-000.parquet", sizeBytes: 29418, lastModified: "2026-10-15T00:11:00Z", versionId: "null", storageClass: "STANDARD", encryption: "SSE-KMS" }
+  ],
+  s3BucketPolicies: [
+    { bucketName: "prod-app-artifacts", statements: [
+      { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "S3 object requests must use secure transport (TLS)." },
+      { sid: "DenyRuntimeArtifactOverwrite", effect: "Deny", principal: "Lambda-Payments-Role", actions: ["PutObject"], keyPrefix: "releases/payments-api/", detail: "Runtime Lambda roles cannot overwrite immutable release artifacts." }
+    ]},
+    { bucketName: "prod-app-logs", statements: [
+      { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "S3 object requests must use secure transport (TLS)." }
+    ]},
+    { bucketName: "data-lake-raw", statements: [
+      { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "S3 object requests must use secure transport (TLS)." }
+    ]},
+    { bucketName: "data-lake-curated", statements: [
+      { sid: "DenyInsecureTransport", effect: "Deny", principal: "*", actions: ["GetObject", "PutObject"], keyPrefix: "", condition: "insecure-transport", detail: "S3 object requests must use secure transport (TLS)." }
+    ]}
   ],
   glueJobs: [
     { name: "orders-daily-curation", state: "FAILED", sourceBucketName: "data-lake-raw", sourcePrefix: "orders/", targetBucketName: "data-lake-curated", targetPrefix: "orders/", expectedPartition: "day=2026-10-15", latestSourcePartition: "day=2026-10-14", latestTargetPartition: "day=2026-10-14", roleName: "DataPipeline-Role", requiredPolicy: "DataLakeCuratedWrite", bookmarkEnabled: true, lastRunTime: "2026-10-15T02:11:00Z", recordsRead: 0, recordsWritten: 0, errorMessage: "Expected source partition was not found." }
@@ -219,10 +239,15 @@ export function updateS3BucketSetting(
   setting: "blockPublicAccess" | "versioningEnabled",
   value: boolean
 ): AwsLabState {
-  return {
-    ...state,
-    s3Buckets: state.s3Buckets.map(bucket => bucket.name === bucketName ? { ...bucket, [setting]: value } : bucket)
-  };
+  const bucket = state.s3Buckets.find(item => item.name === bucketName);
+  if (!bucket) return state;
+  const updated = { ...state, s3Buckets: state.s3Buckets.map(item => item.name === bucketName ? { ...item, [setting]: value } : item) };
+  return appendAwsCloudTrailEvent(updated, {
+    eventName: setting === "blockPublicAccess" ? "PutPublicAccessBlock" : "PutBucketVersioning",
+    eventSource: "s3.amazonaws.com", userIdentity: "simulated-console-user",
+    resource: bucketName, region: bucket.region, errorCode: null,
+    detail: setting === "blockPublicAccess" ? "Block Public Access changed to " + value + "." : "Bucket versioning changed to " + value + "."
+  });
 }
 
 export function toggleIamRolePolicy(state: AwsLabState, roleName: string, policyName: string): AwsLabState {
@@ -414,6 +439,73 @@ export function invokeAwsLambdaFunction(state: AwsLabState, functionName: string
   return { state: audited, success: canInvoke, detail: canInvoke ? "Invocation succeeded; recent error count cleared." : "Invocation failed; check function state, execution-role trust, and required permissions." };
 }
 export function getAwsS3Objects(state: AwsLabState): AwsS3Object[] { return state.s3Objects ?? []; }
+export function getAwsS3BucketPolicies(state: AwsLabState): AwsS3BucketPolicy[] { return state.s3BucketPolicies ?? []; }
+
+function roleAllowsS3Action(role: AwsLabState["iamRoles"][number], action: AwsS3AccessAction): boolean {
+  const readPolicies = ["AmazonS3ReadOnlyAccess", "S3ArtifactsRead", "AmazonS3FullAccess", "AdministratorAccess"];
+  const writePolicies = ["S3ArtifactsWrite", "DataLakeCuratedWrite", "AmazonS3FullAccess", "AdministratorAccess"];
+  return role.attachedPolicies.some(policy => (action === "GetObject" ? readPolicies : writePolicies).includes(policy));
+}
+
+export function simulateAwsS3Access(
+  state: AwsLabState,
+  input: { roleName: string; bucketName: string; key: string; action: AwsS3AccessAction; secureTransport: boolean; sizeBytes?: number }
+): AwsS3AccessSimulationResult {
+  const key = input.key.trim();
+  const bucket = state.s3Buckets.find(item => item.name === input.bucketName);
+  const role = state.iamRoles.find(item => item.name === input.roleName);
+  const actor = role ? "assumed-role/" + role.name + "/s3-access-test" : "unknown-role/" + input.roleName;
+  if (!key || key.startsWith("/") || key.length > 1024 || key.includes("//")) {
+    const detail = "Object key must be a non-empty relative key no longer than 1,024 characters.";
+    const audited = appendAwsCloudTrailEvent(state, { eventName: input.action, eventSource: "s3.amazonaws.com", userIdentity: actor, resource: "arn:aws:s3:::" + input.bucketName + "/" + key, region: bucket?.region ?? "eu-west-1", errorCode: "InvalidArgument", detail });
+    return { state: audited, success: false, errorCode: "InvalidArgument", detail, checks: [{ name: "Object key validation", result: "blocked", detail }] };
+  }
+  const identityAllowed = !!role && roleAllowsS3Action(role, input.action);
+  const bucketPolicy = getAwsS3BucketPolicies(state).find(policy => policy.bucketName === input.bucketName);
+  const matchedDeny = bucketPolicy?.statements.find(statement =>
+    (statement.principal === "*" || statement.principal === input.roleName) &&
+    statement.actions.includes(input.action) &&
+    key.startsWith(statement.keyPrefix) &&
+    !(statement.condition === "insecure-transport" && input.secureTransport)
+  );
+  const objects = getAwsS3Objects(state);
+  const existingObject = objects.find(object => object.bucketName === input.bucketName && object.key === key);
+  const authorizedBeforeObjectLookup = !!bucket && !!role && identityAllowed && !matchedDeny;
+  const objectExists = !!existingObject;
+  const success = authorizedBeforeObjectLookup && (input.action === "PutObject" || objectExists);
+  const errorCode = success ? null : !bucket ? "NoSuchBucket" : (!role || !identityAllowed || matchedDeny) ? "AccessDenied" : "NoSuchKey";
+  const detail = success
+    ? input.action === "GetObject" ? "GetObject succeeded for the requested key." : "PutObject succeeded; the simulated object was written."
+    : !bucket ? "NoSuchBucket: the requested S3 bucket does not exist."
+    : !role ? "AccessDenied: the requested IAM role does not exist."
+    : !identityAllowed ? "AccessDenied: the role is missing the identity-based permission required for " + (input.action === "GetObject" ? "s3:GetObject" : "s3:PutObject") + "."
+    : matchedDeny ? "AccessDenied: " + matchedDeny.sid + " — " + matchedDeny.detail
+    : "NoSuchKey: the requested object key does not exist.";
+  const checks: AwsServiceCheck[] = [
+    { name: "Bucket exists", result: bucket ? "passed" : "blocked", detail: bucket ? "The target bucket exists in the selected account." : "The target bucket was not found." },
+    { name: "IAM identity permission", result: identityAllowed ? "passed" : "blocked", detail: identityAllowed ? "The selected role has a policy that permits " + (input.action === "GetObject" ? "s3:GetObject" : "s3:PutObject") + "." : "The selected role is missing a policy that permits " + (input.action === "GetObject" ? "s3:GetObject" : "s3:PutObject") + "." },
+    { name: "Bucket policy evaluation", result: matchedDeny ? "blocked" : "passed", detail: matchedDeny ? "Explicit Deny " + matchedDeny.sid + " matched: " + matchedDeny.detail : "No explicit Deny statement matched this role, action, key prefix and transport setting." },
+    { name: "Object lookup / write", result: input.action === "PutObject" ? (authorizedBeforeObjectLookup ? "passed" : "blocked") : (authorizedBeforeObjectLookup && objectExists ? "passed" : "blocked"), detail: input.action === "PutObject" ? authorizedBeforeObjectLookup ? "Authorization passed; the requested key can be created or replaced." : "Write not attempted because an earlier authorization check failed." : !authorizedBeforeObjectLookup ? "Object lookup was not evaluated because an earlier authorization check failed." : objectExists ? "The requested object exists." : "The object key was not found in this bucket." }
+  ];
+  let updated = state;
+  if (success && input.action === "PutObject" && bucket) {
+    const versionedPrior = existingObject?.versionId.startsWith("sim-v") ? Number(existingObject.versionId.slice(5)) || 0 : 0;
+    const sizeBytes = Number.isInteger(input.sizeBytes) && (input.sizeBytes ?? 0) > 0 ? Math.min(input.sizeBytes!, 1000000000) : 4096;
+    const object: AwsS3Object = {
+      bucketName: bucket.name, key, sizeBytes,
+      lastModified: new Date().toISOString(),
+      versionId: bucket.versioningEnabled ? "sim-v" + String(versionedPrior + 1).padStart(4, "0") : "null",
+      storageClass: "STANDARD", encryption: bucket.encryption
+    };
+    updated = { ...state, s3Objects: [...objects.filter(item => item.bucketName !== bucket.name || item.key !== key), object] };
+  }
+  const audited = appendAwsCloudTrailEvent(updated, {
+    eventName: input.action, eventSource: "s3.amazonaws.com", userIdentity: actor,
+    resource: "arn:aws:s3:::" + input.bucketName + "/" + key,
+    region: bucket?.region ?? "eu-west-1", errorCode, detail
+  });
+  return { state: audited, success, errorCode, detail, checks };
+}
 export function getAwsGlueJobs(state: AwsLabState): AwsGlueJob[] { return state.glueJobs ?? []; }
 export function getAwsCloudTrailEvents(state: AwsLabState): AwsCloudTrailEvent[] { return state.cloudTrailEvents ?? []; }
 export function getAwsCostUsage(state: AwsLabState): AwsCostUsageLine[] { return state.costUsage ?? []; }
@@ -786,9 +878,10 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 5, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 6, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ?? baseline.s3Objects,
+    s3BucketPolicies: savedState.s3BucketPolicies ?? baseline.s3BucketPolicies,
     glueJobs: savedState.glueJobs ?? baseline.glueJobs,
     cloudTrailEvents: savedState.cloudTrailEvents ?? baseline.cloudTrailEvents,
     costUsage: savedState.costUsage ?? baseline.costUsage,

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState,getAwsS3Objects,getAwsGlueJobs,getAwsCloudTrailEvents,getAwsCostUsage,evaluateAwsGlueJob,putAwsS3Object,runAwsGlueJob}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState,getAwsS3Objects,getAwsGlueJobs,getAwsCloudTrailEvents,getAwsCostUsage,evaluateAwsGlueJob,putAwsS3Object,runAwsGlueJob,getAwsS3BucketPolicies,simulateAwsS3Access}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
   const initial=createInitialAwsLabState();
@@ -303,7 +303,7 @@ test('subnet creation validates CIDR overlap and route table VPC',()=>{
 
 test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda, DynamoDB and alarms',()=>{
   const state=createInitialAwsLabState();
-  assert.equal(state.schemaVersion,5);
+  assert.equal(state.schemaVersion,6);
   assert.equal(getAwsLoadBalancers(state)[0].listeners[0].targetGroupId,'tg-payments-api');
   assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,true);
@@ -400,7 +400,7 @@ test('legacy account migration adds new service graph once and preserves later t
   delete old.instance.listeners;
   delete old.instance.healthCheckPaths;
   const migrated=migrateAwsLabState(old);
-  assert.equal(migrated.schemaVersion,5);
+  assert.equal(migrated.schemaVersion,6);
   assert.ok(getAwsLoadBalancers(migrated).length>0);
   assert.ok(migrated.s3Buckets.some(bucket=>bucket.name==="data-lake-raw"));
   assert.ok(getAwsS3Objects(migrated).length>0);
@@ -471,9 +471,47 @@ test('schema-v4 saved state gains the Glue freshness alarm without resetting exi
     cloudWatchAlarmDefinitions:initial.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name!=='orders-curation-freshness')
   };
   const migrated=migrateAwsLabState(schemaFour);
-  assert.equal(migrated.schemaVersion,5);
+  assert.equal(migrated.schemaVersion,6);
   assert.equal(migrated.instance.guestSsh,'stopped');
   assert.equal(migrated.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name==='orders-curation-freshness').length,1);
   assert.equal(getAwsCloudWatchAlarms(migrated).find(alarm=>alarm.name==='orders-curation-freshness').state,'ALARM');
   assert.equal(migrated.cloudWatchAlarmDefinitions.length,4);
+});
+
+
+test('S3 object access evaluates IAM identity permissions, explicit bucket Deny statements and TLS transport',()=>{
+  const initial=createInitialAwsLabState();
+  const artifactKey='releases/payments-api/2026.10.14.zip';
+  assert.ok(getAwsS3BucketPolicies(initial).some(policy=>policy.bucketName==='prod-app-artifacts'&&policy.statements.some(statement=>statement.sid==='DenyRuntimeArtifactOverwrite')));
+  const first=simulateAwsS3Access(initial,{roleName:'Lambda-Payments-Role',bucketName:'prod-app-artifacts',key:artifactKey,action:'GetObject',secureTransport:true});
+  assert.equal(first.success,false);
+  assert.equal(first.errorCode,'AccessDenied');
+  assert.equal(first.checks.find(check=>check.name==='IAM identity permission').result,'blocked');
+  assert.ok(getAwsCloudTrailEvents(first.state).some(event=>event.eventName==='GetObject'&&event.errorCode==='AccessDenied'&&event.resource.endsWith(artifactKey)));
+  const withRead=toggleIamRolePolicy(first.state,'Lambda-Payments-Role','S3ArtifactsRead');
+  const readable=simulateAwsS3Access(withRead,{roleName:'Lambda-Payments-Role',bucketName:'prod-app-artifacts',key:artifactKey,action:'GetObject',secureTransport:true});
+  assert.equal(readable.success,true);
+  assert.equal(readable.errorCode,null);
+  assert.equal(readable.checks.every(check=>check.result==='passed'),true);
+  const insecure=simulateAwsS3Access(readable.state,{roleName:'Lambda-Payments-Role',bucketName:'prod-app-artifacts',key:artifactKey,action:'GetObject',secureTransport:false});
+  assert.equal(insecure.success,false);
+  assert.equal(insecure.checks.find(check=>check.name==='Bucket policy evaluation').result,'blocked');
+  const withWrite=toggleIamRolePolicy(insecure.state,'Lambda-Payments-Role','S3ArtifactsWrite');
+  const immutable=simulateAwsS3Access(withWrite,{roleName:'Lambda-Payments-Role',bucketName:'prod-app-artifacts',key:artifactKey,action:'PutObject',secureTransport:true});
+  assert.equal(immutable.success,false);
+  assert.match(immutable.detail,/DenyRuntimeArtifactOverwrite/);
+  assert.equal(immutable.checks.find(check=>check.name==='Bucket policy evaluation').result,'blocked');
+  const allowedWrite=simulateAwsS3Access(immutable.state,{roleName:'Lambda-Payments-Role',bucketName:'prod-app-logs',key:'manual/s3-access-test.json',action:'PutObject',secureTransport:true,sizeBytes:128});
+  assert.equal(allowedWrite.success,true);
+  assert.ok(getAwsS3Objects(allowedWrite.state).some(object=>object.bucketName==='prod-app-logs'&&object.key==='manual/s3-access-test.json'&&object.versionId==='sim-v0001'));
+});
+
+test('schema-v5 saved accounts receive default S3 explicit-deny policies without losing bucket or IAM edits',()=>{
+  const initial=createInitialAwsLabState();
+  const saved={...initial,schemaVersion:5,s3BucketPolicies:undefined,s3Buckets:initial.s3Buckets.map(bucket=>bucket.name==='prod-app-artifacts'?{...bucket,blockPublicAccess:false}:bucket),iamRoles:initial.iamRoles.map(role=>role.name==='Lambda-Payments-Role'?{...role,attachedPolicies:['S3ArtifactsRead']}:role)};
+  const migrated=migrateAwsLabState(saved);
+  assert.equal(migrated.schemaVersion,6);
+  assert.equal(migrated.s3Buckets.find(bucket=>bucket.name==='prod-app-artifacts').blockPublicAccess,false);
+  assert.deepEqual(migrated.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies,['S3ArtifactsRead']);
+  assert.ok(migrated.s3BucketPolicies.some(policy=>policy.bucketName==='prod-app-artifacts'&&policy.statements.some(statement=>statement.sid==='DenyInsecureTransport')));
 });
