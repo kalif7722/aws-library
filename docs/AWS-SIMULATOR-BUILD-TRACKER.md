@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — console-realism cleanup in progress; S3 authorization teaching moved to the standalone lab; fresh validation required  
-**Last reviewed:** 2026-10-15 (S3 access tester removed from console; fresh validation pending)
+**Status:** In progress — removed custom topology and service-diagnostic panels from the AWS console UI; regression tests added; fresh validation required  
+**Last reviewed:** 2026-10-15 (removed custom console diagnostics/topology; added realism regression tests; fresh validation pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -30,18 +30,29 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
 | S3 | **Bucket/object console view; diagnosis moved to lab** | S3 object authorization is taught in the standalone Access Denied lab; engine-policy tests remain separate from the console UI |
-| IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact; S3 read/write test permissions are attachable from the IAM role view |
-| Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
-| RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
-| Route 53 | **Shared record targeting implemented** | Public/private example zones, records to ALB/RDS, resource-target mismatch detection and stale-target exercise |
+| IAM and Lambda | **Shared configuration; console UI realism cleanup applied** | Lambda inventory retains function configuration, error counts and invocation action; synthetic readiness and configuration-check panels removed; S3 authorization teaching remains in standalone lab |
+| Load Balancing | **Shared model; console UI realism cleanup applied** | ALB table now shows native-style resource fields; target-group health is retained on the target-group screen; custom service-check panel removed; validation pending |
+| RDS | **Shared model; console UI realism cleanup applied** | Private PostgreSQL inventory retains database fields and lifecycle action; custom app-connectivity column/panel removed from console; connectivity evaluation remains engine/lab logic |
+| Route 53 | **Shared record targeting; console UI realism cleanup applied** | Record inventory retains zone/name/type/target/TTL and editable target; synthetic resolution-health and diagnostic columns removed; stale-target exercise belongs in lab guidance |
 | DynamoDB | **Inventory/configuration data seeded** | Orders and IdempotencyKeys tables; capacity, encryption, item counts, throttling and recovery configuration are displayed |
 | CloudWatch | **Alarm states computed from shared model** | Target health, RDS connections/state, Lambda errors and Glue data freshness feed four alarms; successful curation resolves the Glue alarm |
 | CloudTrail | **Event history modeled** | Seeded API events include DynamoDB AccessDenied, missing S3 object, DNS target edit, target-group change and NAT change; key simulator actions append new events |
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Previous revision passed; this cleanup needs CI** | Run [38716475709](https://github.com/kalif7722/aws-library/actions/runs/38716475709) passed 94/94 tests before this UI/lab update; fresh build/test and separate browser/deployment verification remain required |
+| Automated validation / build | **Pending after console-realism cleanup** | Added `tests/aws-console-realism.test.mjs`; must run production build and full `npm test`; prior 94/94 result applies only to an earlier revision; browser/deployment verification remains separate |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
+
+## Latest console-realism audit — 2026-10-15
+
+- [x] Removed the S3 object-access tester from the normal S3 console; authorization learning stays in the standalone Access Denied lab.
+- [x] Removed the custom connected-application topology and downstream dependency shortcut panel from Console Home.
+- [x] Removed custom ALB service-check panel, RDS app-connectivity diagnostics, Lambda readiness/configuration-check panels, and Glue freshness-check panel.
+- [x] Removed synthetic RDS connectivity, Lambda readiness, and Route 53 resolution-health columns from service inventories; target-group health remains on the Target Groups view.
+- [x] Added regression tests that enforce the console/lab boundary.
+- [ ] Run the production build and full test suite on the latest branch head; do not treat source edits as validated until CI passes.
+- [ ] Browser-walk the revised console and confirm the Access Denied and stale-data lessons still teach actionable investigation outside the console.
+- [ ] Verify Cloudflare deployment separately; the live site may not include these branch changes.
 
 ## Phase 0 — Architecture and working discipline
 
