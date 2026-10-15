@@ -119,7 +119,8 @@ export default function AwsAiAccessDeniedLab() {
 
   function syncConsoleFrame() {
     if (!sideBySide) return;
-    const screen = current.consolePage.split(" · ")[0];
+    const label = current.consolePage.split(" · ")[0];
+    const screen = label === "Amazon Bedrock" ? "Bedrock" : label;
     consoleFrame.current?.contentWindow?.postMessage({ type: "aws-sim-navigate", screen }, window.location.origin);
   }
 
