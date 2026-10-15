@@ -3,7 +3,7 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — EC2/VPC only  
+**Status:** In progress — shared EC2/VPC/application service graph; latest cross-service additions await a fresh build/test pass  
 **Last reviewed:** 2026-10-15 (build-blocker correction recorded)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
@@ -26,11 +26,18 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Service catalog | **Complete for current catalog scope** | 89 unique catalog entries; catalog entries are not all functional simulators |
 | EC2 inventory and lifecycle | **Implemented; validation pending** | Launch workflow, multi-instance inventory, scoped lifecycle actions, bulk start/stop/reboot and tag CRUD; browser/build verification remains |
 | Security Groups | **Ingress/egress CRUD implemented; validation pending** | Selectable inventory; inbound and outbound rule create/edit/delete with shared validation; end-to-end verification remains |
-| VPC / subnets / route tables | **Core CRUD wired; validation pending** | One VPC, public/private subnets, two route tables, selectable inventories, subnet association editor, route create/edit/delete and state model |
+| VPC / subnets / route tables | **Core model wired; validation pending** | One VPC, four public/private subnets across two AZs, two route tables, subnet associations, route create/edit/delete, connected target subnets and RDS/ALB placements |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
-| Shared reachability evaluation | **Expanded; validation pending** | Selected source/destination instance, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks |
-| S3 and IAM examples | **Basic state flows implemented** | Bucket public-access/versioning settings and role policy attachments; not the current focus |
-| Automated validation / build | **Blocked previously; correction committed, rerun pending** | The supplied Cloudflare log identified a missing `)` in the EC2 select-all checkbox handler in `page.tsx`; corrected in `994ad216`. No GitHub Actions runs/status checks are available to confirm the next build yet |
+| Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
+| S3 | **Basic config flows implemented** | Three bucket records; public-access block, versioning, encryption and shared-state updates. Object-level workflows and policy evaluation remain future work |
+| IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact |
+| Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
+| RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
+| Route 53 | **Shared record targeting implemented** | Public/private example zones, records to ALB/RDS, resource-target mismatch detection and stale-target exercise |
+| DynamoDB | **Inventory/configuration data seeded** | Orders and IdempotencyKeys tables; capacity, encryption, item counts, throttling and recovery configuration are displayed |
+| CloudWatch | **Alarm states computed from shared model** | Target health, RDS connections/state and Lambda readiness/error count feed three alarms; metrics tab includes linked service values |
+| Cost Explorer and other catalog entries | **Partially simulated / catalog-only** | Billing summary is sample data; do not treat unmodeled directory entries as working service simulators |
+| Automated validation / build | **Previous builds reported green; current graph changes pending** | The project owner reported two successful Cloudflare builds after the JSX correction. Those builds preceded the latest shared-service model/UI/tests; the current head needs a fresh build and test run |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Phase 0 — Architecture and working discipline
@@ -135,12 +142,12 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 
 Begin after Phase 2 exit gate.
 
-- [ ] Add representative, configurable mock resource profiles that reuse the same resource model (not isolated hard-coded scenario engines).
-- [ ] Make service configuration changes visibly affect dependent resources and diagnostic results.
-- [ ] Add useful validation, loading/empty/error states and realistic action feedback.
-- [ ] Improve AWS-console visual/interaction consistency without claiming pixel-perfect parity.
-- [ ] Add regression tests for cross-resource state transitions and saved-state compatibility.
-- [ ] Review accessibility, keyboard use and responsive layouts.
+- [x] Seed a shared connected application graph for ALB → target group → EC2 → RDS/Lambda/DynamoDB, plus Route 53 and CloudWatch links.
+- [x] Make selected configuration changes affect dependent checks: target health path/listener, DB status/security group/NACL, DNS target, Lambda role policy and invocation error count.
+- [x] Add regression tests for cross-service state transitions and legacy-state migration; execution remains pending on the latest branch head.
+- [ ] Add more realistic S3 object/access-policy behavior and CloudTrail event history for the AccessDenied and data-ingestion labs.
+- [ ] Improve empty/error states, action feedback, accessibility, keyboard use and responsive browser behavior.
+- [ ] Extend IAM policy evaluation beyond the currently simulated policy-attachment/readiness cases.
 
 ## Phase 4 — Expand service families (one at a time)
 
@@ -181,18 +188,25 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Latest verification update — 2026-10-15
 
-- GitHub PR #5 is still **open and draft**; head is `9f011bfc4c0ad8305ce6f3110b1a809f39ccbdb6`.
-- The Cloudflare deployment status attached to the latest PR discussion reports **deployment failed** for commit `9f011bfc` at 2026-10-15 04:54 UTC. This supersedes any assumption that the prior syntax correction made the build/deployment healthy.
-- GitHub Actions PR-triggered workflow runs and commit status checks are empty for this head. They do not establish a passing build.
-- `package.json` defines `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build followed by tests). These commands have not been executed here: the GitHub connector provides repository reads/writes but no runnable checkout, and a network clone was unavailable. Do not mark the Phase 2 gate passed.
-- Next blocking action: inspect the Cloudflare build log for commit `9f011bfc`, fix the specific current failure, then run the exact commands above in a working checkout and record their outputs before further service expansion.
+- The project owner reports the **last two Cloudflare builds succeeded** after the EC2 Tags JSX parser fix.
+- Those successful builds preceded the newer shared application graph, Lambda invocation flow, DB/NACL checks, multi-AZ seed, live service inventories, and console-home topology work. They **do not validate the current branch head**.
+- Latest reviewed branch head before this tracker edit: `74e525ceaf987fef5c575c461fc048e3c91e9846`. The current workstream has added shared service models/evaluators and expanded the engine test file to **29 tests**.
+- Current simulator content: 1 application load balancer, 2 target groups, 1 private PostgreSQL database, 3 DNS records across 2 zones, 3 Lambda functions, 2 DynamoDB tables, 3 model-driven CloudWatch alarms, 3 S3 buckets, and one VPC with 4 subnets across 2 availability zones. These counts are seed data; launching EC2 or creating a subnet changes some counts dynamically.
+- Useful seeded lab conditions include an unhealthy admin target group (wrong health path/port), a stale DNS target, and a Lambda execution-role permission/error condition. The normal console does not expose a lab selector or disclose the cause.
+- Database connectivity now checks application instance state, VPC/local route, database status, database security group, inbound NACL and return-path NACL. ALB/TG, DNS, Lambda readiness and CloudWatch alarms read the same shared state.
+- `tests/aws-simulator-engine.test.mjs` contains 29 test cases, including seven cross-service graph/migration/invocation cases and a NACL database-path assertion. The test source has been updated but **has not been executed here**.
+- Required commands remain `npm run build`, `node --test tests/*.test.mjs`, and `npm test`. This environment has repository read/write access but no working local checkout; do not claim current-head build/test success until Cloudflare/CI results or a runnable checkout confirms it.
+- **Next gate:** validate current branch head after the latest changes, fix any failures based on exact output, then manually exercise DNS → ALB → target group → EC2 and EC2 → RDS/Lambda/DynamoDB flows before expanding beyond these directly connected services.
 
-## Cloudflare failure evidence supplied — 2026-10-15
+## Historical Cloudflare failure evidence supplied — 2026-10-15
+
+> Historical log excerpts from before the JSX root-cause fix. The project owner subsequently reported two successful builds; the later shared-service additions still need a fresh verification pass.
+
 
 - The repeated Cloudflare build logs supplied by the project owner show dependency installation and all catalog validators completing, then the production build failing during Vite/Rolldown transform of `app/troubleshooting/simulators/aws/page.tsx`.
 - Latest supplied error (2026-10-15 04:54 UTC): **`Expected `}` but found `Identifier``**, location reported as `page.tsx at 35381..35390`. Earlier retry logs show the same parser failure at the same location. A previous 2026-10-14 build reported a separate missing `,` or `)` around offsets 29715–29897; subsequent commits changed that area, but the newer error remains.
 - This is a source-level TSX parse failure, not a dependency-install failure. Build output confirms the catalog/Azure/GCP validators ran before the app transform failed. The npm `allow-scripts` messages are warnings, not the terminating error shown in these logs.
-- **Current blocker:** resolve the exact current TSX parser location against the exact commit Cloudflare built. Do not infer that the earlier EC2 select-all fix resolved all syntax errors. Re-run Cloudflare build, then run `npm run build`, `node --test tests/*.test.mjs`, and `npm test` in a working checkout; only mark the gate green with actual successful output.
+- **Action at that point:** resolve the TSX parser location against the exact commit Cloudflare built. Do not infer that the earlier EC2 select-all fix resolved all syntax errors. Re-run Cloudflare build, then run `npm run build`, `node --test tests/*.test.mjs`, and `npm test` in a working checkout; only mark the gate green with actual successful output.
 
 - **2026-10-15 follow-up:** Inspected the current AWS simulator TSX and found the concrete malformed JSX in the EC2 **Tags** tab: two sibling `<div>` panels were emitted directly from one `&&` expression without a fragment/closing expression. Wrapped the tag header, table, and editor in a fragment. Commit: [`f40f0e1`](https://github.com/kalif7722/aws-library/commit/f40f0e19cf250045efd4377c433043f81c9dee5f). This is a source-level fix matching the reported parser class; the Cloudflare rebuild and automated test suite are still pending, so the gate remains **not verified**.
 
