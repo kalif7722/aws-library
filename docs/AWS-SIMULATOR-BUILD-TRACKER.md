@@ -3,7 +3,7 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — shared EC2/VPC/application service graph; latest cross-service additions await a fresh build/test pass  
+**Status:** In progress — shared AWS application/data/identity graph; current head awaits build/test validation  
 **Last reviewed:** 2026-10-15 (build-blocker correction recorded)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
@@ -36,7 +36,10 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Route 53 | **Shared record targeting implemented** | Public/private example zones, records to ALB/RDS, resource-target mismatch detection and stale-target exercise |
 | DynamoDB | **Inventory/configuration data seeded** | Orders and IdempotencyKeys tables; capacity, encryption, item counts, throttling and recovery configuration are displayed |
 | CloudWatch | **Alarm states computed from shared model** | Target health, RDS connections/state and Lambda readiness/error count feed three alarms; metrics tab includes linked service values |
-| Cost Explorer and other catalog entries | **Partially simulated / catalog-only** | Billing summary is sample data; do not treat unmodeled directory entries as working service simulators |
+| CloudTrail | **Event history modeled** | Seeded API events include DynamoDB AccessDenied, missing S3 object, DNS target edit, target-group change and NAT change; key simulator actions append new events |
+| Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
+| Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
+| Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
 | Automated validation / build | **Previous builds reported green; current graph changes pending** | The project owner reported two successful Cloudflare builds after the JSX correction. Those builds preceded the latest shared-service model/UI/tests; the current head needs a fresh build and test run |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
@@ -143,9 +146,10 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 Begin after Phase 2 exit gate.
 
 - [x] Seed a shared connected application graph for ALB → target group → EC2 → RDS/Lambda/DynamoDB, plus Route 53 and CloudWatch links.
+- [x] Add CloudTrail event history, S3 object-level data, a repairable Glue curation job and cost-usage dimensions for stale-data, access-denied and cost-spike labs.
 - [x] Make selected configuration changes affect dependent checks: target health path/listener, DB status/security group/NACL, DNS target, Lambda role policy and invocation error count.
 - [x] Add regression tests for cross-service state transitions and legacy-state migration; execution remains pending on the latest branch head.
-- [ ] Add more realistic S3 object/access-policy behavior and CloudTrail event history for the AccessDenied and data-ingestion labs.
+- [ ] Expand S3 access-policy evaluation and wire all supported actions into audit history; CloudTrail and object-level data are now seeded and partially interactive.
 - [ ] Improve empty/error states, action feedback, accessibility, keyboard use and responsive browser behavior.
 - [ ] Extend IAM policy evaluation beyond the currently simulated policy-attachment/readiness cases.
 
@@ -188,15 +192,13 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Latest verification update — 2026-10-15
 
-- The project owner reports the **last two Cloudflare builds succeeded** after the EC2 Tags JSX parser fix.
-- Those successful builds preceded the newer shared application graph, Lambda invocation flow, DB/NACL checks, multi-AZ seed, live service inventories, and console-home topology work. They **do not validate the current branch head**.
-- Latest reviewed branch head before this tracker edit: `74e525ceaf987fef5c575c461fc048e3c91e9846`. The current workstream has added shared service models/evaluators and expanded the engine test file to **29 tests**.
-- Current simulator content: 1 application load balancer, 2 target groups, 1 private PostgreSQL database, 3 DNS records across 2 zones, 3 Lambda functions, 2 DynamoDB tables, 3 model-driven CloudWatch alarms, 3 S3 buckets, and one VPC with 4 subnets across 2 availability zones. These counts are seed data; launching EC2 or creating a subnet changes some counts dynamically.
-- Useful seeded lab conditions include an unhealthy admin target group (wrong health path/port), a stale DNS target, and a Lambda execution-role permission/error condition. The normal console does not expose a lab selector or disclose the cause.
-- Database connectivity now checks application instance state, VPC/local route, database status, database security group, inbound NACL and return-path NACL. ALB/TG, DNS, Lambda readiness and CloudWatch alarms read the same shared state.
-- `tests/aws-simulator-engine.test.mjs` contains 29 test cases, including seven cross-service graph/migration/invocation cases and a NACL database-path assertion. The test source has been updated but **has not been executed here**.
-- Required commands remain `npm run build`, `node --test tests/*.test.mjs`, and `npm test`. This environment has repository read/write access but no working local checkout; do not claim current-head build/test success until Cloudflare/CI results or a runnable checkout confirms it.
-- **Next gate:** validate current branch head after the latest changes, fix any failures based on exact output, then manually exercise DNS → ALB → target group → EC2 and EC2 → RDS/Lambda/DynamoDB flows before expanding beyond these directly connected services.
+- The project owner reported two successful Cloudflare builds after the EC2 Tags JSX correction. Those builds preceded the later shared-service graph and current CloudTrail/Glue/S3-object/Cost Explorer additions.
+- The current source change adds **CloudTrail event history**, a repairable S3-to-Glue ingestion workflow, object-level S3 inventory/upload, and a cost-usage breakdown with a NAT data-processing spike. It also bumps the persisted simulator schema to v4 and migrates older saved state.
+- The shared application graph now covers EC2/VPC, Security Groups, NACLs, route tables, ALB/target groups, RDS, Route 53, Lambda/IAM, DynamoDB, CloudWatch, S3 objects/bucket settings, Glue jobs, CloudTrail events and Cost Explorer usage rows.
+- The engine test source contains **32 test cases**, including tests for cross-service health changes, database NACL paths, Lambda policy repair/invocation, legacy migration, Glue partition repair, CloudTrail audit updates and cost anomaly data.
+- The most recent known branch head before this batched change was 3e7286b9f445a7e0ece3aa836eec076eae939814. These new changes require one fresh Cloudflare build and an actual run of npm run build, node --test tests/*.test.mjs, and npm test. The commands have not been executed in a local checkout in this session.
+- Do not mark build/test/deployment green until the current head is verified. After the new build passes, manually walk three connected scenarios: ALB target health, Lambda AccessDenied → IAM policy → successful invocation, and S3 partition → Glue job → fresh curated output.
+- Avoid additional service-family expansion until this validation pass completes; prioritize fixes found by the next build/test run.
 
 ## Historical Cloudflare failure evidence supplied — 2026-10-15
 

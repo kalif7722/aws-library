@@ -19,6 +19,10 @@ export type AwsDnsRecord = { id: string; zoneName: string; name: string; type: "
 export type AwsLambdaFunction = { name: string; runtime: string; handler: string; state: "active" | "inactive"; roleName: string; timeoutSeconds: number; memoryMb: number; environment: Record<string, string>; vpcSubnetIds: string[]; securityGroupIds: string[]; requiredPolicy?: string; errorCount: number };
 export type AwsDynamoTable = { name: string; status: "active" | "updating"; partitionKey: string; capacityMode: "on-demand" | "provisioned"; encryption: string; itemCount: number; throttledRequests: number; pointInTimeRecovery: boolean };
 export type AwsCloudWatchAlarm = { name: string; metric: string; namespace: string; threshold: number; evaluationPeriods: number; resourceType: "target-group" | "database" | "lambda"; resourceId: string; comparison: "minimum" | "maximum"; };
+export type AwsS3Object = { bucketName: string; key: string; sizeBytes: number; lastModified: string; versionId: string; storageClass: string; encryption: "SSE-S3" | "SSE-KMS" };
+export type AwsGlueJob = { name: string; state: "SUCCEEDED" | "FAILED" | "RUNNING"; sourceBucketName: string; sourcePrefix: string; targetBucketName: string; targetPrefix: string; expectedPartition: string; latestSourcePartition: string; latestTargetPartition: string; roleName: string; requiredPolicy: string; bookmarkEnabled: boolean; lastRunTime: string; recordsRead: number; recordsWritten: number; errorMessage: string | null };
+export type AwsCloudTrailEvent = { id: string; eventTime: string; eventName: string; eventSource: string; userIdentity: string; resource: string; region: string; errorCode: string | null; detail: string };
+export type AwsCostUsageLine = { service: string; region: string; usageType: string; resourceId: string; amount: number; baselineAmount: number; owner: string };
 export type AwsServiceCheck = { name: string; result: "passed" | "blocked"; detail: string };
 export type AwsServiceHealthResult = { healthy: boolean; checks: AwsServiceCheck[] };
 export type AwsLabState = {\n  schemaVersion?: number;\n  instance: AwsInstance;
@@ -38,6 +42,10 @@ export type AwsLabState = {\n  schemaVersion?: number;\n  instance: AwsInstance;
   lambdaFunctions?: AwsLambdaFunction[];
   dynamoTables?: AwsDynamoTable[];
   cloudWatchAlarmDefinitions?: AwsCloudWatchAlarm[];
+  s3Objects?: AwsS3Object[];
+  glueJobs?: AwsGlueJob[];
+  cloudTrailEvents?: AwsCloudTrailEvent[];
+  costUsage?: AwsCostUsageLine[];
 };
 export type AwsReachabilityResult = {
   reachable: boolean;
@@ -46,7 +54,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 3,
+  schemaVersion: 4,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -90,12 +98,13 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   s3Buckets: [
     { name: "prod-app-artifacts", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
     { name: "prod-app-logs", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-S3" },
-    { name: "data-lake-curated", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: false, encryption: "SSE-KMS" }
+    { name: "data-lake-curated", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: false, encryption: "SSE-KMS" },
+    { name: "data-lake-raw", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" }
   ],
   iamRoles: [
     { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
-    { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess"] }
+    { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] }
   ],
   loadBalancers: [{ id: "alb-payments-prod", name: "alb-payments-prod", type: "application", scheme: "internet-facing", state: "active", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0fedcba9876543210", "subnet-0bb1234567890abcd"], securityGroupIds: ["sg-alb-payments"], dnsName: "alb-payments-prod.eu-west-1.elb.amazonaws.com", listeners: [{ port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api" }] }],
   targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8443, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }],
@@ -103,8 +112,41 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   dnsRecords: [{ id: "record-api", zoneName: "example.com", name: "api.example.com", type: "A", targetResourceType: "load-balancer", targetResourceId: "alb-payments-prod", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 60, enabled: true }, { id: "record-orders", zoneName: "example.internal", name: "orders.example.internal", type: "CNAME", targetResourceType: "database", targetResourceId: "orders-prod", expectedResourceType: "database", expectedResourceId: "orders-prod", ttl: 30, enabled: true }, { id: "record-api-legacy", zoneName: "example.com", name: "legacy-api.example.com", type: "A", targetResourceType: "static", targetResourceId: "198.51.100.44", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 300, enabled: true }],
   lambdaFunctions: [{ name: "payments-authorizer", runtime: "Python 3.12", handler: "app.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 8, memoryMb: 256, environment: { TABLE_NAME: "IdempotencyKeys" }, vpcSubnetIds: [], securityGroupIds: [], errorCount: 0 }, { name: "orders-event-handler", runtime: "Node.js 22.x", handler: "index.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 3, memoryMb: 256, environment: { TABLE_NAME: "Orders" }, vpcSubnetIds: ["subnet-0123abcd4567ef890"], securityGroupIds: ["sg-0ab12cd34ef56ab78"], requiredPolicy: "DynamoDBOrdersWrite", errorCount: 12 }, { name: "invoice-generator", runtime: "Container image", handler: "image-entrypoint", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 30, memoryMb: 1024, environment: { ARTIFACT_BUCKET: "prod-app-artifacts" }, vpcSubnetIds: [], securityGroupIds: [], errorCount: 0 }],
   dynamoTables: [{ name: "Orders", status: "active", partitionKey: "orderId (String)", capacityMode: "on-demand", encryption: "AWS owned key", itemCount: 284190, throttledRequests: 0, pointInTimeRecovery: true }, { name: "IdempotencyKeys", status: "active", partitionKey: "key (String)", capacityMode: "on-demand", encryption: "KMS key", itemCount: 13742, throttledRequests: 0, pointInTimeRecovery: true }],
-  cloudWatchAlarmDefinitions: [{ name: "payments-target-health", metric: "HealthyHostCount", namespace: "AWS/ApplicationELB", threshold: 1, evaluationPeriods: 2, resourceType: "target-group", resourceId: "tg-payments-api", comparison: "minimum" }, { name: "orders-db-connections", metric: "DatabaseConnections", namespace: "AWS/RDS", threshold: 150, evaluationPeriods: 3, resourceType: "database", resourceId: "orders-prod", comparison: "maximum" }, { name: "orders-event-handler-errors", metric: "Errors", namespace: "AWS/Lambda", threshold: 1, evaluationPeriods: 1, resourceType: "lambda", resourceId: "orders-event-handler", comparison: "maximum" }]
+  cloudWatchAlarmDefinitions: [{ name: "payments-target-health", metric: "HealthyHostCount", namespace: "AWS/ApplicationELB", threshold: 1, evaluationPeriods: 2, resourceType: "target-group", resourceId: "tg-payments-api", comparison: "minimum" }, { name: "orders-db-connections", metric: "DatabaseConnections", namespace: "AWS/RDS", threshold: 150, evaluationPeriods: 3, resourceType: "database", resourceId: "orders-prod", comparison: "maximum" }, { name: "orders-event-handler-errors", metric: "Errors", namespace: "AWS/Lambda", threshold: 1, evaluationPeriods: 1, resourceType: "lambda", resourceId: "orders-event-handler", comparison: "maximum" }],
+  s3Objects: [
+    { bucketName: "prod-app-artifacts", key: "releases/payments-api/2026.10.14.zip", sizeBytes: 38492117, lastModified: "2026-10-14T20:15:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "prod-app-logs", key: "application/2026/10/15/api-2026-10-15.log", sizeBytes: 2981042, lastModified: "2026-10-15T05:02:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-S3" },
+    { bucketName: "data-lake-raw", key: "orders/day=2026-10-14/part-000.json", sizeBytes: 78342, lastModified: "2026-10-14T23:56:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "data-lake-curated", key: "orders/day=2026-10-14/part-000.parquet", sizeBytes: 29418, lastModified: "2026-10-15T00:11:00Z", versionId: "null", storageClass: "STANDARD", encryption: "SSE-KMS" }
+  ],
+  glueJobs: [
+    { name: "orders-daily-curation", state: "FAILED", sourceBucketName: "data-lake-raw", sourcePrefix: "orders/", targetBucketName: "data-lake-curated", targetPrefix: "orders/", expectedPartition: "day=2026-10-15", latestSourcePartition: "day=2026-10-14", latestTargetPartition: "day=2026-10-14", roleName: "DataPipeline-Role", requiredPolicy: "DataLakeCuratedWrite", bookmarkEnabled: true, lastRunTime: "2026-10-15T02:11:00Z", recordsRead: 0, recordsWritten: 0, errorMessage: "Expected source partition was not found." }
+  ],
+  cloudTrailEvents: [
+    { id: "evt-0007", eventTime: "2026-10-15T05:01:00Z", eventName: "PutItem", eventSource: "dynamodb.amazonaws.com", userIdentity: "assumed-role/Lambda-Payments-Role/orders-event-handler", resource: "Orders", region: "eu-west-1", errorCode: "AccessDeniedException", detail: "DynamoDB rejected a write during order event processing." },
+    { id: "evt-0006", eventTime: "2026-10-15T02:11:02Z", eventName: "GetObject", eventSource: "s3.amazonaws.com", userIdentity: "assumed-role/DataPipeline-Role/orders-daily-curation", resource: "data-lake-raw/orders/day=2026-10-15/part-000.json", region: "eu-west-1", errorCode: "NoSuchKey", detail: "The requested source object key was not found." },
+    { id: "evt-0005", eventTime: "2026-10-15T01:48:22Z", eventName: "ChangeResourceRecordSets", eventSource: "route53.amazonaws.com", userIdentity: "dns-automation-role", resource: "legacy-api.example.com", region: "eu-west-1", errorCode: null, detail: "Record target changed during a legacy application cutover." },
+    { id: "evt-0004", eventTime: "2026-10-14T23:32:10Z", eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "deployment-pipeline-role", resource: "tg-payments-admin", region: "eu-west-1", errorCode: null, detail: "Target-group health-check configuration was updated." },
+    { id: "evt-0003", eventTime: "2026-10-14T22:15:00Z", eventName: "CreateNatGateway", eventSource: "ec2.amazonaws.com", userIdentity: "network-automation-role", resource: "nat-0123abcd4567ef890", region: "eu-west-1", errorCode: null, detail: "A NAT gateway change preceded an increase in regional data-processing usage." },
+    { id: "evt-0002", eventTime: "2026-10-14T19:40:00Z", eventName: "AttachRolePolicy", eventSource: "iam.amazonaws.com", userIdentity: "platform-admin", resource: "Lambda-Payments-Role", region: "eu-west-1", errorCode: null, detail: "A policy attachment changed on the payments Lambda execution role." },
+    { id: "evt-0001", eventTime: "2026-10-14T17:05:00Z", eventName: "PutBucketVersioning", eventSource: "s3.amazonaws.com", userIdentity: "data-platform-admin", resource: "data-lake-curated", region: "eu-west-1", errorCode: null, detail: "Versioning configuration was modified for the curated data bucket." }
+  ],
+  costUsage: [
+    { service: "Amazon EC2", region: "eu-west-1", usageType: "BoxUsage:t3.medium", resourceId: "i-0a12b345c678d9012", amount: 1420, baselineAmount: 1310, owner: "payments-platform" },
+    { service: "Amazon EC2", region: "eu-west-1", usageType: "NatGateway-Bytes", resourceId: "nat-0123abcd4567ef890", amount: 890.17, baselineAmount: 150, owner: "network-platform" },
+    { service: "Amazon RDS", region: "eu-west-1", usageType: "InstanceUsage:db.r6g.large", resourceId: "orders-prod", amount: 980, baselineAmount: 980, owner: "payments-platform" },
+    { service: "Amazon S3", region: "eu-west-1", usageType: "TimedStorage-ByteHrs", resourceId: "data-lake-curated", amount: 346, baselineAmount: 320, owner: "data-platform" },
+    { service: "Elastic Load Balancing", region: "eu-west-1", usageType: "LCU-Hours", resourceId: "alb-payments-prod", amount: 220, baselineAmount: 220, owner: "payments-platform" },
+    { service: "AWS Lambda", region: "eu-west-1", usageType: "Requests-GB-Second", resourceId: "orders-event-handler", amount: 190, baselineAmount: 190, owner: "payments-platform" },
+    { service: "Amazon DynamoDB", region: "eu-west-1", usageType: "OnDemandWriteRequestUnits", resourceId: "Orders", amount: 240, baselineAmount: 240, owner: "payments-platform" }
+  ],
 });
+function appendAwsCloudTrailEvent(state: AwsLabState, input: Omit<AwsCloudTrailEvent, "id" | "eventTime">): AwsLabState {
+  const events = state.cloudTrailEvents ?? [];
+  const event: AwsCloudTrailEvent = { ...input, id: "evt-sim-" + String(events.length + 1).padStart(4, "0"), eventTime: new Date().toISOString() };
+  return { ...state, cloudTrailEvents: [event, ...events].slice(0, 100) };
+}
+
 export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup", targetGroupId = state.instance.securityGroupIds[0]): AwsLabState {
   const groupId = targetGroupId;
   const normalizedSource = sourceType === "SecurityGroup"
@@ -182,17 +224,15 @@ export function updateS3BucketSetting(
 }
 
 export function toggleIamRolePolicy(state: AwsLabState, roleName: string, policyName: string): AwsLabState {
-  return {
-    ...state,
-    iamRoles: state.iamRoles.map(role => {
-      if (role.name !== roleName) return role;
-      const attached = role.attachedPolicies.includes(policyName);
-      return { ...role, attachedPolicies: attached ? role.attachedPolicies.filter(policy => policy !== policyName) : [...role.attachedPolicies, policyName] };
-    })
-  };
+  const role = state.iamRoles.find(item => item.name === roleName);
+  if (!role) return state;
+  const attached = role.attachedPolicies.includes(policyName);
+  const updated = { ...state, iamRoles: state.iamRoles.map(item => {
+    if (item.name !== roleName) return item;
+    return { ...item, attachedPolicies: attached ? item.attachedPolicies.filter(policy => policy !== policyName) : [...item.attachedPolicies, policyName] };
+  }) };
+  return appendAwsCloudTrailEvent(updated, { eventName: attached ? "DetachRolePolicy" : "AttachRolePolicy", eventSource: "iam.amazonaws.com", userIdentity: "simulated-console-user", resource: roleName, region: "eu-west-1", errorCode: null, detail: (attached ? "Detached " : "Attached ") + policyName + "." });
 }
-
-
 export function getAwsLoadBalancers(state: AwsLabState): AwsLoadBalancer[] {
   return state.loadBalancers ?? [];
 }
@@ -217,10 +257,11 @@ export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupI
   if (!path.startsWith("/") || path.length > 128 || /\s/.test(path)) {
     return { state, error: "Health-check path must start with /, contain no spaces, and be 128 characters or fewer." };
   }
-  if (!getAwsTargetGroups(state).some(group => group.id === targetGroupId)) return { state, error: "Target group not found." };
-  return { state: { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path } : group) }, error: null };
+  const current = getAwsTargetGroups(state).find(group => group.id === targetGroupId);
+  if (!current) return { state, error: "Target group not found." };
+  const updated = { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path } : group) };
+  return { state: appendAwsCloudTrailEvent(updated, { eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "simulated-console-user", resource: current.name, region: "eu-west-1", errorCode: null, detail: "Target-group health-check path changed to " + path + "." }), error: null };
 }
-
 export function setAwsInstanceListenerState(state: AwsLabState, instanceId: string, port: number, nextState: "listening" | "stopped"): { state: AwsLabState; error: string | null } {
   if (!Number.isInteger(port) || port < 1 || port > 65535) return { state, error: "Listener port must be between 1 and 65535." };
   const instances = getAwsInstances(state);
@@ -336,14 +377,15 @@ export function updateAwsDnsRecordTarget(state: AwsLabState, recordId: string, t
   if (!target) return { state, error: "Choose a DNS target." };
   if (targetResourceType === "load-balancer" && !getAwsLoadBalancers(state).some(item => item.id === target)) return { state, error: "Choose an existing load balancer." };
   if (targetResourceType === "database" && !getAwsDatabases(state).some(item => item.id === target)) return { state, error: "Choose an existing database." };
-  return { state: { ...state, dnsRecords: getAwsDnsRecords(state).map(item => item.id === recordId ? { ...item, targetResourceType, targetResourceId: target } : item) }, error: null };
+  const updated = { ...state, dnsRecords: getAwsDnsRecords(state).map(item => item.id === recordId ? { ...item, targetResourceType, targetResourceId: target } : item) };
+  return { state: appendAwsCloudTrailEvent(updated, { eventName: "ChangeResourceRecordSets", eventSource: "route53.amazonaws.com", userIdentity: "simulated-console-user", resource: record.name, region: "eu-west-1", errorCode: null, detail: "DNS record target changed to " + target + "." }), error: null };
 }
-
 export function setAwsDatabaseStatus(state: AwsLabState, databaseId: string, status: AwsDatabase["status"]): { state: AwsLabState; error: string | null } {
-  if (!getAwsDatabases(state).some(item => item.id === databaseId)) return { state, error: "Database not found." };
-  return { state: { ...state, databases: getAwsDatabases(state).map(db => db.id === databaseId ? { ...db, status } : db) }, error: null };
+  const database = getAwsDatabases(state).find(item => item.id === databaseId);
+  if (!database) return { state, error: "Database not found." };
+  const updated = { ...state, databases: getAwsDatabases(state).map(db => db.id === databaseId ? { ...db, status } : db) };
+  return { state: appendAwsCloudTrailEvent(updated, { eventName: status === "available" ? "StartDBInstance" : "StopDBInstance", eventSource: "rds.amazonaws.com", userIdentity: "simulated-console-user", resource: database.identifier, region: "eu-west-1", errorCode: null, detail: "Database status changed to " + status + "." }), error: null };
 }
-
 export function evaluateAwsLambdaReadiness(state: AwsLabState, functionName: string): AwsServiceHealthResult {
   const fn = getAwsLambdaFunctions(state).find(item => item.name === functionName);
   if (!fn) return { healthy: false, checks: [{ name: "Function exists", result: "blocked", detail: "Lambda function was not found." }] };
@@ -365,12 +407,86 @@ export function invokeAwsLambdaFunction(state: AwsLabState, functionName: string
   const role = state.iamRoles.find(item => item.name === fn.roleName);
   const canInvoke = fn.state === "active" && !!role && role.trustedService === "lambda.amazonaws.com" && (!fn.requiredPolicy || role.attachedPolicies.includes(fn.requiredPolicy));
   const errorCount = canInvoke ? 0 : fn.errorCount + 1;
-  const lambdaFunctions = getAwsLambdaFunctions(state).map(item => item.name === functionName ? { ...item, errorCount } : item);
-  return {
-    state: { ...state, lambdaFunctions },
-    success: canInvoke,
-    detail: canInvoke ? "Invocation succeeded; recent error count cleared." : "Invocation failed; check function state, execution-role trust, and required permissions."
-  };
+  const updated = { ...state, lambdaFunctions: getAwsLambdaFunctions(state).map(item => item.name === functionName ? { ...item, errorCount } : item) };
+  const audited = appendAwsCloudTrailEvent(updated, { eventName: "Invoke", eventSource: "lambda.amazonaws.com", userIdentity: "simulated-console-user", resource: functionName, region: "eu-west-1", errorCode: canInvoke ? null : "AccessDeniedException", detail: canInvoke ? "Test invocation succeeded and cleared recent errors." : "Test invocation failed; inspect function state and execution-role permissions." });
+  return { state: audited, success: canInvoke, detail: canInvoke ? "Invocation succeeded; recent error count cleared." : "Invocation failed; check function state, execution-role trust, and required permissions." };
+}
+export function getAwsS3Objects(state: AwsLabState): AwsS3Object[] { return state.s3Objects ?? []; }
+export function getAwsGlueJobs(state: AwsLabState): AwsGlueJob[] { return state.glueJobs ?? []; }
+export function getAwsCloudTrailEvents(state: AwsLabState): AwsCloudTrailEvent[] { return state.cloudTrailEvents ?? []; }
+export function getAwsCostUsage(state: AwsLabState): AwsCostUsageLine[] { return state.costUsage ?? []; }
+
+export function putAwsS3Object(state: AwsLabState, input: { bucketName: string; key: string; sizeBytes: number }): { state: AwsLabState; error: string | null } {
+  const bucket = state.s3Buckets.find(item => item.name === input.bucketName);
+  const key = input.key.trim();
+  if (!bucket) return { state, error: "Choose an existing S3 bucket." };
+  if (!key || key.startsWith("/") || key.length > 1024 || key.includes("//")) return { state, error: "Object key must be a non-empty relative key no longer than 1,024 characters." };
+  if (!Number.isInteger(input.sizeBytes) || input.sizeBytes < 1 || input.sizeBytes > 1000000000) return { state, error: "Object size must be between 1 byte and 1 GB in this simulator." };
+  const current = getAwsS3Objects(state);
+  const prior = current.find(item => item.bucketName === bucket.name && item.key === key);
+  const versionNumber = prior && prior.versionId.startsWith("sim-v") ? (Number(prior.versionId.slice(5)) || 0) + 1 : 1;
+  const object: AwsS3Object = { bucketName: bucket.name, key, sizeBytes: input.sizeBytes, lastModified: new Date().toISOString(), versionId: bucket.versioningEnabled ? "sim-v" + String(versionNumber).padStart(4, "0") : "null", storageClass: "STANDARD", encryption: bucket.encryption };
+  const updated = { ...state, s3Objects: [...current.filter(item => item.bucketName !== bucket.name || item.key !== key), object] };
+  const audited = appendAwsCloudTrailEvent(updated, { eventName: "PutObject", eventSource: "s3.amazonaws.com", userIdentity: "simulated-console-user", resource: bucket.name + "/" + key, region: bucket.region, errorCode: null, detail: "Object uploaded to the simulated bucket (" + input.sizeBytes.toLocaleString() + " bytes)." });
+  return { state: audited, error: null };
+}
+
+export function evaluateAwsGlueJob(state: AwsLabState, jobName: string): AwsServiceHealthResult {
+  const job = getAwsGlueJobs(state).find(item => item.name === jobName);
+  if (!job) return { healthy: false, checks: [{ name: "Glue job exists", result: "blocked", detail: "Job was not found in the simulated Data Catalog." }] };
+  const objects = getAwsS3Objects(state);
+  const expectedInputPrefix = job.sourcePrefix + job.expectedPartition + "/";
+  const inputFound = objects.some(object => object.bucketName === job.sourceBucketName && object.key.startsWith(expectedInputPrefix));
+  const expectedOutputPrefix = job.targetPrefix + job.expectedPartition + "/";
+  const outputFresh = objects.some(object => object.bucketName === job.targetBucketName && object.key.startsWith(expectedOutputPrefix)) && job.latestTargetPartition === job.expectedPartition;
+  const role = state.iamRoles.find(item => item.name === job.roleName);
+  const trusted = !!role && role.trustedService === "glue.amazonaws.com";
+  const permitted = !!role && role.attachedPolicies.includes(job.requiredPolicy);
+  const completed = job.state === "SUCCEEDED";
+  const checks: AwsServiceCheck[] = [
+    { name: "Glue execution-role trust", result: trusted ? "passed" : "blocked", detail: trusted ? "The execution role trusts AWS Glue." : "The configured role is missing or does not trust AWS Glue." },
+    { name: "Source bucket permissions", result: permitted ? "passed" : "blocked", detail: permitted ? "The role has the configured data-lake permissions." : "The role is missing required policy " + job.requiredPolicy + "." },
+    { name: "Expected source partition", result: inputFound ? "passed" : "blocked", detail: inputFound ? "The expected partition exists under " + expectedInputPrefix : "No source object exists under " + job.sourceBucketName + "/" + expectedInputPrefix + "." },
+    { name: "Curated output freshness", result: outputFresh ? "passed" : "blocked", detail: outputFresh ? "The curated output contains the expected partition." : "The latest curated output is " + job.latestTargetPartition + "; expected " + job.expectedPartition + "." },
+    { name: "Latest job run", result: completed ? "passed" : "blocked", detail: completed ? "The latest Glue job run succeeded." : "The last Glue run is " + job.state + (job.errorMessage ? ": " + job.errorMessage : ".") }
+  ];
+  return { healthy: checks.every(check => check.result === "passed"), checks };
+}
+
+export function runAwsGlueJob(state: AwsLabState, jobName: string): { state: AwsLabState; success: boolean; detail: string } {
+  const job = getAwsGlueJobs(state).find(item => item.name === jobName);
+  if (!job) return { state, success: false, detail: "Glue job was not found." };
+  const currentObjects = getAwsS3Objects(state);
+  const inputPrefix = job.sourcePrefix + job.expectedPartition + "/";
+  const inputObjects = currentObjects.filter(object => object.bucketName === job.sourceBucketName && object.key.startsWith(inputPrefix));
+  const role = state.iamRoles.find(item => item.name === job.roleName);
+  let failure: string | null = null;
+  let errorCode: string | null = null;
+  if (!role || role.trustedService !== "glue.amazonaws.com") {
+    failure = "The job execution role is missing or has incorrect trust.";
+    errorCode = "AccessDeniedException";
+  } else if (!role.attachedPolicies.includes(job.requiredPolicy)) {
+    failure = "The execution role lacks " + job.requiredPolicy + ".";
+    errorCode = "AccessDeniedException";
+  } else if (!inputObjects.length) {
+    failure = "Expected source partition was not found under " + job.sourceBucketName + "/" + inputPrefix + ".";
+    errorCode = "NoSuchKey";
+  }
+  const now = new Date().toISOString();
+  if (failure) {
+    const updatedJob: AwsGlueJob = { ...job, state: "FAILED", lastRunTime: now, recordsRead: 0, recordsWritten: 0, errorMessage: failure };
+    const updated = { ...state, glueJobs: getAwsGlueJobs(state).map(item => item.name === jobName ? updatedJob : item) };
+    const audited = appendAwsCloudTrailEvent(updated, { eventName: errorCode === "NoSuchKey" ? "GetObject" : "StartJobRun", eventSource: errorCode === "NoSuchKey" ? "s3.amazonaws.com" : "glue.amazonaws.com", userIdentity: "assumed-role/" + job.roleName + "/" + job.name, resource: job.sourceBucketName + "/" + inputPrefix, region: "eu-west-1", errorCode, detail: failure });
+    return { state: audited, success: false, detail: failure };
+  }
+  const outputKey = job.targetPrefix + job.expectedPartition + "/part-000.parquet";
+  const outputBucket = state.s3Buckets.find(item => item.name === job.targetBucketName);
+  if (!outputBucket) return { state, success: false, detail: "Target S3 bucket was not found." };
+  const outputObject: AwsS3Object = { bucketName: job.targetBucketName, key: outputKey, sizeBytes: Math.max(1024, Math.round(inputObjects.reduce((sum, object) => sum + object.sizeBytes, 0) * 0.42)), lastModified: now, versionId: outputBucket.versioningEnabled ? "sim-v" + String(currentObjects.length + 1).padStart(4, "0") : "null", storageClass: "STANDARD", encryption: outputBucket.encryption };
+  const updatedJob: AwsGlueJob = { ...job, state: "SUCCEEDED", lastRunTime: now, recordsRead: Math.max(1, inputObjects.length * 642), recordsWritten: Math.max(1, inputObjects.length * 642), latestSourcePartition: job.expectedPartition, latestTargetPartition: job.expectedPartition, errorMessage: null };
+  const updated = { ...state, s3Objects: [...currentObjects.filter(object => object.bucketName !== outputObject.bucketName || object.key !== outputObject.key), outputObject], glueJobs: getAwsGlueJobs(state).map(item => item.name === jobName ? updatedJob : item) };
+  const audited = appendAwsCloudTrailEvent(updated, { eventName: "StartJobRun", eventSource: "glue.amazonaws.com", userIdentity: "assumed-role/" + job.roleName + "/" + job.name, resource: job.name, region: "eu-west-1", errorCode: null, detail: "Glue job completed successfully and wrote " + outputKey + "." });
+  return { state: audited, success: true, detail: "Glue job completed; the expected source partition was transformed into the curated table prefix." };
 }
 
 export function getAwsCloudWatchAlarms(state: AwsLabState): { name: string; state: "OK" | "ALARM"; metric: string; namespace: string; value: number; threshold: number; detail: string }[] {
@@ -635,7 +751,7 @@ export function toggleAwsRouteState(state: AwsLabState, routeTableId: string, de
 export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | undefined): AwsLabState {
   const baseline = createInitialAwsLabState();
   if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
-  const graphUpgrade = (savedState.schemaVersion ?? 0) < 3;
+  const graphUpgrade = (savedState.schemaVersion ?? 0) < 4;
   const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }), listeners: savedState.instance.listeners ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.listeners : undefined), healthCheckPaths: savedState.instance.healthCheckPaths ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.healthCheckPaths : undefined) };
   const securityGroups = [
     ...savedState.securityGroups.map(savedGroup => {
@@ -663,8 +779,12 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 3, instance, instances, securityGroups, networkAcl,
-    s3Buckets: savedState.s3Buckets ?? baseline.s3Buckets,
+    ...baseline, ...savedState, schemaVersion: 4, instance, instances, securityGroups, networkAcl,
+    s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
+    s3Objects: savedState.s3Objects ?? baseline.s3Objects,
+    glueJobs: savedState.glueJobs ?? baseline.glueJobs,
+    cloudTrailEvents: savedState.cloudTrailEvents ?? baseline.cloudTrailEvents,
+    costUsage: savedState.costUsage ?? baseline.costUsage,
     iamRoles: savedState.iamRoles ?? baseline.iamRoles,
     loadBalancers: savedState.loadBalancers ?? baseline.loadBalancers,
     targetGroups: savedState.targetGroups ?? baseline.targetGroups,

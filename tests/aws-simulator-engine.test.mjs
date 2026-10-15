@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState,getAwsS3Objects,getAwsGlueJobs,getAwsCloudTrailEvents,getAwsCostUsage,evaluateAwsGlueJob,putAwsS3Object,runAwsGlueJob}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
   const initial=createInitialAwsLabState();
@@ -303,7 +303,7 @@ test('subnet creation validates CIDR overlap and route table VPC',()=>{
 
 test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda, DynamoDB and alarms',()=>{
   const state=createInitialAwsLabState();
-  assert.equal(state.schemaVersion,3);
+  assert.equal(state.schemaVersion,4);
   assert.equal(getAwsLoadBalancers(state)[0].listeners[0].targetGroupId,'tg-payments-api');
   assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,true);
@@ -390,14 +390,56 @@ test('legacy account migration adds new service graph once and preserves later t
   delete old.lambdaFunctions;
   delete old.dynamoTables;
   delete old.cloudWatchAlarmDefinitions;
+  delete old.s3Objects;
+  delete old.glueJobs;
+  delete old.cloudTrailEvents;
+  delete old.costUsage;
+  old.s3Buckets=old.s3Buckets.filter(bucket=>bucket.name!=="data-lake-raw");
   old.securityGroups=old.securityGroups.filter(group=>group.id!=='sg-alb-payments'&&group.id!=='sg-rds-orders').map(group=>group.id==='sg-0ab12cd34ef56ab78'?{...group,ingress:group.ingress.filter(rule=>rule.id!=='sgr-alb-8080')}:group);
   delete old.instance.listeners;
   delete old.instance.healthCheckPaths;
   const migrated=migrateAwsLabState(old);
-  assert.equal(migrated.schemaVersion,3);
+  assert.equal(migrated.schemaVersion,4);
   assert.ok(getAwsLoadBalancers(migrated).length>0);
+  assert.ok(migrated.s3Buckets.some(bucket=>bucket.name==="data-lake-raw"));
+  assert.ok(getAwsS3Objects(migrated).length>0);
+  assert.ok(getAwsGlueJobs(migrated).length>0);
+  assert.ok(getAwsCloudTrailEvents(migrated).length>0);
   assert.ok(migrated.securityGroups.find(group=>group.id==='sg-0ab12cd34ef56ab78').ingress.some(rule=>rule.id==='sgr-alb-8080'));
   const broken=updateAwsTargetGroupHealthCheck(migrated,'tg-payments-api','/ready').state;
   const reloaded=migrateAwsLabState(broken);
   assert.equal(evaluateAwsTargetGroupHealth(reloaded,'tg-payments-api').healthy,false);
+});
+
+
+test('Glue freshness lab can be repaired by uploading the missing S3 partition and rerunning the job',()=>{
+  const initial=createInitialAwsLabState();
+  assert.equal(evaluateAwsGlueJob(initial,'orders-daily-curation').healthy,false);
+  const failed=runAwsGlueJob(initial,'orders-daily-curation');
+  assert.equal(failed.success,false);
+  assert.ok(getAwsCloudTrailEvents(failed.state).some(event=>event.errorCode==='NoSuchKey'));
+  const uploaded=putAwsS3Object(failed.state,{bucketName:'data-lake-raw',key:'orders/day=2026-10-15/part-000.json',sizeBytes:78342});
+  assert.equal(uploaded.error,null);
+  const completed=runAwsGlueJob(uploaded.state,'orders-daily-curation');
+  assert.equal(completed.success,true);
+  assert.equal(evaluateAwsGlueJob(completed.state,'orders-daily-curation').healthy,true);
+  assert.ok(getAwsS3Objects(completed.state).some(object=>object.bucketName==='data-lake-curated'&&object.key==='orders/day=2026-10-15/part-000.parquet'));
+});
+
+test('CloudTrail exposes seeded access-denied evidence and records simulated service changes',()=>{
+  const initial=createInitialAwsLabState();
+  assert.ok(getAwsCloudTrailEvents(initial).some(event=>event.eventSource==='dynamodb.amazonaws.com'&&event.errorCode==='AccessDeniedException'));
+  const updated=putAwsS3Object(initial,{bucketName:'data-lake-raw',key:'manual/test.json',sizeBytes:32});
+  assert.ok(getAwsCloudTrailEvents(updated.state).some(event=>event.eventName==='PutObject'&&event.resource==='data-lake-raw/manual/test.json'));
+  const fixedPolicy=toggleIamRolePolicy(updated.state,'Lambda-Payments-Role','DynamoDBOrdersWrite');
+  assert.ok(getAwsCloudTrailEvents(fixedPolicy).some(event=>event.eventName==='AttachRolePolicy'&&event.resource==='Lambda-Payments-Role'));
+});
+
+test('Cost Explorer usage rows surface the seeded NAT data-processing spike',()=>{
+  const lines=getAwsCostUsage(createInitialAwsLabState());
+  const total=lines.reduce((sum,line)=>sum+line.amount,0);
+  assert.ok(Math.abs(total-4286.17)<0.001);
+  const spike=lines.find(line=>line.usageType==='NatGateway-Bytes');
+  assert.ok(spike);
+  assert.ok(spike.amount>spike.baselineAmount*1.5);
 });
