@@ -419,6 +419,8 @@ function score(item: SearchItem, query: string) {
 export default function SemanticSearch() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [launcherVisible, setLauncherVisible] = useState(true);
+  const [launcherPreferenceLoaded, setLauncherPreferenceLoaded] = useState(false);
   const searchTypes = ["Services", "Solutions", "Walkthroughs", "Certifications"] as const;
   type SearchType = typeof searchTypes[number];
   const [selectedTypes, setSelectedTypes] = useState<SearchType[]>([...searchTypes]);
@@ -428,6 +430,16 @@ export default function SemanticSearch() {
   const selectAllSearchTypes = () => setSelectedTypes(current => current.length === searchTypes.length ? [] : [...searchTypes]);
   const [taskItems, setTaskItems] = useState<SearchItem[]>([]);
   const [taskIndexFailed, setTaskIndexFailed] = useState(false);
+
+  // The launcher preference is global across the learning site and survives reloads.
+  useEffect(() => {
+    try { setLauncherVisible(window.localStorage.getItem("visual-cloud-search-launcher-hidden") !== "true"); } catch { /* Search remains available without storage. */ }
+    setLauncherPreferenceLoaded(true);
+  }, []);
+  useEffect(() => {
+    if (!launcherPreferenceLoaded) return;
+    try { window.localStorage.setItem("visual-cloud-search-launcher-hidden", String(!launcherVisible)); } catch { /* Search remains available without storage. */ }
+  }, [launcherVisible, launcherPreferenceLoaded]);
 
   // Load the large cross-cloud task index only after the user starts searching.
   // This keeps the shared layout from eagerly loading all exam-objective data.
@@ -551,9 +563,12 @@ export default function SemanticSearch() {
     return diversifyResults(ranked, query, 6);
   }, [searchableItems, query, selectedTypes]);
   return <div className="semantic-search">
-    <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
-      <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
-    </button>
+    {launcherVisible ? <div className="semantic-search-dock">
+      <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
+        <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
+      </button>
+      <button type="button" className="semantic-search-hide" title="Hide search launcher" aria-label="Hide search launcher" onClick={() => setLauncherVisible(false)}>−</button>
+    </div> : <button type="button" className="semantic-search-restore" title="Show search launcher and open search" aria-label="Show search launcher and open search" aria-expanded={open} onClick={() => { setLauncherVisible(true); setOpen(true); }}><span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Show search</span></button>}
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
       <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && (autocomplete[0] || results[0])) window.location.href = (autocomplete[0] || results[0]).item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
       <p className="semantic-search-hint">Choose what you want to find, then search by service name or describe a business problem in plain English.</p>

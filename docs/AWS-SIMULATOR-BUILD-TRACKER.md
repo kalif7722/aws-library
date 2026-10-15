@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — S3 IAM/bucket-policy access simulator passed the full CI gate; browser walkthrough and deployed revision verification remain  
-**Last reviewed:** 2026-10-15 (S3 access simulation validated in CI)
+**Status:** In progress — S3 access visibility, subnet lifecycle, and global search launcher fixes implemented; validation and deployed revision verification remain  
+**Last reviewed:** 2026-10-15 (S3 visibility, subnet lifecycle, global search launcher)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -26,10 +26,10 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Service catalog | **Complete for current catalog scope** | 89 unique catalog entries; catalog entries are not all functional simulators |
 | EC2 inventory and lifecycle | **Implemented; validation pending** | Launch workflow, multi-instance inventory, scoped lifecycle actions, bulk start/stop/reboot and tag CRUD; browser/build verification remains |
 | Security Groups | **Ingress/egress CRUD implemented; validation pending** | Selectable inventory; inbound and outbound rule create/edit/delete with shared validation; end-to-end verification remains |
-| VPC / subnets / route tables | **Core model wired; validation pending** | One VPC, four public/private subnets across two AZs, two route tables, subnet associations, route create/edit/delete, connected target subnets and RDS/ALB placements |
+| VPC / subnets / route tables | **Create/delete workflows implemented; CI pending** | Dedicated Subnets navigation, CIDR/VPC validation, route-table associations, guarded delete for unused subnets, and deletion blocked while EC2/ALB/RDS/Lambda resources remain attached |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
-| S3 | **Object inventory/upload and IAM access simulation validated in CI** | Four buckets, object inventory, IAM-role GetObject/PutObject, explicit TLS and immutable-release denies, CloudTrail outcomes and IAM remediation controls; browser check pending |
+| S3 | **Access simulation implemented; UI visibility fix added** | Test object access is moved above the bucket inventory so the access panel is visible without scrolling past the tables; IAM-role GetObject/PutObject, explicit TLS and immutable-release denies, CloudTrail outcomes; latest UI fix still needs CI/browser check |
 | IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact; S3 read/write test permissions are attachable from the IAM role view |
 | Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
 | RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
@@ -40,7 +40,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Passed on current code revision** | GitHub Actions run 38711526340 built the production app and reported 93 tests passed, 0 failed on code commit d89dcb77ca0bdfb808b05d34a88b60334c5da396; Cloudflare deployment and browser smoke test remain unverified |
+| Automated validation / build | **Previous revision passed; new fix-batch gate pending** | Run 38711526340 built the production app and passed 93/93 tests on code commit d89dcb77ca0bdfb808b05d34a88b60334c5da396; the current UI/subnet-delete batch still requires CI, and Cloudflare deployment/browser checks remain unverified |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Phase 0 — Architecture and working discipline
@@ -287,3 +287,12 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Add IAM role controls to attach/detach S3 artifact read/write policies and recover a failed read.
 - [x] Add schema-v6 migration for persisted bucket policies and regression coverage.
 - [ ] In-browser verify the end-to-end access test, IAM remediation and CloudTrail evidence.
+
+
+## UI clarity and subnet lifecycle fixes — 2026-10-15
+
+- [x] Promote **Test object access** to the top of the S3 screen, before bucket inventory, so the role/action/object-key workflow is discoverable immediately.
+- [x] Add a dedicated **Subnets** navigation target and inventory with Create/Delete actions; empty subnet deletion updates route-table associations and deletion is blocked while EC2, load balancer, RDS, or Lambda resources still depend on the subnet.
+- [x] Add a global search launcher hide/show control, persist the preference locally, and keep Ctrl+K / ⌘K and Escape behavior independent of launcher visibility.
+- [ ] Run the simulator CI workflow against this change set and confirm the build/tests result.
+- [ ] Confirm the deployed website serves this branch's revision and smoke-test the S3 and subnet screens in a browser.

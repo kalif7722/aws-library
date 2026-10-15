@@ -1006,12 +1006,48 @@ export function createAwsSubnet(
     return cidrContains(left, rightBase) || cidrContains(right, leftBase);
   };
   if (subnets.some(subnet => subnet.vpcId === vpc.id && overlaps(subnet.cidr, cidr))) return { state, subnet: null, error: "The subnet CIDR overlaps an existing subnet in this VPC." };
+  let subnetSuffix = subnets.length + 1;
+  let subnetId = "subnet-0f0000000000000" + subnetSuffix.toString(16).padStart(2, "0");
+  while (subnets.some(item => item.id === subnetId)) {
+    subnetSuffix += 1;
+    subnetId = "subnet-0f0000000000000" + subnetSuffix.toString(16).padStart(2, "0");
+  }
   const subnet: AwsSubnet = {
-    id: "subnet-0f0000000000000" + (subnets.length + 1).toString(16).padStart(2, "0"),
+    id: subnetId,
     name, vpcId: vpc.id, cidr, availabilityZone: input.availabilityZone,
     state: "available", routeTableId: routeTable.id,
     networkAclId: subnets.find(item => item.vpcId === vpc.id)?.networkAclId ?? "acl-0123abcd4567ef890"
   };
   const routeTables = getAwsRouteTables(state).map(table => table.id === routeTable.id ? { ...table, associatedSubnetIds: [...new Set([...table.associatedSubnetIds, subnet.id])] } : table);
   return { state: { ...state, subnets: [...subnets, subnet], routeTables }, subnet, error: null };
+}
+
+export function deleteAwsSubnet(
+  state: AwsLabState,
+  subnetId: string
+): { state: AwsLabState; deleted: boolean; error: string | null } {
+  const subnet = getAwsSubnets(state).find(item => item.id === subnetId);
+  if (!subnet) return { state, deleted: false, error: "Subnet no longer exists." };
+
+  // AWS does not permit deleting a subnet while dependent resources remain attached.
+  const dependencies = [
+    ...getAwsInstances(state).filter(item => item.subnetId === subnetId).map(item => `EC2 instance ${item.name}`),
+    ...getAwsLoadBalancers(state).filter(item => item.subnetIds.includes(subnetId)).map(item => `load balancer ${item.name}`),
+    ...getAwsDatabases(state).filter(item => item.subnetIds.includes(subnetId)).map(item => `database ${item.identifier}`),
+    ...getAwsLambdaFunctions(state).filter(item => item.vpcSubnetIds.includes(subnetId)).map(item => `Lambda function ${item.name}`),
+  ];
+  if (dependencies.length) {
+    return {
+      state,
+      deleted: false,
+      error: `Cannot delete subnet ${subnet.name} while resources are attached: ${dependencies.join(", ")}. Move or detach those resources first.`,
+    };
+  }
+
+  const subnets = getAwsSubnets(state).filter(item => item.id !== subnetId);
+  const routeTables = getAwsRouteTables(state).map(table => ({
+    ...table,
+    associatedSubnetIds: table.associatedSubnetIds.filter(id => id !== subnetId),
+  }));
+  return { state: { ...state, subnets, routeTables }, deleted: true, error: null };
 }

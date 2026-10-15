@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {loadArchitectureModule} from './load-architecture-module.mjs';
 
-const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState,getAwsS3Objects,getAwsGlueJobs,getAwsCloudTrailEvents,getAwsCostUsage,evaluateAwsGlueJob,putAwsS3Object,runAwsGlueJob,getAwsS3BucketPolicies,simulateAwsS3Access}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
+const {createInitialAwsLabState,addSshIngressRule,addSecurityGroupIngressRule,updateSecurityGroupIngressRule,deleteSecurityGroupIngressRule,addSecurityGroupEgressRule,updateSecurityGroupEgressRule,deleteSecurityGroupEgressRule,addNetworkAclRule,updateNetworkAclRule,deleteNetworkAclRule,getAwsInstances,launchAwsInstance,setAwsInstanceState,rebootAwsInstance,updateAwsInstanceTag,deleteAwsInstanceTag,getAwsVpcs,getAwsSubnets,getAwsRouteTables,associateSubnetWithRouteTable,toggleAwsRouteState,addAwsRoute,updateAwsRoute,deleteAwsRoute,createAwsSubnet,deleteAwsSubnet,migrateAwsLabState,evaluateAwsSshReachability,updateS3BucketSetting,toggleIamRolePolicy,getAwsLoadBalancers,getAwsTargetGroups,getAwsDatabases,getAwsDnsRecords,getAwsLambdaFunctions,getAwsDynamoTables,getAwsCloudWatchAlarms,evaluateAwsTargetGroupHealth,evaluateAwsLoadBalancerHealth,evaluateAwsDatabaseConnectivity,evaluateAwsDnsRecord,evaluateAwsLambdaReadiness,updateAwsTargetGroupHealthCheck,setAwsDatabaseStatus,invokeAwsLambdaFunction,updateAwsDnsRecordTarget,setAwsInstanceListenerState,getAwsS3Objects,getAwsGlueJobs,getAwsCloudTrailEvents,getAwsCostUsage,evaluateAwsGlueJob,putAwsS3Object,runAwsGlueJob,getAwsS3BucketPolicies,simulateAwsS3Access}=loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts',import.meta.url));
 
 test('instance lifecycle actions stay scoped and synchronize the legacy primary-instance view',()=>{
   const initial=createInitialAwsLabState();
@@ -206,6 +206,22 @@ test('route edits stay in the selected route table and update effective reachabi
   assert.equal(getAwsRouteTables(updated.state).find(table=>table.id==='rtb-0123abcd4567ef890').routes.find(route=>route.destination==='10.20.0.0/16').state,'blackhole');
   const publicRoute=toggleAwsRouteState(initial,'rtb-0fedcba9876543210','0.0.0.0/0');
   assert.equal(publicRoute.state.routes.find(route=>route.destination==='0.0.0.0/0').target,'nat-0123abcd4567ef890');
+});
+
+test('subnet deletion removes empty subnets and route-table associations but protects attached resources',()=>{
+  const initial=createInitialAwsLabState();
+  const protectedResult=deleteAwsSubnet(initial,'subnet-0123abcd4567ef890');
+  assert.equal(protectedResult.deleted,false);
+  assert.match(protectedResult.error,/resources are attached/);
+  assert.equal(getAwsSubnets(initial).length,4);
+
+  const created=createAwsSubnet(initial,{name:'disposable-subnet',cidr:'10.20.5.0/24',availabilityZone:'eu-west-1c',vpcId:'vpc-0123abcd4567ef890',routeTableId:'rtb-0123abcd4567ef890'});
+  assert.equal(created.error,null);
+  const deleted=deleteAwsSubnet(created.state,created.subnet.id);
+  assert.equal(deleted.deleted,true);
+  assert.equal(deleted.error,null);
+  assert.equal(getAwsSubnets(deleted.state).some(subnet=>subnet.id===created.subnet.id),false);
+  assert.equal(getAwsRouteTables(deleted.state).some(table=>table.associatedSubnetIds.includes(created.subnet.id)),false);
 });
 
 test('legacy saved state migration preserves existing route faults and supplies subnet relationships',()=>{
