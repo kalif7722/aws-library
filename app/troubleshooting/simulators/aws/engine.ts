@@ -220,11 +220,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
     { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] },
     { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["BedrockInvokeAccess", "SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
-    { name: "BedrockKnowledgeBaseRole", lastActivity: "Today", trustedService: "bedrock.amazonaws.com", attachedPolicies: ["BedrockDataSourceRead", "S3ArtifactsRead", "KMSDecryptForAIArtifacts"] },
-    { name: "SageMakerExecutionRole", lastActivity: "Today", trustedService: "sagemaker.amazonaws.com", attachedPolicies: ["SageMakerTrainingAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
-    { name: "ComprehendBatchRole", lastActivity: "Today", trustedService: "comprehend.amazonaws.com", attachedPolicies: ["ComprehendBatchAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
-    { name: "TextractDocumentRole", lastActivity: "Today", trustedService: "textract.amazonaws.com", attachedPolicies: ["TextractDocumentAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
-    { name: "QBusinessDataSourceRole", lastActivity: "Today", trustedService: "qbusiness.amazonaws.com", attachedPolicies: ["QBusinessDataSourceAccess", "S3ArtifactsRead", "KMSDecryptForAIArtifacts"] }
+    { name: "BedrockKnowledgeBaseRole", lastActivity: "Today", trustedService: "bedrock.amazonaws.com", attachedPolicies: ["BedrockDataSourceRead", "S3ArtifactsRead", "KMSAIArtifactAccess"] },
+    { name: "SageMakerExecutionRole", lastActivity: "Today", trustedService: "sagemaker.amazonaws.com", attachedPolicies: ["SageMakerTrainingAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
+    { name: "ComprehendBatchRole", lastActivity: "Today", trustedService: "comprehend.amazonaws.com", attachedPolicies: ["ComprehendBatchAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
+    { name: "TextractDocumentRole", lastActivity: "Today", trustedService: "textract.amazonaws.com", attachedPolicies: ["TextractDocumentAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
+    { name: "QBusinessDataSourceRole", lastActivity: "Today", trustedService: "qbusiness.amazonaws.com", attachedPolicies: ["QBusinessDataSourceAccess", "S3ArtifactsRead", "KMSAIArtifactAccess"] }
   ],
   loadBalancers: [{ id: "alb-payments-prod", name: "alb-payments-prod", type: "application", scheme: "internet-facing", state: "active", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0fedcba9876543210", "subnet-0bb1234567890abcd"], securityGroupIds: ["sg-alb-payments"], dnsName: "alb-payments-prod.eu-west-1.elb.amazonaws.com", listeners: [{ port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api" }] }],
   targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8443, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }],
@@ -1028,9 +1028,13 @@ function aiPrefixObjects(state: AwsLabState, bucketName: string, prefix: string)
   return (state.s3Objects ?? []).filter(object => object.bucketName === bucketName && object.key.startsWith(prefix));
 }
 
-export function submitAwsBedrockUseCase(state: AwsLabState, modelId: string): { state: AwsLabState; error: string | null } {
+export function submitAwsBedrockUseCase(state: AwsLabState, modelId: string, input: { description: string; website: string }): { state: AwsLabState; error: string | null } {
   const model = getAwsBedrockModels(state).find(item => item.modelId === modelId);
   if (!model) return { state, error: "Foundation model was not found." };
+  const description = input.description.trim();
+  const website = input.website.trim();
+  if (!description || description.length > 8192) return { state, error: "Enter intended-use details (up to 8,192 characters)." };
+  if (!/^https:\/\//i.test(website) || website.length > 128) return { state, error: "Enter a valid HTTPS website or project URL (up to 128 characters)." };
   const models = getAwsBedrockModels(state).map(item => item.modelId === modelId ? { ...item, accessStatus: "Available" as const } : item);
   const updated = { ...state, bedrockModels: models };
   return { state: appendAwsCloudTrailEvent(updated, { eventName: "PutUseCaseForModelAccess", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: modelId, region: "eu-west-1", errorCode: null, detail: "Model use-case details were submitted in the training account." }), error: null };
@@ -1060,7 +1064,7 @@ export function syncAwsBedrockKnowledgeBase(state: AwsLabState, knowledgeBaseId:
   const sourceObjects = aiPrefixObjects(state, knowledgeBase.sourceBucketName, knowledgeBase.sourcePrefix);
   let error: string | null = null;
   if (!role || role.trustedService !== "bedrock.amazonaws.com") error = "The knowledge-base role must trust bedrock.amazonaws.com.";
-  else if (!role.attachedPolicies.includes("BedrockDataSourceRead") || !role.attachedPolicies.includes("S3ArtifactsRead")) error = "The knowledge-base role is missing S3 data-source read permissions.";
+  else if (!role.attachedPolicies.includes("BedrockDataSourceRead") || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("KMSAIArtifactAccess")) error = "The knowledge-base role is missing S3 or KMS data-source permissions.";
   else if (!sourceObjects.length) error = "No source objects were found under the configured S3 prefix.";
   const updatedKBs = getAwsBedrockKnowledgeBases(state).map(item => item.id === knowledgeBaseId ? { ...item, status: error ? "FAILED" as const : "ACTIVE" as const, documentsIndexed: error ? item.documentsIndexed : sourceObjects.length, lastSyncTime: new Date().toISOString() } : item);
   const audited = appendAwsCloudTrailEvent({ ...state, bedrockKnowledgeBases: updatedKBs }, { eventName: "StartIngestionJob", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: knowledgeBaseId, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Knowledge-base data source synchronization completed against the configured S3 prefix." });
@@ -1085,7 +1089,7 @@ export function createAwsSageMakerTrainingJob(state: AwsLabState, input: { name:
   else if (existing) error = "A training job with this name already exists.";
   else if (!["XGBoost", "Linear Learner", "Random Cut Forest"].includes(input.algorithm)) error = "Select a supported built-in algorithm.";
   else if (!role || role.trustedService !== "sagemaker.amazonaws.com") error = "The execution role must trust sagemaker.amazonaws.com.";
-  else if (!role.attachedPolicies.includes("SageMakerTrainingAccess") || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite")) error = "The execution role is missing training or S3 artifact permissions.";
+  else if (!role.attachedPolicies.includes("SageMakerTrainingAccess") || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite") || !role.attachedPolicies.includes("KMSAIArtifactAccess")) error = "The execution role is missing training, S3, or KMS artifact permissions.";
   else if (!source) error = "The selected S3 input object does not exist.";
   else if (!outputBucket || !input.outputPrefix.trim() || input.outputPrefix.startsWith("/")) error = "Choose an existing output bucket and a relative S3 output prefix.";
   else if (!Number.isInteger(input.instanceCount) || input.instanceCount < 1 || input.instanceCount > 10) error = "Instance count must be between 1 and 10.";
@@ -1145,7 +1149,7 @@ export function runAwsAiProcessingJob(state: AwsLabState, input: { service: "Com
   else if (existing) error = "A job with this name already exists for " + input.service + ".";
   else if (!source) error = "The selected S3 input object was not found.";
   else if (!bucket || !input.outputPrefix.trim() || input.outputPrefix.startsWith("/")) error = "Choose an existing output bucket and a relative output prefix.";
-  else if (!role || role.trustedService !== trustedService || !role.attachedPolicies.includes(requiredPolicy) || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite")) error = "The " + input.service + " execution role is missing service trust or S3 read/write permissions.";
+  else if (!role || role.trustedService !== trustedService || !role.attachedPolicies.includes(requiredPolicy) || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite") || !role.attachedPolicies.includes("KMSAIArtifactAccess")) error = "The " + input.service + " execution role is missing service trust or S3/KMS read/write permissions.";
   const createdAt = new Date().toISOString();
   const outputPrefix = input.outputPrefix.endsWith("/") ? input.outputPrefix : input.outputPrefix + "/";
   const outputKey = outputPrefix + (input.service === "Comprehend" ? "sentiment-results.json" : "document-analysis.json");
@@ -1157,7 +1161,7 @@ export function runAwsAiProcessingJob(state: AwsLabState, input: { service: "Com
     const object = aiS3Object(updated, input.outputBucketName, outputKey, Math.max(1024, Math.round((sourceObject?.sizeBytes ?? 2048) * 0.08)));
     if (object) updated = putAiS3Object(updated, object);
   }
-  updated = appendAwsCloudTrailEvent(updated, { eventName: input.service === "Comprehend" ? "StartSentimentDetectionJob" : "StartDocumentAnalysis", eventSource: input.service.toLowerCase() + ".amazonaws.com", userIdentity: "simulated-console-user", resource: name, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Batch analysis completed in the simulator; output stored at s3://" + input.outputBucketName + "/" + outputKey + "." });
+  updated = appendAwsCloudTrailEvent(updated, { eventName: input.service === "Comprehend" ? "StartSentimentDetectionJob" : input.jobType === "Expense analysis" ? "StartExpenseAnalysis" : "StartDocumentTextDetection", eventSource: input.service.toLowerCase() + ".amazonaws.com", userIdentity: "simulated-console-user", resource: name, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Batch analysis completed in the simulator; output stored at s3://" + input.outputBucketName + "/" + outputKey + "." });
   return { state: updated, success: !error, error, job };
 }
 export function syncAwsQBusinessApplication(state: AwsLabState, applicationId: string): { state: AwsLabState; success: boolean; error: string | null } {
@@ -1167,7 +1171,7 @@ export function syncAwsQBusinessApplication(state: AwsLabState, applicationId: s
   const documents = aiPrefixObjects(state, app.sourceBucketName, app.sourcePrefix);
   let error: string | null = null;
   if (!role || role.trustedService !== "qbusiness.amazonaws.com") error = "The data-source role must trust qbusiness.amazonaws.com.";
-  else if (!role.attachedPolicies.includes("QBusinessDataSourceAccess") || !role.attachedPolicies.includes("S3ArtifactsRead")) error = "The data-source role is missing S3 read permission.";
+  else if (!role.attachedPolicies.includes("QBusinessDataSourceAccess") || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("KMSAIArtifactAccess")) error = "The data-source role is missing S3 or KMS read permission.";
   else if (!documents.length) error = "No documents were found in the configured S3 data source.";
   const updatedApps = getAwsQBusinessApplications(state).map(item => item.id === applicationId ? { ...item, status: error ? "FAILED" as const : "ACTIVE" as const, syncStatus: error ? "FAILED" as const : "SUCCEEDED" as const, documentsIndexed: error ? item.documentsIndexed : documents.length, lastSyncTime: new Date().toISOString() } : item);
   const updated = appendAwsCloudTrailEvent({ ...state, qBusinessApplications: updatedApps }, { eventName: "StartDataSourceSyncJob", eventSource: "qbusiness.amazonaws.com", userIdentity: "simulated-console-user", resource: applicationId, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Amazon Q Business data source sync completed against the configured S3 prefix." });
@@ -1216,8 +1220,8 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   return {
     ...baseline, ...savedState, schemaVersion: 7, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
-    s3Objects: savedState.s3Objects ?? baseline.s3Objects,
-    s3BucketPolicies: savedState.s3BucketPolicies ?? baseline.s3BucketPolicies,
+    s3Objects: savedState.s3Objects ? [...savedState.s3Objects, ...baseline.s3Objects!.filter(object => !savedState.s3Objects!.some(savedObject => savedObject.bucketName === object.bucketName && savedObject.key === object.key))] : baseline.s3Objects,
+    s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
     glueJobs: savedState.glueJobs ?? baseline.glueJobs,
     cloudTrailEvents: savedState.cloudTrailEvents ?? baseline.cloudTrailEvents,
     costUsage: savedState.costUsage ?? baseline.costUsage,
@@ -1230,7 +1234,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     aiProcessingJobs: savedState.aiProcessingJobs ?? baseline.aiProcessingJobs,
     qBusinessApplications: savedState.qBusinessApplications ?? baseline.qBusinessApplications,
     qDeveloperUsers: savedState.qDeveloperUsers ?? baseline.qDeveloperUsers,
-    iamRoles: savedState.iamRoles ?? baseline.iamRoles,
+    iamRoles: savedState.iamRoles ? [...savedState.iamRoles, ...baseline.iamRoles.filter(role => !savedState.iamRoles!.some(savedRole => savedRole.name === role.name))] : baseline.iamRoles,
     loadBalancers: savedState.loadBalancers ?? baseline.loadBalancers,
     targetGroups: savedState.targetGroups ?? baseline.targetGroups,
     databases: savedState.databases ?? baseline.databases,
