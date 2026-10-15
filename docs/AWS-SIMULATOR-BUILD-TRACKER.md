@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — removed custom topology and service-diagnostic panels from the AWS console UI; regression tests added; fresh validation required  
-**Last reviewed:** 2026-10-15 (removed custom console diagnostics/topology; added realism regression tests; fresh validation pending)
+**Status:** In progress — console-realism cleanup applied; production build and regression suite passed (96/96); browser and deployment verification still pending  
+**Last reviewed:** 2026-10-15 (console diagnostics/topology removed; production build and 96 regression tests passed; browser/deployment checks pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -40,7 +40,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Pending after console-realism cleanup** | Added `tests/aws-console-realism.test.mjs`; must run production build and full `npm test`; prior 94/94 result applies only to an earlier revision; browser/deployment verification remains separate |
+| Automated validation / build | **Passed — 96/96 tests** | GitHub Actions run [38737025084](https://github.com/kalif7722/aws-library/actions/runs/38737025084) completed successfully after restoring the missing load-balancer wrapper closure; production build and full regression suite passed. Browser/deployment verification remains separate |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Latest console-realism audit — 2026-10-15
@@ -50,7 +50,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [x] Removed custom ALB service-check panel, RDS app-connectivity diagnostics, Lambda readiness/configuration-check panels, and Glue freshness-check panel.
 - [x] Removed synthetic RDS connectivity, Lambda readiness, and Route 53 resolution-health columns from service inventories; target-group health remains on the Target Groups view.
 - [x] Added regression tests that enforce the console/lab boundary.
-- [ ] Run the production build and full test suite on the latest branch head; do not treat source edits as validated until CI passes.
+- [x] Run the production build and full regression suite — [run 38737025084](https://github.com/kalif7722/aws-library/actions/runs/38737025084), 96 passed / 0 failed.
 - [ ] Browser-walk the revised console and confirm the Access Denied and stale-data lessons still teach actionable investigation outside the console.
 - [ ] Verify Cloudflare deployment separately; the live site may not include these branch changes.
 
