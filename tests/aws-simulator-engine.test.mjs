@@ -303,7 +303,7 @@ test('subnet creation validates CIDR overlap and route table VPC',()=>{
 
 test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda, DynamoDB and alarms',()=>{
   const state=createInitialAwsLabState();
-  assert.equal(state.schemaVersion,4);
+  assert.equal(state.schemaVersion,5);
   assert.equal(getAwsLoadBalancers(state)[0].listeners[0].targetGroupId,'tg-payments-api');
   assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,true);
@@ -399,7 +399,7 @@ test('legacy account migration adds new service graph once and preserves later t
   delete old.instance.listeners;
   delete old.instance.healthCheckPaths;
   const migrated=migrateAwsLabState(old);
-  assert.equal(migrated.schemaVersion,4);
+  assert.equal(migrated.schemaVersion,5);
   assert.ok(getAwsLoadBalancers(migrated).length>0);
   assert.ok(migrated.s3Buckets.some(bucket=>bucket.name==="data-lake-raw"));
   assert.ok(getAwsS3Objects(migrated).length>0);
@@ -458,4 +458,21 @@ test('Glue job permission failure can be diagnosed and repaired through IAM poli
   const success=runAwsGlueJob(repaired,'orders-daily-curation');
   assert.equal(success.success,true);
   assert.equal(evaluateAwsGlueJob(success.state,'orders-daily-curation').healthy,true);
+});
+
+
+test('schema-v4 saved state gains the Glue freshness alarm without resetting existing alarm/resource edits',()=>{
+  const initial=createInitialAwsLabState();
+  const schemaFour={
+    ...initial,
+    schemaVersion:4,
+    instance:{...initial.instance,guestSsh:'stopped'},
+    cloudWatchAlarmDefinitions:initial.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name!=='orders-curation-freshness')
+  };
+  const migrated=migrateAwsLabState(schemaFour);
+  assert.equal(migrated.schemaVersion,5);
+  assert.equal(migrated.instance.guestSsh,'stopped');
+  assert.equal(migrated.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name==='orders-curation-freshness').length,1);
+  assert.equal(getAwsCloudWatchAlarms(migrated).find(alarm=>alarm.name==='orders-curation-freshness').state,'ALARM');
+  assert.equal(migrated.cloudWatchAlarmDefinitions.length,4);
 });
