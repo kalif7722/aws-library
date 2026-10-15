@@ -25,7 +25,9 @@ export type AwsCloudTrailEvent = { id: string; eventTime: string; eventName: str
 export type AwsCostUsageLine = { service: string; region: string; usageType: string; resourceId: string; amount: number; baselineAmount: number; owner: string };
 export type AwsServiceCheck = { name: string; result: "passed" | "blocked"; detail: string };
 export type AwsServiceHealthResult = { healthy: boolean; checks: AwsServiceCheck[] };
-export type AwsLabState = {\n  schemaVersion?: number;\n  instance: AwsInstance;
+export type AwsLabState = {
+  schemaVersion?: number;
+  instance: AwsInstance;
   instances?: AwsInstance[];
   vpcs?: AwsVpc[];
   subnets?: AwsSubnet[];

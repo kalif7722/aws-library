@@ -6,19 +6,7 @@ on:
       - feature/troubleshooting-guided-flow
     paths:
       - "app/troubleshooting/simulators/aws/**"
-      - "tests/aws-simulator-engine.test.mjs"
-      - "tests/load-architecture-module.mjs"
-      - "package.json"
-      - "package-lock.json"
-      - "scripts/build-verified.sh"
-      - ".github/workflows/aws-simulator-validation.yml"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "app/troubleshooting/simulators/aws/**"
-      - "tests/aws-simulator-engine.test.mjs"
-      - "tests/load-architecture-module.mjs"
+      - "tests/**"
       - "package.json"
       - "package-lock.json"
       - "scripts/build-verified.sh"
@@ -33,7 +21,7 @@ concurrency:
 
 jobs:
   simulator:
-    name: Engine tests and production build
+    name: Production build and regression tests
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -42,14 +30,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "22.13.0"
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
-      - name: Run engine and repository regression tests
-        run: node --test tests/*.test.mjs
-      - name: Run verified production build
+      - name: Build and run the complete regression suite
         env:
           SITES_BUILD_TIMEOUT: "6m"
           SITES_BUILD_KILL_AFTER: "15s"
-        run: npm run build
+        run: npm test

@@ -240,3 +240,11 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Add `.github/workflows/aws-simulator-validation.yml` to run engine tests and the production build whenever simulator code, test helpers, dependency manifests, or the validation workflow changes on `feature/troubleshooting-guided-flow`.
 - [ ] Check the first workflow run for the current simulator head and fix any actual failure before adding additional service features.
 - [ ] Record engine-test and production-build outcomes separately from Cloudflare deployment status.
+
+
+## CI findings and correction — 2026-10-15
+
+- The first simulator-validation run successfully installed dependencies but failed in the test step before production build. Results: 54 passed, 4 failed.
+- The failures identified three actionable causes: (1) the service-directory test still expected CloudTrail to be catalog-only after it gained a real screen; (2) `AwsLabState` contained literal escaped newline characters in its type declaration, which caused `load-architecture-module.mjs` to emit invalid JavaScript; (3) output-dependent rendered HTML/CSS tests ran before `dist` existed.
+- Corrected the stale directory expectation, restored actual line breaks in the state type, and changed `npm test` to run test files serially after its build step. The workflow now uses the package's full `npm test` sequence, Node 22.13.0 (compatible with the declared runtime and avoids Node 24 npm install-script warnings), and a single push trigger to prevent duplicate runs.
+- [ ] Confirm the next CI run executes the complete build, then all tests pass. No green status is claimed from this failed run.
