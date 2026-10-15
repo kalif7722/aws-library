@@ -11,9 +11,17 @@ export type AwsVpc = { id: string; name: string; cidr: string; state: "available
 export type AwsSubnet = { id: string; name: string; vpcId: string; cidr: string; availabilityZone: string; state: "available" | "pending"; routeTableId: string; networkAclId: string };
 export type AwsRoute = { destination: string; target: string; state: "active" | "blackhole" };
 export type AwsRouteTable = { id: string; name: string; vpcId: string; routes: AwsRoute[]; associatedSubnetIds: string[]; isMain: boolean; tags: Record<string, string> };
-export type AwsInstance = { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped"; instanceType?: string; availabilityZone?: string; imageId?: string; tags?: Record<string, string> };
-export type AwsLabState = {
-  instance: AwsInstance;
+export type AwsInstance = { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped"; instanceType?: string; availabilityZone?: string; imageId?: string; tags?: Record<string, string>; listeners?: { port: number; protocol: "TCP" | "UDP"; state: "listening" | "stopped" }[]; healthCheckPaths?: string[] };
+export type AwsLoadBalancer = { id: string; name: string; type: "application" | "network"; scheme: "internal" | "internet-facing"; state: "active" | "provisioning" | "failed"; vpcId: string; subnetIds: string[]; securityGroupIds: string[]; dnsName: string; listeners: { port: number; protocol: "HTTP" | "HTTPS"; targetGroupId: string }[] };
+export type AwsTargetGroup = { id: string; name: string; protocol: "HTTP" | "HTTPS"; port: number; vpcId: string; targetInstanceIds: string[]; healthCheckPath: string; healthyPath: string; matcher: string };
+export type AwsDatabase = { id: string; identifier: string; status: "available" | "stopped" | "failed"; engine: string; engineVersion: string; instanceClass: string; port: number; endpoint: string; privateIp: string; vpcId: string; subnetIds: string[]; securityGroupIds: string[]; publiclyAccessible: boolean; allocatedStorageGb: number; connections: number; cpuPercent: number };
+export type AwsDnsRecord = { id: string; zoneName: string; name: string; type: "A" | "CNAME"; targetResourceType: "load-balancer" | "database" | "static"; targetResourceId: string; expectedResourceType: "load-balancer" | "database"; expectedResourceId: string; ttl: number; enabled: boolean };
+export type AwsLambdaFunction = { name: string; runtime: string; handler: string; state: "active" | "inactive"; roleName: string; timeoutSeconds: number; memoryMb: number; environment: Record<string, string>; vpcSubnetIds: string[]; securityGroupIds: string[]; requiredPolicy?: string; errorCount: number };
+export type AwsDynamoTable = { name: string; status: "active" | "updating"; partitionKey: string; capacityMode: "on-demand" | "provisioned"; encryption: string; itemCount: number; throttledRequests: number; pointInTimeRecovery: boolean };
+export type AwsCloudWatchAlarm = { name: string; metric: string; namespace: string; threshold: number; evaluationPeriods: number; resourceType: "target-group" | "database" | "lambda"; resourceId: string; comparison: "minimum" | "maximum"; };
+export type AwsServiceCheck = { name: string; result: "passed" | "blocked"; detail: string };
+export type AwsServiceHealthResult = { healthy: boolean; checks: AwsServiceCheck[] };
+export type AwsLabState = {\n  schemaVersion?: number;\n  instance: AwsInstance;
   instances?: AwsInstance[];
   vpcs?: AwsVpc[];
   subnets?: AwsSubnet[];
@@ -23,6 +31,13 @@ export type AwsLabState = {
   networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
   s3Buckets: { name: string; region: string; blockPublicAccess: boolean; versioningEnabled: boolean; encryption: "SSE-S3" | "SSE-KMS"; }[];
   iamRoles: { name: string; lastActivity: string; trustedService: string; attachedPolicies: string[] }[];
+  loadBalancers?: AwsLoadBalancer[];
+  targetGroups?: AwsTargetGroup[];
+  databases?: AwsDatabase[];
+  dnsRecords?: AwsDnsRecord[];
+  lambdaFunctions?: AwsLambdaFunction[];
+  dynamoTables?: AwsDynamoTable[];
+  cloudWatchAlarmDefinitions?: AwsCloudWatchAlarm[];
 };
 export type AwsReachabilityResult = {
   reachable: boolean;
@@ -31,14 +46,28 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
+  schemaVersion: 3,
+  instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
-    { id: "sgr-0b844311223344557", protocol: "TCP", fromPort: 8443, toPort: 8443, sourceType: "SecurityGroup", source: "sg-0f55aa11bb22cc33", description: "Internal service traffic" }
+    { id: "sgr-0b844311223344557", protocol: "TCP", fromPort: 8443, toPort: 8443, sourceType: "SecurityGroup", source: "sg-0f55aa11bb22cc33", description: "Internal service traffic" },
+    { id: "sgr-alb-8080", protocol: "TCP", fromPort: 8080, toPort: 8080, sourceType: "SecurityGroup", source: "sg-alb-payments", description: "ALB health checks and application traffic" }
   ], egress: [{ id: "sgr-egress-default", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }] }, {
     id: "sg-0f55aa11bb22cc33", name: "sg-bastion-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
       { id: "sgr-0c944311223344558", protocol: "TCP", fromPort: 22, toPort: 22, sourceType: "IPv4", source: "10.20.0.0/16", description: "Approved administrator access" }
     ], egress: [{ id: "sgr-egress-default", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }]
+  }, {
+    id: "sg-alb-payments", name: "sg-alb-payments", vpcId: "vpc-0123abcd4567ef890", ingress: [
+      { id: "sgr-alb-https", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Corporate HTTPS clients" }
+    ], egress: [
+      { id: "sgr-alb-egress-api", protocol: "TCP", fromPort: 8080, toPort: 8080, sourceType: "SecurityGroup", source: "sg-0ab12cd34ef56ab78", description: "Forward traffic to payments API targets" }
+    ]
+  }, {
+    id: "sg-rds-orders", name: "sg-rds-orders", vpcId: "vpc-0123abcd4567ef890", ingress: [
+      { id: "sgr-rds-postgres", protocol: "TCP", fromPort: 5432, toPort: 5432, sourceType: "SecurityGroup", source: "sg-0ab12cd34ef56ab78", description: "PostgreSQL from payments API" }
+    ], egress: [
+      { id: "sgr-rds-default-egress", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }
+    ]
   }],
   routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }],
   vpcs: [{ id: "vpc-0123abcd4567ef890", name: "production-vpc", cidr: "10.20.0.0/16", state: "available", isDefault: false }],
@@ -65,7 +94,14 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
     { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess"] }
-  ]
+  ],
+  loadBalancers: [{ id: "alb-payments-prod", name: "alb-payments-prod", type: "application", scheme: "internet-facing", state: "active", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0fedcba9876543210"], securityGroupIds: ["sg-alb-payments"], dnsName: "alb-payments-prod.eu-west-1.elb.amazonaws.com", listeners: [{ port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api" }] }],
+  targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8443, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }],
+  databases: [{ id: "orders-prod", identifier: "orders-prod", status: "available", engine: "PostgreSQL", engineVersion: "16.3", instanceClass: "db.r6g.large", port: 5432, endpoint: "orders-prod.abc123.eu-west-1.rds.amazonaws.com", privateIp: "10.20.2.50", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0123abcd4567ef890"], securityGroupIds: ["sg-rds-orders"], publiclyAccessible: false, allocatedStorageGb: 250, connections: 47, cpuPercent: 34 }],
+  dnsRecords: [{ id: "record-api", zoneName: "example.com", name: "api.example.com", type: "A", targetResourceType: "load-balancer", targetResourceId: "alb-payments-prod", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 60, enabled: true }, { id: "record-orders", zoneName: "example.internal", name: "orders.example.internal", type: "CNAME", targetResourceType: "database", targetResourceId: "orders-prod", expectedResourceType: "database", expectedResourceId: "orders-prod", ttl: 30, enabled: true }, { id: "record-api-legacy", zoneName: "example.com", name: "legacy-api.example.com", type: "A", targetResourceType: "static", targetResourceId: "198.51.100.44", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 300, enabled: true }],
+  lambdaFunctions: [{ name: "payments-authorizer", runtime: "Python 3.12", handler: "app.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 8, memoryMb: 256, environment: { TABLE_NAME: "IdempotencyKeys" }, vpcSubnetIds: [], securityGroupIds: [], errorCount: 0 }, { name: "orders-event-handler", runtime: "Node.js 22.x", handler: "index.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 3, memoryMb: 256, environment: { TABLE_NAME: "Orders" }, vpcSubnetIds: ["subnet-0123abcd4567ef890"], securityGroupIds: ["sg-0ab12cd34ef56ab78"], requiredPolicy: "DynamoDBOrdersWrite", errorCount: 12 }],
+  dynamoTables: [{ name: "Orders", status: "active", partitionKey: "orderId (String)", capacityMode: "on-demand", encryption: "AWS owned key", itemCount: 284190, throttledRequests: 0, pointInTimeRecovery: true }, { name: "IdempotencyKeys", status: "active", partitionKey: "key (String)", capacityMode: "on-demand", encryption: "KMS key", itemCount: 13742, throttledRequests: 0, pointInTimeRecovery: true }],
+  cloudWatchAlarmDefinitions: [{ name: "payments-target-health", metric: "HealthyHostCount", namespace: "AWS/ApplicationELB", threshold: 1, evaluationPeriods: 2, resourceType: "target-group", resourceId: "tg-payments-api", comparison: "minimum" }, { name: "orders-db-connections", metric: "DatabaseConnections", namespace: "AWS/RDS", threshold: 150, evaluationPeriods: 3, resourceType: "database", resourceId: "orders-prod", comparison: "maximum" }, { name: "orders-event-handler-errors", metric: "Errors", namespace: "AWS/Lambda", threshold: 1, evaluationPeriods: 1, resourceType: "lambda", resourceId: "orders-event-handler", comparison: "maximum" }]
 });
 export function addSshIngressRule(state: AwsLabState, source: string, sourceType: "IPv4" | "SecurityGroup", targetGroupId = state.instance.securityGroupIds[0]): AwsLabState {
   const groupId = targetGroupId;
