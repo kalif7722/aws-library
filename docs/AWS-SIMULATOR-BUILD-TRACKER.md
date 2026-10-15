@@ -4,7 +4,7 @@
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
 **Status:** In progress — console-realism cleanup and first AI service family implemented; production build passed with 103/103 tests; browser workflow verification and deployed-revision smoke test remain pending  
-**Last reviewed:** 2026-10-15 (AI foundation audit reopened; prior tool-created blobs were not committed to the working branch, so implementation status must be verified from branch contents and CI before claiming completion)
+**Last reviewed:** 2026-10-15 (AI remediation regression tests committed; CI result for the new commit pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -53,6 +53,15 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
 | Automated validation / build | **Passed — 103/103 tests** | Latest verified run [38743249192](https://github.com/kalif7722/aws-library/actions/runs/38743249192) completed successfully on AI-service branch head; production build and full regression suite passed (103/103). Cloudflare Workers build check also passed for the same head. Browser smoke-test remains separate. |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
+
+## Latest implementation increment — AI fault / remediation regression coverage (2026-10-15)
+
+- [x] Added `tests/aws-ai-remediation.test.mjs` on the feature branch in commit [`6b3cc86`](https://github.com/kalif7722/aws-library/commit/6b3cc8605df8427bda1a7d1322919350b3221744).
+- [x] Added a Bedrock IAM denial → policy repair → successful retest assertion, including CloudTrail evidence and explicit local-simulation wording.
+- [x] Added a Q Business service-trust failure → trust repair → successful data-source sync assertion.
+- [x] Added a Comprehend KMS permission failure → role-policy repair → successful job retest assertion; verifies failed jobs do not create result objects.
+- [ ] Verify the new test file is reachable from the branch and the branch-triggered CI run passes.
+- [ ] Browser-walk the corresponding screens and verify the learner can make the same configuration changes through the console UI; these engine tests alone do not establish UI/lab readiness.
 
 ## AI services implementation checkpoint — 2026-10-15
 
