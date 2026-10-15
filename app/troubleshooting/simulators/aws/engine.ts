@@ -29,6 +29,103 @@ export type AwsCloudTrailEvent = { id: string; eventTime: string; eventName: str
 export type AwsCostUsageLine = { service: string; region: string; usageType: string; resourceId: string; amount: number; baselineAmount: number; owner: string };
 export type AwsServiceCheck = { name: string; result: "passed" | "blocked"; detail: string };
 export type AwsServiceHealthResult = { healthy: boolean; checks: AwsServiceCheck[] };
+
+export type AwsBedrockFoundationModel = {
+  modelId: string;
+  name: string;
+  provider: string;
+  inputModalities: string[];
+  outputModalities: string[];
+  accessStatus: "Available" | "Use case required";
+  invocationCount: number;
+};
+export type AwsBedrockKnowledgeBase = {
+  id: string;
+  name: string;
+  sourceBucketName: string;
+  sourcePrefix: string;
+  embeddingModel: string;
+  vectorStore: string;
+  roleName: string;
+  status: "ACTIVE" | "FAILED";
+  documentsIndexed: number;
+  lastSyncTime: string;
+};
+export type AwsBedrockGuardrail = {
+  id: string;
+  name: string;
+  version: number;
+  status: "READY" | "DRAFT";
+  contentFiltersEnabled: boolean;
+  deniedTopicsEnabled: boolean;
+  sensitiveInformationFiltersEnabled: boolean;
+};
+export type AwsSageMakerModel = {
+  name: string;
+  framework: string;
+  modelDataUrl: string;
+  trainingJobName: string;
+  executionRole: string;
+  createdAt: string;
+};
+export type AwsSageMakerTrainingJob = {
+  name: string;
+  algorithm: string;
+  status: "Completed" | "InProgress" | "Failed";
+  executionRole: string;
+  inputBucketName: string;
+  inputKey: string;
+  outputBucketName: string;
+  outputPrefix: string;
+  instanceType: string;
+  instanceCount: number;
+  modelName: string | null;
+  createdAt: string;
+  failureReason: string | null;
+};
+export type AwsSageMakerEndpoint = {
+  name: string;
+  modelName: string;
+  status: "InService" | "Updating" | "Failed";
+  instanceType: string;
+  instanceCount: number;
+  invocationCount: number;
+};
+export type AwsAiProcessingJob = {
+  id: string;
+  service: "Comprehend" | "Textract";
+  name: string;
+  jobType: string;
+  status: "SUCCEEDED" | "FAILED";
+  inputBucketName: string;
+  inputKey: string;
+  outputBucketName: string;
+  outputPrefix: string;
+  executionRole: string;
+  createdAt: string;
+  outputKey: string | null;
+  failureReason: string | null;
+};
+export type AwsQBusinessApplication = {
+  id: string;
+  name: string;
+  status: "ACTIVE" | "FAILED";
+  identityProvider: string;
+  indexName: string;
+  sourceBucketName: string;
+  sourcePrefix: string;
+  roleName: string;
+  documentsIndexed: number;
+  lastSyncTime: string;
+  syncStatus: "SUCCEEDED" | "FAILED";
+};
+export type AwsQDeveloperUser = {
+  username: string;
+  subscription: "Free" | "Pro";
+  status: "Active" | "Suspended";
+  assignedAt: string;
+};
+
 export type AwsLabState = {
   schemaVersion?: number;
   instance: AwsInstance;
@@ -53,6 +150,15 @@ export type AwsLabState = {
   glueJobs?: AwsGlueJob[];
   cloudTrailEvents?: AwsCloudTrailEvent[];
   costUsage?: AwsCostUsageLine[];
+  bedrockModels?: AwsBedrockFoundationModel[];
+  bedrockKnowledgeBases?: AwsBedrockKnowledgeBase[];
+  bedrockGuardrails?: AwsBedrockGuardrail[];
+  sagemakerModels?: AwsSageMakerModel[];
+  sagemakerTrainingJobs?: AwsSageMakerTrainingJob[];
+  sagemakerEndpoints?: AwsSageMakerEndpoint[];
+  aiProcessingJobs?: AwsAiProcessingJob[];
+  qBusinessApplications?: AwsQBusinessApplication[];
+  qDeveloperUsers?: AwsQDeveloperUser[];
 };
 export type AwsReachabilityResult = {
   reachable: boolean;
@@ -61,7 +167,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 6,
+  schemaVersion: 7,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -106,12 +212,19 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "prod-app-artifacts", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
     { name: "prod-app-logs", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-S3" },
     { name: "data-lake-curated", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: false, encryption: "SSE-KMS" },
-    { name: "data-lake-raw", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" }
+    { name: "data-lake-raw", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" },
+    { name: "ai-workloads", region: "eu-west-1", blockPublicAccess: true, versioningEnabled: true, encryption: "SSE-KMS" }
   ],
   iamRoles: [
     { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
-    { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] }
+    { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] },
+    { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["BedrockInvokeAccess", "SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
+    { name: "BedrockKnowledgeBaseRole", lastActivity: "Today", trustedService: "bedrock.amazonaws.com", attachedPolicies: ["BedrockDataSourceRead", "S3ArtifactsRead", "KMSDecryptForAIArtifacts"] },
+    { name: "SageMakerExecutionRole", lastActivity: "Today", trustedService: "sagemaker.amazonaws.com", attachedPolicies: ["SageMakerTrainingAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
+    { name: "ComprehendBatchRole", lastActivity: "Today", trustedService: "comprehend.amazonaws.com", attachedPolicies: ["ComprehendBatchAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
+    { name: "TextractDocumentRole", lastActivity: "Today", trustedService: "textract.amazonaws.com", attachedPolicies: ["TextractDocumentAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSDecryptForAIArtifacts"] },
+    { name: "QBusinessDataSourceRole", lastActivity: "Today", trustedService: "qbusiness.amazonaws.com", attachedPolicies: ["QBusinessDataSourceAccess", "S3ArtifactsRead", "KMSDecryptForAIArtifacts"] }
   ],
   loadBalancers: [{ id: "alb-payments-prod", name: "alb-payments-prod", type: "application", scheme: "internet-facing", state: "active", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0fedcba9876543210", "subnet-0bb1234567890abcd"], securityGroupIds: ["sg-alb-payments"], dnsName: "alb-payments-prod.eu-west-1.elb.amazonaws.com", listeners: [{ port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api" }] }],
   targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8443, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }],
@@ -124,7 +237,15 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { bucketName: "prod-app-artifacts", key: "releases/payments-api/2026.10.14.zip", sizeBytes: 38492117, lastModified: "2026-10-14T20:15:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
     { bucketName: "prod-app-logs", key: "application/2026/10/15/api-2026-10-15.log", sizeBytes: 2981042, lastModified: "2026-10-15T05:02:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-S3" },
     { bucketName: "data-lake-raw", key: "orders/day=2026-10-14/part-000.json", sizeBytes: 78342, lastModified: "2026-10-14T23:56:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
-    { bucketName: "data-lake-curated", key: "orders/day=2026-10-14/part-000.parquet", sizeBytes: 29418, lastModified: "2026-10-15T00:11:00Z", versionId: "null", storageClass: "STANDARD", encryption: "SSE-KMS" }
+    { bucketName: "data-lake-curated", key: "orders/day=2026-10-14/part-000.parquet", sizeBytes: 29418, lastModified: "2026-10-15T00:11:00Z", versionId: "null", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "training/churn/train.csv", sizeBytes: 2841019, lastModified: "2026-10-14T21:00:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "models/churn-risk-xgb-v3/model.tar.gz", sizeBytes: 12840962, lastModified: "2026-10-14T23:40:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "knowledge/payments/product-guide.txt", sizeBytes: 18420, lastModified: "2026-10-15T03:12:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "comprehend/reviews/batch-01.txt", sizeBytes: 264182, lastModified: "2026-10-15T04:15:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "textract/invoices/invoice-1027.pdf", sizeBytes: 872194, lastModified: "2026-10-15T04:30:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "qbusiness/handbook/employee-guide.txt", sizeBytes: 468210, lastModified: "2026-10-15T04:40:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "comprehend/output/reviews-batch-01/sentiment.json", sizeBytes: 64210, lastModified: "2026-10-15T04:20:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" },
+    { bucketName: "ai-workloads", key: "textract/output/invoice-1027/analysis.json", sizeBytes: 22810, lastModified: "2026-10-15T04:35:00Z", versionId: "sim-v0001", storageClass: "STANDARD", encryption: "SSE-KMS" }
   ],
   s3BucketPolicies: [
     { bucketName: "prod-app-artifacts", statements: [
@@ -152,6 +273,37 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { id: "evt-0003", eventTime: "2026-10-14T22:15:00Z", eventName: "CreateNatGateway", eventSource: "ec2.amazonaws.com", userIdentity: "network-automation-role", resource: "nat-0123abcd4567ef890", region: "eu-west-1", errorCode: null, detail: "A NAT gateway change preceded an increase in regional data-processing usage." },
     { id: "evt-0002", eventTime: "2026-10-14T19:40:00Z", eventName: "AttachRolePolicy", eventSource: "iam.amazonaws.com", userIdentity: "platform-admin", resource: "Lambda-Payments-Role", region: "eu-west-1", errorCode: null, detail: "A policy attachment changed on the payments Lambda execution role." },
     { id: "evt-0001", eventTime: "2026-10-14T17:05:00Z", eventName: "PutBucketVersioning", eventSource: "s3.amazonaws.com", userIdentity: "data-platform-admin", resource: "data-lake-curated", region: "eu-west-1", errorCode: null, detail: "Versioning configuration was modified for the curated data bucket." }
+  ],
+  bedrockModels: [
+    { modelId: "amazon.nova-lite-v1:0", name: "Nova Lite", provider: "Amazon", inputModalities: ["Text"], outputModalities: ["Text"], accessStatus: "Available", invocationCount: 12 },
+    { modelId: "anthropic.claude-sonnet-4-20250514-v1:0", name: "Claude Sonnet 4", provider: "Anthropic", inputModalities: ["Text", "Image"], outputModalities: ["Text"], accessStatus: "Use case required", invocationCount: 0 }
+  ],
+  bedrockKnowledgeBases: [
+    { id: "kb-payments-product-guide", name: "payments-product-knowledge", sourceBucketName: "ai-workloads", sourcePrefix: "knowledge/payments/", embeddingModel: "Titan Text Embeddings v2", vectorStore: "OpenSearch Serverless", roleName: "BedrockKnowledgeBaseRole", status: "ACTIVE", documentsIndexed: 1, lastSyncTime: "2026-10-15T03:20:00Z" }
+  ],
+  bedrockGuardrails: [
+    { id: "gr-payments-assistant", name: "payments-assistant-guardrail", version: 3, status: "READY", contentFiltersEnabled: true, deniedTopicsEnabled: true, sensitiveInformationFiltersEnabled: true }
+  ],
+  sagemakerModels: [
+    { name: "churn-risk-xgb-v3", framework: "XGBoost", modelDataUrl: "s3://ai-workloads/models/churn-risk-xgb-v3/model.tar.gz", trainingJobName: "churn-risk-training-2026-10-14", executionRole: "SageMakerExecutionRole", createdAt: "2026-10-14T23:40:00Z" }
+  ],
+  sagemakerTrainingJobs: [
+    { name: "churn-risk-training-2026-10-14", algorithm: "XGBoost", status: "Completed", executionRole: "SageMakerExecutionRole", inputBucketName: "ai-workloads", inputKey: "training/churn/train.csv", outputBucketName: "ai-workloads", outputPrefix: "models/churn-risk-xgb-v3/", instanceType: "ml.m5.xlarge", instanceCount: 1, modelName: "churn-risk-xgb-v3", createdAt: "2026-10-14T21:20:00Z", failureReason: null }
+  ],
+  sagemakerEndpoints: [
+    { name: "churn-risk-predictor", modelName: "churn-risk-xgb-v3", status: "InService", instanceType: "ml.m5.large", instanceCount: 2, invocationCount: 38 }
+  ],
+  aiProcessingJobs: [
+    { id: "comp-reviews-batch-01", service: "Comprehend", name: "reviews-sentiment-batch-01", jobType: "Sentiment analysis", status: "SUCCEEDED", inputBucketName: "ai-workloads", inputKey: "comprehend/reviews/batch-01.txt", outputBucketName: "ai-workloads", outputPrefix: "comprehend/output/reviews-batch-01/", executionRole: "ComprehendBatchRole", createdAt: "2026-10-15T04:18:00Z", outputKey: "comprehend/output/reviews-batch-01/sentiment.json", failureReason: null },
+    { id: "textract-invoice-1027", service: "Textract", name: "invoice-1027-analysis", jobType: "Expense analysis", status: "SUCCEEDED", inputBucketName: "ai-workloads", inputKey: "textract/invoices/invoice-1027.pdf", outputBucketName: "ai-workloads", outputPrefix: "textract/output/invoice-1027/", executionRole: "TextractDocumentRole", createdAt: "2026-10-15T04:33:00Z", outputKey: "textract/output/invoice-1027/analysis.json", failureReason: null }
+  ],
+  qBusinessApplications: [
+    { id: "q-app-operations", name: "operations-knowledge-assistant", status: "ACTIVE", identityProvider: "IAM Identity Center", indexName: "operations-content-index", sourceBucketName: "ai-workloads", sourcePrefix: "qbusiness/handbook/", roleName: "QBusinessDataSourceRole", documentsIndexed: 1, lastSyncTime: "2026-10-15T04:45:00Z", syncStatus: "SUCCEEDED" }
+  ],
+  qDeveloperUsers: [
+    { username: "architect@example.com", subscription: "Pro", status: "Active", assignedAt: "2026-08-01" },
+    { username: "developer@example.com", subscription: "Pro", status: "Active", assignedAt: "2026-09-12" },
+    { username: "intern@example.com", subscription: "Free", status: "Active", assignedAt: "2026-10-01" }
   ],
   costUsage: [
     { service: "Amazon EC2", region: "eu-west-1", usageType: "BoxUsage:t3.medium", resourceId: "i-0a12b345c678d9012", amount: 1420, baselineAmount: 1310, owner: "payments-platform" },
@@ -847,6 +999,190 @@ export function toggleAwsRouteState(state: AwsLabState, routeTableId: string, de
 }
 
 
+
+export function getAwsBedrockModels(state: AwsLabState): AwsBedrockFoundationModel[] { return state.bedrockModels ?? []; }
+export function getAwsBedrockKnowledgeBases(state: AwsLabState): AwsBedrockKnowledgeBase[] { return state.bedrockKnowledgeBases ?? []; }
+export function getAwsBedrockGuardrails(state: AwsLabState): AwsBedrockGuardrail[] { return state.bedrockGuardrails ?? []; }
+export function getAwsSageMakerModels(state: AwsLabState): AwsSageMakerModel[] { return state.sagemakerModels ?? []; }
+export function getAwsSageMakerTrainingJobs(state: AwsLabState): AwsSageMakerTrainingJob[] { return state.sagemakerTrainingJobs ?? []; }
+export function getAwsSageMakerEndpoints(state: AwsLabState): AwsSageMakerEndpoint[] { return state.sagemakerEndpoints ?? []; }
+export function getAwsAiProcessingJobs(state: AwsLabState, service?: "Comprehend" | "Textract"): AwsAiProcessingJob[] {
+  const jobs = state.aiProcessingJobs ?? [];
+  return service ? jobs.filter(job => job.service === service) : jobs;
+}
+export function getAwsQBusinessApplications(state: AwsLabState): AwsQBusinessApplication[] { return state.qBusinessApplications ?? []; }
+export function getAwsQDeveloperUsers(state: AwsLabState): AwsQDeveloperUser[] { return state.qDeveloperUsers ?? []; }
+
+function aiS3Object(state: AwsLabState, bucketName: string, key: string, sizeBytes: number): AwsS3Object | null {
+  const bucket = state.s3Buckets.find(item => item.name === bucketName);
+  if (!bucket) return null;
+  const existing = (state.s3Objects ?? []).find(item => item.bucketName === bucketName && item.key === key);
+  const versionNumber = existing && existing.versionId.startsWith("sim-v") ? (Number(existing.versionId.slice(5)) || 0) + 1 : 1;
+  return { bucketName, key, sizeBytes, lastModified: new Date().toISOString(), versionId: bucket.versioningEnabled ? "sim-v" + String(versionNumber).padStart(4, "0") : "null", storageClass: "STANDARD", encryption: bucket.encryption };
+}
+function putAiS3Object(state: AwsLabState, object: AwsS3Object): AwsLabState {
+  const objects = state.s3Objects ?? [];
+  return { ...state, s3Objects: [...objects.filter(item => item.bucketName !== object.bucketName || item.key !== object.key), object] };
+}
+function aiPrefixObjects(state: AwsLabState, bucketName: string, prefix: string): AwsS3Object[] {
+  return (state.s3Objects ?? []).filter(object => object.bucketName === bucketName && object.key.startsWith(prefix));
+}
+
+export function submitAwsBedrockUseCase(state: AwsLabState, modelId: string): { state: AwsLabState; error: string | null } {
+  const model = getAwsBedrockModels(state).find(item => item.modelId === modelId);
+  if (!model) return { state, error: "Foundation model was not found." };
+  const models = getAwsBedrockModels(state).map(item => item.modelId === modelId ? { ...item, accessStatus: "Available" as const } : item);
+  const updated = { ...state, bedrockModels: models };
+  return { state: appendAwsCloudTrailEvent(updated, { eventName: "PutUseCaseForModelAccess", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: modelId, region: "eu-west-1", errorCode: null, detail: "Model use-case details were submitted in the training account." }), error: null };
+}
+export function invokeAwsBedrockModel(state: AwsLabState, modelId: string, prompt: string): { state: AwsLabState; success: boolean; response: string; error: string | null } {
+  const model = getAwsBedrockModels(state).find(item => item.modelId === modelId);
+  const caller = state.iamRoles.find(role => role.name === "AI-Platform-Operator");
+  let error: string | null = null;
+  if (!model) error = "Foundation model was not found.";
+  else if (!prompt.trim()) error = "Enter a prompt before invoking the model.";
+  else if (prompt.trim().length > 8000) error = "Prompt exceeds the simulator's 8,000-character limit.";
+  else if (model.accessStatus !== "Available") error = "Model access is not ready. Complete the model's required access step first.";
+  else if (!caller || !caller.attachedPolicies.includes("BedrockInvokeAccess")) error = "The caller is missing bedrock:InvokeModel permission.";
+  if (error || !model) {
+    const audited = appendAwsCloudTrailEvent(state, { eventName: "Converse", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: modelId, region: "eu-west-1", errorCode: error?.includes("permission") ? "AccessDeniedException" : error ? "ValidationException" : "ResourceNotFoundException", detail: error ?? "The foundation model was not found." });
+    return { state: audited, success: false, response: "", error: error ?? "Foundation model was not found." };
+  }
+  const models = getAwsBedrockModels(state).map(item => item.modelId === modelId ? { ...item, invocationCount: item.invocationCount + 1 } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, bedrockModels: models }, { eventName: "Converse", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: modelId, region: "eu-west-1", errorCode: null, detail: "Simulated model invocation completed; no live foundation-model API was called." });
+  const response = "Simulated inference output for " + model.name + ". The request was accepted by the training model workflow; no live foundation-model API was called.";
+  return { state: updated, success: true, response, error: null };
+}
+export function syncAwsBedrockKnowledgeBase(state: AwsLabState, knowledgeBaseId: string): { state: AwsLabState; success: boolean; error: string | null } {
+  const knowledgeBase = getAwsBedrockKnowledgeBases(state).find(item => item.id === knowledgeBaseId);
+  if (!knowledgeBase) return { state, success: false, error: "Knowledge base was not found." };
+  const role = state.iamRoles.find(item => item.name === knowledgeBase.roleName);
+  const sourceObjects = aiPrefixObjects(state, knowledgeBase.sourceBucketName, knowledgeBase.sourcePrefix);
+  let error: string | null = null;
+  if (!role || role.trustedService !== "bedrock.amazonaws.com") error = "The knowledge-base role must trust bedrock.amazonaws.com.";
+  else if (!role.attachedPolicies.includes("BedrockDataSourceRead") || !role.attachedPolicies.includes("S3ArtifactsRead")) error = "The knowledge-base role is missing S3 data-source read permissions.";
+  else if (!sourceObjects.length) error = "No source objects were found under the configured S3 prefix.";
+  const updatedKBs = getAwsBedrockKnowledgeBases(state).map(item => item.id === knowledgeBaseId ? { ...item, status: error ? "FAILED" as const : "ACTIVE" as const, documentsIndexed: error ? item.documentsIndexed : sourceObjects.length, lastSyncTime: new Date().toISOString() } : item);
+  const audited = appendAwsCloudTrailEvent({ ...state, bedrockKnowledgeBases: updatedKBs }, { eventName: "StartIngestionJob", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: knowledgeBaseId, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Knowledge-base data source synchronization completed against the configured S3 prefix." });
+  return { state: audited, success: !error, error };
+}
+export function updateAwsBedrockGuardrail(state: AwsLabState, guardrailId: string, setting: "contentFiltersEnabled" | "deniedTopicsEnabled" | "sensitiveInformationFiltersEnabled", enabled: boolean): { state: AwsLabState; error: string | null } {
+  const guardrail = getAwsBedrockGuardrails(state).find(item => item.id === guardrailId);
+  if (!guardrail) return { state, error: "Guardrail was not found." };
+  const guardrails = getAwsBedrockGuardrails(state).map(item => item.id === guardrailId ? { ...item, [setting]: enabled, version: item.version + 1 } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, bedrockGuardrails: guardrails }, { eventName: "UpdateGuardrail", eventSource: "bedrock.amazonaws.com", userIdentity: "simulated-console-user", resource: guardrailId, region: "eu-west-1", errorCode: null, detail: "Guardrail configuration was updated to version " + (guardrail.version + 1) + "." });
+  return { state: updated, error: null };
+}
+
+export function createAwsSageMakerTrainingJob(state: AwsLabState, input: { name: string; algorithm: string; executionRole: string; inputBucketName: string; inputKey: string; outputBucketName: string; outputPrefix: string; instanceType: string; instanceCount: number }): { state: AwsLabState; success: boolean; error: string | null; job: AwsSageMakerTrainingJob | null } {
+  const name = input.name.trim();
+  const existing = getAwsSageMakerTrainingJobs(state).some(job => job.name.toLowerCase() === name.toLowerCase());
+  const role = state.iamRoles.find(item => item.name === input.executionRole);
+  const source = (state.s3Objects ?? []).some(object => object.bucketName === input.inputBucketName && object.key === input.inputKey);
+  const outputBucket = state.s3Buckets.find(item => item.name === input.outputBucketName);
+  let error: string | null = null;
+  if (!name) error = "Training job name is required.";
+  else if (existing) error = "A training job with this name already exists.";
+  else if (!["XGBoost", "Linear Learner", "Random Cut Forest"].includes(input.algorithm)) error = "Select a supported built-in algorithm.";
+  else if (!role || role.trustedService !== "sagemaker.amazonaws.com") error = "The execution role must trust sagemaker.amazonaws.com.";
+  else if (!role.attachedPolicies.includes("SageMakerTrainingAccess") || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite")) error = "The execution role is missing training or S3 artifact permissions.";
+  else if (!source) error = "The selected S3 input object does not exist.";
+  else if (!outputBucket || !input.outputPrefix.trim() || input.outputPrefix.startsWith("/")) error = "Choose an existing output bucket and a relative S3 output prefix.";
+  else if (!Number.isInteger(input.instanceCount) || input.instanceCount < 1 || input.instanceCount > 10) error = "Instance count must be between 1 and 10.";
+  const createdAt = new Date().toISOString();
+  if (error) {
+    const audited = appendAwsCloudTrailEvent(state, { eventName: "CreateTrainingJob", eventSource: "sagemaker.amazonaws.com", userIdentity: "simulated-console-user", resource: name || "(unnamed)", region: "eu-west-1", errorCode: error.includes("role") || error.includes("permissions") ? "AccessDeniedException" : "ValidationException", detail: error });
+    return { state: audited, success: false, error, job: null };
+  }
+  const outputPrefix = input.outputPrefix.endsWith("/") ? input.outputPrefix : input.outputPrefix + "/";
+  const modelName = name + "-model";
+  const artifactKey = outputPrefix + modelName + "/model.tar.gz";
+  const modelObject = aiS3Object(state, input.outputBucketName, artifactKey, 1842093);
+  if (!modelObject) return { state, success: false, error: "Output bucket was not found.", job: null };
+  const job: AwsSageMakerTrainingJob = { name, algorithm: input.algorithm, status: "Completed", executionRole: input.executionRole, inputBucketName: input.inputBucketName, inputKey: input.inputKey, outputBucketName: input.outputBucketName, outputPrefix, instanceType: input.instanceType, instanceCount: input.instanceCount, modelName, createdAt, failureReason: null };
+  const model: AwsSageMakerModel = { name: modelName, framework: input.algorithm, modelDataUrl: "s3://" + input.outputBucketName + "/" + artifactKey, trainingJobName: name, executionRole: input.executionRole, createdAt };
+  let updated: AwsLabState = { ...state, sagemakerTrainingJobs: [job, ...getAwsSageMakerTrainingJobs(state)], sagemakerModels: [model, ...getAwsSageMakerModels(state)], s3Objects: [...(state.s3Objects ?? []).filter(object => object.bucketName !== modelObject.bucketName || object.key !== modelObject.key), modelObject] };
+  updated = appendAwsCloudTrailEvent(updated, { eventName: "CreateTrainingJob", eventSource: "sagemaker.amazonaws.com", userIdentity: "simulated-console-user", resource: name, region: "eu-west-1", errorCode: null, detail: "Training job completed in the simulator and wrote model artifacts to " + model.modelDataUrl + "." });
+  return { state: updated, success: true, error: null, job };
+}
+export function setAwsSageMakerEndpointInstanceCount(state: AwsLabState, endpointName: string, instanceCount: number): { state: AwsLabState; error: string | null } {
+  const endpoint = getAwsSageMakerEndpoints(state).find(item => item.name === endpointName);
+  if (!endpoint) return { state, error: "Endpoint was not found." };
+  if (!Number.isInteger(instanceCount) || instanceCount < 1 || instanceCount > 5) return { state, error: "Endpoint instance count must be between 1 and 5." };
+  if (!getAwsSageMakerModels(state).some(model => model.name === endpoint.modelName)) return { state, error: "The endpoint's model is not present in the model registry." };
+  const endpoints = getAwsSageMakerEndpoints(state).map(item => item.name === endpointName ? { ...item, instanceCount, status: "InService" as const } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, sagemakerEndpoints: endpoints }, { eventName: "UpdateEndpoint", eventSource: "sagemaker.amazonaws.com", userIdentity: "simulated-console-user", resource: endpointName, region: "eu-west-1", errorCode: null, detail: "Endpoint configuration updated to " + instanceCount + " instance(s)." });
+  return { state: updated, error: null };
+}
+export function invokeAwsSageMakerEndpoint(state: AwsLabState, endpointName: string): { state: AwsLabState; success: boolean; error: string | null } {
+  const endpoint = getAwsSageMakerEndpoints(state).find(item => item.name === endpointName);
+  const role = state.iamRoles.find(item => item.name === "AI-Platform-Operator");
+  let error: string | null = null;
+  if (!endpoint) error = "Endpoint was not found.";
+  else if (endpoint.status !== "InService") error = "Endpoint is not InService.";
+  else if (!getAwsSageMakerModels(state).some(model => model.name === endpoint.modelName)) error = "Endpoint model is not registered.";
+  else if (!role || !role.attachedPolicies.includes("SageMakerEndpointInvoke")) error = "The caller is missing sagemaker:InvokeEndpoint permission.";
+  if (error || !endpoint) {
+    const updated = appendAwsCloudTrailEvent(state, { eventName: "InvokeEndpoint", eventSource: "sagemaker.amazonaws.com", userIdentity: "simulated-console-user", resource: endpointName, region: "eu-west-1", errorCode: error?.includes("permission") ? "AccessDeniedException" : "ValidationException", detail: error ?? "Endpoint was not found." });
+    return { state: updated, success: false, error: error ?? "Endpoint was not found." };
+  }
+  const endpoints = getAwsSageMakerEndpoints(state).map(item => item.name === endpointName ? { ...item, invocationCount: item.invocationCount + 1 } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, sagemakerEndpoints: endpoints }, { eventName: "InvokeEndpoint", eventSource: "sagemaker.amazonaws.com", userIdentity: "simulated-console-user", resource: endpointName, region: "eu-west-1", errorCode: null, detail: "Test invocation recorded in the simulated account." });
+  return { state: updated, success: true, error: null };
+}
+
+export function runAwsAiProcessingJob(state: AwsLabState, input: { service: "Comprehend" | "Textract"; name: string; jobType: string; inputBucketName: string; inputKey: string; outputBucketName: string; outputPrefix: string }): { state: AwsLabState; success: boolean; error: string | null; job: AwsAiProcessingJob | null } {
+  const name = input.name.trim();
+  const existing = getAwsAiProcessingJobs(state, input.service).some(job => job.name.toLowerCase() === name.toLowerCase());
+  const source = (state.s3Objects ?? []).some(object => object.bucketName === input.inputBucketName && object.key === input.inputKey);
+  const bucket = state.s3Buckets.find(item => item.name === input.outputBucketName);
+  const roleName = input.service === "Comprehend" ? "ComprehendBatchRole" : "TextractDocumentRole";
+  const requiredPolicy = input.service === "Comprehend" ? "ComprehendBatchAccess" : "TextractDocumentAccess";
+  const trustedService = input.service === "Comprehend" ? "comprehend.amazonaws.com" : "textract.amazonaws.com";
+  const role = state.iamRoles.find(item => item.name === roleName);
+  let error: string | null = null;
+  if (!name) error = "Enter a job name.";
+  else if (existing) error = "A job with this name already exists for " + input.service + ".";
+  else if (!source) error = "The selected S3 input object was not found.";
+  else if (!bucket || !input.outputPrefix.trim() || input.outputPrefix.startsWith("/")) error = "Choose an existing output bucket and a relative output prefix.";
+  else if (!role || role.trustedService !== trustedService || !role.attachedPolicies.includes(requiredPolicy) || !role.attachedPolicies.includes("S3ArtifactsRead") || !role.attachedPolicies.includes("S3ArtifactsWrite")) error = "The " + input.service + " execution role is missing service trust or S3 read/write permissions.";
+  const createdAt = new Date().toISOString();
+  const outputPrefix = input.outputPrefix.endsWith("/") ? input.outputPrefix : input.outputPrefix + "/";
+  const outputKey = outputPrefix + (input.service === "Comprehend" ? "sentiment-results.json" : "document-analysis.json");
+  const id = input.service.toLowerCase() + "-sim-" + String(getAwsAiProcessingJobs(state).length + 1).padStart(4, "0");
+  const job: AwsAiProcessingJob = { id, service: input.service, name, jobType: input.jobType, status: error ? "FAILED" : "SUCCEEDED", inputBucketName: input.inputBucketName, inputKey: input.inputKey, outputBucketName: input.outputBucketName, outputPrefix, executionRole: roleName, createdAt, outputKey: error ? null : outputKey, failureReason: error };
+  let updated: AwsLabState = { ...state, aiProcessingJobs: [job, ...getAwsAiProcessingJobs(state)] };
+  if (!error) {
+    const sourceObject = (state.s3Objects ?? []).find(object => object.bucketName === input.inputBucketName && object.key === input.inputKey);
+    const object = aiS3Object(updated, input.outputBucketName, outputKey, Math.max(1024, Math.round((sourceObject?.sizeBytes ?? 2048) * 0.08)));
+    if (object) updated = putAiS3Object(updated, object);
+  }
+  updated = appendAwsCloudTrailEvent(updated, { eventName: input.service === "Comprehend" ? "StartSentimentDetectionJob" : "StartDocumentAnalysis", eventSource: input.service.toLowerCase() + ".amazonaws.com", userIdentity: "simulated-console-user", resource: name, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Batch analysis completed in the simulator; output stored at s3://" + input.outputBucketName + "/" + outputKey + "." });
+  return { state: updated, success: !error, error, job };
+}
+export function syncAwsQBusinessApplication(state: AwsLabState, applicationId: string): { state: AwsLabState; success: boolean; error: string | null } {
+  const app = getAwsQBusinessApplications(state).find(item => item.id === applicationId);
+  if (!app) return { state, success: false, error: "Amazon Q Business application was not found." };
+  const role = state.iamRoles.find(item => item.name === app.roleName);
+  const documents = aiPrefixObjects(state, app.sourceBucketName, app.sourcePrefix);
+  let error: string | null = null;
+  if (!role || role.trustedService !== "qbusiness.amazonaws.com") error = "The data-source role must trust qbusiness.amazonaws.com.";
+  else if (!role.attachedPolicies.includes("QBusinessDataSourceAccess") || !role.attachedPolicies.includes("S3ArtifactsRead")) error = "The data-source role is missing S3 read permission.";
+  else if (!documents.length) error = "No documents were found in the configured S3 data source.";
+  const updatedApps = getAwsQBusinessApplications(state).map(item => item.id === applicationId ? { ...item, status: error ? "FAILED" as const : "ACTIVE" as const, syncStatus: error ? "FAILED" as const : "SUCCEEDED" as const, documentsIndexed: error ? item.documentsIndexed : documents.length, lastSyncTime: new Date().toISOString() } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, qBusinessApplications: updatedApps }, { eventName: "StartDataSourceSyncJob", eventSource: "qbusiness.amazonaws.com", userIdentity: "simulated-console-user", resource: applicationId, region: "eu-west-1", errorCode: error ? "AccessDeniedException" : null, detail: error ?? "Amazon Q Business data source sync completed against the configured S3 prefix." });
+  return { state: updated, success: !error, error };
+}
+export function updateAwsQDeveloperUser(state: AwsLabState, username: string, updates: { subscription?: "Free" | "Pro"; status?: "Active" | "Suspended" }): { state: AwsLabState; error: string | null } {
+  const user = getAwsQDeveloperUsers(state).find(item => item.username === username);
+  if (!user) return { state, error: "Amazon Q Developer user was not found." };
+  const subscription = updates.subscription ?? user.subscription;
+  const status = updates.status ?? user.status;
+  const users = getAwsQDeveloperUsers(state).map(item => item.username === username ? { ...item, subscription, status } : item);
+  const updated = appendAwsCloudTrailEvent({ ...state, qDeveloperUsers: users }, { eventName: updates.subscription ? "UpdateUserSubscription" : "UpdateUser", eventSource: "q.amazonaws.com", userIdentity: "simulated-console-user", resource: username, region: "eu-west-1", errorCode: null, detail: "Amazon Q Developer subscription assignment updated: " + subscription + ", " + status + "." });
+  return { state: updated, error: null };
+}
+
 export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | undefined): AwsLabState {
   const baseline = createInitialAwsLabState();
   if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
@@ -878,13 +1214,22 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 6, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 7, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ?? baseline.s3Objects,
     s3BucketPolicies: savedState.s3BucketPolicies ?? baseline.s3BucketPolicies,
     glueJobs: savedState.glueJobs ?? baseline.glueJobs,
     cloudTrailEvents: savedState.cloudTrailEvents ?? baseline.cloudTrailEvents,
     costUsage: savedState.costUsage ?? baseline.costUsage,
+    bedrockModels: savedState.bedrockModels ?? baseline.bedrockModels,
+    bedrockKnowledgeBases: savedState.bedrockKnowledgeBases ?? baseline.bedrockKnowledgeBases,
+    bedrockGuardrails: savedState.bedrockGuardrails ?? baseline.bedrockGuardrails,
+    sagemakerModels: savedState.sagemakerModels ?? baseline.sagemakerModels,
+    sagemakerTrainingJobs: savedState.sagemakerTrainingJobs ?? baseline.sagemakerTrainingJobs,
+    sagemakerEndpoints: savedState.sagemakerEndpoints ?? baseline.sagemakerEndpoints,
+    aiProcessingJobs: savedState.aiProcessingJobs ?? baseline.aiProcessingJobs,
+    qBusinessApplications: savedState.qBusinessApplications ?? baseline.qBusinessApplications,
+    qDeveloperUsers: savedState.qDeveloperUsers ?? baseline.qDeveloperUsers,
     iamRoles: savedState.iamRoles ?? baseline.iamRoles,
     loadBalancers: savedState.loadBalancers ?? baseline.loadBalancers,
     targetGroups: savedState.targetGroups ?? baseline.targetGroups,
