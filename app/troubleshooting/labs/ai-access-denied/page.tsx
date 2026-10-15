@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./lab.css";
 
 type Choice = { label: string; correct: boolean; feedback: string };
@@ -80,6 +80,7 @@ const stages: Stage[] = [
 ];
 
 function Architecture({ step }: { step: number }) {
+  const focusIndex = [2, 3, 1, 2][step] ?? 0;
   const nodes = [
     { title: "Application / operator", sub: "Request + credentials", detail: "Caller", color: "blue" },
     { title: "IAM role session", sub: "Effective permissions", detail: "Authorization", color: step === 2 ? "green" : step === 1 || step === 0 ? "amber" : "blue" },
@@ -91,7 +92,7 @@ function Architecture({ step }: { step: number }) {
       <div className="lab-architecture-top"><span>REQUEST PATH</span><span>ILLUSTRATIVE LAB ARCHITECTURE</span></div>
       <div className="lab-architecture-flow">
         {nodes.map((node, i) => <div className="lab-architecture-part" key={node.title}>
-          <div className={"lab-arch-node " + node.color + (i === step % 4 ? " focus" : "")}>
+          <div className={"lab-arch-node " + node.color + (i === focusIndex ? " focus" : "")}>
             <span className="lab-arch-index">{String(i + 1).padStart(2, "0")}</span>
             <strong>{node.title}</strong><small>{node.sub}</small><em>{node.detail}</em>
           </div>
@@ -109,11 +110,20 @@ export default function AwsAiAccessDeniedLab() {
   const [sideBySide, setSideBySide] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [checked, setChecked] = useState<Record<number, boolean>>({});
+  const consoleFrame = useRef<HTMLIFrameElement>(null);
   const current = stages[step];
   const correctCount = useMemo(() => stages.reduce((n, stage, i) => n + (checked[i] && stage.choices[answers[i]]?.correct ? 1 : 0), 0), [answers, checked]);
   const choice = answers[step];
   const submitted = !!checked[step];
   const passed = submitted && current.choices[choice]?.correct;
+
+  function syncConsoleFrame() {
+    if (!sideBySide) return;
+    const screen = current.consolePage.split(" · ")[0];
+    consoleFrame.current?.contentWindow?.postMessage({ type: "aws-sim-navigate", screen }, window.location.origin);
+  }
+
+  useEffect(() => { syncConsoleFrame(); }, [sideBySide, step]);
 
   function goTo(next: number) {
     setStep(Math.max(0, Math.min(stages.length - 1, next)));
@@ -166,6 +176,7 @@ export default function AwsAiAccessDeniedLab() {
         <article className="lab-workspace">
           <div className="lab-stage-head"><span>CHECKPOINT {step + 1} OF {stages.length}</span><h2>{current.title}</h2><p>{current.objective}</p></div>
           <div className="lab-evidence-card"><div className="lab-evidence-head"><span>{mode === "guided" ? "INVESTIGATION EVIDENCE" : "CASE FILE"}</span><strong>{current.evidenceTitle}</strong></div>{current.evidence.map((line) => <div className="lab-evidence-row" key={line}><span>{line.split(":")[0]}</span><strong>{line.includes(":") ? line.slice(line.indexOf(":") + 1).trim() : line}</strong></div>)}</div>
+          {step === 0 && <details className="lab-raw-error" open={mode === "guided"}><summary>Full simulated API error response · HTTP 403</summary><code>AccessDeniedException: User: arn:aws:sts::123456789012:assumed-role/AI-Platform-Operator/lab-session is not authorized to perform: bedrock:InvokeModel on resource: arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0 because no identity-based policy allows the bedrock:InvokeModel action.</code><p>This is a valid AWS-style enhanced authorization message for a missing identity-based allow. AWS does sometimes return this level of detail; other denials may be generic or identify an explicit deny, SCP, model-access prerequisite, or another cause. Use the complete error and CloudTrail evidence rather than assuming every AccessDenied has this cause.</p><a href="https://repost.aws/knowledge-center/bedrock-invokemodel-api-error" target="_blank" rel="noreferrer">AWS reference for Bedrock API errors ↗</a></details>}
           {mode === "guided" ? <div className="lab-instruction"><h3>Visual walkthrough · {current.consolePage}</h3><p>{current.action}</p><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open AWS Console Simulator in a new tab ↗</a></div> : <details className="lab-hint"><summary>Reveal guided walkthrough</summary><p>{current.action}</p><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open AWS Console Simulator ↗</a></details>}
           <div className="lab-verify"><h3>Evidence-based verification</h3><p>{mode === "guided" ? current.verify : "What evidence would confirm or reject your hypothesis? Check the request result and the matching CloudTrail event before moving on."}</p></div>
           <div className="lab-question"><h3>Decision checkpoint</h3><p>{current.question}</p><div className="lab-choices">{current.choices.map((item, i) => <button key={item.label} className={submitted && choice === i ? item.correct ? "right" : "wrong" : choice === i ? "selected" : ""} onClick={() => { setAnswers(old => ({ ...old, [step]: i })); setChecked(old => ({ ...old, [step]: false })); }}><span>{String.fromCharCode(65 + i)}</span>{item.label}</button>)}</div>
@@ -174,7 +185,7 @@ export default function AwsAiAccessDeniedLab() {
           </div>
         </article>
 
-        {sideBySide && <aside className="lab-console-pane"><div className="lab-console-head"><div><span>SIMULATED AWS CONSOLE</span><strong>{current.consolePage}</strong></div><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open full view ↗</a></div><iframe title="AWS console simulator side-by-side view" src="/troubleshooting/simulators/aws" loading="lazy" /></aside>}
+        {sideBySide && <aside className="lab-console-pane"><div className="lab-console-head"><div><span>SIMULATED AWS CONSOLE</span><strong>{current.consolePage}</strong></div><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open full view ↗</a></div><iframe ref={consoleFrame} onLoad={syncConsoleFrame} title="AWS console simulator side-by-side view" src="/troubleshooting/simulators/aws" loading="lazy" /></aside>}
       </section>
       <footer className="lab-footer">Training simulation only · The console and evidence are local illustrations, not live AWS resources. Do not grant broad permissions as a shortcut.</footer>
     </main>
