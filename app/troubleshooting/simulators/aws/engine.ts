@@ -290,6 +290,8 @@ export function evaluateAwsDatabaseConnectivity(state: AwsLabState, instanceId: 
   const routeReady = sameVpc && !!routeTable?.routes.some(route => route.target === "local" && route.state === "active" && cidrContains(route.destination, database.privateIp));
   const running = instance.state === "running" && instance.systemStatus === "passed" && instance.instanceStatus === "passed";
   const dbAvailable = database.status === "available";
+  const inboundAclAllows = aclAllows(state, "inbound", database.port, instance.privateIp);
+  const outboundAclAllows = aclAllows(state, "outbound", 49152, instance.privateIp);
   const sgAllows = database.securityGroupIds.some(id => state.securityGroups.find(sg => sg.id === id)?.ingress.some(rule =>
     (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= database.port && rule.toPort >= database.port)) &&
     ((rule.sourceType === "SecurityGroup" && instance.securityGroupIds.includes(rule.source)) || (rule.sourceType === "IPv4" && cidrContains(rule.source, instance.privateIp)))) ?? false);
@@ -297,6 +299,8 @@ export function evaluateAwsDatabaseConnectivity(state: AwsLabState, instanceId: 
     { name: "Application instance", result: running ? "passed" : "blocked", detail: running ? "Application instance is running and healthy." : "Application instance is stopped or impaired." },
     { name: "VPC and route", result: routeReady ? "passed" : "blocked", detail: routeReady ? "An active VPC local route covers the database address." : "The instance subnet does not have an active route to the database in the same VPC." },
     { name: "Database status", result: dbAvailable ? "passed" : "blocked", detail: dbAvailable ? `Database is available on TCP/${database.port}.` : `Database status is ${database.status}.` },
+    { name: "Network ACL database request", result: inboundAclAllows ? "passed" : "blocked", detail: inboundAclAllows ? `The first matching inbound rule allows TCP/${database.port} from the application subnet.` : `Network ACL rules block TCP/${database.port} from the application subnet.` },
+    { name: "Network ACL return path", result: outboundAclAllows ? "passed" : "blocked", detail: outboundAclAllows ? "The first matching outbound rule permits ephemeral TCP return traffic." : "Network ACL rules block ephemeral TCP return traffic." },
     { name: "Database security group", result: sgAllows ? "passed" : "blocked", detail: sgAllows ? `Database ingress allows TCP/${database.port} from an attached application security group.` : `Database security groups do not allow TCP/${database.port} from the application's security groups.` }
   ];
   return { healthy: checks.every(check => check.result === "passed"), checks };
