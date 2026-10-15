@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — console-realism cleanup applied; production build and regression suite passed (96/96); browser and deployment verification still pending  
-**Last reviewed:** 2026-10-15 (console diagnostics/topology removed; production build and 96 regression tests passed; browser/deployment checks pending)
+**Status:** In progress — console-realism cleanup and first AI service family implemented; production build passed with 103/103 tests; browser workflow verification and deployed-revision smoke test remain pending  
+**Last reviewed:** 2026-10-15 (AI screens and shared state added; production build and 103 regression tests passed; browser/deployment smoke test pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -39,9 +39,28 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | CloudTrail | **Event history modeled** | Seeded API events include DynamoDB AccessDenied, missing S3 object, DNS target edit, target-group change and NAT change; key simulator actions append new events |
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
+| AI services | **First functional AI service family implemented; browser validation pending** | Bedrock, SageMaker AI, Comprehend, Textract, Amazon Q Business and Amazon Q Developer are wired to shared account state. Includes seeded S3/KMS artifacts, dedicated service roles, model/job/index/user workflows and CloudTrail events. Inference/processing is local simulation only, not a live AWS API. Regression coverage added. |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Passed — 96/96 tests** | GitHub Actions run [38737025084](https://github.com/kalif7722/aws-library/actions/runs/38737025084) completed successfully after restoring the missing load-balancer wrapper closure; production build and full regression suite passed. Browser/deployment verification remains separate |
+| Automated validation / build | **Passed — 103/103 tests** | Latest verified run [38743249192](https://github.com/kalif7722/aws-library/actions/runs/38743249192) completed successfully on AI-service branch head; production build and full regression suite passed (103/103). Cloudflare Workers build check also passed for the same head. Browser smoke-test remains separate. |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
+
+## AI services implementation checkpoint — 2026-10-15
+
+- [x] Promote Bedrock, SageMaker AI, Comprehend, Textract, Amazon Q Business and Amazon Q Developer from catalog-only entries to dedicated simulator screens.
+- [x] Add shared AwsLabState types, seed data and schema-v7 migration for AI resources; legacy account state is merged with required AI S3 objects, bucket policy and execution roles without resetting existing saved resources.
+- [x] Add encrypted, private ai-workloads S3 bucket with TLS-only explicit Deny policy; seed training data, model artifacts, knowledge-base documents, text inputs, PDFs and Q Business documents.
+- [x] Add service-specific IAM trust/policy checks, including S3/KMS artifact access, Bedrock invocation, SageMaker training/endpoint invocation, Comprehend/Textract batch jobs, and Q Business data-source sync.
+- [x] Implement Bedrock model catalog/access submission/playground invocation, knowledge-base sync and guardrail settings; operations append CloudTrail events.
+- [x] Implement SageMaker model inventory, training job creation, model artifact writes, endpoint invocation and endpoint capacity changes.
+- [x] Implement Comprehend sentiment batch and Textract document/expense jobs using shared S3 input/output objects and CloudTrail history.
+- [x] Implement Q Business data-source sync and Q Developer subscription/user assignment controls.
+- [x] Add tests/aws-ai-services.test.mjs, service-directory coverage, and responsive console styling.
+- [x] Update pre-existing schema-version assertions for schema v7.
+- [x] Validate latest AI checkpoint: [GitHub Actions run 38743249192](https://github.com/kalif7722/aws-library/actions/runs/38743249192) passed production build and 103 tests (0 failed); its Cloudflare Workers build check also passed.
+- [ ] Browser-walk all six AI screens, including a failed IAM/S3/KMS prerequisite followed by remediation, and inspect the corresponding CloudTrail event.
+- [ ] Confirm the live learning site serves the intended revision; a successful build check alone is not a manual deployed-site smoke test.
+
+**Simulation boundary:** foundation-model inference, training, batch text/document analysis and enterprise Q synchronization are modeled locally. No live AWS API calls, model providers, indexes, cloud resources, or paid subscriptions are changed.
 
 ## Latest console-realism audit — 2026-10-15
 
@@ -191,18 +210,22 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Current next actions (ordered)
 
-1. [x] Inspect package scripts and document commands: `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build + tests); execution is still pending.
+1. [x] Inspect package scripts and document commands: `npm run build`, `node --test tests/*.test.mjs`, and `npm test` (build + tests).
 2. [x] Implement EC2 Launch Instance flow and backward-compatible multi-instance state/UI.
 3. [x] Add instance tag editing and safe bulk start/stop/reboot actions.
 4. [x] Wire VPC/subnet inventories, resource selection and related navigation.
 5. [x] Add route-table inventory and subnet association editing.
 6. [x] Add NACL edit/renumber/delete.
 7. [ ] Complete outbound Security Group rule editing and broader cross-resource regression coverage.
-8. [ ] Run tests/build and record actual results.
-9. [ ] Complete the Phase 2 exit gate review before adding another service family.
+8. [x] Run production build and regression suite on the latest AI-service checkpoint — 103/103 passed.
+9. [ ] Complete browser testing for core network scenarios and the six AI service screens; capture runtime/UI mismatches.
+10. [ ] Verify the live Cloudflare site revision and update the PR summary before any merge.
 
 ## Latest verification update — 2026-10-15
 
+- **Latest verified head:** commit 5265be7fcd5e070e291eeadffa5e62d4d77c010c; [GitHub Actions run 38743249192](https://github.com/kalif7722/aws-library/actions/runs/38743249192) passed the production build and all 103 regression tests (0 failed). The Cloudflare Workers build check for this commit also completed successfully: [build details](https://dash.cloudflare.com/ab94c37b3699204fc5c22a370abce5b5/workers/services/view/aws-library/production/builds/848c19dd-ed91-4d83-8c10-329c05c51e58).
+- AI service implementation adds six dedicated screens and shared-model operations; see the AI services implementation checkpoint. AI model calls are simulated locally, not sent to live AWS APIs.
+- Browser testing and a smoke test of the deployed website remain unverified.
 - The project owner reported two successful Cloudflare builds after the EC2 Tags JSX correction. Those builds preceded the later shared-service graph and current CloudTrail/Glue/S3-object/Cost Explorer additions.
 - The current source adds **CloudTrail event history**, a repairable S3-to-Glue ingestion workflow, object-level S3 inventory/upload, cost-usage breakdown, and a CloudWatch Glue freshness alarm. Persisted simulator state is now schema v5; migrations preserve saved configuration and backfill newly added alarm definitions. A follow-up review fixed the service-panel allowlist for Glue/CloudTrail and added an IAM-policy repair regression test.
 - The shared application graph now covers EC2/VPC, Security Groups, NACLs, route tables, ALB/target groups, RDS, Route 53, Lambda/IAM, DynamoDB, CloudWatch, S3 objects/bucket settings, Glue jobs, CloudTrail events and Cost Explorer usage rows.
@@ -233,7 +256,8 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 
 ## Change log
 
-- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows; build, automated tests, and browser behavior remain unverified in this session.
+- **2026-10-15:** Wired EC2 launch/multi-instance inventory and lifecycle controls, instance tag editing, inbound/outbound Security Group CRUD, connected VPC/subnet/route-table inventories, route-table association and route CRUD controls, selected-instance Reachability Analyzer, and legacy state migration. Engine/UI regression tests were added for the workflows.
+- **2026-10-15:** Added Bedrock, SageMaker AI, Comprehend, Textract, Amazon Q Business and Amazon Q Developer simulator screens, shared AI state/schema-v7 migration, AI-specific S3/IAM/KMS prerequisites, S3 input/output artifacts, and CloudTrail audit entries. Latest build/test validation passed 103/103; browser/deployment smoke testing remains pending.
 
 - **2026-10-15:** Initial persistent tracker created from the current PR scope. Current implementation includes the 89-entry service catalog, EC2 inventory, launch, multi-instance lifecycle and tag editing, selectable Security Groups with inbound-rule CRUD, Route Table/NACL views, NACL rule creation/validation, shared reachability engine, and basic S3/IAM state flows. Build/test and deployment remain unverified.
 
