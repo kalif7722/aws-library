@@ -419,6 +419,28 @@ function score(item: SearchItem, query: string) {
 export default function SemanticSearch() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [widgetCollapsed, setWidgetCollapsed] = useState(false);
+
+  // Remember the learner's preference across pages and visits. Keep the keyboard
+  // shortcut active even when the floating launcher is collapsed.
+  useEffect(() => {
+    try {
+      setWidgetCollapsed(window.localStorage.getItem("visual-cloud-search-collapsed") === "true");
+    } catch {
+      // Storage can be unavailable in private/restricted browsing contexts.
+    }
+  }, []);
+  const toggleWidgetCollapsed = () => {
+    setWidgetCollapsed(current => {
+      const next = !current;
+      try {
+        window.localStorage.setItem("visual-cloud-search-collapsed", String(next));
+      } catch {
+        // The control still works for this page when storage is unavailable.
+      }
+      return next;
+    });
+  };
   const searchTypes = ["Services", "Solutions", "Walkthroughs", "Certifications"] as const;
   type SearchType = typeof searchTypes[number];
   const [selectedTypes, setSelectedTypes] = useState<SearchType[]>([...searchTypes]);
@@ -550,10 +572,13 @@ export default function SemanticSearch() {
       .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index);
     return diversifyResults(ranked, query, 6);
   }, [searchableItems, query, selectedTypes]);
-  return <div className="semantic-search">
-    <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
-      <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
-    </button>
+  return <div className={`semantic-search${widgetCollapsed ? " semantic-search-collapsed" : ""}`}>
+    {widgetCollapsed ? <button type="button" className="semantic-search-reopen" onClick={toggleWidgetCollapsed} aria-label="Show cloud learning search" title="Show cloud learning search"><span className="semantic-search-icon" aria-hidden="true">⌕</span></button> : <div className="semantic-search-launcher">
+      <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
+        <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
+      </button>
+      <button type="button" className="semantic-search-collapse" onClick={toggleWidgetCollapsed} aria-label="Collapse search box" title="Collapse search box">−</button>
+    </div>}
     {open && <div className="semantic-search-panel" role="dialog" aria-label="Semantic cloud search">
       <div className="semantic-search-input-wrap"><span aria-hidden="true">⌕</span><input autoFocus type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. keep a private app highly available…" aria-label="Search cloud learning content" onKeyDown={event => { if (event.key === "Escape") setOpen(false); if (event.key === "Enter" && (autocomplete[0] || results[0])) window.location.href = (autocomplete[0] || results[0]).item.href; }} /><button type="button" onClick={() => { setQuery(""); setOpen(false); }} aria-label="Close search">×</button></div>
       <p className="semantic-search-hint">Choose what you want to find, then search by service name or describe a business problem in plain English.</p>
