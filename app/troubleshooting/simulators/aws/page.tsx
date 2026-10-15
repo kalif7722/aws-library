@@ -259,6 +259,16 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
     setShowServices(false);
     notify(`${service.name} added to pinned services. Its detailed console screen will be built in a later service review.`);
   }
+  useEffect(() => {
+    function handleLabNavigation(event: MessageEvent) {
+      if (event.origin !== window.location.origin || event.data?.type !== "aws-sim-navigate") return;
+      if (typeof event.data.screen !== "string") return;
+      openService(event.data.screen);
+    }
+    window.addEventListener("message", handleLabNavigation);
+    return () => window.removeEventListener("message", handleLabNavigation);
+  }, []);
+
   const resourceCount = screen === "CloudTrail" ? `${cloudTrailEvents.length} events` : screen === "Glue" ? `${glueJobs.length} jobs` : screen === "Instances" ? `${instances.length} instances` : screen === "Security Groups" ? `${state.securityGroups.length} security groups` : screen === "Route Tables" ? `${routeTables.length} route tables` : screen === "Network ACLs" ? "1 network ACL" : screen === "VPCs" ? `${vpcs.length} VPCs` : screen === "Subnets" ? `${subnets.length} subnets` : screen === "S3" ? `${state.s3Buckets.length} buckets` : screen === "IAM" ? `${state.iamRoles.length} roles and sample identities` : screen === "RDS" ? `${databases.length} databases` : screen === "Lambda" ? `${lambdaFunctions.length} functions` : screen === "CloudWatch" ? `${cloudWatchAlarms.length} alarms` : screen === "Route 53" ? `${new Set(dnsRecords.map(record => record.zoneName)).size} hosted zones` : screen === "DynamoDB" ? `${dynamoTables.length} tables` : screen === "Load Balancers" ? `${loadBalancers.length} load balancers` : screen === "Target Groups" ? `${targetGroups.length} target groups` : screen === "Bedrock" ? `${(state.bedrockModels ?? []).length} foundation models` : screen === "SageMaker AI" ? `${(state.sagemakerEndpoints ?? []).length} endpoints` : screen === "Comprehend" ? `${(state.aiProcessingJobs ?? []).filter(job => job.service === "Comprehend").length} jobs` : screen === "Textract" ? `${(state.aiProcessingJobs ?? []).filter(job => job.service === "Textract").length} jobs` : screen === "Amazon Q Business" ? `${(state.qBusinessApplications ?? []).length} applications` : screen === "Amazon Q Developer" ? `${(state.qDeveloperUsers ?? []).length} users` : "Resources";
   const screenDescription: Record<Screen, string> = {
     "Console Home":"View AWS services and resources.",
