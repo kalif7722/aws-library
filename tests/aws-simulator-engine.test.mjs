@@ -314,7 +314,7 @@ test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda,
   assert.equal(getAwsLambdaFunctions(state).length,2);
   assert.equal(evaluateAwsLambdaReadiness(state,'payments-authorizer').healthy,true);
   assert.equal(evaluateAwsLambdaReadiness(state,'orders-event-handler').healthy,false);
-  assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['OK','OK','ALARM']);
+  assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['OK','OK','ALARM','ALARM']);
 });
 
 test('target health-check configuration changes health and the related CloudWatch alarm',()=>{
@@ -415,6 +415,7 @@ test('legacy account migration adds new service graph once and preserves later t
 test('Glue freshness lab can be repaired by uploading the missing S3 partition and rerunning the job',()=>{
   const initial=createInitialAwsLabState();
   assert.equal(evaluateAwsGlueJob(initial,'orders-daily-curation').healthy,false);
+  assert.equal(getAwsCloudWatchAlarms(initial).find(alarm=>alarm.name==='orders-curation-freshness').state,'ALARM');
   const failed=runAwsGlueJob(initial,'orders-daily-curation');
   assert.equal(failed.success,false);
   assert.ok(getAwsCloudTrailEvents(failed.state).some(event=>event.errorCode==='NoSuchKey'));
@@ -423,6 +424,7 @@ test('Glue freshness lab can be repaired by uploading the missing S3 partition a
   const completed=runAwsGlueJob(uploaded.state,'orders-daily-curation');
   assert.equal(completed.success,true);
   assert.equal(evaluateAwsGlueJob(completed.state,'orders-daily-curation').healthy,true);
+  assert.equal(getAwsCloudWatchAlarms(completed.state).find(alarm=>alarm.name==='orders-curation-freshness').state,'OK');
   assert.ok(getAwsS3Objects(completed.state).some(object=>object.bucketName==='data-lake-curated'&&object.key==='orders/day=2026-10-15/part-000.parquet'));
 });
 

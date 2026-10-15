@@ -28,7 +28,7 @@ export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
   { name: "IAM", category: "Security, Identity & Compliance", icon: "♙", description: "Users, roles, policies, and permissions", count: "3 roles · sample policies", implemented: true, screen: "IAM" },
   { name: "RDS", category: "Database", icon: "▤", description: "Managed relational databases", count: "1 database", implemented: true, screen: "RDS" },
   { name: "Lambda", category: "Compute", icon: "λ", description: "Run code without managing servers", count: "3 functions", implemented: true, screen: "Lambda" },
-  { name: "CloudWatch", category: "Management & Governance", icon: "◷", description: "Metrics, logs, alarms, and events", count: "3 linked alarms", implemented: true, screen: "CloudWatch" },
+  { name: "CloudWatch", category: "Management & Governance", icon: "◷", description: "Metrics, logs, alarms, and events", count: "4 linked alarms", implemented: true, screen: "CloudWatch" },
   { name: "Route 53", category: "Networking & Content Delivery", icon: "⌘", description: "DNS and health checks", count: "2 hosted zones", implemented: true, screen: "Route 53" },
   { name: "DynamoDB", category: "Database", icon: "▦", description: "Managed NoSQL database", count: "2 tables", implemented: true, screen: "DynamoDB" },
   { name: "Cost Explorer", category: "Cloud Financial Management", icon: "$", description: "Explore usage and spending", count: "Current month", implemented: true, screen: "Cost Explorer" },

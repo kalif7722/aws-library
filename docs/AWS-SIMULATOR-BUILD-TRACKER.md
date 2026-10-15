@@ -35,7 +35,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
 | Route 53 | **Shared record targeting implemented** | Public/private example zones, records to ALB/RDS, resource-target mismatch detection and stale-target exercise |
 | DynamoDB | **Inventory/configuration data seeded** | Orders and IdempotencyKeys tables; capacity, encryption, item counts, throttling and recovery configuration are displayed |
-| CloudWatch | **Alarm states computed from shared model** | Target health, RDS connections/state and Lambda readiness/error count feed three alarms; metrics tab includes linked service values |
+| CloudWatch | **Alarm states computed from shared model** | Target health, RDS connections/state, Lambda errors and Glue data freshness feed four alarms; successful curation resolves the Glue alarm |
 | CloudTrail | **Event history modeled** | Seeded API events include DynamoDB AccessDenied, missing S3 object, DNS target edit, target-group change and NAT change; key simulator actions append new events |
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
@@ -195,8 +195,8 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - The project owner reported two successful Cloudflare builds after the EC2 Tags JSX correction. Those builds preceded the later shared-service graph and current CloudTrail/Glue/S3-object/Cost Explorer additions.
 - The current source change adds **CloudTrail event history**, a repairable S3-to-Glue ingestion workflow, object-level S3 inventory/upload, and a cost-usage breakdown with a NAT data-processing spike. It also bumps the persisted simulator schema to v4 and migrates older saved state. A follow-up review fixed the service-panel allowlist for Glue/CloudTrail and added an IAM-policy repair regression test.
 - The shared application graph now covers EC2/VPC, Security Groups, NACLs, route tables, ALB/target groups, RDS, Route 53, Lambda/IAM, DynamoDB, CloudWatch, S3 objects/bucket settings, Glue jobs, CloudTrail events and Cost Explorer usage rows.
-- The engine test source contains **33 test cases**, including tests for cross-service health changes, database NACL paths, Lambda policy repair/invocation, legacy migration, Glue partition and IAM repair, CloudTrail audit updates and cost anomaly data.
-- The most recent known branch head before this batched change was 3e7286b9f445a7e0ece3aa836eec076eae939814. These new changes require one fresh Cloudflare build and an actual run of npm run build, node --test tests/*.test.mjs, and npm test. The commands have not been executed in a local checkout in this session.
+- The engine test source contains **33 test cases** at the reviewed head, covering network configuration, cross-service health changes, schema migration, Glue partition repair, CloudTrail audit updates and cost anomaly data.
+- Reviewed branch head before this update: `63ad4ff655314e346326257fdc11bec7837ea7fa`. This change adds a fourth alarm driven by Glue job freshness; a fresh Cloudflare build and execution of `npm run build`, `node --test tests/*.test.mjs`, and `npm test` are still required. These commands have not been executed in a local checkout in this session.
 - Do not mark build/test/deployment green until the current head is verified. After the new build passes, manually walk three connected scenarios: ALB target health, Lambda AccessDenied → IAM policy → successful invocation, and S3 partition → Glue job → fresh curated output.
 - Avoid additional service-family expansion until this validation pass completes; prioritize fixes found by the next build/test run.
 
@@ -229,3 +229,5 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - **2026-10-15:** Added an EC2 lifecycle regression test covering per-instance stop/reboot scoping, synchronization of the legacy primary-instance view, and immutability of the prior state. Test suite execution remains pending.
 
 - **2026-10-15:** Fixed the TSX parser error reported by the Cloudflare build (`Expected ',' or ')' but found '}'`) by closing the `setSelectedInstanceIds(...)` call in the EC2 select-all handler. Commit: [`994ad21`](https://github.com/kalif7722/aws-library/commit/994ad2165af7bc308588e6afab299498967856e6). The previous failure is explained by this syntax defect; a fresh production build and test run are still required before marking validation complete.
+
+- [x] Add a CloudWatch alarm driven by Glue freshness/job state; assert that uploading the missing source partition and rerunning Glue moves the alarm from ALARM to OK.
