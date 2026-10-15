@@ -311,7 +311,8 @@ test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda,
   assert.equal(evaluateAwsDatabaseConnectivity(state,state.instance.id,'orders-prod').healthy,true);
   assert.equal(evaluateAwsDnsRecord(state,'record-api').healthy,true);
   assert.equal(getAwsDynamoTables(state).length,2);
-  assert.equal(getAwsLambdaFunctions(state).length,2);
+  assert.equal(getAwsLambdaFunctions(state).length,3);
+  assert.ok(getAwsLambdaFunctions(state).some(fn=>fn.name==='invoice-generator'));
   assert.equal(evaluateAwsLambdaReadiness(state,'payments-authorizer').healthy,true);
   assert.equal(evaluateAwsLambdaReadiness(state,'orders-event-handler').healthy,false);
   assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['OK','OK','ALARM','ALARM']);

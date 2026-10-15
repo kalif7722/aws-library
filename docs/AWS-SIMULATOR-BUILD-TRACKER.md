@@ -248,3 +248,13 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - The failures identified three actionable causes: (1) the service-directory test still expected CloudTrail to be catalog-only after it gained a real screen; (2) `AwsLabState` contained literal escaped newline characters in its type declaration, which caused `load-architecture-module.mjs` to emit invalid JavaScript; (3) output-dependent rendered HTML/CSS tests ran before `dist` existed.
 - Corrected the stale directory expectation, restored actual line breaks in the state type, and changed `npm test` to run test files serially after its build step. The workflow now uses the package's full `npm test` sequence, Node 22.13.0 (compatible with the declared runtime and avoids Node 24 npm install-script warnings), and a single push trigger to prevent duplicate runs.
 - [ ] Confirm the next CI run executes the complete build, then all tests pass. No green status is claimed from this failed run.
+
+
+## Latest CI run — 2026-10-15
+
+- Workflow run [38706195047](https://github.com/kalif7722/aws-library/actions/runs/38706195047) successfully installed dependencies and completed the production build, then ran 91 tests: 88 passed and 3 failed.
+- The remaining failures were: the shared-resource test expected 2 Lambda functions though the seeded account has 3; the rendered-HTML test expected a Codex development-preview meta tag not emitted by this production build; and Tailwind animation variables were absent from generated CSS because `tw-animate-css` was installed but not imported.
+- [x] Correct the Lambda count expectation and explicitly assert the third seeded function.
+- [x] Change the rendered HTML test to assert real production title/description/application-name metadata rather than environment-specific preview metadata.
+- [x] Import `tw-animate-css` in the global stylesheet so animation utilities are emitted by the Tailwind v4 production build.
+- [ ] Run a new CI pass and verify all tests and production build succeed; no green status is claimed yet.
