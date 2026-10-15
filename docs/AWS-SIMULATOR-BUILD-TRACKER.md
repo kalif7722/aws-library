@@ -3,8 +3,8 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — base revision passed the full CI gate; S3 role-level access evaluator is the next change awaiting validation  
-**Last reviewed:** 2026-10-15 (build-blocker correction recorded)
+**Status:** In progress — S3 IAM/bucket-policy access simulator passed the full CI gate; browser walkthrough and deployed revision verification remain  
+**Last reviewed:** 2026-10-15 (S3 access simulation validated in CI)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
 
@@ -29,7 +29,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | VPC / subnets / route tables | **Core model wired; validation pending** | One VPC, four public/private subnets across two AZs, two route tables, subnet associations, route create/edit/delete, connected target subnets and RDS/ALB placements |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
-| S3 | **Object inventory/upload and access simulation implemented in source; validation pending** | Four buckets, sample objects, IAM-role GetObject/PutObject evaluation, explicit bucket-policy denies for TLS and immutable release prefixes, CloudTrail outcomes and IAM repair buttons |
+| S3 | **Object inventory/upload and IAM access simulation validated in CI** | Four buckets, object inventory, IAM-role GetObject/PutObject, explicit TLS and immutable-release denies, CloudTrail outcomes and IAM remediation controls; browser check pending |
 | IAM and Lambda | **Shared configuration and readiness modeled** | Three Lambda functions, execution-role trust/policy checks, invocation retry behavior, per-function error counts and CloudWatch impact; S3 read/write test permissions are attachable from the IAM role view |
 | Load Balancing | **Shared model and health checks implemented** | One ALB across two public subnets, listeners, two target groups, registered EC2 target, port/SG checks and configurable health-check paths |
 | RDS | **Shared model and connectivity checks implemented** | Private PostgreSQL resource in two private subnets; status, endpoint/port, DB SG, route and stateless NACL checks |
@@ -40,7 +40,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | Glue and S3 objects | **Shared ingestion workflow modeled** | Four buckets and object keys, one daily curation job, expected partition detection, output freshness checks, object upload and Glue rerun path |
 | Cost Explorer | **Usage breakdown modeled** | Seven usage line items total the seeded month-to-date cost; NAT gateway byte usage exceeds its baseline and can be investigated alongside CloudTrail |
 | Other catalog services | **Catalog-only / partially simulated** | Only entries explicitly marked implemented should be treated as working simulators |
-| Automated validation / build | **Previous builds reported green; current graph changes pending** | The project owner reported two successful Cloudflare builds after the JSX correction. Those builds preceded the latest shared-service model/UI/tests; the current head needs a fresh build and test run |
+| Automated validation / build | **Passed on current code revision** | GitHub Actions run 38711526340 built the production app and reported 93 tests passed, 0 failed on code commit d89dcb77ca0bdfb808b05d34a88b60334c5da396; Cloudflare deployment and browser smoke test remain unverified |
 | Deployment | **Not verified** | Do not assume changes are live until deployment is explicitly checked |
 
 ## Phase 0 — Architecture and working discipline
@@ -247,30 +247,43 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - The first simulator-validation run successfully installed dependencies but failed in the test step before production build. Results: 54 passed, 4 failed.
 - The failures identified three actionable causes: (1) the service-directory test still expected CloudTrail to be catalog-only after it gained a real screen; (2) `AwsLabState` contained literal escaped newline characters in its type declaration, which caused `load-architecture-module.mjs` to emit invalid JavaScript; (3) output-dependent rendered HTML/CSS tests ran before `dist` existed.
 - Corrected the stale directory expectation, restored actual line breaks in the state type, and changed `npm test` to run test files serially after its build step. The workflow now uses the package's full `npm test` sequence, Node 22.13.0 (compatible with the declared runtime and avoids Node 24 npm install-script warnings), and a single push trigger to prevent duplicate runs.
-- [ ] Confirm the next CI run executes the complete build, then all tests pass. No green status is claimed from this failed run.
+- [x] A subsequent CI run corrected the blockers; the later green baseline is recorded below.
 
 
-## Latest CI run — 2026-10-15
+## Historical CI failure — 2026-10-15
 
 - Workflow run [38706195047](https://github.com/kalif7722/aws-library/actions/runs/38706195047) successfully installed dependencies and completed the production build, then ran 91 tests: 88 passed and 3 failed.
 - The remaining failures were: the shared-resource test expected 2 Lambda functions though the seeded account has 3; the rendered-HTML test expected a Codex development-preview meta tag not emitted by this production build; and Tailwind animation variables were absent from generated CSS because `tw-animate-css` was installed but not imported.
 - [x] Correct the Lambda count expectation and explicitly assert the third seeded function.
 - [x] Change the rendered HTML test to assert real production title/description/application-name metadata rather than environment-specific preview metadata.
 - [x] Import `tw-animate-css` in the global stylesheet so animation utilities are emitted by the Tailwind v4 production build.
-- [ ] Run a new CI pass and verify all tests and production build succeed; no green status is claimed yet.
+- [x] Follow-up run 38707769473 built successfully and passed all 91 tests.
 
 
-## Latest CI correction — 2026-10-15
+## Historical CI correction — 2026-10-15
 
 - The next `npm test` run built successfully and executed 91 tests: 89 passed, 2 failed.
 - The production-metadata regex expected the wrong wording for the existing page description. Corrected it to match the actual metadata output.
 - The CSS assertion checked the obsolete `scroll-fade-reveal-b` class and an unused `tw-shimmer` selector. The current message-scroller uses `scroll-fade-b`; added a Tailwind v4 `@utility` for its bottom fade mask and changed the assertion to verify the real generated class. Animation variables, scrollbar rules and reduced-motion CSS had already passed in this run.
-- [ ] Re-run production build + all tests on the new head. No passing status is claimed until this run completes.
+- [x] Follow-up run 38707769473 built successfully and passed all 91 tests.
 
 
-## Latest verified baseline and next validation — 2026-10-15
+## Latest verified state — 2026-10-15
 
-- [x] GitHub Actions run [38707769473](https://github.com/kalif7722/aws-library/actions/runs/38707769473) passed `npm test`: production build completed and the full suite reported **91 passed, 0 failed** at commit `4857a4268235d6ae9f0ae6eb93489c314ead19ac`.
-- The current source adds S3 role-level GetObject/PutObject simulation, explicit bucket Deny policy checks, CloudTrail success/failure events, IAM permission remediation controls and schema-v6 migration. These additions still need their own full CI run.
-- [ ] Verify missing role permission → attach S3 read permission → allowed GetObject; insecure transport and immutable release-artifact writes remain denied by bucket policy.
-- [ ] Check the full CI result for the new S3 access tests before continuing to other features.
+- [x] GitHub Actions run [38711526340](https://github.com/kalif7722/aws-library/actions/runs/38711526340) passed `npm test`: production build completed and the full regression suite reported **93 passed, 0 failed** on code commit `d89dcb77ca0bdfb808b05d34a88b60334c5da396`.
+- [x] S3 access tests validate missing IAM read permission, remediation by attaching the S3 read policy, TLS explicit Deny, immutable artifact overwrite Deny, successful object writes and CloudTrail evidence.
+- [x] Schema v6 migration backfills the new S3 bucket policy model while preserving saved bucket and role configuration.
+- [ ] Browser-walk the S3 access tester, IAM remediation and CloudTrail view in the running deployment.
+- [ ] Verify which revision is deployed to Cloudflare; CI does not establish deployment status.
+- [ ] Continue improving access-policy realism and cross-screen evidence consistency before adding more services.
+
+
+## S3 IAM access simulation — implementation checklist
+
+- [x] Add per-bucket explicit-deny policy model with a TLS requirement on object actions.
+- [x] Add an immutable-release-prefix Deny for runtime Lambda writes.
+- [x] Add a role-based S3 GetObject/PutObject test, showing bucket existence, IAM authorization, bucket-policy evaluation and object lookup/write checks.
+- [x] Record success, AccessDenied, NoSuchKey and invalid-key requests in CloudTrail.
+- [x] Add IAM role controls to attach/detach S3 artifact read/write policies and recover a failed read.
+- [x] Add schema-v6 migration for persisted bucket policies and regression coverage.
+- [ ] In-browser verify the end-to-end access test, IAM remediation and CloudTrail evidence.
