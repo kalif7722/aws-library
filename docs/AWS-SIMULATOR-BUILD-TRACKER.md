@@ -3,7 +3,7 @@
 **Repository:** `kalif7722/aws-library`  
 **Working branch:** `feature/troubleshooting-guided-flow`  
 **Pull request:** [#5 — Build console-first AWS account simulator](https://github.com/kalif7722/aws-library/pull/5)  
-**Status:** In progress — console-realism cleanup and first AI service family implemented; production build passed with 103/103 tests; browser workflow verification and deployed-revision smoke test remain pending  
+**Status:** In progress — first interactive Bedrock IAM AccessDenied lab added; build/CI and browser verification for the new lab are pending  
 **Last reviewed:** 2026-10-15 (AI remediation regression tests committed; CI result for the new commit pending)
 
 This is the source-of-truth tracker for the AWS simulator. Update the checkboxes and status notes in the same change as each meaningful implementation step. Do not mark work complete until it is implemented and validated.
@@ -18,7 +18,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 - [ ] Do not describe simulated inference as a live AWS API call. Label local simulation clearly.
 - [ ] Do not mark a service “lab-ready” until a learner can trigger a fault, observe realistic evidence, apply a fix, and verify recovery.
 
-## Product rules (must remain true)
+## Latest implementation batch (2026-10-15)\n\n- Added `/troubleshooting/labs/ai-access-denied` with three interactive checkpoints: reproduce the Bedrock invocation failure, identify the caller permission, and verify recovery with CloudTrail evidence.\n- Added a Troubleshooting Hub entry point for the new lab.\n- The lab explicitly labels all evidence and changes as simulated; it instructs learners to use IAM, Bedrock, and CloudTrail pages in the simulator rather than inventing diagnostic panels inside the console.\n- Validation is **pending** for the new route. The existing automated workflow currently targets simulator/test paths; confirm CI coverage includes `app/troubleshooting/labs/**` before relying on it for lab validation.\n\n## Product rules (must remain true)
 
 - [x] **Console-first:** learners browse the simulated AWS account and discover issues themselves.
 - [x] No incident selector, disclosed root cause, or diagnostic checklist in the normal console.
@@ -39,6 +39,7 @@ This is the source-of-truth tracker for the AWS simulator. Update the checkboxes
 | VPC / subnets / route tables | **Create/delete workflows implemented; CI pending** | Dedicated Subnets navigation, CIDR/VPC validation, route-table associations, guarded delete for unused subnets, and deletion blocked while EC2/ALB/RDS/Lambda resources remain attached |
 | Network ACLs | **CRUD implemented; validation pending** | Numeric priority, validated create/edit/renumber/delete UI and shared reachability evaluation |
 | Shared network reachability | **Expanded; validation pending** | Selected source/destination EC2, attached SGs, target subnet route table, instance health, guest listener and inbound/return-path NACL checks; DB connectivity also evaluates local route, DB SG, and both NACL directions |
+| Troubleshooting labs | **First AI lab added; validation pending** | Bedrock model invocation AccessDenied: reproduce, correlate CloudTrail, attach least-privilege policy, and retest; uses the local AWS simulator only |
 | S3 | **Bucket/object console view; diagnosis moved to lab** | S3 object authorization is taught in the standalone Access Denied lab; engine-policy tests remain separate from the console UI |
 | IAM and Lambda | **Shared configuration; console UI realism cleanup applied** | Lambda inventory retains function configuration, error counts and invocation action; synthetic readiness and configuration-check panels removed; S3 authorization teaching remains in standalone lab |
 | Load Balancing | **Shared model; console UI realism cleanup applied** | ALB table now shows native-style resource fields; target-group health is retained on the target-group screen; custom service-check panel removed; validation pending |
