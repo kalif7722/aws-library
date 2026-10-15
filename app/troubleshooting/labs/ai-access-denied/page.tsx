@@ -169,7 +169,7 @@ export default function AwsAiAccessDeniedLab() {
       </div>
       <p className="lab-mode-description">{mode === "guided" ? "Guided mode explains what to inspect, why it matters, and how to verify the result." : "Challenge mode hides the suggested action and explanation. Use the simulator and evidence to decide your next move; reveal the walkthrough when you need a hint."}</p>
 
-      <section className={"lab-layout " + (sideBySide ? "split-layout" : "")} style={sideBySide ? { gridTemplateColumns: `${sidebarWidth}px minmax(320px, 1fr) minmax(360px, ${consoleWidth}px)` } : undefined}>
+      <section className={"lab-layout " + (sideBySide ? "split-layout" : "")} style={sideBySide ? ({ "--lab-sidebar-width": `${sidebarWidth}px`, "--lab-console-width": `${consoleWidth}px` } as React.CSSProperties) : undefined}>
         <aside className="lab-steps" aria-label="Lab progress">
           <h2>Investigation path</h2>
           {stages.map((item, i) => <button key={item.title} className={i === step ? "active" : checked[i] && item.choices[answers[i]]?.correct ? "complete" : ""} onClick={() => goTo(i)}><span>{checked[i] && item.choices[answers[i]]?.correct ? "✓" : String(i + 1).padStart(2, "0")}</span><strong>{item.title}</strong><small>{checked[i] ? item.choices[answers[i]]?.correct ? "Passed" : "Review answer" : "Not completed"}</small></button>)}
