@@ -108,6 +108,19 @@ export default function AwsSimulatorPage() {
     try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen, pinnedServices })); } catch { /* Storage is optional. */ }
   }, [hydrated, state, screen, pinnedServices]);
 
+  useEffect(() => {
+    if (!hydrated || window.parent === window) return;
+    const group = state.securityGroups.find(item => item.id === "sg-api-prod" || item.name === "sg-api-prod");
+    const sourceGroup = state.securityGroups.find(item => item.id === "sg-bastion-prod" || item.name === "sg-bastion-prod");
+    const rulePresent = !!group?.ingress.some(rule =>
+      rule.protocol === "TCP" &&
+      rule.fromPort <= 22 &&
+      rule.toPort >= 22 &&
+      rule.sourceType === "SecurityGroup" &&
+      (rule.source === "sg-bastion-prod" || rule.source === sourceGroup?.id)
+    );
+    window.parent.postMessage({ type: "aws-sim-vm-config-status", rulePresent, securityGroup: "sg-api-prod" }, window.location.origin);
+  }, [hydrated, state]);
   const filteredServices = useMemo(() => services.filter(service => service.implemented && (service.name + " " + service.category + " " + service.description).toLowerCase().includes(search.toLowerCase())), [search]);
   const serviceCategories = useMemo(() => {
     const order = ["Analytics", "Application Integration", "Artificial Intelligence", "Cloud Financial Management", "Compute", "Containers", "Database", "Front-End Web & Mobile", "Internet of Things", "Management & Governance", "Media Services", "Migration & Transfer", "Networking & Content Delivery", "Security, Identity & Compliance", "Storage"];
@@ -267,25 +280,23 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
         if (typeof event.data.resource === "string") setSelectedResource(event.data.resource);
         return;
       }
-      if (event.data?.type === "aws-sim-apply-lab-fix") {
-        const groupId = String(event.data.securityGroup || "sg-api-prod");
-        const source = String(event.data.sourceSecurityGroup || "sg-bastion-prod");
+      if (event.data?.type === "aws-sim-test-vm-connectivity") {
+        const groupName = String(event.data.securityGroup || "sg-api-prod");
+        const sourceName = String(event.data.sourceSecurityGroup || "sg-bastion-prod");
         const protocol = event.data.protocol === "UDP" ? "UDP" : "TCP";
         const port = Number(event.data.port) === 3389 ? 3389 : 22;
-        setState(current => {
-          const group = current.securityGroups.find(item => item.id === groupId || item.name === groupId);
-          if (!group) return current;
-          const alreadyPresent = group.ingress.some(rule => rule.protocol === protocol && rule.fromPort === port && rule.toPort === port && rule.sourceType === "SecurityGroup" && rule.source === source);
-          if (alreadyPresent) return current;
-          const result = addSecurityGroupIngressRule(current, group.id, {
-            protocol, fromPort: port, toPort: port, sourceType: "SecurityGroup", source,
-            description: "Approved admin access — added by VM-unreachable training lab"
-          });
-          return result.error ? current : result.state;
-        });
-        setSelectedResource(groupId);
-        openService("Security Groups");
-        notify("Training lab rule applied to the simulated security-group configuration.");
+        const group = state.securityGroups.find(item => item.id === groupName || item.name === groupName);
+        const sourceGroup = state.securityGroups.find(item => item.id === sourceName || item.name === sourceName);
+        const rulePresent = !!group?.ingress.some(rule =>
+          rule.protocol === protocol &&
+          rule.fromPort <= port &&
+          rule.toPort >= port &&
+          rule.sourceType === "SecurityGroup" &&
+          (rule.source === sourceName || rule.source === sourceGroup?.id)
+        );
+        const ok = rulePresent && !!sourceGroup;
+        event.source?.postMessage({ type: "aws-sim-vm-connectivity-result", rulePresent, ok, protocol, port, checkedAt: Date.now() }, event.origin);
+        notify(ok ? "Simulated connection test passed: the current security-group rule allows the requested path." : "Simulated connection test failed: the current security-group configuration does not allow the requested path.");
       }
     }
     window.addEventListener("message", handleLabNavigation);
