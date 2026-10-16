@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./lab.css";
-import { assetUrl } from "@/lib/asset-url";
+const AWS_R2_ICON_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-icons";
 
 type Provider = "AWS" | "Azure" | "Google Cloud";
 type Choice = { label: string; correct: boolean; feedback: string };
@@ -443,15 +443,15 @@ export default function VmUnreachableLab() {
           {step >= 1 && <path d="M305 116 H350" stroke="#e11d48" strokeWidth="2.5" strokeDasharray="5 4" fill="none"/>}
           <rect x="12" y="70" width="104" height="94" rx="7" fill="#f8fafc" stroke="#d5e0ed"/>
           <text x="64" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1b2a40">Your workstation</text>
-          <image href={assetUrl("/aws-icons/General/User.png")} x="39" y="94" width="50" height="43" preserveAspectRatio="xMidYMid meet"/>
+          <image href={`${AWS_R2_ICON_BASE}/General/User.png`} x="39" y="94" width="50" height="43" preserveAspectRatio="xMidYMid meet"/>
           <text x="64" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">Admin laptop</text><text x="64" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source</text>
           <rect x="160" y="70" width="140" height="94" rx="7" fill="#eff6ff" stroke="#93c5fd"/>
           <text x="230" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1d4e89">Bastion host</text>
-          <image href={assetUrl("/aws-icons/Compute/EC2.png")} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
+          <image href={`${AWS_R2_ICON_BASE}/Compute/EC2.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
           <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">i-bastion</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">10.40.1.10</text>
           <rect x="355" y="72" width="150" height="90" rx="7" fill={step >= 1 ? "#fff1f2" : "#f8fafc"} stroke={step >= 1 ? "#ef4444" : "#cbd5e1"} strokeWidth={step >= 1 ? "1.5" : "1"}/>
           <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#1b2a40"}>Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#52647a"}>sg-web-prod</text>
-          <image href={assetUrl("/aws-icons/NetworkingContentDelivery/VPC.png")} x="405" y="110" width="50" height="43" preserveAspectRatio="xMidYMid meet" opacity={step >= 1 ? 1 : 0.82}/>
+          <image href={`${AWS_R2_ICON_BASE}/NetworkingContentDelivery/VPC.png`} x="405" y="110" width="50" height="43" preserveAspectRatio="xMidYMid meet" opacity={step >= 1 ? 1 : 0.82}/>
           {step >= 1 && <g><rect x="350" y="6" width="160" height="43" rx="6" fill="#fff1f2" stroke="#ef4444"/><text x="430" y="22" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Missing inbound rule</text><text x="430" y="36" fontSize="9" textAnchor="middle" fill="#991b1b">{protocol==="SSH"?"TCP 22":"TCP 3389"} from sg-bastion-prod</text><path d="M430 49 L430 64" stroke="#ef4444" strokeWidth="1.5"/><path d="M423 59 L430 66 L437 59" stroke="#ef4444" strokeWidth="1.5" fill="none"/></g>}
           <text x="326" y="102" fontSize="9" fontWeight="700" textAnchor="middle" fill="#047857">{protocol} ({protocol==="SSH"?"TCP 22":"TCP 3389"})</text>{step >= 1 && <g><circle cx="330" cy="116" r="8" fill="#fff" stroke="#ef4444" strokeWidth="1.5"/><path d="M326 112 L334 120 M334 112 L326 120" stroke="#ef4444" strokeWidth="1.8"/></g>}
           <rect x="555" y="72" width="135" height="90" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
