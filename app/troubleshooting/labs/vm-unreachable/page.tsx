@@ -255,6 +255,24 @@ export default function VmUnreachableLab() {
     if (!progressHydrated) return;
     try { window.localStorage.setItem("aws-vm-unreachable-lab-progress-v1", JSON.stringify({ provider, protocol, step, mode, answers, securityGroupFixed, connectionVerified, consoleTab })); } catch { /* Progress persistence is optional. */ }
   }, [progressHydrated, provider, protocol, step, mode, answers, securityGroupFixed, connectionVerified, consoleTab]);
+  useEffect(() => {
+    function handleSimulatorStatus(event: MessageEvent) {
+      if (event.origin !== window.location.origin || !event.data) return;
+      if (event.data.type === "aws-sim-vm-connectivity-result") {
+        const ok = event.data.ok === true;
+        setSecurityGroupFixed(event.data.rulePresent === true);
+        setConnectionVerified(ok);
+        if (!ok) setConsoleTab("Inbound rules");
+      }
+      if (event.data.type === "aws-sim-vm-config-status") {
+        const ok = event.data.rulePresent === true;
+        setSecurityGroupFixed(ok);
+        if (!ok) setConnectionVerified(false);
+      }
+    }
+    window.addEventListener("message", handleSimulatorStatus);
+    return () => window.removeEventListener("message", handleSimulatorStatus);
+  }, []);
   const awsConsoleFrame = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
     if (provider !== "AWS") return;
@@ -479,7 +497,7 @@ export default function VmUnreachableLab() {
           <text x="64" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">Admin laptop</text><text x="64" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source</text>
           <rect x="160" y="70" width="140" height="94" rx="7" fill="#eff6ff" stroke="#93c5fd"/>
           <text x="230" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1d4e89">Approved admin path</text>
-          <image href={`${AWS_R2_ICON_BASE}/NetworkingContentDelivery/VPC.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
+          <image href={`${AWS_R2_ICON_BASE}/Compute/EC2.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
           <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">sg-bastion-prod</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source range</text>
           <rect x="355" y="72" width="150" height="90" rx="7" fill={step >= 1 ? "#fff1f2" : "#f8fafc"} stroke={step >= 1 ? "#ef4444" : "#cbd5e1"} strokeWidth={step >= 1 ? "1.5" : "1"}/>
           <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill={connectionVerified ? "#047857" : step >= 1 && !securityGroupFixed ? "#991b1b" : "#1b2a40"}>Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill={connectionVerified ? "#047857" : step >= 1 && !securityGroupFixed ? "#991b1b" : "#52647a"}>sg-api-prod</text>
@@ -515,8 +533,8 @@ export default function VmUnreachableLab() {
         <div className="vm-lab-investigate"><div className="vm-lab-question"><span className="vm-lab-section-label">YOUR TURN · VERIFY BEFORE CONTINUING</span><h3>{current.question}</h3><p>Select the conclusion best supported by the console evidence. Incorrect choices explain why and can be retried.</p></div><div className="vm-lab-choices">{current.choices.map((c,i)=><button key={c.label} className={selected===i?(c.correct?"correct":"incorrect"):""} onClick={()=>setAnswers(prev=>({...prev,[answerKey]:i}))}><span>{String.fromCharCode(65+i)}</span><strong>{c.label}</strong><i>{selected===i?(c.correct?"✓":"↻"):"→"}</i></button>)}</div>
           {selected!==undefined&&<div className={"vm-lab-feedback "+(current.choices[selected].correct?"correct":"incorrect")}><strong>{current.choices[selected].correct?"Evidence verified":"Not quite — inspect the console again"}</strong><p>{current.choices[selected].feedback}</p>{!current.choices[selected].correct&&<button onClick={()=>setAnswers(prev=>{const next={...prev};delete next[answerKey];return next;})}>Try again</button>}</div>}
           <div className="vm-lab-remediation">
-            {step===1 && selected!==undefined && current.choices[selected]?.correct && !securityGroupFixed && <div className="vm-lab-remediation-card"><strong>Finding confirmed: inbound rule is missing</strong><p>Training-only action: add TCP {protocol==="SSH"?"22":"3389"} from the approved bastion security group <code>sg-bastion-prod</code> to <code>sg-api-prod</code>. This does not change a live AWS account.</p><button type="button" onClick={()=>{if(provider==="AWS"){awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-apply-lab-fix",securityGroup:"sg-api-prod",sourceSecurityGroup:"sg-bastion-prod",protocol:"TCP",port:protocol==="SSH"?22:3389},window.location.origin);}setSecurityGroupFixed(true);setConnectionVerified(false);setConsoleTab("Inbound rules");awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-navigate",screen:"Security Groups",resource:"sg-api-prod"},window.location.origin);}}>Apply approved rule to simulator</button></div>}
-            {securityGroupFixed && !connectionVerified && <div className="vm-lab-remediation-card"><strong>Rule added in the lab state</strong><p>The rule is now written to the simulator configuration. Open the inbound-rules view to inspect it, then run the connection test. The topology stays amber until verification passes.</p><div className="vm-lab-remediation-actions"><button type="button" onClick={()=>{setConsoleTab("Inbound rules");awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-navigate",screen:"Security Groups",resource:"sg-api-prod"},window.location.origin);}}>View updated security group in console</button><button type="button" onClick={()=>{const frame=awsConsoleFrame.current;if(frame){frame.onload=()=>frame.contentWindow?.postMessage({type:"aws-sim-navigate",screen:"Security Groups",resource:"sg-api-prod"},window.location.origin);frame.contentWindow?.location.reload();}}}>Refresh console view</button><button type="button" onClick={()=>setConnectionVerified(true)}>Run connection test</button></div></div>}
+            {step===1 && selected!==undefined && current.choices[selected]?.correct && !securityGroupFixed && <div className="vm-lab-remediation-card"><strong>Finding confirmed: inbound rule is missing</strong><p>Make the correction yourself in the AWS Console Simulator: open Security Groups → sg-api-prod → Inbound rules, then add TCP {protocol==="SSH"?"22":"3389"} from security group sg-bastion-prod. The lab detects the actual configuration change; it will not add the rule for you.</p><button type="button" onClick={()=>{setConsoleTab("Inbound rules");awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-navigate",screen:"Security Groups",resource:"sg-api-prod"},window.location.origin);}}>Open security group in console</button></div>}
+            {securityGroupFixed && !connectionVerified && <div className="vm-lab-remediation-card"><strong>Rule detected in console</strong><p>The simulator reports that the expected inbound rule exists. Run a connection test against the current console configuration.</p><button type="button" onClick={()=>{setConnectionVerified(false);awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-test-vm-connectivity",securityGroup:"sg-api-prod",sourceSecurityGroup:"sg-bastion-prod",protocol:"TCP",port:protocol==="SSH"?22:3389},window.location.origin);}}>Run connection test</button></div>}
             {connectionVerified && <div className="vm-lab-remediation-card success"><strong>✓ Connection restored</strong><p>The security-group checkpoint is green. The simulated TCP/{protocol==="SSH"?"22":"3389"} test succeeds from <code>sg-bastion-prod</code> to <code>api-prod-01 · 10.20.2.17</code>. No live resources were changed.</p></div>}
           </div>
           <div className="vm-lab-actions"><button className="vm-lab-command-toggle" onClick={()=>setShowCommand(v=>!v)}>{showCommand?"Hide CLI / diagnostic example":"Show CLI / diagnostic example"} <span>{showCommand?"−":"+"}</span></button>{showCommand&&<div className="vm-lab-terminal"><span>{provider} · EXAMPLE ONLY</span><pre>{current.command}{"\n\n"}{current.commandOutput}</pre><small>Illustrative commands and outputs only. Check your account, region, resource IDs, permissions, and change approval before using commands in a real environment.</small></div>}<button className="vm-lab-next" disabled={!passed} onClick={()=>{setShowCommand(false);if(step<steps.length-1){const next=step+1;setStep(next);setConsoleTab(next===1?"Inbound rules":next===2?(provider==="AWS"?"Routes":provider==="Azure"?"Effective routes":"Routes"):"Overview");setSelectedRule(null);}}}>{step===steps.length-1?"Investigation complete":"Verify and continue"} <span>→</span></button></div>
