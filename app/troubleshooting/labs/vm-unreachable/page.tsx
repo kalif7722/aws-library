@@ -229,7 +229,7 @@ export default function VmUnreachableLab() {
   const [consoleTab, setConsoleTab] = useState("Overview");
   const [selectedRule, setSelectedRule] = useState<string | null>(null);
   const [showAwsConsole, setShowAwsConsole] = useState(true);
-  const [awsConsoleWidth, setAwsConsoleWidth] = useState(900);
+
   const awsConsoleFrame = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
     if (provider !== "AWS") return;
@@ -440,7 +440,7 @@ export default function VmUnreachableLab() {
           </defs>
           <path d="M116 116 H160 M300 116 H355 M505 116 H555 M690 116 H738 M872 116 H916" stroke="#16a36a" strokeWidth="2.5" fill="none" markerEnd="url(#arch-arrow)"/>
           <path d="M300 116 H350" stroke="#16a36a" strokeWidth="2.5" fill="none"/>
-          <path d="M305 116 H350" stroke="#e11d48" strokeWidth="2.5" strokeDasharray="5 4" fill="none"/>
+          {step >= 1 && <path d="M305 116 H350" stroke="#e11d48" strokeWidth="2.5" strokeDasharray="5 4" fill="none"/>}
           <rect x="12" y="70" width="104" height="94" rx="7" fill="#f8fafc" stroke="#d5e0ed"/>
           <text x="64" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1b2a40">Your workstation</text>
           <image href={`${AWS_ICON_ROOT}/General/User.png`} x="39" y="94" width="50" height="43" preserveAspectRatio="xMidYMid meet"/>
@@ -449,11 +449,11 @@ export default function VmUnreachableLab() {
           <text x="230" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1d4e89">Bastion host</text>
           <image href={`${AWS_ICON_ROOT}/Compute/EC2.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
           <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">i-bastion</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">10.40.1.10</text>
-          <rect x="355" y="72" width="150" height="90" rx="7" fill="#fff1f2" stroke="#ef4444" strokeWidth="1.5"/>
-          <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill="#991b1b">sg-web-prod</text>
-          <image href={`${AWS_ICON_ROOT}/NetworkingContentDelivery/VPC.png`} x="405" y="110" width="50" height="43" preserveAspectRatio="xMidYMid meet"/>
-          <rect x="350" y="6" width="160" height="43" rx="6" fill="#fff1f2" stroke="#ef4444"/><text x="430" y="22" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Missing inbound rule</text><text x="430" y="36" fontSize="9" textAnchor="middle" fill="#991b1b">{protocol==="SSH"?"TCP 22":"TCP 3389"} from sg-bastion-prod</text><path d="M430 49 L430 64" stroke="#ef4444" strokeWidth="1.5"/><path d="M423 59 L430 66 L437 59" stroke="#ef4444" strokeWidth="1.5" fill="none"/>
-          <text x="326" y="102" fontSize="9" fontWeight="700" textAnchor="middle" fill="#047857">{protocol} ({protocol==="SSH"?"TCP 22":"TCP 3389"})</text><circle cx="330" cy="116" r="8" fill="#fff" stroke="#ef4444" strokeWidth="1.5"/><path d="M326 112 L334 120 M334 112 L326 120" stroke="#ef4444" strokeWidth="1.8"/>
+          <rect x="355" y="72" width="150" height="90" rx="7" fill={step >= 1 ? "#fff1f2" : "#f8fafc"} stroke={step >= 1 ? "#ef4444" : "#cbd5e1"} strokeWidth={step >= 1 ? "1.5" : "1"}/>
+          <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#1b2a40"}>Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#52647a"}>sg-web-prod</text>
+          <image href={`${AWS_ICON_ROOT}/NetworkingContentDelivery/VPC.png`} x="405" y="110" width="50" height="43" preserveAspectRatio="xMidYMid meet" opacity={step >= 1 ? 1 : 0.82}/>
+          {step >= 1 && <g><rect x="350" y="6" width="160" height="43" rx="6" fill="#fff1f2" stroke="#ef4444"/><text x="430" y="22" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Missing inbound rule</text><text x="430" y="36" fontSize="9" textAnchor="middle" fill="#991b1b">{protocol==="SSH"?"TCP 22":"TCP 3389"} from sg-bastion-prod</text><path d="M430 49 L430 64" stroke="#ef4444" strokeWidth="1.5"/><path d="M423 59 L430 66 L437 59" stroke="#ef4444" strokeWidth="1.5" fill="none"/></g>}
+          <text x="326" y="102" fontSize="9" fontWeight="700" textAnchor="middle" fill="#047857">{protocol} ({protocol==="SSH"?"TCP 22":"TCP 3389"})</text>{step >= 1 && <g><circle cx="330" cy="116" r="8" fill="#fff" stroke="#ef4444" strokeWidth="1.5"/><path d="M326 112 L334 120 M334 112 L326 120" stroke="#ef4444" strokeWidth="1.8"/></g>}
           <rect x="555" y="72" width="135" height="90" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
           <text x="622" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill="#5b21b6">VPC route table</text><text x="622" y="105" fontSize="9" textAnchor="middle" fill="#5b21b6">10.0.1.0/24</text><image href={`${AWS_ICON_ROOT}/NetworkingContentDelivery/VPC.png`} x="601" y="111" width="43" height="38" preserveAspectRatio="xMidYMid meet"/><circle cx="674" cy="151" r="10" fill="#16a36a"/><path d="M669 151 L673 155 L680 147" stroke="#fff" strokeWidth="2" fill="none"/>
           <rect x="738" y="72" width="134" height="90" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
@@ -463,12 +463,12 @@ export default function VmUnreachableLab() {
           <text x="560" y="192" fontSize="10" fontWeight="600" fill="#52647a">Forward + return path must both be valid · verify each layer before remediation</text>
         </svg>
       </div>
-      <div className="vm-topology-legend"><span><i className="topology-dot ok"/> Route table and NACL shown as healthy in this scenario</span><span><i className="topology-dot fault"/> Missing inbound allow is the suspected fault</span><span><i className="topology-dot neutral"/> Training simulation only</span></div>
+      <div className="vm-topology-legend"><span><i className="topology-dot ok"/> Route table and NACL shown as healthy in this scenario</span>{step >= 1 && <span><i className="topology-dot fault"/> Missing inbound allow discovered during inspection</span>}<span><i className="topology-dot neutral"/> Training simulation only</span></div>
     </section>}
     {provider === "AWS" && <section className="vm-real-console">
       <div className="vm-real-console-head"><div><span className="vm-lab-section-label">INTERACTIVE TRAINING CONSOLE</span><h2>AWS Console Simulator</h2><p>Use the console navigation and inspect the real-style resource screens. Lab guidance stays separate; this simulator does not access your AWS account or create real CloudTrail events.</p></div><label><input type="checkbox" checked={showAwsConsole} onChange={e=>setShowAwsConsole(e.target.checked)}/> Show console</label></div>
-      {showAwsConsole && <><div className="vm-console-sizing"><label>Console pane width <strong>{awsConsoleWidth}px</strong><input aria-label="Console pane width" type="range" min="620" max="1400" step="40" value={awsConsoleWidth} onChange={e=>setAwsConsoleWidth(Number(e.target.value))}/></label><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open simulator in full tab ↗</a></div>
-      <div className="vm-real-console-frame" style={{maxWidth:awsConsoleWidth+"px"}}><iframe ref={awsConsoleFrame} title="Interactive AWS console simulator for VM unreachable lab" src="/troubleshooting/simulators/aws" loading="lazy" onLoad={() => { const screen = step === 0 ? "EC2" : step === 1 ? "Security Groups" : step === 2 ? (consoleTab === "Network ACLs" ? "Network ACLs" : consoleTab === "Reachability Analyzer" ? "Reachability Analyzer" : "Route Tables") : step === 3 ? "EC2" : "Security Groups"; awsConsoleFrame.current?.contentWindow?.postMessage({ type: "aws-sim-navigate", screen }, window.location.origin); }}/></div></>}
+      {showAwsConsole && <><div className="vm-console-sizing"><a href="/troubleshooting/simulators/aws" target="_blank" rel="noreferrer">Open simulator in full tab ↗</a></div>
+      <div className="vm-real-console-frame"><iframe ref={awsConsoleFrame} title="Interactive AWS console simulator for VM unreachable lab" src="/troubleshooting/simulators/aws" loading="lazy" onLoad={() => { const screen = step === 0 ? "EC2" : step === 1 ? "Security Groups" : step === 2 ? (consoleTab === "Network ACLs" ? "Network ACLs" : consoleTab === "Reachability Analyzer" ? "Reachability Analyzer" : "Route Tables") : step === 3 ? "EC2" : "Security Groups"; awsConsoleFrame.current?.contentWindow?.postMessage({ type: "aws-sim-navigate", screen }, window.location.origin); }}/></div></>}
     </section>}
     <section className="vm-lab-provider"><div><span className="vm-lab-section-label">01 / CHOOSE YOUR CLOUD</span><p>Same incident pattern. Vendor-specific console, rules, and diagnostics.</p><div className="vm-lab-protocol-switch" aria-label="Remote access protocol"><button className={protocol === "SSH" ? "active" : ""} onClick={() => { setProtocol("SSH"); setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); }}>SSH · TCP/22</button><button className={protocol === "RDP" ? "active" : ""} onClick={() => { setProtocol("RDP"); setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); }}>RDP · TCP/3389</button></div></div><div className="vm-lab-provider-buttons">{(["AWS","Azure","Google Cloud"] as Provider[]).map(p=><button key={p} className={provider===p?"active "+p.toLowerCase().replace(" ","-"):""} onClick={()=>{setProvider(p);setStep(0);setShowCommand(false);setConsoleTab("Overview");setSelectedRule(null);}}><span className={"vm-cloud-mark "+p.toLowerCase().replace(" ","-")}>{p==="AWS"?"aws":p==="Azure"?"Az":"G"}</span><strong>{p}</strong><small>{providerNames[p].product}</small></button>)}</div></section>
     <section className="vm-lab-workspace">
