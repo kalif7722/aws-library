@@ -185,7 +185,7 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     ]
   }, {
     id: "sg-rds-orders", name: "sg-rds-orders", vpcId: "vpc-0123abcd4567ef890", ingress: [
-      { id: "sgr-rds-postgres", protocol: "TCP", fromPort: 5432, toPort: 5432, sourceType: "SecurityGroup", source: "sg-0ab12cd34ef56ab78", description: "PostgreSQL from payments API" }
+      { id: "sgr-rds-postgres", protocol: "TCP", fromPort: 5432, toPort: 5432, sourceType: "SecurityGroup", source: "sg-0f55aa11bb22cc33", description: "Temporary bastion-only rule; application source not allowed" }
     ], egress: [
       { id: "sgr-rds-default-egress", protocol: "ALL", fromPort: 0, toPort: 65535, sourceType: "IPv4", source: "0.0.0.0/0", description: "Default allow all outbound traffic" }
     ]
@@ -219,7 +219,7 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
     { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] },
-    { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["BedrockInvokeAccess", "SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
+    { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
     { name: "BedrockKnowledgeBaseRole", lastActivity: "Today", trustedService: "bedrock.amazonaws.com", attachedPolicies: ["BedrockDataSourceRead", "S3ArtifactsRead", "KMSAIArtifactAccess"] },
     { name: "SageMakerExecutionRole", lastActivity: "Today", trustedService: "sagemaker.amazonaws.com", attachedPolicies: ["SageMakerTrainingAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
     { name: "ComprehendBatchRole", lastActivity: "Today", trustedService: "comprehend.amazonaws.com", attachedPolicies: ["ComprehendBatchAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
@@ -282,7 +282,7 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { modelId: "anthropic.claude-sonnet-4-20250514-v1:0", name: "Claude Sonnet 4", provider: "Anthropic", inputModalities: ["Text", "Image"], outputModalities: ["Text"], accessStatus: "Use case required", invocationCount: 0 }
   ],
   bedrockKnowledgeBases: [
-    { id: "kb-payments-product-guide", name: "payments-product-knowledge", sourceBucketName: "ai-workloads", sourcePrefix: "knowledge/payments/", embeddingModel: "Titan Text Embeddings v2", vectorStore: "OpenSearch Serverless", roleName: "BedrockKnowledgeBaseRole", status: "ACTIVE", documentsIndexed: 1, lastSyncTime: "2026-10-15T03:20:00Z" }
+    { id: "kb-payments-product-guide", name: "payments-product-knowledge", sourceBucketName: "ai-workloads", sourcePrefix: "knowledge/payments/", embeddingModel: "Titan Text Embeddings v2", vectorStore: "OpenSearch Serverless", roleName: "BedrockKnowledgeBaseRole", status: "ACTIVE", documentsIndexed: 1, lastSyncTime: "2026-10-15T02:20:00Z" }
   ],
   bedrockGuardrails: [
     { id: "gr-payments-assistant", name: "payments-assistant-guardrail", version: 3, status: "READY", contentFiltersEnabled: true, deniedTopicsEnabled: true, sensitiveInformationFiltersEnabled: true }
