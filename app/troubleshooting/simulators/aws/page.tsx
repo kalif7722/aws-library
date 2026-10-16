@@ -108,6 +108,19 @@ export default function AwsSimulatorPage() {
     try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen, pinnedServices })); } catch { /* Storage is optional. */ }
   }, [hydrated, state, screen, pinnedServices]);
 
+  useEffect(() => {
+    if (!hydrated || window.parent === window) return;
+    const group = state.securityGroups.find(item => item.id === "sg-api-prod" || item.name === "sg-api-prod");
+    const sourceGroup = state.securityGroups.find(item => item.id === "sg-bastion-prod" || item.name === "sg-bastion-prod");
+    const rulePresent = !!group?.ingress.some(rule =>
+      rule.protocol === "TCP" &&
+      rule.fromPort <= 22 &&
+      rule.toPort >= 22 &&
+      rule.sourceType === "SecurityGroup" &&
+      (rule.source === "sg-bastion-prod" || rule.source === sourceGroup?.id)
+    );
+    window.parent.postMessage({ type: "aws-sim-vm-config-status", rulePresent, securityGroup: "sg-api-prod" }, window.location.origin);
+  }, [hydrated, state]);
   const filteredServices = useMemo(() => services.filter(service => service.implemented && (service.name + " " + service.category + " " + service.description).toLowerCase().includes(search.toLowerCase())), [search]);
   const serviceCategories = useMemo(() => {
     const order = ["Analytics", "Application Integration", "Artificial Intelligence", "Cloud Financial Management", "Compute", "Containers", "Database", "Front-End Web & Mobile", "Internet of Things", "Management & Governance", "Media Services", "Migration & Transfer", "Networking & Content Delivery", "Security, Identity & Compliance", "Storage"];
@@ -261,13 +274,34 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
   }
   useEffect(() => {
     function handleLabNavigation(event: MessageEvent) {
-      if (event.origin !== window.location.origin || event.data?.type !== "aws-sim-navigate") return;
-      if (typeof event.data.screen !== "string") return;
-      openService(event.data.screen);
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type === "aws-sim-navigate") {
+        if (typeof event.data.screen === "string") openService(event.data.screen);
+        if (typeof event.data.resource === "string") setSelectedResource(event.data.resource);
+        return;
+      }
+      if (event.data?.type === "aws-sim-test-vm-connectivity") {
+        const groupName = String(event.data.securityGroup || "sg-api-prod");
+        const sourceName = String(event.data.sourceSecurityGroup || "sg-bastion-prod");
+        const protocol = event.data.protocol === "UDP" ? "UDP" : "TCP";
+        const port = Number(event.data.port) === 3389 ? 3389 : 22;
+        const group = state.securityGroups.find(item => item.id === groupName || item.name === groupName);
+        const sourceGroup = state.securityGroups.find(item => item.id === sourceName || item.name === sourceName);
+        const rulePresent = !!group?.ingress.some(rule =>
+          rule.protocol === protocol &&
+          rule.fromPort <= port &&
+          rule.toPort >= port &&
+          rule.sourceType === "SecurityGroup" &&
+          (rule.source === sourceName || rule.source === sourceGroup?.id)
+        );
+        const ok = rulePresent && !!sourceGroup;
+        event.source?.postMessage({ type: "aws-sim-vm-connectivity-result", rulePresent, ok, protocol, port, checkedAt: Date.now() }, event.origin);
+        notify(ok ? "Simulated connection test passed: the current security-group rule allows the requested path." : "Simulated connection test failed: the current security-group configuration does not allow the requested path.");
+      }
     }
     window.addEventListener("message", handleLabNavigation);
     return () => window.removeEventListener("message", handleLabNavigation);
-  }, []);
+  }, [state]);
 
   const resourceCount = screen === "CloudTrail" ? `${cloudTrailEvents.length} events` : screen === "Glue" ? `${glueJobs.length} jobs` : screen === "Instances" ? `${instances.length} instances` : screen === "Security Groups" ? `${state.securityGroups.length} security groups` : screen === "Route Tables" ? `${routeTables.length} route tables` : screen === "Network ACLs" ? "1 network ACL" : screen === "VPCs" ? `${vpcs.length} VPCs` : screen === "Subnets" ? `${subnets.length} subnets` : screen === "S3" ? `${state.s3Buckets.length} buckets` : screen === "IAM" ? `${state.iamRoles.length} roles and sample identities` : screen === "RDS" ? `${databases.length} databases` : screen === "Lambda" ? `${lambdaFunctions.length} functions` : screen === "CloudWatch" ? `${cloudWatchAlarms.length} alarms` : screen === "Route 53" ? `${new Set(dnsRecords.map(record => record.zoneName)).size} hosted zones` : screen === "DynamoDB" ? `${dynamoTables.length} tables` : screen === "Load Balancers" ? `${loadBalancers.length} load balancers` : screen === "Target Groups" ? `${targetGroups.length} target groups` : screen === "Bedrock" ? `${(state.bedrockModels ?? []).length} foundation models` : screen === "SageMaker AI" ? `${(state.sagemakerEndpoints ?? []).length} endpoints` : screen === "Comprehend" ? `${(state.aiProcessingJobs ?? []).filter(job => job.service === "Comprehend").length} jobs` : screen === "Textract" ? `${(state.aiProcessingJobs ?? []).filter(job => job.service === "Textract").length} jobs` : screen === "Amazon Q Business" ? `${(state.qBusinessApplications ?? []).length} applications` : screen === "Amazon Q Developer" ? `${(state.qDeveloperUsers ?? []).length} users` : "Resources";
   const screenDescription: Record<Screen, string> = {

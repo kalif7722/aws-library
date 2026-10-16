@@ -99,3 +99,132 @@
 .vm-lab-path-foot{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #e0e8f0;color:#526579;font-size:11px;line-height:1.6}
 .vm-lab-path-foot b{color:#263e57;margin-right:5px}
 @media(max-width:760px){.vm-lab-path-title{display:block}.vm-lab-path-title>p{margin-top:8px}.vm-lab-path-grid{grid-template-columns:1fr}.vm-lab-path-grid .path-arrow{transform:rotate(90deg)}.vm-lab-path-foot{grid-template-columns:1fr}}
+
+.vm-topology-card,.vm-real-console{margin:20px 0 24px;padding:22px;border:1px solid var(--lab-border);border-radius:16px;background:linear-gradient(145deg,#101b2d,#0b1321);min-width:0}
+.vm-topology-heading{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:20px;align-items:start;margin-bottom:20px}
+.vm-topology-heading h2,.vm-real-console-head h2{font-size:clamp(1.2rem,2.4vw,1.8rem);letter-spacing:-.035em;margin:8px 0}
+.vm-topology-heading p,.vm-real-console-head p{font-size:.83rem;line-height:1.65;color:var(--lab-muted);margin:4px 0 0}
+.vm-topology-flow{display:grid;grid-template-columns:minmax(0,1fr) 26px minmax(0,1fr) 26px minmax(0,1fr) 26px minmax(0,1fr);gap:8px;align-items:stretch}
+.vm-topology-flow>div{display:flex;flex-direction:column;gap:6px;min-width:0;padding:15px;border:1px solid #31425d;border-radius:12px;background:#121f32}
+.vm-topology-flow>div.focus{border-color:#f4bd64;background:linear-gradient(145deg,#382d20,#182234);box-shadow:0 0 0 1px #f4bd6430}
+.vm-topology-flow strong{font-size:.82rem;line-height:1.4}.vm-topology-flow small{font-size:.68rem;line-height:1.45;color:var(--lab-muted);overflow-wrap:anywhere}
+.topology-icon{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#263d58;color:#a7dcff;font:500 .7rem 'DM Mono',monospace}
+.vm-topology-flow>div.focus .topology-icon{background:#765126;color:#ffdfa7}
+.topology-arrow{display:grid;place-items:center;color:#6f83a2;font-size:1.2rem}
+.vm-topology-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--lab-border);color:var(--lab-muted);font-size:.7rem}
+.vm-topology-legend span{display:flex;align-items:center;gap:7px}.topology-dot{width:8px;height:8px;border-radius:50%;display:inline-block}.topology-dot.ok{background:#55d6ad}.topology-dot.fault{background:#ffba66}.topology-dot.neutral{background:#8ea3c3}
+.vm-real-console{padding:0;overflow:hidden}
+.vm-real-console-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--lab-border)}
+.vm-real-console-head>div{min-width:0}.vm-real-console-head h2{margin:5px 0}.vm-real-console-head label{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:.78rem;font-weight:800;color:var(--lab-muted)}
+.vm-real-console-head input{accent-color:#8b82ff;width:16px;height:16px}
+.vm-console-sizing{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;padding:13px 22px;border-bottom:1px solid var(--lab-border);background:#0c1422}
+.vm-console-sizing label{display:grid;grid-template-columns:auto auto;gap:5px 12px;align-items:center;color:var(--lab-muted);font-size:.74rem;font-weight:700}
+.vm-console-sizing label strong{color:#e1e9fa}.vm-console-sizing input[type=range]{grid-column:1/-1;width:min(380px,70vw);accent-color:#8b82ff}
+.vm-console-sizing a{font-size:.75rem;font-weight:800;color:#a9c8ff;text-decoration:none}
+.vm-real-console-frame{width:100%;min-width:0;max-width:100%;resize:none;overflow:hidden;border-right:0}
+.vm-real-console-frame iframe{display:block;width:100%;height:780px;border:0;background:#f3f5f7}
+@media(max-width:900px){.vm-topology-heading{grid-template-columns:1fr}.vm-topology-flow{grid-template-columns:1fr}.topology-arrow{transform:rotate(90deg);height:20px}.vm-real-console-head{align-items:flex-start;flex-direction:column}.vm-real-console-frame iframe{height:680px}}
+
+
+/* Reference layout: compact light troubleshooting workspace with persistent left rail. */
+.vm-lab-shell{
+  --lab-bg:#f4f6f9;--lab-panel:#fff;--lab-panel-2:#f8fafc;--lab-border:#dce3eb;--lab-muted:#5d6b7e;--lab-text:#142033;
+  max-width:none;width:100%;margin:0;padding:16px 16px 36px;background:var(--lab-bg);color:var(--lab-text);min-height:calc(100vh - 50px);
+  display:grid;grid-template-columns:minmax(270px,320px) minmax(0,1fr);grid-auto-flow:row;align-content:start;gap:12px;
+}
+.vm-lab-shell>.vm-lab-hero{grid-column:2;grid-row:1;padding:10px 0 12px;grid-template-columns:minmax(0,1fr);gap:8px;align-items:start}
+.vm-lab-shell>.vm-lab-hero h1{font-size:clamp(1.65rem,2.2vw,2.15rem);line-height:1.15;letter-spacing:-.04em;margin:0 0 6px;color:#111c2e;max-width:none}
+.vm-lab-shell>.vm-lab-hero h1 em{background:none;color:inherit}
+.vm-lab-shell>.vm-lab-hero p:not(.vm-lab-kicker){font-size:.88rem;line-height:1.5;color:#5b6a7f;max-width:none}
+.vm-lab-shell .vm-lab-kicker{color:#60758f}
+.vm-lab-shell>.vm-lab-hero .vm-lab-score{display:none}
+.vm-lab-shell>.vm-lab-path-overview{grid-column:2;grid-row:2;margin:0;max-width:none}
+.vm-lab-shell>.vm-topology-card{grid-column:2;grid-row:3;margin:0;padding:16px;background:#fff;border-color:#dfe5ed;color:#152238}
+.vm-lab-shell .vm-topology-heading{grid-template-columns:minmax(0,1fr);gap:5px;margin-bottom:12px}
+.vm-lab-shell .vm-topology-heading h2,.vm-lab-shell .vm-real-console-head h2{font-size:1.15rem;color:#142033;letter-spacing:-.025em}
+.vm-lab-shell .vm-topology-heading p,.vm-lab-shell .vm-real-console-head p{color:#5b6a7f;font-size:.78rem;line-height:1.5}
+.vm-lab-shell .vm-topology-flow>div{background:#f8fafc;border-color:#dbe4ef}
+.vm-lab-shell .vm-topology-flow>div.focus{background:#fff1f0;border-color:#f87171;box-shadow:0 0 0 1px #f8717125}
+.vm-lab-shell .vm-topology-flow strong{color:#18263a}
+.vm-lab-shell .vm-topology-flow small{color:#5d6b7e}
+.vm-lab-shell .vm-topology-legend{color:#5d6b7e;border-color:#e4e9f0}
+.vm-lab-shell>.vm-real-console{grid-column:2;grid-row:4;margin:0;padding:0;background:#fff;border-color:#dfe5ed;color:#142033}
+.vm-lab-shell .vm-real-console-head{padding:14px 18px;border-color:#e0e6ed}
+.vm-lab-shell .vm-real-console-head label{color:#536278}
+.vm-lab-shell .vm-console-sizing{background:#f8fafc;border-color:#e0e6ed}
+.vm-lab-shell .vm-console-sizing label{color:#536278}
+.vm-lab-shell .vm-console-sizing label strong{color:#1a2b42}
+.vm-lab-shell .vm-console-sizing a{color:#175ea8}
+.vm-lab-shell .vm-real-console-frame iframe{height:680px}
+.vm-lab-shell>.vm-lab-provider{grid-column:2;grid-row:5;margin:0;padding:14px;background:#fff;border:1px solid #dfe5ed;border-radius:12px}
+.vm-lab-shell>.vm-lab-workspace{display:contents}
+.vm-lab-shell .vm-lab-step-rail{grid-column:1;grid-row:1 / span 5;align-self:stretch;background:#fff;border:1px solid #dfe5ed;border-radius:12px;padding:14px;min-width:0}
+.vm-lab-shell .vm-lab-main{grid-column:2;grid-row:6;min-width:0}
+.vm-lab-shell .vm-lab-step-rail,.vm-lab-shell .vm-lab-main{color:#142033}
+.vm-lab-shell .vm-lab-rail-head,.vm-lab-shell .vm-lab-step-heading{color:#142033}
+.vm-lab-shell .vm-lab-step-rail button{color:#1d2a3d}
+.vm-lab-shell .vm-lab-step-rail button.active{background:#e8f2ff;color:#075fcb;border-color:#c8defb}
+.vm-lab-shell .vm-lab-step-rail button small{color:#607086}
+.vm-lab-shell .vm-lab-main .vm-cloud-console{background:#fff;color:#142033}
+@media(max-width:1000px){
+ .vm-lab-shell{display:flex;flex-direction:column;padding:12px}
+ .vm-lab-shell>.vm-lab-hero,.vm-lab-shell>.vm-lab-path-overview,.vm-lab-shell>.vm-topology-card,.vm-lab-shell>.vm-real-console,.vm-lab-shell>.vm-lab-provider{width:100%;grid-column:auto;grid-row:auto}
+ .vm-lab-shell .vm-lab-step-rail,.vm-lab-shell .vm-lab-main{grid-column:auto;grid-row:auto}
+ .vm-lab-shell .vm-real-console-frame iframe{height:620px}
+}
+
+/* Diagram-forward architecture flow modeled on the user's reference image. */
+.vm-architecture-canvas{width:100%;overflow-x:auto;border:1px solid #e6ebf1;border-radius:9px;background:linear-gradient(180deg,#fff,#fbfcfe);padding:8px}
+.vm-architecture-svg{display:block;width:100%;min-width:760px;height:auto;max-height:250px}
+.vm-topology-card .vm-topology-legend{font-size:.72rem}
+@media(max-width:760px){.vm-architecture-svg{min-width:850px}.vm-architecture-canvas{padding:6px}}
+
+/* Console is full-width; no manual resizing or horizontal frame scrollbar. */
+.vm-console-sizing{justify-content:flex-end;padding:8px 18px;background:#fff}
+.vm-console-sizing label{display:none}
+.vm-real-console-frame{width:100%!important;max-width:100%!important;resize:none!important;overflow:hidden!important}
+.vm-real-console-frame iframe{width:100%!important;max-width:100%!important}
+
+
+/* Learning modes and verified remediation state */
+.vm-lab-mode-picker{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;margin:0 0 26px;border:1px solid var(--lab-border);border-radius:15px;background:linear-gradient(120deg,#111a2b,#15233a)}
+.vm-lab-mode-picker strong{font-size:.95rem}.vm-lab-mode-picker p{color:var(--lab-muted);font-size:.82rem;margin:5px 0 0}
+.vm-lab-mode-buttons{display:flex;gap:10px;flex-wrap:wrap}.vm-lab-mode-buttons button{display:flex;flex-direction:column;gap:4px;text-align:left;padding:10px 14px;border:1px solid var(--lab-border);border-radius:10px;background:#0d1524;color:var(--lab-text);min-width:175px}.vm-lab-mode-buttons button.active{border-color:#62d7cb;box-shadow:0 0 0 1px #62d7cb33;background:#12302f}.vm-lab-mode-buttons small{font-size:.72rem;color:var(--lab-muted);font-weight:400}
+.vm-lab-remediation{margin:16px 0}.vm-lab-remediation-card{border:1px solid #d97706;background:#2a2117;border-radius:12px;padding:16px}.vm-lab-remediation-card strong{display:block;color:#ffd28a}.vm-lab-remediation-card p{color:#e6d9c7;line-height:1.65;margin:8px 0 12px}.vm-lab-remediation-card code{color:#fff;background:#3b3023;padding:2px 5px;border-radius:4px}.vm-lab-remediation-card button{border:1px solid #f0b45a;background:#f4b75e;color:#201506;border-radius:8px;padding:10px 14px;font-weight:800}.vm-lab-remediation-card.success{border-color:#059669;background:#102a25}.vm-lab-remediation-card.success strong{color:#78edbd}
+@media(max-width:760px){.vm-lab-mode-picker{align-items:stretch;flex-direction:column}.vm-lab-mode-buttons button{flex:1;min-width:140px}}
+
+
+/* Lab interaction refinements: make mode selection prominent and remediation auditable */
+.vm-lab-mode-picker{display:flex!important;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 24px;padding:18px 20px;border:1px solid #3b5273;border-radius:14px;background:linear-gradient(120deg,#111a2b,#182944);color:#f2f6ff}
+.vm-lab-mode-picker>div:first-child{flex:1}.vm-lab-mode-picker strong{display:block;font-weight:800}.vm-lab-mode-picker p{margin:5px 0 0;color:#aebed5;font-size:.84rem;line-height:1.5}
+.vm-lab-mode-buttons{display:flex;gap:10px;flex-wrap:wrap}.vm-lab-mode-buttons button{display:flex;flex-direction:column;gap:4px;min-width:170px;text-align:left;padding:11px 14px;border:1px solid #415675;border-radius:10px;background:#0b1423;color:#edf4ff;font-weight:800}.vm-lab-mode-buttons button.active{border-color:#5eead4;background:#103a36;box-shadow:0 0 0 2px #5eead433}.vm-lab-mode-buttons small{font-size:.72rem;color:#b8c6db;font-weight:500}
+.vm-lab-remediation-actions{display:flex;gap:8px;flex-wrap:wrap}.vm-lab-remediation-actions button{border:1px solid #6b829e;background:#16253b;color:#f2f6ff;border-radius:8px;padding:10px 12px;font-weight:750}.vm-lab-remediation-actions button:last-child{border-color:#4bd2a0;background:#124032;color:#d9fff0}
+.vm-lab-mode-picker button:focus-visible,.vm-lab-remediation-actions button:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+@media(max-width:780px){.vm-lab-mode-picker{align-items:stretch;flex-direction:column}.vm-lab-mode-buttons button{flex:1;min-width:135px}}
+
+
+/* Force the investigation mode switcher to remain visible in the lab layout. */
+.vm-lab-mode-picker{display:flex!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:none!important;overflow:visible!important;position:relative!important;z-index:2!important}
+.vm-lab-mode-picker .vm-lab-mode-buttons{display:flex!important;visibility:visible!important;opacity:1!important}
+.vm-lab-mode-picker .vm-lab-mode-buttons button{display:flex!important;visibility:visible!important;opacity:1!important}
+
+
+/* Clear mode selection at the top; one mode per attempt. */
+.vm-lab-mode-picker{order:-1;position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:12px 0 22px;padding:18px 20px;border:1px solid #3b5273;border-radius:14px;background:linear-gradient(120deg,#111a2b,#182944);color:#f2f6ff}
+.vm-lab-mode-picker button:disabled{cursor:not-allowed;opacity:.65;filter:saturate(.6)}
+.vm-lab-mode-picker button:disabled.active{opacity:1;border-color:#5eead4}
+.vm-lab-mode-start{margin:18px 0;padding:22px;border:1px dashed #6b829e;border-radius:12px;background:#f8fafc;color:#172033}
+.vm-lab-mode-start strong{display:block;font-size:1.05rem}.vm-lab-mode-start p{margin:6px 0 0;color:#53647a}
+.vm-lab-hint{margin:14px 0;padding:14px 16px;border:1px solid #9aabc0;border-radius:10px;background:#f8fafc;color:#172033}
+.vm-lab-hint p{margin:7px 0 0;line-height:1.55}.vm-lab-hint button{margin-top:8px;border:1px solid #64748b;border-radius:8px;background:#172a43;color:#fff;padding:9px 12px;font-weight:750}
+.vm-lab-hint button:disabled{opacity:.6;cursor:not-allowed}
+.vm-lab-hint-guided{border-color:#60a5fa;background:#eff6ff}.vm-lab-hint-challenge{border-color:#a3a3a3;background:#fafafa}
+@media(max-width:780px){.vm-lab-mode-picker{flex-direction:column;align-items:stretch}.vm-lab-mode-buttons button{flex:1;min-width:135px}}
+
+/* Single-attempt learning mode: prominent top selector, locked after selection. */
+.vm-lab-top + .vm-lab-mode-picker{position:sticky;top:0;z-index:30;display:flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:space-between;gap:18px;margin:12px 0 20px;padding:16px 18px;border:1px solid #587092;border-radius:14px;background:#111d30;box-shadow:0 8px 26px #0b122033}
+.vm-lab-mode-picker>div:first-child{flex:1}.vm-lab-mode-picker strong{display:block;font-size:1rem}.vm-lab-mode-picker p{margin:5px 0 0;line-height:1.45}
+.vm-lab-mode-buttons{display:flex!important;gap:10px;flex-wrap:wrap}.vm-lab-mode-buttons button{min-width:175px;display:flex!important;flex-direction:column;gap:4px;padding:11px 14px;border:1px solid #5a6f8c;border-radius:10px;background:#17263d;color:#f2f6ff;font-weight:800}.vm-lab-mode-buttons button.active{border-color:#55dfb4;background:#103c34;box-shadow:0 0 0 2px #55dfb433}.vm-lab-mode-buttons button:disabled{cursor:not-allowed;opacity:.78}.vm-lab-mode-buttons small{font-size:.74rem;color:#c2cfe1;font-weight:500}
+.vm-lab-path-overview-challenge .vm-lab-path-foot span:nth-child(2){font-weight:600}
+.vm-lab-path-overview-challenge .vm-lab-path-foot span:nth-child(2) b{display:block}
+@media(max-width:780px){.vm-lab-top + .vm-lab-mode-picker{position:relative;flex-direction:column;align-items:stretch}.vm-lab-mode-buttons button{flex:1;min-width:140px}}
