@@ -427,15 +427,42 @@ export default function VmUnreachableLab() {
       </div>
       <div className="vm-lab-path-foot"><span><b>Failure symptom</b> {protocol==="SSH"?"SSH connection times out or is refused":"RDP connection times out or is refused"}</span><span><b>Investigation order</b> Instance health → effective network rules → routes / return path → guest listener → connection re-test</span></div>
     </section>
-    {provider === "AWS" && <section className="vm-topology-card" aria-label="AWS VM connectivity topology">
-      <div className="vm-topology-heading"><div><span className="vm-lab-section-label">NETWORK TOPOLOGY · AWS</span><h2>Trace the packet path before changing anything</h2></div><p>Expected admin flow: bastion → VPC controls → private subnet → EC2 network interface → guest listener. The seeded fault is a missing, source-scoped inbound rule—not a proven route failure.</p></div>
-      <div className="vm-topology-flow">
-        <div className={step===0?"focus":""}><span className="topology-icon">01</span><strong>Admin / bastion</strong><small>sg-bastion-prod</small><small>Source: approved admin path</small></div><span className="topology-arrow">→</span>
-        <div className={step===1?"focus":""}><span className="topology-icon">02</span><strong>Security group</strong><small>sg-api-prod</small><small>{protocol==="SSH"?"TCP/22":"TCP/3389"} inbound rule absent</small></div><span className="topology-arrow">→</span>
-        <div className={step===2?"focus":""}><span className="topology-icon">03</span><strong>VPC path</strong><small>Route table + NACL</small><small>Check forward + return path</small></div><span className="topology-arrow">→</span>
-        <div className={step===3?"focus":""}><span className="topology-icon">04</span><strong>EC2 guest</strong><small>api-prod-01 · 10.20.2.17</small><small>{protocol==="SSH"?"sshd :22":"TermService :3389"}</small></div>
+    {provider === "AWS" && <section className="vm-topology-card" aria-label="AWS VM connectivity architecture and problem flow">
+      <div className="vm-topology-heading"><div><span className="vm-lab-section-label">1. ARCHITECTURE AND PROBLEM FLOW</span><h2>Trace the connection from admin to EC2</h2></div><p>This diagram follows the network path from the administrator's workstation to the instance. The highlighted red checkpoint is the missing inbound rule; green checkpoints are healthy in this simulated scenario.</p></div>
+      <div className="vm-architecture-canvas">
+        <svg className="vm-architecture-svg" viewBox="0 0 1120 218" role="img" aria-labelledby="aws-architecture-title aws-architecture-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="aws-architecture-title">EC2 instance unreachable network architecture</title>
+          <desc id="aws-architecture-desc">Administrator workstation connects through a bastion host, target security group, VPC route table and network ACL to an EC2 instance. SSH TCP port 22 is blocked by a missing inbound security group rule.</desc>
+          <defs>
+            <marker id="arch-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#16a36a"/></marker>
+            <marker id="arch-muted-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6b7788"/></marker>
+          </defs>
+          <path d="M116 116 H160 M300 116 H355 M505 116 H555 M690 116 H738 M872 116 H916" stroke="#16a36a" strokeWidth="2.5" fill="none" markerEnd="url(#arch-arrow)"/>
+          <path d="M300 116 H350" stroke="#16a36a" strokeWidth="2.5" fill="none"/>
+          <path d="M305 116 H350" stroke="#e11d48" strokeWidth="2.5" strokeDasharray="5 4" fill="none"/>
+          <rect x="12" y="70" width="104" height="94" rx="7" fill="#f8fafc" stroke="#d5e0ed"/>
+          <text x="64" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1b2a40">Your workstation</text>
+          <rect x="48" y="101" width="32" height="22" rx="2" fill="none" stroke="#52647a" strokeWidth="2"/><path d="M64 123 V130 M54 130 H74" stroke="#52647a" strokeWidth="2"/>
+          <text x="64" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">Admin laptop</text><text x="64" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source</text>
+          <rect x="160" y="70" width="140" height="94" rx="7" fill="#eff6ff" stroke="#93c5fd"/>
+          <text x="230" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1d4e89">Bastion host</text>
+          <rect x="211" y="100" width="38" height="30" rx="2" fill="none" stroke="#f59e0b" strokeWidth="2"/><path d="M217 96 V100 M225 96 V100 M233 96 V100 M241 96 V100 M217 130 V134 M225 130 V134 M233 130 V134 M241 130 V134" stroke="#f59e0b" strokeWidth="2"/>
+          <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">i-bastion</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">10.40.1.10</text>
+          <rect x="355" y="72" width="150" height="90" rx="7" fill="#fff1f2" stroke="#ef4444" strokeWidth="1.5"/>
+          <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill="#991b1b">sg-web-prod</text>
+          <path d="M430 113 L447 120 V136 Q447 146 430 152 Q413 146 413 136 V120 Z" fill="none" stroke="#dc2626" strokeWidth="2"/><path d="M424 126 L436 138 M436 126 L424 138" stroke="#dc2626" strokeWidth="2"/>
+          <rect x="350" y="6" width="160" height="43" rx="6" fill="#fff1f2" stroke="#ef4444"/><text x="430" y="22" fontSize="10" fontWeight="700" textAnchor="middle" fill="#991b1b">Missing inbound rule</text><text x="430" y="36" fontSize="9" textAnchor="middle" fill="#991b1b">{protocol==="SSH"?"TCP 22":"TCP 3389"} from sg-bastion-prod</text><path d="M430 49 L430 64" stroke="#ef4444" strokeWidth="1.5"/><path d="M423 59 L430 66 L437 59" stroke="#ef4444" strokeWidth="1.5" fill="none"/>
+          <text x="326" y="102" fontSize="9" fontWeight="700" textAnchor="middle" fill="#047857">{protocol} ({protocol==="SSH"?"TCP 22":"TCP 3389"})</text><circle cx="330" cy="116" r="8" fill="#fff" stroke="#ef4444" strokeWidth="1.5"/><path d="M326 112 L334 120 M334 112 L326 120" stroke="#ef4444" strokeWidth="1.8"/>
+          <rect x="555" y="72" width="135" height="90" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
+          <text x="622" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill="#5b21b6">VPC route table</text><text x="622" y="105" fontSize="9" textAnchor="middle" fill="#5b21b6">10.0.1.0/24</text><path d="M605 117 H640 M605 125 H640 M605 133 H631" stroke="#8b5cf6" strokeWidth="2"/><circle cx="674" cy="151" r="10" fill="#16a36a"/><path d="M669 151 L673 155 L680 147" stroke="#fff" strokeWidth="2" fill="none"/>
+          <rect x="738" y="72" width="134" height="90" rx="7" fill="#f5f3ff" stroke="#c4b5fd"/>
+          <text x="805" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill="#5b21b6">Network ACL</text><text x="805" y="105" fontSize="9" textAnchor="middle" fill="#5b21b6">Public subnet</text><circle cx="805" cy="128" r="16" fill="none" stroke="#8b5cf6" strokeWidth="2"/><rect x="799" y="124" width="12" height="10" rx="2" fill="none" stroke="#8b5cf6" strokeWidth="2"/><path d="M802 124 V120 A3 3 0 0 1 808 120 V124" fill="none" stroke="#8b5cf6" strokeWidth="2"/><circle cx="856" cy="151" r="10" fill="#16a36a"/><path d="M851 151 L855 155 L862 147" stroke="#fff" strokeWidth="2" fill="none"/>
+          <rect x="916" y="70" width="188" height="94" rx="7" fill="#fff7ed" stroke="#fdba74"/>
+          <text x="1010" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#9a3412">EC2 instance</text><text x="1010" y="101" fontSize="10" textAnchor="middle" fill="#9a3412">i-web-01</text><rect x="994" y="110" width="32" height="30" rx="2" fill="none" stroke="#f97316" strokeWidth="2"/><path d="M1000 106 V110 M1008 106 V110 M1016 106 V110 M1024 106 V110 M1000 140 V144 M1008 140 V144 M1016 140 V144 M1024 140 V144" stroke="#f97316" strokeWidth="2"/><text x="1010" y="156" fontSize="9" textAnchor="middle" fill="#7c2d12">10.0.1.20</text>
+          <text x="560" y="192" fontSize="10" fontWeight="600" fill="#52647a">Forward + return path must both be valid · verify each layer before remediation</text>
+        </svg>
       </div>
-      <div className="vm-topology-legend"><span><i className="topology-dot ok"/> Healthy evidence</span><span><i className="topology-dot fault"/> Suspected fault: inbound allow missing</span><span><i className="topology-dot neutral"/> Verify, don’t assume</span></div>
+      <div className="vm-topology-legend"><span><i className="topology-dot ok"/> Route table and NACL shown as healthy in this scenario</span><span><i className="topology-dot fault"/> Missing inbound allow is the suspected fault</span><span><i className="topology-dot neutral"/> Training simulation only</span></div>
     </section>}
     {provider === "AWS" && <section className="vm-real-console">
       <div className="vm-real-console-head"><div><span className="vm-lab-section-label">INTERACTIVE TRAINING CONSOLE</span><h2>AWS Console Simulator</h2><p>Use the console navigation and inspect the real-style resource screens. Lab guidance stays separate; this simulator does not access your AWS account or create real CloudTrail events.</p></div><label><input type="checkbox" checked={showAwsConsole} onChange={e=>setShowAwsConsole(e.target.checked)}/> Show console</label></div>
