@@ -22,13 +22,13 @@
 | # | Lab | Primary AWS console path / evidence | Status |
 |---:|---|---|---|
 | 01 | EC2 instance unreachable (SSH/RDP) | EC2 → Instances / Status checks; Security Groups → Inbound rules; VPC → Route tables, Network ACLs, Reachability Analyzer; Systems Manager for guest checks | In progress — topology and embedded interactive console added on feature branch |
-| 02 | Application Load Balancer targets unhealthy | EC2 → Target Groups → Targets / Health checks; Load Balancers → Listeners | Planned |
-| 03 | EC2 has no outbound internet access | VPC → Route tables, Internet Gateways, NAT Gateways, route targets | Planned |
+| 02 | Application Load Balancer targets unhealthy | EC2 → Target Groups → Targets / Health checks; Load Balancers → Listeners | Implemented on feature branch — guided/challenge, evidence checkpoints, remediation and verification |
+| 03 | EC2 has no outbound internet access | VPC → Route tables, Internet Gateways, NAT Gateways, route targets | Implemented on feature branch — guided/challenge, evidence checkpoints, remediation and verification |
 | 04 | Private EC2 cannot reach another subnet/service | VPC → Route tables, Security Groups, Network ACLs, Reachability Analyzer | Planned |
-| 05 | RDS connection timeout from application | RDS → Connectivity & security; VPC security groups / subnet groups; CloudWatch metrics | Planned |
-| 06 | S3 AccessDenied / object unavailable | S3 → Object permissions / bucket policy; IAM policy simulator concepts; KMS if encrypted | Planned |
+| 05 | RDS connection timeout from application | RDS → Connectivity & security; VPC security groups / subnet groups; CloudWatch metrics | Implemented on feature branch — seeded-config-aware evidence, guided/challenge, remediation and verification |
+| 06 | S3 AccessDenied / object unavailable | S3 → Object permissions / bucket policy; IAM policy simulator concepts; KMS if encrypted | Implemented on feature branch — explicit-deny scenario, guided/challenge, remediation and verification |
 | 07 | IAM role assumption or API AccessDenied | IAM → Roles / Trust relationships / Permissions; CloudTrail event history | Planned |
-| 08 | Lambda function timeout | Lambda → Monitor / Configuration / VPC; CloudWatch Logs and metrics | Planned |
+| 08 | Lambda function timeout | Lambda → Monitor / Configuration / VPC; CloudWatch Logs and metrics | Implemented on feature branch — guided/challenge, evidence checkpoints, remediation and verification |
 | 09 | Lambda cannot reach RDS in VPC | Lambda → Configuration → VPC; RDS connectivity; security groups and subnet routes | Planned |
 | 10 | Route 53 record resolves incorrectly | Route 53 → Hosted zones / Records; health checks; resolver and TTL checks | Planned |
 | 11 | VPC peering / Transit Gateway connectivity failure | VPC → Peering connections / Transit Gateway attachments / Route tables | Planned |
@@ -44,9 +44,9 @@
 
 ## Delivery sequence
 
-1. Finish lab 01 as the end-to-end acceptance test: console navigation, topology, checkpoint gating, accurate security-group evidence, Reachability Analyzer path interpretation, and proof of recovery.
-2. Build labs 02–05 (networking and application availability).
-3. Build labs 06–10 (identity, storage, serverless, and DNS).
+1. Finish lab 01 as the end-to-end acceptance test: console navigation, topology, checkpoint gating, accurate security-group evidence, Reachability Analyzer path interpretation, simulated least-privilege remediation, and proof of recovery. Lab 01 now has Guided and Challenge modes plus a red-to-green security-group verification flow.
+2. Labs 02, 03, and 05 now have reusable guided/challenge flows on the feature branch; continue expanding lab 04 and validate each seeded resource path.
+3. Lab 06 and lab 08 now have reusable guided/challenge flows on the feature branch; continue labs 07, 09, and 10.
 4. Build labs 11–15 (network connectivity, compute/storage, containers, and observability).
 5. Build labs 16–20 (messaging, APIs, encryption, CDN, and recovery).
 6. For each lab, add its route and index entry, validate the seeded state against the simulator engine, run tests/build, perform browser smoke tests, then proceed to the next lab.
