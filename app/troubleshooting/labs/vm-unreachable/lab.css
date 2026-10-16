@@ -124,3 +124,51 @@
 .vm-real-console-frame{width:100%;min-width:0;max-width:100%;resize:horizontal;overflow:auto;border-right:1px solid var(--lab-border)}
 .vm-real-console-frame iframe{display:block;width:100%;height:780px;border:0;background:#f3f5f7}
 @media(max-width:900px){.vm-topology-heading{grid-template-columns:1fr}.vm-topology-flow{grid-template-columns:1fr}.topology-arrow{transform:rotate(90deg);height:20px}.vm-real-console-head{align-items:flex-start;flex-direction:column}.vm-real-console-frame iframe{height:680px}}
+
+
+/* Reference layout: compact light troubleshooting workspace with persistent left rail. */
+.vm-lab-shell{
+  --lab-bg:#f4f6f9;--lab-panel:#fff;--lab-panel-2:#f8fafc;--lab-border:#dce3eb;--lab-muted:#5d6b7e;--lab-text:#142033;
+  max-width:none;width:100%;margin:0;padding:16px 16px 36px;background:var(--lab-bg);color:var(--lab-text);min-height:calc(100vh - 50px);
+  display:grid;grid-template-columns:minmax(270px,320px) minmax(0,1fr);grid-auto-flow:row;align-content:start;gap:12px;
+}
+.vm-lab-shell>.vm-lab-hero{grid-column:2;grid-row:1;padding:10px 0 12px;grid-template-columns:minmax(0,1fr);gap:8px;align-items:start}
+.vm-lab-shell>.vm-lab-hero h1{font-size:clamp(1.65rem,2.2vw,2.15rem);line-height:1.15;letter-spacing:-.04em;margin:0 0 6px;color:#111c2e;max-width:none}
+.vm-lab-shell>.vm-lab-hero h1 em{background:none;color:inherit}
+.vm-lab-shell>.vm-lab-hero p:not(.vm-lab-kicker){font-size:.88rem;line-height:1.5;color:#5b6a7f;max-width:none}
+.vm-lab-shell .vm-lab-kicker{color:#60758f}
+.vm-lab-shell>.vm-lab-hero .vm-lab-score{display:none}
+.vm-lab-shell>.vm-lab-path-overview{grid-column:2;grid-row:2;margin:0;max-width:none}
+.vm-lab-shell>.vm-topology-card{grid-column:2;grid-row:3;margin:0;padding:16px;background:#fff;border-color:#dfe5ed;color:#152238}
+.vm-lab-shell .vm-topology-heading{grid-template-columns:minmax(0,1fr);gap:5px;margin-bottom:12px}
+.vm-lab-shell .vm-topology-heading h2,.vm-lab-shell .vm-real-console-head h2{font-size:1.15rem;color:#142033;letter-spacing:-.025em}
+.vm-lab-shell .vm-topology-heading p,.vm-lab-shell .vm-real-console-head p{color:#5b6a7f;font-size:.78rem;line-height:1.5}
+.vm-lab-shell .vm-topology-flow>div{background:#f8fafc;border-color:#dbe4ef}
+.vm-lab-shell .vm-topology-flow>div.focus{background:#fff1f0;border-color:#f87171;box-shadow:0 0 0 1px #f8717125}
+.vm-lab-shell .vm-topology-flow strong{color:#18263a}
+.vm-lab-shell .vm-topology-flow small{color:#5d6b7e}
+.vm-lab-shell .vm-topology-legend{color:#5d6b7e;border-color:#e4e9f0}
+.vm-lab-shell>.vm-real-console{grid-column:2;grid-row:4;margin:0;padding:0;background:#fff;border-color:#dfe5ed;color:#142033}
+.vm-lab-shell .vm-real-console-head{padding:14px 18px;border-color:#e0e6ed}
+.vm-lab-shell .vm-real-console-head label{color:#536278}
+.vm-lab-shell .vm-console-sizing{background:#f8fafc;border-color:#e0e6ed}
+.vm-lab-shell .vm-console-sizing label{color:#536278}
+.vm-lab-shell .vm-console-sizing label strong{color:#1a2b42}
+.vm-lab-shell .vm-console-sizing a{color:#175ea8}
+.vm-lab-shell .vm-real-console-frame iframe{height:680px}
+.vm-lab-shell>.vm-lab-provider{grid-column:2;grid-row:5;margin:0;padding:14px;background:#fff;border:1px solid #dfe5ed;border-radius:12px}
+.vm-lab-shell>.vm-lab-workspace{display:contents}
+.vm-lab-shell .vm-lab-step-rail{grid-column:1;grid-row:1 / span 5;align-self:stretch;background:#fff;border:1px solid #dfe5ed;border-radius:12px;padding:14px;min-width:0}
+.vm-lab-shell .vm-lab-main{grid-column:2;grid-row:6;min-width:0}
+.vm-lab-shell .vm-lab-step-rail,.vm-lab-shell .vm-lab-main{color:#142033}
+.vm-lab-shell .vm-lab-rail-head,.vm-lab-shell .vm-lab-step-heading{color:#142033}
+.vm-lab-shell .vm-lab-step-rail button{color:#1d2a3d}
+.vm-lab-shell .vm-lab-step-rail button.active{background:#e8f2ff;color:#075fcb;border-color:#c8defb}
+.vm-lab-shell .vm-lab-step-rail button small{color:#607086}
+.vm-lab-shell .vm-lab-main .vm-cloud-console{background:#fff;color:#142033}
+@media(max-width:1000px){
+ .vm-lab-shell{display:flex;flex-direction:column;padding:12px}
+ .vm-lab-shell>.vm-lab-hero,.vm-lab-shell>.vm-lab-path-overview,.vm-lab-shell>.vm-topology-card,.vm-lab-shell>.vm-real-console,.vm-lab-shell>.vm-lab-provider{width:100%;grid-column:auto;grid-row:auto}
+ .vm-lab-shell .vm-lab-step-rail,.vm-lab-shell .vm-lab-main{grid-column:auto;grid-row:auto}
+ .vm-lab-shell .vm-real-console-frame iframe{height:620px}
+}
