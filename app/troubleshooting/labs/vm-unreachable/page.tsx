@@ -224,7 +224,10 @@ export default function VmUnreachableLab() {
   const [provider, setProvider] = useState<Provider>("AWS");
   const [protocol, setProtocol] = useState<"SSH" | "RDP">("SSH");
   const [step, setStep] = useState(0);
-  const [mode, setMode] = useState<"guided" | "challenge">("challenge");
+  const [mode, setMode] = useState<"guided" | "challenge" | null>(null);
+  const [modeLocked, setModeLocked] = useState(false);
+  const [hintUsed, setHintUsed] = useState(false);
+  const [showHint, setShowHint] = useState(false);
   const [securityGroupFixed, setSecurityGroupFixed] = useState(false);
   const [connectionVerified, setConnectionVerified] = useState(false);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -243,6 +246,9 @@ export default function VmUnreachableLab() {
         if (value.protocol === "SSH" || value.protocol === "RDP") setProtocol(value.protocol);
         if (Number.isInteger(value.step)) setStep(Math.max(0, Math.min(3, value.step)));
         if (value.mode === "guided" || value.mode === "challenge") setMode(value.mode);
+        if (typeof value.modeLocked === "boolean") setModeLocked(value.modeLocked);
+        if (typeof value.hintUsed === "boolean") setHintUsed(value.hintUsed);
+        if (typeof value.showHint === "boolean") setShowHint(value.showHint);
         if (value.answers && typeof value.answers === "object") setAnswers(value.answers);
         if (typeof value.securityGroupFixed === "boolean") setSecurityGroupFixed(value.securityGroupFixed);
         if (typeof value.connectionVerified === "boolean") setConnectionVerified(value.connectionVerified);
@@ -253,8 +259,8 @@ export default function VmUnreachableLab() {
   }, []);
   useEffect(() => {
     if (!progressHydrated) return;
-    try { window.localStorage.setItem("aws-vm-unreachable-lab-progress-v1", JSON.stringify({ provider, protocol, step, mode, answers, securityGroupFixed, connectionVerified, consoleTab })); } catch { /* Progress persistence is optional. */ }
-  }, [progressHydrated, provider, protocol, step, mode, answers, securityGroupFixed, connectionVerified, consoleTab]);
+    try { window.localStorage.setItem("aws-vm-unreachable-lab-progress-v1", JSON.stringify({ provider, protocol, step, mode, modeLocked, hintUsed, showHint, answers, securityGroupFixed, connectionVerified, consoleTab })); } catch { /* Progress persistence is optional. */ }
+  }, [progressHydrated, provider, protocol, step, mode, modeLocked, hintUsed, showHint, answers, securityGroupFixed, connectionVerified, consoleTab]);
   useEffect(() => {
     function handleSimulatorStatus(event: MessageEvent) {
       if (event.origin !== window.location.origin || !event.data) return;
@@ -301,7 +307,7 @@ export default function VmUnreachableLab() {
   const selected = answers[answerKey];
   const passed = selected !== undefined && current.choices[selected]?.correct;
   const progress = Math.round((Object.keys(answers).filter(k => k.startsWith(provider + ":") && labSteps[provider][Number(k.split(":")[1])]?.choices[answers[k]]?.correct).length / steps.length) * 100);
-  const reset = () => { setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); setSecurityGroupFixed(false); setConnectionVerified(false); try { window.localStorage.removeItem("aws-vm-unreachable-lab-progress-v1"); } catch {} };
+  const reset = () => { setStep(0); setAnswers({}); setShowCommand(false); setConsoleTab("Overview"); setSelectedRule(null); setSecurityGroupFixed(false); setConnectionVerified(false); setMode(null); setModeLocked(false); setHintUsed(false); setShowHint(false); try { window.localStorage.removeItem("aws-vm-unreachable-lab-progress-v1"); } catch {} };
   const tabOptions = step === 0
     ? (provider === "AWS" ? ["Details", "Status checks", "Monitoring", "System log"] : provider === "Azure" ? ["Overview", "Activity log", "Monitoring", "Boot diagnostics"] : ["Details", "Observability", "Serial port 1 output", "Logs Explorer"])
     : step === 1
@@ -455,18 +461,20 @@ export default function VmUnreachableLab() {
 
   return <main className="vm-lab-shell">
     <header className="vm-lab-top"><a href="/troubleshooting">← Troubleshooting library</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
+    <section className="vm-lab-mode-picker" aria-label="Choose learning mode">
+      <div><strong>{modeLocked ? (mode==="guided" ? "Guided mode selected" : "Challenge mode selected") : "Choose your investigation mode"}</strong><p>{modeLocked ? "Mode is locked for this attempt. Use Reset lab to choose a different mode." : "Choose once before starting. Challenge mode hides the diagnosis and allows one optional hint."}</p></div>
+      <div className="vm-lab-mode-buttons">
+        <button type="button" disabled={modeLocked} className={mode==="guided"?"active":""} onClick={()=>{setMode("guided");setModeLocked(true);setHintUsed(false);setShowHint(false);}} aria-pressed={mode==="guided"}>Guided mode <small>Coaching and diagnostic clues</small></button>
+        <button type="button" disabled={modeLocked} className={mode==="challenge"?"active":""} onClick={()=>{setMode("challenge");setModeLocked(true);setHintUsed(false);setShowHint(false);}} aria-pressed={mode==="challenge"}>Challenge mode <small>Investigate independently · one hint</small></button>
+      </div>
+    </section>
     <section className="vm-lab-hero">
       <div><p className="vm-lab-kicker">NETWORK TROUBLESHOOTING · LAB 01</p><h1>VM unreachable over <em>{protocol}</em></h1><p>Follow the evidence through the cloud console. Inspect the resource, choose what the evidence proves, and unlock the next diagnostic step. No live cloud resources are accessed or changed.</p></div>
       <div className="vm-lab-score"><span>YOUR INVESTIGATION</span><strong>{progress}%</strong><div><i style={{width: progress + "%"}} /></div><small>{Object.keys(answers).filter(k=>k.startsWith(provider+":") && labSteps[provider][Number(k.split(":")[1])]?.choices[answers[k]]?.correct).length} of {steps.length} checks verified</small></div>
     </section>
     
-    <section className="vm-lab-mode-picker" aria-label="Choose learning mode">
-      <div><strong>Choose your investigation mode</strong><p>Switch modes any time. Both use the same seeded AWS console state.</p></div>
-      <div className="vm-lab-mode-buttons">
-        <button type="button" className={mode==="guided"?"active":""} onClick={()=>setMode("guided")} aria-pressed={mode==="guided"}>Guided mode <small>Hints and coaching</small></button>
-        <button type="button" className={mode==="challenge"?"active":""} onClick={()=>setMode("challenge")} aria-pressed={mode==="challenge"}>Challenge mode <small>Find the fault with fewer hints</small></button>
-      </div>
-    </section>
+
+    {!modeLocked ? <section className="vm-lab-mode-start"><strong>Choose a mode above to begin</strong><p>Your choice stays locked until you reset this lab.</p></section> : <>
     <section className="vm-lab-path-overview" aria-label="Troubleshooting path overview">
       <div className="vm-lab-path-title"><div><span>START HERE · CONNECTION SCOPE</span><h2>What exactly are we troubleshooting?</h2></div><p>Keep this flow in view while checking each console layer. Do not change a rule until the observed path and failed port are confirmed.</p></div>
       <div className="vm-lab-path-grid">
@@ -524,14 +532,16 @@ export default function VmUnreachableLab() {
     <section className="vm-lab-workspace">
       <aside className="vm-lab-step-rail"><div className="vm-lab-rail-head"><span>DIAGNOSTIC PATH</span><strong>{step+1} / {steps.length}</strong></div>{steps.map((s,i)=><button key={s.title} className={i===step?"active":answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"complete":i>step?"locked":""} onClick={()=>{if(i<=step || (i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)){setStep(i);setShowCommand(false);setConsoleTab(i===1?"Inbound rules":i===2?(provider==="AWS"?"Routes":provider==="Azure"?"Effective routes":"Routes"):"Overview");setSelectedRule(null);}}} disabled={i>step && !(i>0 && labSteps[provider][i-1].choices[answers[provider+":"+(i-1)]]?.correct)}><span>{answers[provider+":"+i]!==undefined&&labSteps[provider][i].choices[answers[provider+":"+i]]?.correct?"✓":String(i+1).padStart(2,"0")}</span><strong>{s.title}</strong><small>{i===step?"Current check":i<step?"Reviewed":"Locked until verified"}</small></button>)}</aside>
       <div className="vm-lab-main">
-        <div className="vm-lab-step-heading"><span>STEP {String(step+1).padStart(2,"0")} · {consoleHeader.service.toUpperCase()}</span><h2>{current.title}</h2><p>{current.objective}</p></div>
+        <div className="vm-lab-step-heading"><span>STEP {String(step+1).padStart(2,"0")} · {consoleHeader.service.toUpperCase()}</span><h2>{mode==="challenge" ? ["Inspect the target instance","Trace the network path","Verify the route and return path","Retest the connection"][step] : current.title}</h2><p>{mode==="challenge" ? "Gather evidence from the console before deciding what to change. Do not assume the first suspicious setting is the root cause." : current.objective}</p></div>
         {provider !== "AWS" && <div className={"vm-cloud-console "+provider.toLowerCase().replace(" ","-")}>
           <div className="vm-console-chrome"><span className={"vm-console-brand "+consoleHeader.logo}>{consoleHeader.logo==="aws"?"aws":consoleHeader.logo==="azure"?"Microsoft Azure":"Google Cloud"}</span><span className="vm-console-global">{provider==="AWS"?"Search AWS services and features":provider==="Azure"?"Search resources, services, and docs":"Search (/) for resources, docs, products, and more"} <kbd>/</kbd></span><span className="vm-console-profile">{provider==="AWS"?"123456789012 ▾":provider==="Azure"?"Directory ▾":"prod-app ▾"}</span></div>
           <div className="vm-console-breadcrumb">{consoleHeader.eyebrow} <b>›</b> {consoleHeader.path}</div>
           <div className="vm-console-body"><aside><strong>{consoleScreen.service}</strong>{consoleNav.map(item=><span key={item} className={activeNavItem===item?"selected":""}>{item}</span>)}</aside><div className="vm-console-resource"><div className="vm-console-resource-title"><div><h3>{consoleScreen.resource}</h3></div></div><div className="vm-console-tabs">{tabOptions.map(item=><button type="button" key={item} className={activeConsoleTab===item?"active":""} onClick={()=>{setConsoleTab(item);setSelectedRule(null);}}>{item}</button>)}</div>{((step===1&&((provider==="AWS"&&(activeConsoleTab==="Inbound rules"||activeConsoleTab==="Outbound rules"))||(provider==="Azure"&&activeConsoleTab==="Effective security rules")||(provider==="Google Cloud"&&activeConsoleTab==="Firewall rules")))||(step===4&&((provider==="AWS"&&activeConsoleTab==="Security group rules")||(provider==="Azure"&&activeConsoleTab==="Effective security rules")||(provider==="Google Cloud"&&activeConsoleTab==="Firewall rules"))))?<div className="vm-console-rule-area"><div className="vm-console-table-wrap"><table className={"vm-console-rule-table "+provider.toLowerCase().replace(" ","-")}><thead><tr>{(provider==="AWS"?(activeConsoleTab==="Outbound rules"?["Name","Security group rule ID","IP version","Type","Protocol","Port range","Destination"]:["Name","Security group rule ID","IP version","Type","Protocol","Port range","Source"]):provider==="Azure"?["Priority","Name","Port","Protocol","Source","Destination","Action"]:["Name","Network","Direction","Priority","Action","Targets","Filters","Protocols / ports"]).map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{ruleRows.map(rule=><tr key={rule.id} className={selectedRule===rule.id?"chosen":""} onClick={()=>setSelectedRule(rule.id)} tabIndex={0} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelectedRule(rule.id);}}}>{provider==="AWS"?<><td>—</td><td>{rule.id}</td><td>{(activeConsoleTab==="Outbound rules"?rule.destination:rule.source)?.startsWith("sg-")?"—":"IPv4"}</td><td>{rule.name}</td><td>{rule.protocol}</td><td>{rule.port}</td><td>{activeConsoleTab==="Outbound rules"?rule.destination:rule.source}</td></>:provider==="Azure"?<><td>{rule.priority}</td><td>{rule.name}</td><td>{rule.service==="TCP/22"?"22":rule.service==="TCP/3389"?"3389":rule.service==="TCP/443"?"443":"Any"}</td><td>{rule.service?.startsWith("TCP/")?"TCP":"Any"}</td><td>{rule.source}</td><td>{rule.destination}</td><td><span className={rule.action==="Deny"?"rule-deny":"rule-allow"}>{rule.action}</span></td></>:<><td>{rule.name}</td><td>{rule.network}</td><td>{rule.direction}</td><td>{rule.priority}</td><td><span className="rule-allow">{rule.action}</span></td><td>{rule.target}</td><td>{rule.source}</td><td>{rule.ports}</td></>}</tr>)}</tbody></table></div></div>:<>{isRouteTableView?<div className="vm-console-details-table"><table><thead><tr>{Object.keys(routeTableRows[0]||{}).map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{routeTableRows.map((r,i)=><tr key={i}>{Object.values(r).map((v,j)=><td key={j}>{v}</td>)}</tr>)}</tbody></table></div>:isTerminalView?<pre className="vm-console-log-output">{terminalText}</pre>:consoleScreen.rows.length===0?<div className="vm-console-empty-state">No firewall policies found.</div>:<div className="vm-console-details-table"><table><thead><tr><th>{detailHeader[0]}</th><th>{detailHeader[1]}</th></tr></thead><tbody>{consoleScreen.rows.map((r,i)=><tr key={r.label+i}><td>{r.label}</td><td>{r.value}</td></tr>)}</tbody></table></div>}</>}</div></div></div>}
           
-        <div className="vm-lab-investigate"><div className="vm-lab-question"><span className="vm-lab-section-label">YOUR TURN · VERIFY BEFORE CONTINUING</span><h3>{current.question}</h3><p>Select the conclusion best supported by the console evidence. Incorrect choices explain why and can be retried.</p></div><div className="vm-lab-choices">{current.choices.map((c,i)=><button key={c.label} className={selected===i?(c.correct?"correct":"incorrect"):""} onClick={()=>setAnswers(prev=>({...prev,[answerKey]:i}))}><span>{String.fromCharCode(65+i)}</span><strong>{c.label}</strong><i>{selected===i?(c.correct?"✓":"↻"):"→"}</i></button>)}</div>
-          {selected!==undefined&&<div className={"vm-lab-feedback "+(current.choices[selected].correct?"correct":"incorrect")}><strong>{current.choices[selected].correct?"Evidence verified":"Not quite — inspect the console again"}</strong><p>{current.choices[selected].feedback}</p>{!current.choices[selected].correct&&<button onClick={()=>setAnswers(prev=>{const next={...prev};delete next[answerKey];return next;})}>Try again</button>}</div>}
+        <div className="vm-lab-investigate"><div className="vm-lab-question"><span className="vm-lab-section-label">YOUR TURN · VERIFY BEFORE CONTINUING</span><h3>{mode==="challenge" ? "What does the evidence support so far?" : current.question}</h3><p>{mode==="challenge" ? "Compare the instance status, source, protocol/port, and network controls. Choose the next best diagnostic conclusion; you can retry incorrect answers." : "Select the conclusion best supported by the console evidence. Incorrect choices explain why and can be retried."}</p></div><div className="vm-lab-choices">{current.choices.map((c,i)=><button key={c.label} className={selected===i?(c.correct?"correct":"incorrect"):""} onClick={()=>setAnswers(prev=>({...prev,[answerKey]:i}))}><span>{String.fromCharCode(65+i)}</span><strong>{c.label}</strong><i>{selected===i?(c.correct?"✓":"↻"):"→"}</i></button>)}</div>
+          {selected!==undefined&&<div className={"vm-lab-feedback "+(current.choices[selected].correct?"correct":"incorrect")}><strong>{current.choices[selected].correct?"Evidence verified":"Not quite — inspect the console again"}</strong><p>{mode==="challenge" && !current.choices[selected].correct ? "Not enough evidence for that conclusion. Recheck the relevant console properties and try again. You can request your single hint if you are stuck." : current.choices[selected].feedback}</p>{!current.choices[selected].correct&&<button onClick={()=>setAnswers(prev=>{const next={...prev};delete next[answerKey];return next;})}>Try again</button>}</div>}
+          {mode==="guided" && <div className="vm-lab-hint vm-lab-hint-guided"><strong>Guided clue</strong><p>{current.clue}</p></div>}
+          {mode==="challenge" && <div className="vm-lab-hint vm-lab-hint-challenge">{showHint ? <><strong>One-time hint used</strong><p>{current.clue}</p></> : <><strong>Stuck? You can ask for one hint during this attempt.</strong><button type="button" disabled={hintUsed} onClick={()=>{setHintUsed(true);setShowHint(true);}}>{hintUsed ? "Hint already used" : "Reveal my one hint"}</button></>}</div>}
           <div className="vm-lab-remediation">
             {step===1 && selected!==undefined && current.choices[selected]?.correct && !securityGroupFixed && <div className="vm-lab-remediation-card"><strong>Finding confirmed: inbound rule is missing</strong><p>Make the correction yourself in the AWS Console Simulator: open Security Groups → sg-api-prod → Inbound rules, then add TCP {protocol==="SSH"?"22":"3389"} from security group sg-bastion-prod. The lab detects the actual configuration change; it will not add the rule for you.</p><button type="button" onClick={()=>{setConsoleTab("Inbound rules");awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-navigate",screen:"Security Groups",resource:"sg-api-prod"},window.location.origin);}}>Open security group in console</button></div>}
             {securityGroupFixed && !connectionVerified && <div className="vm-lab-remediation-card"><strong>Rule detected in console</strong><p>The simulator reports that the expected inbound rule exists. Run a connection test against the current console configuration.</p><button type="button" onClick={()=>{setConnectionVerified(false);awsConsoleFrame.current?.contentWindow?.postMessage({type:"aws-sim-test-vm-connectivity",securityGroup:"sg-api-prod",sourceSecurityGroup:"sg-bastion-prod",protocol:"TCP",port:protocol==="SSH"?22:3389},window.location.origin);}}>Run connection test</button></div>}
@@ -542,5 +552,6 @@ export default function VmUnreachableLab() {
         </div>
       </div>
     </section>
+    </>}
   </main>;
 }
