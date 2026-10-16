@@ -261,9 +261,32 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
   }
   useEffect(() => {
     function handleLabNavigation(event: MessageEvent) {
-      if (event.origin !== window.location.origin || event.data?.type !== "aws-sim-navigate") return;
-      if (typeof event.data.screen !== "string") return;
-      openService(event.data.screen);
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type === "aws-sim-navigate") {
+        if (typeof event.data.screen === "string") openService(event.data.screen);
+        if (typeof event.data.resource === "string") setSelectedResource(event.data.resource);
+        return;
+      }
+      if (event.data?.type === "aws-sim-apply-lab-fix") {
+        const groupId = String(event.data.securityGroup || "sg-api-prod");
+        const source = String(event.data.sourceSecurityGroup || "sg-bastion-prod");
+        const protocol = event.data.protocol === "UDP" ? "UDP" : "TCP";
+        const port = Number(event.data.port) === 3389 ? 3389 : 22;
+        setState(current => {
+          const group = current.securityGroups.find(item => item.id === groupId || item.name === groupId);
+          if (!group) return current;
+          const alreadyPresent = group.ingress.some(rule => rule.protocol === protocol && rule.fromPort === port && rule.toPort === port && rule.sourceType === "SecurityGroup" && rule.source === source);
+          if (alreadyPresent) return current;
+          const result = addSecurityGroupIngressRule(current, group.id, {
+            protocol, fromPort: port, toPort: port, sourceType: "SecurityGroup", source,
+            description: "Approved admin access — added by VM-unreachable training lab"
+          });
+          return result.error ? current : result.state;
+        });
+        setSelectedResource(groupId);
+        openService("Security Groups");
+        notify("Training lab rule applied to the simulated security-group configuration.");
+      }
     }
     window.addEventListener("message", handleLabNavigation);
     return () => window.removeEventListener("message", handleLabNavigation);
