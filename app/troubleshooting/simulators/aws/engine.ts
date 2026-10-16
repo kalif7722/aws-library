@@ -362,10 +362,11 @@ function aclAllows(state: AwsLabState, direction: "inbound" | "outbound", port: 
 export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bastion-prod", targetInstanceId?: string, destinationPort = 22, protocol: "TCP" | "UDP" = "TCP"): AwsReachabilityResult {
   const targetInstance = getAwsInstances(state).find(item => item.id === targetInstanceId) ?? state.instance;
   const groups = state.securityGroups.filter(item => targetInstance.securityGroupIds.includes(item.id));
-  const sourceIp = source === "sg-bastion-prod" ? "10.20.1.10" : source.split("/")[0];
+  const sourceGroupId = source === "eni-0f55aa11bb22cc33" ? "sg-0f55aa11bb22cc33" : source;
+  const sourceIp = sourceGroupId === "sg-bastion-prod" || sourceGroupId === "sg-0f55aa11bb22cc33" ? "10.20.1.10" : sourceGroupId.split("/")[0];
   const port = Number.isFinite(destinationPort) && destinationPort >= 1 && destinationPort <= 65535 ? destinationPort : 22;
   const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === protocol && rule.fromPort <= port && rule.toPort >= port)) &&
-    ((rule.sourceType === "SecurityGroup" && (rule.source === source || state.securityGroups.some(sourceGroup => sourceGroup.name === source && sourceGroup.id === rule.source))) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
+    ((rule.sourceType === "SecurityGroup" && (rule.source === sourceGroupId || state.securityGroups.some(sourceGroup => sourceGroup.name === sourceGroupId && sourceGroup.id === rule.source))) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
   const targetSubnet = getAwsSubnets(state).find(subnet => subnet.id === targetInstance.subnetId);
   const targetRouteTable = targetSubnet ? getAwsRouteTables(state).find(table => table.id === targetSubnet.routeTableId) : undefined;
   const effectiveRoutes = targetInstance.id === state.instance.id ? state.routes : targetRouteTable?.routes ?? state.routes;
