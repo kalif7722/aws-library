@@ -88,7 +88,7 @@ export default function AwsSimulatorPage() {
   const [toast, setToast] = useState("");
   const [analysis, setAnalysis] = useState<{ ran: boolean; reachable: boolean; blockedAt: string | null; summary: string; checks: { name: string; ok: boolean; detail: string }[] } | null>(null);
   const [analysisDestinationId, setAnalysisDestinationId] = useState("i-0a12b345c678d9012");
-  const [analysisSource, setAnalysisSource] = useState("sg-bastion-prod");
+  const [analysisSource, setAnalysisSource] = useState("eni-0f55aa11bb22cc33");
   const [analysisProtocol, setAnalysisProtocol] = useState<"TCP" | "UDP">("TCP");
   const [analysisPort, setAnalysisPort] = useState("22");
 
@@ -239,7 +239,7 @@ export default function AwsSimulatorPage() {
     setLastRefreshed("Just now");
     setAnalysis(null);
     setAnalysisDestinationId("i-0a12b345c678d9012");
-    setAnalysisSource("sg-bastion-prod");
+    setAnalysisSource("eni-0f55aa11bb22cc33");
     setAnalysisProtocol("TCP");
     setAnalysisPort("22");
     setSourceType("SecurityGroup");
@@ -403,7 +403,7 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
               <h3>Create and analyze path</h3>
               <p>Model network reachability between supported AWS resources. This analysis evaluates configuration; it does not send packets or test guest services.</p>
               <div className="aws-sim-form-grid">
-                <label>Source resource (network interface)<select value={analysisSource} onChange={event=>{setAnalysisSource(event.target.value);setAnalysis(null);}}><option value="sg-bastion-prod">eni-bastion-prod · administrator interface</option></select></label>
+                <label>Source resource (network interface)<select value={analysisSource} onChange={event=>{setAnalysisSource(event.target.value);setAnalysis(null);}}><option value="eni-0f55aa11bb22cc33">eni-0f55aa11bb22cc33 · bastion-prod interface</option></select></label>
                 <label>Destination resource (EC2 instance)<select value={analysisDestinationId} onChange={event=>{setAnalysisDestinationId(event.target.value);setAnalysis(null);}}>{instances.map(item=><option key={item.id} value={item.id}>{item.id} · {item.name}</option>)}</select></label>
                 <label>Protocol<select value={analysisProtocol} onChange={event=>{setAnalysisProtocol(event.target.value as "TCP" | "UDP");setAnalysis(null);}}><option value="TCP">TCP</option><option value="UDP">UDP</option></select></label>
                 <label>Destination port<input type="number" min="1" max="65535" value={analysisPort} onChange={event=>{setAnalysisPort(event.target.value);setAnalysis(null);}} /></label>
@@ -412,7 +412,7 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
             </div>
             {analysis?.ran&&<div className={"aws-sim-analysis "+(analysis.reachable?"success":"blocked")}>
               <div className="aws-sim-analysis-title"><span>{analysis.reachable?"✓":"!"}</span><div><h3>Reachability status: {analysis.reachable?"Reachable":"Not reachable"}</h3><p>{analysis.summary}</p></div></div>
-              {analysis.reachable ? <><h3 className="aws-sim-analysis-subtitle">Path details</h3><ol className="aws-sim-path-details">{analysis.checks.map(check=><li key={check.name}><span className={"aws-sim-status "+(check.ok?"good":"bad")}>{check.ok?"Passed":"Passed"}</span><b>{check.name}</b><p>{check.detail}</p></li>)}</ol></> : <><h3 className="aws-sim-analysis-subtitle">Explanations</h3><div className="aws-sim-explanation"><b>{analysis.blockedAt === "security-group" ? "Security group rules" : analysis.blockedAt === "network-acl" ? "Network ACL rules" : "Route table"}</b><p>{analysis.checks.find(check=>!check.ok)?.detail}</p><small>Inspect the indicated resource configuration, make an approved change, then analyze the path again.</small></div><details className="aws-sim-analysis-details"><summary>Analysis details</summary><ol className="aws-sim-path-details">{analysis.checks.map(check=><li key={check.name}><span className={"aws-sim-status "+(check.ok?"good":"bad")}>{check.ok?"Passed":"Blocking component"}</span><b>{check.name}</b><p>{check.detail}</p></li>)}</ol></details></>}
+              {analysis.reachable ? <><h3 className="aws-sim-analysis-subtitle">Path details</h3><ol className="aws-sim-path-details">{analysis.checks.map(check=><li key={check.name}><span className={"aws-sim-status "+(check.ok?"good":"bad")}>{check.name}</span><b>{check.name}</b><p>{check.detail}</p></li>)}</ol></> : <><h3 className="aws-sim-analysis-subtitle">Explanations</h3><div className="aws-sim-explanation"><b>{analysis.blockedAt === "security-group" ? "Security group rules" : analysis.blockedAt === "network-acl" ? "Network ACL rules" : "Route table"}</b><p>{analysis.checks.find(check=>!check.ok)?.detail}</p><small>Inspect the indicated resource configuration, make an approved change, then analyze the path again.</small></div><details className="aws-sim-analysis-details"><summary>Analysis details</summary><ol className="aws-sim-path-details">{analysis.checks.map(check=><li key={check.name}><span className={"aws-sim-status "+(check.ok?"good":"bad")}>{check.ok?"Passed":"Blocking component"}</span><b>{check.name}</b><p>{check.detail}</p></li>)}</ol></details></>}
             </div>}
           </>}
           {(screen==="Load Balancers" || screen==="Target Groups") && <div className="aws-sim-related"><b>Related resources</b><button onClick={()=>go("Load Balancers")}>Load balancers ↗</button><button onClick={()=>go("Target Groups")}>Target groups ↗</button><button onClick={()=>go("Instances")}>EC2 instances ↗</button><button onClick={()=>go("Security Groups")}>Security groups ↗</button><button onClick={()=>go("CloudWatch")}>CloudWatch metrics ↗</button></div>}
