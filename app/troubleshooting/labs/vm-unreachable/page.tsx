@@ -447,8 +447,8 @@ export default function VmUnreachableLab() {
           <text x="64" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">Admin laptop</text><text x="64" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source</text>
           <rect x="160" y="70" width="140" height="94" rx="7" fill="#eff6ff" stroke="#93c5fd"/>
           <text x="230" y="88" fontSize="10" fontWeight="700" textAnchor="middle" fill="#1d4e89">Approved admin path</text>
-          <image href={`${AWS_R2_ICON_BASE}/Compute/EC2.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
-          <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">sg-bastion-prod</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">10.20.0.0/16</text>
+          <image href={`${AWS_R2_ICON_BASE}/NetworkingContentDelivery/VPC.png`} x="202" y="94" width="56" height="43" preserveAspectRatio="xMidYMid meet"/>
+          <text x="230" y="145" fontSize="10" textAnchor="middle" fill="#1b2a40">sg-bastion-prod</text><text x="230" y="157" fontSize="9" textAnchor="middle" fill="#52647a">Approved source range</text>
           <rect x="355" y="72" width="150" height="90" rx="7" fill={step >= 1 ? "#fff1f2" : "#f8fafc"} stroke={step >= 1 ? "#ef4444" : "#cbd5e1"} strokeWidth={step >= 1 ? "1.5" : "1"}/>
           <text x="430" y="91" fontSize="10" fontWeight="700" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#1b2a40"}>Security group</text><text x="430" y="104" fontSize="10" textAnchor="middle" fill={step >= 1 ? "#991b1b" : "#52647a"}>sg-api-prod</text>
           <image href={`${AWS_R2_ICON_BASE}/NetworkingContentDelivery/VPC.png`} x="405" y="110" width="50" height="43" preserveAspectRatio="xMidYMid meet" opacity={step >= 1 ? 1 : 0.82}/>
