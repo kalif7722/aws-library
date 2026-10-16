@@ -118,21 +118,21 @@ export default function AwsSimulatorPage() {
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem("aws-console-simulator-state-v2");
+      const saved = window.localStorage.getItem("aws-console-simulator-state-v3") ?? window.localStorage.getItem("aws-console-simulator-state-v2");
       if (saved) {
-        const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen; pinnedServices?: string[] };
+        const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen; pinnedServices?: string[]; iamUsers?: typeof iamUsers; iamPolicies?: typeof iamPolicies; dynamoItems?: typeof dynamoItems };
         const savedState = parsed.state;
         if (savedState) setState(migrateAwsLabState(savedState));
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
-        if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
+        if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));\n        if (Array.isArray(parsed.iamUsers)) setIamUsers(parsed.iamUsers);\n        if (Array.isArray(parsed.iamPolicies)) setIamPolicies(parsed.iamPolicies);\n        if (Array.isArray(parsed.dynamoItems)) setDynamoItems(parsed.dynamoItems);
       }
     } catch { /* Start with the seeded training account if storage is unavailable. */ }
     setHydrated(true);
   }, []);
   useEffect(() => {
     if (!hydrated) return;
-    try { window.localStorage.setItem("aws-console-simulator-state-v2", JSON.stringify({ state, screen, pinnedServices })); } catch { /* Storage is optional. */ }
-  }, [hydrated, state, screen, pinnedServices]);
+    try { window.localStorage.setItem("aws-console-simulator-state-v3", JSON.stringify({ state, screen, pinnedServices, iamUsers, iamPolicies, dynamoItems })); } catch { /* Storage is optional. */ }
+  }, [hydrated, state, screen, pinnedServices, iamUsers, iamPolicies, dynamoItems]);
 
   useEffect(() => {
     if (!hydrated || window.parent === window) return;
