@@ -280,6 +280,74 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
         if (typeof event.data.resource === "string") setSelectedResource(event.data.resource);
         return;
       }
+      if (event.data?.type === "aws-sim-apply-cost-mitigation") {
+        const before = state.costUsage ?? [];
+        const natLine = before.find(item => item.usageType === "NatGateway-Bytes");
+        if (!natLine) {
+          notify("No NAT Gateway usage line was found to mitigate in this training account.");
+          event.source?.postMessage({ type: "aws-sim-cost-mitigation-result", ok: false }, event.origin);
+          return;
+        }
+        const audit = {
+          id: "evt-sim-cost-mitigation-" + Date.now(),
+          eventTime: new Date().toISOString(),
+          eventName: "ApplyCostOptimizationRecommendation",
+          eventSource: "ce.amazonaws.com",
+          userIdentity: "simulated-console-user",
+          resource: natLine.resourceId,
+          region: natLine.region,
+          errorCode: null,
+          detail: "Lab-only simulation: approved NAT Gateway usage optimization applied; sample usage returned to baseline."
+        };
+        setState(current => ({ ...current, costUsage: (current.costUsage ?? []).map(item => item.usageType === "NatGateway-Bytes" ? { ...item, amount: item.baselineAmount } : item), cloudTrailEvents: [audit, ...(current.cloudTrailEvents ?? [])].slice(0, 100) }));
+        notify("Simulation-only cost mitigation applied. Run Verify recovery to check the updated sample.");
+        event.source?.postMessage({ type: "aws-sim-cost-mitigation-result", ok: true }, event.origin);
+        return;
+      }
+      if (event.data?.type === "aws-sim-validate-lab") {
+        const incident = String(event.data.incident || "");
+        const checks: { label: string; ok: boolean; detail: string }[] = [];
+        const addCheck = (label: string, ok: boolean, detail: string) => checks.push({ label, ok, detail });
+        if (incident === "private-connectivity") {
+          const group = state.securityGroups.find(item => item.id === "sg-rds-orders" || item.name === "sg-rds-orders");
+          const app = state.securityGroups.find(item => item.id === "sg-0ab12cd34ef56ab78" || item.name === "sg-api-prod");
+          const allowed = !!group?.ingress.some(rule => rule.protocol === "TCP" && rule.fromPort <= 5432 && rule.toPort >= 5432 && rule.sourceType === "SecurityGroup" && (rule.source === "sg-api-prod" || rule.source === app?.id));
+          addCheck("RDS inbound TCP/5432", allowed, allowed ? "The database allows the application security group." : "The database security group still does not allow TCP/5432 from sg-api-prod.");
+        } else if (incident === "access-denied") {
+          const role = state.iamRoles.find(item => item.name === "Lambda-Payments-Role");
+          const allowed = !!role?.attachedPolicies.includes("DynamoDBOrdersWrite");
+          addCheck("Lambda role permission", allowed, allowed ? "DynamoDBOrdersWrite is attached to Lambda-Payments-Role." : "Attach the least-privilege DynamoDBOrdersWrite policy to Lambda-Payments-Role.");
+        } else if (incident === "ai-access-denied") {
+          const role = state.iamRoles.find(item => item.name === "AI-Platform-Operator");
+          const allowed = !!role?.attachedPolicies.includes("BedrockInvokeAccess");
+          addCheck("Bedrock invocation permission", allowed, allowed ? "BedrockInvokeAccess is attached to AI-Platform-Operator." : "The workload role is still missing BedrockInvokeAccess.");
+        } else if (incident === "database-slowdown") {
+          const group = state.targetGroups.find(item => item.id === "tg-payments-admin" || item.name === "tg-payments-admin");
+          const pathOk = !!group && group.healthCheckPath === group.healthyPath;
+          addCheck("Target-group health-check path", pathOk, pathOk ? "The health-check path matches the healthy application endpoint." : "The configured health-check path still differs from the endpoint the application serves.");
+        } else if (incident === "stale-data") {
+          const result = evaluateAwsGlueJob(state, "orders-daily-curation");
+          addCheck("Analytics pipeline freshness", result.healthy, result.healthy ? "The expected source partition is present and the latest Glue run produced the expected target partition." : result.checks.filter(item => item.result !== "passed").map(item => item.name + ": " + item.detail).join(" "));
+        } else if (incident === "rag-stale-answers") {
+          const kb = (state.bedrockKnowledgeBases ?? []).find(item => item.id === "kb-payments-product-guide" || item.name === "payments-product-knowledge");
+          const objects = (state.s3Objects ?? []).filter(item => item.bucketName === "ai-workloads" && item.key.startsWith("knowledge/payments/"));
+          const latestSource = objects.sort((a,b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())[0];
+          const synced = !!kb && !!latestSource && new Date(kb.lastSyncTime).getTime() >= new Date(latestSource.lastModified).getTime();
+          addCheck("Knowledge-base freshness", synced, synced ? "The latest source document is covered by the most recent knowledge-base sync." : "Sync the payments knowledge base after the latest source-document update, then retest retrieval.");
+        } else if (incident === "cloud-cost-spike") {
+          const spike = (state.costUsage ?? []).find(item => item.usageType === "NatGateway-Bytes" && item.amount > item.baselineAmount);
+          const mitigationEvent = (state.cloudTrailEvents ?? []).some(item => item.eventName === "ApplyCostOptimizationRecommendation" && /nat/i.test(item.resource + " " + item.detail));
+          addCheck("NAT usage anomaly", !spike, spike ? "NAT gateway usage is still above baseline; apply the simulation-only mitigation in the lab panel after diagnosis." : "NAT gateway usage is no longer above baseline.");
+          addCheck("Mitigation evidence", mitigationEvent, mitigationEvent ? "The simulation-only mitigation is recorded in the audit history." : "No cost mitigation has been recorded in the simulator.");
+        } else {
+          addCheck("Known lab scenario", false, "This lab does not have a simulator recovery check configured.");
+        }
+        const ok = checks.length > 0 && checks.every(check => check.ok);
+        const message = checks.map(check => (check.ok ? "✓ " : "✗ ") + check.label + ": " + check.detail).join("\n");
+        event.source?.postMessage({ type: "aws-sim-lab-validation-result", incident, ok, checks, message }, event.origin);
+        notify(ok ? "Lab recovery verified against the current simulator configuration." : "Recovery not verified. Review the lab validation results.");
+        return;
+      }
       if (event.data?.type === "aws-sim-test-vm-connectivity") {
         const groupName = String(event.data.securityGroup || "sg-api-prod");
         const sourceName = String(event.data.sourceSecurityGroup || "sg-bastion-prod");
