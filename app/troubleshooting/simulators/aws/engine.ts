@@ -359,32 +359,29 @@ function aclAllows(state: AwsLabState, direction: "inbound" | "outbound", port: 
   const first = rules[0];
   return !!first && first.action === "allow";
 }
-export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bastion-prod", targetInstanceId?: string): AwsReachabilityResult {
+export function evaluateAwsSshReachability(state: AwsLabState, source = "sg-bastion-prod", targetInstanceId?: string, destinationPort = 22, protocol: "TCP" | "UDP" = "TCP"): AwsReachabilityResult {
   const targetInstance = getAwsInstances(state).find(item => item.id === targetInstanceId) ?? state.instance;
   const groups = state.securityGroups.filter(item => targetInstance.securityGroupIds.includes(item.id));
   const sourceIp = source === "sg-bastion-prod" ? "10.20.1.10" : source.split("/")[0];
-  const instanceHealthy = targetInstance.state === "running" && targetInstance.systemStatus === "passed" && targetInstance.instanceStatus === "passed";
-  const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) &&
+  const port = Number.isFinite(destinationPort) && destinationPort >= 1 && destinationPort <= 65535 ? destinationPort : 22;
+  const ruleAllows = groups.some(group => group.ingress.some(rule => (rule.protocol === "ALL" || (rule.protocol === protocol && rule.fromPort <= port && rule.toPort >= port)) &&
     ((rule.sourceType === "SecurityGroup" && (rule.source === source || state.securityGroups.some(sourceGroup => sourceGroup.name === source && sourceGroup.id === rule.source))) || (rule.sourceType === "IPv4" && cidrContains(rule.source, sourceIp)))));
   const targetSubnet = getAwsSubnets(state).find(subnet => subnet.id === targetInstance.subnetId);
   const targetRouteTable = targetSubnet ? getAwsRouteTables(state).find(table => table.id === targetSubnet.routeTableId) : undefined;
   const effectiveRoutes = targetInstance.id === state.instance.id ? state.routes : targetRouteTable?.routes ?? state.routes;
   const routeHealthy = effectiveRoutes.some(route => cidrContains(route.destination, targetInstance.privateIp) && route.target === "local" && route.state === "active");
-  const inboundAclAllows = aclAllows(state, "inbound", 22, sourceIp);
+  const inboundAclAllows = aclAllows(state, "inbound", port, sourceIp);
   const outboundAclAllows = aclAllows(state, "outbound", 49152, sourceIp);
-  const guestHealthy = targetInstance.guestSsh === "listening";
   const checks = [
-    { name: "EC2 instance status", result: instanceHealthy ? "passed" as const : "blocked" as const, detail: instanceHealthy ? "Instance is running; both status checks passed." : "Instance state or status checks are not healthy." },
-    { name: "VPC local route", result: routeHealthy ? "passed" as const : "blocked" as const, detail: routeHealthy ? "An active local route covers the instance private IP." : "No active local route covers the instance private IP." },
-    { name: "Network ACL inbound", result: inboundAclAllows ? "passed" as const : "blocked" as const, detail: inboundAclAllows ? "The first matching inbound rule permits TCP/22 from the source." : "Inbound network ACL rules do not permit TCP/22 from the source." },
-    { name: "Security group ingress", result: ruleAllows ? "passed" as const : "blocked" as const, detail: ruleAllows ? "An attached security group allows TCP/22 from the approved administrator source." : "No attached security group allows TCP/22 from the approved administrator source." },
-    { name: "Network ACL return traffic", result: outboundAclAllows ? "passed" as const : "blocked" as const, detail: outboundAclAllows ? "The first matching outbound rule permits ephemeral TCP return traffic." : "Outbound network ACL rules block the ephemeral TCP return path." },
-    { name: "Guest SSH listener", result: guestHealthy ? "passed" as const : "blocked" as const, detail: guestHealthy ? "sshd is listening on TCP/22." : "The guest SSH service is not listening." }
+    { name: "VPC route tables", result: routeHealthy ? "passed" as const : "blocked" as const, detail: routeHealthy ? "An active VPC local route covers the destination interface." : "No active local route covers the destination interface." },
+    { name: "Network ACL inbound", result: inboundAclAllows ? "passed" as const : "blocked" as const, detail: inboundAclAllows ? `The first matching inbound network ACL rule permits ${protocol}/${port}.` : `Inbound network ACL rules do not permit ${protocol}/${port}.` },
+    { name: "Security group rules", result: ruleAllows ? "passed" as const : "blocked" as const, detail: ruleAllows ? `An attached security group permits ${protocol}/${port} from the selected source.` : `No attached security group permits ${protocol}/${port} from the selected source.` },
+    { name: "Network ACL return path", result: outboundAclAllows ? "passed" as const : "blocked" as const, detail: outboundAclAllows ? "The first matching outbound network ACL rule permits ephemeral return traffic." : "Outbound network ACL rules block ephemeral return traffic." }
   ];
   const failed = checks.find(check => check.result === "blocked");
-  const map = { "EC2 instance status": "instance", "VPC local route": "route", "Network ACL inbound": "network-acl", "Security group ingress": "security-group", "Network ACL return traffic": "network-acl", "Guest SSH listener": "guest" } as const;
+  const map = { "VPC route tables": "route", "Network ACL inbound": "network-acl", "Security group rules": "security-group", "Network ACL return path": "network-acl" } as const;
   return { reachable: !failed, blockedAt: failed ? map[failed.name as keyof typeof map] : null,
-    summary: failed ? "Traffic is blocked at " + failed.name.toLowerCase() + ": " + failed.detail : "The simulated path allows TCP/22 from the approved administrator source. A real SSH login still requires separate authentication verification.",
+    summary: failed ? "The modeled path is blocked by " + failed.name.toLowerCase() + "." : `The modeled network configuration permits ${protocol}/${port}. Reachability Analyzer does not test guest operating-system services or application authentication.`,
     checks };
 }
 
