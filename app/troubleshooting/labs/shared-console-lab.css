@@ -112,3 +112,43 @@
 .shared-console-lab .shared-lab-mode-start p{color:#64748b!important;line-height:1.6}
 @media(max-width:850px){.shared-console-lab{padding:16px!important}.shared-console-lab .vm-lab-hero{padding-right:0!important}.shared-console-lab .shared-lab-workspace{grid-template-columns:1fr!important}.shared-console-lab .shared-lab-steps{position:static;max-height:none;overflow:visible}.shared-console-lab .vm-lab-mode-buttons{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:560px){.shared-console-lab .vm-lab-mode-buttons{grid-template-columns:1fr!important}.shared-console-lab .shared-lab-investigation{padding:14px!important}.shared-console-lab .shared-lab-evidence{grid-template-columns:1fr!important}.shared-console-lab .shared-lab-actions button{width:100%}}
+
+/* Shared labs use a normal vertical document flow, not the VM lab's legacy two-column shell grid.
+   The VM page places its own sections by grid row/column; applying that shell to this different
+   component tree squeezed each shared-lab section into implicit grid columns. */
+.shared-console-lab{
+  display:block!important;
+  width:100%!important;
+  max-width:1540px!important;
+}
+.shared-console-lab>.shared-lab-reset{position:absolute}
+.shared-console-lab>.vm-lab-hero{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:1440px!important;
+  padding:0 0 16px!important;
+}
+.shared-console-lab>.vm-lab-path-overview,
+.shared-console-lab>.vm-topology-card,
+.shared-console-lab>.vm-real-console,
+.shared-console-lab>.shared-lab-workspace{
+  width:100%!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+}
+.shared-console-lab .vm-lab-path-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:stretch;
+}
+.shared-console-lab .vm-lab-path-grid>div{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:900px){
+  .shared-console-lab .vm-lab-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:560px){
+  .shared-console-lab .vm-lab-path-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+
