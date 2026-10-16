@@ -121,7 +121,7 @@
 .vm-console-sizing label{display:grid;grid-template-columns:auto auto;gap:5px 12px;align-items:center;color:var(--lab-muted);font-size:.74rem;font-weight:700}
 .vm-console-sizing label strong{color:#e1e9fa}.vm-console-sizing input[type=range]{grid-column:1/-1;width:min(380px,70vw);accent-color:#8b82ff}
 .vm-console-sizing a{font-size:.75rem;font-weight:800;color:#a9c8ff;text-decoration:none}
-.vm-real-console-frame{width:100%;min-width:0;max-width:100%;resize:horizontal;overflow:auto;border-right:1px solid var(--lab-border)}
+.vm-real-console-frame{width:100%;min-width:0;max-width:100%;resize:none;overflow:hidden;border-right:0}
 .vm-real-console-frame iframe{display:block;width:100%;height:780px;border:0;background:#f3f5f7}
 @media(max-width:900px){.vm-topology-heading{grid-template-columns:1fr}.vm-topology-flow{grid-template-columns:1fr}.topology-arrow{transform:rotate(90deg);height:20px}.vm-real-console-head{align-items:flex-start;flex-direction:column}.vm-real-console-frame iframe{height:680px}}
 
@@ -178,3 +178,9 @@
 .vm-architecture-svg{display:block;width:100%;min-width:760px;height:auto;max-height:250px}
 .vm-topology-card .vm-topology-legend{font-size:.72rem}
 @media(max-width:760px){.vm-architecture-svg{min-width:850px}.vm-architecture-canvas{padding:6px}}
+
+/* Console is full-width; no manual resizing or horizontal frame scrollbar. */
+.vm-console-sizing{justify-content:flex-end;padding:8px 18px;background:#fff}
+.vm-console-sizing label{display:none}
+.vm-real-console-frame{width:100%!important;max-width:100%!important;resize:none!important;overflow:hidden!important}
+.vm-real-console-frame iframe{width:100%!important;max-width:100%!important}
