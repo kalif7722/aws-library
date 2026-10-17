@@ -127,7 +127,7 @@ export default function AwsSimulatorPage() {
   const [lambdaInvocationHistory, setLambdaInvocationHistory] = useState<Record<string,{time:string;success:boolean;requestId:string;detail:string;event:string;response:string}[]>>({});
   const [lambdaConfigDraft, setLambdaConfigDraft] = useState<{name:string;runtime:string;handler:string;roleName:string;timeoutSeconds:string;memoryMb:string;description:string;environmentText:string;vpcSubnetIds:string[];securityGroupIds:string[]} | null>(null);
   const [lambdaConfigError, setLambdaConfigError] = useState("");
-  const [lambdaCodeDirty, setLambdaCodeDirty] = useState(false);
+  const [, setLambdaCodeDirty] = useState(false);
   const [lambdaTestEventDraft, setLambdaTestEventDraft] = useState("");
   const [lambdaTestError, setLambdaTestError] = useState("");
   const [lambdaLastResult, setLambdaLastResult] = useState<{functionName:string;time:string;success:boolean;requestId:string;detail:string;event:string;response:string} | null>(null);
