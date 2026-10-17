@@ -19,6 +19,9 @@ export type AwsServiceDirectoryEntry = {
 export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
   { name: "EC2", category: "Compute", icon: "▣", description: "Virtual servers in the cloud", count: "1 instance", implemented: true, screen: "EC2 Dashboard" },
   { name: "VPC", category: "Networking & Content Delivery", icon: "◇", description: "Isolated virtual networks and routing", count: "1 VPC", implemented: true, screen: "VPCs" },
+  { name: "NAT Gateways", category: "Networking & Content Delivery", icon: "⇄", description: "Inspect NAT gateway and addresses", count: "1 NAT gateway", implemented: true, screen: "NAT Gateways", kind: "console-page" },
+  { name: "VPC Endpoints", category: "Networking & Content Delivery", icon: "↔", description: "Private access to AWS services", count: "VPC endpoints", implemented: true, screen: "VPC Endpoints", kind: "console-page" },
+  { name: "VPC Flow Logs", category: "Networking & Content Delivery", icon: "≋", description: "Inspect traffic metadata", count: "Flow Logs", implemented: true, screen: "VPC Flow Logs", kind: "console-page" },
   { name: "Security Groups", category: "Networking & Security", icon: "⬡", description: "Stateful traffic controls for resources", count: "4 security groups", implemented: true, screen: "Security Groups", kind: "console-page" },
   { name: "Route Tables", category: "Networking & Security", icon: "⇄", description: "Subnet routing configuration", count: "2 route tables", implemented: true, screen: "Route Tables", kind: "console-page" },
   { name: "Network ACLs", category: "Networking & Security", icon: "▤", description: "Stateless subnet traffic controls", count: "1 network ACL", implemented: true, screen: "Network ACLs", kind: "console-page" },

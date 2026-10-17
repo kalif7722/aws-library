@@ -11,6 +11,9 @@ export type AwsVpc = { id: string; name: string; cidr: string; state: "available
 export type AwsSubnet = { id: string; name: string; vpcId: string; cidr: string; availabilityZone: string; state: "available" | "pending"; routeTableId: string; networkAclId: string };
 export type AwsRoute = { destination: string; target: string; state: "active" | "blackhole" };
 export type AwsRouteTable = { id: string; name: string; vpcId: string; routes: AwsRoute[]; associatedSubnetIds: string[]; isMain: boolean; tags: Record<string, string> };
+export type AwsNatGateway = { id: string; name: string; state: "available" | "pending" | "failed"; vpcId: string; subnetId: string; connectivityType: "public" | "private"; publicIp: string | null; privateIp: string; tags: Record<string, string> };
+export type AwsVpcEndpoint = { id: string; serviceName: string; type: "Gateway" | "Interface"; state: "available" | "pending"; vpcId: string; routeTableIds: string[]; createdAt: string };
+export type AwsVpcFlowLog = { id: string; interfaceId: string; sourceInstanceName: string; sourceAddress: string; destinationAddress: string; destinationHint: string; destinationPort: number; protocol: "TCP" | "UDP"; packets: number; bytes: number; action: "ACCEPT" | "REJECT" };
 export type AwsInstance = { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped"; instanceType?: string; availabilityZone?: string; imageId?: string; tags?: Record<string, string>; listeners?: { port: number; protocol: "TCP" | "UDP"; state: "listening" | "stopped" }[]; healthCheckPaths?: string[] };
 export type AwsLoadBalancer = { id: string; name: string; type: "application" | "network"; scheme: "internal" | "internet-facing"; state: "active" | "provisioning" | "failed"; vpcId: string; subnetIds: string[]; securityGroupIds: string[]; dnsName: string; listeners: { port: number; protocol: "HTTP" | "HTTPS"; targetGroupId: string }[] };
 export type AwsTargetGroup = { id: string; name: string; protocol: "HTTP" | "HTTPS"; port: number; vpcId: string; targetInstanceIds: string[]; healthCheckPath: string; healthyPath: string; matcher: string };
@@ -133,6 +136,9 @@ export type AwsLabState = {
   vpcs?: AwsVpc[];
   subnets?: AwsSubnet[];
   routeTables?: AwsRouteTable[];
+  natGateways?: AwsNatGateway[];
+  vpcEndpoints?: AwsVpcEndpoint[];
+  vpcFlowLogs?: AwsVpcFlowLog[];
   securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[]; egress?: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
@@ -202,6 +208,9 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { id: "rtb-0123abcd4567ef890", name: "rtb-production-private", vpcId: "vpc-0123abcd4567ef890", routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "nat-0123abcd4567ef890", state: "active" }], associatedSubnetIds: ["subnet-0123abcd4567ef890", "subnet-0aa1234567890abcd"], isMain: false, tags: { Name: "rtb-production-private", Environment: "production" } },
     { id: "rtb-0fedcba9876543210", name: "rtb-production-public", vpcId: "vpc-0123abcd4567ef890", routes: [{ destination: "10.20.0.0/16", target: "local", state: "active" }, { destination: "0.0.0.0/0", target: "igw-0123abcd4567ef890", state: "active" }], associatedSubnetIds: ["subnet-0fedcba9876543210", "subnet-0bb1234567890abcd"], isMain: false, tags: { Name: "rtb-production-public", Environment: "production" } }
   ],
+  natGateways: [{id:"nat-0123abcd4567ef890",name:"nat-prod-eu-west-1a",state:"available",vpcId:"vpc-0123abcd4567ef890",subnetId:"subnet-0fedcba9876543210",connectivityType:"public",publicIp:"18.202.10.24",privateIp:"10.20.1.12",tags:{Name:"nat-prod-eu-west-1a",Owner:"network-platform"}}],
+  vpcEndpoints: [],
+  vpcFlowLogs: [{id:"fl-1",interfaceId:"eni-api-prod-01",sourceInstanceName:"api-prod-01",sourceAddress:"10.20.2.17",destinationAddress:"52.218.88.42",destinationHint:"Possible S3 traffic; verify AWS prefix list",destinationPort:443,protocol:"TCP",packets:9876543,bytes:10800000000000,action:"ACCEPT"},{id:"fl-2",interfaceId:"eni-api-prod-01",sourceInstanceName:"api-prod-01",sourceAddress:"10.20.2.17",destinationAddress:"54.72.10.18",destinationHint:"External package repository (training correlation)",destinationPort:443,protocol:"TCP",packets:642100,bytes:650000000000,action:"ACCEPT"}],
   networkAcl: [
     { direction: "inbound", ruleNumber: 110, protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
     { direction: "inbound", ruleNumber: 100, protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
@@ -310,7 +319,8 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   ],
   costUsage: [
     { service: "Amazon EC2", region: "eu-west-1", usageType: "BoxUsage:t3.medium", resourceId: "i-0a12b345c678d9012", amount: 1420, baselineAmount: 1310, owner: "payments-platform" },
-    { service: "Amazon EC2", region: "eu-west-1", usageType: "NatGateway-Bytes", resourceId: "nat-0123abcd4567ef890", amount: 890.17, baselineAmount: 150, owner: "network-platform" },
+    { service: "Amazon EC2", region: "eu-west-1", usageType: "NatGateway-Hours", resourceId: "nat-0123abcd4567ef890", amount: 54, baselineAmount: 54, owner: "network-platform" },
+    { service: "Amazon EC2", region: "eu-west-1", usageType: "NatGateway-Bytes", resourceId: "nat-0123abcd4567ef890", amount: 836.17, baselineAmount: 96, owner: "network-platform" },
     { service: "Amazon RDS", region: "eu-west-1", usageType: "InstanceUsage:db.r6g.large", resourceId: "orders-prod", amount: 980, baselineAmount: 980, owner: "payments-platform" },
     { service: "Amazon S3", region: "eu-west-1", usageType: "TimedStorage-ByteHrs", resourceId: "data-lake-curated", amount: 346, baselineAmount: 320, owner: "data-platform" },
     { service: "Elastic Load Balancing", region: "eu-west-1", usageType: "LCU-Hours", resourceId: "alb-payments-prod", amount: 220, baselineAmount: 220, owner: "payments-platform" },
@@ -1194,6 +1204,8 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   const baseline = createInitialAwsLabState();
   if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
   const graphUpgrade = (savedState.schemaVersion ?? 0) < 4;
+  const oldNat = savedState.costUsage?.find(x => x.usageType === "NatGateway-Bytes" && x.resourceId === "nat-0123abcd4567ef890" && Math.abs(x.amount - 890.17) < 0.01);
+  const migratedCost = oldNat ? [...savedState.costUsage!.filter(x => x !== oldNat), {...oldNat,usageType:"NatGateway-Hours",amount:54,baselineAmount:54},{...oldNat,usageType:"NatGateway-Bytes",amount:836.17,baselineAmount:96}] : savedState.costUsage;
   const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }), listeners: savedState.instance.listeners ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.listeners : undefined), healthCheckPaths: savedState.instance.healthCheckPaths ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.healthCheckPaths : undefined) };
   const securityGroups = [
     ...savedState.securityGroups.map(savedGroup => {
@@ -1227,7 +1239,10 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
     glueJobs: savedState.glueJobs ?? baseline.glueJobs,
     cloudTrailEvents: savedState.cloudTrailEvents ?? baseline.cloudTrailEvents,
-    costUsage: savedState.costUsage ?? baseline.costUsage,
+    costUsage: migratedCost ?? baseline.costUsage,
+    natGateways: savedState.natGateways ?? baseline.natGateways,
+    vpcEndpoints: savedState.vpcEndpoints ?? baseline.vpcEndpoints,
+    vpcFlowLogs: savedState.vpcFlowLogs ?? baseline.vpcFlowLogs,
     bedrockModels: savedState.bedrockModels ?? baseline.bedrockModels,
     bedrockKnowledgeBases: savedState.bedrockKnowledgeBases ?? baseline.bedrockKnowledgeBases,
     bedrockGuardrails: savedState.bedrockGuardrails ?? baseline.bedrockGuardrails,
