@@ -145,6 +145,7 @@ export default function AwsSimulatorPage() {
   const [rdsError, setRdsError] = useState("");
   const [rdsRowError, setRdsRowError] = useState("");
   const [rdsDeleteConfirmText, setRdsDeleteConfirmText] = useState("");
+  const [showRdsDeleteConfirm, setShowRdsDeleteConfirm] = useState(false);
   const [showRdsCreate, setShowRdsCreate] = useState(false);
   const [rdsCreateDraft, setRdsCreateDraft] = useState({identifier:"",engine:"PostgreSQL",engineVersion:"16.3",instanceClass:"db.t3.micro",storageGb:"20",dbName:"appdb",masterUsername:"dbadmin",publiclyAccessible:false});
   const [rdsCreateError, setRdsCreateError] = useState("");
