@@ -324,7 +324,9 @@ test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda,
   assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-admin').healthy,false);
-  assert.equal(evaluateAwsDatabaseConnectivity(state,state.instance.id,'orders-prod').healthy,true);
+  assert.equal(evaluateAwsDatabaseConnectivity(state,state.instance.id,'orders-prod').healthy,false);
+  const allowedDb={...state,securityGroups:state.securityGroups.map(group=>group.id==='sg-rds-orders'?{...group,ingress:[{id:'sgr-rds-app-test',protocol:'TCP',fromPort:5432,toPort:5432,sourceType:'SecurityGroup',source:'sg-0ab12cd34ef56ab78',description:'Application access'}]}:group)};
+  assert.equal(evaluateAwsDatabaseConnectivity(allowedDb,state.instance.id,'orders-prod').healthy,true);
   assert.equal(evaluateAwsDnsRecord(state,'record-api').healthy,true);
   assert.equal(getAwsDynamoTables(state).length,2);
   assert.equal(getAwsLambdaFunctions(state).length,3);
