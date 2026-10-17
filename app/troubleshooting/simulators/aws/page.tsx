@@ -148,7 +148,7 @@ export default function AwsSimulatorPage() {
         if (Array.isArray(parsed.iamPolicies)) setIamPolicies(parsed.iamPolicies);
         if (Array.isArray(parsed.dynamoItems)) setDynamoItems(parsed.dynamoItems);
         if (parsed && typeof parsed === "object") {
-          const savedData = parsed as { lambdaCodeByName?: Record<string,string>; lambdaTestEventByName?: Record<string,string>; lambdaInvocationHistory?: Record<string,{time:string;success:boolean;requestId:string;detail:string;event:string;response:string}[]> };
+          const savedData = parsed as typeof parsed & { lambdaCodeByName?: Record<string,string>; lambdaTestEventByName?: Record<string,string>; lambdaInvocationHistory?: Record<string,{time:string;success:boolean;requestId:string;detail:string;event:string;response:string}[]> };
           if (savedData.lambdaCodeByName && typeof savedData.lambdaCodeByName === "object") setLambdaCodeByName(savedData.lambdaCodeByName);
           if (savedData.lambdaTestEventByName && typeof savedData.lambdaTestEventByName === "object") setLambdaTestEventByName(savedData.lambdaTestEventByName);
           if (savedData.lambdaInvocationHistory && typeof savedData.lambdaInvocationHistory === "object") setLambdaInvocationHistory(savedData.lambdaInvocationHistory);
