@@ -132,7 +132,9 @@ export default function AwsSimulatorPage() {
         if (savedState) setState(migrateAwsLabState(savedState));
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
         if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
-        if (Array.isArray(parsed.iamUsers)) setIamUsers(parsed.iamUsers);\n        if (Array.isArray(parsed.iamPolicies)) setIamPolicies(parsed.iamPolicies);\n        if (Array.isArray(parsed.dynamoItems)) setDynamoItems(parsed.dynamoItems);
+        if (Array.isArray(parsed.iamUsers)) setIamUsers(parsed.iamUsers);
+        if (Array.isArray(parsed.iamPolicies)) setIamPolicies(parsed.iamPolicies);
+        if (Array.isArray(parsed.dynamoItems)) setDynamoItems(parsed.dynamoItems);
       }
     } catch { /* Start with the seeded training account if storage is unavailable. */ }
     setHydrated(true);
