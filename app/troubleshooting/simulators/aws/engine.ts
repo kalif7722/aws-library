@@ -14,6 +14,7 @@ export type AwsRouteTable = { id: string; name: string; vpcId: string; routes: A
 export type AwsNatGateway = { id: string; name: string; state: "available" | "pending" | "failed"; vpcId: string; subnetId: string; connectivityType: "public" | "private"; publicIp: string | null; privateIp: string; tags: Record<string, string> };
 export type AwsVpcEndpoint = { id: string; serviceName: string; type: "Gateway" | "Interface"; state: "available" | "pending"; vpcId: string; routeTableIds: string[]; createdAt: string };
 export type AwsVpcFlowLog = { id: string; interfaceId: string; sourceInstanceName: string; sourceAddress: string; destinationAddress: string; destinationHint: string; destinationPort: number; protocol: "TCP" | "UDP"; packets: number; bytes: number; action: "ACCEPT" | "REJECT" };
+export type AwsVpcFlowLogConfig = { id: string; name: string; resourceType: "VPC" | "Subnet" | "NetworkInterface"; resourceId: string; trafficType: "ALL" | "ACCEPT" | "REJECT"; destinationType: "CloudWatch Logs" | "Amazon S3"; destination: string; status: "ACTIVE" | "FAILED"; };
 export type AwsInstance = { id: string; name: string; state: "running" | "stopped"; systemStatus: "passed" | "impaired"; instanceStatus: "passed" | "impaired"; privateIp: string; subnetId: string; securityGroupIds: string[]; guestSsh: "listening" | "stopped"; instanceType?: string; availabilityZone?: string; imageId?: string; tags?: Record<string, string>; listeners?: { port: number; protocol: "TCP" | "UDP"; state: "listening" | "stopped" }[]; healthCheckPaths?: string[] };
 export type AwsLoadBalancer = { id: string; name: string; type: "application" | "network"; scheme: "internal" | "internet-facing"; state: "active" | "provisioning" | "failed"; vpcId: string; subnetIds: string[]; securityGroupIds: string[]; dnsName: string; listeners: { port: number; protocol: "HTTP" | "HTTPS"; targetGroupId: string }[] };
 export type AwsTargetGroup = { id: string; name: string; protocol: "HTTP" | "HTTPS"; port: number; vpcId: string; targetInstanceIds: string[]; healthCheckPath: string; healthyPath: string; matcher: string };
@@ -139,6 +140,7 @@ export type AwsLabState = {
   natGateways?: AwsNatGateway[];
   vpcEndpoints?: AwsVpcEndpoint[];
   vpcFlowLogs?: AwsVpcFlowLog[];
+  vpcFlowLogConfigs?: AwsVpcFlowLogConfig[];
   securityGroups: { id: string; name: string; vpcId: string; ingress: AwsIngressRule[]; egress?: AwsIngressRule[] }[];
   routes: { destination: string; target: string; state: "active" | "blackhole" }[];
   networkAcl: { direction: "inbound" | "outbound"; ruleNumber: number; protocol: string; ports: string; source: string; action: "allow" | "deny" }[];
@@ -211,9 +213,11 @@ export const createInitialAwsLabState = (): AwsLabState => ({
   natGateways: [{id:"nat-0123abcd4567ef890",name:"nat-prod-eu-west-1a",state:"available",vpcId:"vpc-0123abcd4567ef890",subnetId:"subnet-0fedcba9876543210",connectivityType:"public",publicIp:"18.202.10.24",privateIp:"10.20.1.12",tags:{Name:"nat-prod-eu-west-1a",Owner:"network-platform"}}],
   vpcEndpoints: [],
   vpcFlowLogs: [{id:"fl-1",interfaceId:"eni-api-prod-01",sourceInstanceName:"api-prod-01",sourceAddress:"10.20.2.17",destinationAddress:"52.218.88.42",destinationHint:"Possible S3 traffic; verify AWS prefix list",destinationPort:443,protocol:"TCP",packets:9876543,bytes:10800000000000,action:"ACCEPT"},{id:"fl-2",interfaceId:"eni-api-prod-01",sourceInstanceName:"api-prod-01",sourceAddress:"10.20.2.17",destinationAddress:"54.72.10.18",destinationHint:"External package repository (training correlation)",destinationPort:443,protocol:"TCP",packets:642100,bytes:650000000000,action:"ACCEPT"}],
+  vpcFlowLogConfigs: [{id:"fl-0a12bc34de56f7890",name:"production-vpc-flow-logs",resourceType:"VPC",resourceId:"vpc-0123abcd4567ef890",trafficType:"ALL",destinationType:"CloudWatch Logs",destination:"/aws/vpc/flowlogs/production-vpc",status:"ACTIVE"}],
   networkAcl: [
     { direction: "inbound", ruleNumber: 110, protocol: "TCP", ports: "1024-65535", source: "10.20.0.0/16", action: "allow" },
     { direction: "inbound", ruleNumber: 100, protocol: "TCP", ports: "22", source: "10.20.0.0/16", action: "allow" },
+    { direction: "inbound", ruleNumber: 105, protocol: "TCP", ports: "5432", source: "10.20.0.0/16", action: "allow" },
     { direction: "outbound", ruleNumber: 100, protocol: "TCP", ports: "1024-65535", source: "0.0.0.0/0", action: "allow" },
     { direction: "outbound", ruleNumber: 110, protocol: "TCP", ports: "22", source: "0.0.0.0/0", action: "allow" }
   ],
@@ -228,7 +232,7 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "EC2-Production-Role", lastActivity: "Today", trustedService: "ec2.amazonaws.com", attachedPolicies: ["CloudWatchAgentServerPolicy"] },
     { name: "Lambda-Payments-Role", lastActivity: "Today", trustedService: "lambda.amazonaws.com", attachedPolicies: ["PaymentsReadOnly"] },
     { name: "DataPipeline-Role", lastActivity: "Yesterday", trustedService: "glue.amazonaws.com", attachedPolicies: ["AmazonS3ReadOnlyAccess", "DataLakeCuratedWrite"] },
-    { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
+    { name: "AI-Platform-Operator", lastActivity: "Today", trustedService: "sso.amazonaws.com", attachedPolicies: ["BedrockInvokeAccess", "SageMakerEndpointInvoke", "ComprehendBatchAccess", "TextractDocumentAccess", "QBusinessUserAccess"] },
     { name: "BedrockKnowledgeBaseRole", lastActivity: "Today", trustedService: "bedrock.amazonaws.com", attachedPolicies: ["BedrockDataSourceRead", "S3ArtifactsRead", "KMSAIArtifactAccess"] },
     { name: "SageMakerExecutionRole", lastActivity: "Today", trustedService: "sagemaker.amazonaws.com", attachedPolicies: ["SageMakerTrainingAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
     { name: "ComprehendBatchRole", lastActivity: "Today", trustedService: "comprehend.amazonaws.com", attachedPolicies: ["ComprehendBatchAccess", "S3ArtifactsRead", "S3ArtifactsWrite", "KMSAIArtifactAccess"] },
@@ -1243,6 +1247,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     natGateways: savedState.natGateways ?? baseline.natGateways,
     vpcEndpoints: savedState.vpcEndpoints ?? baseline.vpcEndpoints,
     vpcFlowLogs: savedState.vpcFlowLogs ?? baseline.vpcFlowLogs,
+    vpcFlowLogConfigs: savedState.vpcFlowLogConfigs ?? baseline.vpcFlowLogConfigs,
     bedrockModels: savedState.bedrockModels ?? baseline.bedrockModels,
     bedrockKnowledgeBases: savedState.bedrockKnowledgeBases ?? baseline.bedrockKnowledgeBases,
     bedrockGuardrails: savedState.bedrockGuardrails ?? baseline.bedrockGuardrails,

@@ -356,7 +356,7 @@ test('application listener state drives target group and load balancer health',(
   assert.equal(evaluateAwsLoadBalancerHealth(restored.state,'alb-payments-prod').healthy,true);
 });
 
-test('RDS availability and database security rules drive private application connectivity',()=>{
+test('RDS availability and database security rules drive private application connectivity from a blocked baseline',()=>{
   const initial=createInitialAwsLabState();
   const stopped=setAwsDatabaseStatus(initial,'orders-prod','stopped');
   assert.equal(stopped.error,null);
@@ -364,7 +364,9 @@ test('RDS availability and database security rules drive private application con
   assert.equal(getAwsCloudWatchAlarms(stopped.state).find(alarm=>alarm.name==='orders-db-connections').state,'ALARM');
   const fixedSg={...initial,securityGroups:initial.securityGroups.map(group=>group.id==='sg-rds-orders'?{...group,ingress:[]}:group)};
   assert.equal(evaluateAwsDatabaseConnectivity(fixedSg,initial.instance.id,'orders-prod').healthy,false);
-  assert.equal(evaluateAwsDatabaseConnectivity(initial,initial.instance.id,'orders-prod').healthy,true);
+  assert.equal(evaluateAwsDatabaseConnectivity(initial,initial.instance.id,'orders-prod').healthy,false);
+  const appAllowed={...initial,securityGroups:initial.securityGroups.map(group=>group.id==='sg-rds-orders'?{...group,ingress:[{id:'sgr-rds-app',protocol:'TCP',fromPort:5432,toPort:5432,sourceType:'SecurityGroup',source:'sg-0ab12cd34ef56ab78',description:'Application access'}]}:group)};
+  assert.equal(evaluateAwsDatabaseConnectivity(appAllowed,initial.instance.id,'orders-prod').healthy,true);
   const aclBlocked={...initial,networkAcl:[...initial.networkAcl,{direction:'inbound',ruleNumber:90,protocol:'TCP',ports:'5432',source:'10.20.0.0/16',action:'deny'}]};
   const aclResult=evaluateAwsDatabaseConnectivity(aclBlocked,initial.instance.id,'orders-prod');
   assert.equal(aclResult.healthy,false);

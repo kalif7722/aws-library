@@ -7,7 +7,7 @@ const consoleSource = await readFile(
   "utf8",
 );
 const accessDeniedLab = await readFile(
-  new URL("../app/troubleshooting/labs/access-denied/page.tsx", import.meta.url),
+  new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url),
   "utf8",
 );
 
@@ -33,8 +33,8 @@ test("AWS console screens do not expose custom troubleshooting diagnostics", () 
 });
 
 test("Access Denied teaching remains in the standalone lab", () => {
-  assert.match(accessDeniedLab, /Identify the runtime caller/);
-  assert.match(accessDeniedLab, /Inspect the effective permission/);
-  assert.match(accessDeniedLab, /least-privilege/i);
+  assert.match(accessDeniedLab, /Identify the actual caller/);
+  assert.match(accessDeniedLab, /Evaluate effective permissions/);
+  assert.match(accessDeniedLab, /least privilege/i);
   assert.match(accessDeniedLab, /CloudTrail/);
 });
