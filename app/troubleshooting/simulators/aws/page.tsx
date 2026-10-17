@@ -141,7 +141,7 @@ export default function AwsSimulatorPage() {
   const [dynamoItemEditor, setDynamoItemEditor] = useState<{ mode: "create" | "edit"; originalKey: string; json: string } | null>(null);
   const [dynamoItemError, setDynamoItemError] = useState("");
   const [showRdsModify, setShowRdsModify] = useState(false);
-  const [rdsDraft, setRdsDraft] = useState<{ id: string; instanceClass: string; allocatedStorageGb: string; publiclyAccessible: boolean } | null>(null);
+  const [rdsDraft, setRdsDraft] = useState<{ id: string; instanceClass: string; allocatedStorageGb: string; publiclyAccessible: boolean; deletionProtection: boolean } | null>(null);
   const [rdsError, setRdsError] = useState("");
   const [rdsRowError, setRdsRowError] = useState("");
   const [rdsDeleteConfirmText, setRdsDeleteConfirmText] = useState("");
