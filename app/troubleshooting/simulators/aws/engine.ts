@@ -500,7 +500,9 @@ export function evaluateAwsTargetGroupHealth(state: AwsLabState, targetGroupId: 
       rule.sourceType === "SecurityGroup" && linkedLbGroups.includes(rule.source)) ?? false);
     checks.push({ name: `${target.name} security-group path`, result: policyAllows ? "passed" : "blocked", detail: policyAllows ? `An attached target security group allows port ${group.port} from the load balancer security group.` : `No attached target security group allows port ${group.port} from the load balancer security group.` });
   }
-  return { healthy: checks.every(check => check.result === "passed"), checks };
+  const baseHealthy = checks.slice(0, 2).every(check => check.result === "passed");
+  const anyListenerHealthy = checks.slice(2).some(check => check.result === "passed");
+  return { healthy: baseHealthy && anyListenerHealthy, checks };
 }
 
 export function evaluateAwsLoadBalancerHealth(state: AwsLabState, loadBalancerId: string): AwsServiceHealthResult {
