@@ -630,9 +630,9 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
           addCheck("Bedrock invocation permission", allowed, allowed ? "BedrockInvokeAccess is attached to AI-Platform-Operator." : "The workload role is still missing BedrockInvokeAccess.");
         } else if (incident === "database-slowdown") {
           const group = state.targetGroups.find(item => item.id === "tg-payments-admin" || item.name === "tg-payments-admin");
-          const lb = state.loadBalancers.find(item => item.id === "alb-payments-prod");
+          const lb = getAwsLoadBalancers(state).find(item => item.id === "alb-payments-prod");
           const listenerConnected = !!lb?.listeners.some(listener => listener.port === 8443 && listener.protocol === "HTTPS" && listener.targetGroupId === "tg-payments-admin");
-          const target = state.instances.find(item => item.id === "i-0a12b345c678d9012");
+          const target = getAwsInstances(state).find(item => item.id === "i-0a12b345c678d9012");
           const portMatches = !!group && group.port === 8080 && !!target?.listeners?.some(listener => listener.port === 8080 && listener.protocol === "TCP" && listener.state === "listening");
           const pathOk = !!group && group.healthCheckPath === group.healthyPath && group.healthyPath === "/health";
           addCheck("HTTPS listener forwards to affected target group", listenerConnected, listenerConnected ? "HTTPS :8443 on alb-payments-prod forwards to tg-payments-admin." : "The affected listener must forward to tg-payments-admin.");
