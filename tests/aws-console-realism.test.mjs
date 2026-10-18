@@ -44,7 +44,7 @@ test("labs 5–8 have evidence-led walkthroughs, actionable fixes, and rollback 
   const source = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
   for (const phrase of [
     "NatGateway-Hours", "NatGateway-Bytes", "Create and verify an S3 gateway endpoint",
-    "Checkout requests are slow or failing", "TargetResponseTime", "HTTPCode_Target_5XX_Count",
+    "Checkout requests are slow or failing", "HealthyHostCount", "HTTPCode_ELB_5XX_Count",
     "Restore the missing partition through S3", "orders-daily-curation",
     "Test retrieval independently", "Problem and solution confirmed", "Rollback / safety:",
   ]) assert.ok(source.includes(phrase), "Expected walkthrough evidence: " + phrase);
@@ -63,8 +63,8 @@ test("cost mitigation is performed through the simulated VPC Endpoints console",
   const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
   assert.equal(lab.includes("Create S3 gateway endpoint (simulation)"), false);
   assert.match(consoleSource, /Create VPC endpoint/);
-  assert.match(consoleSource, /TargetResponseTime/);
-  assert.match(consoleSource, /HTTPCode_Target_5XX_Count/);
+  assert.match(consoleSource, /HealthyHostCount/);
+  assert.match(consoleSource, /HTTPCode_ELB_5XX_Count/);
 });
 
 
@@ -72,9 +72,9 @@ test("checkout latency lab follows the listener-to-target relationship and valid
   const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
   const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
   const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
-  assert.match(engine, /port: 8443, protocol: "HTTPS", targetGroupId: "tg-payments-admin"/);
-  assert.match(engine, /id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8080/);
-  assert.match(lab, /HTTPS :8443/);
+  assert.match(engine, /port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api"/);
+  assert.match(engine, /id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080/);
+  assert.match(lab, /HTTPS :443/);
   assert.match(lab, /configured path \/ready differs from served path \/health/);
   assert.match(consoleSource, /HTTPS listener forwards to affected target group/);
   assert.match(consoleSource, /Registered target port/);
@@ -87,7 +87,7 @@ test("existing simulator state migrates the checkout listener topology without o
   const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
   const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
   assert.match(engine, /const topologyUpgrade = \(savedState\.schemaVersion \?\? 0\) < 8/);
-  assert.match(engine, /const migratedTargetGroups = .*tg-payments-admin/s);
+  assert.match(engine, /const migratedTargetGroups = .*tg-payments-api/s);
   assert.match(consoleSource, /0 after recovery/);
   assert.match(consoleSource, /24 during seeded incident window/);
 });

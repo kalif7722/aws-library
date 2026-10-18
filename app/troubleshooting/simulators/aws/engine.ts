@@ -175,7 +175,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 8,
+  schemaVersion: 9,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -240,7 +240,7 @@ export const createInitialAwsLabState = (): AwsLabState => ({
     { name: "QBusinessDataSourceRole", lastActivity: "Today", trustedService: "qbusiness.amazonaws.com", attachedPolicies: ["QBusinessDataSourceAccess", "S3ArtifactsRead", "KMSAIArtifactAccess"] }
   ],
   loadBalancers: [{ id: "alb-payments-prod", name: "alb-payments-prod", type: "application", scheme: "internet-facing", state: "active", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0fedcba9876543210", "subnet-0bb1234567890abcd"], securityGroupIds: ["sg-alb-payments"], dnsName: "alb-payments-prod.eu-west-1.elb.amazonaws.com", listeners: [{ port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api" }, { port: 8443, protocol: "HTTPS", targetGroupId: "tg-payments-admin" }] }],
-  targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }],
+  targetGroups: [{ id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/ready", healthyPath: "/health", matcher: "200" }, { id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8080, vpcId: "vpc-0123abcd4567ef890", targetInstanceIds: ["i-0a12b345c678d9012"], healthCheckPath: "/health", healthyPath: "/health", matcher: "200" }],
   databases: [{ id: "orders-prod", identifier: "orders-prod", status: "available", engine: "PostgreSQL", engineVersion: "16.3", instanceClass: "db.r6g.large", port: 5432, endpoint: "orders-prod.abc123.eu-west-1.rds.amazonaws.com", privateIp: "10.20.2.50", vpcId: "vpc-0123abcd4567ef890", subnetIds: ["subnet-0123abcd4567ef890", "subnet-0aa1234567890abcd"], securityGroupIds: ["sg-rds-orders"], publiclyAccessible: false, allocatedStorageGb: 250, connections: 47, cpuPercent: 34, dbName: "orders", masterUsername: "dbadmin", backupRetentionDays: 7, multiAz: true, deletionProtection: true, storageType: "gp3", encrypted: true }],
   dnsRecords: [{ id: "record-api", zoneName: "example.com", name: "api.example.com", type: "A", targetResourceType: "load-balancer", targetResourceId: "alb-payments-prod", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 60, enabled: true }, { id: "record-orders", zoneName: "example.internal", name: "orders.example.internal", type: "CNAME", targetResourceType: "database", targetResourceId: "orders-prod", expectedResourceType: "database", expectedResourceId: "orders-prod", ttl: 30, enabled: true }, { id: "record-api-legacy", zoneName: "example.com", name: "legacy-api.example.com", type: "A", targetResourceType: "static", targetResourceId: "198.51.100.44", expectedResourceType: "load-balancer", expectedResourceId: "alb-payments-prod", ttl: 300, enabled: true }],
   lambdaFunctions: [{ name: "payments-authorizer", runtime: "Python 3.12", handler: "app.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 8, memoryMb: 256, environment: { TABLE_NAME: "IdempotencyKeys" }, vpcSubnetIds: [], securityGroupIds: [], errorCount: 0 }, { name: "orders-event-handler", runtime: "Node.js 22.x", handler: "index.handler", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 3, memoryMb: 256, environment: { TABLE_NAME: "Orders" }, vpcSubnetIds: ["subnet-0123abcd4567ef890"], securityGroupIds: ["sg-0ab12cd34ef56ab78"], requiredPolicy: "DynamoDBOrdersWrite", errorCount: 12 }, { name: "invoice-generator", runtime: "Container image", handler: "image-entrypoint", state: "active", roleName: "Lambda-Payments-Role", timeoutSeconds: 30, memoryMb: 1024, environment: { ARTIFACT_BUCKET: "prod-app-artifacts" }, vpcSubnetIds: [], securityGroupIds: [], errorCount: 0 }],
@@ -448,15 +448,15 @@ export function getAwsDynamoTables(state: AwsLabState): AwsDynamoTable[] {
   return state.dynamoTables ?? [];
 }
 
-export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupId: string, pathInput: string): { state: AwsLabState; error: string | null } {
+export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupId: string, pathInput: string, matcherInput?: string): { state: AwsLabState; error: string | null } {
   const path = pathInput.trim();
-  if (!path.startsWith("/") || path.length > 128 || /\s/.test(path)) {
-    return { state, error: "Health-check path must start with /, contain no spaces, and be 128 characters or fewer." };
-  }
+  const matcher = (matcherInput ?? getAwsTargetGroups(state).find(group => group.id === targetGroupId)?.matcher ?? "200").trim();
+  if (!path.startsWith("/") || path.length > 128 || /\s/.test(path)) return { state, error: "Health-check path must start with /, contain no spaces, and be 128 characters or fewer." };
+  if (!/^\d{3}(?:-\d{3})?$/.test(matcher) || (matcher.includes("-") && Number(matcher.split("-")[0]) > Number(matcher.split("-")[1]))) return { state, error: "Success codes must be an HTTP code (200) or range (200-299)." };
   const current = getAwsTargetGroups(state).find(group => group.id === targetGroupId);
   if (!current) return { state, error: "Target group not found." };
-  const updated = { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path } : group) };
-  return { state: appendAwsCloudTrailEvent(updated, { eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "simulated-console-user", resource: current.name, region: "eu-west-1", errorCode: null, detail: "Target-group health-check path changed to " + path + "." }), error: null };
+  const updated = { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path, matcher } : group) };
+  return { state: appendAwsCloudTrailEvent(updated, { eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "simulated-console-user", resource: current.name, region: "eu-west-1", errorCode: null, detail: "Target-group health-check configuration updated." }), error: null };
 }
 export function setAwsInstanceListenerState(state: AwsLabState, instanceId: string, port: number, nextState: "listening" | "stopped"): { state: AwsLabState; error: string | null } {
   if (!Number.isInteger(port) || port < 1 || port > 65535) return { state, error: "Listener port must be between 1 and 65535." };
@@ -508,7 +508,7 @@ export function evaluateAwsLoadBalancerHealth(state: AwsLabState, loadBalancerId
   if (!lb) return { healthy: false, checks: [{ name: "Load balancer exists", result: "blocked", detail: "Load balancer was not found." }] };
   const checks: AwsServiceCheck[] = [
     { name: "Load balancer state", result: lb.state === "active" ? "passed" : "blocked", detail: lb.state === "active" ? "Load balancer is active." : `Load balancer state is ${lb.state}.` },
-    { name: "Listener configuration", result: lb.listeners.length > 0 && lb.listeners.every(listener => getAwsTargetGroups(state).some(group => group.id === listener.targetGroupId)) ? "passed" : "blocked", detail: lb.listeners.length ? "Configured listeners reference existing target groups." : "No listeners are configured." }
+    { name: "Listener configuration", result: lb.listeners.length > 0 && lb.listeners.some(listener => getAwsTargetGroups(state).some(group => group.id === listener.targetGroupId)) ? "passed" : "blocked", detail: lb.listeners.length ? "Configured listeners reference existing target groups." : "No listeners are configured." }
   ];
   for (const listener of lb.listeners) {
     const health = evaluateAwsTargetGroupHealth(state, listener.targetGroupId);
@@ -1231,7 +1231,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   }
   const routes = savedState.routes ?? baseline.routes;
   const routeTables = savedState.routeTables?.length ? savedState.routeTables : (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
-  const topologyUpgrade = (savedState.schemaVersion ?? 0) < 8;
+  const topologyUpgrade = (savedState.schemaVersion ?? 0) < 9;
   const migratedLoadBalancers = (savedState.loadBalancers ?? baseline.loadBalancers).map(lb => {
     if (!topologyUpgrade || lb.id !== "alb-payments-prod") return lb;
     const seeded = baseline.loadBalancers.find(item => item.id === lb.id);
@@ -1240,7 +1240,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...lb, listeners: seededAdminListener ? [...existingListeners, seededAdminListener] : existingListeners };
   });
   const migratedTargetGroups = (savedState.targetGroups ?? baseline.targetGroups).map(group =>
-    topologyUpgrade && group.id === "tg-payments-admin" ? { ...group, port: 8080 } : group
+    topologyUpgrade && group.id === "tg-payments-admin" ? { ...group, port: 8080, healthCheckPath: "/health" } : topologyUpgrade && group.id === "tg-payments-api" ? { ...group, healthCheckPath: "/ready" } : group
   );
   const baseInstances = getAwsInstances(baseline);
   const instances = savedState.instances?.map(item => {
@@ -1248,7 +1248,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 8, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 9, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ? [...savedState.s3Objects, ...baseline.s3Objects!.filter(object => !savedState.s3Objects!.some(savedObject => savedObject.bucketName === object.bucketName && savedObject.key === object.key))] : baseline.s3Objects,
     s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
