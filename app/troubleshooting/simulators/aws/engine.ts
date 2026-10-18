@@ -175,7 +175,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 7,
+  schemaVersion: 8,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -1231,13 +1231,24 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   }
   const routes = savedState.routes ?? baseline.routes;
   const routeTables = savedState.routeTables?.length ? savedState.routeTables : (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
+  const topologyUpgrade = (savedState.schemaVersion ?? 0) < 8;
+  const migratedLoadBalancers = (savedState.loadBalancers ?? baseline.loadBalancers).map(lb => {
+    if (!topologyUpgrade || lb.id !== "alb-payments-prod") return lb;
+    const seeded = baseline.loadBalancers.find(item => item.id === lb.id);
+    const existingListeners = lb.listeners.filter(listener => listener.port !== 8443);
+    const seededAdminListener = seeded?.listeners.find(listener => listener.port === 8443);
+    return { ...lb, listeners: seededAdminListener ? [...existingListeners, seededAdminListener] : existingListeners };
+  });
+  const migratedTargetGroups = (savedState.targetGroups ?? baseline.targetGroups).map(group =>
+    topologyUpgrade && group.id === "tg-payments-admin" ? { ...group, port: 8080 } : group
+  );
   const baseInstances = getAwsInstances(baseline);
   const instances = savedState.instances?.map(item => {
     const seeded = baseInstances.find(base => base.id === item.id);
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 7, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 8, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ? [...savedState.s3Objects, ...baseline.s3Objects!.filter(object => !savedState.s3Objects!.some(savedObject => savedObject.bucketName === object.bucketName && savedObject.key === object.key))] : baseline.s3Objects,
     s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
@@ -1258,8 +1269,8 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     qBusinessApplications: savedState.qBusinessApplications ?? baseline.qBusinessApplications,
     qDeveloperUsers: savedState.qDeveloperUsers ?? baseline.qDeveloperUsers,
     iamRoles: savedState.iamRoles ? [...savedState.iamRoles, ...baseline.iamRoles.filter(role => !savedState.iamRoles!.some(savedRole => savedRole.name === role.name))] : baseline.iamRoles,
-    loadBalancers: savedState.loadBalancers ?? baseline.loadBalancers,
-    targetGroups: savedState.targetGroups ?? baseline.targetGroups,
+    loadBalancers: migratedLoadBalancers,
+    targetGroups: migratedTargetGroups,
     databases: savedState.databases ?? baseline.databases,
     dnsRecords: savedState.dnsRecords ?? baseline.dnsRecords,
     lambdaFunctions: savedState.lambdaFunctions ?? baseline.lambdaFunctions,

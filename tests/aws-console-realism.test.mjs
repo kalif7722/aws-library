@@ -81,3 +81,13 @@ test("checkout latency lab follows the listener-to-target relationship and valid
   assert.match(consoleSource, /Target health/);
   assert.doesNotMatch(lab, /Show CLI \/ diagnostic example/);
 });
+
+
+test("existing simulator state migrates the checkout listener topology without overwriting other listener settings", async () => {
+  const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
+  const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
+  assert.match(engine, /const topologyUpgrade = \(savedState\.schemaVersion \?\? 0\) < 8/);
+  assert.match(engine, /const migratedTargetGroups = .*tg-payments-admin/s);
+  assert.match(consoleSource, /0 after recovery/);
+  assert.match(consoleSource, /24 during seeded incident window/);
+});
