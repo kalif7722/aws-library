@@ -630,8 +630,16 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
           addCheck("Bedrock invocation permission", allowed, allowed ? "BedrockInvokeAccess is attached to AI-Platform-Operator." : "The workload role is still missing BedrockInvokeAccess.");
         } else if (incident === "database-slowdown") {
           const group = state.targetGroups.find(item => item.id === "tg-payments-admin" || item.name === "tg-payments-admin");
-          const pathOk = !!group && group.healthCheckPath === group.healthyPath;
-          addCheck("Target-group health-check path", pathOk, pathOk ? "The health-check path matches the healthy application endpoint." : "The configured health-check path still differs from the endpoint the application serves.");
+          const lb = state.loadBalancers.find(item => item.id === "alb-payments-prod");
+          const listenerConnected = !!lb?.listeners.some(listener => listener.port === 8443 && listener.protocol === "HTTPS" && listener.targetGroupId === "tg-payments-admin");
+          const target = state.instances.find(item => item.id === "i-0a12b345c678d9012");
+          const portMatches = !!group && group.port === 8080 && !!target?.listeners?.some(listener => listener.port === 8080 && listener.protocol === "TCP" && listener.state === "listening");
+          const pathOk = !!group && group.healthCheckPath === group.healthyPath && group.healthyPath === "/health";
+          addCheck("HTTPS listener forwards to affected target group", listenerConnected, listenerConnected ? "HTTPS :8443 on alb-payments-prod forwards to tg-payments-admin." : "The affected listener must forward to tg-payments-admin.");
+          addCheck("Registered target port", portMatches, portMatches ? "tg-payments-admin targets api-prod-01 on HTTP :8080, where the application listener is available." : "The target-group port must match the application's listening port 8080.");
+          addCheck("Target-group health-check path", pathOk, pathOk ? "The health-check path matches the application's /health endpoint." : "Set the target-group health-check path to /health, the endpoint the application serves.");
+          const health = evaluateAwsTargetGroupHealth(state, "tg-payments-admin");
+          addCheck("Target health", health.healthy, health.healthy ? "The target group has a registered, healthy target." : health.checks.filter(item => item.result !== "passed").map(item => item.name + ": " + item.detail).join(" "));
         } else if (incident === "stale-data") {
           const result = evaluateAwsGlueJob(state, "orders-daily-curation");
           addCheck("Analytics pipeline freshness", result.healthy, result.healthy ? "The expected source partition is present and the latest Glue run produced the expected target partition." : result.checks.filter(item => item.result !== "passed").map(item => item.name + ": " + item.detail).join(" "));

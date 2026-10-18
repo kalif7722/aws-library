@@ -66,3 +66,18 @@ test("cost mitigation is performed through the simulated VPC Endpoints console",
   assert.match(consoleSource, /TargetResponseTime/);
   assert.match(consoleSource, /HTTPCode_Target_5XX_Count/);
 });
+
+
+test("checkout latency lab follows the listener-to-target relationship and validates recovery", async () => {
+  const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
+  const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
+  const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
+  assert.match(engine, /port: 8443, protocol: "HTTPS", targetGroupId: "tg-payments-admin"/);
+  assert.match(engine, /id: "tg-payments-admin", name: "tg-payments-admin", protocol: "HTTP", port: 8080/);
+  assert.match(lab, /HTTPS :8443/);
+  assert.match(lab, /configured path \/ready differs from served path \/health/);
+  assert.match(consoleSource, /HTTPS listener forwards to affected target group/);
+  assert.match(consoleSource, /Registered target port/);
+  assert.match(consoleSource, /Target health/);
+  assert.doesNotMatch(lab, /Show CLI \/ diagnostic example/);
+});
