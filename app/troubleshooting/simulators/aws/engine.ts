@@ -500,9 +500,7 @@ export function evaluateAwsTargetGroupHealth(state: AwsLabState, targetGroupId: 
       rule.sourceType === "SecurityGroup" && linkedLbGroups.includes(rule.source)) ?? false);
     checks.push({ name: `${target.name} security-group path`, result: policyAllows ? "passed" : "blocked", detail: policyAllows ? `An attached target security group allows port ${group.port} from the load balancer security group.` : `No attached target security group allows port ${group.port} from the load balancer security group.` });
   }
-  const baseHealthy = checks.slice(0, 2).every(check => check.result === "passed");
-  const anyListenerHealthy = checks.slice(2).some(check => check.result === "passed");
-  return { healthy: baseHealthy && anyListenerHealthy, checks };
+  return { healthy: checks.every(check => check.result === "passed"), checks };
 }
 
 export function evaluateAwsLoadBalancerHealth(state: AwsLabState, loadBalancerId: string): AwsServiceHealthResult {
@@ -516,7 +514,9 @@ export function evaluateAwsLoadBalancerHealth(state: AwsLabState, loadBalancerId
     const health = evaluateAwsTargetGroupHealth(state, listener.targetGroupId);
     checks.push({ name: `Listener ${listener.protocol}:${listener.port} targets`, result: health.healthy ? "passed" : "blocked", detail: health.healthy ? "All target-group health checks pass." : health.checks.filter(check => check.result === "blocked").map(check => check.name + ": " + check.detail).join(" ") });
   }
-  return { healthy: checks.every(check => check.result === "passed"), checks };
+  const baseHealthy = checks.slice(0, 2).every(check => check.result === "passed");
+  const anyListenerHealthy = checks.slice(2).some(check => check.result === "passed");
+  return { healthy: baseHealthy && anyListenerHealthy, checks };
 }
 
 export function evaluateAwsDatabaseConnectivity(state: AwsLabState, instanceId: string, databaseId: string): AwsServiceHealthResult {
