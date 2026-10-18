@@ -51,4 +51,18 @@
 5. Build labs 16–20 (messaging, APIs, encryption, CDN, and recovery).
 6. For each lab, add its route and index entry, validate the seeded state against the simulator engine, run tests/build, perform browser smoke tests, then proceed to the next lab.
 
+
+## Incident-scenario labs 5–8 — current implementation batch
+
+These are the four incident scenarios layered on the shared simulator (separate from the numbered Top-20 console-lab catalogue above). Changes remain on `feature/aws-top-20-console-labs`; do not merge or deploy until branch CI and browser smoke tests pass.
+
+| Incident lab | Guided investigation | Remediation / recovery check | Validation status |
+|---|---|---|---|
+| Unexpected increase in cloud spend | Cost Explorer usage types → NAT Gateway → VPC Flow Logs / CloudWatch Logs Insights | Create S3 gateway endpoint through the VPC Endpoints console; verify prefix-list route and retain NAT | Updated; CI/browser verification pending |
+| Checkout requests are slow or failing | CloudWatch latency/errors → ALB listener → target group health check | Correct `/ready` vs `/health` mismatch and retest | Updated; CI/browser verification pending |
+| Analytics dashboard shows stale data | S3 source partition → Glue run/bookmark/input evidence → curated output | Restore expected source object, rerun Glue, verify target partition | Updated; CI/browser verification pending |
+| RAG assistant returns outdated answers | Canonical S3 version → Bedrock ingestion history → retrieved chunk/citation → same-query retest | Sync the knowledge base after the source update and verify grounded citation | Updated; CI/browser verification pending |
+
+**Console realism guardrail:** fixes must be performed through the simulated AWS service screens, not shortcut buttons in the teaching overlay. Guided walkthroughs may explain evidence and safe remediation outside the console. A saved setting is not recovery proof; each lab must validate the resulting shared simulator state and retain rollback guidance.
+
 **Deployment rule:** Work on this feature branch first. Do not merge/deploy the batch until the VM-unreachable acceptance test and regression checks pass. Keep production AWS-console simulation screens vendor-faithful; put learning overlays and topology outside the simulated console.

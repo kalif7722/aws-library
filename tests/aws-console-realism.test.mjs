@@ -38,3 +38,31 @@ test("Access Denied teaching remains in the standalone lab", () => {
   assert.match(accessDeniedLab, /least privilege/i);
   assert.match(accessDeniedLab, /CloudTrail/);
 });
+
+
+test("labs 5–8 have evidence-led walkthroughs, actionable fixes, and rollback guidance", async () => {
+  const source = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
+  for (const phrase of [
+    "NatGateway-Hours", "NatGateway-Bytes", "Create and verify an S3 gateway endpoint",
+    "Checkout requests are slow or failing", "TargetResponseTime", "HTTPCode_Target_5XX_Count",
+    "Restore the missing partition through S3", "orders-daily-curation",
+    "Test retrieval independently", "Problem and solution confirmed", "Rollback / safety:",
+  ]) assert.ok(source.includes(phrase), "Expected walkthrough evidence: " + phrase);
+  for (const incident of ["cloud-cost-spike", "database-slowdown", "stale-data", "rag-stale-answers"]) {
+    const at = source.indexOf('"' + incident + '":{', source.indexOf("const labs:"));
+    assert.ok(at >= 0, "Missing incident " + incident);
+    const next = source.indexOf("\n\n", at);
+    const block = source.slice(at, next < 0 ? source.length : next);
+    assert.match(block, /solution:/, incident + " needs an explicit solution");
+    assert.match(block, /rollback:/, incident + " needs rollback guidance");
+  }
+});
+
+test("cost mitigation is performed through the simulated VPC Endpoints console", async () => {
+  const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
+  const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
+  assert.equal(lab.includes("Create S3 gateway endpoint (simulation)"), false);
+  assert.match(consoleSource, /Create VPC endpoint/);
+  assert.match(consoleSource, /TargetResponseTime/);
+  assert.match(consoleSource, /HTTPCode_Target_5XX_Count/);
+});
