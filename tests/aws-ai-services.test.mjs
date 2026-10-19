@@ -29,7 +29,7 @@ const {
 
 test('AI service baseline contains secure S3 inputs, outputs and least-privilege execution roles', () => {
   const state = createInitialAwsLabState();
-  assert.equal(state.schemaVersion, 10);
+  assert.equal(state.schemaVersion, 11);
   assert.ok(state.s3Buckets.some(bucket => bucket.name === 'ai-workloads' && bucket.blockPublicAccess && bucket.encryption === 'SSE-KMS'));
   for (const key of [
     'training/churn/train.csv',
@@ -90,7 +90,7 @@ test('legacy saved accounts receive AI prerequisites without losing existing sta
     cloudTrailEvents: [...baseline.cloudTrailEvents],
   };
   const migrated = migrateAwsLabState(legacy);
-  assert.equal(migrated.schemaVersion, 10);
+  assert.equal(migrated.schemaVersion, 11);
   assert.ok(migrated.instance);
   assert.ok(migrated.s3Buckets.some(bucket => bucket.name === 'ai-workloads'));
   assert.ok(migrated.s3Objects.some(object => object.bucketName === 'ai-workloads' && object.key === 'training/churn/train.csv'));

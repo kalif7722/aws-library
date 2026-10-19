@@ -91,6 +91,9 @@ test("existing simulator state migrates the checkout listener topology without o
   const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
   const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
   assert.match(engine, /const topologyUpgrade = \(savedState\.schemaVersion \?\? 0\) < 10/);
+  assert.match(engine, /healthyPath: typeof group\.healthyPath/);
+  assert.match(engine, /healthCheckPaths: item\.healthCheckPaths \?\? seeded\?\.healthCheckPaths/);
+  assert.match(consoleSource, /savedGroup\?\.healthCheckPath === targetGroupHealthDraft\.path\.trim\(\)/);
   assert.match(engine, /const migratedTargetGroups = .*tg-payments-api/s);
   assert.match(consoleSource, /0 after recovery/);
   assert.match(consoleSource, /24 during seeded incident window/);

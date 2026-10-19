@@ -289,18 +289,25 @@ export default function AwsSimulatorPage() {
     const result = updateAwsTargetGroupHealthCheck(state, targetGroupHealthDraft.id, targetGroupHealthDraft.path, targetGroupHealthDraft.matcher);
     if (result.error) { setTargetGroupHealthError(result.error); return; }
     setState(result.state);
-    let persisted = true;
+    let persisted = false;
     try {
-      window.localStorage.setItem("aws-console-simulator-state-v3", JSON.stringify({
+      const payload = {
         state: result.state, screen, pinnedServices, iamUsers, iamPolicies, dynamoItems, rdsRows,
         lambdaCodeByName, lambdaCodeDraftByName, lambdaTestEventByName, lambdaInvocationHistory
-      }));
+      };
+      const storageKey = "aws-console-simulator-state-v3";
+      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+      const readback = JSON.parse(window.localStorage.getItem(storageKey) ?? "null") as { state?: AwsLabState } | null;
+      const savedGroup = readback?.state?.targetGroups?.find(group => group.id === targetGroupHealthDraft.id);
+      persisted = savedGroup?.healthCheckPath === targetGroupHealthDraft.path.trim()
+        && typeof savedGroup.healthyPath === "string";
+      if (!persisted) throw new Error("Saved health-check configuration did not match the requested path.");
     } catch { persisted = false; }
     setTargetGroupHealthDraft(null);
     setTargetGroupHealthError("");
     notify(persisted
-      ? "Health check saved. The target health will reflect the new path after evaluation."
-      : "Health check updated for this session, but browser storage is unavailable so it may not persist after reload.");
+      ? `Health check saved: ${targetGroupHealthDraft.path.trim()}. Verify target health after evaluation.`
+      : "Health check changed in this session, but the saved value could not be verified. Check browser storage and retry.");
   }
 
   function changeInstanceState(next: "running" | "stopped") {

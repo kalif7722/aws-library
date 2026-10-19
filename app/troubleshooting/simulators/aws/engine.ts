@@ -175,7 +175,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 10,
+  schemaVersion: 11,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -455,7 +455,7 @@ export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupI
   if (!/^\d{3}(?:-\d{3})?$/.test(matcher) || (matcher.includes("-") && Number(matcher.split("-")[0]) > Number(matcher.split("-")[1]))) return { state, error: "Success codes must be an HTTP code (200) or range (200-299)." };
   const current = getAwsTargetGroups(state).find(group => group.id === targetGroupId);
   if (!current) return { state, error: "Target group not found." };
-  const updated = { ...state, schemaVersion: 10, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path, matcher } : group) };
+  const updated = { ...state, schemaVersion: 11, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path, matcher } : group) };
   return { state: appendAwsCloudTrailEvent(updated, { eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "simulated-console-user", resource: current.name, region: "eu-west-1", errorCode: null, detail: "Target-group health-check configuration updated." }), error: null };
 }
 export function setAwsInstanceListenerState(state: AwsLabState, instanceId: string, port: number, nextState: "listening" | "stopped"): { state: AwsLabState; error: string | null } {
@@ -1212,7 +1212,13 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   const graphUpgrade = (savedState.schemaVersion ?? 0) < 4;
   const oldNat = savedState.costUsage?.find(x => x.usageType === "NatGateway-Bytes" && x.resourceId === "nat-0123abcd4567ef890" && Math.abs(x.amount - 890.17) < 0.01);
   const migratedCost = oldNat ? [...savedState.costUsage!.filter(x => x !== oldNat), {...oldNat,usageType:"NatGateway-Hours",amount:54,baselineAmount:54},{...oldNat,usageType:"NatGateway-Bytes",amount:836.17,baselineAmount:96}] : savedState.costUsage;
-  const instance: AwsInstance = { ...baseline.instance, ...savedState.instance, tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }), listeners: savedState.instance.listeners ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.listeners : undefined), healthCheckPaths: savedState.instance.healthCheckPaths ?? (graphUpgrade && savedState.instance.id === baseline.instance.id ? baseline.instance.healthCheckPaths : undefined) };
+  const instance: AwsInstance = {
+    ...baseline.instance,
+    ...savedState.instance,
+    tags: savedState.instance.tags ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.tags : { Name: savedState.instance.name }),
+    listeners: savedState.instance.listeners ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.listeners : undefined),
+    healthCheckPaths: savedState.instance.healthCheckPaths ?? (savedState.instance.id === baseline.instance.id ? baseline.instance.healthCheckPaths : undefined)
+  };
   const securityGroups = [
     ...savedState.securityGroups.map(savedGroup => {
       const seededGroup = baseline.securityGroups.find(group => group.id === savedGroup.id);
@@ -1241,16 +1247,43 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     const seededAdminListener = seeded?.listeners.find(listener => listener.port === 8443);
     return { ...lb, listeners: seededAdminListener ? [...existingListeners, seededAdminListener] : existingListeners };
   });
-  const migratedTargetGroups = (savedState.targetGroups ?? baseline.targetGroups).map(group =>
-    topologyUpgrade && group.id === "tg-payments-admin" ? { ...group, port: 8080, healthCheckPath: "/health" } : topologyUpgrade && group.id === "tg-payments-api" ? { ...group, healthCheckPath: "/ready" } : group
-  );
+  const savedTargetGroups = savedState.targetGroups ?? baseline.targetGroups;
+  const migratedTargetGroups = [
+    ...savedTargetGroups.map(group => {
+      const seeded = baseline.targetGroups.find(item => item.id === group.id);
+      if (!seeded) return group;
+      // Older saved browser states may not include the app's served health path.
+      // Fill newly introduced fields from the canonical seeded resource while
+      // preserving values explicitly saved by the learner.
+      const normalized = {
+        ...seeded,
+        ...group,
+        targetInstanceIds: Array.isArray(group.targetInstanceIds) ? group.targetInstanceIds : seeded.targetInstanceIds,
+        healthCheckPath: typeof group.healthCheckPath === "string" && group.healthCheckPath.startsWith("/") ? group.healthCheckPath : seeded.healthCheckPath,
+        healthyPath: typeof group.healthyPath === "string" && group.healthyPath.startsWith("/") ? group.healthyPath : seeded.healthyPath,
+        matcher: typeof group.matcher === "string" && group.matcher.trim() ? group.matcher : seeded.matcher
+      };
+      if (topologyUpgrade && group.id === "tg-payments-admin") return { ...normalized, port: 8080, healthCheckPath: "/health" };
+      if (topologyUpgrade && group.id === "tg-payments-api") return { ...normalized, healthCheckPath: "/ready" };
+      return normalized;
+    }),
+    ...baseline.targetGroups.filter(seeded => !savedTargetGroups.some(group => group.id === seeded.id))
+  ];
   const baseInstances = getAwsInstances(baseline);
   const instances = savedState.instances?.map(item => {
     const seeded = baseInstances.find(base => base.id === item.id);
-    return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
+    return {
+      ...(graphUpgrade && seeded ? seeded : {}),
+      ...item,
+      // Runtime attributes are required for target-health evaluation even in
+      // saved states created after the original topology migration.
+      listeners: item.listeners ?? seeded?.listeners,
+      healthCheckPaths: item.healthCheckPaths ?? seeded?.healthCheckPaths,
+      tags: item.tags ?? seeded?.tags ?? { Name: item.name }
+    };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 10, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 11, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ? [...savedState.s3Objects, ...baseline.s3Objects!.filter(object => !savedState.s3Objects!.some(savedObject => savedObject.bucketName === object.bucketName && savedObject.key === object.key))] : baseline.s3Objects,
     s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
