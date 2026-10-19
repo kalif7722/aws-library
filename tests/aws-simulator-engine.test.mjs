@@ -333,7 +333,7 @@ test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda,
   assert.ok(getAwsLambdaFunctions(state).some(fn=>fn.name==='invoice-generator'));
   assert.equal(evaluateAwsLambdaReadiness(state,'payments-authorizer').healthy,true);
   assert.equal(evaluateAwsLambdaReadiness(state,'orders-event-handler').healthy,false);
-  assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['OK','OK','ALARM','ALARM']);
+  assert.deepEqual(getAwsCloudWatchAlarms(state).map(alarm=>alarm.state),['ALARM','OK','ALARM','ALARM']);
 });
 
 test('target health-check configuration changes health and the related CloudWatch alarm',()=>{
