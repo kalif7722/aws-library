@@ -319,7 +319,7 @@ test('subnet creation validates CIDR overlap and route table VPC',()=>{
 
 test('shared service graph seeds connected ALB, target groups, RDS, DNS, Lambda, DynamoDB and alarms',()=>{
   const state=createInitialAwsLabState();
-  assert.equal(state.schemaVersion,9);
+  assert.equal(state.schemaVersion,10);
   assert.equal(getAwsLoadBalancers(state)[0].listeners[0].targetGroupId,'tg-payments-api');
   assert.equal(evaluateAwsLoadBalancerHealth(state,'alb-payments-prod').healthy,true);
   assert.equal(evaluateAwsTargetGroupHealth(state,'tg-payments-api').healthy,false);
@@ -348,6 +348,20 @@ test('target health-check configuration changes health and the related CloudWatc
   assert.match(updateAwsTargetGroupHealthCheck(initial,'tg-payments-api','bad path').error,/start with/);
 });
 
+test('schema v9 browser state migrates once to the seeded health-check fault and later saves persist',()=>{
+  const seeded=createInitialAwsLabState();
+  const older={...seeded,schemaVersion:9,targetGroups:seeded.targetGroups.map(group=>group.id==='tg-payments-api'?{...group,healthCheckPath:'/health'}:group)};
+  const migrated=migrateAwsLabState(older);
+  assert.equal(migrated.schemaVersion,10);
+  assert.equal(getAwsTargetGroups(migrated).find(group=>group.id==='tg-payments-api').healthCheckPath,'/ready');
+  const saved=updateAwsTargetGroupHealthCheck(migrated,'tg-payments-api','/health');
+  assert.equal(saved.error,null);
+  assert.equal(saved.state.schemaVersion,10);
+  assert.equal(getAwsTargetGroups(saved.state).find(group=>group.id==='tg-payments-api').healthCheckPath,'/health');
+  assert.equal(evaluateAwsTargetGroupHealth(saved.state,'tg-payments-api').healthy,true);
+  const reloaded=migrateAwsLabState(saved.state);
+  assert.equal(getAwsTargetGroups(reloaded).find(group=>group.id==='tg-payments-api').healthCheckPath,'/health');
+});
 test('application listener state drives target group and load balancer health',()=>{
   const initial=createInitialAwsLabState();
   const stopped=setAwsInstanceListenerState(initial,initial.instance.id,8080,'stopped');
@@ -420,7 +434,7 @@ test('legacy account migration adds new service graph once and preserves later t
   delete old.instance.listeners;
   delete old.instance.healthCheckPaths;
   const migrated=migrateAwsLabState(old);
-  assert.equal(migrated.schemaVersion,9);
+  assert.equal(migrated.schemaVersion,10);
   assert.ok(getAwsLoadBalancers(migrated).length>0);
   assert.ok(migrated.s3Buckets.some(bucket=>bucket.name==="data-lake-raw"));
   assert.ok(getAwsS3Objects(migrated).length>0);
@@ -491,7 +505,7 @@ test('schema-v4 saved state gains the Glue freshness alarm without resetting exi
     cloudWatchAlarmDefinitions:initial.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name!=='orders-curation-freshness')
   };
   const migrated=migrateAwsLabState(schemaFour);
-  assert.equal(migrated.schemaVersion,9);
+  assert.equal(migrated.schemaVersion,10);
   assert.equal(migrated.instance.guestSsh,'stopped');
   assert.equal(migrated.cloudWatchAlarmDefinitions.filter(alarm=>alarm.name==='orders-curation-freshness').length,1);
   assert.equal(getAwsCloudWatchAlarms(migrated).find(alarm=>alarm.name==='orders-curation-freshness').state,'ALARM');
@@ -530,7 +544,7 @@ test('schema-v5 saved accounts receive default S3 explicit-deny policies without
   const initial=createInitialAwsLabState();
   const saved={...initial,schemaVersion:5,s3BucketPolicies:undefined,s3Buckets:initial.s3Buckets.map(bucket=>bucket.name==='prod-app-artifacts'?{...bucket,blockPublicAccess:false}:bucket),iamRoles:initial.iamRoles.map(role=>role.name==='Lambda-Payments-Role'?{...role,attachedPolicies:['S3ArtifactsRead']}:role)};
   const migrated=migrateAwsLabState(saved);
-  assert.equal(migrated.schemaVersion,9);
+  assert.equal(migrated.schemaVersion,10);
   assert.equal(migrated.s3Buckets.find(bucket=>bucket.name==='prod-app-artifacts').blockPublicAccess,false);
   assert.deepEqual(migrated.iamRoles.find(role=>role.name==='Lambda-Payments-Role').attachedPolicies,['S3ArtifactsRead']);
   assert.ok(migrated.s3BucketPolicies.some(policy=>policy.bucketName==='prod-app-artifacts'&&policy.statements.some(statement=>statement.sid==='DenyInsecureTransport')));

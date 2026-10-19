@@ -175,7 +175,7 @@ export type AwsReachabilityResult = {
   checks: { name: string; result: "passed" | "blocked"; detail: string }[];
 };
 export const createInitialAwsLabState = (): AwsLabState => ({
-  schemaVersion: 9,
+  schemaVersion: 10,
   instance: { id: "i-0a12b345c678d9012", name: "api-prod-01", state: "running", systemStatus: "passed", instanceStatus: "passed", privateIp: "10.20.2.17", subnetId: "subnet-0123abcd4567ef890", securityGroupIds: ["sg-0ab12cd34ef56ab78"], guestSsh: "listening", listeners: [{ port: 8080, protocol: "TCP", state: "listening" }], healthCheckPaths: ["/health"], tags: { Name: "api-prod-01", Environment: "production", Application: "payments-api", Owner: "platform-engineering" } },
   securityGroups: [{ id: "sg-0ab12cd34ef56ab78", name: "sg-api-prod", vpcId: "vpc-0123abcd4567ef890", ingress: [
     { id: "sgr-0a443311223344556", protocol: "TCP", fromPort: 443, toPort: 443, sourceType: "IPv4", source: "10.40.0.0/16", description: "Application HTTPS" },
@@ -455,7 +455,7 @@ export function updateAwsTargetGroupHealthCheck(state: AwsLabState, targetGroupI
   if (!/^\d{3}(?:-\d{3})?$/.test(matcher) || (matcher.includes("-") && Number(matcher.split("-")[0]) > Number(matcher.split("-")[1]))) return { state, error: "Success codes must be an HTTP code (200) or range (200-299)." };
   const current = getAwsTargetGroups(state).find(group => group.id === targetGroupId);
   if (!current) return { state, error: "Target group not found." };
-  const updated = { ...state, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path, matcher } : group) };
+  const updated = { ...state, schemaVersion: 10, targetGroups: getAwsTargetGroups(state).map(group => group.id === targetGroupId ? { ...group, healthCheckPath: path, matcher } : group) };
   return { state: appendAwsCloudTrailEvent(updated, { eventName: "ModifyTargetGroup", eventSource: "elasticloadbalancing.amazonaws.com", userIdentity: "simulated-console-user", resource: current.name, region: "eu-west-1", errorCode: null, detail: "Target-group health-check configuration updated." }), error: null };
 }
 export function setAwsInstanceListenerState(state: AwsLabState, instanceId: string, port: number, nextState: "listening" | "stopped"): { state: AwsLabState; error: string | null } {
@@ -1233,7 +1233,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
   }
   const routes = savedState.routes ?? baseline.routes;
   const routeTables = savedState.routeTables?.length ? savedState.routeTables : (baseline.routeTables ?? []).map((table, index) => index === 0 ? { ...table, routes, associatedSubnetIds: [instance.subnetId] } : table);
-  const topologyUpgrade = (savedState.schemaVersion ?? 0) < 9;
+  const topologyUpgrade = (savedState.schemaVersion ?? 0) < 10;
   const migratedLoadBalancers = (savedState.loadBalancers ?? baseline.loadBalancers).map(lb => {
     if (!topologyUpgrade || lb.id !== "alb-payments-prod") return lb;
     const seeded = baseline.loadBalancers.find(item => item.id === lb.id);
@@ -1250,7 +1250,7 @@ export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | und
     return { ...(graphUpgrade && seeded ? seeded : {}), ...item, listeners: item.listeners ?? (graphUpgrade ? seeded?.listeners : undefined), healthCheckPaths: item.healthCheckPaths ?? (graphUpgrade ? seeded?.healthCheckPaths : undefined), tags: item.tags ?? { Name: item.name } };
   });
   return {
-    ...baseline, ...savedState, schemaVersion: 9, instance, instances, securityGroups, networkAcl,
+    ...baseline, ...savedState, schemaVersion: 10, instance, instances, securityGroups, networkAcl,
     s3Buckets: savedState.s3Buckets ? [...savedState.s3Buckets, ...baseline.s3Buckets.filter(bucket => !savedState.s3Buckets!.some(savedBucket => savedBucket.name === bucket.name))] : baseline.s3Buckets,
     s3Objects: savedState.s3Objects ? [...savedState.s3Objects, ...baseline.s3Objects!.filter(object => !savedState.s3Objects!.some(savedObject => savedObject.bucketName === object.bucketName && savedObject.key === object.key))] : baseline.s3Objects,
     s3BucketPolicies: savedState.s3BucketPolicies ? [...savedState.s3BucketPolicies, ...baseline.s3BucketPolicies!.filter(policy => !savedState.s3BucketPolicies!.some(savedPolicy => savedPolicy.bucketName === policy.bucketName))] : baseline.s3BucketPolicies,
