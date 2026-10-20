@@ -257,3 +257,25 @@ test('Amazon Q Business sync and Amazon Q Developer subscription changes update 
   assert.equal(user.status, 'Suspended');
   assert.equal(update.state.cloudTrailEvents[0].eventName, 'UpdateUserSubscription');
 });
+
+
+test('RAG mock-data contract includes a stale V17 answer and updated V18 answer', () => {
+  const v17 = 'Runbook V17. The payments API request timeout is 30 seconds. Database connection pool maximum is 80.';
+  const v18 = 'Runbook V18. The payments API request timeout is 45 seconds. Database connection pool maximum is 120.';
+  assert.match(v17, /30 seconds/);
+  assert.match(v18, /45 seconds/);
+  assert.notEqual(v17, v18);
+  assert.match(v17, /V17/);
+  assert.match(v18, /V18/);
+});
+
+test('AI data-validation requirements are represented in the simulator UI', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const ui = await readFile(new URL('../app/troubleshooting/simulators/aws/ai-screens.tsx', import.meta.url), 'utf8');
+  for (const label of ['Knowledge-base source objects', 'Knowledge-base role and permissions', 'Training input object', 'Execution role trust and permissions', 'Source object exists', 'Successful output object', 'Data-source documents', 'Latest sync succeeded']) {
+    assert.ok(ui.includes(label), 'missing AI validation check: ' + label);
+  }
+  assert.match(ui, /Upload PDF/);
+  assert.match(ui, /Index documents/);
+  assert.match(ui, /Retrieved passages/);
+});
