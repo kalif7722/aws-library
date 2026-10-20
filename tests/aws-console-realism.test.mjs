@@ -80,7 +80,8 @@ test("checkout latency lab follows the listener-to-target relationship and valid
   assert.match(consoleSource, /Registered target port/);
   assert.match(consoleSource, /Target health/);
   assert.match(consoleSource, /Edit health check settings/);
-  assert.match(consoleSource, /Save changes/);
+  assert.match(consoleSource, /updateAwsTargetGroupHealthCheck/);
+  assert.match(consoleSource, /<button type="button" className="primary" onClick=\{saveTargetGroupHealthCheck\}>Save changes<\/button>/);
   assert.match(consoleSource, /window\.localStorage\.setItem\("aws-console-simulator-state-v3"/);
   assert.match(consoleSource, /Health check saved/);
   assert.doesNotMatch(lab, /Show CLI \/ diagnostic example/);
