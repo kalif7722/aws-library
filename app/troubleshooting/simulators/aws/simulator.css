@@ -261,3 +261,23 @@ body:has(.aws-console-sim) .semantic-search{left:auto;right:14px;bottom:14px}
 .aws-sim-traffic-path>div span{font-size:12px;color:var(--aws-sim-muted,#64748b);overflow-wrap:anywhere}
 .aws-sim-traffic-path>span{align-self:center;color:var(--aws-sim-muted,#64748b);font-weight:700}
 @media(max-width:700px){.aws-sim-traffic-path{display:grid;grid-template-columns:1fr}.aws-sim-traffic-path>span{transform:rotate(90deg)}}
+
+
+/* Responsive hardening: keep every simulated AWS console view inside the available viewport. */
+.aws-sim,.aws-console-sim,.aws-sim-layout,.aws-sim-content,.aws-sim-panel,.aws-sim-editor,.aws-sim-ai-output{min-width:0;max-width:100%}
+.aws-console-sim{width:100%;max-width:100%;overflow-x:clip}
+.aws-sim-layout{width:100%;grid-template-columns:minmax(190px,245px) minmax(0,1fr)}
+.aws-sim-content{overflow-wrap:anywhere}
+.aws-sim table{max-width:100%}
+.aws-sim pre,.aws-console-sim pre,.aws-sim code{max-width:100%;overflow-wrap:anywhere;white-space:pre-wrap}
+.aws-sim input,.aws-sim select,.aws-sim textarea,.aws-sim button{max-width:100%}
+.aws-console-sim .aws-sim-service-search{max-width:calc(100vw - 24px)}
+.aws-console-sim .aws-sim-menu-categories>*{min-width:0}
+.aws-console-sim .aws-sim-instance-filters label{min-width:min(190px,100%)}
+.aws-console-sim .aws-sim-instance-filters input,.aws-console-sim .aws-sim-instance-filters select{max-width:100%;min-width:0}
+.aws-console-sim .aws-sim-vpc-map>button{min-width:min(190px,100%)}
+.aws-sim-ai-job-toolbar>*{min-width:0;max-width:100%}
+@media(max-width:1100px){.aws-sim-layout{grid-template-columns:200px minmax(0,1fr)}.aws-sim-content{padding-left:clamp(12px,2vw,24px);padding-right:clamp(12px,2vw,24px)}.aws-sim table{min-width:680px}}
+@media(max-width:900px){.aws-sim-layout{display:block;min-height:0}.aws-sim-sidebar{position:static;display:block;border-right:0;border-bottom:1px solid var(--line);padding:10px 12px}.aws-sim-sidebar section{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;padding:3px 0 8px;overscroll-behavior-x:contain}.aws-sim-sidebar section h2{flex:0 0 100%;padding:4px 8px}.aws-sim-sidebar section button{flex:0 0 auto;width:auto;white-space:nowrap;padding:9px 11px}.aws-sim-sidebar-note{display:none}.aws-sim-content{padding:18px clamp(12px,2.5vw,24px) 30px}.aws-sim-heading{flex-wrap:wrap}}
+@media(max-width:700px){.aws-sim-global{gap:9px;padding:10px;min-width:0}.aws-sim-search{flex-basis:100%;width:100%;min-width:0}.aws-sim-content{padding:14px 10px 24px}.aws-sim-heading h1{font-size:clamp(20px,6vw,24px);overflow-wrap:anywhere}.aws-sim-table-wrap{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}.aws-sim table{min-width:640px}.aws-sim-editor{margin:12px 0;padding:12px}.aws-sim-detail-grid,.aws-sim-property-grid,.aws-sim-resource-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.aws-console-sim .aws-sim-service-search{top:112px;left:8px;right:8px;width:auto;max-width:calc(100vw - 16px)}.aws-console-sim .aws-sim-menu-categories{padding:8px}}
+@media(max-width:420px){.aws-sim-detail-grid,.aws-sim-property-grid,.aws-sim-resource-strip,.aws-sim-checks,.aws-sim-dashboard-grid,.aws-sim-form-grid{grid-template-columns:minmax(0,1fr)}.aws-sim-path{padding:14px}.aws-sim-tabs{gap:14px}.aws-sim-panel-title{padding:13px}}

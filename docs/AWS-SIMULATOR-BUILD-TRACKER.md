@@ -361,3 +361,16 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Hide catalog-only and planned services from AWS service search/home.
 - [ ] Remove remaining synthetic diagnostic cards, teaching overlays and placeholder operations across individual service pages.
 - [ ] Run a fresh production build and the full regression suite; browser/deployed revision verification remains separate.
+
+
+## PDF ingestion, RAG answer freshness, and AI data validation — 2026-10-20
+
+- [x] Add a Bedrock Knowledge Bases training panel with PDF type/size/header checks and lightweight text-layer extraction for common text-based PDFs.
+- [x] Show extracted versus indexed text length and explicit pending/indexed status so upload does not silently change answers before indexing.
+- [x] Add an explicit mock V17/V18 runbook to reproduce stale answers (30-second timeout) and verify updated answers (45-second timeout) only after indexing.
+- [x] Show the source document/version and retrieved passages with each simulated RAG response; abstain when no matching indexed passage exists.
+- [x] Add visible state-derived data-validation checks to Bedrock, SageMaker, Comprehend, Textract, and Amazon Q Business/Developer screens.
+- [ ] Run the full production build and regression suite on the resulting commit; browser-test real PDF uploads, especially compressed streams, font encodings, and scanned PDFs.
+- [ ] Confirm the Cloudflare deployment separately. The upload/index/query flow is a training simulation: PDF object metadata, sync status and audit events update the shared simulated AWS account, but no real S3 upload or live Bedrock call occurs.
+
+**PDF extraction boundary:** this first implementation supports common text-based PDF content streams. Scanned/image-only PDFs and unsupported font encodings require OCR or a full PDF parsing library and should report that limitation rather than silently fabricate extracted text.
