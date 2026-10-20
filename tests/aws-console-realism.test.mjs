@@ -99,3 +99,21 @@ test("existing simulator state migrates the checkout listener topology without o
   assert.match(consoleSource, /0 after recovery/);
   assert.match(consoleSource, /24 during seeded incident window/);
 });
+
+
+test("RAG stale-answer lab stages PDF metadata, syncs the seeded knowledge base, and reveals grounded mock results only after verification", async () => {
+  const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
+  const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
+  assert.match(lab, /RAG ANSWER PLAYGROUND/);
+  assert.match(lab, /How long must payment transaction records be retained/);
+  assert.match(lab, /Payment transaction records must be retained for 7 years/);
+  assert.match(lab, /Payment transaction records must be retained for 10 years/);
+  assert.match(lab, /accept="application\/pdf,\.pdf"/);
+  assert.match(lab, /PDF text is not extracted/);
+  assert.match(lab, /selectedRagExample\.currentAnswer/);
+  assert.match(lab, /aws-sim-upload-rag-document/);
+  assert.match(consoleSource, /putAwsS3Object\(state, \{ bucketName: "ai-workloads", key, sizeBytes \}\)/);
+  assert.match(consoleSource, /knowledge\/payments\/uploads\//);
+  assert.match(consoleSource, /aws-sim-reset-rag-lab/);
+  assert.match(consoleSource, /Knowledge-base freshness/);
+});

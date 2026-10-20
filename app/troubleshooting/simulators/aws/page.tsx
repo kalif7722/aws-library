@@ -630,6 +630,46 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
         if (typeof event.data.resource === "string") setSelectedResource(event.data.resource);
         return;
       }
+      if (event.data?.type === "aws-sim-upload-rag-document") {
+        const inputName = typeof event.data.fileName === "string" ? event.data.fileName : "";
+        const sizeBytes = Number(event.data.sizeBytes);
+        const baseName = inputName.split(/[\\/]/).pop() ?? "";
+        const safeName = baseName.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
+        const failUpload = (error: string) => {
+          event.source?.postMessage({ type: "aws-sim-upload-rag-document-result", ok: false, error }, event.origin);
+          notify(error);
+        };
+        if (!safeName.toLowerCase().endsWith(".pdf") || !Number.isInteger(sizeBytes) || sizeBytes < 1 || sizeBytes > 10 * 1024 * 1024) {
+          failUpload("Choose a valid PDF between 1 byte and 10 MB.");
+          return;
+        }
+        const key = "knowledge/payments/uploads/" + safeName;
+        const result = putAwsS3Object(state, { bucketName: "ai-workloads", key, sizeBytes });
+        if (result.error) {
+          failUpload(result.error);
+          return;
+        }
+        setState(result.state);
+        setSelectedResource(key);
+        openService("S3");
+        const object = (result.state.s3Objects ?? []).find(item => item.bucketName === "ai-workloads" && item.key === key);
+        event.source?.postMessage({ type: "aws-sim-upload-rag-document-result", ok: true, key, fileName: safeName, sizeBytes, versionId: object?.versionId }, event.origin);
+        notify("PDF metadata staged in the simulated ai-workloads S3 bucket; no file bytes were transferred.");
+        return;
+      }
+      if (event.data?.type === "aws-sim-reset-rag-lab") {
+        const updated: AwsLabState = {
+          ...state,
+          s3Objects: (state.s3Objects ?? []).filter(item => !(item.bucketName === "ai-workloads" && item.key.startsWith("knowledge/payments/uploads/"))),
+          bedrockKnowledgeBases: (state.bedrockKnowledgeBases ?? []).map(item => item.id === "kb-payments-product-guide" ? { ...item, status: "ACTIVE" as const, lastSyncTime: "2026-10-15T02:20:00Z" } : item),
+        };
+        setState(updated);
+        setSelectedResource("ai-workloads");
+        openService("S3");
+        event.source?.postMessage({ type: "aws-sim-reset-rag-lab-result", ok: true }, event.origin);
+        notify("RAG scenario reset to the seeded stale source; staged PDF metadata was removed.");
+        return;
+      }
       if (event.data?.type === "aws-sim-create-s3-endpoint" || event.data?.type === "aws-sim-apply-cost-mitigation") {
         if (!(state.vpcEndpoints ?? []).some(x => x.serviceName === "com.amazonaws.eu-west-1.s3")) {
           const id = "vpce-0s3gateway123456789";
