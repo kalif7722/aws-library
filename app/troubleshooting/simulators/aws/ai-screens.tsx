@@ -14,6 +14,7 @@ import {
   getAwsSageMakerTrainingJobs,
   invokeAwsBedrockModel,
   invokeAwsSageMakerEndpoint,
+  putAwsS3Object,
   runAwsAiProcessingJob,
   setAwsSageMakerEndpointInstanceCount,
   submitAwsBedrockUseCase,
@@ -251,11 +252,15 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
       if (extractedText.length < 30) {
         throw new Error("No readable text layer was found. This PDF may be scanned/image-only or use unsupported font encoding; OCR is not simulated in this browser-only lab.");
       }
-      const prior = ragDocuments.find(document => document.name.toLowerCase() === file.name.toLowerCase());
       const version = Math.max(17, ...ragDocuments.map(document => document.version)) + 1;
-      const document: RagDocument = { id: prior?.id ?? "uploaded-" + Date.now(), name: file.name, version, extractedText, indexedText: prior?.indexedText ?? "", status: "PENDING", updatedAt: new Date().toISOString(), source: "upload" };
-      setRagDocuments(old => [...old.filter(item => item.id !== document.id), document]);
-      setRagError("PDF text extracted. Select Index documents to make this version available to RAG answers.");
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+      const objectKey = "knowledge/payments/uploads/" + safeName;
+      const uploadResult = putAwsS3Object(state, { bucketName: "ai-workloads", key: objectKey, sizeBytes: file.size });
+      if (uploadResult.error) throw new Error(uploadResult.error);
+      setState(uploadResult.state);
+      const document: RagDocument = { id: "uploaded-" + Date.now(), name: file.name, version, extractedText, indexedText: "", status: "PENDING", updatedAt: new Date().toISOString(), source: "upload" };
+      setRagDocuments(old => [...old, document]);
+      setRagError("PDF text extracted and its object metadata was added to the simulated S3 inventory and CloudTrail. Select Index documents to make this version available to RAG answers.");
     } catch (error) {
       setRagError(error instanceof Error ? error.message : "Could not extract readable PDF text.");
     } finally {
@@ -269,14 +274,22 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
       setRagError("No pending document changes. Upload a new version or activate the V18 demo to test re-indexing.");
       return;
     }
+    const knowledgeBase = knowledgeBases[0];
+    if (!knowledgeBase) { setRagError("No Bedrock knowledge base is configured in the simulated account."); return; }
+    const sync = syncAwsBedrockKnowledgeBase(state, knowledgeBase.id);
+    if (!sync.success) { setState(sync.state); setRagError(sync.error ?? "Knowledge-base sync failed."); return; }
+    setState(sync.state);
     setRagDocuments(old => old.map(document => ({ ...document, indexedText: document.extractedText, status: "INDEXED", updatedAt: new Date().toISOString() })));
     setRagAnswer(null);
-    setRagError("Index updated. New answers will retrieve from the latest indexed text.");
-    notify("Simulated knowledge-base index updated.");
+    setRagError("Index updated. The simulated knowledge-base sync and CloudTrail event succeeded; new answers will retrieve from the latest indexed text.");
+    notify("Simulated knowledge-base index updated and sync recorded.");
   }
 
   function activateRagV18Demo() {
     const v18 = "Runbook V18. The payments API request timeout is 45 seconds. Escalate repeated timeout errors to the Platform Operations team. Database connection pool maximum is 120. Change record CHG-2048 approved the timeout and pool-size update.";
+    const objectResult = putAwsS3Object(state, { bucketName: "ai-workloads", key: "knowledge/payments/operations-runbook-v18.pdf", sizeBytes: v18.length * 2 });
+    if (objectResult.error) { setRagError(objectResult.error); return; }
+    setState(objectResult.state);
     setRagDocuments(old => {
       const existing = old.find(document => document.id === "operations-runbook-v18");
       const document: RagDocument = { id: "operations-runbook-v18", name: "operations-runbook.pdf", version: 18, extractedText: v18, indexedText: existing?.indexedText ?? "", status: "PENDING", updatedAt: new Date().toISOString(), source: "mock" };
@@ -390,7 +403,7 @@ export default function AwsAiScreens({ screen, state, setState, tab, setTab, not
         <div className="aws-sim-table-wrap"><table><thead><tr><th>Name</th><th>Knowledge base ID</th><th>Data source</th><th>Embedding model</th><th>Vector store</th><th>Status</th><th>Indexed objects</th><th>Last sync</th><th>Actions</th></tr></thead><tbody>{knowledgeBases.map(kb => <tr key={kb.id}><td>{kb.name}</td><td className="mono">{kb.id}</td><td>s3://{kb.sourceBucketName}/{kb.sourcePrefix}</td><td>{kb.embeddingModel}</td><td>{kb.vectorStore}</td><td><Status value={kb.status} /></td><td>{kb.documentsIndexed}</td><td>{new Date(kb.lastSyncTime).toLocaleString()}</td><td><button className="aws-sim-text-link" onClick={() => syncKnowledgeBase(kb.id)}>Sync data source</button></td></tr>)}</tbody></table></div>
         <section className="aws-sim-editor">
           <h3>Document ingestion and RAG validation</h3>
-          <p>Browser-local training simulation. Text-based PDFs are extracted, chunked, and indexed locally; no S3 upload or live Bedrock Knowledge Bases call occurs.</p>
+          <p>Training simulation. Text-based PDFs are extracted and indexed locally; upload metadata, knowledge-base sync status, and CloudTrail events update the shared simulated AWS account. No real S3 upload or live Bedrock Knowledge Bases call occurs.</p>
           <div className="aws-sim-form-grid"><label className="wide">Upload PDF (max 10 MB)<input type="file" accept="application/pdf,.pdf" disabled={ragBusy} onChange={event => { void uploadRagPdf(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label></div>
           <div className="aws-sim-editor-actions"><button type="button" onClick={activateRagV18Demo}>Load mock V18 (stale-answer demo)</button><button type="button" className="primary" onClick={indexRagDocuments} disabled={ragBusy}>Index documents</button></div>
           {ragBusy && <p role="status">Extracting PDF text…</p>}

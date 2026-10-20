@@ -277,5 +277,14 @@ test('AI data-validation requirements are represented in the simulator UI', asyn
   }
   assert.match(ui, /Upload PDF/);
   assert.match(ui, /Index documents/);
-  assert.match(ui, /Retrieved passages/);
+  assert.match(ui, /retrieved passages/i);
+});
+
+
+test('PDF upload and indexing are wired into shared simulated S3 and Bedrock state', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const ui = await readFile(new URL('../app/troubleshooting/simulators/aws/ai-screens.tsx', import.meta.url), 'utf8');
+  assert.match(ui, /putAwsS3Object\(state, \{ bucketName: "ai-workloads"/);
+  assert.match(ui, /syncAwsBedrockKnowledgeBase\(state, knowledgeBase\.id\)/);
+  assert.match(ui, /shared simulated AWS account/);
 });

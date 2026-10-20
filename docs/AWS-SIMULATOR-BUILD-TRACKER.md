@@ -371,6 +371,6 @@ Suggested order after EC2/VPC: **Load Balancing → DNS/network edge → S3 → 
 - [x] Show the source document/version and retrieved passages with each simulated RAG response; abstain when no matching indexed passage exists.
 - [x] Add visible state-derived data-validation checks to Bedrock, SageMaker, Comprehend, Textract, and Amazon Q Business/Developer screens.
 - [ ] Run the full production build and regression suite on the resulting commit; browser-test real PDF uploads, especially compressed streams, font encodings, and scanned PDFs.
-- [ ] Confirm the Cloudflare deployment separately. The upload/index/query flow is a browser-local training simulation and does not upload to real S3 or call live Bedrock.
+- [ ] Confirm the Cloudflare deployment separately. The upload/index/query flow is a training simulation: PDF object metadata, sync status and audit events update the shared simulated AWS account, but no real S3 upload or live Bedrock call occurs.
 
 **PDF extraction boundary:** this first implementation supports common text-based PDF content streams. Scanned/image-only PDFs and unsupported font encodings require OCR or a full PDF parsing library and should report that limitation rather than silently fabricate extracted text.
