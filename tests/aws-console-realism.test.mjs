@@ -117,3 +117,17 @@ test("RAG stale-answer lab stages PDF metadata, syncs the seeded knowledge base,
   assert.match(consoleSource, /aws-sim-reset-rag-lab/);
   assert.match(consoleSource, /Knowledge-base freshness/);
 });
+
+
+test("RAG stale and updated answer examples are shown side by side before the AWS simulator iframe", async () => {
+  const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
+  const panel = lab.indexOf('aria-label="RAG answer comparison workbench"');
+  const consoleFrame = lab.indexOf('<section className="vm-real-console shared-lab-console">');
+  assert.ok(panel >= 0 && consoleFrame > panel, "RAG comparison should appear above the console iframe.");
+  assert.match(lab, /BEFORE FIX · STALE RETRIEVAL/);
+  assert.match(lab, /AFTER FIX · EXPECTED CURRENT ANSWER/);
+  assert.match(lab, /selectedRagExample\.staleAnswer/);
+  assert.match(lab, /selectedRagExample\.currentAnswer/);
+  assert.match(lab, /Not verified yet/);
+  assert.match(lab, /Recovery check passed/);
+});
