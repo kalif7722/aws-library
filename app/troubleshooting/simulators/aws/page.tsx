@@ -719,7 +719,7 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
         } else if (incident === "vm-unreachable") {
           const instance = getAwsInstances(state).find(item => item.id === "i-0a12b345c678d9012");
           const group = state.securityGroups.find(item => item.name === "sg-api-prod");
-          const sshRule = !!group?.ingress.some(rule => rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22 && rule.sourceType === "SecurityGroup" && (rule.source === "sg-bastion-prod" || rule.source === state.securityGroups.find(item => item.name === "sg-bastion-prod")?.id));
+          const sshRule = !!group?.ingress.some(rule => rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22 && rule.sourceType === "SecurityGroup" && rule.source === "sg-bastion-prod");
           addCheck("SSH service", instance?.guestSsh === "listening", instance?.guestSsh === "listening" ? "The instance SSH service is listening." : "Restore the simulated SSH service after inspecting instance evidence.");
           addCheck("Approved SSH ingress", sshRule, sshRule ? "The approved bastion source is allowed." : "Add a narrow TCP/22 rule from the approved bastion security group.");
         } else if (incident === "rds-connection-timeout") {
@@ -734,8 +734,8 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
         } else if (incident === "ec2-no-outbound") {
           const nat = (state.natGateways ?? []).find(item => item.id === "nat-0123abcd4567ef890");
           const route = (state.routeTables ?? []).find(item => item.id === "rtb-0123abcd4567ef890")?.routes.some(item => item.destination === "0.0.0.0/0" && item.target === "nat-0123abcd4567ef890" && item.state === "active");
-          addCheck("NAT gateway", nat?.state === "available", nat?.state === "available" ? "NAT gateway is available." : "Restore NAT availability after checking its public subnet path.");
-          addCheck("Private default route", !!route, route ? "Private subnet default route targets the available NAT gateway." : "Edit the private route table's default route to target nat-0123abcd4567ef890.");
+          addCheck("NAT gateway", nat?.state === "available", nat?.state === "available" ? "NAT gateway is available." : "Restore the NAT gateway to available after checking its public subnet path.");
+          addCheck("Private default route", !!route, route ? "Private subnet default route still targets NAT." : "Preserve the private subnet default route to NAT.");
         } else if (incident === "s3-access-denied") {
           const protectedDeny = (state.s3BucketPolicies ?? []).some(policy => policy.bucketName === "prod-app-artifacts" && policy.statements.some(statement => statement.effect === "Deny" && statement.principal === "Lambda-Payments-Role" && statement.actions.includes("s3:PutObject")));
           addCheck("Artifact protection", protectedDeny, protectedDeny ? "The runtime overwrite guard remains in place; use the authorized publisher workflow." : "Review the bucket policy and preserve the intended immutable-release guard.");

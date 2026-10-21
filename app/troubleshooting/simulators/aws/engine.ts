@@ -1216,6 +1216,7 @@ export function createAwsLabStateForScenario(scenarioId: string): AwsLabState {
   switch (scenarioId) {
     case "vm-unreachable":
       if (appSgId) state.securityGroups = state.securityGroups.map(group => group.id === appSgId ? { ...group, ingress: group.ingress.filter(rule => !(rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) } : group);
+      state.instance.guestSsh = "stopped";
       break;
     case "private-connectivity":
     case "rds-connection-timeout":
@@ -1244,9 +1245,8 @@ export function createAwsLabStateForScenario(scenarioId: string): AwsLabState {
       if (adminTarget) adminTarget.healthCheckPath = "/ready";
       break;
     case "ec2-no-outbound": {
-      const routeTable = state.routeTables?.find(table => table.id === "rtb-0123abcd4567ef890");
-      if (routeTable) routeTable.routes = routeTable.routes.map(route => route.destination === "0.0.0.0/0" ? { ...route, target: "nat-0broken00000000000", state: "blackhole" } : route);
-      state.routes = state.routes.map(route => route.destination === "0.0.0.0/0" ? { ...route, target: "nat-0broken00000000000", state: "blackhole" } : route);
+      const nat = state.natGateways?.[0];
+      if (nat) nat.state = "failed";
       break;
     }
     case "s3-access-denied":

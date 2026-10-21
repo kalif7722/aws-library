@@ -44,7 +44,7 @@ test("labs 5–8 have evidence-led walkthroughs, actionable fixes, and rollback 
   const source = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
   for (const phrase of [
     "NatGateway-Hours", "NatGateway-Bytes", "Create and verify an S3 gateway endpoint",
-    "Checkout requests fail: unhealthy ALB target", "HealthyHostCount", "HTTPCode_ELB_5XX_Count",
+    "Checkout latency: RDS database slowdown", "CPUUtilization 96%", "DatabaseConnections",
     "Restore the missing partition through S3", "orders-daily-curation",
     "Test retrieval independently", "Problem and solution confirmed", "Rollback / safety:",
   ]) assert.ok(source.includes(phrase), "Expected walkthrough evidence: " + phrase);
@@ -68,25 +68,18 @@ test("cost mitigation is performed through the simulated VPC Endpoints console",
 });
 
 
-test("checkout latency lab follows the listener-to-target relationship and validates recovery", async () => {
+test("database slowdown lab seeds an undersized RDS instance and validates performance recovery", async () => {
   const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
   const consoleSource = await readFile(new URL("../app/troubleshooting/simulators/aws/page.tsx", import.meta.url), "utf8");
   const lab = await readFile(new URL("../app/troubleshooting/labs/SharedConsoleTroubleshootingLab.tsx", import.meta.url), "utf8");
-  assert.match(engine, /port: 443, protocol: "HTTPS", targetGroupId: "tg-payments-api"/);
-  assert.match(engine, /id: "tg-payments-api", name: "tg-payments-api", protocol: "HTTP", port: 8080/);
-  assert.match(lab, /HTTPS :443/);
-  assert.match(lab, /configured path \/ready differs from served path \/health/);
-  assert.match(consoleSource, /HTTPS listener forwards to affected target group/);
-  assert.match(consoleSource, /Registered target port/);
-  assert.match(consoleSource, /Target health/);
-  assert.match(consoleSource, /Edit health check settings/);
-  assert.match(consoleSource, /updateAwsTargetGroupHealthCheck/);
-  assert.match(consoleSource, /<button type="button" className="primary" onClick=\{saveTargetGroupHealthCheck\}>Save changes<\/button>/);
-  assert.match(consoleSource, /window\.localStorage\.setItem\("aws-console-simulator-state-v3"/);
-  assert.match(consoleSource, /Health check saved/);
-  assert.doesNotMatch(lab, /Show CLI \/ diagnostic example/);
+  assert.match(engine, /createAwsLabStateForScenario/);
+  assert.match(engine, /db\.cpuPercent = 96; db\.connections = 88; db\.instanceClass = "db\.t3\.medium"/);
+  assert.match(lab, /Checkout latency: RDS database slowdown/);
+  assert.match(lab, /Modify DB instance/);
+  assert.match(consoleSource, /RDS CPU recovery/);
+  assert.match(consoleSource, /cpuPercent:38/);
+  assert.match(consoleSource, /window\.localStorage\.setItem\(storageKey/);
 });
-
 
 test("existing simulator state migrates the checkout listener topology without overwriting other listener settings", async () => {
   const engine = await readFile(new URL("../app/troubleshooting/simulators/aws/engine.ts", import.meta.url), "utf8");
