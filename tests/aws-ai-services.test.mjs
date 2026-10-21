@@ -299,7 +299,9 @@ test('scenario-specific simulator seeds preserve each lab fault independently', 
   assert.equal(db.connections, 88);
   const alb = createAwsLabStateForScenario('alb-targets-unhealthy').targetGroups.find(item => item.id === 'tg-payments-admin');
   assert.equal(alb.healthCheckPath, '/ready');
-  assert.equal(createAwsLabStateForScenario('ec2-no-outbound').natGateways[0].state, 'failed');
+  const egress = createAwsLabStateForScenario('ec2-no-outbound');
+  assert.equal(egress.natGateways[0].state, 'available');
+  assert.equal(egress.routeTables.find(table => table.id === 'rtb-0123abcd4567ef890').routes.find(route => route.destination === '0.0.0.0/0').state, 'blackhole');
   const privateDb = createAwsLabStateForScenario('private-connectivity').securityGroups.find(item => item.name === 'sg-rds-orders');
   assert.ok(!privateDb.ingress.some(rule => rule.source === 'sg-api-prod'));
 });
