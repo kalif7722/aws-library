@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import "./standard-lab.css";
+import { AWS_ICON_ROOT, awsArchitectureIcons } from "../../../../lib/aws-architecture-icons";
 
 type Choice = { label: string; correct: boolean; feedback: string };
 type Checkpoint = { title: string; objective: string; consoleScreen: string; resource: string; evidence: string[]; question: string; choices: Choice[]; hint: string };
@@ -114,6 +115,8 @@ const scenarios: Record<string, Scenario> = {
 };
 
 function serviceIcon(label:string){const v=label.toLowerCase();if(v.includes("route 53")||v.includes("dns")||v.includes("resolver"))return{glyph:"DNS",kind:"dns"};if(v.includes("ecs")||v.includes("eks")||v.includes("pod")||v.includes("container"))return{glyph:"▦",kind:"containers"};if(v.includes("cloudwatch")||v.includes("logs")||v.includes("monitor"))return{glyph:"◷",kind:"observability"};if(v.includes("s3")||v.includes("storage")||v.includes("bucket"))return{glyph:"▤",kind:"storage"};if(v.includes("lambda")||v.includes("function"))return{glyph:"λ",kind:"serverless"};if(v.includes("rds")||v.includes("database")||v.includes("db"))return{glyph:"▥",kind:"database"};if(v.includes("alb")||v.includes("target group")||v.includes("load balancer"))return{glyph:"⇄",kind:"loadbalancing"};if(v.includes("nat")||v.includes("route")||v.includes("subnet")||v.includes("vpc"))return{glyph:"↗",kind:"network"};if(v.includes("iam")||v.includes("role")||v.includes("permission")||v.includes("secret"))return{glyph:"◇",kind:"security"};if(v.includes("client")||v.includes("pipeline")||v.includes("application"))return{glyph:"▣",kind:"application"};return{glyph:"☁",kind:"cloud"};}
+function architectureService(label:string){const v=label.toLowerCase();const key=v.includes("route 53")||v.includes("dns")||v.includes("resolver")||v.includes("hosted zone")?"route53":v.includes("cloudwatch")||v.includes("log group")||v.includes("log stream")||v.includes("metrics")?"cloudwatch":v.includes("ecs")||v.includes("task definition")||v.includes("deployment")?"ecs":v.includes("eks")||v.includes("pod")||v.includes("namespace")?"eks":v.includes("s3")||v.includes("bucket")||v.includes("object")?"s3":v.includes("lambda")||v.includes("function")?"lambda":v.includes("dynamodb")?"dynamodb":v.includes("rds")||v.includes("database")?"rds":v.includes("alb")||v.includes("target group")||v.includes("load balancer")?"elb":v.includes("ec2")||v.includes("instance")?"ec2":v.includes("nat")||v.includes("route table")||v.includes("subnet")||v.includes("vpc")?"vpc":v.includes("iam")||v.includes("role")||v.includes("permission")||v.includes("policy")||v.includes("secret")?"iam":v.includes("event")?"eventbridge":v.includes("application")||v.includes("runtime")||v.includes("client")?"ec2":"awsCloud";return awsArchitectureIcons[key]||awsArchitectureIcons.awsCloud;}
+const architectureInspect=(scenario:Scenario,index:number)=>{const checkpoint=scenario.checkpoints[Math.min(index,scenario.checkpoints.length-1)];return checkpoint ? {title:checkpoint.title,objective:checkpoint.objective,screen:checkpoint.consoleScreen,resource:checkpoint.resource}:null;};
 export default function StandardTroubleshootingLab() {
   const params = useParams<{slug:string}>();
   const slug = params?.slug || "";
@@ -123,17 +126,36 @@ export default function StandardTroubleshootingLab() {
   const [answers,setAnswers] = useState<Record<number,number>>({});
   const [remediated,setRemediated] = useState(false);
   const [verified,setVerified] = useState(false);
+  const [architectureStep,setArchitectureStep] = useState(0);
   const current = scenario?.checkpoints[step];
   const selected = answers[step];
   const correct = selected !== undefined && current?.choices[selected]?.correct;
   const progress = useMemo(()=>scenario ? Math.round((Object.keys(answers).filter(k=>scenario.checkpoints[Number(k)]?.choices[answers[Number(k)]]?.correct).length/scenario.checkpoints.length)*100):0,[answers,scenario]);
   if (!scenario || !current) return <main className="standard-lab"><a href="/troubleshooting">← Troubleshooting library</a><h1>Lab not found</h1><p>Choose a lab from the troubleshooting library.</p></main>;
-  const reset = () => {setStep(0);setAnswers({});setRemediated(false);setVerified(false);};
+  const reset = () => {setStep(0);setAnswers({});setRemediated(false);setVerified(false);setArchitectureStep(0);};
   return <main className="standard-lab">
     <header className="standard-lab-top"><a href="/troubleshooting">← Troubleshooting library</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
     <section className="standard-lab-hero"><div><p className="standard-kicker">AWS TROUBLESHOOTING · HANDS-ON LAB</p><h1>{scenario.title}</h1><p>{scenario.symptom}</p><small>{scenario.resourceSummary}</small></div><div className="standard-score"><span>INVESTIGATION PROGRESS</span><strong>{progress}%</strong><div><i style={{width:progress+"%"}}/></div><small>{Object.keys(answers).filter(k=>scenario.checkpoints[Number(k)]?.choices[answers[Number(k)]]?.correct).length} / {scenario.checkpoints.length} checkpoints</small></div></section>
     <section className="standard-mode"><div><strong>Choose your mode</strong><p>Guided mode provides hints; challenge mode asks you to reason from the evidence.</p></div><div><button className={mode==="guided"?"active":""} onClick={()=>setMode("guided")}>Guided mode</button><button className={mode==="challenge"?"active":""} onClick={()=>setMode("challenge")}>Challenge mode</button></div></section>
-    <section className="standard-topology"><div className="standard-section-heading"><span>LIVE LAB TOPOLOGY</span><h2>Trace the request path</h2><p>Resources are illustrative links to the local simulator's seeded configuration; teaching and remediation stay outside the console.</p></div><div className="standard-path">{scenario.path.map((node,i)=>{const icon=serviceIcon(node);return <div className={"standard-node "+icon.kind+" "+(verified?"healthy":remediated&&i===scenario.path.length-2?"healthy":"")} key={node}><span className="standard-node-icon" aria-hidden="true">{icon.glyph}</span><small>STEP {String(i+1).padStart(2,"0")}</small><strong>{node}</strong>{i<scenario.path.length-1&&<b className="standard-node-arrow" aria-hidden="true">→</b>}</div>})}</div><div className="standard-endpoints"><span>{scenario.source}</span><span>{scenario.destination}</span></div></section>
+    <section className="standard-topology" aria-label="Interactive AWS architecture walkthrough">
+      <div className="standard-section-heading"><span>ARCHITECTURE WALKTHROUGH · AWS SERVICE ICONS</span><h2>Understand the workload and trace the request</h2><p>Follow the path from source to destination. Select a service to understand its role and what to inspect. The actual fault remains hidden until you investigate the console.</p></div>
+      <div className="standard-architecture-flow" role="group" aria-label="Architecture service path">
+        {scenario.path.map((node,i)=>{const asset=architectureService(node);return <div className="standard-architecture-stage" key={node+"-"+i}>
+          <button type="button" className={"standard-architecture-card "+(architectureStep===i?"selected ":"")+(verified?"healthy":"")} aria-pressed={architectureStep===i} onClick={()=>setArchitectureStep(i)}>
+            <span className="standard-architecture-number">0{i+1}</span>
+            <img src={AWS_ICON_ROOT+"/"+asset.file} alt={asset.name+" architecture icon"} loading="lazy" onError={e=>{e.currentTarget.style.display="none";}}/>
+            <strong>{node}</strong><small>{asset.name}</small>
+            <span className="standard-architecture-inspect">{architectureStep===i?"Inspecting this stage":"Inspect stage →"}</span>
+          </button>
+          {i<scenario.path.length-1&&<span className="standard-architecture-connector" aria-hidden="true">→</span>}
+        </div>})}
+      </div>
+      <div className="standard-architecture-details" aria-live="polite">
+        <div><span>ARCHITECTURE STAGE {architectureStep+1} OF {scenario.path.length}</span><h3>{scenario.path[architectureStep]}</h3><p>{architectureStep===0?"Start at the originating workload and confirm the exact symptom, request and identity.":architectureStep===scenario.path.length-1?"This is the destination or final observation point. Verify the end-to-end outcome here after remediation.":"This is an intermediate dependency or control in the request path. Check its configuration and evidence before proceeding downstream."}</p></div>
+        <div><strong>What to inspect</strong><p>{architectureInspect(scenario,architectureStep)?.objective}</p><small>Console: {architectureInspect(scenario,architectureStep)?.screen} · {architectureInspect(scenario,architectureStep)?.resource}</small></div>
+      </div>
+      <div className="standard-architecture-controls"><button type="button" disabled={architectureStep===0} onClick={()=>setArchitectureStep(i=>Math.max(0,i-1))}>← Previous component</button><span>{scenario.source} → {scenario.destination}</span><button type="button" disabled={architectureStep===scenario.path.length-1} onClick={()=>setArchitectureStep(i=>Math.min(scenario.path.length-1,i+1))}>Next component →</button></div>
+    </section>
     <section className="standard-console"><div className="standard-console-header"><span className="standard-console-service">{serviceIcon(current.consoleScreen).glyph} {current.consoleScreen}</span><span className="standard-console-resource">{current.resource}</span></div><div className="standard-section-heading"><span>STEP {String(step+1).padStart(2,"0")} / {String(scenario.checkpoints.length).padStart(2,"0")}</span><h2>{current.title}</h2><p>{current.objective}</p></div><div className="standard-console-meta"><span>Console destination</span><strong>{current.consoleScreen} › {current.resource}</strong><a href={"/troubleshooting/simulators/aws?lab="+slug} target="_blank" rel="noreferrer">Open full AWS Console Simulator ↗</a></div><iframe title={"AWS Console Simulator — "+current.consoleScreen} src={"/troubleshooting/simulators/aws?lab="+slug} loading="lazy" />
       <div className="standard-evidence"><h3>Evidence checklist</h3><ul>{current.evidence.map(item=><li key={item}>{item}</li>)}</ul>{mode==="guided"?<p className="standard-hint"><strong>Guided hint:</strong> {current.hint}</p>:<p className="standard-hint"><strong>Challenge:</strong> Decide what the evidence proves before revealing a hint.</p>}</div>
       <div className="standard-question"><span>YOUR DECISION</span><h3>{current.question}</h3><div className="standard-choices">{current.choices.map((choice,i)=><button key={choice.label} className={selected===i?(choice.correct?"correct":"incorrect"):""} onClick={()=>setAnswers(prev=>({...prev,[step]:i}))}><b>{String.fromCharCode(65+i)}</b><span>{choice.label}</span></button>)}</div>
