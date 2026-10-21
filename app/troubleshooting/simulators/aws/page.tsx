@@ -191,7 +191,7 @@ export default function AwsSimulatorPage() {
         const parsed = JSON.parse(saved) as { state?: AwsLabState; screen?: Screen; pinnedServices?: string[]; iamUsers?: typeof iamUsers; iamPolicies?: typeof iamPolicies; dynamoItems?: typeof dynamoItems; rdsRows?: typeof rdsRows };
         const savedState = parsed.state;
         if (savedState) setState(migrateAwsLabState(savedState));
-        else if (scenarioId) setState(createAwsLabStateForScenario(scenarioId));
+
         if (parsed.screen && parsed.screen !== "Instance details") setScreen(parsed.screen);
         if (Array.isArray(parsed.pinnedServices)) setPinnedServices(parsed.pinnedServices.filter(name => services.some(service => service.name === name && !service.implemented)));
         if (Array.isArray(parsed.iamUsers)) setIamUsers(parsed.iamUsers);
@@ -205,8 +205,10 @@ export default function AwsSimulatorPage() {
           if (savedData.lambdaTestEventByName && typeof savedData.lambdaTestEventByName === "object") setLambdaTestEventByName(savedData.lambdaTestEventByName);
           if (savedData.lambdaInvocationHistory && typeof savedData.lambdaInvocationHistory === "object") setLambdaInvocationHistory(savedData.lambdaInvocationHistory);
         }
+      } else if (scenarioId) {
+        setState(createAwsLabStateForScenario(scenarioId));
       }
-    } catch { /* Start with the seeded training account if storage is unavailable. */ }
+    } catch { if (scenarioId) setState(createAwsLabStateForScenario(scenarioId)); /* Start with the seeded training account if storage is unavailable. */ }
     setHydrated(true);
   }, []);
   useEffect(() => {
