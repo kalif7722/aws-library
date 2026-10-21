@@ -78,8 +78,7 @@ const scenarios: Record<string, Scenario> = {
     ],
     remediation:"Apply only the change supported by logs: fix slow code, dependency connectivity, or timeout sizing after measurement. Do not assume which cause applies without invocation evidence.",
     verify:"Replay the same test event, compare duration and error metrics, and confirm the expected downstream effect."
-  }
-
+  },
   "dns-resolution-failure": {
     title:"Application cannot resolve a cloud service hostname",category:"DNS & service discovery",symptom:"The application reports name-resolution failures for a dependency, while direct network connectivity and the service itself appear healthy.",source:"Application · private subnet",destination:"orders.internal.example",path:["Client application","VPC resolver","Route 53 private hosted zone","Private service endpoint"],resourceSummary:"Training incident: the private hosted zone is not associated with the application's VPC. Confirm the resolver path and zone association before changing application code or opening network access.",
     checkpoints:[
