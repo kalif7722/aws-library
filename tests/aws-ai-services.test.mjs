@@ -288,3 +288,18 @@ test('PDF upload and indexing are wired into shared simulated S3 and Bedrock sta
   assert.match(ui, /syncAwsBedrockKnowledgeBase\(state, knowledgeBase\.id\)/);
   assert.match(ui, /shared simulated AWS account/);
 });
+
+const scenarioSeeds = loadArchitectureModule(new URL('../app/troubleshooting/simulators/aws/engine.ts', import.meta.url));
+const { createAwsLabStateForScenario } = scenarioSeeds;
+
+test('scenario-specific simulator seeds preserve each lab fault independently', () => {
+  const db = createAwsLabStateForScenario('database-slowdown').databases.find(item => item.id === 'orders-prod');
+  assert.equal(db.instanceClass, 'db.t3.medium');
+  assert.equal(db.cpuPercent, 96);
+  assert.equal(db.connections, 88);
+  const alb = createAwsLabStateForScenario('alb-targets-unhealthy').targetGroups.find(item => item.id === 'tg-payments-admin');
+  assert.equal(alb.healthCheckPath, '/ready');
+  assert.equal(createAwsLabStateForScenario('ec2-no-outbound').natGateways[0].state, 'failed');
+  const privateDb = createAwsLabStateForScenario('private-connectivity').securityGroups.find(item => item.name === 'sg-rds-orders');
+  assert.ok(!privateDb.ingress.some(rule => rule.source === 'sg-api-prod'));
+});

@@ -1206,6 +1206,61 @@ export function updateAwsQDeveloperUser(state: AwsLabState, username: string, up
   return { state: updated, error: null };
 }
 
+export function createAwsLabStateForScenario(scenarioId: string): AwsLabState {
+  const state = createInitialAwsLabState();
+  const appSgId = state.securityGroups.find(group => group.name === "sg-api-prod")?.id;
+  const dbSg = state.securityGroups.find(group => group.name === "sg-rds-orders");
+  const aiRole = state.iamRoles.find(role => role.name === "AI-Platform-Operator");
+  const db = state.databases?.find(database => database.id === "orders-prod");
+  const adminTarget = state.targetGroups?.find(group => group.id === "tg-payments-admin");
+  switch (scenarioId) {
+    case "vm-unreachable":
+      if (appSgId) state.securityGroups = state.securityGroups.map(group => group.id === appSgId ? { ...group, ingress: group.ingress.filter(rule => !(rule.protocol === "TCP" && rule.fromPort <= 22 && rule.toPort >= 22)) } : group);
+      state.instance.guestSsh = "stopped";
+      break;
+    case "private-connectivity":
+    case "rds-connection-timeout":
+      if (dbSg) dbSg.ingress = dbSg.ingress.filter(rule => rule.source !== appSgId && rule.source !== "sg-api-prod");
+      break;
+    case "access-denied": {
+      const role = state.iamRoles.find(item => item.name === "Lambda-Payments-Role");
+      if (role) role.attachedPolicies = role.attachedPolicies.filter(policy => policy !== "DynamoDBOrdersWrite");
+      break;
+    }
+    case "ai-access-denied":
+      if (aiRole) aiRole.attachedPolicies = aiRole.attachedPolicies.filter(policy => policy !== "BedrockInvokeAccess");
+      break;
+    case "database-slowdown":
+      if (db) { db.cpuPercent = 96; db.connections = 88; db.instanceClass = "db.t3.medium"; }
+      break;
+    case "stale-data": {
+      const job = state.glueJobs?.find(item => item.name === "orders-daily-curation");
+      if (job) { job.state = "FAILED"; job.errorMessage = "Expected source partition day=2026-10-15 is missing."; }
+      break;
+    }
+    case "cloud-cost-spike":
+      state.costUsage = (state.costUsage ?? []).map(item => /NAT|DataProcessing/i.test(item.usageType + " " + item.service) ? { ...item, amount: Math.max(item.amount, 840) } : item);
+      break;
+    case "alb-targets-unhealthy":
+      if (adminTarget) adminTarget.healthCheckPath = "/ready";
+      break;
+    case "ec2-no-outbound": {
+      const nat = state.natGateways?.[0];
+      if (nat) nat.state = "failed";
+      break;
+    }
+    case "s3-access-denied":
+    case "rag-stale-answers":
+      break;
+    case "lambda-timeout": {
+      const fn = state.lambdaFunctions?.find(item => item.name === "orders-event-handler");
+      if (fn) { fn.timeoutSeconds = 3; fn.errorCount = 12; }
+      break;
+    }
+  }
+  return state;
+}
+
 export function migrateAwsLabState(savedState: Partial<AwsLabState> | null | undefined): AwsLabState {
   const baseline = createInitialAwsLabState();
   if (!savedState?.instance || !savedState.securityGroups || !savedState.routes) return baseline;
