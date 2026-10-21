@@ -15,6 +15,11 @@ const labs = [
   { number: "11", id: "rds-connection-timeout", title: "Application cannot connect to RDS", category: "Networking & databases", level: "Core", status: "Available", description: "Validate endpoint, port, subnet path, database security group and client configuration.", services: "RDS · VPC · Security Groups", icon: "▦" },
   { number: "12", id: "s3-access-denied", title: "S3 object operation returns AccessDenied", category: "Identity & storage", level: "Core", status: "Available", description: "Compare identity and bucket policies, object ownership and encryption permissions.", services: "S3 · IAM · KMS", icon: "▤" },
   { number: "13", id: "lambda-timeout", title: "Lambda function times out", category: "Serverless", level: "Intermediate", status: "Available", description: "Inspect function configuration, logs, downstream calls and VPC networking to isolate the delay.", services: "Lambda · CloudWatch · VPC", icon: "λ" },
+
+  { number: "14", id: "dns-resolution-failure", title: "Private DNS name does not resolve", category: "DNS & service discovery", level: "Core", status: "Available", description: "Check private hosted-zone associations, records, resolver visibility and the affected VPC before changing application code.", services: "Route 53 · VPC · Resolver", icon: "DNS" },
+  { number: "15", id: "ecs-deployment-failed", title: "ECS deployment stuck or rolling back", category: "Containers & deployments", level: "Intermediate", status: "Available", description: "Correlate ECS service events, task-definition port mappings, target health and rollout stability.", services: "ECS · ALB · CloudWatch", icon: "▦" },
+  { number: "16", id: "eks-pod-crashloop", title: "EKS workload in CrashLoopBackOff", category: "Containers & Kubernetes", level: "Intermediate", status: "Available", description: "Use pod events and previous-container logs to isolate startup configuration, secrets and readiness failures.", services: "EKS · Kubernetes · CloudWatch", icon: "▣" },
+  { number: "17", id: "cloudwatch-logs-missing", title: "CloudWatch logs missing", category: "Observability", level: "Core", status: "Available", description: "Validate log destination, region, runtime role permissions and fresh log-stream delivery.", services: "CloudWatch Logs · IAM", icon: "◷" },
 ];
 
 const groups = [
@@ -24,6 +29,9 @@ const groups = [
   { title: "Data & analytics", description: "Source freshness and processing pipelines", ids: ["stale-data"] },
   { title: "Cost & governance", description: "Usage analysis and NAT Gateway spend", ids: ["cloud-cost-spike"] },
   { title: "Performance & reliability", description: "Database pressure, latency and health checks", ids: ["database-slowdown", "alb-targets-unhealthy", "lambda-timeout"] },
+  { title: "DNS & service discovery", description: "Private names, hosted zones and resolver paths", ids: ["dns-resolution-failure"] },
+  { title: "Containers & deployments", description: "Task definitions, pod startup and safe rollouts", ids: ["ecs-deployment-failed", "eks-pod-crashloop"] },
+  { title: "Observability", description: "Restore runtime logs and incident evidence", ids: ["cloudwatch-logs-missing"] },
 ];
 
 export default function TroubleshootingPage() {
@@ -37,7 +45,7 @@ export default function TroubleshootingPage() {
       <div><p className="lab-directory-eyebrow">HANDS-ON CLOUD OPERATIONS</p><h1>Troubleshooting <span>Lab Library</span></h1><p className="lab-directory-intro">Choose an incident, follow the architecture and investigate using a console-style simulator. The learning guidance stays outside the console; simulated console screens focus on the controls and evidence a cloud engineer would actually inspect.</p></div>
       <div className="lab-directory-stats"><div><strong>{labs.length}</strong><span>LAB SCENARIOS</span></div><div><strong>{completed}</strong><span>COMPLETED</span></div><div><strong>{groups.length}</strong><span>CATEGORIES</span></div></div>
     </section>
-    <section className="lab-directory-toolbar"><div><p className="lab-directory-eyebrow">BROWSE BY CATEGORY</p><h2>Pick a lab to begin</h2></div><p>Each card opens its own lab page with an architecture walkthrough, investigation steps and console simulator where implemented.</p></section>
+    <section className="lab-directory-toolbar"><div><p className="lab-directory-eyebrow">BROWSE BY CATEGORY</p><h2>Pick a lab to begin</h2></div><p>Each card opens the same light-theme lab format: service-icon architecture flow, evidence-led investigation, guided/challenge mode, console simulator and remediation verification.</p></section>
     <nav className="lab-directory-categories" aria-label="Lab categories">{groups.map((group) => <a key={group.title} href={"#category-" + group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}><span>{group.title}</span><b>{group.ids.length.toString().padStart(2, "0")}</b></a>)}</nav>
     {groups.map((group) => <section className="lab-directory-group" id={"category-" + group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")} key={group.title}>
       <div className="lab-directory-group-heading"><div><p className="lab-directory-eyebrow">CATEGORY</p><h2>{group.title}</h2><p>{group.description}</p></div><span>{group.ids.length.toString().padStart(2, "0")} LABS</span></div>
