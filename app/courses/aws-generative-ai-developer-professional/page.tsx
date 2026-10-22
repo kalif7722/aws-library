@@ -1,11 +1,13 @@
 import CertificationCourse from "../../components/CertificationCourse";
 import AipC01TaskGuide from "../../components/AipC01TaskGuide";
+import GenAICourseVisualLibrary from "../../components/GenAICourseVisualLibrary";
 import "../../components/AipC01TaskGuide.css";
 import { aipScope } from "../../course-data";
 
 export default function GenerativeAIDeveloperProfessionalCourse() {
   return (
     <>
+      <GenAICourseVisualLibrary />
       <AipC01TaskGuide />
       <CertificationCourse
         code="AIP"
