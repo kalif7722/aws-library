@@ -1,5 +1,5 @@
-import CertificationCourse from "../../../../components/CertificationCourse";
-import { aipScope } from "../../../../course-data";
+import CertificationCourse from "../../../components/CertificationCourse";
+import { aipScope } from "../../../course-data";
 
 export default function GenAIServiceReferencePage() {
   return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 18px"}}>
