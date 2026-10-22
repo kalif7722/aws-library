@@ -15,7 +15,6 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   });
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [failed, setFailed] = useState<number[]>([]);
-  const [dimensions, setDimensions] = useState<Record<number, { width: number; height: number }>>({});
 
   const close = useCallback(() => setActiveIndex(null), []);
   const previous = useCallback(() => setActiveIndex((current) => current === null ? null : (current + visuals.length - 1) % visuals.length), [visuals.length]);
@@ -38,7 +37,6 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   }, [activeIndex, close, next, previous]);
 
   const active = activeIndex === null ? null : visuals[activeIndex];
-  const activeDimensions = activeIndex === null ? undefined : dimensions[activeIndex];
 
   return <>
     <style>{`
@@ -63,21 +61,20 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     `}</style>
     <div className="module-visual-grid">
       {visuals.map((visual, i) => <button type="button" className="module-visual-card" key={visual.index} onClick={() => setActiveIndex(i)} aria-label={`Open visual ${String(visual.index).padStart(2, "0")} full screen`}>
-        {failed.includes(i) ? <div className="module-visual-fallback">Visual {String(visual.index).padStart(2, "0")} will appear here after the WebP file is reviewed and uploaded.</div> : <img className="module-visual-thumb" src={visual.src} alt={visual.alt} loading="lazy" onError={() => setFailed((old) => old.includes(i) ? old : [...old, i])} onLoad={(event) => { const img = event.currentTarget; setDimensions((old) => ({ ...old, [i]: { width: img.naturalWidth, height: img.naturalHeight } })); }} />}
+        {failed.includes(i) ? <div className="module-visual-fallback">Visual {String(visual.index).padStart(2, "0")} will appear here after the WebP file is reviewed and uploaded.</div> : <img className="module-visual-thumb" src={visual.src} alt={visual.alt} loading="lazy" onError={() => setFailed((old) => old.includes(i) ? old : [...old, i])} />}
         <div className="module-visual-meta"><b>Visual {String(visual.index).padStart(2, "0")}</b><small>Asset: module-{moduleNumber}/slide-{String(visual.index).padStart(2, "0")}.webp · Click to enlarge</small></div>
       </button>)}
     </div>
     {active && activeIndex !== null && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="module-viewer-top">
-        <div><strong>{active.alt}</strong><div style={{fontSize:12,color:"#cbd5e1",marginTop:4}}>Visual {activeIndex + 1} of {visuals.length}{activeDimensions ? ` · ${activeDimensions.width} × ${activeDimensions.height}px` : ""}</div></div>
+        <div><strong>{active.alt}</strong></div>
         <div className="module-viewer-controls"><button type="button" onClick={previous} aria-label="Previous visual" title="Previous (←)">←</button><button type="button" onClick={next} aria-label="Next visual" title="Next (→)">→</button><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕ Close</button></div>
       </div>
       <div className="module-viewer-stage">
         <button className="module-viewer-arrow" type="button" onClick={previous} aria-label="Previous visual" title="Previous visual">‹</button>
-        <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image" src={active.src} alt={active.alt} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} onLoad={(event) => { const img = event.currentTarget; setDimensions((old) => ({ ...old, [activeIndex]: { width: img.naturalWidth, height: img.naturalHeight } })); }} />}</div>
+        <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image" src={active.src} alt={active.alt} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} />}</div>
         <button className="module-viewer-arrow" type="button" onClick={next} aria-label="Next visual" title="Next visual">›</button>
       </div>
-      <div className="module-viewer-footer">Use ← / → to navigate · Esc to close · Best-quality source target: at least 2048 × 1152 pixels</div>
     </div>}
   </>;
 }
