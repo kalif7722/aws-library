@@ -1,5 +1,5 @@
-import AipC01TaskGuide from "../../../../components/AipC01TaskGuide";
-import "../../../../components/AipC01TaskGuide.css";
+import AipC01TaskGuide from "../../../components/AipC01TaskGuide";
+import "../../../components/AipC01TaskGuide.css";
 
 export default function GenAIExamObjectivesPage() {
   return <main style={{maxWidth:1500,margin:"0 auto",padding:"24px 18px"}}>
