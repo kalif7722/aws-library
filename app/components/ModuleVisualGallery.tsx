@@ -17,11 +17,15 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [failed, setFailed] = useState<number[]>([]);
 
   const close = useCallback(() => setActiveIndex(null), []);
+  const previous = useCallback(() => setActiveIndex((current) => current === null ? null : (current + visuals.length - 1) % visuals.length), [visuals.length]);
+  const next = useCallback(() => setActiveIndex((current) => current === null ? null : (current + 1) % visuals.length), [visuals.length]);
 
   useEffect(() => {
     if (activeIndex === null) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
+      if (event.key === "ArrowLeft") previous();
+      if (event.key === "ArrowRight") next();
     };
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -30,7 +34,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       document.body.style.overflow = oldOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [activeIndex, close]);
+  }, [activeIndex, close, next, previous]);
 
   const active = activeIndex === null ? null : visuals[activeIndex];
 
@@ -38,7 +42,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     <style>{`
       .module-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}
       .module-visual-card{border:1px solid #dbe5f1;border-radius:14px;overflow:hidden;background:#fff;color:#152440;padding:0;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0}
-      .module-visual-card:focus-visible,.module-viewer button:focus-visible{outline:3px solid #38bdf8;outline-offset:3px}
+      .module-visual-card:focus-visible,.module-viewer button:focus-visible{outline:3px solid #38bdf8;outline-offset:3px}\n      .module-visual-image-protected{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
       .module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#f3f7fc;display:block}
       .module-visual-fallback{aspect-ratio:16/9;display:grid;place-items:center;text-align:center;padding:18px;background:#f3f7fc;color:#66758b;font-size:13px}
       .module-visual-meta{padding:12px}.module-visual-meta b{font-size:13px}.module-visual-meta small{display:block;color:#687991;margin-top:5px}
@@ -56,17 +60,17 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     `}</style>
     <div className="module-visual-grid">
       {visuals.map((visual, i) => <button type="button" className="module-visual-card" key={visual.index} onClick={() => setActiveIndex(i)} aria-label={`Open visual ${String(visual.index).padStart(2, "0")} full screen`}>
-        {failed.includes(i) ? <div className="module-visual-fallback">Visual {String(visual.index).padStart(2, "0")} will appear here after the WebP file is reviewed and uploaded.</div> : <img className="module-visual-thumb" src={visual.src} alt={visual.alt} loading="lazy" onError={() => setFailed((old) => old.includes(i) ? old : [...old, i])} />}
-        <div className="module-visual-meta"><b>Visual {String(visual.index).padStart(2, "0")}</b><small>Asset: module-{moduleNumber}/slide-{String(visual.index).padStart(2, "0")}.webp · Click to enlarge</small></div>
+        {failed.includes(i) ? <div className="module-visual-fallback">Visual {String(visual.index).padStart(2, "0")} will appear here after the WebP file is reviewed and uploaded.</div> : <img className="module-visual-thumb module-visual-image-protected" src={visual.src} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(i) ? old : [...old, i])} />}
       </button>)}
     </div>
-    {active && activeIndex !== null && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
+    {active && activeIndex !== null && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="module-viewer-top">
         <div><strong>{active.alt}</strong></div>
-        <div className="module-viewer-controls"><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕</button></div>
+        <div className="module-viewer-controls"><button type="button" onClick={previous} aria-label="Previous visual" title="Previous (←)">←</button><button type="button" onClick={next} aria-label="Next visual" title="Next (→)">→</button><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕</button></div>
       </div>
       <div className="module-viewer-stage">
-        <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image" src={active.src} alt={active.alt} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} />}</div>
+        <button type="button" onClick={previous} aria-label="Previous visual" title="Previous visual" style={{fontSize:30,flexShrink:0}}>‹</button>
+        <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image module-visual-image-protected" src={active.src} alt={active.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} />}</div>
       </div>
     </div>}
   </>;
