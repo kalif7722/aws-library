@@ -1,0 +1,32 @@
+"use client";
+const modules = [
+["00","Course Introduction","3–15","Start here and understand the course map.","#64748b"],
+["01","Generative AI Fundamentals and Amazon Bedrock","16–74","Foundation models, core concepts, and Bedrock.","#6d5dfc"],
+["02","Managing Data for Generative AI","75–218","Prepare, store, retrieve, and protect data.","#0d9488"],
+["03","Agentic AI","219–268","Agents, tools, orchestration, and frameworks.","#f59e0b"],
+["04","Operations Efficiency and Optimization","269–290","Cost, latency, throughput, and reliability.","#db2777"],
+["05","Managing Models with SageMaker AI","291–326","Model lifecycle, deployment, and monitoring.","#2563eb"],
+["06","More Tools for Building AI Applications","327–402","Application building blocks and developer tools.","#7c3aed"],
+["07","Governance and Quality Assurance","403–454","Evaluation, governance, and output quality.","#0f766e"],
+["08","Security, Identity, and Compliance","455–507","Identity, access, privacy, and security controls.","#dc2626"],
+["09","Other AWS Services: Analytics","508–533","Analytics services in GenAI data flows.","#0284c7"],
+["10","Other AWS Services: Compute, Containers and Customer Engagement","534–550","Compute, containers, and customer engagement.","#ea580c"],
+["11","Other AWS Services: Database","551–560","Database choices and application integration.","#16a34a"],
+["12","Other AWS Services: Developer Tools","561–578","Build, test, and delivery tools.","#4f46e5"],
+["13","Other AWS Services: Machine Learning","579–590","Related ML services and use cases.","#c026d3"],
+["14","Other AWS Services: Management and Governance","591–605","Operational management and governance.","#475569"],
+["15","Other AWS Services: Migration and Data Transfer","606–611","Migration and data movement options.","#0891b2"],
+["16","Other AWS Services: Networking and Content Delivery","612–629","Connectivity, network boundaries, and delivery.","#1d4ed8"],
+["17","Other AWS Services: Storage","630–649","Storage options for AI architectures.","#a16207"],
+["18","Exam Preparation","650–671","Review scenarios and practise service selection.","#b91c1c"]
+] as const;
+export default function GenAICourseVisualLibrary() {
+ return <section className="genai-overview"><style>{`
+ .genai-overview{color:#13213c;margin:22px 0 36px}.genai-overview *{box-sizing:border-box}.genai-overview-hero{border-radius:24px;padding:clamp(24px,4vw,42px);background:radial-gradient(circle at 85% 15%,#5686ed,transparent 27%),linear-gradient(125deg,#111b38,#174078 60%,#087e9e);color:white;display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:center}.genai-overview .eyebrow{font-size:11px;letter-spacing:.14em;font-weight:800;color:#a9e7ff}.genai-overview h2{font-size:clamp(28px,4vw,44px);line-height:1.1;margin:12px 0}.genai-overview-hero p{color:#e2edff;line-height:1.7;margin:0}.genai-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.genai-stat{border:1px solid #ffffff42;background:#ffffff12;border-radius:14px;padding:14px}.genai-stat strong{display:block;font-size:25px}.genai-stat span{font-size:11px;color:#d6e6ff}.genai-path-heading{margin:28px 0 14px}.genai-path-heading h3{font-size:22px;margin:0}.genai-path-heading p{font-size:13px;color:#65758d;margin:5px 0}.genai-path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.genai-path-card{--c:#2459d3;display:flex;flex-direction:column;min-height:180px;padding:17px;text-decoration:none;color:#152440;border:1px solid #dfe7f2;border-radius:17px;background:linear-gradient(145deg,#fff 55%,color-mix(in srgb,var(--c) 9%,white));transition:transform .18s,box-shadow .18s}.genai-path-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px #13294b18}.genai-path-top{display:flex;justify-content:space-between;align-items:center}.genai-path-number{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--c);color:white;font-weight:850}.genai-path-arrow{font-size:20px;color:var(--c)}.genai-path-card h4{font-size:15px;line-height:1.35;margin:13px 0 7px}.genai-path-card p{font-size:12px;line-height:1.5;color:#61718a;margin:0 0 14px}.genai-path-footer{margin-top:auto;border-top:1px solid #e8edf5;padding-top:11px;display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#64748b}.genai-path-footer b{color:var(--c)}.genai-overview-note{margin-top:18px;padding:15px 17px;border:1px solid #cfe5f5;border-radius:14px;background:#f0f9ff;color:#34526c;font-size:12px;line-height:1.6}.genai-overview-note strong{display:block;color:#163b5b}@media(max-width:900px){.genai-overview-hero{grid-template-columns:1fr}.genai-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.genai-path-grid{grid-template-columns:1fr}}
+ `}</style>
+ <div className="genai-overview-hero"><div><div className="eyebrow">VISUAL LEARNING PATH · AWS AIP-C01</div><h2>A clear path through Generative AI Developer Professional</h2><p>This is your course overview. Choose a module to open a dedicated learning page for visual deep dives. We’ll make complex topics easier to understand without cutting the source material short.</p></div><div className="genai-stats"><div className="genai-stat"><strong>19</strong><span>course modules</span></div><div className="genai-stat"><strong>3–671</strong><span>source PDF pages</span></div><div className="genai-stat"><strong>10</strong><span>images per ZIP batch</span></div><div className="genai-stat"><strong>WebP</strong><span>individual 16:9 visuals</span></div></div></div>
+ <div className="genai-path-heading"><h3>Your learning path</h3><p>Follow the sequence or jump straight to a topic.</p></div>
+ <div className="genai-path-grid">{modules.map(([id,title,pages,desc,color])=><a key={id} className="genai-path-card" style={{"--c":color} as React.CSSProperties} href={`/courses/aws-generative-ai-developer-professional/visual/module-${id}`}><div className="genai-path-top"><span className="genai-path-number">{id}</span><span className="genai-path-arrow">↗</span></div><h4>{title}</h4><p>{desc}</p><div className="genai-path-footer"><span>PDF pages {pages}</span><b>Open lessons →</b></div></a>)}</div>
+ <div className="genai-overview-note"><strong>Built for understanding, not compressed summaries.</strong>Each module will have its own learning page. Every image-generation batch will be delivered as a ZIP containing 10 separate WebP visuals; only reviewed and uploaded images count as complete.</div>
+ </section>;
+}
