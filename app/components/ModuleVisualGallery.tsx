@@ -71,6 +71,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       <div className="module-viewer-stage">
         <button type="button" onClick={previous} aria-label="Previous visual" title="Previous visual" style={{fontSize:30,flexShrink:0}}>‹</button>
         <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image module-visual-image-protected" src={active.src} alt={active.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} />}</div>
+        <button type="button" onClick={next} aria-label="Next visual" title="Next visual" style={{fontSize:30,flexShrink:0}}>›</button>
       </div>
     </div>}
   </>;
