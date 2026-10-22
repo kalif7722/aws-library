@@ -17,15 +17,11 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [failed, setFailed] = useState<number[]>([]);
 
   const close = useCallback(() => setActiveIndex(null), []);
-  const previous = useCallback(() => setActiveIndex((current) => current === null ? null : (current + visuals.length - 1) % visuals.length), [visuals.length]);
-  const next = useCallback(() => setActiveIndex((current) => current === null ? null : (current + 1) % visuals.length), [visuals.length]);
 
   useEffect(() => {
     if (activeIndex === null) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
-      if (event.key === "ArrowLeft") previous();
-      if (event.key === "ArrowRight") next();
     };
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -34,7 +30,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       document.body.style.overflow = oldOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [activeIndex, close, next, previous]);
+  }, [activeIndex, close]);
 
   const active = activeIndex === null ? null : visuals[activeIndex];
 
@@ -54,10 +50,9 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       .module-viewer-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(6px,2vw,24px);padding:8px 12px 18px}
       .module-viewer-image-wrap{flex:1;min-width:0;min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
       .module-viewer-image{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:auto}
-      .module-viewer-arrow{flex:0 0 auto;font-size:28px!important;width:48px;padding:0!important}
       .module-viewer-footer{text-align:center;color:#cbd5e1;font-size:12px;padding:0 12px 12px}
       @media(max-width:850px){.module-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-      @media(max-width:560px){.module-visual-grid{grid-template-columns:1fr}.module-viewer-top{padding:10px}.module-viewer-stage{gap:4px;padding:4px}.module-viewer-arrow{width:38px;min-width:38px;padding:0!important}.module-viewer-controls button{min-width:38px;padding:6px 10px}}
+      @media(max-width:560px){.module-visual-grid{grid-template-columns:1fr}.module-viewer-top{padding:10px}.module-viewer-stage{gap:4px;padding:4px}.module-viewer-controls button{min-width:38px;padding:6px 10px}}
     `}</style>
     <div className="module-visual-grid">
       {visuals.map((visual, i) => <button type="button" className="module-visual-card" key={visual.index} onClick={() => setActiveIndex(i)} aria-label={`Open visual ${String(visual.index).padStart(2, "0")} full screen`}>
@@ -68,12 +63,10 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     {active && activeIndex !== null && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="module-viewer-top">
         <div><strong>{active.alt}</strong></div>
-        <div className="module-viewer-controls"><button type="button" onClick={previous} aria-label="Previous visual" title="Previous (←)">←</button><button type="button" onClick={next} aria-label="Next visual" title="Next (→)">→</button><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕ Close</button></div>
+        <div className="module-viewer-controls"><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕</button></div>
       </div>
       <div className="module-viewer-stage">
-        <button className="module-viewer-arrow" type="button" onClick={previous} aria-label="Previous visual" title="Previous visual">‹</button>
         <div className="module-viewer-image-wrap">{failed.includes(activeIndex) ? <div className="module-visual-fallback">This visual has not been uploaded yet.</div> : <img className="module-viewer-image" src={active.src} alt={active.alt} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} />}</div>
-        <button className="module-viewer-arrow" type="button" onClick={next} aria-label="Next visual" title="Next visual">›</button>
       </div>
     </div>}
   </>;
