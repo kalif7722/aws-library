@@ -55,9 +55,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       const sourcePdfPage = lesson?.sourcePage ?? (moduleMeta ? moduleMeta.sourcePageStart + i : index);
       return {
         src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
-        alt: lesson
-          ? lesson.title
-          : "Visual lesson " + String(index).padStart(2, "0"),
+        alt: "Module " + moduleNumber + " slide " + String(index).padStart(2, "0"),
         index,
         title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
         sourcePdfPage,
@@ -76,8 +74,9 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [taskFilter, setTaskFilter] = useState("all");
+  const [taskSearch, setTaskSearch] = useState("");
   const taskOptions = useMemo(() => [...new Set(visuals.flatMap((visual) => visual.examTasks))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true })), [visuals]);
+  const taskFilter = taskSearch.trim() ? (taskSearch.match(/(\d+)\s*[.\-]\s*(\d+)/)?.slice(1).join("-") ?? "none") : "all";
 
   useEffect(() => {
     let current = true;
@@ -185,25 +184,26 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
   return <>
     <style>{[
-      '.module-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}',
-      '.module-visual-card{border:1px solid #dbe5f1;border-radius:14px;overflow:hidden;background:#fff;color:#152440;padding:0;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0}',
+      '.module-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}',
+      '.module-visual-card{border:1px solid #436389;border-radius:17px;overflow:hidden;background:#132642;color:#f1f7ff;padding:7px;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0;box-shadow:0 10px 26px #020b1b66;transition:transform .18s,border-color .18s,box-shadow .18s}',
+      '.module-visual-card:hover{transform:translateY(-4px);border-color:#77cffa;box-shadow:0 0 0 1px #56c8f880,0 14px 34px #105f9d66}',
       '.module-visual-card:focus-visible,.module-viewer button:focus-visible{outline:3px solid #38bdf8;outline-offset:3px}',
       '.module-visual-image-protected{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}',
-      '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#f3f7fc;display:block}',
+      '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#101e34;border-radius:11px;display:block}',
       '.module-visual-fallback{display:grid;place-items:center;text-align:center;padding:22px;background:#f3f7fc;color:#66758b;font-size:13px;line-height:1.5;border:1px dashed #cbd5e1;border-radius:12px}',
-      '.module-visual-meta{padding:12px;min-height:102px}.module-visual-meta b{font-size:13px;display:block;line-height:1.4}.module-visual-meta small{display:block;color:#687991;margin-top:5px;line-height:1.4}',
+      '.module-visual-meta{padding:8px 8px 5px;color:#a8cdec;font-size:11px;font-weight:800;letter-spacing:.1em}',
       '.module-visual-meta-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;color:#61718a;font-size:11px}',
       '.module-visual-status{display:inline-block;border-radius:999px;padding:3px 7px;background:#e9f8ef;color:#166534;font-size:10px;font-weight:700;white-space:normal;text-align:right}',
-      '.module-map-summary{margin-top:20px;padding:16px 18px;border:1px solid #cbdff3;border-radius:14px;background:#f4f9ff;color:#183453;line-height:1.5}',
+      '.module-map-summary{margin-top:20px;padding:20px 24px;border:1px solid #3e5c7f;border-radius:18px;background:linear-gradient(125deg,#142a49,#14243d 65%,#202644);color:#eff7ff;line-height:1.5;box-shadow:0 16px 36px #030a1c3d}',
       '.module-map-summary-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}',
       '.module-map-summary small{display:block;margin-top:8px;color:#62748c}',
       '.module-map-counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}',
-      '.module-map-counts span{background:white;border:1px solid #d6e3f1;border-radius:8px;padding:5px 9px;font-size:12px}',
+      '.module-map-counts span{background:#ffffff12;border:1px solid #80a5c34d;border-radius:8px;padding:5px 9px;font-size:12px;color:#c6def4}',
       '.module-map-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}',
-      '.module-map-refresh{border:1px solid #b5c9df;background:white;color:#16416a;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}',
+      '.module-map-refresh{border:1px solid #6087ad;background:#24456a;color:#e8f6ff;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}',
       '.module-map-refresh:disabled{opacity:.6;cursor:wait}',
-      '.module-map-note{margin-top:8px;color:#62748c;font-size:12px;line-height:1.5}',
-      '.module-task-filter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px;font-weight:700}.module-task-filter select{border:1px solid #b5c9df;border-radius:9px;padding:8px;background:#fff;color:#16416a;font:inherit}.module-task-badge{display:inline-block;margin-top:7px;padding:4px 7px;border-radius:7px;background:#e8f4ff;color:#16416a;font-size:11px;font-weight:800}',
+      '.module-map-note{margin-top:8px;color:#b5c9df;font-size:12px;line-height:1.5}',
+      '.module-task-search{margin-top:12px;color:#a9d7f4;font-size:12px}.module-task-search summary{width:max-content;cursor:pointer;font-weight:800}.module-task-search label{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:10px}.module-task-search input{width:160px;border:1px solid #6384a5;border-radius:9px;padding:9px 11px;background:#0e2037;color:#fff;font:inherit}.module-task-search input::placeholder{color:#9db1c8}',
       '.module-viewer{position:fixed;inset:0;z-index:99999;background:rgba(3,7,18,.97);color:#fff;display:flex;flex-direction:column}',
       '.module-viewer-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;flex-wrap:wrap}',
       '.module-viewer-controls{display:flex;gap:8px;align-items:center}',
@@ -218,14 +218,10 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
     <div className="module-map-summary">
       <div className="module-map-summary-head">
-        <strong>{moduleTitle} · uploaded visual lessons</strong>
-        <span>{visibleVisuals.length} visual lessons</span>
+        <strong>{moduleTitle} · visual lessons</strong>
+        <span>{visibleVisuals.length} slides</span>
       </div>
-      <div className="module-map-counts">
-        <span>{visibleVisuals.length} lessons available</span>
-
-      </div>
-      <label className="module-task-filter">Exam task <select value={taskFilter} onChange={(event) => {setTaskFilter(event.target.value);setActiveIndex(null)}}><option value="all">All lessons</option>{taskOptions.map((task) => <option key={task} value={task}>Task {task}</option>)}<option value="supporting">Supporting context</option></select></label>
+      <details className="module-task-search"><summary>Find slides by exam task</summary><label>Task number <input type="search" inputMode="text" placeholder="e.g. 2-1" value={taskSearch} list={`module-${moduleNumber}-tasks`} onChange={(event) => {setTaskSearch(event.target.value);setActiveIndex(null)}} /><datalist id={`module-${moduleNumber}-tasks`}>{taskOptions.map(task => <option key={task} value={task} />)}</datalist></label></details>
       <div className="module-map-actions">
         <button type="button" className="module-map-refresh" onClick={() => setRefreshKey((value) => value + 1)} disabled={loadingAssets}>
           {loadingAssets ? "Checking lessons…" : "Refresh lessons"}
@@ -246,17 +242,13 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     {!loadingAssets && !discoveryError && visibleVisuals.length > 0 ? <div className="module-visual-grid">
       {visibleVisuals.map(({ visual, index }) => <button type="button" className="module-visual-card" key={"Module " + moduleNumber + "-" + visual.index} onClick={() => setActiveIndex(index)} aria-label={"Open " + visual.alt + " full screen"}>
         <img className="module-visual-thumb module-visual-image-protected" src={resolvedSrc(visual)} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
-        <div className="module-visual-meta">
-          <b>{visual.title}</b>
-          {visual.examTasks.length ? visual.examTasks.map(task => <span key={task} className="module-task-badge">Task {task}</span>) : <span className="module-task-badge">Supporting context</span>}
-          {visual.focus ? <small>{visual.focus}</small> : null}
-        </div>
+        <div className="module-visual-meta">SLIDE {String(visual.index).padStart(2,"0")}</div>
       </button>)}
     </div> : null}
 
     {active && activeIndex !== null && availableSlides.includes(active.index) && !failed.includes(activeIndex) && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="module-viewer-top">
-        <div><strong>{active.alt}</strong>{active.examTasks.length ? <div>{active.examTasks.map(task => <a key={task} href={`/courses/aws-generative-ai-developer-professional/exam-objectives?task=${task.replace(".", "-")}`} style={{color:"#8bdbff",fontSize:12,marginRight:10}}>Exam task {task} ↗</a>)}</div> : null}</div>
+        <div><strong>Slide {String(active.index).padStart(2,"0")}</strong></div>
         <div className="module-viewer-controls"><button type="button" onClick={previous} aria-label="Previous visual" title="Previous (←)">←</button><button type="button" onClick={next} aria-label="Next visual" title="Next (→)">→</button><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕</button></div>
       </div>
       <div className="module-viewer-stage">
