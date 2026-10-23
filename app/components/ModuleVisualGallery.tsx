@@ -114,9 +114,8 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
   const resolvedSrc = useCallback((visual: Visual) => {
     const discoveredKey = slidePaths[String(visual.index)];
-    return discoveredKey
-      ? imageBase.replace(/\\/$/, "") + "/" + discoveredKey
-      : visual.src;
+    const base = imageBase.endsWith("/") ? imageBase.slice(0, -1) : imageBase;
+    return discoveredKey ? base + "/" + discoveredKey : visual.src;
   }, [imageBase, slidePaths]);
 
   const navigableIndices = useMemo(
