@@ -22,14 +22,15 @@ type Visual = {
   alt: string;
   index: number;
   title: string;
-  sourcePdfPage: number;
+  sourcePdfPage?: number;
   focus?: string;
   batch?: string;
 };
 
 type DiscoveryResponse = {
   moduleId: string;
-  expectedCount: number;
+  referenceCount: number;
+  consecutiveMissing: number;
   availableSlides: number[];
   slidePaths?: Record<string, string>;
   failedChecks: number;
@@ -42,29 +43,6 @@ const courseModules = visualMap.modules as ModuleMeta[];
 export default function ModuleVisualGallery({ moduleNumber, imageBase }: { moduleNumber: string; imageBase: string }) {
   const mappedLessons = lessonsByModule[moduleNumber] ?? [];
   const moduleMeta = courseModules.find((module) => module.id === moduleNumber);
-  const expectedCount = moduleMeta
-    ? moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1
-    : Math.max(mappedLessons.length, 10);
-
-  const visuals: Visual[] = useMemo(() => {
-    return Array.from({ length: expectedCount }, (_, i) => {
-      const index = i + 1;
-      const lesson = mappedLessons[index - 1];
-      const sourcePdfPage = lesson?.sourcePage ?? (moduleMeta ? moduleMeta.sourcePageStart + i : index);
-      return {
-        src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
-        alt: lesson
-          ? lesson.title
-          : "Visual lesson " + String(index).padStart(2, "0"),
-        index,
-        title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
-        sourcePdfPage,
-        focus: lesson?.focus,
-        batch: lesson?.batch,
-      };
-    });
-  }, [expectedCount, imageBase, mappedLessons, moduleMeta, moduleNumber]);
-
   const [availableSlides, setAvailableSlides] = useState<number[]>([]);
   const [slidePaths, setSlidePaths] = useState<Record<string, string>>({});
   const [failed, setFailed] = useState<number[]>([]);
@@ -73,6 +51,21 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  // Uploaded slide numbers drive the gallery. PDF pages describe the source only.
+  const visuals: Visual[] = useMemo(() => availableSlides.map((index) => {
+    const lesson = mappedLessons[index - 1];
+    const withinPdf = moduleMeta && index <= moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1;
+    return {
+      src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
+      alt: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
+      index,
+      title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
+      sourcePdfPage: lesson?.sourcePage ?? (withinPdf ? moduleMeta.sourcePageStart + index - 1 : undefined),
+      focus: lesson?.focus,
+      batch: lesson?.batch,
+    };
+  }), [availableSlides, imageBase, mappedLessons, moduleMeta, moduleNumber]);
 
   useEffect(() => {
     let current = true;
@@ -91,17 +84,19 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       const paths: Record<string, string> = {};
       let failures = 0;
       let start: number | null = 1;
+      let missing = 0;
       try {
         do {
-          const response = await fetch(`/api/course-visuals?module=${encodeURIComponent(moduleNumber)}&start=${start}`, { cache: "no-store", signal: controller.signal });
+          const response = await fetch(`/api/course-visuals?module=${encodeURIComponent(moduleNumber)}&start=${start}&missing=${missing}`, { cache: "no-store", signal: controller.signal });
           if (!response.ok) throw new Error("Unable to check visual lessons. Please retry.");
           const payload: DiscoveryResponse = await response.json();
           if (!current) return;
           for (const slide of payload.availableSlides ?? []) {
-            if (Number.isInteger(slide) && slide >= 1 && slide <= expectedCount) found.add(slide);
+            if (Number.isInteger(slide) && slide >= 1) found.add(slide);
           }
           Object.assign(paths, payload.slidePaths ?? {});
           failures += payload.failedChecks;
+          missing = payload.consecutiveMissing ?? 0;
           const next = payload.nextStart;
           if (next !== null && (!Number.isInteger(next) || next <= start)) throw new Error("Unable to finish checking lessons.");
           start = next;
@@ -129,7 +124,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     };
     void scan();
     return () => { current = false; controller.abort(); clearTimeout(timer); };
-  }, [expectedCount, moduleNumber, refreshKey]);
+  }, [moduleNumber, refreshKey]);
 
   const resolvedSrc = useCallback((visual: Visual) => {
     const discoveredKey = slidePaths[String(visual.index)];
@@ -186,7 +181,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       '.module-visual-image-protected{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}',
       '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#f3f7fc;display:block}',
       '.module-visual-fallback{display:grid;place-items:center;text-align:center;padding:22px;background:#f3f7fc;color:#66758b;font-size:13px;line-height:1.5;border:1px dashed #cbd5e1;border-radius:12px}',
-      '.module-visual-meta{padding:12px;min-height:102px}.module-visual-meta b{font-size:13px;display:block;line-height:1.4}.module-visual-meta small{display:block;color:#687991;margin-top:5px;line-height:1.4}',
+      '.module-visual-meta{padding:10px 14px}.module-visual-meta b{font-size:13px;display:block;line-height:1.4}.module-visual-meta small{display:block;color:#687991;margin-top:5px;line-height:1.4}',
       '.module-visual-meta-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;color:#61718a;font-size:11px}',
       '.module-visual-status{display:inline-block;border-radius:999px;padding:3px 7px;background:#e9f8ef;color:#166534;font-size:10px;font-weight:700;white-space:normal;text-align:right}',
       '.module-map-summary{margin-top:20px;padding:16px 18px;border:1px solid #cbdff3;border-radius:14px;background:#f4f9ff;color:#183453;line-height:1.5}',
