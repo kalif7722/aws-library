@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import visualMap from "../courses/aws-generative-ai-developer-professional/visual-lesson-map.json";
+import module02Titles from "../courses/aws-generative-ai-developer-professional/visual/module-02-titles.json";
 
 type ModuleLesson = {
   sourcePage: number;
@@ -55,14 +56,19 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   // Uploaded slide numbers drive the gallery. PDF pages describe the source only.
   const visuals: Visual[] = useMemo(() => availableSlides.map((index) => {
     const lesson = mappedLessons[index - 1];
+    // Editorial page titles diverge after additional demos are inserted.
+    // Only display titles checked against the uploaded visual.
+    const verifiedTitle = moduleNumber === "02"
+      ? (module02Titles as Record<string, string>)[String(index)]
+      : lesson?.title;
     const withinPdf = moduleMeta && index <= moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1;
     return {
       src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
-      alt: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
+      alt: verifiedTitle ?? ("Visual lesson " + String(index).padStart(2, "0")),
       index,
-      title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
+      title: verifiedTitle ?? ("Visual lesson " + String(index).padStart(2, "0")),
       sourcePdfPage: lesson?.sourcePage ?? (withinPdf ? moduleMeta.sourcePageStart + index - 1 : undefined),
-      focus: lesson?.focus,
+      focus: moduleNumber === "02" ? undefined : lesson?.focus,
       batch: lesson?.batch,
     };
   }), [availableSlides, imageBase, mappedLessons, moduleMeta, moduleNumber]);
