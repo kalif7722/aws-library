@@ -13,30 +13,45 @@ const MAX_SLIDES_PER_MODULE = 300;
 const PROBE_CONCURRENCY = 24;
 const PROBE_TIMEOUT_MS = 4000;
 
-async function objectExists(url: string): Promise<{ exists: boolean; failed: boolean }> {
+type ObjectCheck = "exists" | "missing" | "failed";
+
+async function checkObject(url: string): Promise<ObjectCheck> {
   try {
-    let response = await fetch(url, {
+    const headResponse = await fetch(url, {
       method: "HEAD",
       signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
     });
 
-    // A few object gateways may not implement HEAD consistently. Fall back
-    // to a one-byte range request without downloading the full image.
-    if (response.status === 405 || response.status === 501) {
-      response = await fetch(url, {
-        method: "GET",
-        headers: { Range: "bytes=0-0" },
-        signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
-      });
-      await response.body?.cancel();
-    }
+    if (headResponse.ok) return "exists";
+    if (headResponse.status === 404) return "missing";
 
-    if (response.ok) return { exists: true, failed: false };
-    if (response.status === 404) return { exists: false, failed: false };
-    return { exists: false, failed: true };
+    // Some public object gateways do not respond consistently to HEAD.
+    // Confirm with a one-byte range request before treating the object as unavailable.
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Range: "bytes=0-0" },
+      signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
+    });
+    await response.body?.cancel();
+
+    if (response.ok) return "exists";
+    if (response.status === 404) return "missing";
+    return "failed";
   } catch {
-    return { exists: false, failed: true };
+    return "failed";
   }
+}
+
+function candidateObjectKeys(moduleId: string, slideNumber: number): string[] {
+  const filename = "slide-" + String(slideNumber).padStart(2, "0") + ".webp";
+  // The first key is the canonical convention. The alternatives handle files
+  // uploaded by extracting the ZIP inside the already-selected module folder,
+  // or extracting only the slide files to the course-assets root.
+  return [
+    "module-" + moduleId + "/" + filename,
+    "module-" + moduleId + "/module-" + moduleId + "/" + filename,
+    filename,
+  ];
 }
 
 export async function GET(request: Request) {
@@ -56,6 +71,7 @@ export async function GET(request: Request) {
   }
 
   const availableSlides: number[] = [];
+  const slidePaths: Record<string, string> = {};
   let failedChecks = 0;
   let nextSlide = 1;
 
@@ -64,10 +80,18 @@ export async function GET(request: Request) {
       const slideNumber = nextSlide++;
       if (slideNumber > expectedCount) return;
 
-      const objectUrl = IMAGE_BASE + "/module-" + moduleId + "/slide-" + String(slideNumber).padStart(2, "0") + ".webp";
-      const result = await objectExists(objectUrl);
-      if (result.exists) availableSlides.push(slideNumber);
-      if (result.failed) failedChecks++;
+      let hadFailedProbe = false;
+      for (const objectKey of candidateObjectKeys(moduleId, slideNumber)) {
+        const result = await checkObject(IMAGE_BASE + "/" + objectKey);
+        if (result === "exists") {
+          availableSlides.push(slideNumber);
+          slidePaths[String(slideNumber)] = objectKey;
+          hadFailedProbe = false;
+          break;
+        }
+        if (result === "failed") hadFailedProbe = true;
+      }
+      if (!slidePaths[String(slideNumber)] && hadFailedProbe) failedChecks++;
     }
   };
 
@@ -82,6 +106,7 @@ export async function GET(request: Request) {
       moduleId,
       expectedCount,
       availableSlides,
+      slidePaths,
       failedChecks,
       checkedAt: new Date().toISOString(),
     },
