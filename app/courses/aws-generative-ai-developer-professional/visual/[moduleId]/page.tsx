@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ModuleVisualGallery from "../../../../components/ModuleVisualGallery";
+import GenAITroubleshootingModule from "../../../../components/GenAITroubleshootingModule";
 import visualMap from "../../visual-lesson-map.json";
 
 type CourseModule = {
@@ -23,6 +24,11 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
   const id = moduleId.replace("module-", "");
   const selected = modules.find((item) => item.id === id);
   if (!selected) return <main style={{padding:32}}><h1>Module not found</h1><Link href="/courses/aws-generative-ai-developer-professional">Back to course overview</Link></main>;
+  if (id === "19") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}>
+    <style>{heroCss}</style>
+    <section className="genai-deep-hero"><Link href="/courses/aws-generative-ai-developer-professional">← All course modules</Link><p style={{letterSpacing:".12em",fontSize:11,fontWeight:800}}>MODULE 19 · AIP-C01 TROUBLESHOOTING</p><h1>GenAI Troubleshooting</h1><p>Practical failure diagnosis across model requests, retrieval, prompts, agents, and deployment.</p></section>
+    <GenAITroubleshootingModule />
+  </main>;
   const { id: num, title, sourcePageStart, sourcePageEnd, description: desc } = selected;
   const imageBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals";
 

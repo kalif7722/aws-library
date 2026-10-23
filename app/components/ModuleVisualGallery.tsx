@@ -2,7 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import visualMap from "../courses/aws-generative-ai-developer-professional/visual-lesson-map.json";
+import { examTasksForLesson } from "./aipLessonTasks";
 
+type ModuleLesson = {
+  sourcePage: number;
+  title: string;
+  focus: string;
+  batch: string;
+  assetStatus: "generated" | "uploaded" | "qa-passed" | "planned";
+};
 type ModuleMeta = {
   id: string;
   title: string;
@@ -14,22 +22,52 @@ type Visual = {
   src: string;
   alt: string;
   index: number;
+  title: string;
+  sourcePdfPage: number;
+  focus?: string;
+  batch?: string;
+  examTasks: string[];
 };
 
 type DiscoveryResponse = {
   moduleId: string;
-  referenceCount: number;
-  consecutiveMissing: number;
+  expectedCount: number;
   availableSlides: number[];
   slidePaths?: Record<string, string>;
   failedChecks: number;
   nextStart: number | null;
 };
 
+const lessonsByModule = (visualMap as unknown as { lessonsByModule?: Record<string, ModuleLesson[]> }).lessonsByModule ?? {};
 const courseModules = visualMap.modules as ModuleMeta[];
 
 export default function ModuleVisualGallery({ moduleNumber, imageBase }: { moduleNumber: string; imageBase: string }) {
+  const mappedLessons = lessonsByModule[moduleNumber] ?? [];
   const moduleMeta = courseModules.find((module) => module.id === moduleNumber);
+  const expectedCount = moduleMeta
+    ? moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1
+    : Math.max(mappedLessons.length, 10);
+
+  const visuals: Visual[] = useMemo(() => {
+    return Array.from({ length: expectedCount }, (_, i) => {
+      const index = i + 1;
+      const lesson = mappedLessons[index - 1];
+      const sourcePdfPage = lesson?.sourcePage ?? (moduleMeta ? moduleMeta.sourcePageStart + i : index);
+      return {
+        src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
+        alt: lesson
+          ? lesson.title
+          : "Visual lesson " + String(index).padStart(2, "0"),
+        index,
+        title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
+        sourcePdfPage,
+        focus: lesson?.focus,
+        batch: lesson?.batch,
+        examTasks: examTasksForLesson(moduleNumber, lesson?.title ?? ""),
+      };
+    });
+  }, [expectedCount, imageBase, mappedLessons, moduleMeta, moduleNumber]);
+
   const [availableSlides, setAvailableSlides] = useState<number[]>([]);
   const [slidePaths, setSlidePaths] = useState<Record<string, string>>({});
   const [failed, setFailed] = useState<number[]>([]);
@@ -38,16 +76,8 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [comfortView, setComfortView] = useState(true);
-
-  // Uploaded slide numbers drive the gallery. PDF pages describe the source only.
-  const visuals: Visual[] = useMemo(() => availableSlides.map((index) => {
-    return {
-      src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
-      alt: `Module ${moduleNumber} visual slide ${index}`,
-      index,
-    };
-  }), [availableSlides, imageBase, moduleNumber]);
+  const [taskFilter, setTaskFilter] = useState("all");
+  const taskOptions = useMemo(() => [...new Set(visuals.flatMap((visual) => visual.examTasks))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true })), [visuals]);
 
   useEffect(() => {
     let current = true;
@@ -66,19 +96,17 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       const paths: Record<string, string> = {};
       let failures = 0;
       let start: number | null = 1;
-      let missing = 0;
       try {
         do {
-          const response = await fetch(`/api/course-visuals?module=${encodeURIComponent(moduleNumber)}&start=${start}&missing=${missing}`, { cache: "no-store", signal: controller.signal });
+          const response = await fetch(`/api/course-visuals?module=${encodeURIComponent(moduleNumber)}&start=${start}`, { cache: "no-store", signal: controller.signal });
           if (!response.ok) throw new Error("Unable to check visual lessons. Please retry.");
           const payload: DiscoveryResponse = await response.json();
           if (!current) return;
           for (const slide of payload.availableSlides ?? []) {
-            if (Number.isInteger(slide) && slide >= 1) found.add(slide);
+            if (Number.isInteger(slide) && slide >= 1 && slide <= expectedCount) found.add(slide);
           }
           Object.assign(paths, payload.slidePaths ?? {});
           failures += payload.failedChecks;
-          missing = payload.consecutiveMissing ?? 0;
           const next = payload.nextStart;
           if (next !== null && (!Number.isInteger(next) || next <= start)) throw new Error("Unable to finish checking lessons.");
           start = next;
@@ -106,7 +134,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     };
     void scan();
     return () => { current = false; controller.abort(); clearTimeout(timer); };
-  }, [moduleNumber, refreshKey]);
+  }, [expectedCount, moduleNumber, refreshKey]);
 
   const resolvedSrc = useCallback((visual: Visual) => {
     const discoveredKey = slidePaths[String(visual.index)];
@@ -116,9 +144,9 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
   const navigableIndices = useMemo(
     () => visuals
-      .map((visual, index) => availableSlides.includes(visual.index) && !failed.includes(index) ? index : -1)
+      .map((visual, index) => availableSlides.includes(visual.index) && !failed.includes(index) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))) ? index : -1)
       .filter((index) => index >= 0),
-    [availableSlides, failed, visuals],
+    [availableSlides, failed, visuals, taskFilter],
   );
 
   const close = useCallback(() => setActiveIndex(null), []);
@@ -152,25 +180,20 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const active = activeIndex === null ? null : visuals[activeIndex];
   const visibleVisuals = visuals
     .map((visual, index) => ({ visual, index }))
-    .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index));
+    .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))));
   const moduleTitle = moduleMeta?.title ?? ("Module " + moduleNumber);
 
-  return <section className={comfortView ? "module-visual-library" : "module-visual-library module-comfort-off"}>
+  return <>
     <style>{[
       '.module-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}',
-      '.module-visual-card{border:1px solid #314a74;border-radius:18px;overflow:hidden;background:#101c35;color:#fff;padding:0;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0;box-shadow:0 0 0 1px rgba(94,165,255,.13),0 7px 22px rgba(13,37,85,.24);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}',
-      '.module-visual-card:hover,.module-visual-card:focus-visible{transform:translateY(-3px);border-color:#79c9ff;box-shadow:0 0 0 1px rgba(130,213,255,.5),0 0 20px rgba(54,147,255,.26),0 14px 30px rgba(12,35,82,.32)}',
+      '.module-visual-card{border:1px solid #dbe5f1;border-radius:14px;overflow:hidden;background:#fff;color:#152440;padding:0;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0}',
       '.module-visual-card:focus-visible,.module-viewer button:focus-visible{outline:3px solid #38bdf8;outline-offset:3px}',
       '.module-visual-image-protected{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}',
-      '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#101c35;display:block}',
-      '.module-visual-library{--slide-image-filter:brightness(.86) saturate(.9)}',
-      'html[data-theme=\"light\"] .module-visual-library{--slide-image-filter:brightness(.97) saturate(.96)}',
-      '.module-visual-library.module-comfort-off{--slide-image-filter:none!important}',
-      '.module-visual-thumb,.module-viewer-image{filter:var(--slide-image-filter);transition:filter .2s ease}',
-      '.module-comfort-toggle{border:1px solid #9bb6d9;background:#fff;color:#16416a;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}',
-      '.module-comfort-toggle[aria-pressed=\"true\"]{background:#e5f2ff;border-color:#5e9ad4}',
-      '.module-comfort-toggle:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}',
+      '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#f3f7fc;display:block}',
       '.module-visual-fallback{display:grid;place-items:center;text-align:center;padding:22px;background:#f3f7fc;color:#66758b;font-size:13px;line-height:1.5;border:1px dashed #cbd5e1;border-radius:12px}',
+      '.module-visual-meta{padding:12px;min-height:102px}.module-visual-meta b{font-size:13px;display:block;line-height:1.4}.module-visual-meta small{display:block;color:#687991;margin-top:5px;line-height:1.4}',
+      '.module-visual-meta-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;color:#61718a;font-size:11px}',
+      '.module-visual-status{display:inline-block;border-radius:999px;padding:3px 7px;background:#e9f8ef;color:#166534;font-size:10px;font-weight:700;white-space:normal;text-align:right}',
       '.module-map-summary{margin-top:20px;padding:16px 18px;border:1px solid #cbdff3;border-radius:14px;background:#f4f9ff;color:#183453;line-height:1.5}',
       '.module-map-summary-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}',
       '.module-map-summary small{display:block;margin-top:8px;color:#62748c}',
@@ -180,15 +203,15 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       '.module-map-refresh{border:1px solid #b5c9df;background:white;color:#16416a;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}',
       '.module-map-refresh:disabled{opacity:.6;cursor:wait}',
       '.module-map-note{margin-top:8px;color:#62748c;font-size:12px;line-height:1.5}',
+      '.module-task-filter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px;font-weight:700}.module-task-filter select{border:1px solid #b5c9df;border-radius:9px;padding:8px;background:#fff;color:#16416a;font:inherit}.module-task-badge{display:inline-block;margin-top:7px;padding:4px 7px;border-radius:7px;background:#e8f4ff;color:#16416a;font-size:11px;font-weight:800}',
       '.module-viewer{position:fixed;inset:0;z-index:99999;background:rgba(3,7,18,.97);color:#fff;display:flex;flex-direction:column}',
-      '.module-viewer-top{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:14px 18px;flex-wrap:wrap}',
+      '.module-viewer-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;flex-wrap:wrap}',
       '.module-viewer-controls{display:flex;gap:8px;align-items:center}',
       '.module-viewer button{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;border-radius:999px;min-width:42px;min-height:42px;padding:8px 14px;cursor:pointer;font-size:16px}',
       '.module-viewer button:hover{background:rgba(255,255,255,.2)}',
       '.module-viewer-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(6px,2vw,24px);padding:8px 12px 18px}',
       '.module-viewer-image-wrap{flex:1;min-width:0;min-height:0;height:100%;display:flex;align-items:center;justify-content:center}',
       '.module-viewer-image{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:auto}',
-      '@media(prefers-reduced-motion:reduce){.module-visual-card,.module-visual-thumb,.module-viewer-image{transition:none}.module-visual-card:hover,.module-visual-card:focus-visible{transform:none}}',
       '@media(max-width:850px){.module-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}',
       '@media(max-width:560px){.module-visual-grid{grid-template-columns:1fr}.module-viewer-top{padding:10px}.module-viewer-stage{gap:4px;padding:4px}.module-viewer-controls button{min-width:38px;padding:6px 10px}}'
     ].join("\n")}</style>
@@ -202,8 +225,8 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
         <span>{visibleVisuals.length} lessons available</span>
 
       </div>
+      <label className="module-task-filter">Exam task <select value={taskFilter} onChange={(event) => {setTaskFilter(event.target.value);setActiveIndex(null)}}><option value="all">All lessons</option>{taskOptions.map((task) => <option key={task} value={task}>Task {task}</option>)}<option value="supporting">Supporting context</option></select></label>
       <div className="module-map-actions">
-        <button type="button" className="module-comfort-toggle" aria-pressed={comfortView} onClick={() => setComfortView((value) => !value)}>Comfort view {comfortView ? "On" : "Off"}</button>
         <button type="button" className="module-map-refresh" onClick={() => setRefreshKey((value) => value + 1)} disabled={loadingAssets}>
           {loadingAssets ? "Checking lessons…" : "Refresh lessons"}
         </button>
@@ -217,17 +240,23 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     {loadingAssets ? <div className="module-visual-fallback" role="status">Finding visual lessons…</div> : null}
     {!loadingAssets && discoveryError ? <div className="module-visual-fallback">Lessons could not be checked right now. Retrying automatically.</div> : null}
     {!loadingAssets && !discoveryError && visibleVisuals.length === 0 ? <div className="module-visual-fallback">
-      Visual lessons will appear here as they become available.
+      {taskFilter === "all" ? "Visual lessons will appear here as they become available." : "No uploaded lessons match this task yet."}
     </div> : null}
 
     {!loadingAssets && !discoveryError && visibleVisuals.length > 0 ? <div className="module-visual-grid">
       {visibleVisuals.map(({ visual, index }) => <button type="button" className="module-visual-card" key={"Module " + moduleNumber + "-" + visual.index} onClick={() => setActiveIndex(index)} aria-label={"Open " + visual.alt + " full screen"}>
         <img className="module-visual-thumb module-visual-image-protected" src={resolvedSrc(visual)} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
+        <div className="module-visual-meta">
+          <b>{visual.title}</b>
+          {visual.examTasks.length ? visual.examTasks.map(task => <span key={task} className="module-task-badge">Task {task}</span>) : <span className="module-task-badge">Supporting context</span>}
+          {visual.focus ? <small>{visual.focus}</small> : null}
+        </div>
       </button>)}
     </div> : null}
 
     {active && activeIndex !== null && availableSlides.includes(active.index) && !failed.includes(activeIndex) && <div className="module-viewer" role="dialog" aria-modal="true" aria-label={active.alt} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
       <div className="module-viewer-top">
+        <div><strong>{active.alt}</strong>{active.examTasks.length ? <div>{active.examTasks.map(task => <a key={task} href={`/courses/aws-generative-ai-developer-professional/exam-objectives?task=${task.replace(".", "-")}`} style={{color:"#8bdbff",fontSize:12,marginRight:10}}>Exam task {task} ↗</a>)}</div> : null}</div>
         <div className="module-viewer-controls"><button type="button" onClick={previous} aria-label="Previous visual" title="Previous (←)">←</button><button type="button" onClick={next} aria-label="Next visual" title="Next (→)">→</button><button type="button" onClick={close} aria-label="Close full-screen viewer" title="Close (Esc)">✕</button></div>
       </div>
       <div className="module-viewer-stage">
@@ -236,5 +265,5 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
         <button type="button" onClick={next} aria-label="Next visual" title="Next visual" style={{fontSize:30,flexShrink:0}}>›</button>
       </div>
     </div>}
-  </section>;
+  </>;
 }
