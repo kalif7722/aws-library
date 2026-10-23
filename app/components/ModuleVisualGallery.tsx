@@ -38,6 +38,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [comfortView, setComfortView] = useState(true);
 
   // Uploaded slide numbers drive the gallery. PDF pages describe the source only.
   const visuals: Visual[] = useMemo(() => availableSlides.map((index) => {
@@ -154,7 +155,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index));
   const moduleTitle = moduleMeta?.title ?? ("Module " + moduleNumber);
 
-  return <>
+  return <section className={comfortView ? "module-visual-library" : "module-visual-library module-comfort-off"}>
     <style>{[
       '.module-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}',
       '.module-visual-card{border:1px solid #314a74;border-radius:18px;overflow:hidden;background:#101c35;color:#fff;padding:0;text-align:left;cursor:zoom-in;display:block;width:100%;min-width:0;box-shadow:0 0 0 1px rgba(94,165,255,.13),0 7px 22px rgba(13,37,85,.24);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}',
@@ -162,6 +163,13 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       '.module-visual-card:focus-visible,.module-viewer button:focus-visible{outline:3px solid #38bdf8;outline-offset:3px}',
       '.module-visual-image-protected{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}',
       '.module-visual-thumb{width:100%;aspect-ratio:16/9;object-fit:contain;background:#101c35;display:block}',
+      '.module-visual-library{--slide-image-filter:brightness(.86) saturate(.9)}',
+      'html[data-theme=\"light\"] .module-visual-library{--slide-image-filter:brightness(.97) saturate(.96)}',
+      '.module-visual-library.module-comfort-off{--slide-image-filter:none!important}',
+      '.module-visual-thumb,.module-viewer-image{filter:var(--slide-image-filter);transition:filter .2s ease}',
+      '.module-comfort-toggle{border:1px solid #9bb6d9;background:#fff;color:#16416a;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}',
+      '.module-comfort-toggle[aria-pressed=\"true\"]{background:#e5f2ff;border-color:#5e9ad4}',
+      '.module-comfort-toggle:focus-visible{outline:3px solid #38bdf8;outline-offset:2px}',
       '.module-visual-fallback{display:grid;place-items:center;text-align:center;padding:22px;background:#f3f7fc;color:#66758b;font-size:13px;line-height:1.5;border:1px dashed #cbd5e1;border-radius:12px}',
       '.module-map-summary{margin-top:20px;padding:16px 18px;border:1px solid #cbdff3;border-radius:14px;background:#f4f9ff;color:#183453;line-height:1.5}',
       '.module-map-summary-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}',
@@ -180,7 +188,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       '.module-viewer-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(6px,2vw,24px);padding:8px 12px 18px}',
       '.module-viewer-image-wrap{flex:1;min-width:0;min-height:0;height:100%;display:flex;align-items:center;justify-content:center}',
       '.module-viewer-image{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:auto}',
-      '@media(prefers-reduced-motion:reduce){.module-visual-card{transition:none}.module-visual-card:hover,.module-visual-card:focus-visible{transform:none}}',
+      '@media(prefers-reduced-motion:reduce){.module-visual-card,.module-visual-thumb,.module-viewer-image{transition:none}.module-visual-card:hover,.module-visual-card:focus-visible{transform:none}}',
       '@media(max-width:850px){.module-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}',
       '@media(max-width:560px){.module-visual-grid{grid-template-columns:1fr}.module-viewer-top{padding:10px}.module-viewer-stage{gap:4px;padding:4px}.module-viewer-controls button{min-width:38px;padding:6px 10px}}'
     ].join("\n")}</style>
@@ -195,6 +203,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
       </div>
       <div className="module-map-actions">
+        <button type="button" className="module-comfort-toggle" aria-pressed={comfortView} onClick={() => setComfortView((value) => !value)}>Comfort view {comfortView ? "On" : "Off"}</button>
         <button type="button" className="module-map-refresh" onClick={() => setRefreshKey((value) => value + 1)} disabled={loadingAssets}>
           {loadingAssets ? "Checking lessons…" : "Refresh lessons"}
         </button>
@@ -227,5 +236,5 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
         <button type="button" onClick={next} aria-label="Next visual" title="Next visual" style={{fontSize:30,flexShrink:0}}>›</button>
       </div>
     </div>}
-  </>;
+  </section>;
 }
