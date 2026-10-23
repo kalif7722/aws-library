@@ -31,6 +31,7 @@ type DiscoveryResponse = {
   moduleId: string;
   expectedCount: number;
   availableSlides: number[];
+  slidePaths?: Record<string, string>;
   failedChecks: number;
 };
 
@@ -64,6 +65,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   }, [expectedCount, imageBase, mappedLessons, moduleMeta, moduleNumber]);
 
   const [availableSlides, setAvailableSlides] = useState<number[]>([]);
+  const [slidePaths, setSlidePaths] = useState<Record<string, string>>({});
   const [failed, setFailed] = useState<number[]>([]);
   const [loadingAssets, setLoadingAssets] = useState(true);
   const [discoveryError, setDiscoveryError] = useState<string | null>(null);
@@ -77,6 +79,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     setDiscoveryError(null);
     setDiscoveryWarning(null);
     setAvailableSlides([]);
+    setSlidePaths({});
     setFailed([]);
     setActiveIndex(null);
 
@@ -94,6 +97,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
           ? payload.availableSlides.filter((slide) => Number.isInteger(slide) && slide >= 1 && slide <= expectedCount)
           : [];
         setAvailableSlides(validSlides);
+        setSlidePaths(payload.slidePaths && typeof payload.slidePaths === "object" ? payload.slidePaths : {});
         if (payload.failedChecks > 0) {
           setDiscoveryWarning("Some R2 files could not be checked due to a temporary network response. Refresh to retry.");
         }
@@ -107,6 +111,13 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
     return () => { current = false; };
   }, [expectedCount, moduleNumber, refreshKey]);
+
+  const resolvedSrc = useCallback((visual: Visual) => {
+    const discoveredKey = slidePaths[String(visual.index)];
+    return discoveredKey
+      ? imageBase.replace(/\\/$/, "") + "/" + discoveredKey
+      : visual.src;
+  }, [imageBase, slidePaths]);
 
   const navigableIndices = useMemo(
     () => visuals
@@ -211,7 +222,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
     {!loadingAssets && !discoveryError && visibleVisuals.length > 0 ? <div className="module-visual-grid">
       {visibleVisuals.map(({ visual, index }) => <button type="button" className="module-visual-card" key={"Module " + moduleNumber + "-" + visual.index} onClick={() => setActiveIndex(index)} aria-label={"Open " + visual.alt + " full screen"}>
-        <img className="module-visual-thumb module-visual-image-protected" src={visual.src} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
+        <img className="module-visual-thumb module-visual-image-protected" src={resolvedSrc(visual)} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
         <div className="module-visual-meta">
           <div className="module-visual-meta-top">
             <span>PDF {visual.sourcePdfPage}</span>
@@ -232,7 +243,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       </div>
       <div className="module-viewer-stage">
         <button type="button" onClick={previous} aria-label="Previous visual" title="Previous visual" style={{fontSize:30,flexShrink:0}}>‹</button>
-        <div className="module-viewer-image-wrap"><img className="module-viewer-image module-visual-image-protected" src={active.src} alt={active.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} /></div>
+        <div className="module-viewer-image-wrap"><img className="module-viewer-image module-visual-image-protected" src={resolvedSrc(active)} alt={active.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} /></div>
         <button type="button" onClick={next} aria-label="Next visual" title="Next visual" style={{fontSize:30,flexShrink:0}}>›</button>
       </div>
     </div>}
