@@ -33,10 +33,9 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
       <p style={{letterSpacing:".12em",fontSize:11,fontWeight:800}}>MODULE {num} · VISUAL DEEP DIVE</p>
       <h1>{title}</h1>
       <p>{desc}</p>
-      <p>Source PDF pages {sourcePageStart}–{sourcePageEnd}. This space is reserved for individual visual lessons; content should preserve source coverage rather than compressing multiple concepts into one overview.</p>
     </section>
     <section>
-      <h2 style={{marginTop:28}}>Visual lessons</h2>
+      <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>
       <p style={{color:"#64748b"}}>Click any available visual to open the full-screen viewer. Use the left/right arrows or keyboard arrow keys to move between available visuals; press Esc to close.</p>
       <ModuleVisualGallery moduleNumber={num} imageBase={imageBase} />
     </section>

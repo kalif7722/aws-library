@@ -10,7 +10,9 @@ type CourseModule = {
 const modules = visualMap.modules as CourseModule[];
 const IMAGE_BASE = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals";
 const MAX_SLIDES_PER_MODULE = 300;
-const PROBE_CONCURRENCY = 24;
+const PROBE_CONCURRENCY = 6;
+// At most 24 probes per request, below the Worker subrequest budget.
+const SCAN_SIZE = 6;
 const PROBE_TIMEOUT_MS = 4000;
 
 type ObjectCheck = "exists" | "missing" | "failed";
@@ -22,6 +24,7 @@ async function checkObject(url: string): Promise<ObjectCheck> {
       signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
     });
 
+    await headResponse.body?.cancel();
     if (headResponse.ok) return "exists";
     if (headResponse.status === 404) return "missing";
 
@@ -44,18 +47,16 @@ async function checkObject(url: string): Promise<ObjectCheck> {
 
 function candidateObjectKeys(moduleId: string, slideNumber: number): string[] {
   const filename = "slide-" + String(slideNumber).padStart(2, "0") + ".webp";
-  // The first key is the canonical convention. The alternatives handle files
-  // uploaded by extracting the ZIP inside the already-selected module folder,
-  // or extracting only the slide files to the course-assets root.
+  // Support canonical and nested extraction paths, isolated to this module.
   return [
     "module-" + moduleId + "/" + filename,
     "module-" + moduleId + "/module-" + moduleId + "/" + filename,
-    filename,
   ];
 }
 
 export async function GET(request: Request) {
-  const moduleId = new URL(request.url).searchParams.get("module") ?? "";
+  const params = new URL(request.url).searchParams;
+  const moduleId = params.get("module") ?? "";
   if (!/^\d{2}$/.test(moduleId)) {
     return Response.json({ error: "A two-digit module ID is required." }, { status: 400 });
   }
@@ -73,12 +74,17 @@ export async function GET(request: Request) {
   const availableSlides: number[] = [];
   const slidePaths: Record<string, string> = {};
   let failedChecks = 0;
-  let nextSlide = 1;
+  const start = Number(params.get("start") ?? "1");
+  if (!Number.isInteger(start) || start < 1 || start > expectedCount) {
+    return Response.json({ error: "Invalid scan position." }, { status: 400 });
+  }
+  const end = Math.min(start + SCAN_SIZE - 1, expectedCount);
+  let nextSlide = start;
 
   const worker = async () => {
     while (true) {
       const slideNumber = nextSlide++;
-      if (slideNumber > expectedCount) return;
+      if (slideNumber > end) return;
 
       let hadFailedProbe = false;
       for (const objectKey of candidateObjectKeys(moduleId, slideNumber)) {
@@ -105,6 +111,7 @@ export async function GET(request: Request) {
     {
       moduleId,
       expectedCount,
+      nextStart: end < expectedCount ? end + 1 : null,
       availableSlides,
       slidePaths,
       failedChecks,

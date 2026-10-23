@@ -33,6 +33,7 @@ type DiscoveryResponse = {
   availableSlides: number[];
   slidePaths?: Record<string, string>;
   failedChecks: number;
+  nextStart: number | null;
 };
 
 const lessonsByModule = (visualMap as unknown as { lessonsByModule?: Record<string, ModuleLesson[]> }).lessonsByModule ?? {};
@@ -53,8 +54,8 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
       return {
         src: imageBase + "/module-" + moduleNumber + "/slide-" + String(index).padStart(2, "0") + ".webp",
         alt: lesson
-          ? "Module " + moduleNumber + " · PDF page " + sourcePdfPage + ": " + lesson.title
-          : "Module " + moduleNumber + " · PDF page " + sourcePdfPage + " · visual " + String(index).padStart(2, "0"),
+          ? lesson.title
+          : "Visual lesson " + String(index).padStart(2, "0"),
         index,
         title: lesson?.title ?? ("Visual lesson " + String(index).padStart(2, "0")),
         sourcePdfPage,
@@ -83,33 +84,51 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     setFailed([]);
     setActiveIndex(null);
 
-    fetch("/api/course-visuals?module=" + encodeURIComponent(moduleNumber), { cache: "no-store" })
-      .then(async (response) => {
-        if (!response.ok) {
-          const payload = await response.json().catch(() => null) as { error?: string } | null;
-          throw new Error(payload?.error ?? "Unable to check uploaded visual files.");
-        }
-        return response.json() as Promise<DiscoveryResponse>;
-      })
-      .then((payload) => {
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout>;
+    const scan = async () => {
+      const found = new Set<number>();
+      const paths: Record<string, string> = {};
+      let failures = 0;
+      let start: number | null = 1;
+      try {
+        do {
+          const response = await fetch(`/api/course-visuals?module=${encodeURIComponent(moduleNumber)}&start=${start}`, { cache: "no-store", signal: controller.signal });
+          if (!response.ok) throw new Error("Unable to check visual lessons. Please retry.");
+          const payload: DiscoveryResponse = await response.json();
+          if (!current) return;
+          for (const slide of payload.availableSlides ?? []) {
+            if (Number.isInteger(slide) && slide >= 1 && slide <= expectedCount) found.add(slide);
+          }
+          Object.assign(paths, payload.slidePaths ?? {});
+          failures += payload.failedChecks;
+          const next = payload.nextStart;
+          if (next !== null && (!Number.isInteger(next) || next <= start)) throw new Error("Unable to finish checking lessons.");
+          start = next;
+          // Show results as they arrive without dropping existing cards during refresh.
+          setAvailableSlides(old => [...new Set([...old, ...found])].sort((a,b) => a-b));
+          setSlidePaths(old => ({...old, ...paths}));
+          setLoadingAssets(false);
+        } while (start !== null);
         if (!current) return;
-        const validSlides = Array.isArray(payload.availableSlides)
-          ? payload.availableSlides.filter((slide) => Number.isInteger(slide) && slide >= 1 && slide <= expectedCount)
-          : [];
-        setAvailableSlides(validSlides);
-        setSlidePaths(payload.slidePaths && typeof payload.slidePaths === "object" ? payload.slidePaths : {});
-        if (payload.failedChecks > 0) {
-          setDiscoveryWarning("Some R2 files could not be checked due to a temporary network response. Refresh to retry.");
+        if (!failures) {
+          setAvailableSlides([...found].sort((a,b) => a-b));
+          setSlidePaths(paths);
         }
-      })
-      .catch((error: unknown) => {
-        if (current) setDiscoveryError(error instanceof Error ? error.message : "Unable to discover uploaded visuals.");
-      })
-      .finally(() => {
-        if (current) setLoadingAssets(false);
-      });
-
-    return () => { current = false; };
+        setFailed([]);
+        setDiscoveryError(null);
+        setDiscoveryWarning(failures ? "Some lessons could not be checked. Retrying automatically…" : null);
+      } catch (error) {
+        if (current) setDiscoveryError(error instanceof Error ? error.message : "Unable to check lessons.");
+      } finally {
+        if (current) {
+          setLoadingAssets(false);
+          timer = setTimeout(scan, 60000);
+        }
+      }
+    };
+    void scan();
+    return () => { current = false; controller.abort(); clearTimeout(timer); };
   }, [expectedCount, moduleNumber, refreshKey]);
 
   const resolvedSrc = useCallback((visual: Visual) => {
@@ -158,8 +177,6 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     .map((visual, index) => ({ visual, index }))
     .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index));
   const moduleTitle = moduleMeta?.title ?? ("Module " + moduleNumber);
-  const startPage = moduleMeta?.sourcePageStart ?? visuals[0]?.sourcePdfPage ?? 1;
-  const endPage = moduleMeta?.sourcePageEnd ?? visuals[visuals.length - 1]?.sourcePdfPage ?? expectedCount;
 
   return <>
     <style>{[
@@ -196,41 +213,35 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     <div className="module-map-summary">
       <div className="module-map-summary-head">
         <strong>{moduleTitle} · uploaded visual lessons</strong>
-        <span>PDF pages {startPage}–{endPage} · {visibleVisuals.length} uploaded / {expectedCount} possible</span>
+        <span>{visibleVisuals.length} visual lessons</span>
       </div>
       <div className="module-map-counts">
-        <span>{visibleVisuals.length} images detected in R2</span>
-        <span>{expectedCount - availableSlides.length} not uploaded yet</span>
+        <span>{visibleVisuals.length} lessons available</span>
+
       </div>
       <div className="module-map-actions">
         <button type="button" className="module-map-refresh" onClick={() => setRefreshKey((value) => value + 1)} disabled={loadingAssets}>
-          {loadingAssets ? "Checking R2…" : "Refresh uploaded images"}
+          {loadingAssets ? "Checking lessons…" : "Refresh lessons"}
         </button>
-        {loadingAssets ? <span role="status" className="module-map-note">Checking slide filenames for this module…</span> : null}
+        {loadingAssets ? <span role="status" className="module-map-note">Checking for new lessons…</span> : null}
         {discoveryError ? <span role="alert" className="module-map-note">Discovery error: {discoveryError}</span> : null}
         {discoveryWarning ? <span role="status" className="module-map-note">{discoveryWarning}</span> : null}
       </div>
-      <small className="module-map-note">Images are discovered from the actual R2 filenames. No per-image manifest or status update is required after upload; use the same <code>module-{moduleNumber}/slide-NN.webp</code> naming convention.</small>
+
     </div>
 
-    {loadingAssets ? <div className="module-visual-fallback" role="status">Scanning R2 for uploaded WebP files…</div> : null}
-    {!loadingAssets && discoveryError ? <div className="module-visual-fallback">The gallery could not check R2 right now. Try “Refresh uploaded images”.</div> : null}
+    {loadingAssets ? <div className="module-visual-fallback" role="status">Finding visual lessons…</div> : null}
+    {!loadingAssets && discoveryError ? <div className="module-visual-fallback">Lessons could not be checked right now. Retrying automatically.</div> : null}
     {!loadingAssets && !discoveryError && visibleVisuals.length === 0 ? <div className="module-visual-fallback">
-      No images have been detected for this module yet. Upload files using the expected path, such as <code>module-{moduleNumber}/slide-01.webp</code>, then click “Refresh uploaded images”. No manifest edit is needed.
+      Visual lessons will appear here as they become available.
     </div> : null}
 
     {!loadingAssets && !discoveryError && visibleVisuals.length > 0 ? <div className="module-visual-grid">
       {visibleVisuals.map(({ visual, index }) => <button type="button" className="module-visual-card" key={"Module " + moduleNumber + "-" + visual.index} onClick={() => setActiveIndex(index)} aria-label={"Open " + visual.alt + " full screen"}>
         <img className="module-visual-thumb module-visual-image-protected" src={resolvedSrc(visual)} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
         <div className="module-visual-meta">
-          <div className="module-visual-meta-top">
-            <span>PDF {visual.sourcePdfPage}</span>
-            <span className="module-visual-status">Available in R2</span>
-          </div>
           <b>{visual.title}</b>
           {visual.focus ? <small>{visual.focus}</small> : null}
-          {visual.batch ? <small>{visual.batch}</small> : null}
-          {!mappedLessons[index] ? <small>Slide {String(visual.index).padStart(2, "0")}</small> : null}
         </div>
       </button>)}
     </div> : null}
