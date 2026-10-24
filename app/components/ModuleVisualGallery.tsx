@@ -44,9 +44,9 @@ const courseModules = visualMap.modules as ModuleMeta[];
 export default function ModuleVisualGallery({ moduleNumber, imageBase }: { moduleNumber: string; imageBase: string }) {
   const mappedLessons = lessonsByModule[moduleNumber] ?? [];
   const moduleMeta = courseModules.find((module) => module.id === moduleNumber);
-  const expectedCount = moduleMeta
-    ? moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1
-    : Math.max(mappedLessons.length, 10);
+  // The source PDF page range is reference metadata only. Uploaded visuals and lab slides
+  // may extend beyond it, so keep the gallery aligned with the discovery API window.
+  const expectedCount = 300;
 
   const visuals: Visual[] = useMemo(() => {
     return Array.from({ length: expectedCount }, (_, i) => {
