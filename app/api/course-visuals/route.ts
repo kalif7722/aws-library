@@ -67,7 +67,7 @@ export async function GET(request: Request) {
     return Response.json({ error: "Module not found." }, { status: 404 });
   }
 
-  const expectedCount = moduleMeta.lessonCount ?? (moduleMeta.sourcePageEnd - moduleMeta.sourcePageStart + 1);
+  // Uploaded visuals can extend beyond the source PDF page range.\n  // Scan the discoverable asset window instead of locking a module to its reference-page count.\n  const expectedCount = MAX_SLIDES_PER_MODULE;
   if (expectedCount < 1 || expectedCount > MAX_SLIDES_PER_MODULE) {
     return Response.json({ error: "The module slide range is invalid." }, { status: 500 });
   }
