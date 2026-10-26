@@ -1,0 +1,3 @@
+import map from "./map.json";
+
+export default function GenAILabLauncher(){return <details style={{margin:"16px 24px",padding:"14px 18px",background:"#fff",border:"1px solid #c9d6e2",borderRadius:10,color:"#172b42"}}><summary style={{cursor:"pointer",fontWeight:700}}>GenAI troubleshooting labs · 12 interactive cases</summary><p style={{fontSize:13}}>Each case opens an isolated incident workspace with console evidence, an application workbench and matching visual walkthroughs.</p><nav aria-label="GenAI simulator labs" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:8}}>{map.map(lab=><a key={lab.id} style={{color:"#0967b6",padding:8}} href={`/troubleshooting/simulators/aws/genai/${lab.slug}`}>{lab.id} · {lab.title}</a>)}</nav></details>}

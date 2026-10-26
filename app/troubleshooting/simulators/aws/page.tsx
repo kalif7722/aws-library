@@ -5,6 +5,7 @@ import { addNetworkAclRule, updateNetworkAclRule, deleteNetworkAclRule, addSecur
 import "./simulator.css";
 import { AWS_SERVICE_DIRECTORY, type AwsServiceDirectoryEntry } from "./service-directory";
 import AwsAiScreens, { type AwsAiScreen } from "./ai-screens";
+import GenAILabLauncher from "../../../components/genai-labs/Launcher";
 
 type Screen = "Console Home" | "EC2 Dashboard" | "Instances" | "Instance details" | "Security Groups" | "Route Tables" | "Network ACLs" | "VPCs" | "Subnets" | "Load Balancers" | "Target Groups" | "S3" | "IAM" | "RDS" | "Lambda" | "CloudWatch" | "Route 53" | "DynamoDB" | "Cost Explorer" | "Reachability Analyzer" | "CloudTrail" | "Glue" | AwsAiScreen;
 const services: AwsServiceDirectoryEntry[] = AWS_SERVICE_DIRECTORY;
@@ -308,6 +309,7 @@ const linkedPolicyForRole = (roleName: string) => roleName === "Lambda-Payments-
   const navButton = (item: Screen) => <button key={item} className={screen === item ? "selected" : ""} onClick={() => go(item)}><span className="aws-sim-nav-icon">{item === "Instances" ? "▣" : item.includes("Group") ? "⬡" : item.includes("Route") ? "⇄" : item.includes("ACL") ? "▤" : item === "VPCs" ? "◇" : item === "Subnets" ? "▦" : item === "Lambda" ? "λ" : item === "S3" ? "▰" : item === "IAM" ? "♙" : item === "CloudWatch" ? "◷" : "⌂"}</span><span>{item}</span>{screen === item && <i />}</button>;
 
   return <main className="aws-sim aws-console-sim">
+    <GenAILabLauncher />
     <div className="aws-sim-sandbox-toolbar"><span><b>Simulator sandbox</b> · Resource data is seeded; changes stay in this browser and are not sent to AWS.</span><button onClick={resetAccount}>Reset sandbox</button></div>
     <header className="aws-sim-global">
       <button className="aws-sim-menu" aria-label="Open services menu" onClick={() => setShowServices(value => !value)}>☰</button>
