@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import map from "./map.json";
 import { createState, applyConfig, evaluate, serviceAction, SCENARIOS, HINTS, SOLUTIONS } from "./engine.mjs";
 import { GUIDES } from "./guides.mjs";
+import {beginAttempt} from "./attempt.mjs";
 import Visuals from "./Visuals";
 import Architecture from "./Architecture";
 import CloudWatchConsole from "./CloudWatchConsole";
@@ -11,6 +12,7 @@ import BedrockConsole from "./BedrockConsole";
 import "./labs.css";
 import "./layout.css";
 import "./theme.css";
+import "./console-focus.css";
 
 type State = Omit<ReturnType<typeof createState>,"result"> & {result:ReturnType<typeof evaluate>|null};
 type Service = "CloudWatch"|"Amazon Bedrock"|"S3"|"IAM"|"Lambda"|"OpenSearch Serverless";
@@ -19,6 +21,7 @@ const fmt=(value:unknown)=>JSON.stringify(value,null,2);
 const courseUrl="/courses/aws-generative-ai-developer-professional/visual/19";
 
 export default function Workspace({labIndex}:{labIndex:number}){
+ const [consoleFocus,setConsoleFocus]=useState(false);
  const lab=map[labIndex];const [state,setState]=useState<State>(()=>createState(labIndex));
  const [mode,setMode]=useState<"guided"|"challenge"|null>(null);const [hint,setHint]=useState(false);const [hydrated,setHydrated]=useState(false);
  const [draft,setDraft]=useState(()=>fmt(createState(labIndex).config));const [error,setError]=useState("");
@@ -26,8 +29,8 @@ export default function Workspace({labIndex}:{labIndex:number}){
  const [bedrock,setBedrock]=useState(labIndex===9?"Agents":labIndex===10?"Guardrails":labIndex===4?"Prompt management":labIndex>=5&&labIndex<=8?"Knowledge bases":"Playgrounds");
  const [query,setQuery]=useState(labIndex===9?"What is the status of order A104?":labIndex===10?"Summarize the policy. Dummy identifier: DUMMY-1234.":"What is the refund period?");const [response,setResponse]=useState("");const [trace,setTrace]=useState(false);const [notice,setNotice]=useState("");
  const key=`aip-genai-lab-v1-${lab.id}`;
- useEffect(()=>{try{const raw=sessionStorage.getItem(key);if(raw){const saved=JSON.parse(raw);if((saved.mode==="guided"||saved.mode==="challenge")&&saved.state?.schema===1&&saved.state.lab===labIndex&&saved.state.config&&typeof saved.state.config==="object"){const next={...createState(labIndex),...saved.state,result:null};setState(next);setDraft(fmt(next.config));setMode(saved.mode==="challenge"?"challenge":"guided");setHint(Boolean(saved.hint))}}}catch{}setHydrated(true)},[key,labIndex]);
- useEffect(()=>{if(hydrated&&mode)try{sessionStorage.setItem(key,JSON.stringify({state,mode,hint}))}catch{}},[state,mode,hint,hydrated,key]);
+ useEffect(()=>{let saved=null;try{saved=sessionStorage.getItem(key)}catch{}const next=beginAttempt(labIndex,saved);setState(next.state);setDraft(fmt(next.state.config));setMode(next.mode);setHint(false);setHydrated(true)},[key,labIndex]);
+ useEffect(()=>{if(hydrated)try{sessionStorage.setItem(key,JSON.stringify({mode}))}catch{}},[mode,hydrated,key]);
  const report=state.result??evaluate(state);const unsaved=draft!==fmt(state.config);
  function reset(changeMode=false){if(!window.confirm("Reset this lab to its original broken configuration?"))return;const next=createState(labIndex);setState(next);setDraft(fmt(next.config));setHint(false);setError("");setResponse("");setNotice("");if(changeMode)setMode(null)}
  function save(){try{const next=applyConfig(state,JSON.parse(draft));setState(next);setDraft(fmt(next.config));setError("");setNotice("Application configuration saved. Re-run validation; previous results were invalidated.")}catch(e){setError(e instanceof Error?e.message:"Invalid JSON")}}
@@ -37,10 +40,11 @@ export default function Workspace({labIndex}:{labIndex:number}){
  const source=state.indexedVersion===18?"Refunds are available within 30 days of purchase.":"Refunds are available within 14 days of purchase.";
  const retrieval=state.config.category==="shipping"?"Shipping normally takes 3–5 business days.":source;
  function runService(){const q=query.toLowerCase();if(service==="Amazon Bedrock"&&bedrock==="Knowledge bases"){const known=q.includes("refund")||q.includes("shipping");const otherTenant=q.includes("other tenant")||q.includes("tenant beta");const passage=q.includes("shipping")?"Shipping normally takes 3–5 business days.":retrieval;setResponse(fmt({retrievalResults:known&&!otherTenant?[{content:{text:passage},location:{s3Location:{uri:`s3://aip-lab-docs/policies/${q.includes("shipping")?"shipping.pdf":"policy.pdf"}`}},metadata:{tenant:"acme",policyVersion:state.indexedVersion}}]:[]}))}else if(service==="Amazon Bedrock"&&bedrock==="Agents")setResponse(!state.prepared?"Agent is not prepared. Prepare the working draft before invoking TestAlias.":!q.includes("a104")?"No matching order found.":evaluate(state).summary);else if(service==="Amazon Bedrock"&&bedrock==="Guardrails")setResponse(state.guardrailDraft?"Sample test: dummy identifier [REDACTED]. Benign refund question allowed.":"Sample test: dummy identifier DUMMY-1234 is not masked by this working draft.");else if(service==="Lambda")setResponse(fmt({StatusCode:200,ExecutedVersion:"$LATEST",Payload:state.config.toolResult??{status:"ok"}}));else setResponse(q.includes("refund")?"Refunds are available within 30 days of purchase.":q.includes("hello")?"Hello! How can I help you?":"This sample playground supports the refund-policy question. Inspect the application request and parser separately.")}
- return <main className="gl-workspace">
+ return <main className={`gl-workspace ${consoleFocus?"gl-console-focus":""}`}>
   <header className="gl-lab-header"><div><a href={courseUrl}>← Troubleshooting module</a><h1>Lab {lab.id} · {lab.title}</h1><p>Simulation only · synthetic data · no AWS calls or charges · changes are isolated to this tab.</p></div><div className="gl-toolbar">{mode&&<><span>{mode==="guided"?"Guided":"Challenge"} mode</span><button onClick={()=>reset()}>Reset lab</button><button onClick={()=>reset(true)}>Change mode</button></>}<a href="/troubleshooting/simulators/aws">All-service console</a></div></header>
   {!mode?<section className="gl-mode"><h2>Choose your learning mode</h2><p>{SCENARIOS[labIndex]}</p><div><button onClick={()=>setMode("guided")}><b>Guided</b><span>Walkthrough visuals, diagnostic steps and configuration reference.</span></button><button onClick={()=>setMode("challenge")}><b>Challenge</b><span>Start from the broken state. One optional hint; walkthrough unlocks after verification.</span></button></div></section>:<>
   <Architecture labIndex={labIndex}/>
+  <button className="gl-focus-toggle" onClick={()=>setConsoleFocus(!consoleFocus)}>{consoleFocus?"Show lab walkthrough":"Expand console workspace"}</button>
   <ConsoleNotes/>
   <div className="gl-work-grid"><aside className="gl-walkthrough"><h2>Incident brief</h2><p>{SCENARIOS[labIndex]}</p><div className={`gl-verification ${state.result?.ok&&!unsaved?"ok":"pending"}`} role="status">{unsaved?"Unsaved changes — verification required":state.result?.ok?"Verified against the fixture suite":state.result?"Still failing — inspect the evidence":"Not verified — begin with evidence"}</div>
     {mode==="guided"?<><h3>Inspect → change → verify</h3><ol>{GUIDES[labIndex].map(text=><li key={text}>{text}</li>)}</ol><details><summary>Configuration reference</summary><p>Compare this reference with your current configuration, then make the changes in Application workbench. Service actions such as Sync, Prepare or Create version are still required.</p><pre>{fmt(SOLUTIONS[labIndex])}</pre></details><details><summary>Visual walkthrough ({lab.steps.length} images)</summary><Visuals steps={lab.steps} compact/></details></>:<><p>Find the failing stage using the console evidence and application trace. No repair is applied by this page.</p><button disabled={hint} onClick={()=>setHint(true)}>{hint?"Hint used":"Use my one hint"}</button>{hint&&<p className="gl-hint">{HINTS[labIndex]}</p>}{state.result?.ok&&<details><summary>Review walkthrough</summary><Visuals steps={lab.steps} compact/></details>}</>}
