@@ -7,8 +7,9 @@ Prepared 2026-10-27. Source inventory: AWS Certified AI Practitioner Slides v16,
 - 337 source-backed visual lesson slots preserve the teaching pages, including examples, comparisons and recap contexts.
 - 27 pages are explicitly reference-only: section dividers, administrative material and career/completion guidance. No page is silently omitted.
 - 12 additional current-guide lessons bring the plan to 349 slots.
-- 1 image is directly reused; 21 supporting placements link to 18 existing local AIP scenario images as references, not completed replacements for source-backed lessons.
-- 51 close AIP topic matches are recorded as reuse candidates. Their R2 image availability, accuracy and foundational depth still require review. They link to the existing AIP module now; candidate image URLs must not be counted as completed lessons.
+- All AIP image references, course links and reuse candidates have been removed at user request.
+- Original images are generated sequentially. The first batch contains 10 reviewed WebP images: module 00 (4/4) and module 01 (6/6).
+- Current progress: 10/349 reviewed and available (2.9%); 339 remaining. The course progress page derives live counts from the lesson manifest.
 
 ## Learning sequence and production batches
 
@@ -16,8 +17,8 @@ ML foundations move ahead of GenAI to establish prerequisites. The source sectio
 
 | Module | Title | Visual lesson slots | Production batches of up to 10 | Available dedicated visuals |
 |---|---|---:|---:|---:|
-| 00 | Course Introduction | 4 | 1 | 0 |
-| 01 | Introduction to Artificial Intelligence | 6 | 1 | 0 |
+| 00 | Course Introduction | 4 | 1 | 4 |
+| 01 | Introduction to Artificial Intelligence | 6 | 1 | 6 |
 | 02 | AWS and Cloud Computing | 29 | 3 | 0 |
 | 03 | AI and Machine Learning | 62 | 7 | 0 |
 | 04 | Generative AI and Amazon Bedrock | 20 | 2 | 0 |
@@ -28,7 +29,7 @@ ML foundations move ahead of GenAI to establish prerequisites. The source sectio
 | 09 | Amazon SageMaker AI | 36 | 4 | 0 |
 | 10 | Responsible AI and Explainability | 16 | 2 | 0 |
 | 11 | AI Governance, Compliance and MLOps | 23 | 3 | 0 |
-| 12 | AWS Security and Supporting Services | 52 | 6 | 1 |
+| 12 | AWS Security and Supporting Services | 52 | 6 | 0 |
 | 13 | Current Exam Guide Additions | 12 | 2 | 0 |
 | 14 | Revision and Exam Preparation | 2 | 1 | 0 |
 
@@ -36,7 +37,7 @@ ML foundations move ahead of GenAI to establish prerequisites. The source sectio
 
 One original 2048×1152, 16:9 WebP per approved lesson. Use navy backgrounds, cyan/teal headings, restrained amber highlights and clear diagrams. Preserve the original teaching distinction; do not collapse several topics into a dense collage. Keep beginner-friendly examples, meaningful comparisons and readable labels. Use a concept visual, architecture, comparison or worked example according to each lesson's `visualType` and `generationFocus`.
 
-Generate sequentially, in batches of up to ten within each module. Before generating, review that lesson's reuse candidate. Prefer relinking a verified close match; otherwise create a new original asset. Supporting AIP scenario images remain examples and do not automatically replace a whole lesson. Review current service capabilities, pricing and names rather than reproducing dated source facts.
+Generate sequentially, in batches of up to ten, completing modules in learning order. Create original images for every remaining lesson; do not relink AIP course assets. Review current service capabilities, pricing and names rather than reproducing dated source facts.
 
 Mark a visual available only after technical, text-legibility and image-format checks. Planned visuals must remain visibly distinct from available images. Use numeric internal asset IDs; retain topics and exam objective metadata for search and coverage.
 
