@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ModuleVisualGallery from "../../../../components/ModuleVisualGallery";
 import GenAITroubleshootingModule from "../../../../components/GenAITroubleshootingModule";
+import ExamPreparation from "../../../../components/genai-exam/ExamPreparation";
 import visualMap from "../../visual-lesson-map.json";
 
 type CourseModule = {
@@ -24,6 +25,7 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
   const id = moduleId.replace("module-", "");
   const selected = modules.find((item) => item.id === id);
   if (!selected) return <main style={{padding:32}}><h1>Module not found</h1><Link href="/courses/aws-generative-ai-developer-professional">Back to course overview</Link></main>;
+  if (id === "18") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}><style>{heroCss}</style><section className="genai-deep-hero"><Link href="/courses/aws-generative-ai-developer-professional">← All course modules</Link><p>MODULE 18 · EXAM PREPARATION</p><h1>Review. Practice. Build confidence.</h1><p>Visual revision followed by original scenario-based practice and a timed exam.</p></section><ExamPreparation /></main>;
   if (id === "19") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}>
     <style>{heroCss}</style>
     <section className="genai-deep-hero"><Link href="/courses/aws-generative-ai-developer-professional">← All course modules</Link><p style={{letterSpacing:".12em",fontSize:11,fontWeight:800}}>MODULE 19 · AIP-C01 TROUBLESHOOTING</p><h1>GenAI Troubleshooting</h1><p>Practical failure diagnosis across model requests, retrieval, prompts, agents, and deployment.</p></section>
