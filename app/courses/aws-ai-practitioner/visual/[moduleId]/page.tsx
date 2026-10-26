@@ -1,0 +1,9 @@
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import AifModuleLessons from '../../../../components/AifModuleLessons';
+import plan from '../../visual-lesson-map.json';
+import '../../../../components/AifVisualCourse.css';
+export default async function Page({params}:{params:Promise<{moduleId:string}>}){
+ const {moduleId}=await params;const id=moduleId.replace(/^module-/,'');const at=plan.modules.findIndex(m=>m.id===id);if(at<0)notFound();const m=plan.modules[at];const previous=plan.modules[at-1],next=plan.modules[at+1];const own=plan.lessons.filter(l=>l.moduleId===id);
+ return <main className="aif-course"><section className="aif-hero aif-module-hero"><div><Link className="aif-back" href="/courses/aws-ai-practitioner">← All course modules</Link><p className="aif-eyebrow">MODULE {m.id} · AIF-C01 VISUAL LEARNING</p><h1>{m.title}</h1><p className="aif-hero-copy">{m.description}</p><div className="aif-module-facts"><span>{own.length} visual lessons planned</span><span>{own.filter(l=>l.asset).length} {own.filter(l=>l.asset).length===1?'visual':'visuals'} available</span>{m.examTasks.length>0&&<span>Exam tasks {m.examTasks.join(' · ')}</span>}</div></div></section>{id==='14'&&<p className="aif-empty">Revision visuals and the AI Practitioner question bank are in preparation. Planned practice includes single-choice, multiple-response, ordering and matching questions, with a 90-minute timed exam option.</p>}<AifModuleLessons key={id} moduleId={id}/><nav className="aif-module-pager" aria-label="Module navigation"><span>{previous&&<Link href={`/courses/aws-ai-practitioner/visual/module-${previous.id}`}>← {previous.title}</Link>}</span><span>{next&&<Link href={`/courses/aws-ai-practitioner/visual/module-${next.id}`}>{next.title} →</Link>}</span></nav></main>;
+}
