@@ -8,8 +8,8 @@ Prepared 2026-10-27. Source inventory: AWS Certified AI Practitioner Slides v16,
 - 27 pages are explicitly reference-only: section dividers, administrative material and career/completion guidance. No page is silently omitted.
 - 12 additional current-guide lessons bring the plan to 349 slots.
 - All AIP image references, course links and reuse candidates have been removed at user request.
-- Original images are generated sequentially. The first batch contains 10 reviewed WebP images: module 00 (4/4) and module 01 (6/6).
-- Current progress: 10/349 reviewed and available (2.9%); 339 remaining. The course progress page derives live counts from the lesson manifest.
+- Original images are generated and technically reviewed module by module. Modules 00–03 now contain 101 reviewed WebP images.
+- Current progress: 101/349 reviewed and available (28.9%); 248 remaining. The course progress page derives live counts from the lesson manifest.
 
 ## Learning sequence and production batches
 
