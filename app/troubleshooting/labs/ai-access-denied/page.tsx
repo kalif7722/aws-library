@@ -135,7 +135,7 @@ export default function AwsAiAccessDeniedLab() {
   return (
     <main className={"lab-shell " + (sideBySide ? "lab-side-mode" : "")}>
       <header className="lab-hero">
-        <a href="/troubleshooting">← Troubleshooting Hub</a>
+        <a href="/courses/aws-generative-ai-developer-professional">← Generative AI Developer course</a>
         <p className="lab-kicker">AWS HANDS-ON TROUBLESHOOTING · LAB 01</p>
         <h1>Amazon Bedrock: failed model invocation</h1>
         <p>A model request starts failing after an access change. Investigate the request path, correlate CloudTrail evidence, identify the actual authorization layer, then prove recovery. This lab uses a local simulator—no live AWS resources are accessed or changed.</p>

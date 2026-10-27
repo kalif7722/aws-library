@@ -413,7 +413,7 @@ export default function VmUnreachableLab() {
 
   return <main className="vm-lab-shell">
     <button type="button" onClick={reset} aria-label="Reset lab and clear progress" title="Reset lab" className="vm-lab-reset-floating" style={{position:"fixed",top:12,right:16,zIndex:2147483000,display:"inline-flex",alignItems:"center",justifyContent:"center",minWidth:112,minHeight:42,margin:0,padding:"10px 14px",border:"2px solid #d6e5ff",borderRadius:10,background:"#172b46",color:"#ffffff",fontSize:14,fontWeight:800,lineHeight:1.2,whiteSpace:"nowrap",boxShadow:"0 4px 18px rgba(0,0,0,.65)",opacity:1,visibility:"visible"}}>Reset lab</button>
-    <header className="vm-lab-top"><a href="/troubleshooting">← Troubleshooting library</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
+    <header className="vm-lab-top"><a href="/#courses">← Certification courses</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
     <section className="vm-lab-hero">
       <div><p className="vm-lab-kicker">NETWORK TROUBLESHOOTING · LAB 01</p><h1>VM unreachable over <em>{protocol}</em></h1><p>Follow the evidence through the cloud console. Inspect the resource, choose what the evidence proves, and unlock the next diagnostic step. No live cloud resources are accessed or changed.</p></div>
       <div className="vm-lab-score"><span>YOUR INVESTIGATION</span><strong>{progress}%</strong><div><i style={{width: progress + "%"}} /></div><small>{Object.keys(answers).filter(k=>k.startsWith(provider+":") && labSteps[provider][Number(k.split(":")[1])]?.choices[answers[k]]?.correct).length} of {steps.length} checks verified</small></div>

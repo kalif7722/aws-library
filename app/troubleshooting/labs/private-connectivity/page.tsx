@@ -163,7 +163,7 @@ export default function PrivateConnectivityLab() {
   const reset = () => { setStage(0); setAnswers({}); setShowCommand(false); };
 
   return <main className="private-lab-shell">
-    <header className="private-lab-top"><a href="/troubleshooting">← Troubleshooting library</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
+    <header className="private-lab-top"><a href="/#courses">← Certification courses</a><span>SIMULATED LAB · NO LIVE ACCOUNT</span></header>
     <section className="private-lab-hero"><div><p className="private-lab-kicker">NETWORK TROUBLESHOOTING · LAB 02</p><h1>Private app cannot reach its database</h1><p>Follow the app-to-database path through provider-specific console screens. Identify the blocking rule, apply a narrow simulated fix, and verify the final state.</p></div><div className="private-lab-score"><span>INVESTIGATION</span><strong>{progress}%</strong><div><i style={{ width: progress + "%" }} /></div><small>{Object.keys(answers).filter(key => key.startsWith(provider + ":") && steps[provider][Number(key.split(":")[1])]?.choices[answers[key]]?.correct).length} of 4 checks verified</small></div></section>
     
     <section className="private-lab-path-overview" aria-label="Troubleshooting path overview">
