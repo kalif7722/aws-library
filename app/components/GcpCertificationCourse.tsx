@@ -126,7 +126,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
   return <main className="learning-shell course-page gcp-course-page">
     <nav className="top-nav" aria-label="Primary navigation">
       <a className="brand-link" href="/">Visual Learning</a>
-      <div><a className="home-button" href="/">Home</a><a className="active" href={`/courses/${course.route}`}>{course.code}</a><a href="/gcp-services">Browse all GCP services</a></div>
+      <div><a className="active" href={`/courses/${course.route}`}>{course.code}</a><a href="/gcp-services">Browse all GCP services</a></div>
     </nav>
 
     <header className="course-hero compact-course-hero gcp-course-page-hero">
@@ -152,7 +152,7 @@ export default function GcpCertificationCourse({ course }: { course: GcpCourse }
         {sidebarCollapsed ? <div className="course-sidebar-rail"><span>{course.code}</span><strong>Course services</strong><small>{services.length}</small></div> : <>
           <div className="course-sidebar-head"><div><p className="course-kicker">Exam-linked services</p><h2>{categories.length} service categories</h2></div><button onClick={() => setAllOpen(value => !value)} type="button">{allOpen ? "Collapse all" : "Expand all"}</button></div>
           <p className="course-source-note">Services are matched from the supplied Google exam objectives and reviewed course coverage. Selecting a service reuses the central GCP EL10, architecture, learning, and console walkthrough content.</p>
-          <div className="course-category-list">{categories.map((category, index) => <details className="course-nav-group" key={`${category.title}-${allOpen}`} open={allOpen || index === 0} style={{ "--module-accent": `hsl(${(index * 37 + 205) % 360} 78% 62%)` } as CSSProperties}>
+          <div className="course-category-list">{categories.map((category, index) => <details id={`course-category-${index}`} className="course-nav-group" key={`${category.title}-${allOpen}`} open={allOpen || index === 0} style={{ "--module-accent": `hsl(${(index * 37 + 205) % 360} 78% 62%)` } as CSSProperties}>
             <summary><span>{String(index + 1).padStart(2, "0")}</span><strong>{category.title}</strong><small>{category.services.length}</small><b>⌄</b></summary>
             <div className="course-service-list">{category.services.map(service => <button key={service.slug} className={service.slug === selected?.slug ? "active" : ""} onClick={() => selectService(service)} aria-pressed={service.slug === selected?.slug} type="button"><span>{service.displayName}</span><small>GCP service page</small></button>)}</div>
           </details>)}</div>
