@@ -7,6 +7,13 @@ import './SapC03Slides.css';
 
 const guide = 'https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03.html';
 const names = ['Course roadmap and architecture thinking', 'IAM, federation and cross-account access'];
+const visualNotes: Record<string,string> = {
+  path:'This is the learning sequence for the decision.', process:'Follow each step in order and check what changes at the boundary.',
+  flow:'Trace the credential or request from caller to resource.', compare:'Compare the roles of the items before choosing one.',
+  decision:'Identify the condition that determines the outcome.', scenario:'Apply the constraints to the architecture shown.',
+  anatomy:'Read the parts together; each can alter the decision.', quiz:'Pause, choose an answer, then reveal the key decision.',
+  synthesis:'Connect the pieces into one complete architecture.'
+};
 
 export default function SapC03Slides() {
   const [current, setCurrent] = useState(0);
@@ -36,7 +43,7 @@ export default function SapC03Slides() {
     <section className="sap03-stage" aria-labelledby="sap03-title">
       <div className="sap03-kicker"><span>MODULE {String(slide.module).padStart(2, '0')}</span><span>{names[slide.module-1]}</span><span>{numberInModule} / {moduleTotal}</span></div>
       <div className="sap03-main"><div className="sap03-copy"><div className="sap03-kind">{slide.kind} · SAP-C03</div><h1 id="sap03-title">{slide.title}</h1><p className="sap03-lead">{slide.lead}</p><ul>{slide.points.map((point, i) => <li key={i}><span>{String(i+1).padStart(2, '0')}</span>{point}</li>)}</ul></div>
-      <div className={`sap03-visual sap03-visual-${slide.kind}`} aria-label="Concept map"><div className="sap03-visual-heading"><Layers size={19}/> Concept map</div><div className="sap03-visual-track">{slide.visual.map((item, i) => <div className="sap03-visual-node" key={i}><span>{String(i+1).padStart(2, '0')}</span><strong>{item}</strong></div>)}</div><div className="sap03-visual-caption">Follow the identity, permission, and resource boundaries in the request.</div></div></div>
+      <div className={`sap03-visual sap03-visual-${slide.kind}`} aria-label="Concept map"><div className="sap03-visual-heading"><Layers size={19}/> {slide.kind === 'compare' ? 'Architecture comparison' : slide.kind === 'scenario' ? 'Scenario map' : 'Concept map'}</div><div className="sap03-visual-track">{slide.visual.map((item, i) => <div className="sap03-visual-node" key={i}><span>{String(i+1).padStart(2, '0')}</span><strong>{item}</strong></div>)}</div><div className="sap03-visual-caption">{visualNotes[slide.kind]}</div></div></div>
       <div className="sap03-bottom"><div className="sap03-check"><button onClick={() => setRevealed(!revealed)} aria-expanded={revealed}><Compass size={18}/>{revealed ? 'Hide key decision' : 'Reveal key decision'}</button>{revealed && <p><Check size={18}/>{slide.takeaway}</p>}</div><div className="sap03-skill"><BookOpen size={16}/>{slide.skills.map(s => /^\d\.\d\.\d$/.test(s) ? `Skill ${s}` : s).join(' · ')}</div></div>
     </section>
     <footer className="sap03-controls"><span>Lesson {current + 1} of 48 · Opening 2 of 28 modules</span><div><button disabled={current===0} onClick={() => setCurrent(n => n - 1)}><ArrowLeft size={17}/> Previous</button><button disabled={current===slides.length-1} onClick={() => setCurrent(n => n + 1)}>Next lesson <ArrowRight size={17}/></button></div><a href={guide} target="_blank" rel="noreferrer">Official SAP-C03 exam guide ↗</a></footer>
