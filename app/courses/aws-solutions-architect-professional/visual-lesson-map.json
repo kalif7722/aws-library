@@ -38,7 +38,7 @@
       "id": "03",
       "title": "Encryption, certificates and secrets",
       "plannedVisuals": 26,
-      "acceptedVisuals": 10,
+      "acceptedVisuals": 15,
       "status": "in-progress"
     },
     {
@@ -4053,17 +4053,20 @@
         ],
         "imageBrief": "Parameter Store versus Secrets Manager — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Parameter Store supports hierarchical configuration and KMS-encrypted SecureString, but does not itself rotate stored credentials automatically.",
+          "Secrets Manager is purpose-built for credentials, configured rotation and cross-Region replication. Choose on lifecycle and access needs, not encryption alone."
+        ],
+        "decisionCue": "Use Secrets Manager when credential rotation is a requirement.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-11.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4077,17 +4080,20 @@
         ],
         "imageBrief": "TLS 1.3 handshake and trust chain — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "TLS 1.3 negotiates key shares and validates server identity through the certificate chain and hostname before the protected application session.",
+          "Trust anchors, validity, supported protocol/cipher policy and certificate deployment all affect success. A certificate does not itself encrypt bulk traffic."
+        ],
+        "decisionCue": "Investigate certificate trust separately from protocol compatibility.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-12.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4101,17 +4107,20 @@
         ],
         "imageBrief": "ACM public certificates for AWS endpoints — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "ACM public certificate issuance requires domain validation; attach the issued certificate to supported integrated endpoints.",
+          "CloudFront viewer certificates from ACM use us-east-1. ACM manages eligible renewals when validation and use conditions hold; imported certificate renewal is customer managed."
+        ],
+        "decisionCue": "Check endpoint Region and renewal ownership.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-13.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4125,17 +4134,20 @@
         ],
         "imageBrief": "AWS Private CA and private certificate lifecycle — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "AWS Private CA issues private certificates for internal trust domains; clients need the private CA chain in their trust stores.",
+          "Plan CA hierarchy, issuer permissions, renewal, revocation, monitoring and cost. Private certificates are not publicly trusted by default."
+        ],
+        "decisionCue": "Choose private CA for managed internal PKI with explicit trust distribution.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-14.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4149,17 +4161,20 @@
         ],
         "imageBrief": "End-to-end TLS through load balancers — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "An ALB HTTPS listener terminates client TLS. An HTTPS target group starts a separate TLS connection to the target; HTTP targets leave the backend leg unencrypted.",
+          "The target needs a certificate and compatible protocol configuration. Distinguish TLS re-encryption from TCP passthrough when reading an architecture scenario."
+        ],
+        "decisionCue": "Draw both legs before claiming end-to-end encryption.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-15.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4437,7 +4452,7 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 80,
+    "acceptedVisuals": 85,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 13,
     "pdfDistinctTopicsReviewed": false,
