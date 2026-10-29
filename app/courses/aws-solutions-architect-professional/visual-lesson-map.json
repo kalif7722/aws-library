@@ -45,7 +45,7 @@
       "id": "04",
       "title": "VPC foundations, multi-VPC design and private connectivity",
       "plannedVisuals": 40,
-      "acceptedVisuals": 5,
+      "acceptedVisuals": 10,
       "status": "in-progress"
     },
     {
@@ -485,8 +485,10 @@
         "08",
         "15"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-04-010"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "1.4.2",
@@ -503,7 +505,9 @@
         "sap-04-002",
         "sap-04-003",
         "sap-04-004",
-        "sap-04-005"
+        "sap-04-005",
+        "sap-04-006",
+        "sap-04-007"
       ],
       "status": "in-progress"
     },
@@ -517,8 +521,11 @@
         "08",
         "15"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-04-008",
+        "sap-04-009"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "1.4.4",
@@ -4689,17 +4696,20 @@
         ],
         "imageBrief": "Overlap detection and network renumbering — an original visual explanation grounded in SAP-C03 skill 1.4.2.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Overlapping VPC CIDRs prevent unambiguous direct routing and VPC peering.",
+          "IPAM reveals conflicts; plan workload and DNS migration to nonoverlapping space. PrivateLink can expose a specific service without full network connectivity."
+        ],
+        "decisionCue": "Identify overlap before interconnecting networks.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-06.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4713,17 +4723,20 @@
         ],
         "imageBrief": "Route priority and longest-prefix match — an original visual explanation grounded in SAP-C03 skill 1.4.2.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Longest-prefix match selects the most specific route in the associated subnet route table.",
+          "Check return routes and SG/NACL permissions after selecting a target."
+        ],
+        "decisionCue": "Read the effective route table for the source subnet.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-07.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4737,17 +4750,20 @@
         ],
         "imageBrief": "Security groups versus network ACLs — an original visual explanation grounded in SAP-C03 skill 1.4.3.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Security groups are stateful allow-only controls on ENIs; NACLs are ordered stateless allow/deny controls on subnets.",
+          "For HTTPS inbound, NACL outbound response must permit the client ephemeral port range."
+        ],
+        "decisionCue": "Troubleshoot both directions at the subnet boundary.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-08.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4761,17 +4777,20 @@
         ],
         "imageBrief": "VPC Flow Logs: what they show and miss — an original visual explanation grounded in SAP-C03 skill 1.4.3.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Flow Logs capture aggregated IP flow metadata and ACCEPT/REJECT action at VPC, subnet or ENI scope.",
+          "They are not packet capture; exclusions and capture/delivery settings affect what appears."
+        ],
+        "decisionCue": "Correlate flow metadata with routes and application logs.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-09.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4785,17 +4804,20 @@
         ],
         "imageBrief": "VPC endpoints: gateway versus interface — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Gateway endpoints use route table targets for S3 and DynamoDB and have no endpoint hourly charge.",
+          "Interface endpoints create managed ENIs with security groups and can support private DNS and hybrid access with routing/DNS."
+        ],
+        "decisionCue": "Pick endpoint type by service, reachability and cost.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-10.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5522,9 +5544,9 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 101,
+    "acceptedVisuals": 106,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 16,
+    "officialSkillsCoveredByAcceptedVisuals": 18,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
