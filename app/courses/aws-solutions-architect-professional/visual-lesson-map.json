@@ -38,8 +38,8 @@
       "id": "03",
       "title": "Encryption, certificates and secrets",
       "plannedVisuals": 26,
-      "acceptedVisuals": 20,
-      "status": "in-progress"
+      "acceptedVisuals": 26,
+      "status": "visuals-complete"
     },
     {
       "id": "04",
@@ -4325,17 +4325,20 @@
         ],
         "imageBrief": "Post-quantum threat model and migration inventory — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Inventory asymmetric key exchange, signatures, certificates, client lifetimes and long-lived sensitive data before migration.",
+          "Harvest-now-decrypt-later risk is most relevant to captured traffic that must remain confidential. Assess symmetric encryption separately from vulnerable asymmetric algorithms."
+        ],
+        "decisionCue": "Prioritize long-lived secrets and hard-to-upgrade clients.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-21.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4349,17 +4352,20 @@
         ],
         "imageBrief": "ML-KEM and hybrid key establishment — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "ML-KEM encapsulates a shared secret with a public key; its private key decapsulates the ciphertext. It is key establishment, not a signature or bulk encryption.",
+          "AWS KMS supports ML-KEM asymmetric keys and Encapsulate/Decapsulate. Hybrid post-quantum TLS for KMS API transport combines classical ECDH and ML-KEM; test client and network compatibility."
+        ],
+        "decisionCue": "Separate KMS ML-KEM key operations from hybrid TLS transport.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-22.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4373,17 +4379,20 @@
         ],
         "imageBrief": "ML-DSA signatures and verification — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "ML-DSA signs with a protected private key and verifies with a public key for authenticity and integrity; it does not encrypt content.",
+          "Plan verifier compatibility, key specification and message-size handling. KMS ML-DSA supports RAW messages up to 4 KB and EXTERNAL_MU processing for larger messages."
+        ],
+        "decisionCue": "Use ML-DSA for signatures, ML-KEM for shared secrets.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-23.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4397,17 +4406,20 @@
         ],
         "imageBrief": "Crypto agility and staged rollout — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Pilot supported hybrid TLS clients and endpoints, then test proxies, middleboxes, handshake size, failure modes and telemetry before staged rollout.",
+          "Verify negotiated key exchange in evidence such as supported KMS CloudTrail tlsDetails for direct API calls. Migrate signatures with verifier compatibility and rollback planning."
+        ],
+        "decisionCue": "Measure negotiated algorithms rather than assuming configuration succeeded.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-24.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4423,17 +4435,20 @@
         ],
         "imageBrief": "Scenario: regulated multi-account encryption — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "In a regulated multi-account S3 design, the data account owns the bucket and customer managed KMS key. Producer and analyst access must be explicitly scoped.",
+          "A cross-account analyst read needs both S3 object and KMS Decrypt authorization. TLS protects transit; audit records usage but does not replace preventive permissions."
+        ],
+        "decisionCue": "Check data permission, key permission and ownership separately.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-25.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4450,26 +4465,29 @@
         ],
         "imageBrief": "Encryption architecture: final synthesis — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "At rest: select service encryption, data-key design and KMS authorization. In transit: choose TLS policy and trusted certificates.",
+          "Key custody: weigh KMS, CloudHSM and XKS operations. Quantum readiness: inventory ML-KEM key establishment and ML-DSA signatures with staged compatibility testing."
+        ],
+        "decisionCue": "Verify access, recovery and operational ownership at every boundary.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-26.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       }
     ]
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 90,
+    "acceptedVisuals": 96,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 14,
+    "officialSkillsCoveredByAcceptedVisuals": 15,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
