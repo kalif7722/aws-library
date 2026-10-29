@@ -45,7 +45,7 @@
       "id": "04",
       "title": "VPC foundations, multi-VPC design and private connectivity",
       "plannedVisuals": 40,
-      "acceptedVisuals": 10,
+      "acceptedVisuals": 15,
       "status": "in-progress"
     },
     {
@@ -486,7 +486,12 @@
         "15"
       ],
       "acceptedVisuals": [
-        "sap-04-010"
+        "sap-04-010",
+        "sap-04-011",
+        "sap-04-012",
+        "sap-04-013",
+        "sap-04-014",
+        "sap-04-015"
       ],
       "status": "in-progress"
     },
@@ -4831,17 +4836,20 @@
         ],
         "imageBrief": "Private DNS for interface endpoints — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Private DNS for a supported interface endpoint resolves the normal service hostname to endpoint ENI private IPs.",
+          "Hybrid clients need appropriate Resolver forwarding/inbound endpoints and network reachability."
+        ],
+        "decisionCue": "Check DNS result, endpoint SG and traffic route separately.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-11.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4855,17 +4863,20 @@
         ],
         "imageBrief": "Endpoint policies and resource policies — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "IAM identity permissions, endpoint policy, bucket/resource policy and applicable SCPs jointly determine access; explicit Deny prevails.",
+          "An endpoint policy filters but does not grant permissions alone; same-account identity permission need not require separate bucket-policy Allow."
+        ],
+        "decisionCue": "Trace principal, action, resource and path.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-12.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4879,17 +4890,20 @@
         ],
         "imageBrief": "VPC peering and nontransitive routes — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Peering connects two nonoverlapping VPCs directly, including across accounts/Regions.",
+          "It is nontransitive: A↔B and B↔C do not enable A↔C. Routes and security permissions are needed in both VPCs."
+        ],
+        "decisionCue": "Use direct peerings sparingly; consider TGW for transit.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-13.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4903,17 +4917,20 @@
         ],
         "imageBrief": "Transit Gateway hub-and-spoke attachments — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "A regional Transit Gateway attaches VPCs and hybrid networks. A subnet route sends traffic to TGW; its associated TGW route table selects an attachment.",
+          "Reachability depends on association, propagation/static routes, destination return route and security controls."
+        ],
+        "decisionCue": "Trace both directions through VPC and TGW routes.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-14.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4927,17 +4944,20 @@
         ],
         "imageBrief": "Transit Gateway route tables and segmentation — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Each attachment consults its associated TGW route table for incoming traffic. Propagation or static routes populate selected destination paths.",
+          "Separate tables can allow Prod and Dev to reach shared services without allowing direct Prod↔Dev routing."
+        ],
+        "decisionCue": "Validate forward and return paths for each segment.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-15.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5544,7 +5564,7 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 106,
+    "acceptedVisuals": 111,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 18,
     "pdfDistinctTopicsReviewed": false,
