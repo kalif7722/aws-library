@@ -45,7 +45,7 @@
       "id": "04",
       "title": "VPC foundations, multi-VPC design and private connectivity",
       "plannedVisuals": 40,
-      "acceptedVisuals": 15,
+      "acceptedVisuals": 20,
       "status": "in-progress"
     },
     {
@@ -491,7 +491,12 @@
         "sap-04-012",
         "sap-04-013",
         "sap-04-014",
-        "sap-04-015"
+        "sap-04-015",
+        "sap-04-016",
+        "sap-04-017",
+        "sap-04-018",
+        "sap-04-019",
+        "sap-04-020"
       ],
       "status": "in-progress"
     },
@@ -4971,17 +4976,20 @@
         ],
         "imageBrief": "Cross-account Transit Gateway sharing — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "A network account can share a regional TGW through AWS RAM with workload accounts, which create VPC attachments.",
+          "TGW owner controls route tables, associations and propagation; VPC routes and security controls remain separate."
+        ],
+        "decisionCue": "Share the hub, then deliberately attach and route.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-16.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4995,17 +5003,20 @@
         ],
         "imageBrief": "Cloud WAN core network and policy — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Cloud WAN uses a global core network policy with regional edges, segments and attachment mapping.",
+          "Segment isolation and route sharing are policy decisions; do not assume automatic reachability."
+        ],
+        "decisionCue": "Compare global policy needs with regional TGW hubs.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-17.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5019,17 +5030,20 @@
         ],
         "imageBrief": "PrivateLink producer and consumer boundaries — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "PrivateLink exposes a particular provider service through an interface endpoint without full VPC peering or CIDR routing.",
+          "Overlapping provider and consumer VPC CIDRs can work for service-level access."
+        ],
+        "decisionCue": "Use for a specific private service across account boundaries.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-18.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5043,17 +5057,20 @@
         ],
         "imageBrief": "PrivateLink endpoint service and NLB — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Provider associates an NLB with an endpoint service and manages allowed principals/acceptance.",
+          "Consumer creates interface endpoints in supported AZs and checks endpoint SG, DNS and service health."
+        ],
+        "decisionCue": "Test both provider target health and consumer endpoint state.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-19.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5067,17 +5084,20 @@
         ],
         "imageBrief": "PrivateLink versus peering versus Transit Gateway — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Peering provides direct nontransitive VPC routing; TGW centralizes many routed VPC/hybrid links; PrivateLink publishes a service only.",
+          "Choose according to needed reachability, overlap, security and cost."
+        ],
+        "decisionCue": "Ask whether the consumer needs a network, routed hub or service.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-20.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5564,7 +5584,7 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 111,
+    "acceptedVisuals": 116,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 18,
     "pdfDistinctTopicsReviewed": false,
