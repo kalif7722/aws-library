@@ -31,7 +31,7 @@
       "id": "02",
       "title": "Organizations, landing zones and governance",
       "plannedVisuals": 22,
-      "acceptedVisuals": 5,
+      "acceptedVisuals": 10,
       "status": "in-progress"
     },
     {
@@ -782,7 +782,8 @@
         "sap-02-002",
         "sap-02-003",
         "sap-02-004",
-        "sap-02-005"
+        "sap-02-005",
+        "sap-02-006"
       ],
       "status": "in-progress"
     },
@@ -793,8 +794,10 @@
         "02",
         "17"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-02-010"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "2.3.3",
@@ -813,8 +816,13 @@
         "02",
         "17"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-02-006",
+        "sap-02-007",
+        "sap-02-008",
+        "sap-02-009"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "2.3.5",
@@ -823,8 +831,10 @@
         "02",
         "17"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-02-006"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "2.3.6",
@@ -3282,17 +3292,21 @@
         ],
         "imageBrief": "Preventive, detective and proactive controls — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Preventive controls prevent disallowed API changes; SCPs are one mechanism.",
+          "Proactive controls assess supported CloudFormation resources before provisioning.",
+          "Detective controls flag drift after deployment and require a remediation process."
+        ],
+        "decisionCue": "Select the control type for the time you must detect or stop a violation.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-06.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3306,17 +3320,21 @@
         ],
         "imageBrief": "SCPs: maximum permissions, not grants — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "SCPs define maximum permissions for principals in member accounts and never grant access.",
+          "An explicit Deny at any inherited level overrides an IAM Allow.",
+          "Allow-list designs need Allow at each hierarchy level; service-linked roles and management account have exceptions."
+        ],
+        "decisionCue": "Use SCPs for organization-wide principal guardrails, not application permissions.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-07.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3330,17 +3348,21 @@
         ],
         "imageBrief": "RCPs: guardrails around resources — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "RCPs constrain supported resources in member accounts, including requests by external principals.",
+          "RCP support is service and action specific; S3, DynamoDB and SQS are examples.",
+          "RCPs never grant access and do not apply to management-account resources."
+        ],
+        "decisionCue": "Use an RCP for resource-side data perimeter controls, especially where external callers are possible.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-08.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3354,17 +3376,21 @@
         ],
         "imageBrief": "Policy inheritance and exception design — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Root and ancestor OU policies are inherited by member accounts.",
+          "A child OU or IAM Allow cannot override an applicable ancestor explicit Deny.",
+          "A necessary exception must be scoped at the policy that imposes the Deny, then tested and approved."
+        ],
+        "decisionCue": "Design exceptions deliberately at the controlling policy layer.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-09.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3378,17 +3404,21 @@
         ],
         "imageBrief": "Organization CloudTrail and immutable log archive — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "An organization trail centralizes management events for current and future member accounts.",
+          "Configure data events selectively; S3 and Lambda data events are not universal by default.",
+          "Centralize delivery to a protected log archive and design S3/KMS permissions, retention and monitoring."
+        ],
+        "decisionCue": "Treat CloudTrail as evidence and protect the log destination independently from workload accounts.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-10.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4327,9 +4357,9 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 53,
+    "acceptedVisuals": 58,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 6,
+    "officialSkillsCoveredByAcceptedVisuals": 9,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
