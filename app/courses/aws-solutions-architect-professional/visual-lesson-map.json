@@ -31,7 +31,7 @@
       "id": "02",
       "title": "Organizations, landing zones and governance",
       "plannedVisuals": 22,
-      "acceptedVisuals": 10,
+      "acceptedVisuals": 15,
       "status": "in-progress"
     },
     {
@@ -795,7 +795,11 @@
         "17"
       ],
       "acceptedVisuals": [
-        "sap-02-010"
+        "sap-02-010",
+        "sap-02-011",
+        "sap-02-012",
+        "sap-02-013",
+        "sap-02-014"
       ],
       "status": "in-progress"
     },
@@ -806,8 +810,10 @@
         "02",
         "17"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-02-015"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "2.3.4",
@@ -832,7 +838,9 @@
         "17"
       ],
       "acceptedVisuals": [
-        "sap-02-006"
+        "sap-02-006",
+        "sap-02-011",
+        "sap-02-012"
       ],
       "status": "in-progress"
     },
@@ -3433,17 +3441,21 @@
         ],
         "imageBrief": "AWS Config aggregation across accounts — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Config recorders and rules operate in source accounts and Regions; aggregation centralizes their results.",
+          "A Config aggregator does not itself enable source recording or remediate resources.",
+          "Delivery to an S3 archive is a separate configuration history path."
+        ],
+        "decisionCue": "Use an organization aggregator for cross-account visibility after recording is enabled.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-11.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3458,17 +3470,21 @@
         ],
         "imageBrief": "GuardDuty and Security Hub organization view — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "GuardDuty detects potential threats from supported telemetry; Security Hub CSPM manages findings and enabled standards.",
+          "Delegated administrators and organization integration scale enrollment, but Region coverage needs configuration.",
+          "Findings need triage and response automation; neither service inherently remediates."
+        ],
+        "decisionCue": "Connect detection to a central finding workflow and a separately authorized response.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-12.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3482,17 +3498,21 @@
         ],
         "imageBrief": "Security Lake and security data pipelines — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Security Lake normalizes supported security data to OCSF and stores it in regional S3 lakes.",
+          "Subscribers can query or access governed data according to their configured permissions.",
+          "It complements GuardDuty detection and Security Hub posture management."
+        ],
+        "decisionCue": "Use Security Lake when centralized normalized evidence and subscriber analytics are needed.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-13.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3506,17 +3526,21 @@
         ],
         "imageBrief": "CloudWatch Logs and AI invocation evidence — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Application logs, Bedrock model invocation logs, and CloudTrail events serve different evidence needs.",
+          "Enable model invocation logging deliberately; CloudTrail does not automatically store prompt and response bodies.",
+          "Protect sensitive content with minimization, encryption, retention and scoped access."
+        ],
+        "decisionCue": "Design observability and privacy controls together for AI workflows.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-14.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3530,17 +3554,21 @@
         ],
         "imageBrief": "AWS RAM shares within and across the organization — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "AWS RAM shares supported resources while the owning account keeps ownership and lifecycle control.",
+          "Organization/OU sharing and external account invitations have different setup and acceptance requirements.",
+          "Managed resource-share permissions and IAM principal permissions serve different roles; billing varies by service."
+        ],
+        "decisionCue": "Choose RAM for supported shared infrastructure with documented owner and consumer duties.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-15.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4357,9 +4385,9 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 58,
+    "acceptedVisuals": 63,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 9,
+    "officialSkillsCoveredByAcceptedVisuals": 10,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
