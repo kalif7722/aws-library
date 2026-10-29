@@ -38,7 +38,7 @@
       "id": "03",
       "title": "Encryption, certificates and secrets",
       "plannedVisuals": 26,
-      "acceptedVisuals": 15,
+      "acceptedVisuals": 20,
       "status": "in-progress"
     },
     {
@@ -4188,17 +4188,20 @@
         ],
         "imageBrief": "Mutual TLS for client authentication — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "In ALB mutual TLS verify mode, the load balancer validates client certificates against its configured trust store and optional revocation list.",
+          "In ALB passthrough mode it forwards the client certificate chain in HTTP headers for application validation; this is not TCP TLS passthrough. Application authorization remains separate."
+        ],
+        "decisionCue": "Select verification ownership before configuring mTLS.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-16.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4212,17 +4215,20 @@
         ],
         "imageBrief": "Certificate renewal, revocation and expiry — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Diagnose hostname, chain trust, certificate validity and endpoint deployment separately.",
+          "ACM-issued eligible public certificates can renew under required validation/use conditions; imported certificates require customer replacement. Revocation checking depends on client and service behavior."
+        ],
+        "decisionCue": "Monitor expiry and renewal evidence, not just issuance.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-17.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4236,17 +4242,20 @@
         ],
         "imageBrief": "CloudHSM ownership and cluster operations — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "CloudHSM offers dedicated HSMs in a customer VPC; deploy HSMs across Availability Zones and integrate applications with supported client libraries.",
+          "AWS operates physical HSM infrastructure while the customer manages cluster, HSM users and keys. Encrypted backups and recovery planning remain essential."
+        ],
+        "decisionCue": "Use dedicated HSM control only when requirement justifies operations.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-18.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4261,17 +4270,20 @@
         ],
         "imageBrief": "CloudHSM versus KMS custom key store — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Direct CloudHSM application use requires HSM client integration and customer key/user operations.",
+          "A KMS CloudHSM custom key store retains KMS API and policy integration while storing non-extractable KMS key material in a customer-managed cluster; connection, quotas and health affect operations."
+        ],
+        "decisionCue": "Compare API integration and operational responsibility.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-19.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4286,17 +4298,20 @@
         ],
         "imageBrief": "External key store and control trade-offs — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "An external key store sends authorized KMS cryptographic requests through a customer-operated XKS proxy to an external key manager.",
+          "External key material stays outside AWS; customer availability, latency, proxy security and recovery become dependencies. Check supported key/service scenarios before selecting XKS."
+        ],
+        "decisionCue": "Choose XKS only for a firm external custody requirement.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-20.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4452,9 +4467,9 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 85,
+    "acceptedVisuals": 90,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 13,
+    "officialSkillsCoveredByAcceptedVisuals": 14,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
