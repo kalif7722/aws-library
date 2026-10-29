@@ -31,8 +31,8 @@
       "id": "02",
       "title": "Organizations, landing zones and governance",
       "plannedVisuals": 22,
-      "acceptedVisuals": 0,
-      "status": "planned"
+      "acceptedVisuals": 5,
+      "status": "in-progress"
     },
     {
       "id": "03",
@@ -777,8 +777,14 @@
         "02",
         "17"
       ],
-      "acceptedVisuals": [],
-      "status": "planned"
+      "acceptedVisuals": [
+        "sap-02-001",
+        "sap-02-002",
+        "sap-02-003",
+        "sap-02-004",
+        "sap-02-005"
+      ],
+      "status": "in-progress"
     },
     {
       "id": "2.3.2",
@@ -3121,13 +3127,1209 @@
           "sourceCoverage": true
         }
       }
+    ],
+    "02": [
+      {
+        "id": "sap-02-001",
+        "moduleId": "02",
+        "sequence": 1,
+        "title": "The landing zone as a governance foundation",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1"
+        ],
+        "imageBrief": "The landing zone as a governance foundation — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [
+          "A landing zone establishes account, identity, logging and network baselines before teams deploy workloads.",
+          "Organizations supplies the hierarchy; Control Tower can orchestrate an opinionated baseline.",
+          "Separate security and workload accounts to reduce blast radius and centralize evidence."
+        ],
+        "decisionCue": "Start with governance requirements and account boundaries before choosing workload services.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-01.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
+        }
+      },
+      {
+        "id": "sap-02-002",
+        "moduleId": "02",
+        "sequence": 2,
+        "title": "Organizations hierarchy: root, OUs and accounts",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1"
+        ],
+        "imageBrief": "Organizations hierarchy: root, OUs and accounts — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [
+          "An account sits under one OU in the Organizations hierarchy and inherits applicable policies from the root and ancestor OUs.",
+          "SCPs set a maximum for member-account principals and do not grant IAM permissions.",
+          "The management account is not restricted by SCPs."
+        ],
+        "decisionCue": "Use OUs for governance inheritance; assign workforce permissions to specific accounts.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-02.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
+        }
+      },
+      {
+        "id": "sap-02-003",
+        "moduleId": "02",
+        "sequence": 3,
+        "title": "Management account and delegated administrators",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1"
+        ],
+        "imageBrief": "Management account and delegated administrators — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [
+          "Keep organization-wide billing and governance tasks in the management account.",
+          "Register service-specific delegated administrator accounts to operate supported security services across member accounts.",
+          "Central log storage and audit access deserve distinct accounts and narrow roles."
+        ],
+        "decisionCue": "Delegate service administration while keeping the management account lean.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-03.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
+        }
+      },
+      {
+        "id": "sap-02-004",
+        "moduleId": "02",
+        "sequence": 4,
+        "title": "Control Tower landing zone components",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1"
+        ],
+        "imageBrief": "Control Tower landing zone components — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [
+          "Control Tower builds on Organizations and orchestrates an opinionated landing zone with foundational accounts, access and controls.",
+          "Preventive, detective and proactive controls use different underlying mechanisms and have different scopes.",
+          "Account enrollment and drift monitoring do not replace application-team security work."
+        ],
+        "decisionCue": "Choose Control Tower when standardized multi-account baselines and account vending are needed.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-04.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
+        }
+      },
+      {
+        "id": "sap-02-005",
+        "moduleId": "02",
+        "sequence": 5,
+        "title": "Account Factory and account lifecycle",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1"
+        ],
+        "imageBrief": "Account Factory and account lifecycle — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [
+          "Account Factory provisions or enrolls governed accounts and applies the landing-zone baseline.",
+          "OU selection changes inherited controls; IAM Identity Center assignments target specific accounts and permission sets.",
+          "The lifecycle includes approval, monitoring, drift review and careful retirement or migration."
+        ],
+        "decisionCue": "Treat account provisioning as a governed product with a documented owner and lifecycle.",
+        "asset": "/course-visuals/sap-c03/module-02/slide-05.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
+        }
+      },
+      {
+        "id": "sap-02-006",
+        "moduleId": "02",
+        "sequence": 6,
+        "title": "Preventive, detective and proactive controls",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1",
+          "2.3.4",
+          "2.3.5"
+        ],
+        "imageBrief": "Preventive, detective and proactive controls — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-007",
+        "moduleId": "02",
+        "sequence": 7,
+        "title": "SCPs: maximum permissions, not grants",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.4"
+        ],
+        "imageBrief": "SCPs: maximum permissions, not grants — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-008",
+        "moduleId": "02",
+        "sequence": 8,
+        "title": "RCPs: guardrails around resources",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.4"
+        ],
+        "imageBrief": "RCPs: guardrails around resources — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-009",
+        "moduleId": "02",
+        "sequence": 9,
+        "title": "Policy inheritance and exception design",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.4"
+        ],
+        "imageBrief": "Policy inheritance and exception design — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-010",
+        "moduleId": "02",
+        "sequence": 10,
+        "title": "Organization CloudTrail and immutable log archive",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.2"
+        ],
+        "imageBrief": "Organization CloudTrail and immutable log archive — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-011",
+        "moduleId": "02",
+        "sequence": 11,
+        "title": "AWS Config aggregation across accounts",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.2",
+          "2.3.5"
+        ],
+        "imageBrief": "AWS Config aggregation across accounts — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-012",
+        "moduleId": "02",
+        "sequence": 12,
+        "title": "GuardDuty and Security Hub organization view",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.2",
+          "2.3.5"
+        ],
+        "imageBrief": "GuardDuty and Security Hub organization view — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-013",
+        "moduleId": "02",
+        "sequence": 13,
+        "title": "Security Lake and security data pipelines",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.2"
+        ],
+        "imageBrief": "Security Lake and security data pipelines — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-014",
+        "moduleId": "02",
+        "sequence": 14,
+        "title": "CloudWatch Logs and AI invocation evidence",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.2"
+        ],
+        "imageBrief": "CloudWatch Logs and AI invocation evidence — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-015",
+        "moduleId": "02",
+        "sequence": 15,
+        "title": "AWS RAM shares within and across the organization",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.3"
+        ],
+        "imageBrief": "AWS RAM shares within and across the organization — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-016",
+        "moduleId": "02",
+        "sequence": 16,
+        "title": "Transit Gateway sharing and network ownership",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.3"
+        ],
+        "imageBrief": "Transit Gateway sharing and network ownership — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-017",
+        "moduleId": "02",
+        "sequence": 17,
+        "title": "Config rules and conformance packs",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.5"
+        ],
+        "imageBrief": "Config rules and conformance packs — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-018",
+        "moduleId": "02",
+        "sequence": 18,
+        "title": "Security Hub CSPM controls and findings",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.5"
+        ],
+        "imageBrief": "Security Hub CSPM controls and findings — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-019",
+        "moduleId": "02",
+        "sequence": 19,
+        "title": "Inspector scanning across accounts",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.6"
+        ],
+        "imageBrief": "Inspector scanning across accounts — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-020",
+        "moduleId": "02",
+        "sequence": 20,
+        "title": "Systems Manager Patch Manager at scale",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.6"
+        ],
+        "imageBrief": "Systems Manager Patch Manager at scale — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-021",
+        "moduleId": "02",
+        "sequence": 21,
+        "title": "Scenario: govern 100 accounts without blocking teams",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.3.1",
+          "2.3.2",
+          "2.3.4",
+          "2.3.5"
+        ],
+        "imageBrief": "Scenario: govern 100 accounts without blocking teams — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-02-022",
+        "moduleId": "02",
+        "sequence": 22,
+        "title": "Governance architecture: final synthesis",
+        "visualType": "synthesis",
+        "examSkills": [
+          "2.3.1",
+          "2.3.2",
+          "2.3.3",
+          "2.3.4",
+          "2.3.5",
+          "2.3.6"
+        ],
+        "imageBrief": "Governance architecture: final synthesis — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      }
+    ],
+    "03": [
+      {
+        "id": "sap-03-001",
+        "moduleId": "03",
+        "sequence": 1,
+        "title": "Encryption decisions begin with data flow",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1",
+          "2.2.2"
+        ],
+        "imageBrief": "Encryption decisions begin with data flow — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-002",
+        "moduleId": "03",
+        "sequence": 2,
+        "title": "KMS keys, envelopes and data keys",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "KMS keys, envelopes and data keys — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-003",
+        "moduleId": "03",
+        "sequence": 3,
+        "title": "AWS owned, AWS managed and customer managed keys",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "AWS owned, AWS managed and customer managed keys — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-004",
+        "moduleId": "03",
+        "sequence": 4,
+        "title": "Key policies, IAM policies and grants",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Key policies, IAM policies and grants — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-005",
+        "moduleId": "03",
+        "sequence": 5,
+        "title": "Automatic rotation and cryptoperiod choices",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Automatic rotation and cryptoperiod choices — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-006",
+        "moduleId": "03",
+        "sequence": 6,
+        "title": "Multi-Region keys and regional boundaries",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Multi-Region keys and regional boundaries — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-007",
+        "moduleId": "03",
+        "sequence": 7,
+        "title": "S3 encryption and SSE-KMS trade-offs",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "S3 encryption and SSE-KMS trade-offs — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-008",
+        "moduleId": "03",
+        "sequence": 8,
+        "title": "EBS and RDS encryption lifecycle",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "EBS and RDS encryption lifecycle — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-009",
+        "moduleId": "03",
+        "sequence": 9,
+        "title": "Cross-account access to encrypted data",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Cross-account access to encrypted data — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-010",
+        "moduleId": "03",
+        "sequence": 10,
+        "title": "Secrets Manager rotation workflow",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Secrets Manager rotation workflow — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-011",
+        "moduleId": "03",
+        "sequence": 11,
+        "title": "Parameter Store versus Secrets Manager",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1"
+        ],
+        "imageBrief": "Parameter Store versus Secrets Manager — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-012",
+        "moduleId": "03",
+        "sequence": 12,
+        "title": "TLS 1.3 handshake and trust chain",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "TLS 1.3 handshake and trust chain — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-013",
+        "moduleId": "03",
+        "sequence": 13,
+        "title": "ACM public certificates for AWS endpoints",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "ACM public certificates for AWS endpoints — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-014",
+        "moduleId": "03",
+        "sequence": 14,
+        "title": "AWS Private CA and private certificate lifecycle",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "AWS Private CA and private certificate lifecycle — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-015",
+        "moduleId": "03",
+        "sequence": 15,
+        "title": "End-to-end TLS through load balancers",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "End-to-end TLS through load balancers — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-016",
+        "moduleId": "03",
+        "sequence": 16,
+        "title": "Mutual TLS for client authentication",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "Mutual TLS for client authentication — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-017",
+        "moduleId": "03",
+        "sequence": 17,
+        "title": "Certificate renewal, revocation and expiry",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.2"
+        ],
+        "imageBrief": "Certificate renewal, revocation and expiry — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-018",
+        "moduleId": "03",
+        "sequence": 18,
+        "title": "CloudHSM ownership and cluster operations",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.3"
+        ],
+        "imageBrief": "CloudHSM ownership and cluster operations — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-019",
+        "moduleId": "03",
+        "sequence": 19,
+        "title": "CloudHSM versus KMS custom key store",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1",
+          "2.2.3"
+        ],
+        "imageBrief": "CloudHSM versus KMS custom key store — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-020",
+        "moduleId": "03",
+        "sequence": 20,
+        "title": "External key store and control trade-offs",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1",
+          "2.2.3"
+        ],
+        "imageBrief": "External key store and control trade-offs — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-021",
+        "moduleId": "03",
+        "sequence": 21,
+        "title": "Post-quantum threat model and migration inventory",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.4"
+        ],
+        "imageBrief": "Post-quantum threat model and migration inventory — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-022",
+        "moduleId": "03",
+        "sequence": 22,
+        "title": "ML-KEM and hybrid key establishment",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.4"
+        ],
+        "imageBrief": "ML-KEM and hybrid key establishment — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-023",
+        "moduleId": "03",
+        "sequence": 23,
+        "title": "ML-DSA signatures and verification",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.4"
+        ],
+        "imageBrief": "ML-DSA signatures and verification — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-024",
+        "moduleId": "03",
+        "sequence": 24,
+        "title": "Crypto agility and staged rollout",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.4"
+        ],
+        "imageBrief": "Crypto agility and staged rollout — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-025",
+        "moduleId": "03",
+        "sequence": 25,
+        "title": "Scenario: regulated multi-account encryption",
+        "visualType": "architecture",
+        "examSkills": [
+          "2.2.1",
+          "2.2.2",
+          "2.2.3"
+        ],
+        "imageBrief": "Scenario: regulated multi-account encryption — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      },
+      {
+        "id": "sap-03-026",
+        "moduleId": "03",
+        "sequence": 26,
+        "title": "Encryption architecture: final synthesis",
+        "visualType": "synthesis",
+        "examSkills": [
+          "2.2.1",
+          "2.2.2",
+          "2.2.3",
+          "2.2.4"
+        ],
+        "imageBrief": "Encryption architecture: final synthesis — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
+        "visualElements": [],
+        "learningNotes": [],
+        "decisionCue": "",
+        "asset": null,
+        "status": "planned",
+        "draftAsset": null,
+        "qa": {
+          "technical": false,
+          "text": false,
+          "readability": false,
+          "imageFirst": false,
+          "sourceCoverage": false
+        }
+      }
     ]
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 48,
+    "acceptedVisuals": 53,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 5,
+    "officialSkillsCoveredByAcceptedVisuals": 6,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
