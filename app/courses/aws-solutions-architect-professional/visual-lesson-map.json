@@ -38,7 +38,7 @@
       "id": "03",
       "title": "Encryption, certificates and secrets",
       "plannedVisuals": 26,
-      "acceptedVisuals": 5,
+      "acceptedVisuals": 10,
       "status": "in-progress"
     },
     {
@@ -3918,17 +3918,20 @@
         ],
         "imageBrief": "Multi-Region keys and regional boundaries — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Related multi-Region keys share key ID and cryptographic material, allowing authorized cross-Region decryption of ciphertext.",
+          "Key policies, grants and aliases remain Regional and must be configured independently. Check each service integration before assuming it uses the multi-Region feature."
+        ],
+        "decisionCue": "Choose replication for a real cross-Region cryptographic requirement.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-06.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3942,17 +3945,20 @@
         ],
         "imageBrief": "S3 encryption and SSE-KMS trade-offs — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "SSE-S3 uses S3-managed encryption; SSE-KMS uses a KMS data key; DSSE-KMS applies a KMS data-key layer and a separate S3-managed layer.",
+          "A customer managed KMS key adds policy control and cross-account options. Plan KMS permissions, request load and costs; S3 Bucket Keys do not support DSSE-KMS."
+        ],
+        "decisionCue": "Select by control and compliance need, then verify permissions.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-07.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3966,17 +3972,20 @@
         ],
         "imageBrief": "EBS and RDS encryption lifecycle — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "EBS encryption is chosen for new volumes or encrypted snapshot copies; migrate existing unencrypted volumes through snapshot and new-volume workflows.",
+          "An existing unencrypted RDS DB cannot be encrypted in place. Copy its snapshot with encryption, restore a new DB and plan cutover."
+        ],
+        "decisionCue": "Test restore and KMS access before the migration window.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-08.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3990,17 +3999,20 @@
         ],
         "imageBrief": "Cross-account access to encrypted data — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "A cross-account S3 read needs object authorization and KMS Decrypt authorization for the customer managed key.",
+          "Grant the external role in owner-account resource/key policies and allow required actions in the reader account; explicit denies and organization controls still apply."
+        ],
+        "decisionCue": "Troubleshoot the S3 and KMS gates independently.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-09.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4014,17 +4026,20 @@
         ],
         "imageBrief": "Secrets Manager rotation workflow — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Secrets Manager rotation creates a pending version, updates the target, tests it, then promotes it to current.",
+          "Rotation is configured for supported secret types and implementations. Applications must retrieve current credentials, tolerate transition and support rollback; never log plaintext."
+        ],
+        "decisionCue": "Verify target update and application behavior, not only version labels.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-10.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4422,7 +4437,7 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 75,
+    "acceptedVisuals": 80,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 13,
     "pdfDistinctTopicsReviewed": false,
