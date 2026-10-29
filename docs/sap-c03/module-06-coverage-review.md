@@ -1,0 +1,1 @@
+Module06:30 original visual lessons. Completes planned26 plus CloudHub,ClientVPN controls,ClientVPN traffic paths and SiteLink. Reviewed text and conceptual illustrations; repaired slides15/23. Whole-course PDF audit remains open. DNS depth:module05; data synchronization:modules10/24; legacy transformation:13/14/24. All assets2048x1152 WebP. Publication is one module commit.
