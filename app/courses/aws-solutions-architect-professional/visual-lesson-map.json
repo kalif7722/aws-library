@@ -38,8 +38,8 @@
       "id": "03",
       "title": "Encryption, certificates and secrets",
       "plannedVisuals": 26,
-      "acceptedVisuals": 0,
-      "status": "planned"
+      "acceptedVisuals": 5,
+      "status": "in-progress"
     },
     {
       "id": "04",
@@ -3783,17 +3783,20 @@
         ],
         "imageBrief": "Encryption decisions begin with data flow — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Trace data in transit, at rest, and in secrets stores; assign ownership and recovery requirements before choosing controls.",
+          "Certificate validation, service integration, key authorization and credential rotation are separate design decisions."
+        ],
+        "decisionCue": "Inventory each data path and boundary.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-01.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3807,17 +3810,20 @@
         ],
         "imageBrief": "KMS keys, envelopes and data keys — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Envelope encryption uses a plaintext data key for bulk data and stores its encrypted copy with encrypted data.",
+          "KMS protects and decrypts the data key for authorized principals; protect plaintext key material in memory and discard it after use."
+        ],
+        "decisionCue": "Distinguish key wrapping from bulk encryption.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-02.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3831,17 +3837,20 @@
         ],
         "imageBrief": "AWS owned, AWS managed and customer managed keys — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "AWS owned keys are abstracted from the customer; AWS managed keys are visible but AWS controls their policy and rotation.",
+          "Customer managed KMS keys give customer control over policy, grants and lifecycle; supported cross-account use needs a customer managed key."
+        ],
+        "decisionCue": "Select the key type based on required control and integration.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-03.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3855,17 +3864,20 @@
         ],
         "imageBrief": "Key policies, IAM policies and grants — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Every KMS key has one key policy; IAM allows require enabling delegation in the key policy or an appropriate direct key-policy grant.",
+          "KMS grants provide scoped permissions often used by services. Cross-account use requires authorization on the owning key and in the external principal account; explicit denies still apply."
+        ],
+        "decisionCue": "Check both sides of cross-account authorization.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-04.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -3879,17 +3891,20 @@
         ],
         "imageBrief": "Automatic rotation and cryptoperiod choices — an original, technically precise visual explanation grounded in the official SAP-C03 guide.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "For eligible customer managed symmetric keys with AWS_KMS origin, automatic rotation changes key material while key ID, ARN and policy remain.",
+          "New encryptions use new material; KMS retains previous material for decryption. Rotation does not re-encrypt existing data."
+        ],
+        "decisionCue": "Match rotation method and cryptoperiod to key type and origin.",
+        "asset": "/public/course-visuals/sap-c03/module-03/slide-05.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -4407,9 +4422,9 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 70,
+    "acceptedVisuals": 75,
     "officialSkills": 115,
-    "officialSkillsCoveredByAcceptedVisuals": 11,
+    "officialSkillsCoveredByAcceptedVisuals": 13,
     "pdfDistinctTopicsReviewed": false,
     "claim100PercentCoverage": false
   }
