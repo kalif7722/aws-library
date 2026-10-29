@@ -45,7 +45,7 @@
       "id": "04",
       "title": "VPC foundations, multi-VPC design and private connectivity",
       "plannedVisuals": 40,
-      "acceptedVisuals": 20,
+      "acceptedVisuals": 25,
       "status": "in-progress"
     },
     {
@@ -496,7 +496,10 @@
         "sap-04-017",
         "sap-04-018",
         "sap-04-019",
-        "sap-04-020"
+        "sap-04-020",
+        "sap-04-021",
+        "sap-04-022",
+        "sap-04-023"
       ],
       "status": "in-progress"
     },
@@ -517,7 +520,8 @@
         "sap-04-004",
         "sap-04-005",
         "sap-04-006",
-        "sap-04-007"
+        "sap-04-007",
+        "sap-04-024"
       ],
       "status": "in-progress"
     },
@@ -533,7 +537,8 @@
       ],
       "acceptedVisuals": [
         "sap-04-008",
-        "sap-04-009"
+        "sap-04-009",
+        "sap-04-025"
       ],
       "status": "in-progress"
     },
@@ -5111,17 +5116,20 @@
         ],
         "imageBrief": "VPC Lattice service-network connectivity — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Lattice associates client VPCs and application services with a service network.",
+          "Listeners, target groups, optional IAM authorization and observability organize access across accounts."
+        ],
+        "decisionCue": "Choose service networking for managed application access.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-21.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5135,17 +5143,20 @@
         ],
         "imageBrief": "Lattice authentication, routing and observability — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "AWS_IAM auth uses signed requests and applicable service/service-network policies; NONE leaves Lattice authorization unenforced.",
+          "Rules and default actions select forwarding; inspect target health, access logs and metrics."
+        ],
+        "decisionCue": "Trace authorization, routing and target health separately.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-22.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5159,17 +5170,20 @@
         ],
         "imageBrief": "Centralized ingress and shared services VPC — an original visual explanation grounded in SAP-C03 skill 1.4.1.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "A central ingress ALB can use supported reachable private IP targets across connected VPCs.",
+          "Shared services and application VPCs need explicit routes, return paths and security controls; evaluate central failure domains."
+        ],
+        "decisionCue": "Prove IP target health and return routing.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-23.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5183,17 +5197,20 @@
         ],
         "imageBrief": "Centralized egress and NAT design — an original visual explanation grounded in SAP-C03 skill 1.4.2.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Spokes route through TGW to an egress VPC with public NAT Gateway and IGW.",
+          "Return routes, AZ alignment and TGW/NAT/cross-AZ cost need explicit design; NAT does not perform deep inspection."
+        ],
+        "decisionCue": "Compare resilience and total traffic cost before centralizing.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-24.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5207,17 +5224,20 @@
         ],
         "imageBrief": "Inspection VPC and symmetric routing — an original visual explanation grounded in SAP-C03 skill 1.4.3.",
         "visualElements": [],
-        "learningNotes": [],
-        "decisionCue": "",
-        "asset": null,
-        "status": "planned",
+        "learningNotes": [
+          "Stateful inspection requires forward and return traffic through the same flow-state endpoint.",
+          "Inspection VPC TGW appliance mode supports symmetry; native TGW-attached Network Firewall provides another managed option."
+        ],
+        "decisionCue": "Validate route symmetry before changing firewall rules.",
+        "asset": "/course-visuals/sap-c03/module-04/slide-25.webp",
+        "status": "qa-passed",
         "draftAsset": null,
         "qa": {
-          "technical": false,
-          "text": false,
-          "readability": false,
-          "imageFirst": false,
-          "sourceCoverage": false
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true
         }
       },
       {
@@ -5584,7 +5604,7 @@
   },
   "audit": {
     "plannedVisuals": 800,
-    "acceptedVisuals": 116,
+    "acceptedVisuals": 121,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 18,
     "pdfDistinctTopicsReviewed": false,
