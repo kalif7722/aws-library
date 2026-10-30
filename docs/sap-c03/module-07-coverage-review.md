@@ -1,3 +1,1 @@
-Original 23-visual production record. Superseded for depth assessment by [Module 07 depth audit](module-07-depth-audit.md).
-
-The detailed review inspected all 23 images and reference PDF pages 175–203. It identified missing and condensed visual explanations and proposes 16 additional visuals. Module 07 is not yet complete at PDF depth. Existing assets remain available; full-course coverage flags remain false.
+Module 07 partial visual repair: 8 existing images revised and 8 focused additions accepted. 31 available of 32 planned. Six finishing items remain because image generation reached its usage limit. See [the detailed depth audit](module-07-depth-audit.md) and [exact generated/desired copy plan](module-07-visual-repair-plan.json). No full PDF-depth completion claim; whole-course coverage flags remain false.
