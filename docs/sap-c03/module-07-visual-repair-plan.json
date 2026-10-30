@@ -30,11 +30,15 @@
     1,
     2,
     6,
+    7,
     8,
     9,
     10,
+    11,
     13,
-    19
+    19,
+    25,
+    31
   ],
   "selectedAdded": [
     24,
@@ -49,13 +53,7 @@
   ],
   "acceptedVisuals": 32,
   "plannedVisuals": 32,
-  "pendingCorrections": [
-    7,
-    9,
-    11,
-    25,
-    31
-  ],
+  "pendingCorrections": [],
   "generationBlock": null,
   "generatedSlides": [
     {
@@ -829,5 +827,122 @@
     "asset": "/course-visuals/sap-c03/module-07/slide-27-v3.webp",
     "generationMethod": "built-in imagegen",
     "note": "Complete multi-node restrictions visible; original draft remains withheld. Published with completed Module08; remaining five Module07 refinements deferred at user direction."
-  }
+  },
+  "finalRepairResolution": {
+    "date": "2026-10-31",
+    "status": "reviewed",
+    "sequences": [
+      7,
+      9,
+      11,
+      25,
+      31
+    ],
+    "sourceVerificationDate": "2026-10-30",
+    "note": "Final revised images visibly close all five identified depth gaps. Current-document access retry failed on2026-10-31; technical review relies on primary-source checks recorded2026-10-30. Whole-course completion is not claimed."
+  },
+  "finalSelectedVisuals": [
+    {
+      "sequence": 11,
+      "title": "HPC: align compute, data movement and recovery",
+      "asset": "/course-visuals/sap-c03/module-07/slide-11-v4.webp",
+      "copy": [
+        "Start with the job",
+        "Elastic capacity can shorten time-to-result; pay for resources used. Tightly coupled jobs need fast communication; independent tasks scale differently.",
+        "Typical HPC workloads",
+        "Genomics, computational chemistry, financial risk, weather prediction, ML/deep learning and autonomous-driving analysis.",
+        "Fit every layer",
+        "Match CPU or GPU, placement and networking to communication needs. Choose object, shared-file, block or disposable-scratch storage for the access pattern.",
+        "Stage data before scaling",
+        "Direct Connect supplies a dedicated network path; add encryption where required. DataSync manages supported online transfers, including S3, EFS and FSx for Windows File Server.",
+        "Orchestrate and recover",
+        "Compare AWS Batch job scheduling with ParallelCluster cluster management. Plan checkpoints, persistence, output collection and restarts.",
+        "Offline-transfer context",
+        "Snowball Edge supports large offline transfers but is restricted to existing customers since November 7, 2025. Check eligibility and current alternatives.",
+        "Remember: Faster compute cannot compensate for slow staging, communication or storage."
+      ],
+      "layout": "Six clear conceptual panels with complete job, workload, resource, staging, orchestration and offline-transfer explanations; Remember strip.",
+      "status": "qa-passed"
+    },
+    {
+      "sequence": 7,
+      "title": "Spot design: price does not promise capacity",
+      "asset": "/course-visuals/sap-c03/module-07/slide-07-v4.webp",
+      "copy": [
+        "Why interruption happens",
+        "AWS can reclaim spare capacity; a configured price ceiling can also affect eligibility. A low price or accepted request does not guarantee future capacity.",
+        "Treat notices as best effort",
+        "The usual interruption warning is two minutes, but it is not guaranteed. Hibernation starts immediately without that two-minute lead.",
+        "Prepare the application",
+        "Use Spot for retryable batch, analytics or stateless work. Checkpoint to durable storage, drain when possible and make retries idempotent.",
+        "Diversify the supply",
+        "Use multiple suitable instance types and AZs with a capacity-aware allocation strategy. Capacity Rebalancing may start replacements early, but cannot guarantee capacity.",
+        "Separate the lifecycle actions",
+        "Canceling a Spot request and terminating a running instance are different operations; verify the intended request and instance state.",
+        "Remember: Savings are useful only when the workload can recover from interruption."
+      ],
+      "layout": "Glossy interruption-ready worker illustration, durable checkpoint vault, diversified instance tiles and warning bell; four teaching stations.",
+      "status": "qa-passed"
+    },
+    {
+      "sequence": 9,
+      "title": "Placement groups: locality, isolation and operational limits",
+      "asset": "/course-visuals/sap-c03/module-07/slide-09-v4.webp",
+      "copy": [
+        "Cluster • performance",
+        "Supported instances close together in one AZ for low latency and throughput. One rack is not guaranteed; the slower instance limits the pair.",
+        "Spread • small critical fleets",
+        "Rack-level spread separates underlying hardware: up to 7 running instances per AZ per group. It can span AZs; host-level spread is an Outposts option.",
+        "Partition • distributed replicas",
+        "Up to 7 partitions per AZ, each holding many instances; total capacity is quota-limited. Different partitions do not share racks. Use partition metadata to separate replicas, as in Kafka, Cassandra or HDFS.",
+        "Change placement deliberately",
+        "Stop the instance, change placement with ModifyInstancePlacement, then start. Compatible capacity is required; launches or starts can fail when unavailable.",
+        "Remember: Placement controls locality or hardware separation. It does not create replication or Multi-AZ recovery."
+      ],
+      "layout": "Three rich conceptual hardware vignettes, cluster, rack spread and partition replicas. No exact rack topology. A short operation ribbon below.",
+      "status": "qa-passed"
+    },
+    {
+      "sequence": 25,
+      "title": "EC2 recovery: preserve identity, expect a restart",
+      "asset": "/course-visuals/sap-c03/module-07/slide-25-v4.webp",
+      "copy": [
+        "When recovery applies",
+        "Supported automatic recovery can address system-status-check failures. An instance-check failure alone does not trigger it.",
+        "What is preserved",
+        "Instance ID; public, private and Elastic IP addresses; metadata; placement group; attached EBS volumes; Availability Zone.",
+        "What is lost",
+        "RAM and OS uptime. With CloudWatch action-based recovery, instance-store data is also lost; verify the selected recovery mechanism and supported configuration.",
+        "Compare the alternatives",
+        "Stop/start can change an auto-assigned public IPv4 address. ASG replacement launches a different instance. Neither is identical to EC2 recovery.",
+        "Prepare before failure",
+        "Verify simplified automatic recovery or configure a supported CloudWatch recovery action. Monitor outcomes, send SNS alerts and keep backups and application recovery procedures.",
+        "Remember: Preserved identity does not preserve in-memory work or guarantee application recovery."
+      ],
+      "layout": "A glass instance identity card and attached-volume vault next to a restarted machine metaphor. Preserve/lost explanation columns, no exact state diagram.",
+      "status": "qa-passed"
+    },
+    {
+      "sequence": 31,
+      "title": "Spot Fleet: pools, target capacity and allocation",
+      "asset": "/course-visuals/sap-c03/module-07/slide-31-v4.webp",
+      "copy": [
+        "Define the fleet",
+        "Target capacity can combine Spot and optional On-Demand. Define pools by instance type, OS and AZ; weights express useful capacity units. Price or budget constraints can prevent fulfillment.",
+        "priceCapacityOptimized",
+        "Select high-availability capacity pools, then consider price; the recommended choice for most Spot workloads.",
+        "capacityOptimized",
+        "Prioritize pools with stronger capacity availability to reduce near-term interruption risk.",
+        "diversified",
+        "Distribute Spot capacity across the specified pools.",
+        "lowestPrice",
+        "Prioritize low-price pools; generally not recommended because interruption risk is higher.",
+        "Choose the fleet manager too",
+        "Spot Fleet is distinct from an ASG mixed-instances policy. EC2 Auto Scaling generally offers richer ongoing fleet-management features.",
+        "Remember: Target capacity is a request, not a guarantee. Pool selection never removes interruption risk."
+      ],
+      "layout": "Dimensional fleet request envelope surrounded by diverse compute pools and four allocation-choice cards. No price chart or invented discount percentages.",
+      "status": "qa-passed"
+    }
+  ]
 }

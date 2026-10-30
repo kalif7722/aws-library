@@ -1,12 +1,12 @@
-# Module 07 visual depth repair — partial release
+# Module 07 visual depth repair — identified refinements complete
 
-2026-10-30. User-directed approach: revise existing images first and add focused slides only where the complete explanation would crowd the image.
+Updated2026-10-31. User-directed approach: revise existing images first and add focused slides only where the complete explanation would crowd the image.
 
 ## Published result
 
-**32 available visuals out of 32 planned.** Eight existing images revised (01, 02, 06, 08, 09, 10, 13, 19); nine focused images added (24–32); fifteen original visuals retained. The original 23 lesson identities remain stable. Lesson 27 now has a reviewed visual with the complete multi-node Batch restrictions and ParallelCluster comparison.
+**32 available visuals out of32 planned.** All five remaining refinements (07,09,11,25,31) have reviewed replacement images. Original lesson identities and the accepted lesson27 orchestration visual are preserved.
 
-The image-generation tool returned usage_limit_reached during the finishing pass. No alternate API/CLI was used. The initial HPC overview draft contained an incorrect storage caption and garbled text, so it was withheld and the original lesson 11 retained. The orchestration draft omitted the multi-node restrictions paragraph, so it was withheld rather than marked complete. Lesson 07 retains its original image pending the revised image's style cleanup.
+Earlier rejected drafts remain excluded. Final images were inspected for complete copy, readability, misleading graphics and the specific missing subtopics. All five selected WebP assets decode at2048×1152.
 
 ## What the published revisions improve
 
@@ -34,17 +34,17 @@ The image-generation tool returned usage_limit_reached during the finishing pass
 | 31 | Spot Fleet pools, target/weighted capacity, optional On-Demand and allocation strategies |
 | 32 | Whole-system layer overview: DNS/CDN, ingress, compute, sessions/cache, data, messaging/workflows, storage/static assets |
 
-## Pending finishing work: five visuals
+## Final five visual refinements
 
-| Lesson | Pending correction | Current publication |
+| Lesson | Detail now visibly covered | Asset |
 |---|---|---|
-| 07 | Remove unintended cloud wordmark from the revised draft; retain price/capacity, notice and lifecycle explanations | Original image retained |
-| 09 | Explicitly state many instances can occupy each partition, subject to quotas | Revised image published; sentence refinement pending |
-| 11 | Clear four-panel HPC overview, elasticity/examples, DX/DataSync and accurate legible Snowball eligibility text; remove false storage caption | Original image retained; bad draft withheld |
-| 25 | Add explicit SNS alerting to the existing recovery/monitoring explanation | New image published; alerting refinement pending |
-| 31 | Make configured price/budget constraints explicit in the fleet definition | New image published; refinement pending |
+|07|Price/capacity eligibility, best-effort warning, immediate hibernation without a two-minute lead, recovery, diversity and cancel-versus-terminate actions|slide-07-v4.webp|
+|09|Many instances per partition, seven partitions per AZ subject to quota, rack separation and metadata-based replica placement|slide-09-v4.webp|
+|11|Job shape and HPC examples; resource fit; DX/DataSync staging; Batch versus ParallelCluster; checkpoints; existing-customer Snowball eligibility|slide-11-v4.webp|
+|25|Explicit SNS alerting alongside preserved identity, lost in-memory state, supported recovery mechanisms and replacement comparison|slide-25-v4.webp|
+|31|Price/budget constraints alongside pools, target/weighted capacity, optional On-Demand and four allocation strategies|slide-31-v4.webp|
 
-Optional notes do not count as closing these visual gaps. Coverage QA remains false for known unfinished visual-depth items.
+These five corrections are closed by visible image content, rather than notes alone. Source review was performed2026-10-30; the2026-10-31 retry could not retrieve current AWS documentation and is not represented as a new successful check. No newly unverified Module09 content is included in this release.
 
 ## PDF topic-to-visual crosswalk
 
@@ -57,14 +57,14 @@ Page numbers refer to the 845-page reference *AWS Certified Solutions Architect 
 | 177 | Placement strategies and change operation | 09 |
 | 178 | Cluster single-AZ locality, network trade-off and use cases | 09, 10; no guaranteed one-rack or universal speed claim |
 | 179 | Spread hardware isolation, multi-AZ scope and per-AZ limit | 09 |
-| 180 | Partition limits, racks, metadata and distributed replicas | 09; explicit many-instance wording remains pending |
-| 181 | Purchase options, RI term/class/payment, dedicated tenancy and affinity | 06, 08; Spot resilience in original 07 |
+| 180 | Partition limits, racks, metadata and distributed replicas | 09; many-instance wording and quota qualification visible |
+| 181 | Purchase options, RI term/class/payment, dedicated tenancy and affinity | 06,08; complete Spot explanation in revised07 |
 | 182 | Graviton/Linux/Windows limitation and workload suitability | 02; legacy marketing gains replaced by benchmark decision |
 | 183 | CPU/credit/network/status/local-disk metrics; RAM not default | 24, 19 |
-| 184 | System/guest failures, monitoring/recovery and preserved attributes | 19, 25; explicit SNS alerting refinement pending |
-| 185 | HPC elasticity, scientific/analytical use cases and job shape | Original 11 is broad; expanded overview pending |
-| 186 | Direct Connect, DataSync and large offline/Snowball transfer | Expanded 11 pending; not counted as visually repaired |
-| 187 | CPU/GPU, Spot and placement for HPC | 01, original 07, 09, original 11; full orchestration comparison in reviewed 27 |
+| 184 | System/guest failures, monitoring/recovery and preserved attributes | 19,25; SNS alerts visible |
+| 185 | HPC elasticity, scientific/analytical use cases and job shape | 11; expanded job shape, elasticity and use-case overview |
+| 186 | Direct Connect, DataSync and large offline/Snowball transfer | 11; DX/DataSync staging and current Snowball eligibility visible |
+| 187 | CPU/GPU, Spot and placement for HPC | 01,07,09,11; full orchestration comparison in27 |
 | 188 | SR-IOV, ENA, Intel VF, EFA/Linux/MPI and OS bypass | 10 |
 | 189 | EBS/io2, local scratch, S3 object model, EFS and FSx for Lustre | 26 |
 | 190 | Batch scheduling/multi-node jobs; ParallelCluster configuration | 27 reviewed: full visible explanation, Spot/Fargate restrictions and workload comparison |
@@ -78,8 +78,8 @@ Page numbers refer to the 845-page reference *AWS Certified Solutions Architect 
 | 198 | Launch-definition/ASG application rollout | 04, 18, 30 |
 | 199 | Rolling group versus separate ASGs/target groups | 30 |
 | 200 | Separate ALBs, DNS weighting and pre-cutover/manual/load testing | 30 |
-| 201–202 | Spot price/capacity eligibility, warning behavior and use cases | Original 07 covers resilience; fuller revised explanation pending |
-| 203 | Spot Fleet target, optional On-Demand, pools and allocation strategies | 31; explicit price/budget-constraint refinement pending |
+| 201–202 | Spot price/capacity eligibility, warning behavior and use cases | 07; price/capacity eligibility, warning/hibernation behavior and recovery visible |
+| 203 | Spot Fleet target, optional On-Demand, pools and allocation strategies | 31; price/budget constraint visible |
 
 ## Current-source checks and dispositions
 
@@ -88,7 +88,7 @@ Current primary documentation was checked for RI options, Graviton compatibility
 - Cluster is not a guarantee of one rack; network limits depend on compatible instances.
 - Intel 82599 VF and the PDF's fixed speed examples are retained as legacy context, not current universal caps.
 - EFS throughput modes are not provisioned IOPS; EBS claims are qualified by supported configurations.
-- Snowball's existing-customer restriction is planned explicitly in lesson 11; that repair is not yet accepted.
+- Snowball's existing-customer restriction is explicitly visible in reviewed lesson11.
 - Lesson 27 now visibly includes multi-node Batch restrictions and has passed coverage QA.
 - DNS weighting is not an instantaneous per-request dial.
 - Recovery identity preservation does not preserve RAM; instance-store behavior is qualified by mechanism.
@@ -122,14 +122,8 @@ Primary references:
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-instance-termination-notices.html
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-allocation-strategy.html
 
-## Claim boundary and continuation
+## Claim boundary
 
-**Module 07 is not yet complete at PDF depth.** Image quality, readable text and a broad topic mention are not substitutes for complete visible explanations. The five finishing items above remain open. Whole-course pdfDistinctTopicsReviewed and claim100PercentCoverage remain false; the remainder of the course also remains subject to a topic/subtopic audit.
+The enumerated Module07 PDF topic inventory on pages175–203 is represented by reviewed visuals or explicit current/legacy dispositions, including all five previously identified finishing items. This does not establish whole-course completion. Whole-course pdfDistinctTopicsReviewed and claim100PercentCoverage remain false.
 
-Exact generated and desired final copy/layout are preserved in module-07-visual-repair-plan.json. Selected replacements use versioned asset paths; unrelated modules and original lesson IDs are preserved. At the user's direction, repair only lesson 27 in this release and proceed to Module08. Other five depth refinements remain deferred; do not mark them complete.
-
-
-## Lesson 27 resolution with Module08
-
-The built-in image generator became available. Regenerated the full orchestration slide; inspected all teaching copy, including the EC2 multi-node explanation, lack of Spot/Fargate support, configurable ParallelCluster/Slurm model, independent-task versus MPI workload comparison and Remember takeaway. Publish versioned asset slide-27-v3.webp with the completed Module08 release. No other Module07 image was changed in this release.
-
+Final copy/layout and selected versioned assets are preserved in module-07-visual-repair-plan.json. The release changes five existing lesson assets and metadata; it adds no lessons and preserves unrelated course modules.
