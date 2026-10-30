@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const root=new URL('../',import.meta.url);
+const read=p=>JSON.parse(fs.readFileSync(new URL(p,root),'utf8'));
+const sha=data=>createHash('sha256').update(data).digest('hex');
+export function questionHash(q){const keys=['stem','options','correct','explanation','type','topic','domain','task','courseModule','prompts','caseContext'];return sha(JSON.stringify(Object.fromEntries(keys.map(k=>[k,q[k]??null]))));}
+export function webpDimensions(data){assert.equal(data.toString('ascii',0,4),'RIFF');assert.equal(data.toString('ascii',8,12),'WEBP');for(let at=12;at+8<=data.length;){const kind=data.toString('ascii',at,at+4),size=data.readUInt32LE(at+4),start=at+8;assert.ok(start+size<=data.length,'Truncated WebP chunk');if(kind==='VP8X')return [data.readUIntLE(start+4,3)+1,data.readUIntLE(start+7,3)+1];if(kind==='VP8 ')return [data.readUInt16LE(start+6)&0x3fff,data.readUInt16LE(start+8)&0x3fff];if(kind==='VP8L'){const packed=data.readUInt32LE(start+1);return [(packed&0x3fff)+1,((packed>>>14)&0x3fff)+1];}at=start+size+(size%2);}throw Error('WebP dimensions not found');}
+export function validate(bank=read('app/components/aif-exam/questions.json')){const audit=read('docs/aif-exam-explanation-progress.json');assert.equal(audit.status,'verified','Explanation review is incomplete');assert.equal(bank.length,65);assert.equal(audit.assets.length,65);assert.equal(new Set(audit.assets.map(a=>a.questionId)).size,65);for(const q of bank){const a=audit.assets.find(a=>a.questionId===q.reviewId);assert.ok(a,`${q.id}: missing review`);assert.equal(a.reviewStatus,'verified',q.id);assert.equal(a.asset,q.explanationImage,q.id);assert.match(a.asset,/^\/course-visuals\/aif-exam-explanations\/aif-r\d{3}\.webp$/);assert.equal(a.questionSha256,questionHash(q),`${q.id}: question changed since visual review`);const bytes=fs.readFileSync(new URL('public'+a.asset,root));assert.ok(bytes.length>20000,`${q.id}: empty or undersized visual`);assert.equal(sha(bytes),a.sha256,`${q.id}: visual changed since review`);assert.deepEqual(webpDimensions(bytes),[2048,1152],q.id);}return {questions:bank.length,verifiedVisuals:audit.assets.length};}
+if(process.argv[1]&&fileURLToPath(import.meta.url)===path.resolve(process.argv[1]))console.log('AIF exam visual validation passed:',validate());

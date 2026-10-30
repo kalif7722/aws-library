@@ -54,6 +54,7 @@ node scripts/apply-analytics-cost-models.mjs
 node scripts/validate-azure-assets.mjs
 node scripts/validate-gcp-architecture-boards.mjs
 node scripts/validate-gcp-courses.mjs
+node scripts/validate-aif-exam-assets.mjs
 
 # AWS architecture icons are synchronized to Cloudflare R2 by the dedicated
 # GitHub Actions workflow. Do not download the icon distribution during each

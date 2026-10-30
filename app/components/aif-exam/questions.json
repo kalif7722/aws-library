@@ -1,509 +1,306 @@
 [
   {
-    "id": "aif-q001",
+    "id": "aif-r001",
+    "reviewId": "AIF-R001",
     "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "A retailer has labeled examples of fraudulent and legitimate transactions. Which learning approach fits?",
+    "stem": "A retail lender has historical applications with income, outstanding debt and a final label indicating whether the borrower defaulted. The lender wants to prioritize new applications for manual review by predicting a default category. The first release does not need to estimate the monetary loss. Which machine learning approach best matches this requirement?",
     "options": [
-      "Supervised classification",
-      "Unsupervised clustering",
-      "Reinforcement learning",
-      "Text generation"
+      "Supervised classification using the historical default labels",
+      "Regression trained to estimate the outstanding loan balance",
+      "Unsupervised clustering followed by treating every cluster as a default class",
+      "Reinforcement learning using each new application as an action"
     ],
     "correct": [
       0
     ],
-    "explanation": "Known class labels support learning a classifier; clustering discovers groups without those labels.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "The required target is a known category, so labeled examples support supervised classification. Regression predicts a quantity; clusters do not automatically have default meanings; no reward-driven action loop is specified.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Classification versus regression",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r001.webp"
   },
   {
-    "id": "aif-q002",
+    "id": "aif-r002",
+    "reviewId": "AIF-R002",
     "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "A property business predicts a numeric sale price from historical examples. Which task fits?",
+    "stem": "A subscription business wants to discover groups of customers with similar viewing and purchase behavior. It has usage records but has not defined customer segments or labeled examples. Analysts will inspect the resulting groups before designing campaigns. Which approach best fits the first stage?",
     "options": [
-      "Classification",
-      "Clustering",
-      "Speech recognition",
-      "Regression"
+      "Train a classifier on customer IDs as the desired segment labels",
+      "Use regression to predict the total number of customer segments",
+      "Apply reinforcement learning without defining actions or rewards",
+      "Apply clustering to discover patterns in the unlabeled behavior data"
     ],
     "correct": [
       3
     ],
-    "explanation": "Regression estimates continuous numeric values rather than class membership.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Clustering discovers group structure without predefined targets. Customer IDs are identifiers rather than segment labels; regression and reward-based learning do not fit the stated discovery task.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Unsupervised customer grouping",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r002.webp"
   },
   {
-    "id": "aif-q003",
+    "id": "aif-r003",
+    "reviewId": "AIF-R003",
     "domain": "1",
+    "task": "1.1",
     "type": "single",
-    "stem": "A retailer wants to discover customer groups without predefined labels. Which technique fits?",
+    "stem": "A warehouse simulator allows an automated cart to choose its next movement. The cart receives rewards for successful deliveries and penalties for collisions or excessive travel. The team wants it to improve its movement policy through repeated interaction with the simulator. Which learning approach is most appropriate?",
     "options": [
-      "Regression",
-      "Machine translation",
-      "Clustering",
-      "Supervised classification"
+      "Clustering delivery addresses without a reward signal",
+      "Regression that predicts package weight from dimensions",
+      "Reinforcement learning based on actions and resulting rewards",
+      "Supervised classification using only product category labels"
     ],
     "correct": [
       2
     ],
-    "explanation": "Clustering discovers patterns in unlabeled records.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "The task has an agent, environment, actions and reward feedback. The alternatives solve static prediction or grouping tasks rather than learning an action policy from interaction.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Reinforcement learning",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r003.webp"
   },
   {
-    "id": "aif-q004",
+    "id": "aif-r004",
+    "reviewId": "AIF-R004",
     "domain": "1",
+    "task": "1.3",
     "type": "single",
-    "stem": "A game-playing system learns actions from rewards after each interaction. Which approach fits?",
+    "stem": "A support-ticket classifier achieves 99% accuracy on its training examples but only 72% on a separate, representative test set. The team has ruled out label-format errors. A stakeholder proposes reporting the training accuracy because it looks better. Which interpretation and next step are most appropriate?",
     "options": [
-      "Regression",
-      "Reinforcement learning",
-      "Supervised classification",
-      "Topic extraction"
+      "Tune repeatedly against the test set and use the best observed test score as an unbiased estimate",
+      "Investigate overfitting and assess generalization using representative held-out data",
+      "Use the higher training score because the model has learned those examples successfully",
+      "Combine the training and test scores into one average and report that as generalization"
     ],
     "correct": [
       1
     ],
-    "explanation": "A reward-driven interaction loop distinguishes reinforcement learning.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "The gap suggests poor generalization and possible overfitting. Averaging away the gap or preferring the training score hides it; repeatedly tuning to the test set compromises its independence.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Overfitting and generalization",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r004.webp"
   },
   {
-    "id": "aif-q005",
+    "id": "aif-r005",
+    "reviewId": "AIF-R005",
     "domain": "1",
+    "task": "1.3",
     "type": "single",
-    "stem": "A model performs well on training data but poorly on unseen examples. What is the likely issue?",
+    "stem": "A bank screens transfers for fraud. Fraudulent transfers that pass undetected cause substantial losses, while investigators can tolerate reviewing additional alerts. The team wants a metric that directly measures the proportion of actual fraudulent transfers detected by the model. Which metric should it prioritize for this objective?",
     "options": [
-      "Overfitting",
-      "Perfect generalization",
-      "Insufficient inference logging",
-      "Successful dimensionality reduction"
+      "Recall for the fraud class",
+      "Precision for the fraud class",
+      "Overall accuracy without examining the minority class",
+      "Average model inference latency"
     ],
     "correct": [
       0
     ],
-    "explanation": "A model can memorize training patterns that do not generalize; use held-out evaluation.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Recall measures detected fraud among all actual fraud. Precision measures the quality of alerts, while aggregate accuracy can hide missed rare cases. Latency is operational rather than detection quality.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Recall versus precision",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r005.webp"
   },
   {
-    "id": "aif-q006",
+    "id": "aif-r006",
+    "reviewId": "AIF-R006",
     "domain": "1",
+    "task": "1.3",
     "type": "single",
-    "stem": "A fraud team wants fewer fraudulent transactions to be missed. Which metric directly measures the fraction of actual fraud detected?",
+    "stem": "An insurance company uses a model to flag suspicious claims. Investigators report that most flagged claims are legitimate, consuming the available review capacity. The business wants to measure how often a flagged claim is actually suspicious before adjusting the decision threshold. Which metric is most directly relevant?",
     "options": [
-      "Precision",
-      "Training duration",
-      "Inference throughput",
-      "Recall"
+      "Recall calculated over all suspicious claims",
+      "The number of training epochs",
+      "Overall accuracy across a dataset dominated by legitimate claims",
+      "Precision for suspicious-claim predictions"
     ],
     "correct": [
       3
     ],
-    "explanation": "Recall measures true positives divided by all actual positives; precision instead measures correctness among positive predictions.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Precision describes true suspicious cases among flagged cases. Recall concerns missed suspicious cases, and overall accuracy may look high despite an inefficient alert queue. Threshold changes require evaluation of the precision–recall trade-off.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Precision and investigation cost",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r006.webp"
   },
   {
-    "id": "aif-q007",
+    "id": "aif-r007",
+    "reviewId": "AIF-R007",
     "domain": "1",
-    "type": "single",
-    "stem": "Investigators waste time on many legitimate transactions flagged as fraud. Which metric measures how many flagged cases are truly fraudulent?",
-    "options": [
-      "Token count",
-      "Availability",
-      "Precision",
-      "Recall"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Precision measures the reliability of positive predictions; increasing it can involve a recall trade-off.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
-  },
-  {
-    "id": "aif-q008",
-    "domain": "1",
+    "task": "1.3",
     "type": "multiple",
-    "stem": "A team wants a trustworthy evaluation of a supervised model. Which TWO practices are appropriate?",
+    "stem": "A retailer plans to deploy a demand model in several regions. Its pilot evaluation uses mostly records from its largest urban store, although smaller stores have different seasonal patterns. The team wants a reliable estimate of deployment performance without leaking training data into evaluation. Which TWO actions are appropriate?",
     "options": [
-      "Use representative held-out test data",
-      "Check relevant subgroup performance",
-      "Use only training-set accuracy",
-      "Remove difficult test cases",
-      "Assume a larger model is always more accurate"
+      "Evaluate on held-out examples representative of the deployment regions",
+      "Inspect performance separately for relevant store and seasonal groups",
+      "Add the held-out answers to training before calculating the reported test score",
+      "Keep only stores where the model already performs well",
+      "Use training accuracy as the sole estimate of deployment quality"
     ],
     "correct": [
       0,
       1
     ],
-    "explanation": "Held-out examples assess generalization, and subgroup evaluation can reveal hidden weaknesses. Training performance alone, cherry-picking and model size do not establish real-world quality.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Representative held-out data and subgroup checks reveal generalization and local weaknesses. Test leakage, cherry-picking and training-only evaluation make the reported result less trustworthy.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Representative evaluation",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r007.webp"
   },
   {
-    "id": "aif-q009",
+    "id": "aif-r008",
+    "reviewId": "AIF-R008",
     "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "A company must convert recorded customer calls into text. Which service fits?",
+    "stem": "A contact center stores recorded customer calls and wants searchable transcripts so supervisors can review conversations. The application does not need to generate speech or translate the calls into another language. The company prefers a managed AWS capability over operating its own speech-recognition model. Which service best meets this requirement?",
     "options": [
-      "Amazon Transcribe",
-      "Amazon Polly",
-      "Amazon Translate",
-      "Amazon Rekognition"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Transcribe recognizes speech; Polly generates speech, Translate translates language, and Rekognition analyzes visual content.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
-  },
-  {
-    "id": "aif-q010",
-    "domain": "1",
-    "type": "single",
-    "stem": "A publisher must turn article text into spoken audio. Which service fits?",
-    "options": [
-      "Amazon Transcribe",
-      "Amazon Comprehend",
-      "Amazon Textract",
-      "Amazon Polly"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Polly synthesizes speech from text; transcription performs the reverse transformation.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
-  },
-  {
-    "id": "aif-q011",
-    "domain": "1",
-    "type": "single",
-    "stem": "A supplier needs fields and tables extracted from scanned invoices. Which service fits?",
-    "options": [
-      "Amazon Lex",
-      "Amazon Personalize",
-      "Amazon Textract",
-      "Amazon Translate"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Textract extracts document text and supported structured elements; business validation is still needed.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
-  },
-  {
-    "id": "aif-q012",
-    "domain": "1",
-    "type": "single",
-    "stem": "Support teams need sentiment analysis of written messages. Which service fits?",
-    "options": [
-      "Amazon EC2",
-      "Amazon Comprehend",
-      "Amazon Polly",
-      "Amazon Rekognition"
+      "Use Amazon Translate to turn the recorded audio directly into a same-language transcript",
+      "Use Amazon Transcribe to produce transcripts for authorized indexing and review",
+      "Use Amazon Polly to convert the stored calls into a searchable text transcript",
+      "Send the audio directly to Amazon Comprehend sentiment analysis and use its output as a verbatim transcript"
     ],
     "correct": [
       1
     ],
-    "explanation": "Comprehend offers supported natural language analysis features; confidence is not certainty about intent.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Transcribe converts supported audio speech into text. Polly creates audio from text, Translate changes language, and Comprehend analyzes existing text rather than directly transcribing audio.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Speech service selection",
+    "courseModule": "08",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r008.webp"
   },
   {
-    "id": "aif-q013",
+    "id": "aif-r009",
+    "reviewId": "AIF-R009",
     "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "A team has fixed, predictable business rules and no need to learn from examples. What should it consider first?",
+    "stem": "A distributor receives scanned invoices from many suppliers. It needs to extract text, line items and supported form/table relationships before checking purchase-order totals. The solution should minimize custom document-model operations. Which approach is the best starting point?",
     "options": [
-      "A deterministic rules-based solution",
-      "Training a foundation model",
-      "An autonomous agent with unrestricted tools",
-      "Reinforcement learning"
+      "Use Amazon Textract for supported document extraction and validate the business fields afterward",
+      "Use Amazon Comprehend entity detection alone to recover invoice table cells directly from scanned images",
+      "Use a text-only foundation model with invoice filenames as context to reconstruct missing line items",
+      "Use image label detection as the invoice parser and treat its object labels as validated accounting fields"
     ],
     "correct": [
       0
     ],
-    "explanation": "AI is not required for every problem; choose the simplest approach meeting the business requirements.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html"
+    "explanation": "Textract supports extraction of document text and supported structure. Text analysis cannot directly recover scanned tables, an unseen filename is not invoice evidence, and visual object labels are not validated accounting fields. Validate extracted business values afterward.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Document extraction",
+    "courseModule": "08",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r009.webp"
   },
   {
-    "id": "aif-q014",
-    "domain": "2",
+    "id": "aif-r010",
+    "reviewId": "AIF-R010",
+    "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "A design team creates new product descriptions from instructions. Which capability is being used?",
+    "stem": "A product team collects written customer reviews. It needs to identify sentiment and mentions of products in the existing text before preparing a service-quality dashboard. It does not need to generate new review text. Which managed AWS service is the most direct fit for these supported language-analysis tasks?",
     "options": [
-      "Only deterministic database lookup",
-      "Only anomaly detection",
-      "Only clustering",
-      "Generative AI"
+      "Use Amazon Translate to infer sentiment solely from translation confidence",
+      "Use Amazon Personalize to interpret every review as a recommendation ranking and return entity spans",
+      "Use Amazon Lex intent configuration as a direct replacement for batch sentiment and entity analysis",
+      "Use Amazon Comprehend for supported sentiment and entity analysis of the existing text"
     ],
     "correct": [
       3
     ],
-    "explanation": "Generating new text is a generative capability, although facts and constraints still need validation.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+    "explanation": "Comprehend directly supports the requested language analysis. Translation confidence is not sentiment, recommendation ranking is not entity-span detection, and configured conversational intents are not a substitute for the specified analysis of existing review text.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Natural language understanding versus generation",
+    "courseModule": "08",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r010.webp"
   },
   {
-    "id": "aif-q015",
-    "domain": "2",
+    "id": "aif-r011",
+    "reviewId": "AIF-R011",
+    "domain": "1",
+    "task": "1.3",
     "type": "single",
-    "stem": "A team compares foundation models for a multilingual assistant. What should drive selection?",
+    "stem": "A manufacturer scores one million stored component records each night. The results are needed for a morning planning report, and no user waits for an immediate prediction. The team wants to avoid maintaining an always-on inference endpoint solely for this workload. Which inference pattern is most suitable?",
     "options": [
-      "The longest output available",
-      "The newest product name alone",
-      "Representative task quality, language support, latency and cost",
-      "Parameter count alone"
+      "Score every record interactively during report viewing, even though the full report is required at opening",
+      "Use a conversational agent to decide which records to skip without an agreed completeness criterion",
+      "Run an offline batch inference job against the stored inputs and collect the results for the report",
+      "Keep a real-time endpoint running continuously because stored inputs require synchronous predictions"
     ],
     "correct": [
       2
     ],
-    "explanation": "A model must meet the workload requirements; model size or release date alone is not sufficient.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+    "explanation": "Batch inference fits stored data with a later reporting deadline. Continuous real-time capacity is not required for that pattern, interactive report-time scoring conflicts with the ready-at-opening requirement, and arbitrary record skipping violates completeness.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "Batch versus real-time inference",
+    "courseModule": "09",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r011.webp"
   },
   {
-    "id": "aif-q016",
-    "domain": "2",
+    "id": "aif-r012",
+    "reviewId": "AIF-R012",
+    "domain": "1",
+    "task": "1.2",
     "type": "single",
-    "stem": "An application repeatedly invents plausible product specifications. What is this behavior called?",
+    "stem": "A finance team must apply a published tax rule with fixed thresholds and exact rounding. The rules change through an approved policy process, and the same valid inputs must always produce the same statutory result. There is no need to infer an unknown value from historical examples. What should the team choose first?",
     "options": [
-      "Data partitioning",
-      "Hallucination",
-      "Encryption",
-      "Tokenization"
+      "Train a classifier on historical tax brackets and let it infer the required rounding rules",
+      "Implement the specified calculation as deterministic rules with validation and controlled updates",
+      "Use a language model to reproduce the published rule and accept any plausible formatted result",
+      "Train a regression model on last year’s outputs and use its prediction as the exact statutory result"
     ],
     "correct": [
       1
     ],
-    "explanation": "Generated content can be fluent but unsupported; grounding and verification can reduce, not eliminate, the risk.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
+    "explanation": "Exact, specified calculations suit deterministic logic. Predictive or generative approaches introduce avoidable uncertainty when the required rule is already known.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "When AI is not the appropriate tool",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r012.webp"
   },
   {
-    "id": "aif-q017",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team needs managed access to supported foundation models through AWS APIs. Which service fits?",
-    "options": [
-      "Amazon Bedrock",
-      "AWS Artifact",
-      "AWS Config",
-      "Amazon Route 53"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Bedrock provides managed foundation-model capabilities; the other services have compliance, configuration or DNS roles.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q018",
-    "domain": "2",
-    "type": "single",
-    "stem": "An application encodes text into vectors for semantic retrieval. What is it creating?",
-    "options": [
-      "IAM policies",
-      "Encryption keys",
-      "Confusion matrices",
-      "Embeddings"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Embeddings represent semantic information numerically; they are not access-control or encryption mechanisms.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q019",
-    "domain": "2",
-    "type": "single",
-    "stem": "A long document exceeds the selected model context window. What should the team consider?",
-    "options": [
-      "Disabling encryption",
-      "Assuming the full document is always retained",
-      "Relevant chunk retrieval or a model with suitable context capacity",
-      "Increasing IAM privileges"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Context capacity limits the input and output a model can process for a request.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q020",
-    "domain": "2",
-    "type": "single",
-    "stem": "A user notices text arriving progressively rather than waiting for the entire response. Which feature enables this?",
-    "options": [
-      "S3 lifecycle rules",
-      "Streaming inference",
-      "Batch labeling",
-      "Training checkpointing"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Supported streaming APIs can improve time to visible output without guaranteeing a shorter total generation time.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q021",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team estimates inference charges for a text model. What must it inspect?",
-    "options": [
-      "The chosen model's current pricing units and input/output usage",
-      "Only the number of IAM users",
-      "Only S3 bucket count",
-      "Only the number of source documents"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Pricing differs by model and deployment option; text models commonly use token-related units.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q022",
-    "domain": "2",
-    "type": "single",
-    "stem": "Two assistants use different tokenizers. Can character counts alone guarantee equal token usage?",
-    "options": [
-      "Yes; each character is always one token",
-      "Yes; each word is always one token",
-      "No; tokens exist only during training",
-      "No; tokenization varies by model and text"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Tokens may represent words, word parts or other units; measure using the applicable model configuration.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q023",
-    "domain": "2",
-    "type": "single",
-    "stem": "A company wants a private application that uses a foundation model without building its serving infrastructure. What is a suitable starting point?",
-    "options": [
-      "Train a new model from random weights",
-      "Use AWS Artifact as the inference engine",
-      "Evaluate a supported model in Amazon Bedrock",
-      "Purchase GPUs before defining requirements"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Managed foundation-model access can reduce operational work; requirements and model suitability still matter.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q024",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team needs an AI assistant for development with specification-driven workflows. Which current AWS tool should it evaluate?",
-    "options": [
-      "Amazon Textract",
-      "Kiro",
-      "Amazon Macie",
-      "AWS CloudTrail"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Kiro supports AI-assisted development; the alternatives address data discovery, auditing and document extraction.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q025",
-    "domain": "2",
-    "type": "single",
-    "stem": "A business wants a workplace assistant combining authorized enterprise data with insights and actions. Which current offering should it evaluate?",
-    "options": [
-      "Amazon Quick",
-      "AWS Shield",
-      "Amazon EBS",
-      "Amazon Route 53"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Amazon Quick targets workplace AI and BI capabilities; permissions and action authorization remain necessary.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q026",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team needs to recognize text in images rather than generate a new image. Which distinction matters?",
-    "options": [
-      "Every image model performs both equally",
-      "Text tokens are IAM permissions",
-      "Image generation always guarantees OCR accuracy",
-      "Image understanding and image generation are different tasks"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Choose a model or service that supports the required modality and task.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q027",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team wants to compare a managed model API with operating its own model hosting. Which cost belongs in the comparison?",
-    "options": [
-      "Only the number of model vendors",
-      "Only the number of application screens",
-      "Infrastructure and operational effort as well as inference charges",
-      "Only the API endpoint name"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Total cost includes engineering and operational responsibilities, not just per-request prices.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q028",
-    "domain": "2",
-    "type": "single",
-    "stem": "A generated summary sounds convincing. What should a reviewer conclude?",
-    "options": [
-      "The source permissions were automatically audited",
-      "Fluency alone does not establish factual accuracy",
-      "All statements are verified by default",
-      "The answer is guaranteed unbiased"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Language quality is different from factual support, fairness and authorization.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q029",
-    "domain": "2",
-    "type": "single",
-    "stem": "A team wants reusable managed runtime capabilities for agents rather than treating a framework as the entire hosting platform. What should it evaluate?",
-    "options": [
-      "Amazon Bedrock AgentCore",
-      "Amazon Polly",
-      "AWS Artifact",
-      "Amazon Translate"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "AgentCore offers agent-related runtime capabilities; framework orchestration and managed operational services are distinct choices.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
-  },
-  {
-    "id": "aif-q030",
-    "domain": "3",
+    "id": "aif-r013",
+    "reviewId": "AIF-R013",
+    "domain": "1",
+    "task": "1.3",
     "type": "ordering",
-    "stem": "Place these steps in the logical order for answering a question using an already indexed knowledge base.",
+    "stem": "A delivery-time model is live and initially met its approved quality criteria. Place the following lifecycle activities in a logical order when evaluating a controlled improvement after a business change. Use each response once.",
     "options": [
-      "Generate an answer grounded in the retrieved evidence",
-      "Receive the user question",
-      "Retrieve relevant authorized passages",
-      "Construct model context from the question and retrieved passages"
+      "Release the approved candidate through the controlled deployment process",
+      "Monitor production data and prediction quality",
+      "Investigate the observed change and prepare a candidate update",
+      "Evaluate the candidate against representative held-out and business acceptance criteria"
     ],
     "correct": [
       1,
@@ -511,608 +308,1289 @@
       3,
       0
     ],
-    "explanation": "The application receives the question, retrieves authorized evidence, constructs context, then generates a grounded answer. Index ingestion occurs earlier; citations still require validation.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Production monitoring identifies the change, investigation informs an update, evaluation establishes whether the candidate meets requirements, and a controlled release follows approval. A change does not justify blindly replacing the model.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
+    "topic": "ML lifecycle and production drift",
+    "courseModule": "09",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r013.webp"
   },
   {
-    "id": "aif-q031",
-    "domain": "3",
+    "id": "aif-r014",
+    "reviewId": "AIF-R014",
+    "domain": "2",
+    "task": "2.1",
     "type": "single",
-    "stem": "A company wants a model to adopt a specialized output style from many curated examples. Which approach may fit?",
+    "stem": "A retailer wants to create draft product descriptions from approved product facts. It also has a separate need to predict whether a shipment will arrive late. The team must explain the difference to stakeholders before selecting services. Which statement correctly distinguishes the two tasks?",
     "options": [
-      "Increasing network bandwidth alone",
-      "Replacing all evaluation with training loss",
-      "Fine-tuning an eligible model",
-      "Changing an S3 bucket name"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Fine-tuning changes model behavior using training examples; it is not usually the first solution for fresh factual lookup.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q032",
-    "domain": "3",
-    "type": "single",
-    "stem": "A prompt contains a clear task, relevant context and a requested output structure. Why is this useful?",
-    "options": [
-      "It permanently changes model weights",
-      "It reduces ambiguity about the desired response",
-      "It guarantees the answer is correct",
-      "It replaces all authorization checks"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Prompt design guides inference behavior without guaranteeing correctness or changing trained weights.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q033",
-    "domain": "3",
-    "type": "single",
-    "stem": "A model is shown several input-output demonstrations before a new task. Which technique is this?",
-    "options": [
-      "Few-shot prompting",
-      "Zero-shot prompting",
-      "Encryption at rest",
-      "Unsupervised clustering"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Few-shot prompting supplies example demonstrations within the request context.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q034",
-    "domain": "3",
-    "type": "single",
-    "stem": "A model receives instructions but no demonstrations. Which technique is this?",
-    "options": [
-      "Few-shot prompting",
-      "Model distillation",
-      "Training checkpointing",
-      "Zero-shot prompting"
+      "Both are classification tasks because each starts from existing business data",
+      "Both are generative tasks because every predicted label is newly produced text",
+      "The distinction depends only on whether the application uses a managed endpoint",
+      "Description drafting generates new content; late-arrival classification predicts a defined category"
     ],
     "correct": [
       3
     ],
-    "explanation": "Zero-shot prompting asks the model to perform a task without task demonstrations in the prompt.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Generating text and predicting a category are distinct capabilities. Historical data alone does not make a task generative, and custom foundation-model pre-training is not a prerequisite.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Generative versus predictive AI",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r014.webp"
   },
   {
-    "id": "aif-q035",
-    "domain": "3",
-    "type": "single",
-    "stem": "A model is too verbose. Which control directly constrains the maximum generated output when supported?",
+    "id": "aif-r015",
+    "reviewId": "AIF-R015",
+    "domain": "2",
+    "task": "2.2",
+    "type": "multiple",
+    "stem": "A travel company is evaluating foundation models for a multilingual support assistant. The service must meet response-time and quality requirements in several customer languages while staying within a defined budget. Which TWO evaluation practices best support selecting a suitable model?",
     "options": [
-      "S3 retention duration",
-      "VPC subnet mask",
-      "Maximum output token setting",
-      "IAM group size"
+      "Use representative examples in the required languages and measure answer quality",
+      "Measure latency and applicable input/output costs on the expected workload",
+      "Select the largest parameter count without testing the required languages",
+      "Compare only the advertised input-token price and ignore generated output usage",
+      "Use one successful English example as evidence of quality in every language"
     ],
     "correct": [
-      2
+      0,
+      1
     ],
-    "explanation": "A supported output-token limit bounds generation length; parameter names and behavior vary by model.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Representative multilingual quality tests and workload measurements support the stated requirements. Size, one pricing unit and a single-language example do not establish suitability.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Selecting a foundation model",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r015.webp"
   },
   {
-    "id": "aif-q036",
-    "domain": "3",
+    "id": "aif-r016",
+    "reviewId": "AIF-R016",
+    "domain": "2",
+    "task": "2.2",
     "type": "single",
-    "stem": "A team wants more repeatable responses for a structured extraction task. What should it evaluate?",
+    "stem": "An assistant produces fluent answers about products, but a reviewer finds specifications that do not exist in the approved catalog. Management proposes removing citations so users will focus on the prose. Which response best addresses the underlying issue?",
     "options": [
-      "Removal of evaluation examples",
-      "Lower sampling randomness with schema validation",
-      "Higher randomness as the sole safeguard",
-      "An unrestricted autonomous agent"
+      "Reduce temperature and consider factual verification unnecessary once answers become more consistent",
+      "Ground answers in approved catalog evidence, evaluate factual support and define behavior for evidence gaps",
+      "Fine-tune on a one-time catalog snapshot and assume future generated specifications will stay current",
+      "Require citations in the output format but allow the model to invent the cited source details"
     ],
     "correct": [
       1
     ],
-    "explanation": "Lower randomness may improve consistency, but schema and semantic checks are still needed.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Evidence grounding and evaluation address unsupported claims. Fine-tuning a snapshot does not keep facts current, citation formatting can still be fabricated, and low randomness does not guarantee accuracy.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Hallucination and factual grounding",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": "Case study: A retailer is piloting an assistant that answers employee questions from an approved internal product catalog. The catalog changes frequently. Some product groups are restricted to particular teams. Pilot answers are fluent, but reviewers have found unsupported specifications.",
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r016.webp"
   },
   {
-    "id": "aif-q037",
-    "domain": "3",
+    "id": "aif-r017",
+    "reviewId": "AIF-R017",
+    "domain": "2",
+    "task": "2.3",
     "type": "single",
-    "stem": "A retrieval system changes embedding models for queries but keeps old document vectors. What is the concern?",
+    "stem": "A small company wants to compare several supported foundation models through managed APIs. It has no team to operate GPU-based model-serving infrastructure and needs to begin with text-generation experiments. Which AWS service is the most suitable starting point?",
     "options": [
-      "The vectors may occupy incompatible embedding spaces",
-      "IAM roles will automatically be deleted",
-      "The model becomes a database transaction engine",
-      "All documents become encrypted"
+      "Amazon Bedrock",
+      "Amazon SageMaker AI with fully customer-managed model hosting as the only option",
+      "Amazon EC2 GPU instances with a self-installed inference server",
+      "AWS Artifact used as a model inference endpoint"
     ],
     "correct": [
       0
     ],
-    "explanation": "Document and query embeddings must use compatible configurations; migrations may require re-embedding.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Bedrock offers managed access to supported foundation models. Self-managed hosting may fit other needs but adds the operational work excluded by this scenario; Artifact supplies compliance documents.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Managed foundation-model access",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r017.webp"
   },
   {
-    "id": "aif-q038",
-    "domain": "3",
+    "id": "aif-r018",
+    "reviewId": "AIF-R018",
+    "domain": "2",
+    "task": "2.1",
     "type": "single",
-    "stem": "A search pipeline retrieves unrelated chunks. What should the team improve first?",
+    "stem": "A knowledge-search team wants queries about an employee leaving the company to retrieve relevant offboarding documents even when the documents use different words. The search must consider meaning rather than depend only on exact keyword matches. Which concept is most relevant?",
     "options": [
-      "Only the answer font",
-      "Only the output length limit",
-      "Only the number of IAM groups",
-      "Retrieval quality and representative retrieval evaluation"
+      "Use exact keyword matching alone and assume synonyms will always match without configuration",
+      "Rank all documents by sentiment score and treat similar sentiment as similar subject matter",
+      "Compare vectors from independently chosen incompatible embedding models because both outputs are numeric",
+      "Use compatible document/query embeddings and evaluate semantic retrieval on representative queries"
     ],
     "correct": [
       3
     ],
-    "explanation": "Poor evidence undermines grounded answers; inspect chunking, indexing, query handling and retrieval results.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Compatible embeddings support semantic retrieval across different wording. Exact keyword matching alone does not guarantee synonym handling, sentiment is not general subject similarity, and numeric vectors from incompatible models are not automatically comparable.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Embeddings and semantic similarity",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r018.webp"
   },
   {
-    "id": "aif-q039",
-    "domain": "3",
+    "id": "aif-r019",
+    "reviewId": "AIF-R019",
+    "domain": "2",
+    "task": "2.1",
     "type": "single",
-    "stem": "An agent can cancel orders. Where should customer ownership and permission be enforced?",
+    "stem": "A legal team submits a very long document together with instructions and asks for a detailed summary. The selected model rejects the request because it exceeds its supported context capacity. Which approach most directly addresses the limitation?",
     "options": [
-      "Only in the model's self-reported confidence",
-      "Only after the cancellation finishes",
-      "In trusted application or tool execution code",
-      "Only in a natural-language prompt"
+      "Increase the permitted output length without reducing input or checking the total model limit",
+      "Assume all stored documents are available to the model even when they are not included or retrieved",
+      "Select relevant content or a suitable larger-context model while budgeting input and output tokens",
+      "Increase the connection timeout and resubmit the same oversized request unchanged"
     ],
     "correct": [
       2
     ],
-    "explanation": "Models may propose actions, but trusted execution paths must enforce authorization and required approvals.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "The model context limit is separate from network timeouts and storage. Select relevant content or suitable supported capacity and budget both input and output; a longer timeout or uploaded document alone does not change what the model can process.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Context window and token limits",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r019.webp"
   },
   {
-    "id": "aif-q040",
-    "domain": "3",
+    "id": "aif-r020",
+    "reviewId": "AIF-R020",
+    "domain": "2",
+    "task": "2.2",
     "type": "single",
-    "stem": "A workflow always classifies a request, routes it, and transforms the output. Which design is a sensible starting point?",
+    "stem": "A support assistant takes several seconds to finish a long answer. Users would benefit from seeing useful text earlier, and the chosen model/API supports streamed responses. The business does not require the entire response to be available before displaying any text. Which change best addresses the user experience?",
     "options": [
-      "A public unfiltered tool endpoint",
-      "An explicit workflow with defined steps",
-      "Unrestricted autonomous planning",
-      "A new foundation model trained from scratch"
+      "Increase the requested answer length and assume that guarantees a shorter time to first output",
+      "Render supported streamed response events progressively, with partial-output and failure handling",
+      "Use a streaming API but buffer all events until the final answer is complete",
+      "Cache the completed answer only and assume every first-time question will have a cache hit"
     ],
     "correct": [
       1
     ],
-    "explanation": "Known stages often fit a deterministic workflow better than unnecessary autonomy.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Displaying supported stream events can improve time to visible output. Buffering until the final event loses that benefit. Caching does not guarantee hits for new questions, and requesting more output does not guarantee a faster first token.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Streaming and perceived latency",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r020.webp"
   },
   {
-    "id": "aif-q041",
-    "domain": "3",
+    "id": "aif-r021",
+    "reviewId": "AIF-R021",
+    "domain": "2",
+    "task": "2.2",
     "type": "single",
-    "stem": "A team repeatedly sends a large identical prompt prefix to a supported model. Which feature may reduce repeated processing cost?",
+    "stem": "A team compares two text models. Model A has a lower input-token price but produces much longer answers on the representative workload. Model B has a higher input price and shorter useful responses. What should the team do before concluding which option costs less?",
     "options": [
-      "Prompt caching",
-      "Changing the IAM user name",
-      "Increasing image resolution",
-      "Deleting evaluation data"
+      "Measure representative input/output usage and apply each model’s current applicable pricing",
+      "Compare input-token prices alone and omit output charges from both estimates",
+      "Compare character counts while assuming identical tokenization across models",
+      "Compare maximum context sizes and assume the smallest limit guarantees the lowest workload cost"
     ],
     "correct": [
       0
     ],
-    "explanation": "Supported prompt caching can reuse eligible prompt content; eligibility, retention and pricing depend on model and configuration.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Total inference cost depends on applicable usage and pricing dimensions, including output usage where charged. Tokenization and deployment choices can differ.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Token pricing and cost estimation",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r021.webp"
   },
   {
-    "id": "aif-q042",
-    "domain": "3",
+    "id": "aif-r022",
+    "reviewId": "AIF-R022",
+    "domain": "2",
+    "task": "2.1",
     "type": "single",
-    "stem": "A team wants a smaller model to learn behavior from a larger teacher model. Which technique is being considered?",
+    "stem": "A company uses an existing foundation model to draft a reply from instructions and a customer message. It does not run a training job or update model weights. Which statement accurately describes this operation?",
     "options": [
-      "Only document retrieval",
-      "Only tokenization",
-      "Only encryption",
-      "Model distillation"
+      "It is fine-tuning because the model changes its response based on request context",
+      "It is pre-training because the message is new information to the application",
+      "It is continuous pre-training because several messages are sent in one conversation",
+      "It is inference using an existing model without an ordinary prompt updating its weights"
     ],
     "correct": [
       3
     ],
-    "explanation": "Distillation transfers learned behavior using teacher-generated guidance; it differs from retrieving documents at inference time.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "A model can use request context during inference without weight updates. Prompting is not itself pre-training or fine-tuning, and inputs are not automatically labeled training examples.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Foundation-model adaptation versus inference",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r022.webp"
   },
   {
-    "id": "aif-q043",
-    "domain": "3",
+    "id": "aif-r023",
+    "reviewId": "AIF-R023",
+    "domain": "2",
+    "task": "2.3",
     "type": "single",
-    "stem": "A team stores several prompt releases and must reproduce an older production behavior. What should it use?",
+    "stem": "A software team wants AI assistance that can turn feature requirements into structured specifications and help implement changes in its development workflow. The team will continue reviewing and testing generated code. Which AWS offering is the most relevant to evaluate?",
     "options": [
-      "Only the latest chat transcript",
-      "Only a larger context window",
-      "Versioned prompts and recorded model/configuration details",
-      "An overwritten untracked prompt file"
+      "Use Amazon Bedrock Knowledge Bases alone as a complete specification-to-code development environment",
+      "Use SageMaker model training jobs as a direct substitute for code review and application development",
+      "Evaluate Kiro for AI-assisted specification and development workflows",
+      "Use Amazon Quick Sight dashboard authoring as the primary source-code implementation workflow"
     ],
     "correct": [
       2
     ],
-    "explanation": "Versioning and configuration records support reproducibility; other dependencies can also affect results.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Kiro is relevant to AI-assisted development and specification workflows. Dashboard authoring, knowledge retrieval alone and model training jobs do not provide the stated specification-to-application development assistance. Generated changes still require review and testing.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Kiro and development assistance",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r023.webp"
   },
   {
-    "id": "aif-q044",
-    "domain": "3",
+    "id": "aif-r024",
+    "reviewId": "AIF-R024",
+    "domain": "2",
+    "task": "2.3",
     "type": "single",
-    "stem": "An LLM judge assigns quality scores to answers. What is a sound evaluation practice?",
+    "stem": "An operations team wants a workplace AI experience that can bring together authorized company information, business insights and supported actions. It is evaluating current offerings for a new deployment rather than onboarding a new legacy Q Business application. Which AWS offering is the best fit to assess?",
     "options": [
-      "Evaluate only the most favorable outputs",
-      "Calibrate against human judgments and test for judge bias",
-      "Assume the judge is perfectly objective",
-      "Use no representative test cases"
+      "Use Amazon Lex intent configuration alone and assume all enterprise data, BI and actions are already integrated",
+      "Evaluate Amazon Quick’s supported workplace AI, insights and action capabilities",
+      "Use Amazon Comprehend alone as the end-to-end workplace research and action experience",
+      "Use an S3 bucket plus keyword filenames and assume it supplies an authorized conversational workplace assistant"
     ],
     "correct": [
       1
     ],
-    "explanation": "Model-based judging can scale evaluation but needs validation and appropriate human oversight.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
+    "explanation": "Amazon Quick addresses supported workplace AI and insights/actions use cases. Text analysis alone, object storage alone, or an intent configuration alone does not automatically supply the complete authorized enterprise experience described.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Amazon Quick workplace use cases",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r024.webp"
   },
   {
-    "id": "aif-q045",
-    "domain": "3",
-    "type": "single",
-    "stem": "A product team improves benchmark accuracy but users abandon the assistant. What else should it evaluate?",
-    "options": [
-      "Task completion, user experience, latency and business outcomes",
-      "Only model parameter count",
-      "Only training duration",
-      "Only the prompt's word count"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Application success combines model quality with operational performance and user outcomes.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q046",
-    "domain": "3",
-    "type": "single",
-    "stem": "An untrusted retrieved document tells the assistant to reveal secrets. What is the main threat?",
-    "options": [
-      "A guaranteed valid administrator instruction",
-      "A request to fine-tune weights",
-      "An S3 durability event",
-      "Prompt injection"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Retrieved text is untrusted data; isolate instructions and enforce data/tool permissions outside the model.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q047",
-    "domain": "3",
-    "type": "single",
-    "stem": "A guardrail blocks some harmful responses during tests. What should the team conclude?",
-    "options": [
-      "It grants all users access to all documents",
-      "It removes the need for monitoring",
-      "It is one control requiring ongoing evaluation and layered protections",
-      "It guarantees every future response is safe"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Guardrails reduce selected risks but cannot guarantee universal safety or replace authorization and monitoring.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html"
-  },
-  {
-    "id": "aif-q048",
-    "domain": "4",
-    "type": "single",
-    "stem": "A hiring model performs worse for one demographic group. What should the team examine?",
-    "options": [
-      "Only server utilization",
-      "Representative subgroup performance and potential data bias",
-      "Only aggregate accuracy",
-      "Only the largest subgroup"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Aggregate metrics can conceal disparate outcomes; evaluate relevant groups and investigate data and process causes.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q049",
-    "domain": "4",
-    "type": "single",
-    "stem": "A team documents data sources, intended uses and limitations for a model. Which objective does this support?",
-    "options": [
-      "Transparency and responsible governance",
-      "Guaranteed legal compliance",
-      "Automatic elimination of bias",
-      "Unlimited model access"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Documentation supports informed use and accountability but does not guarantee fairness or compliance.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q050",
-    "domain": "4",
-    "type": "single",
-    "stem": "A business uses model predictions to assist consequential decisions. What is a prudent design?",
-    "options": [
-      "Unconditional acceptance of every prediction",
-      "Removal of appeal paths",
-      "Hiding known limitations",
-      "Appropriate human oversight and escalation"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Human review and escalation should reflect risk and impact; oversight must be meaningful.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q051",
-    "domain": "4",
-    "type": "single",
-    "stem": "A team wants to understand which inputs influenced a prediction. Which concept fits?",
-    "options": [
-      "Tokenization",
-      "Data replication",
-      "Explainability",
-      "Availability"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Explainability concerns reasons or contributing factors; it does not prove causal relationships or fairness.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q052",
-    "domain": "4",
-    "type": "single",
-    "stem": "A model performs well on typical inputs but fails on noisy examples. Which quality is most directly in question?",
-    "options": [
-      "Only source-code formatting",
-      "Robustness",
-      "Only storage durability",
-      "Only authorization"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Robustness addresses reliable behavior under variation and challenging inputs.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q053",
-    "domain": "4",
-    "type": "single",
-    "stem": "A generative application may produce discriminatory or harmful content. What is appropriate?",
-    "options": [
-      "Evaluate representative risks and apply layered safeguards",
-      "Assume all foundation models are unbiased",
-      "Hide user feedback",
-      "Remove incident response procedures"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Responsible AI requires testing, prevention, monitoring and response throughout the lifecycle.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q054",
-    "domain": "4",
-    "type": "single",
-    "stem": "A team has permission to access a document. Does that alone settle whether it can use the document to train a commercial model?",
-    "options": [
-      "Yes; access always grants every reuse right",
-      "Yes; model training is always unrestricted",
-      "No; all public information is prohibited",
-      "No; usage rights and applicable terms still need review"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "Access permission and reuse rights are different; governance should assess provenance, license and intended use.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q055",
-    "domain": "4",
-    "type": "single",
-    "stem": "A team finds low confidence on an unusual medical text. What should its application do?",
-    "options": [
-      "Discard all audit evidence",
-      "Increase confidence by changing the display label",
-      "Route according to risk-based review rules and avoid treating extraction as diagnosis",
-      "Present the extraction as a confirmed diagnosis"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Probabilistic extraction needs appropriate validation; it does not substitute for clinical judgment.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q056",
-    "domain": "4",
-    "type": "single",
-    "stem": "A model starts producing misleading outputs after a business process changes. What should the team do?",
-    "options": [
-      "Declare all future outputs reliable",
-      "Investigate, monitor impact, and update or constrain the solution",
-      "Assume validation at launch is sufficient forever",
-      "Hide failures from stakeholders"
-    ],
-    "correct": [
-      1
-    ],
-    "explanation": "Responsible operation includes ongoing monitoring and adaptation as data and use conditions change.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html"
-  },
-  {
-    "id": "aif-q057",
-    "domain": "5",
-    "type": "single",
-    "stem": "An AI application needs read access to one approved S3 prefix. What is the appropriate IAM approach?",
-    "options": [
-      "Grant the required actions on the narrow resource scope",
-      "Grant administrator access",
-      "Share root credentials",
-      "Disable resource policies"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Least privilege limits actions and resources to the workload's authorized needs.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
-  },
-  {
-    "id": "aif-q058",
-    "domain": "5",
-    "type": "single",
-    "stem": "A team needs an audit trail of supported AWS API activity. Which service fits?",
-    "options": [
-      "Amazon Polly",
-      "Amazon Translate",
-      "Amazon Personalize",
-      "AWS CloudTrail"
-    ],
-    "correct": [
-      3
-    ],
-    "explanation": "CloudTrail records supported API activity; event categories and data-event collection require appropriate configuration.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
-  },
-  {
-    "id": "aif-q059",
-    "domain": "5",
-    "type": "single",
-    "stem": "A company wants to discover sensitive data in S3. Which service should it evaluate?",
-    "options": [
-      "Amazon Route 53",
-      "Amazon EBS",
-      "Amazon Macie",
-      "Amazon Lex"
-    ],
-    "correct": [
-      2
-    ],
-    "explanation": "Macie helps discover sensitive data in S3; access, encryption and remediation still need controls.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
-  },
-  {
-    "id": "aif-q060",
-    "domain": "5",
+    "id": "aif-r025",
+    "reviewId": "AIF-R025",
+    "domain": "2",
+    "task": "2.1",
     "type": "matching",
-    "stem": "Match each security need to the most appropriate AWS service.",
+    "stem": "A media company is assessing model capabilities for three different business tasks. Match each task to the most appropriate capability to evaluate. Use each response once.",
     "options": [
-      "AWS KMS",
-      "AWS CloudTrail",
-      "Amazon Macie"
+      "Compatible text embeddings",
+      "Image generation",
+      "Image-and-text understanding"
     ],
     "correct": [
       1,
       2,
       0
     ],
-    "explanation": "CloudTrail supports API auditing, Macie supports sensitive-data discovery in S3, and KMS supports key management. These complementary services do not replace IAM authorization.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "explanation": "Content creation, multimodal understanding and semantic representation are different capabilities. Support for one does not guarantee suitability for the other tasks; each needs representative evaluation.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Multimodal model selection",
+    "courseModule": "04",
     "prompts": [
-      "Audit supported AWS API activity",
-      "Discover sensitive data in S3",
-      "Manage cryptographic keys"
-    ]
+      "Create new promotional images from written briefs",
+      "Interpret a component photograph together with an incident report",
+      "Compare differently worded document passages by semantic similarity"
+    ],
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r025.webp"
   },
   {
-    "id": "aif-q061",
-    "domain": "5",
+    "id": "aif-r026",
+    "reviewId": "AIF-R026",
+    "domain": "2",
+    "task": "2.2",
     "type": "single",
-    "stem": "An application encrypts stored data but sends it over an unprotected connection. What is missing?",
+    "stem": "A startup compares a managed model API with hosting an open-weight model on its own compute. The self-hosted estimate includes only accelerator rental, while the managed estimate includes all per-request charges. Which additional factors are necessary for a fair comparison?",
     "options": [
-      "Appropriate encryption in transit such as TLS",
-      "Another copy of the same IAM user",
-      "A higher temperature setting",
-      "A larger token limit"
-    ],
-    "correct": [
-      0
-    ],
-    "explanation": "Encryption at rest and encryption in transit protect different stages of the data lifecycle.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
-  },
-  {
-    "id": "aif-q062",
-    "domain": "5",
-    "type": "single",
-    "stem": "A developer wants credentials for an AWS workload. Which approach should it prefer?",
-    "options": [
-      "Root access keys in source control",
-      "A shared administrator password",
-      "Credentials embedded in prompts",
-      "An appropriate IAM role with temporary credentials"
+      "Compare accelerator rental with managed input-token charges and exclude all other dimensions",
+      "Assume self-hosting is always cheaper because there is no managed per-request invoice",
+      "Assume managed inference is always cheaper regardless of throughput, utilization and requirements",
+      "Include utilization, scaling, availability, security and operational effort in the comparison"
     ],
     "correct": [
       3
     ],
-    "explanation": "Roles and temporary credentials reduce exposure and support scoped workload access.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
+    "explanation": "Infrastructure cost alone omits engineering and operational responsibilities. Utilization and service requirements can materially change the total cost of a self-hosted option.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Managed versus self-hosted total cost",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r026.webp"
   },
   {
-    "id": "aif-q063",
-    "domain": "5",
-    "type": "single",
-    "stem": "A private application needs supported service access without routing that traffic over the public internet. What should it evaluate?",
+    "id": "aif-r027",
+    "reviewId": "AIF-R027",
+    "domain": "2",
+    "task": "2.2",
+    "type": "multiple",
+    "stem": "A marketing company wants generative AI to accelerate first drafts while preserving factual accuracy and brand requirements. Which TWO practices best support this objective?",
     "options": [
-      "Only S3 versioning",
-      "Only a longer prompt",
-      "The service's supported VPC endpoint options",
-      "Only a larger model"
+      "Have reviewers validate factual claims and brand-sensitive content before publication",
+      "Evaluate representative prompts and outputs against documented quality criteria",
+      "Treat every grammatical response as verified factual content",
+      "Remove the approval workflow because the model was pre-trained on large datasets",
+      "Assume a single successful example proves reliability for every campaign"
     ],
     "correct": [
-      2
+      0,
+      1
     ],
-    "explanation": "Endpoint support and DNS/network configuration matter; a managed service is not thereby placed inside the customer's subnet.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
+    "explanation": "Human validation and representative evaluation support controlled use. Grammar, training scale and isolated success do not establish factual reliability across the workload.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Benefits and limitations",
+    "courseModule": "04",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r027.webp"
   },
   {
-    "id": "aif-q064",
-    "domain": "5",
+    "id": "aif-r028",
+    "reviewId": "AIF-R028",
+    "domain": "2",
+    "task": "2.3",
     "type": "single",
-    "stem": "A team needs AWS compliance reports to support its assessment. Which service fits?",
+    "stem": "A team has selected an agent-development framework and now needs to evaluate managed capabilities for running and operating agents. It wants to avoid assuming the framework alone provides all production runtime and identity facilities. Which AWS offering should it assess for these managed agent capabilities?",
     "options": [
-      "Amazon Translate",
-      "AWS Artifact",
-      "Amazon Rekognition",
-      "Amazon Polly"
+      "Treat a prompt template as a replacement for runtime, identity and operational capabilities",
+      "Evaluate Amazon Bedrock AgentCore for supported managed agent operational capabilities",
+      "Assume installing an agent framework also provides a managed runtime and workload identity by default",
+      "Use a vector store alone as the complete agent hosting and operational platform"
     ],
     "correct": [
       1
     ],
-    "explanation": "Artifact supplies relevant AWS compliance documents; customer compliance remains a shared responsibility.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
+    "explanation": "AgentCore provides managed agent-related capabilities; an orchestration framework and an operational platform have different roles. The other services do not provide that overall agent capability set.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Framework versus managed agent capabilities",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r028.webp"
   },
   {
-    "id": "aif-q065",
-    "domain": "5",
+    "id": "aif-r029",
+    "reviewId": "AIF-R029",
+    "domain": "2",
+    "task": "2.1",
     "type": "single",
-    "stem": "An enterprise adopts a managed AI service. Who is responsible for appropriate data access and application controls?",
+    "stem": "A utility has millions of structured meter records and needs to predict a numeric demand value for planning. It does not need conversational text or content generation. Before committing to a foundation model, what is the most appropriate approach?",
     "options": [
-      "The customer retains its responsibilities under the shared responsibility model",
-      "AWS automatically authorizes every business use",
-      "The model independently decides all legal requirements",
-      "No party needs to manage application permissions"
+      "Compare suitable traditional predictive models against accuracy, explainability and cost requirements",
+      "Choose a language model solely because its text responses are more fluent",
+      "Require foundation-model pre-training before testing any structured-data baseline",
+      "Convert every numeric record into prose and assume the conversion guarantees better demand prediction"
     ],
     "correct": [
       0
     ],
-    "explanation": "Managed infrastructure does not remove customer duties for data, identities, configuration and application use.",
-    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html"
+    "explanation": "Structured numeric prediction can suit traditional ML. The choice should follow measured requirements rather than treating generative AI as mandatory.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html",
+    "topic": "Traditional ML versus a foundation model",
+    "courseModule": "03",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r029.webp"
+  },
+  {
+    "id": "aif-r030",
+    "reviewId": "AIF-R030",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "For the retailer in case study CATALOG-01, employees need answers from a catalog that changes weekly. Answers must identify supporting catalog passages and respect restrictions on product groups. The team wants to avoid model training after each catalog edit. Which approach best fits these requirements?",
+    "options": [
+      "Fine-tune on every catalog revision and assume model memory enforces each employee’s document permissions",
+      "Use a static prompt containing a single old catalog snapshot and assume weekly updates appear automatically",
+      "Increase output length and ask the model to supply citations even when no source evidence is retrieved",
+      "Use RAG with updated authorized sources and evaluate citation support"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "RAG can supply updated catalog evidence at inference time with the required permission checks. Fine-tuned model memory does not enforce per-employee document access, a static snapshot does not acquire weekly edits, and citation formatting without evidence can be fabricated.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "RAG and changing business knowledge",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": "Case study: A retailer is piloting an assistant that answers employee questions from an approved internal product catalog. The catalog changes frequently. Some product groups are restricted to particular teams. Pilot answers are fluent, but reviewers have found unsupported specifications.",
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r030.webp"
+  },
+  {
+    "id": "aif-r031",
+    "reviewId": "AIF-R031",
+    "domain": "3",
+    "task": "3.1",
+    "type": "ordering",
+    "stem": "A company has already ingested and indexed its approved support documentation. A customer now asks a product question. Place the following application steps in the logical order for a grounded RAG answer. Use every response once.",
+    "options": [
+      "Generate a response using the supplied evidence",
+      "Receive the customer’s question",
+      "Retrieve relevant authorized passages",
+      "Construct the model request using the question and retrieved passages"
+    ],
+    "correct": [
+      1,
+      2,
+      3,
+      0
+    ],
+    "explanation": "After receiving the question, the application retrieves relevant authorized evidence, constructs the request context, and generates the response. Document ingestion is a separate earlier activity.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "RAG ordering",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r031.webp"
+  },
+  {
+    "id": "aif-r032",
+    "reviewId": "AIF-R032",
+    "domain": "3",
+    "task": "3.3",
+    "type": "single",
+    "stem": "A company already supplies up-to-date product facts through retrieval. Its remaining problem is that responses do not consistently follow a specialized writing style, despite prompt experimentation. It has a large curated set of approved input-output examples and an eligible model. Which approach should it evaluate for behavior adaptation?",
+    "options": [
+      "Use the training examples as the only evaluation set and treat memorization as successful generalization",
+      "Evaluate fine-tuning on representative approved examples while retaining retrieval and independent testing",
+      "Add more unrelated documents to the vector index and assume that teaches the target writing style",
+      "Replace retrieved current facts with model memory so answers have fewer source constraints"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Fine-tuning may adapt behavior or style when eligible models and suitable examples exist. More unrelated retrieval content does not teach the requested style; dropping current evidence harms grounding, and training examples alone cannot independently establish generalization.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Fine-tuning versus RAG",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r032.webp"
+  },
+  {
+    "id": "aif-r033",
+    "reviewId": "AIF-R033",
+    "domain": "3",
+    "task": "3.2",
+    "type": "single",
+    "stem": "A logistics company wants delivery exceptions summarized in a consistent three-field format. The team prefers to try a request-level approach before changing model weights. Which prompt strategy is the best next experiment?",
+    "options": [
+      "Add clear instructions and several representative demonstrations of the required output",
+      "Provide only the field names and let the model choose what each field should mean",
+      "Increase sampling randomness so that more responses happen to match the required format",
+      "Repeat ordinary requests and assume the model’s weights are permanently updated without a training process"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "Few-shot examples demonstrate the requested behavior in context. Ordinary prompting does not itself update weights, and stronger variability does not enforce a schema. Validation remains necessary.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Few-shot prompting",
+    "courseModule": "06",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r033.webp"
+  },
+  {
+    "id": "aif-r034",
+    "reviewId": "AIF-R034",
+    "domain": "3",
+    "task": "3.2",
+    "type": "single",
+    "stem": "A claims assistant receives the instruction “review this” followed by a long report. Results vary between a summary, a coverage decision and a list of missing documents. The business only wants a factual summary and does not authorize automated coverage decisions. Which prompt change is most appropriate?",
+    "options": [
+      "Keep the ambiguous instruction and ask the model to choose the most useful business action",
+      "Increase maximum output length so the model can include every possible interpretation of the task",
+      "Remove the report context and ask for a generic claim response from model memory",
+      "State the summary-only task, relevant context, output structure and the boundary against coverage decisions"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Explicit task and output boundaries reduce ambiguity. They guide model behavior but do not replace trusted authorization for consequential actions. More output capacity does not resolve an unspecified task.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Prompt clarity and output constraints",
+    "courseModule": "06",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r034.webp"
+  },
+  {
+    "id": "aif-r035",
+    "reviewId": "AIF-R035",
+    "domain": "3",
+    "task": "3.1",
+    "type": "multiple",
+    "stem": "A team extracts a small set of facts with a supported text model. It wants more consistent and usable responses but cannot assume every generated value is correct. Which TWO actions are appropriate?",
+    "options": [
+      "Evaluate supported lower-randomness settings and appropriate output limits",
+      "Validate output structure and relevant business facts before accepting the result",
+      "Treat lower randomness as a guarantee that every extracted value is true",
+      "Skip validation whenever the output is valid JSON",
+      "Apply identical parameter ranges to all models without checking support"
+    ],
+    "correct": [
+      0,
+      1
+    ],
+    "explanation": "Sampling and output controls can improve consistency, while validation checks usability and correctness. Lower randomness or valid JSON alone does not guarantee factual accuracy.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Inference parameters",
+    "courseModule": "06",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r035.webp"
+  },
+  {
+    "id": "aif-r036",
+    "reviewId": "AIF-R036",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "A search application replaces its query embedding model but continues searching document vectors created by a different model. The new model uses a different vector representation, and retrieval quality drops. What is the most appropriate corrective approach?",
+    "options": [
+      "Increase answer-model context length while leaving the incompatible retrieval configuration unchanged",
+      "Coordinate compatible document/query embeddings and rebuild affected vectors as needed",
+      "Keep the incompatible vectors and assume equal numeric dimensions guarantee semantic compatibility",
+      "Normalize vector magnitude alone and assume that aligns independently learned embedding spaces"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Document and query representations must be compatible. Matching vector dimensions or magnitudes alone does not align independently learned semantic spaces. Rebuild affected vectors and validate retrieval rather than only changing the downstream answer context limit.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Embedding model migration",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r036.webp"
+  },
+  {
+    "id": "aif-r037",
+    "reviewId": "AIF-R037",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "A policy assistant often retrieves a section heading but not the paragraph containing its exception. The answer model then provides an incomplete policy summary. The team has verified that the source document contains the missing paragraph. Which area should it investigate first?",
+    "options": [
+      "Investigate extraction, chunking and retrieval quality using representative exception questions",
+      "Increase only output length, even when the needed exception never reaches model context",
+      "Fine-tune the generator on response style without inspecting missing retrieval evidence",
+      "Reduce sampling randomness and assume the model can recover any omitted source paragraph"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "The missing exception is an evidence-pipeline problem to investigate through extraction, chunking and retrieval tests. More output capacity, style adaptation or lower randomness cannot reliably supply an omitted source paragraph.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Chunking and retrieval quality",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r037.webp"
+  },
+  {
+    "id": "aif-r038",
+    "reviewId": "AIF-R038",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "A customer assistant can look up orders and request cancellations through tools. A customer asks to cancel an order that belongs to another account. The model produces a well-formed cancellation request. What control is essential before executing the action?",
+    "options": [
+      "Execute any syntactically valid tool request because JSON validity demonstrates permission",
+      "Depend only on a prompt telling the agent to cancel orders for the correct customer",
+      "Cancel first and check ownership afterward using the resulting audit record",
+      "Enforce customer ownership and cancellation authorization in trusted execution code before the action"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Syntactic validity is not authorization. Trusted execution code must enforce ownership, permissions and any required approval before a consequential operation.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Agent action authorization",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r038.webp"
+  },
+  {
+    "id": "aif-r039",
+    "reviewId": "AIF-R039",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "An invoice application always extracts fields, checks required values, and sends exceptions to a reviewer. The stages and routing conditions are known in advance. A stakeholder asks to add unrestricted agent planning even though no new decision flexibility is required. Which design choice is most appropriate?",
+    "options": [
+      "Replace the validation stage with an agent’s verbal assurance that fields look correct",
+      "Grant the agent broad finance access so it can invent new processing steps without review",
+      "Use an explicit workflow and add autonomy only for requirements that need it",
+      "Let an agent select and reorder all stages even though the approved sequence is already known"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Known stages and branches fit an explicit workflow. Unnecessary autonomy and broad permissions increase uncertainty without meeting a stated need; validation remains an application responsibility.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Agents versus explicit workflows",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r039.webp"
+  },
+  {
+    "id": "aif-r040",
+    "reviewId": "AIF-R040",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "A team sends a large unchanged instruction prefix on many requests to a model that supports prompt caching. It wants to reduce repeated processing cost without changing the task or its evaluation criteria. Which option should it evaluate?",
+    "options": [
+      "Fine-tune once and assume the application no longer needs to supply any request-specific context",
+      "Evaluate eligible prompt caching under the selected model’s support and charging rules",
+      "Store conversation transcripts and assume this automatically enables provider-side prompt caching",
+      "Increase response randomness to avoid the cost of repeatedly interpreting the same instructions"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Prompt caching can reuse eligible repeated prompt content. Support and charging rules vary; persistent conversation storage and sampling settings are not the same capability.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Prompt caching",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r040.webp"
+  },
+  {
+    "id": "aif-r041",
+    "reviewId": "AIF-R041",
+    "domain": "3",
+    "task": "3.3",
+    "type": "single",
+    "stem": "A company has a larger model that performs well on a specialized task. It wants to explore a smaller model that reproduces useful task behavior with potentially lower serving cost, subject to an acceptable quality trade-off. Which technique is most directly relevant?",
+    "options": [
+      "Evaluate model distillation from the teacher to the smaller student, with quality testing",
+      "Use RAG alone and describe document retrieval as a transfer of the teacher’s weights",
+      "Increase the student’s context window and assume it automatically inherits teacher behavior",
+      "Change output formatting and assume the smaller model now has identical teacher capabilities"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "Distillation transfers useful behavior from a teacher to a student model. It requires quality evaluation; a smaller model is not guaranteed to preserve every capability.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Model distillation",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r041.webp"
+  },
+  {
+    "id": "aif-r042",
+    "reviewId": "AIF-R042",
+    "domain": "3",
+    "task": "3.2",
+    "type": "single",
+    "stem": "A team updates a production prompt and later needs to investigate why answer behavior changed. Several developers edited the same untracked text file, and the deployed model settings were not recorded. Which practice best supports reproducibility and rollback?",
+    "options": [
+      "Keep only response timestamps and assume they identify the exact deployed instructions",
+      "Overwrite one shared prompt file and rely on team memory for rollback",
+      "Retain only the latest successful answer as a reproducible record of the entire release",
+      "Version prompts and record model/configuration details for each controlled release"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Versioned prompts and configuration records support investigation and controlled rollback. Timestamps alone do not identify the instructions and settings that produced an answer.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Prompt versioning",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r042.webp"
+  },
+  {
+    "id": "aif-r043",
+    "reviewId": "AIF-R043",
+    "domain": "3",
+    "task": "3.4",
+    "type": "single",
+    "stem": "A team uses a second language model to score the helpfulness of generated answers. It wants to scale evaluation but has not checked whether the judge’s ratings agree with knowledgeable human reviewers. Which next step is most appropriate?",
+    "options": [
+      "Keep only high-scoring examples in the evaluation set to obtain a stable positive rating",
+      "Choose the judge with the most parameters without measuring agreement with the quality criteria",
+      "Calibrate judge ratings against representative human assessments and investigate systematic bias",
+      "Assume using a different model makes the judge automatically objective"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Model-based evaluation needs validation and calibration. A different model can still have biases, and selective evaluation does not establish broad quality.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "LLM-as-a-judge",
+    "courseModule": "13",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r043.webp"
+  },
+  {
+    "id": "aif-r044",
+    "reviewId": "AIF-R044",
+    "domain": "3",
+    "task": "3.4",
+    "type": "multiple",
+    "stem": "A travel assistant scores well on a text-similarity benchmark, but users still abandon sessions because answers arrive too slowly and fail to complete itinerary tasks. Which TWO additional measures best address the product team’s concern?",
+    "options": [
+      "User-perceived latency and satisfaction",
+      "Only the number of model parameters",
+      "Only the number of words in the system prompt",
+      "Only the training duration of the base model",
+      "Task completion rate on representative user journeys"
+    ],
+    "correct": [
+      4,
+      0
+    ],
+    "explanation": "Application success includes user outcomes and operational experience as well as model-level benchmarks. Parameter counts, prompt length and training duration do not directly measure completed travel tasks.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Application-level evaluation",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r044.webp"
+  },
+  {
+    "id": "aif-r045",
+    "reviewId": "AIF-R045",
+    "domain": "3",
+    "task": "3.2",
+    "type": "single",
+    "stem": "An assistant retrieves a document containing relevant troubleshooting instructions. The document also includes text telling the assistant to ignore its rules and send an internal credential to an external destination. The content came from an indexed source, but it is not a trusted instruction channel. Which response best addresses the risk?",
+    "options": [
+      "Treat retrieved content as untrusted and enforce secret/tool access boundaries outside the model",
+      "Execute retrieved instructions whenever the document has a high similarity score",
+      "Assume quotation marks around retrieved text guarantee universal injection protection",
+      "Allow the model to decide whether to disclose credentials based only on its self-reported confidence"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "Retrieved content must not gain instruction authority merely by being relevant. Layered prompt defenses and trusted data/tool controls are needed; delimiters alone are not a security guarantee.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Prompt injection through retrieved content",
+    "courseModule": "06",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r045.webp"
+  },
+  {
+    "id": "aif-r046",
+    "reviewId": "AIF-R046",
+    "domain": "3",
+    "task": "3.1",
+    "type": "single",
+    "stem": "A company tests an assistant with a configured content guardrail. Some prohibited outputs are blocked, but the team has tested only a small set of English prompts and the application also serves other languages. Which conclusion is most appropriate?",
+    "options": [
+      "Treat successful blocking of a few prompts as proof of safety for all languages and future inputs",
+      "Use content filtering as a substitute for checking each user’s access to source documents",
+      "Stop monitoring once the guardrail has been enabled for the production endpoint",
+      "Continue representative safety testing with layered controls, monitoring and appropriate authorization"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "A guardrail is one risk-reduction control with a defined scope. Representative testing, monitoring and authorization remain necessary; a few successful tests do not prove universal safety.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Guardrails and layered controls",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r046.webp"
+  },
+  {
+    "id": "aif-r047",
+    "reviewId": "AIF-R047",
+    "domain": "3",
+    "task": "3.3",
+    "type": "multiple",
+    "stem": "A company prepares examples to adapt an eligible foundation model for customer-service responses. The collected data includes outdated answers, duplicate conversations and sensitive customer identifiers. Which TWO actions should occur before training?",
+    "options": [
+      "Curate accurate, representative examples and separate evaluation data",
+      "Review permissions and sensitive data handling for the intended training use",
+      "Include all historical answers regardless of correctness to maximize dataset size",
+      "Use production customer identifiers whenever the model asks for more context",
+      "Evaluate only on exact duplicates of the training conversations"
+    ],
+    "correct": [
+      0,
+      1
+    ],
+    "explanation": "Data quality, representativeness, governance and independent evaluation matter. More low-quality or improperly governed data can introduce errors and privacy risk; duplicates undermine evaluation.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html",
+    "topic": "Fine-tuning data quality",
+    "courseModule": "05",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r047.webp"
+  },
+  {
+    "id": "aif-r048",
+    "reviewId": "AIF-R048",
+    "domain": "4",
+    "task": "4.1",
+    "type": "single",
+    "stem": "A hiring-support model has strong overall accuracy, but an audit finds substantially more qualified candidates from one group are incorrectly rejected. The team has permission to conduct the relevant fairness assessment. Which action best addresses the finding?",
+    "options": [
+      "Change the reporting threshold solely to hide the gap without evaluating business impact",
+      "Evaluate subgroup errors and investigate data, labels and process causes",
+      "Use aggregate accuracy alone because all subgroup errors are included in the average",
+      "Exclude the affected group from reporting without addressing the observed failures"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Aggregate performance can conceal unequal error patterns. Investigate representativeness, labels and the decision process. Excluding a group or adjusting reporting solely to hide the gap does not address the observed harm.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Subgroup fairness",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r048.webp"
+  },
+  {
+    "id": "aif-r049",
+    "reviewId": "AIF-R049",
+    "domain": "4",
+    "task": "4.2",
+    "type": "single",
+    "stem": "A loan-support tool identifies income and outstanding debt as influential inputs for a particular risk prediction. A stakeholder interprets the explanation as proof that changing either value will cause a specific approval outcome. Which statement is most appropriate?",
+    "options": [
+      "Explain that feature influence does not by itself establish causality or a guaranteed decision outcome",
+      "Treat a high attribution value as proof that changing the feature causes approval",
+      "Treat explainability as proof that the model has no unfair subgroup outcomes",
+      "Replace outcome validation with attribution plots because explanations make testing unnecessary"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "Attributions can help explain predictions but do not automatically establish causality, fairness or future outcomes. Those require separate evidence and governance.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Explainability and causality",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r049.webp"
+  },
+  {
+    "id": "aif-r050",
+    "reviewId": "AIF-R050",
+    "domain": "4",
+    "task": "4.1",
+    "type": "single",
+    "stem": "A healthcare organization uses AI to highlight potentially important information in clinical notes. It wants the system to support qualified clinicians rather than independently determine treatment. Which design is most consistent with this objective?",
+    "options": [
+      "Treat a condition mention extracted from text as a confirmed clinical diagnosis",
+      "Allow treatment decisions automatically whenever the language model expresses high confidence",
+      "Use the AI’s written recommendation as the only evidence required by the clinician",
+      "Present evidence and limitations and preserve meaningful clinician review of significant decisions"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Decision support needs appropriate evidence, limitations and meaningful oversight. Entity extraction and fluent text do not establish a diagnosis or authorize treatment.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Human oversight",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r050.webp"
+  },
+  {
+    "id": "aif-r051",
+    "reviewId": "AIF-R051",
+    "domain": "4",
+    "task": "4.2",
+    "type": "single",
+    "stem": "An organization shares a model with several internal business units. Users need to know the intended use, evaluation results, important limitations and situations where the model should not be relied on. Which deliverable best supports this need?",
+    "options": [
+      "Publish only a technical model identifier without use limitations or evaluation context",
+      "Record only the latest aggregate score and omit the population and conditions evaluated",
+      "Maintain model documentation covering intended use, evaluation, limitations and review responsibilities",
+      "Provide only average infrastructure uptime as the model’s transparency record"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Maintained model documentation communicates purpose, evaluation context, limitations and review responsibilities. Infrastructure uptime, an identifier alone or an unqualified aggregate score does not provide that transparency.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Transparency documentation",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r051.webp"
+  },
+  {
+    "id": "aif-r052",
+    "reviewId": "AIF-R052",
+    "domain": "4",
+    "task": "4.1",
+    "type": "single",
+    "stem": "An image classifier performs well on clear catalog photographs but often fails on representative warehouse images with poor lighting and partial obstruction. The business expects those conditions in normal operation. Which quality should the team investigate most directly?",
+    "options": [
+      "Assume high overall accuracy on a different image population guarantees warehouse performance",
+      "Assess robustness using representative variations in lighting and obstruction",
+      "Evaluate only clear catalog images because they produced the best original score",
+      "Raise the displayed confidence label without changing evaluation or model behavior"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Robustness should be assessed under representative operating conditions. Restricting tests to favorable images or changing a displayed confidence label does not fix the weakness; results on another population do not establish warehouse performance.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Robustness testing",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r052.webp"
+  },
+  {
+    "id": "aif-r053",
+    "reviewId": "AIF-R053",
+    "domain": "4",
+    "task": "4.1",
+    "type": "multiple",
+    "stem": "A company wants to publish AI-generated customer advice. Pilot testing finds occasionally harmful or misleading responses, and the business serves users with varied needs. Which TWO practices best support responsible deployment?",
+    "options": [
+      "Discard complaints so they do not affect the model’s aggregate score",
+      "Use only the most successful prompt as the entire safety test set",
+      "Test representative harmful/misleading cases and define acceptable-use boundaries",
+      "Provide proportionate human escalation, monitoring and incident response",
+      "Assume a content filter removes every need for ongoing oversight"
+    ],
+    "correct": [
+      2,
+      3
+    ],
+    "explanation": "Representative risk testing and an operational response process support responsible use. Filters and a favorable example do not eliminate the need for continued evaluation or user recourse.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Responsible content deployment",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r053.webp"
+  },
+  {
+    "id": "aif-r054",
+    "reviewId": "AIF-R054",
+    "domain": "4",
+    "task": "4.1",
+    "type": "single",
+    "stem": "A team can access a collection of third-party reports and wants to use them to train a commercial model. The project owner assumes access permission automatically grants all training and redistribution rights. What should the team do before using the reports?",
+    "options": [
+      "Assume authenticated access grants every possible training and redistribution right",
+      "Remove attribution and assume that automatically authorizes reuse",
+      "Encrypt the dataset and treat storage confidentiality as a complete usage-rights assessment",
+      "Review provenance, applicable permissions and intended reuse with responsible owners"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "The ability to access material is different from permission for every reuse. Provenance and applicable terms require review; anonymizing attribution or encrypting storage does not settle those rights.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Data provenance and rights",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r054.webp"
+  },
+  {
+    "id": "aif-r055",
+    "reviewId": "AIF-R055",
+    "domain": "4",
+    "task": "4.2",
+    "type": "single",
+    "stem": "A regulated business compares two models. One has slightly better predictive performance, while the other offers explanations that stakeholders can evaluate more effectively. The business has documented requirements for both decision quality and understandable review. What is the most appropriate selection process?",
+    "options": [
+      "Choose the more interpretable model without checking its minimum decision-quality performance",
+      "Treat understandable explanations as proof of both accuracy and absence of bias",
+      "Compare both models against documented performance, explainability and risk requirements",
+      "Choose the highest aggregate predictive score regardless of the review requirements"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Model selection should reflect the stated requirements and trade-offs. Neither a higher score nor simpler explanations alone establish overall suitability.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Balancing explainability and performance",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r055.webp"
+  },
+  {
+    "id": "aif-r056",
+    "reviewId": "AIF-R056",
+    "domain": "4",
+    "task": "4.1",
+    "type": "single",
+    "stem": "A customer assistant passed its launch review, but users later report that its advice is misleading after a business policy change. The team can reproduce the problem. Which response best follows responsible AI practice?",
+    "options": [
+      "Respond only if infrastructure availability declines, regardless of misleading advice",
+      "Investigate impact, constrain or correct affected behavior, and re-evaluate before restoring reliance",
+      "Continue unchanged because launch approval is sufficient for all later policy conditions",
+      "Remove the failing examples from quality reports while keeping the production behavior"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Responsible operation continues after launch. Reproducible harmful or misleading behavior needs investigation and proportionate response even when infrastructure is healthy.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html",
+    "topic": "Ongoing responsible operation",
+    "courseModule": "10",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r056.webp"
+  },
+  {
+    "id": "aif-r057",
+    "reviewId": "AIF-R057",
+    "domain": "5",
+    "task": "5.1",
+    "type": "single",
+    "stem": "An AI application needs to read approved documents from one S3 prefix. It must not modify the documents or access unrelated business files. The workload runs on an AWS service that supports IAM roles. Which access approach is most appropriate?",
+    "options": [
+      "Use a workload role with required read actions limited to the approved S3 resource scope",
+      "Use a workload role with account-wide S3 read/write access to reduce future permission changes",
+      "Use a shared long-lived access key with broad read permissions in every processing job",
+      "Grant access to the approved bucket but allow unnecessary write and delete operations"
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "A scoped role supports least-privilege workload access. Broad policies and embedded long-lived credentials add unnecessary exposure and do not match the stated need.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Least-privilege workload access",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r057.webp"
+  },
+  {
+    "id": "aif-r058",
+    "reviewId": "AIF-R058",
+    "domain": "5",
+    "task": "5.1",
+    "type": "single",
+    "stem": "A security team needs a record of supported AWS API activity associated with an AI application, including who called an operation and when. It also recognizes that recording full model prompts and responses is a separate logging decision. Which service is most directly relevant to the API audit requirement?",
+    "options": [
+      "Use only aggregate CloudWatch performance metrics as an identity-level API activity trail",
+      "Use model prompt/response logs alone and assume they record every relevant AWS API operation",
+      "Use AWS Artifact reports as a live record of the application’s API calls",
+      "Use AWS CloudTrail with supported audit-event collection configured for the needed operations"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "CloudTrail supports API activity auditing with appropriate event collection. Aggregate performance metrics are not an identity-level activity trail, prompt/response content logs do not replace API auditing, and Artifact reports are not a live activity stream.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Audit activity versus model content logging",
+    "courseModule": "11",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r058.webp"
+  },
+  {
+    "id": "aif-r059",
+    "reviewId": "AIF-R059",
+    "domain": "5",
+    "task": "5.1",
+    "type": "single",
+    "stem": "A company plans to use documents stored in S3 for an AI knowledge source. Before onboarding the data, it wants to identify potentially sensitive information so the data owners can assess and remediate exposure. Which AWS service best fits the discovery requirement?",
+    "options": [
+      "Use CloudTrail access-event records as a complete classification of the documents’ contents",
+      "Use S3 object sizes and filenames alone as a sufficient sensitive-data assessment",
+      "Use Amazon Macie discovery findings to support data-owner assessment of the S3 content",
+      "Use KMS encryption status as proof that the objects contain no sensitive information"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Macie discovery findings support sensitive-data assessment in S3. Encryption status does not show content is non-sensitive, API activity logs do not fully classify document contents, and sizes or filenames alone are insufficient.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Sensitive-data discovery",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r059.webp"
+  },
+  {
+    "id": "aif-r060",
+    "reviewId": "AIF-R060",
+    "domain": "5",
+    "task": "5.1",
+    "type": "matching",
+    "stem": "An AI project needs three complementary capabilities: an audit record of supported AWS API activity, discovery of sensitive information in S3, and management of encryption keys. Match each requirement to the most appropriate AWS service. Use each response once.",
+    "options": [
+      "AWS KMS",
+      "Amazon Macie",
+      "AWS CloudTrail"
+    ],
+    "correct": [
+      2,
+      1,
+      0
+    ],
+    "explanation": "CloudTrail addresses API activity auditing, Macie sensitive-data discovery in S3, and KMS cryptographic key management. None replaces the application’s authorization controls.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Security-service matching",
+    "courseModule": "12",
+    "prompts": [
+      "Audit supported AWS API activity",
+      "Discover sensitive information in S3",
+      "Manage encryption keys"
+    ],
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r060.webp"
+  },
+  {
+    "id": "aif-r061",
+    "reviewId": "AIF-R061",
+    "domain": "5",
+    "task": "5.1",
+    "type": "multiple",
+    "stem": "A company encrypts the documents stored for its AI application but discovers that one application connection does not use appropriate transport protection. The owner argues that storage encryption already protects every stage. Which TWO statements are correct?",
+    "options": [
+      "Encryption at rest guarantees that all network traffic is encrypted",
+      "A larger foundation model automatically supplies transport encryption",
+      "IAM authorization eliminates the need to consider network confidentiality",
+      "Storage encryption and encryption in transit protect different parts of the data lifecycle",
+      "Appropriate transport protection such as TLS should be assessed for the application connection"
+    ],
+    "correct": [
+      3,
+      4
+    ],
+    "explanation": "At-rest and in-transit protection address different exposure points. Transport security needs its own configuration and validation; model size and access permission are not substitutes.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Encryption at rest and in transit",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r061.webp"
+  },
+  {
+    "id": "aif-r062",
+    "reviewId": "AIF-R062",
+    "domain": "5",
+    "task": "5.1",
+    "type": "single",
+    "stem": "An application team has placed a shared long-lived AWS access key in configuration used by several AI processing jobs. The jobs run in an environment that supports IAM roles and temporary credentials. Which change best reduces credential exposure while retaining necessary access?",
+    "options": [
+      "Store the existing shared long-lived key in an approved secret store but leave all jobs using the same broad identity",
+      "Issue a different administrator key to every job without reducing permissions",
+      "Copy the same key into every job image so credential retrieval is simpler",
+      "Use scoped workload roles and temporary credentials supported by the job environment"
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Supported workload roles and scoped temporary credentials reduce reliance on shared long-lived keys. A secret store may improve storage of an existing key but retains the shared identity, while administrator keys and copied image secrets add exposure without least privilege.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Workload identities",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r062.webp"
+  },
+  {
+    "id": "aif-r063",
+    "reviewId": "AIF-R063",
+    "domain": "5",
+    "task": "5.1",
+    "type": "single",
+    "stem": "A company wants a private application to access a supported managed AI service without routing that application traffic over the public internet. An architect proposes evaluating the service’s VPC endpoint options. Which statement correctly describes the design consideration?",
+    "options": [
+      "Treat endpoint reachability as proof that every caller is authorized to invoke the model",
+      "Assume the endpoint alone replaces all applicable DNS, identity and endpoint-policy configuration",
+      "Use supported endpoints for private connectivity while retaining the AWS-managed service boundary",
+      "Treat endpoint creation as moving the service’s underlying runtime into the customer subnet"
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "Private connectivity and service ownership boundaries are distinct. Network paths still need appropriate DNS and authorization controls; an endpoint is not a universal permission grant.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Private connectivity and service boundaries",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r063.webp"
+  },
+  {
+    "id": "aif-r064",
+    "reviewId": "AIF-R064",
+    "domain": "5",
+    "task": "5.2",
+    "type": "single",
+    "stem": "An enterprise is assessing an AI workload and needs relevant AWS compliance reports for its vendor assessment. It must also evaluate its own application configuration and operational controls. Which statement is most appropriate?",
+    "options": [
+      "Assume managed hosting removes the need for evidence about customer data and identity controls",
+      "Obtain relevant AWS reports through Artifact and separately assess customer application responsibilities",
+      "Treat the provider’s compliance report as automatic certification of every customer configuration",
+      "Use API audit logs alone as a replacement for all provider assurance documentation"
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Artifact supplies relevant AWS compliance documents. A customer workload still needs assessment of its own controls and intended use; provider reports are not blanket application certification.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "Compliance evidence",
+    "courseModule": "12",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r064.webp"
+  },
+  {
+    "id": "aif-r065",
+    "reviewId": "AIF-R065",
+    "domain": "5",
+    "task": "5.2",
+    "type": "multiple",
+    "stem": "A business deploys an internal assistant through a managed AWS foundation-model service. The project owner wants accountable governance for company data and the customer-facing application. Which TWO responsibilities remain with the customer?",
+    "options": [
+      "Define and enforce appropriate user and workload permissions",
+      "Review approved data use and monitor application behavior against business requirements",
+      "Physically secure and replace the underlying AWS-managed data-center hardware",
+      "Let the model infer authorization from conversational wording instead of explicit policies",
+      "Treat every generated confidence statement as an approved compliance assessment"
+    ],
+    "correct": [
+      0,
+      1
+    ],
+    "explanation": "Customers retain responsibilities for identities, data use, configuration and application operation. AWS manages its underlying infrastructure; model confidence does not replace access or governance controls.",
+    "source": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain5.html",
+    "topic": "AI governance ownership",
+    "courseModule": "11",
+    "prompts": null,
+    "caseContext": null,
+    "explanationImage": "/course-visuals/aif-exam-explanations/aif-r065.webp"
   }
 ]
