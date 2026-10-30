@@ -1,0 +1,412 @@
+[
+  {
+    "number": 1,
+    "title": "Choose the load balancer from the traffic",
+    "copy": [
+      "ALB: understand HTTP",
+      "Use Layer 7 request routing for web applications, APIs, HTTP/2 and WebSockets. Rules select application target groups.",
+      "NLB: handle transport flows",
+      "Use high-throughput, low-latency transport load balancing and static zonal addresses. Choose compatible TCP, TLS or UDP listeners.",
+      "GWLB: insert inspection",
+      "Distribute IP traffic to virtual appliances, such as firewalls, IDS/IPS and deep packet inspection systems.",
+      "Legacy context",
+      "Classic Load Balancer supports HTTP, HTTPS, TCP and SSL. Prefer a modern type for new architectures.",
+      "Remember: Start with protocol, routing and security requirements; performance alone does not choose the service."
+    ],
+    "layout": "Three large glossy conceptual service cards and small legacy footer.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 2,
+    "title": "Listener, rule, target group: three decisions",
+    "copy": [
+      "Listener: accept traffic",
+      "Choose the client-facing protocol and port, such as HTTPS on 443. This does not define the application's backend port.",
+      "Rule: choose an action",
+      "ALB evaluates rules from lowest numeric priority upward, then uses the default rule. Forward, redirect or return a fixed response.",
+      "Target group: reach the application",
+      "Define eligible targets, backend protocol and port, health checks and supported routing attributes.",
+      "Keep the boundaries clear",
+      "One ALB can serve several applications through different target groups. A healthy load balancer does not prove that every backend is ready.",
+      "Remember: The listener accepts; the rule decides; the target group delivers."
+    ],
+    "layout": "Three offset glossy conceptual cards, one detailed callout beneath; do not draw exact topology.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 3,
+    "title": "Public entry point, private application",
+    "copy": [
+      "Internet-facing",
+      "Public addresses accept internet traffic when routing and security permit. Targets can remain on private addresses.",
+      "Internal",
+      "Private addresses serve reachable private clients through the VPC, peering, VPN or Direct Connect, subject to routing and controls.",
+      "Reachability still matters",
+      "DNS resolution alone is insufficient. Check subnet routes, address families, security groups and network ACLs.",
+      "Design for resilience",
+      "Enable suitable Availability Zones and register capacity in them. An internal load balancer is not an authorization system.",
+      "Remember: Load balancer scheme controls reachability; identity and network policy control access."
+    ],
+    "layout": "Split glossy public doorway and private building analogy with short annotated cards.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 4,
+    "title": "Cross-zone balancing changes the target pool",
+    "copy": [
+      "Cross-zone enabled",
+      "A load balancer node can send traffic to eligible healthy targets across enabled zones. Uneven zonal capacity is easier to share.",
+      "Cross-zone disabled",
+      "A node uses targets in its own zone. Each zone needs enough healthy capacity for the traffic that arrives there.",
+      "Defaults and controls",
+      "ALB is enabled at the load balancer level; eligible target groups can disable it. NLB and GWLB default to disabled. CLB defaults depend on creation method.",
+      "Availability and cost",
+      "Cross-zone routing is separate from client DNS routing. Check current inter-AZ transfer charges and capacity needs for the selected service.",
+      "Remember: Sharing targets across zones does not remove the need to survive a zone failure."
+    ],
+    "layout": "Illustrated shared-pool versus local-pool analogy, no numerical chart or exact network diagram.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 5,
+    "title": "Health checks measure application readiness",
+    "copy": [
+      "Choose a meaningful probe",
+      "Configure the target-group protocol, port, path, success matcher, interval and thresholds. A listening socket may still hide a broken application.",
+      "Read the reason code",
+      "Separate timeout, response-code mismatch, failed health check and unused target states before changing infrastructure.",
+      "Avoid a shared outage cascade",
+      "A probe that fails whenever a shared dependency fails can remove every target at once. Design readiness checks deliberately.",
+      "Understand fail-open",
+      "If all ALB targets are unhealthy across enabled zones, traffic can be sent to all of them. Unhealthy is not a guaranteed traffic block.",
+      "Remember: Health checks guide routing; they do not repair applications or replace security controls."
+    ],
+    "layout": "Four generous cards with glossy stethoscope, code badge, dependency and amber warning illustrations.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 6,
+    "title": "ALB routes by the request's meaning",
+    "copy": [
+      "Match the request",
+      "Conditions include host, path, HTTP headers, request method, query strings and source IP. Order specific rules before broad matches.",
+      "Choose the response",
+      "Forward to target groups, redirect HTTP to HTTPS, or return a fixed response. The default rule handles unmatched requests.",
+      "Use the protocol features",
+      "ALB supports HTTP/2 and WebSocket upgrades. After an upgrade, messages use the established connection to the selected target.",
+      "Example decision",
+      "Requests for shop.example.com and /checkout can reach the checkout service; /catalog can reach another group without another public ALB.",
+      "Remember: Routing identifies the destination; it does not grant permission to use that destination."
+    ],
+    "layout": "Glossy request envelope with four readable decision cards, different composition from previous slides.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 7,
+    "title": "ALB targets: instances, IPs and functions",
+    "copy": [
+      "Instance or IP targets",
+      "Instance registration uses the instance's primary private address. IP targets support eligible private ranges and reachable hybrid workloads; public IP targets are not supported.",
+      "Container port mapping",
+      "ECS on EC2 with bridge networking can map identical container ports to different host ports. ECS registers the appropriate target ports.",
+      "Fargate and awsvpc",
+      "Tasks have their own network interfaces and private addresses. Use IP target groups rather than registering the host instance.",
+      "Lambda target",
+      "ALB translates an HTTP request into a JSON event and converts the function response back to HTTP. Follow the ALB event and response contract.",
+      "Remember: Choose the target type to match what actually receives the traffic."
+    ],
+    "layout": "Four glossary panels with glossy server, container stack, interface and function illustrations; no invented port labels.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 8,
+    "title": "TLS termination: identify both connections",
+    "copy": [
+      "Client to ALB",
+      "An HTTPS listener needs a server certificate and security policy. SNI lets one listener select among certificates for different hostnames.",
+      "ALB to target",
+      "Choose HTTP or HTTPS independently. HTTPS encrypts the backend leg; ALB does not validate the target certificate.",
+      "Client certificates",
+      "ALB mTLS verify authenticates client certificates against a trust store. In mTLS passthrough mode, certificate details go to the application in HTTP headers.",
+      "Different meaning of passthrough",
+      "NLB with a TCP listener can pass encrypted TLS bytes to the target for end-to-end termination. ALB mTLS passthrough still terminates TLS at ALB.",
+      "Remember: Encryption, server identity and client identity are three separate requirements."
+    ],
+    "layout": "Two illuminated lock sculptures above four readable explanation cards; conceptual not precise topology.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 9,
+    "title": "Authenticate users, then authorize actions",
+    "copy": [
+      "Offload sign-in",
+      "ALB HTTPS listener authentication supports OIDC providers or Amazon Cognito user pools. Cognito can federate corporate or social identities.",
+      "Preserve the login journey",
+      "Configure callback URLs, client credentials, scopes and connectivity to the identity provider. An internal ALB may still need outbound access to IdP endpoints.",
+      "Protect the backend",
+      "Validate the ALB-signed claims and expected signer before trusting identity headers. Prevent clients from bypassing the ALB.",
+      "Application authorization remains",
+      "A valid login does not prove permission to read every record or perform every action. Enforce resource-level authorization in the application.",
+      "Remember: Authentication establishes who the user is; authorization decides what the user may do."
+    ],
+    "layout": "Glossy identity passport and application permission gate with balanced surrounding copy.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 10,
+    "title": "Choose how ALB distributes requests",
+    "copy": [
+      "Round robin",
+      "Default sequential distribution across healthy targets; useful when requests and target capabilities are similar.",
+      "Least outstanding requests",
+      "Prefers targets with fewer in-progress requests. Useful when request duration or processing capability varies.",
+      "Weighted random",
+      "Random distribution with optional Automatic Target Weights anomaly mitigation. It cannot be combined with stickiness or slow start.",
+      "Stickiness and warm-up",
+      "Duration-based or application cookies keep a client on a target but can create imbalance. Slow start gradually increases a new target's share; use a compatible algorithm.",
+      "Remember: Target selection is different from weighted forwarding between target groups."
+    ],
+    "layout": "Four large polished concept tiles with evenly sized readable text; use no data chart.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 11,
+    "title": "Drain connections before removing capacity",
+    "copy": [
+      "Deregister safely",
+      "A deregistering target enters draining. Stop assigning new work and allow in-flight requests to finish within the configured delay.",
+      "Know the timer",
+      "For ALB instance and IP targets, deregistration delay defaults to 300 seconds and can be configured from 0 to 3600 seconds.",
+      "Coordinate the application",
+      "Align container or process shutdown grace, long requests and connection handling. Terminating the process early can still break requests.",
+      "Roll out in stages",
+      "Start replacement capacity, wait for readiness, shift traffic, drain old targets and then terminate. Health and rollback checks belong in the deployment.",
+      "Remember: Deregistration delay is a chance to finish work, not a guarantee that every request survives."
+    ],
+    "layout": "Four staggered glossy lifecycle cards; no precise flowchart.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 12,
+    "title": "Weighted target groups enable controlled releases",
+    "copy": [
+      "Split new requests",
+      "An ALB forward action assigns relative weights to target groups. A 90:10 split is an intended distribution, not an exact small-sample guarantee.",
+      "Account for stickiness",
+      "Group-level stickiness can keep a client in the selected group. Existing sessions may not immediately follow a changed weight.",
+      "Do not assume automatic failover",
+      "If a weighted group is empty or unhealthy, ALB does not automatically move its assigned traffic to another healthy group.",
+      "Make rollback practical",
+      "Observe errors, latency and business outcomes. Restore weights when needed; schema and data compatibility require their own rollback plan.",
+      "Remember: Weighted forwarding controls traffic share; deployment safety requires health signals and compatible state."
+    ],
+    "layout": "Two glossy release-version pedestals, amber control dial and four concise explanatory cards, no numeric chart.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 13,
+    "title": "NLB: choose transport and TLS behavior",
+    "copy": [
+      "Layer 4 transport listeners",
+      "TCP, TLS, UDP and TCP_UDP address common workloads. QUIC and TCP_QUIC are also supported with specific configuration restrictions.",
+      "Terminate or pass through",
+      "A TLS listener terminates client TLS and needs a certificate. A TCP listener on 443 can carry encrypted TLS unchanged to the application.",
+      "Select compatible targets",
+      "Targets: instances, private IPs from eligible ranges, or ALB. Public IP targets are unsupported. Match listener and target protocols; an ALB target requires TCP.",
+      "Avoid false guarantees",
+      "NLB is designed for demanding transport workloads. Fixed latency comparisons and promises of unlimited connections are not architecture guarantees.",
+      "Remember: Choose who terminates TLS before choosing the listener protocol."
+    ],
+    "layout": "Large glossy transport connector and lock comparison, four text cards with ample space.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 14,
+    "title": "NLB addresses, DNS and client identity",
+    "copy": [
+      "Static zonal addresses",
+      "NLB provides a static address per enabled zone. Internet-facing IPv4 deployments can use an Elastic IP per zone for allowlists.",
+      "Regional or zonal DNS",
+      "The regional name can return healthy node addresses across zones. A zonal DNS name identifies a specific zone's node; the application must manage its resilience.",
+      "Client identity at the target",
+      "Client IP preservation depends on protocol and target settings. Proxy Protocol v2 can carry connection metadata when the application understands it.",
+      "Plan the whole path",
+      "DNS zonal affinity influences client-to-NLB selection; cross-zone balancing influences NLB-to-target selection. They solve different parts of locality.",
+      "Remember: A fixed address is zonal; resilient clients must handle multiple zones."
+    ],
+    "layout": "Glossy address plaque, DNS compass and identity envelope in three rich illustrations with explanatory blocks.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 15,
+    "title": "NLB keeps flows together and checks health",
+    "copy": [
+      "Flow-based selection",
+      "NLB selects a target using flow information: protocol, source and destination addresses and ports; TCP also uses the sequence number. An established flow stays with that target.",
+      "Probe the real service",
+      "Active checks can use TCP, HTTP or HTTPS. UDP services need a suitable non-UDP health endpoint that reflects the UDP application's health.",
+      "Know failure behavior",
+      "Unhealthy zonal capacity can cause zonal addresses to leave DNS. If all targets fail, NLB can fail open; empty target groups can also trigger fail-open.",
+      "Connection handling matters",
+      "Idle timeouts, target termination and unhealthy-target behavior affect existing flows. More healthy targets do not transparently migrate a live TCP connection.",
+      "Remember: Balancing connections does not mean balancing every application message."
+    ],
+    "layout": "Glossy bundled cable analogy and pulse probe; four panels, no hash calculation diagram.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 16,
+    "title": "PrivateLink and NLB-to-ALB composition",
+    "copy": [
+      "Publish a private service",
+      "An endpoint service backed by NLB lets consumers connect through interface endpoints. Configure allowed principals and acceptance requirements.",
+      "Keep service boundaries narrow",
+      "PrivateLink exposes the service; it does not create full network peering. Provider and consumer routing and policies still matter.",
+      "Combine transport and HTTP features",
+      "An NLB can use an ALB as its target, combining static entry addresses or PrivateLink with ALB HTTP routing.",
+      "Respect composition constraints",
+      "The NLB and ALB must share the VPC and account. Use an ALB target group with TCP and a port matching an ALB listener; configure health checks.",
+      "Remember: Combine load balancers only when the requirements justify the extra layer, cost and failure surface."
+    ],
+    "layout": "Glossy private doorway and nested service blocks, four annotated conceptual cards, no exact topology.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 17,
+    "title": "GWLB inserts an appliance inspection service",
+    "copy": [
+      "Inspect IP traffic at Layer 3",
+      "GWLB combines transparent network-gateway behavior with load distribution across virtual firewalls, IDS/IPS or other network appliances.",
+      "Use compatible appliances",
+      "The appliance fleet exchanges traffic with GWLB using GENEVE encapsulation on UDP port 6081. Targets can be instances or eligible private IP addresses.",
+      "Connect through endpoints",
+      "Gateway Load Balancer endpoints carry traffic between the consumer VPC and inspection service. GWLB resides with the appliances in the provider VPC.",
+      "Routing is part of the design",
+      "Route tables must steer the intended traffic through inspection and support the return path. Deploying an endpoint alone does not inspect all traffic.",
+      "Remember: GWLB distributes inspection traffic; the appliance supplies the security policy."
+    ],
+    "layout": "Glossy magnifying shield, packet capsule and appliance fleet illustration with readable four blocks; avoid precise routes.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 18,
+    "title": "GWLB flow affinity protects stateful inspection",
+    "copy": [
+      "Keep the flow consistent",
+      "The default 5-tuple uses source and destination addresses, ports and protocol. Configurable 3-tuple or 2-tuple stickiness supports specific appliance requirements.",
+      "Preserve symmetry",
+      "A stateful appliance must see the relevant forward and return traffic. Validate routing and appliance mode when integrating other network services.",
+      "Plan appliance failure",
+      "Health checks identify available targets, but reassignment of existing flows depends on configured failover behavior. A new appliance may lack the old session state.",
+      "Scale with evidence",
+      "Monitor appliance capacity, health and flow behavior. Test draining, failure and recovery under realistic traffic before relying on the design.",
+      "Remember: Healthy replacement capacity does not automatically preserve an existing inspection session."
+    ],
+    "layout": "Glossy paired packet ribbons around shield, conceptual session ledger, four explanatory panels.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 19,
+    "title": "Secure both the entry point and the target",
+    "copy": [
+      "ALB application protection",
+      "AWS WAF can filter supported HTTP requests at ALB. Security groups control network access; WAF and security groups solve different problems.",
+      "NLB security groups",
+      "Associate a security group when creating the NLB if needed. An NLB created without any cannot have security groups added later; protocol-specific restrictions apply.",
+      "Target access and health checks",
+      "Where supported, reference the load balancer security group in the target's security group rules on application and health-check ports. Check outbound rules and stateless NACL return traffic.",
+      "Trust proxy headers carefully",
+      "ALB provides X-Forwarded-For, X-Forwarded-Proto and X-Forwarded-Port. Trust only the secured proxy chain; arbitrary incoming header values are not proof of identity.",
+      "Remember: Prevent direct target bypass and evaluate identity separately from network reachability."
+    ],
+    "layout": "Layered glossy shield illustration surrounded by four readable panels; do not depict exact topology.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 20,
+    "title": "Diagnose ingress with evidence",
+    "copy": [
+      "Start with target health",
+      "Read the target state and reason code. Verify the application listener, probe path, expected response, security groups, routes and network ACLs.",
+      "Separate error sources",
+      "Compare load-balancer errors with target errors. A client-facing failure may originate before a target is reached or inside the application.",
+      "Correlate metrics and logs",
+      "Use healthy-target counts, response time, request volume and error metrics. ALB access logs record request details; traditional delivery uses S3, with newer logging integrations also available.",
+      "Follow the request",
+      "Check TLS negotiation, rule selection, target registration, application logs and dependencies. Verify the corrected path rather than changing every layer at once.",
+      "Remember: A green load-balancer resource is not evidence that the user's request succeeds."
+    ],
+    "layout": "Glossy magnifier, telemetry console illustration without fabricated exact console UI, four explanation blocks.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 21,
+    "title": "Choose ingress for the actual requirement",
+    "copy": [
+      "Many HTTP services, one entry point",
+      "Choose ALB for host or path routing, HTTP-aware controls and supported web protocols.",
+      "Stable addresses plus HTTP routing",
+      "Consider NLB targeting ALB when static zonal entry addresses or PrivateLink must coexist with ALB features.",
+      "Encrypted transport to the application",
+      "Use a compatible NLB TCP listener when the target must terminate the client's TLS connection.",
+      "Transparent appliance inspection",
+      "Use GWLB for an eligible third-party appliance fleet; preserve flow consistency and required routing.",
+      "Check the tradeoffs",
+      "Include capacity, quotas, transfer, logging, public IPv4 and load-balancer usage costs. Compare current pricing rather than memorizing old free-tier or latency claims.",
+      "Remember: Select the simplest design that satisfies protocol, security, availability and operating requirements."
+    ],
+    "layout": "Four glossy scenario vignettes plus small cost lens; each vignette has full readable explanation.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 22,
+    "title": "Classic Load Balancer: understand the legacy",
+    "copy": [
+      "Protocols and certificates",
+      "CLB supports HTTP, HTTPS, TCP and SSL. It does not support SNI. One certificate can cover multiple SAN names; changing those names requires a certificate update, or use separate load balancers.",
+      "TLS at the instance",
+      "A TCP listener can pass encrypted bytes to the instance, where the application can implement mTLS. Modern ALB also supports client-certificate authentication.",
+      "Health and request distribution",
+      "CLB health checks support TCP, SSL, HTTP or HTTPS. HTTP/HTTPS request routing uses least outstanding requests; TCP uses round robin. Cookie stickiness can preserve sessions but create imbalance.",
+      "Cross-zone and migration",
+      "Cross-zone defaults differ by creation method. Compare modern ALB or NLB features, migrate deliberately and test certificates, health checks, sessions and rollback.",
+      "Remember: Legacy knowledge explains existing systems; choose current service capabilities for new designs."
+    ],
+    "layout": "Glossy legacy equipment beside modern service silhouettes, four balanced explanation cards. Lower-left corrected illustration: health-check stethoscope and separate badges HTTP/HTTPS: least outstanding requests; TCP: round robin. No protocol-to-algorithm arrows.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 23,
+    "title": "AWS Load Balancer Controller connects Kubernetes to ELB",
+    "copy": [
+      "Reconcile declared intent",
+      "The controller watches Kubernetes resources and creates or updates AWS load-balancing resources to match. Give it appropriate IAM permissions and subnet discovery configuration.",
+      "Choose the Kubernetes resource",
+      "An Ingress managed by the controller provisions ALB for HTTP routing. A Service of type LoadBalancer managed by it provisions NLB for transport traffic.",
+      "Choose the target mode",
+      "Instance mode reaches node ports; IP mode registers pod addresses. Fargate pods require IP targets. Keep routing, security groups and pod readiness aligned.",
+      "Avoid competing owners",
+      "Use the correct ingress class or loadBalancerClass. EKS Auto Mode has its own integrated load-balancing capabilities; distinguish the chosen controller and its configuration.",
+      "Remember: Kubernetes declares the desired exposure; the controller reconciles the AWS resources."
+    ],
+    "layout": "Glossy declarative blueprint and controller gears alongside two large service cards. Conceptual illustrations, no exact topology.",
+    "status": "qa-passed"
+  },
+  {
+    "number": 24,
+    "title": "Zonal locality: balance resilience and transfer cost",
+    "copy": [
+      "Know the cross-zone cost difference",
+      "ALB and CLB do not add regional transfer charges for their cross-zone load balancing. NLB and GWLB cross-zone traffic can incur inter-AZ transfer charges.",
+      "Keep each hop in view",
+      "Client-to-load-balancer traffic, load-balancer-to-target traffic and later application calls are separate hops. An exempt hop does not make the entire request path free.",
+      "Use locality deliberately",
+      "NLB zonal DNS or supported Route 53 Resolver zonal-affinity policies influence which node clients reach. Disable cross-zone routing only with sufficient capacity in every serving zone.",
+      "Budget for the complete service",
+      "Include load-balancer usage or capacity charges, applicable endpoints, public IPv4, logging and transfer. Use current regional pricing and validate failure behavior.",
+      "Remember: Locality saves cost only when it preserves the availability and capacity the workload needs."
+    ],
+    "layout": "Glossy compass and cost lens above four generous explanation blocks, no rates, no numeric chart.",
+    "status": "qa-passed"
+  }
+]

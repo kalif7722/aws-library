@@ -4,7 +4,7 @@
 
 ## Published result
 
-**31 available visuals out of 32 planned.** Eight existing images revised (01, 02, 06, 08, 09, 10, 13, 19); eight focused images added (24, 25, 26, 28–32); fifteen original visuals retained. The original 23 lesson identities remain stable. Lesson 27 is planned but has no accepted asset.
+**32 available visuals out of 32 planned.** Eight existing images revised (01, 02, 06, 08, 09, 10, 13, 19); nine focused images added (24–32); fifteen original visuals retained. The original 23 lesson identities remain stable. Lesson 27 now has a reviewed visual with the complete multi-node Batch restrictions and ParallelCluster comparison.
 
 The image-generation tool returned usage_limit_reached during the finishing pass. No alternate API/CLI was used. The initial HPC overview draft contained an incorrect storage caption and garbled text, so it was withheld and the original lesson 11 retained. The orchestration draft omitted the multi-node restrictions paragraph, so it was withheld rather than marked complete. Lesson 07 retains its original image pending the revised image's style cleanup.
 
@@ -34,7 +34,7 @@ The image-generation tool returned usage_limit_reached during the finishing pass
 | 31 | Spot Fleet pools, target/weighted capacity, optional On-Demand and allocation strategies |
 | 32 | Whole-system layer overview: DNS/CDN, ingress, compute, sessions/cache, data, messaging/workflows, storage/static assets |
 
-## Pending finishing work: six visuals
+## Pending finishing work: five visuals
 
 | Lesson | Pending correction | Current publication |
 |---|---|---|
@@ -42,7 +42,6 @@ The image-generation tool returned usage_limit_reached during the finishing pass
 | 09 | Explicitly state many instances can occupy each partition, subject to quotas | Revised image published; sentence refinement pending |
 | 11 | Clear four-panel HPC overview, elasticity/examples, DX/DataSync and accurate legible Snowball eligibility text; remove false storage caption | Original image retained; bad draft withheld |
 | 25 | Add explicit SNS alerting to the existing recovery/monitoring explanation | New image published; alerting refinement pending |
-| 27 | Include the full multi-node Batch explanation and Spot/Fargate restrictions with ParallelCluster comparison | No accepted asset; draft withheld |
 | 31 | Make configured price/budget constraints explicit in the fleet definition | New image published; refinement pending |
 
 Optional notes do not count as closing these visual gaps. Coverage QA remains false for known unfinished visual-depth items.
@@ -65,10 +64,10 @@ Page numbers refer to the 845-page reference *AWS Certified Solutions Architect 
 | 184 | System/guest failures, monitoring/recovery and preserved attributes | 19, 25; explicit SNS alerting refinement pending |
 | 185 | HPC elasticity, scientific/analytical use cases and job shape | Original 11 is broad; expanded overview pending |
 | 186 | Direct Connect, DataSync and large offline/Snowball transfer | Expanded 11 pending; not counted as visually repaired |
-| 187 | CPU/GPU, Spot and placement for HPC | 01, original 07, 09, original 11; orchestration detail pending |
+| 187 | CPU/GPU, Spot and placement for HPC | 01, original 07, 09, original 11; full orchestration comparison in reviewed 27 |
 | 188 | SR-IOV, ENA, Intel VF, EFA/Linux/MPI and OS bypass | 10 |
 | 189 | EBS/io2, local scratch, S3 object model, EFS and FSx for Lustre | 26 |
-| 190 | Batch scheduling/multi-node jobs; ParallelCluster configuration | 27 pending; original 11 only provides a brief introduction |
+| 190 | Batch scheduling/multi-node jobs; ParallelCluster configuration | 27 reviewed: full visible explanation, Spot/Fargate restrictions and workload comparison |
 | 191 | Target, simple/step and scheduled scaling | 13, 14, 15 |
 | 192 | Predictive scaling | 15 |
 | 193 | CPU, ALB, network and custom scaling metrics | 13, 24 |
@@ -90,7 +89,7 @@ Current primary documentation was checked for RI options, Graviton compatibility
 - Intel 82599 VF and the PDF's fixed speed examples are retained as legacy context, not current universal caps.
 - EFS throughput modes are not provisioned IOPS; EBS claims are qualified by supported configurations.
 - Snowball's existing-customer restriction is planned explicitly in lesson 11; that repair is not yet accepted.
-- Batch multi-node restrictions must be visible before lesson 27 can pass coverage QA.
+- Lesson 27 now visibly includes multi-node Batch restrictions and has passed coverage QA.
 - DNS weighting is not an instantaneous per-request dial.
 - Recovery identity preservation does not preserve RAM; instance-store behavior is qualified by mechanism.
 - Source-PDF Elasticsearch naming is represented by OpenSearch in the overview.
@@ -125,6 +124,12 @@ Primary references:
 
 ## Claim boundary and continuation
 
-**Module 07 is not yet complete at PDF depth.** Image quality, readable text and a broad topic mention are not substitutes for complete visible explanations. The six finishing items above remain open. Whole-course pdfDistinctTopicsReviewed and claim100PercentCoverage remain false; the remainder of the course also remains subject to a topic/subtopic audit.
+**Module 07 is not yet complete at PDF depth.** Image quality, readable text and a broad topic mention are not substitutes for complete visible explanations. The five finishing items above remain open. Whole-course pdfDistinctTopicsReviewed and claim100PercentCoverage remain false; the remainder of the course also remains subject to a topic/subtopic audit.
 
-Exact generated and desired final copy/layout are preserved in module-07-visual-repair-plan.json. Selected replacements use versioned asset paths; unrelated modules and original lesson IDs are preserved. Resume with the six corrections, then verify the crosswalk and publish the finishing set together.
+Exact generated and desired final copy/layout are preserved in module-07-visual-repair-plan.json. Selected replacements use versioned asset paths; unrelated modules and original lesson IDs are preserved. At the user's direction, repair only lesson 27 in this release and proceed to Module08. Other five depth refinements remain deferred; do not mark them complete.
+
+
+## Lesson 27 resolution with Module08
+
+The built-in image generator became available. Regenerated the full orchestration slide; inspected all teaching copy, including the EC2 multi-node explanation, lack of Spot/Fargate support, configurable ParallelCluster/Slurm model, independent-task versus MPI workload comparison and Remember takeaway. Publish versioned asset slide-27-v3.webp with the completed Module08 release. No other Module07 image was changed in this release.
+
