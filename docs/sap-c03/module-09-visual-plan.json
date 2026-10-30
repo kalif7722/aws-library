@@ -1,0 +1,536 @@
+{
+  "module": "09",
+  "plannedVisuals": 33,
+  "publicationGate": "Technical, source, visual and asset checks passed; deployment is verified separately against the release commit.",
+  "referencePages": "338\u2013357",
+  "slides": [
+    {
+      "sequence": 1,
+      "title": "S3 starts with an object, a key and an access pattern",
+      "copy": [
+        "Object storage",
+        "A bucket holds objects identified by keys. Objects combine data, metadata and a storage class; key prefixes organize names rather than create normal filesystem directories.",
+        "Good fits",
+        "Static assets, backups and data lakes fit object access patterns. Many tiny objects can amplify request and metadata overhead; model the full cost.",
+        "Choose the right interface",
+        "Object APIs differ from POSIX files and block devices. They do not provide general POSIX locking or database-style in-place updates. Match latency, update and query needs to the right interface.",
+        "Remember: Choose storage semantics first, then the service and storage class."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 2,
+      "title": "Consistency does not replace coordination",
+      "copy": [
+        "Read the completed write",
+        "General-purpose S3 object operations provide strong consistency for successful writes, overwrites, deletes and listings.",
+        "Concurrent changes still matter",
+        "Two clients can overwrite the same key. Use conditional requests and version-aware application logic when concurrent updates must be controlled.",
+        "Durability is a separate property",
+        "Durable storage does not prevent an authorized delete or application mistake. Versioning, retention, backups and replication address different risks.",
+        "Remember: Consistent reads do not make a multi-object business transaction atomic."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 3,
+      "title": "S3 access: identity, resource policy and ownership",
+      "copy": [
+        "Start private",
+        "Use Block Public Access and least-privilege identity and bucket policies. An explicit deny overrides an allow.",
+        "Understand ownership",
+        "Bucket owner enforced Object Ownership disables ACLs and centralizes ownership and policy-based access. Cross-account workflows still need appropriate permissions.",
+        "Evaluate the whole request",
+        "Check principal, action, object or bucket resource, policy conditions and applicable organization or endpoint controls. KMS access can be required separately.",
+        "Remember: AccessDenied is an authorization result; diagnose the specific request and policy boundary."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 4,
+      "title": "Access points and private network access",
+      "copy": [
+        "Give applications scoped entry points",
+        "S3 access points provide named endpoints and policies for particular application access patterns. Bucket authorization must support the intended access.",
+        "Reach S3 privately",
+        "A gateway endpoint provides supported VPC access to S3 through route-table integration. Interface endpoints support different private-connectivity requirements and costs.",
+        "Use defense in depth",
+        "An endpoint policy constrains access through that endpoint; it does not grant bucket permission or encrypt the data by itself.",
+        "Remember: A private network path and permission to access an object are separate controls."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 5,
+      "title": "Encryption: protect data and authorize the key",
+      "copy": [
+        "Encryption at rest",
+        "Server-side encryption protects stored object data. SSE-S3 and KMS-based options have different key-management, authorization and audit implications.",
+        "KMS permissions matter",
+        "An S3 permission alone can be insufficient for KMS-encrypted objects. Validate the relevant KMS key policy, IAM permissions and regional key availability.",
+        "Protect transport too",
+        "Use HTTPS and appropriate bucket-policy conditions. Plan key access for replication, cross-account readers and recovery rather than only the writer.",
+        "Remember: Encryption is useful only when authorized applications can use the keys and unauthorized callers cannot."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 6,
+      "title": "Versioning preserves object history",
+      "copy": [
+        "Keep distinct versions",
+        "Versioning preserves prior versions when a key is overwritten. Deleting without a version ID usually adds a delete marker rather than erasing all history.",
+        "Recover deliberately",
+        "Recover the required version or remove the appropriate delete marker. Permanently deleting a particular version removes that stored version.",
+        "Manage the accumulated cost",
+        "Noncurrent versions and delete markers need deliberate lifecycle rules. Suspending versioning is not the same as deleting historical versions.",
+        "Remember: Versioning creates recovery options; lifecycle and permissions determine whether they remain useful."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 7,
+      "title": "Object Lock: retention and legal hold",
+      "copy": [
+        "Use version-level protection",
+        "Object Lock protects eligible object versions in a versioned bucket. A legal hold is separate from a time-based retention period.",
+        "Governance mode",
+        "Appropriately authorized callers can bypass governance retention when they explicitly request that operation.",
+        "Compliance mode",
+        "Protected versions cannot be deleted or have retention shortened before expiry, including by the account root user.",
+        "Remember: Choose retention mode, duration and recovery procedures before applying irreversible protection."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 8,
+      "title": "Serve private static objects through CloudFront",
+      "copy": [
+        "Separate delivery from storage",
+        "S3 stores static objects while CloudFront caches and delivers them closer to users. The application can keep its dynamic compute separately.",
+        "Protect the origin",
+        "For a supported S3 bucket origin, use Origin Access Control and the appropriate bucket policy to restrict direct origin access.",
+        "Choose the endpoint deliberately",
+        "An S3 website endpoint and a regular S3 bucket origin have different capabilities. Viewer HTTPS and origin access must match the chosen design.",
+        "Remember: A CDN improves delivery; it does not automatically make an exposed bucket private."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 9,
+      "title": "Online storage classes: availability and recovery tradeoffs",
+      "copy": [
+        "S3 Standard",
+        "Frequent access, multi-AZ resilience and no minimum storage-duration commitment make it a flexible starting point.",
+        "Standard-IA",
+        "Infrequent access with rapid retrieval across multiple AZs. Account for retrieval charges, minimum duration and minimum billable size.",
+        "One Zone-IA",
+        "Infrequent-access data in one AZ. Use when the data can be recreated or another recoverable copy exists; it does not tolerate loss of that AZ.",
+        "Remember: Durability design, availability, retrieval charges and AZ failure tolerance are different dimensions."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 10,
+      "title": "Glacier classes: choose retrieval behavior",
+      "copy": [
+        "Glacier Instant Retrieval",
+        "Archive-oriented storage with immediate access for rarely read objects. Retrieval and minimum-duration charges still matter.",
+        "Glacier Flexible Retrieval",
+        "Asynchronous restore supports different retrieval tiers. Plan the restoration delay, temporary restored copy and retrieval charges.",
+        "Glacier Deep Archive",
+        "Long-retention data with a longer recovery lead time. A cheaper stored copy may be unsuitable for a short recovery objective.",
+        "Remember: Archive selection must satisfy the time needed to restore usable data, not just the storage price."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 11,
+      "title": "Intelligent-Tiering follows changing access",
+      "copy": [
+        "Unknown or changing patterns",
+        "Eligible objects enter Frequent Access, then move to Infrequent Access after 30 days without access and Archive Instant Access after 90 days.",
+        "Separate online and optional archive tiers",
+        "Optional Archive Access starts after at least 90 days without access; Deep Archive Access after at least 180 days. Both require a restore before reading.",
+        "Include the overhead",
+        "Monitoring and automation charges apply to eligible objects. Objects below 128 KB stay in Frequent Access and are not monitored or charged the monitoring fee.",
+        "Remember: Intelligent-Tiering optimizes access-tier placement; it does not decide whether an object should exist."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 12,
+      "title": "Lifecycle rules manage the whole object history",
+      "copy": [
+        "Transition with intent",
+        "Rules can move eligible objects to supported storage classes or expire them. Filter the intended key prefixes or tags and validate transition constraints.",
+        "Distinguish current and noncurrent versions",
+        "Current-version expiration, noncurrent-version expiration and expired delete-marker cleanup solve different problems.",
+        "Model the complete bill",
+        "Minimum storage duration, retrieval charges, small-object minimums and archive metadata overhead can outweigh a lower price per GB.",
+        "Remember: A lifecycle rule is an automated data-retention decision; test the scope before applying it."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 13,
+      "title": "Replication: same Region or another Region?",
+      "copy": [
+        "Choose the failure boundary",
+        "SRR creates another same-Region copy; CRR creates a copy in another Region. Choose the destination for latency, ownership, compliance and recovery needs.",
+        "Prepare both buckets",
+        "Enable required versioning, permissions and replication configuration. KMS-encrypted data needs supported key permissions and configuration.",
+        "Replication and lifecycle cooperate",
+        "Destination retention or storage-class choices can differ from source choices. Check what is replicated rather than assuming every bucket setting is copied.",
+        "Remember: A replicated copy is useful only if its permissions, keys and recovery design survive the intended failure."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 14,
+      "title": "Replication timing, existing objects and deletion",
+      "copy": [
+        "New versus existing data",
+        "Live replication handles eligible new objects after configuration. Existing objects or repair operations can require S3 Batch Replication.",
+        "Replication Time Control",
+        "S3 RTC applies to eligible live replication, not Batch Replication. Monitor replication delay and failures. Its SLA starts service credits below a 99.9% monthly 15-minute replication percentage, subject to terms.",
+        "Protect recovery independence",
+        "Delete-marker handling requires deliberate configuration. Permanent version deletion and all source-side operations do not automatically become equivalent destination actions.",
+        "Remember: Asynchronous replication has a recovery-point implication and is not a substitute for independent retention."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 15,
+      "title": "S3 event notifications: react without coupling",
+      "copy": [
+        "Choose events and filters",
+        "Object creation, removal, restore and replication events support different workflows. Native notification filtering uses supported key prefixes and suffixes, not arbitrary wildcard expressions.",
+        "Select the destination",
+        "Supported direct destinations include Lambda, standard SQS queues and standard SNS topics. Permissions and regional compatibility must be correct.",
+        "Design for retries",
+        "Delivery usually takes seconds but can take a minute or longer. Events may repeat or arrive out of order. Use idempotent processing and a plan for failures.",
+        "Remember: An object event is a signal to process; it is not exactly-once execution."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 16,
+      "title": "EventBridge adds richer event routing",
+      "copy": [
+        "Enable bucket delivery",
+        "Configure the bucket to send supported S3 events to EventBridge, then use event patterns to select the work.",
+        "Filter actual event fields",
+        "Bucket, object key, object size and event type can support routing decisions. Custom object metadata may require a separate lookup.",
+        "Use the event platform",
+        "Route to supported targets, such as Step Functions or queues. Configure retries, dead-letter handling and optional archive/replay deliberately.",
+        "Remember: Richer routing does not remove duplication, permissions or downstream failure handling."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 17,
+      "title": "Scale requests across useful key prefixes",
+      "copy": [
+        "Plan for request distribution",
+        "The reference baseline is at least 3,500 write-type or 5,500 GET/HEAD requests per second per partitioned prefix. Scaling to a new request pattern can be gradual.",
+        "Use parallelism deliberately",
+        "Spread independent work and connections across suitable prefixes. Prefixes are parts of keys, not a fixed set of physical folders.",
+        "Observe the real bottleneck",
+        "Handle transient throttling with retries and backoff. Client capacity, network throughput and KMS request quotas can constrain the complete system.",
+        "Remember: High S3 capacity does not guarantee that the client, encryption path or network can keep up."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 18,
+      "title": "Multipart upload: parallelize and retry parts",
+      "copy": [
+        "Divide a large object",
+        "Initiate to obtain an upload ID, upload numbered parts and retain their ETags, then complete using the required part information.",
+        "Retry only what failed",
+        "Parallel parts improve throughput; retry a failed part rather than the whole object. Consider multipart around 100 MB; use it beyond the single-PUT limit.",
+        "Completion is a separate step",
+        "Parts become a completed object only after completion succeeds. Validate checksums; the final ETag is not necessarily an MD5. Use the module reference for current size limits.",
+        "Remember: Multipart upload is a managed transfer lifecycle, not just several simultaneous PUT requests."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 19,
+      "title": "Incomplete multipart uploads still consume storage",
+      "copy": [
+        "Recognize stranded work",
+        "A failed or abandoned upload can leave billable parts even though no completed object appears in normal object listing.",
+        "Inspect deliberately",
+        "Use multipart-upload listing operations and inspect the outstanding upload before deciding whether to resume or abort it.",
+        "Automate cleanup",
+        "A lifecycle rule can abort incomplete multipart uploads after the chosen number of days. This is different from expiring completed objects or noncurrent versions.",
+        "Remember: Successful cleanup requires the right lifecycle action, not merely deleting an object key."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 20,
+      "title": "Byte-range GET: fetch only the needed bytes",
+      "copy": [
+        "Download independent ranges",
+        "A Range request retrieves a selected byte interval. Parallel ranges can accelerate suitable large-object downloads.",
+        "Recover smaller failures",
+        "Retry a failed range instead of restarting the entire download. Coordinate the assembled output and request concurrency.",
+        "Read partial content",
+        "Fetch a file header or needed segment without transferring the whole object. Pin the version or use conditions when consistency across requests matters.",
+        "Remember: Less transferred data helps only when the application understands and correctly assembles the selected bytes."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 21,
+      "title": "Transfer Acceleration helps distant uploads",
+      "copy": [
+        "Use an edge entry point",
+        "Eligible accelerated requests enter through an AWS edge location and traverse the AWS network toward the bucket's Region.",
+        "Combine with multipart",
+        "Parallel multipart transfers and acceleration address different parts of the transfer problem and can be used together.",
+        "Measure the benefit",
+        "Distance, network path, object size and client behavior affect the result. Benchmark and include acceleration charges rather than assuming every transfer becomes faster.",
+        "Remember: Acceleration optimizes the journey to a bucket; it is not multi-Region object replication."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 22,
+      "title": "Legacy Select: reduce data before transfer",
+      "copy": [
+        "Understand the historical idea",
+        "S3 Select and Glacier Select used server-side SQL-style filtering to return selected rows and columns rather than a whole supported object.",
+        "Why the pattern mattered",
+        "Returning a smaller result can reduce network transfer and client-side processing. It is different from a general-purpose database index.",
+        "Choose an available query path",
+        "S3 Select is unavailable to new customers; existing customers can continue using it. Glacier Select is historical context here. Evaluate Athena or another suitable engine for new analytical designs.",
+        "Remember: Filtering one object's content and querying a data lake are different architectural operations."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 23,
+      "title": "Storage Class Analysis informs lifecycle decisions",
+      "copy": [
+        "Observe before transitioning",
+        "S3 Analytics Storage Class Analysis examines access patterns to help assess Standard-to-Standard-IA transition opportunities.",
+        "Know the scope",
+        "It is not a universal recommendation engine for One Zone-IA or Glacier classes. Lifecycle execution is a separate configuration.",
+        "Use the reports",
+        "Initial analysis appears in 24\u201348 hours and updates daily; recommendations usually need 30 days or more of observations. Export daily CSV reports for spreadsheets or BI tools, including the QuickSight workflow shown in older materials.",
+        "Remember: A recommendation informs the decision; a lifecycle rule performs the transition."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 24,
+      "title": "Storage Lens: see storage across the organization",
+      "copy": [
+        "Choose the aggregation scope",
+        "Analyze supported organization, account, Region, bucket and prefix views to identify growth, cost and protection patterns.",
+        "Use the default or a custom dashboard",
+        "The default dashboard is preconfigured and can be disabled rather than deleted. Custom dashboards provide a tailored scope.",
+        "Export for further analysis",
+        "Configure supported daily exports, such as CSV or Parquet, and the appropriate access permissions for the destination.",
+        "Remember: Aggregated visibility helps locate problems; it does not apply the corrective policy by itself."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 25,
+      "title": "Storage Lens: summary and cost signals",
+      "copy": [
+        "Measure the footprint",
+        "Storage bytes and object counts reveal growing or underused storage. Compare the right account, bucket or prefix over time.",
+        "Find hidden retained data",
+        "Noncurrent-version bytes and incomplete-multipart-upload bytes can reveal costs that a normal current-object listing misses.",
+        "Turn a signal into an action",
+        "Investigate the affected data, then choose retention, cleanup or class transitions according to recovery and access requirements.",
+        "Remember: Reducing bytes is useful only when it preserves required data and recovery options."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 26,
+      "title": "Storage Lens: protection, ownership and event configuration",
+      "copy": [
+        "Protection metrics",
+        "Inspect versioning, MFA Delete, encryption-related and cross-Region replication indicators to locate gaps in expected safeguards.",
+        "Access-management metrics",
+        "Object Ownership indicators show which buckets use ownership configurations such as bucket owner enforced.",
+        "Event metrics",
+        "Notification-enabled bucket counts help assess where object events are configured. Configuration presence alone does not prove successful downstream processing.",
+        "Remember: A configuration metric is evidence of a setting, not proof that every object and workflow is protected."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 27,
+      "title": "Storage Lens: activity, performance and status codes",
+      "copy": [
+        "Activity metrics",
+        "Request counts, GET, PUT and LIST operations and downloaded bytes show how workloads use stored data.",
+        "Performance-related configuration",
+        "Transfer Acceleration configuration indicators help locate enabled buckets; measure actual transfer results separately.",
+        "Detailed status codes",
+        "Success, forbidden and not-found counts reveal different request outcomes. Investigate authorization, object existence and application behavior before changing retention.",
+        "Remember: Stored capacity, request activity and request success tell different parts of the operational story."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 28,
+      "title": "Storage Lens: choose the needed metric tier",
+      "copy": [
+        "Free usage visibility",
+        "Free daily metrics include storage, cost, protection, ownership, performance and event-configuration signals. Their console query window is 14 days.",
+        "Advanced metrics and recommendations",
+        "Paid advanced metrics add activity, detailed status and deeper cost/protection insights, recommendations and CloudWatch publishing. Prefix-level metrics are not published to CloudWatch.",
+        "Match history to the decision",
+        "All metrics are retained for 15 months. Free metrics can be queried for 14 days; advanced metrics for 15 months. Retention and query access are different.",
+        "Remember: Pay for the scope and history needed to answer a real operational or cost question."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 29,
+      "title": "Build an object-metadata index for application queries",
+      "copy": [
+        "Separate payload from lookup",
+        "S3 holds the object; DynamoDB can hold tenant, upload date, category, object size and key for application-specific lookups.",
+        "Maintain the index",
+        "An event-driven processor can update metadata after object changes. Handle duplicates, out-of-order events and failures, then reconcile missing or stale records.",
+        "Design the query keys",
+        "Design partition and sort keys for tenant/date and attribute queries. Total bytes per customer needs a reliable aggregate or reconciliation. Enforce tenant access and account for index lag.",
+        "Remember: An application index must be maintained and repaired; object storage does not make that workflow atomic."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 30,
+      "title": "Keep static delivery separate from dynamic processing",
+      "copy": [
+        "Static path",
+        "Store suitable assets as objects and deliver them through an appropriate cache. Keep permission checks aligned with the intended audience.",
+        "Dynamic path",
+        "Use application compute or APIs for business logic and databases for transactional state. Do not expect a static object to execute server-side application code.",
+        "Upload without proxying every byte",
+        "An authorized service can issue a bounded presigned upload request. Validate the intended key, method, expiry and application workflow.",
+        "Remember: Each layer should own one responsibility: delivery, computation, metadata lookup or durable object storage."
+      ],
+      "layout": "Asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 31,
+      "title": "Choose recovery controls for the actual failure",
+      "copy": [
+        "Accidental overwrite",
+        "Version history can restore an earlier object state if the required versions have been retained and permissions allow recovery.",
+        "Malicious or mistaken deletion",
+        "Retention and legal-hold controls protect eligible versions; independent backup and access boundaries reduce correlated failure.",
+        "Regional disruption",
+        "A deliberately configured remote replica can support recovery, but data lag, keys, permissions and application dependencies still affect the result.",
+        "Remember: Test the full restore path; the existence of another copy does not prove a usable recovery."
+      ],
+      "layout": "Three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 32,
+      "title": "S3 architecture decisions: fit the access and failure model",
+      "copy": [
+        "Start with semantics",
+        "Choose object, file, block, database or analytical access according to how the application reads, updates and searches data.",
+        "Choose the data lifecycle",
+        "Match online access or restore delays, retention, replication boundaries and complete storage/retrieval costs.",
+        "Validate the complete request path",
+        "Include identity, encryption, network reachability, delivery, events, indexes and operational metrics. Check current service limits before implementation.",
+        "Remember: A strong S3 design balances access, security, recovery, performance and cost across the whole application."
+      ],
+      "layout": "One central glossy metaphor with three surrounding explanation cards.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    },
+    {
+      "sequence": 33,
+      "title": "Static assets: servers, shared files or an object origin?",
+      "copy": [
+        "Local assets on web servers",
+        "Serving static files from EC2 keeps the web tier responsible for availability, patching and scaling. Instance store is ephemeral; EBS introduces its own persistence and AZ considerations.",
+        "Shared files for a web fleet",
+        "EFS can provide a shared Linux file namespace for suitable web applications. The compute fleet and filesystem remain dependencies that need security, performance and resilience planning.",
+        "Object-native static delivery",
+        "S3 with an appropriate CloudFront origin can deliver suitable static objects without a web-server fleet. Keep dynamic application processing separate where the workload allows.",
+        "Remember: Add compute and filesystem layers when their semantics are needed, rather than merely to hold unchanged static objects."
+      ],
+      "layout": "Three generous glossy conceptual comparison vignettes: local server plus disk, web fleet plus shared files, S3 object origin plus delivery globe. No exact topology or copied PDF diagram.",
+      "status": "reviewed",
+      "sourceVerifiedDate": "2026-10-31"
+    }
+  ]
+}
