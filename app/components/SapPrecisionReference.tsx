@@ -7,7 +7,10 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
- const defaults=moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
+ const defaults=moduleId==='13'?['AWS-Lambda','AWS-Lambda','AWS-Lambda','Amazon-API-Gateway','Amazon-API-Gateway','Amazon-API-Gateway','AWS-AppSync']:moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
+ if(moduleId==='13'&&/AppSync/.test(topic))return 'AWS-AppSync';
+ if(moduleId==='13'&&/X-Ray/.test(topic))return 'AWS-X-Ray';
+ if(moduleId==='13'&&/CodeDeploy/.test(topic))return 'AWS-CodeDeploy';
  if(/DAX/.test(topic))return 'dax';
  if(/DocumentDB/.test(topic))return 'Amazon-DocumentDB';
  if(/LiveAnalytics|Time-series/.test(topic))return 'Amazon-Timestream';
@@ -24,7 +27,7 @@ function detailIcon(moduleId:string,index:number,topic:string) {
 export default function SapPrecisionReference({moduleId}:{moduleId:string}) {
  const own=sections.filter(section=>section.moduleId===moduleId);
  if(!own.length)return null;
- const enhanced=moduleId==='11'||moduleId==='12';
+ const enhanced=comparisons.some(group=>group.moduleId===moduleId);
  const groups=comparisons.filter(group=>group.moduleId===moduleId);
  const count=groups.reduce((sum,group)=>sum+group.rows.length,0);
  const detailCount=own.reduce((sum,section)=>sum+section.rows.length,0);

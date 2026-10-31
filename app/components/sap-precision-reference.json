@@ -989,5 +989,383 @@
       "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere-troubleshooting.html",
       "https://anywhere.eks.amazonaws.com/docs/overview/faq/"
     ]
+  },
+  {
+    "moduleId": "13",
+    "title": "Lambda execution, runtime and package precision",
+    "rows": [
+      [
+        "Memory and CPU",
+        "Standard Event Functions configure 128–10,240 MB in 1-MB increments; CPU scales with memory. At 1,769 MB the allocation is equivalent to one vCPU, correcting the source two-vCPU claim. Supported maximum-memory configurations can reach six vCPUs; profile single-threaded versus parallel code."
+      ],
+      [
+        "Timeout scope",
+        "Standard maximum invocation timeout is 900 seconds; default is 3 seconds. Eligible Managed Instances async/event-source-mapping invocations can use 5,400 seconds, except Amazon MQ/DocumentDB sources. Workflow wall-clock duration and individual invocation duration differ."
+      ],
+      [
+        "Temporary storage",
+        "/tmp can be 512–10,240 MB in 1-MB increments for supported standard configurations; it is temporary, separate from memory and not durable state. Reuse does not guarantee retention across environments."
+      ],
+      [
+        "ZIP and layers",
+        "Direct uploaded ZIP packages:50 MB compressed; uncompressed function plus included layers:250 MB. Supported larger compressed artifacts can use S3 upload. Up to five layers. Container images use a different package contract."
+      ],
+      [
+        "Container deployment",
+        "Up to 10 GB uncompressed including image layers. Match supported architecture/OS and implement Lambda Runtime API; read-only root filesystem with supported /tmp writes. Patch the image and validate ECR access; arbitrary Docker server images are not automatically compatible."
+      ],
+      [
+        "Environment and policy sizes",
+        "Aggregate environment variables:4 KB. Function resource-based policy:20 KB. These do not replace Secrets Manager or least-privilege application/configuration design."
+      ],
+      [
+        "Buffered and async payloads",
+        "Synchronous buffered request/response:6 MB each. Async invocation payload:1 MB, replacing the PDF256 KB value. Base 64 encoding and integration envelopes can enlarge data; the smallest boundary in the path wins."
+      ],
+      [
+        "Response streaming",
+        "Lambda synchronous streamed responses support up to 200 MB; after the first 6 MB, the remaining Lambda stream is limited to 2 MB/s. Downstream API/CloudFront/client constraints are separate. Streaming responses do not imply streaming requests."
+      ],
+      [
+        "Runtime lifecycle",
+        "Node.js, Python, Java, .NET and Ruby support is versioned. PowerShell/custom languages require compatible supported packaging/runtime integration, not an assumed permanent managed-runtime entitlement. Track deprecation, OS libraries and SDK versions."
+      ],
+      [
+        "Current function models",
+        "Standard Event Functions are the course baseline. Lambda Managed Instances, durable functions, Web Functions and MicroVM offerings have distinct compute/API/availability/quota contracts. Check the chosen model; do not generalize standard per-environment or duration rules to all Lambda offerings."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-ephemeral-storage.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/runtimes-images.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/lambda-managed-instances.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "Lambda concurrency, retries and failure retention",
+    "rows": [
+      [
+        "Account and function scaling",
+        "Typical regional account concurrency default:1,000; newer accounts can start lower, with increases subject to approval. Standard per-function environment scale-out limit:1,000 environments per 10 seconds. Request rate, source concurrency and downstream limits remain separate."
+      ],
+      [
+        "Reserved versus provisioned",
+        "Reserved concurrency allocates an exclusive share and an upper bound without pre-initializing. Provisioned concurrency keeps qualified version/alias environments ready and adds cost. Leave required unreserved capacity: with the normal quota,100 units remain for unreserved functions. Reserved zero intentionally stops processing; async failure-retention behavior needs review."
+      ],
+      [
+        "Capacity sizing",
+        "Approximate steady concurrency=RPS×average duration in seconds.200 RPS×0.5s≈100concurrent. Tail latency, spikes, initialization and retries need headroom; this arithmetic is not a burst guarantee."
+      ],
+      [
+        "SnapStart support",
+        "Current supported Java 11+, Python 3.12+ and .NET8+ runtime configurations and corresponding eligible container formats must be checked against the current list. Published versions/aliases only, not$LATEST. No provisioned concurrency, EFS or /tmp>512 MB; restore uniqueness and network reconnection must be validated."
+      ],
+      [
+        "Synchronous retries",
+        "Caller/integration decides supported retry behavior. Check function/application errors even when the invoke transport succeeds. A caller timeout can occur after a side effect commits; use idempotency keys and a reconciliation/query path."
+      ],
+      [
+        "Asynchronous function errors",
+        "Default code/runtime error behavior: initial attempt plus two retries, ordinarily about 1minute then 2 minutes later. Configure maximum retry attempts 0–2 and maximum event age 60–21,600 seconds where supported. This is not the universal retry count for throttles/system failures."
+      ],
+      [
+        "Throttles and async queue age",
+        "Throttling/system errors are retried with increasing delay for up to six hours by default. Duplicates can occur even without a function error; queue pressure can age out events. Monitor age, dropped events and failure retention."
+      ],
+      [
+        "DLQ versus destination",
+        "Function DLQ: standard SNS/SQS event payload plus relevant attributes. Async destinations: request/response invocation record for success/failure using supported standard SNS/SQS, Lambda or EventBridge; S3 is failure-only. SNS256 KB can be too small for a large invocation record."
+      ],
+      [
+        "Failure-delivery permissions",
+        "Grant relevant SendMessage, Publish, PutEvents, InvokeFunction or S3 write/list permissions and required KMS access. Monitor DestinationDeliveryFailures and dead-letter errors. Unsupported FIFO destination configuration or size denial is not a successful archive."
+      ],
+      [
+        "Poller contract",
+        "SQS/Kinesis/DynamoDB event source mappings poll and batch; they do not use the function async queue retry contract. Configure source-specific failure behavior, checkpoints, concurrency and partial-batch handling. SQS visibility should cover processing/retry needs; successful records must not be blindly repeated."
+      ],
+      [
+        "Integration catalog",
+        "Supported API/ALB/SDK synchronous invokes; S3/SNS/EventBridge async invokes; SQS/stream polling; IoT rule, Cognito trigger and Logs subscription invocation each have distinct event, permission, timing and retry contracts. Verify the selected source rather than applying a generic Lambda rule."
+      ],
+      [
+        "IoT and Logs source contracts",
+        "AWS IoT rules invoke Lambda asynchronously and need a source-scoped function resource permission. CloudWatch Logs subscription data uses the supported awslogs.data Base64/GZIP envelope; filter and decode it correctly, avoid log-trigger recursion and validate delivery/processing failure behavior."
+      ],
+      [
+        "Cognito user-pool trigger exception",
+        "Most user-pool triggers are synchronous and require a response within a fixed five-second window; eligible retry behavior is trigger/error-specific, not a generic async Lambda rule. Asynchronous custom-sender exceptions must be checked separately. Do not confuse these triggers with legacy Cognito Sync events."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/scaling-behavior.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-configuring.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/services-iot.html",
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html",
+      "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-working-with-lambda-triggers.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "Lambda release, network and operational boundaries",
+    "rows": [
+      [
+        "CodeDeploy modes",
+        "Examples include Linear10PercentEvery3Minutes, Linear10PercentEvery10Minutes, Canary10Percent5Minutes, Canary10Percent30Minutes and AllAtOnce. Validate supported deployment configuration, hooks, alarms and rollback; custom values require supported configuration. SAM can define deployment preferences."
+      ],
+      [
+        "Versions and alias scope",
+        "Published code and most version configuration are immutable; operational trigger/destination/provisioned-concurrency settings can still change, and supported automatic runtime patching has its own policy. An alias is a qualified pointer with supported version weighting and compatibility prerequisites. Scope invoke permissions to the actual version/alias ARN. API deployment stages are independent selectors."
+      ],
+      [
+        "Private networking",
+        "Every function runs in Lambda service-managed infrastructure; customer-VPC configuration provides Hyperplane-ENI connectivity. Select compatible subnets/security groups, ENI management permissions, DNS, route/address capacity and resource authorization."
+      ],
+      [
+        "Internet and fixed egress",
+        "Public subnet attachment gives no Lambda public IP. For standard IPv4 internet egress, use a private subnet route through an appropriately placed public NAT gateway/EIP and IGW. Consider AZ failure, cross-AZ charges, port/capacity and all egress IPs on the external allowlist."
+      ],
+      [
+        "AWS endpoints versus default log delivery",
+        "A supported DynamoDB/S3 endpoint can supply that service path; other SDK/service calls need their own endpoint or internet connectivity. Standard Lambda service delivery of execution logs is not evidence that application SDK HTTPS calls can reach CloudWatch or another service without a network path."
+      ],
+      [
+        "Logging and tracing permission",
+        "For standard CloudWatch Logs delivery, scope supported logs:CreateLogGroup, logs:CreateLogStream and logs:PutLogEvents permissions appropriately. Supported active tracing can require xray:PutTraceSegments and xray:PutTelemetryRecords. Protect sensitive values and set retention; API Gateway tracing and downstream application spans remain separate."
+      ],
+      [
+        "X-Ray tooling timeline",
+        "X-Ray SDKs and daemon entered maintenance 25 February 2026; support ends 25 February 2027 per current timeline. AWS recommends OpenTelemetry-compatible instrumentation. X-Ray service tracing is not declared retired by the SDK timeline."
+      ],
+      [
+        "Thumbnail and scheduled jobs",
+        "Filter source notifications to avoid output recursion; use deterministic output/metadata identities and recover partial S3/DynamoDB completion. Scheduler execution permission and failed-delivery retries are separate from handler business success. Configure explicit timezone/window requirements."
+      ],
+      [
+        "Sandbox evidence",
+        "Walkthroughs are illustrative and should be executed only in a disposable authorized account. Capture event/request IDs, expected outcomes and redacted evidence; verify negative tests and remove sandbox-only rules, identities, queues, logs and releases after use."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc-internet.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html",
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html",
+      "https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html",
+      "https://docs.aws.amazon.com/scheduler/latest/UserGuide/managing-targets-templated.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "API product features, payloads and timeouts",
+    "rows": [
+      [
+        "REST versus HTTP API",
+        "REST has supported request validation/body transformations, usage plans/API keys, cache, canary releases, resource policies, WAF and private API endpoints. HTTP API is a leaner RESTful product with compatible JWT/IAM/Lambda auth and auto deployments. Both can support mTLS; verify configuration."
+      ],
+      [
+        "Private backend support",
+        "Current REST VPC links V2 can integrate with supported ALB/NLB backends; V1 is legacy. HTTP API private integrations have their own ALB/NLB/Cloud Map options. REST private Cloud Map integration is not supported. Private backend access does not make the API endpoint private."
+      ],
+      [
+        "Buffered REST payload/time",
+        "Payload 10 MB. Usual integration timeout 50ms–29s; Regional/private REST can request greater timeouts, potentially reducing regional account throttle. Edge-optimized buffered timeout cannot be increased through that ordinary limit. Lambda 6 MB buffered payload may constrain the chain earlier."
+      ],
+      [
+        "HTTP API limits",
+        "Payload 10 MB; integration timeout maximum 30 seconds, not increasable. These limits are distinct from REST response streaming and Lambda timeout. Default stages 10 and routes 300 are quota entries, not unlimited resources."
+      ],
+      [
+        "REST response streaming",
+        "Supported HTTP_PROXY/AWS_PROXY response-transfer STREAM mode works on REST endpoint types, up to 15 minutes and beyond the ordinary 10 MB response boundary. No request streaming. Endpoint cache, response VTL transformation and content encoding are not supported in STREAM mode; compress in the integration if appropriate."
+      ],
+      [
+        "Streaming idle/bandwidth gates",
+        "REST stream idle timeouts:5 minutes Regional/private and 30 seconds edge-optimized; customer CloudFront response timeout is a separate setting. API stream first 10 MB is uncapped, then 2 MB/s; Lambda stream has a separate 6 MB threshold. A disconnected client does not necessarily stop Lambda execution."
+      ],
+      [
+        "Regional rate quota",
+        "Typical account/Region shared quota across REST, HTTP, WebSocket and callbacks:10,000 RPS with 5,000burst bucket. Some Regions default 2,500/1,250. Actual assigned quotas and downstream rates govern capacity; burst is service-determined, not freely customer-configured."
+      ],
+      [
+        "Stages, deployments and imports",
+        "REST stage points to an API deployment; deployment and rollback preserve configuration history, not all data/side effects. Stage default quota 10, increasable where supported. HTTP auto-deploy support differs; OpenAPI definition import does not supply target permissions or network setup."
+      ],
+      [
+        "Large-object upload",
+        "Presign only after trusted identity/tenant authorization. Scope key, method, expiry, headers and supported size/checksum conditions; clients upload directly to S3. Enforce CORS where required and verify completion/encryption. URL disclosure grants its supported bearer capability."
+      ],
+      [
+        "ALB Lambda target limits",
+        "Same account/Region for function and target group; one function per target group. Request body 1 MB and response JSON1 MB. No WebSocket upgrades on Lambda targets. ALB invokes Lambda directly, so an imagined ALB-SG outbound TCP connection to the function is not the permission model."
+      ],
+      [
+        "Function URL permissions",
+        "For new URLs since October 2025, both lambda:InvokeFunctionUrl and lambda:InvokeFunction permissions are required. AWS_IAM uses SigV4; NONE still needs an appropriate function resource policy and is public unauthenticated access. Cross-account policy requirements and InvokedViaFunctionUrl restrictions matter."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-execution-service-limits-table.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-quotas.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/response-transfer-mode.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/private-integration.html",
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "API authorization, browser behavior and cache details",
+    "rows": [
+      [
+        "REST policy context",
+        "Evaluate caller IAM/method authorization and supported API resource policy together. IP/CIDR, principal and VPC/endpoint conditions have distinct meaning; explicit deny still applies. Backend integration role/Lambda resource permissions are another gate."
+      ],
+      [
+        "IAM, Cognito and custom tokens",
+        "AWS_IAM uses signed requests. REST Cognito authorizers validate compatible user-pool tokens; HTTP JWT authorizers validate supported issuer/audience/time/scope rules. Lambda authorizers implement a supported custom contract; a raw SAML assertion is not automatically a JWT accepted by every authorizer."
+      ],
+      [
+        "Authorizer caching",
+        "A cached policy/decision must be scoped to relevant identity sources, routes and authorization context. Test revoked/changed access, tenant identity and policy resource patterns; cached authentication must not widen data permissions."
+      ],
+      [
+        "CORS semantics",
+        "CORS is enforced by browsers and is not API authentication. Configure preflight OPTIONS and actual/error-response headers. Credentialed requests require compatible explicit origin/credentials settings; wildcard origin does not authorize credentialed access. Backend side effects can happen even when the browser rejects response access."
+      ],
+      [
+        "API keys and plans",
+        "Keys identify metered consumers; protect APIs with IAM/Cognito/authorizers. Plan rate/quota targets aggregate across associated stages; a key is associated with only one plan per stage. Best-effort throttles/quotas can be exceeded and are not hard spending caps."
+      ],
+      [
+        "REST cache sizing and TTL",
+        "Supported cacheClusterSize choices include 0.5,1.6,6.1,13.5,28.4,58.2,118 and 237 GB; verify current API values. TTL default 300s, configurable 0–3600; zero disables. Maximum cached response 1,048,576bytes; encryption can increase its stored size. Cache provisioning/resizing can take minutes and resizing clears data."
+      ],
+      [
+        "Method and key behavior",
+        "When default stage method caching is enabled, GET methods cache by default; override explicitly for other methods. Include required tenant/resource/variant inputs in cache keys and preserve authorization before serving sensitive content. Monitor CacheHitCount/CacheMissCount."
+      ],
+      [
+        "Invalidation controls",
+        "A supported Cache-Control:max-age=0 request can invalidate an entry with appropriate permissions/policy; do not assume any anonymous client can flush data. Whole-stage flush, per-method settings and cache encryption are distinct. Cached stale responses need bounded freshness expectations."
+      ],
+      [
+        "TLS and DNS",
+        "Use supported custom-domain mappings and certificate ownership/validation. Edge-optimized API custom-domain certificates require us-east-1; Regional certificates use the API Region. Choose supported DNS alias/CNAME records rather than treating a service hostname as an A-record IP."
+      ],
+      [
+        "Private API gates",
+        "Private REST access uses execute-api interface endpoints with DNS/security-group reachability plus endpoint/resource/method policies. aws:SourceVpc/SourceVpce can restrict context. A supported connected on-premises network can reach the private path; it is not limited to a client physically inside one subnet."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-resource-policies.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-to-api.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "API evidence, errors and WebSocket lifecycle",
+    "rows": [
+      [
+        "Error interpretation",
+        "400input;401/403auth/policy/path/WAF possibilities;429throttle evidence;502integration/response contract;503unavailability;504integrationtimeout. Use access/integration logs and backend request IDs; do not assert all 502s mean out-of-order invocation."
+      ],
+      [
+        "Logs and metrics by product",
+        "REST supports stage execution logs, access logs, detailed metrics, cache metrics, supported Firehose access-log delivery and X-Ray tracing. HTTP supports metrics/access logs but not the full REST execution-log/X-Ray/cache set. Avoid logging tokens and personal data."
+      ],
+      [
+        "Latency interpretation",
+        "Latency and IntegrationLatency have different scope. Compare gateway overhead, authorizer latency, initialization and backend duration. Increasing function memory is not a generic fix for policy denial, network egress failure or malformed proxy output."
+      ],
+      [
+        "WebSocket routes and state",
+        "Use$connect,$disconnect,$default and message-content-selected custom routes. Persist trusted connection/user/tenant associations where needed. Authentication at connection establishment does not authorize every later data operation automatically."
+      ],
+      [
+        "WebSocket limits",
+        "Connection maximum 2 hours; idle timeout 10 minutes; frame 32 KB; message 128 KB requiring compliant framing. Integration timeout 50ms–29s. Typical new connection default 500/s per account/Region, subject to increase. No explicit concurrent-connection quota does not mean unlimited practical capacity."
+      ],
+      [
+        "Management callback",
+        "Use signed HTTPS POST to correct /stage/@connections/{connectionId} management endpoint; client connects through wss. Backend needs scoped execute-api:ManageConnections. Custom domains can change stage/path construction. GoneException can mean stale or not-yet-established connection."
+      ],
+      [
+        "Disconnect/recovery",
+        "Handle client reconnect, connection-state cleanup and missed updates. Best-effort disconnect delivery cannot be the only cleanup mechanism. Retained database connection records do not make a network socket durable."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-gatewayResponse-definition.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-metrics-and-dimensions.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-overview.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-execution-service-websocket-limits-table.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-connections.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "AppSync schema, identity and real-time boundaries",
+    "rows": [
+      [
+        "Schema and resolver responsibility",
+        "GraphQL schema specifies fields/types/operations; resolvers implement data access. Supported DynamoDB, eligible Aurora/Data API, OpenSearch, HTTP and Lambda adapters each have their own compatibility, mapping, role and network requirements."
+      ],
+      [
+        "Authorization choices",
+        "API_KEY,AWS_IAM,OPENID_CONNECT,AMAZON_COGNITO_USER_POOLS and AWS_LAMBDA modes are supported for GraphQL with configuration restrictions. API key is for a suitable unauthenticated/public API contract, not trusted private user identity. Additional modes require deliberate field/type rules."
+      ],
+      [
+        "Cognito group versus item authorization",
+        "Group claims can allow reader queries and restrict writer mutations. Resolver/application owner/tenant conditions and scoped backend IAM are still required. Test forbidden fields, cross-tenant item keys, list predicates and mutations."
+      ],
+      [
+        "Subscriptions",
+        "GraphQL subscriptions are mutation-linked secure WebSocket updates with supported filters and authorization. Select fields/payloads correctly and protect cross-tenant subscriptions. Connection establishment does not guarantee every event is retained for replay."
+      ],
+      [
+        "Offline synchronization",
+        "Local cache, offline writes, delta/full sync and version/conflict behavior depend on supported client/data-source tooling. A bare GraphQL schema or WebSocket is not a generic offline synchronization implementation; validate reconnect reconciliation."
+      ],
+      [
+        "AppSync Events distinction",
+        "Current AppSync Events is a separate managed event publish/subscribe API with its own channel/authorization contract. Do not silently treat GraphQL resolvers/subscriptions and Events as identical. Historic MQTT-over-WebSocket wording is not a universal protocol guarantee."
+      ],
+      [
+        "Observability and efficiency",
+        "Use supported AppSync logs/metrics and safe request correlation. Field selection is not proof of fewer backend operations; inspect resolver fan-out, request sizes, datastore capacity, errors and total cost. A successful auth token check does not prove negative tenant tests."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/appsync/latest/devguide/security-authz.html",
+      "https://docs.aws.amazon.com/appsync/latest/devguide/aws-appsync-real-time-data.html",
+      "https://docs.aws.amazon.com/appsync/latest/devguide/data-source-components.html",
+      "https://docs.aws.amazon.com/appsync/latest/devguide/conflict-detection-and-sync.html",
+      "https://docs.aws.amazon.com/appsync/latest/eventapi/event-api-welcome.html"
+    ]
   }
 ]

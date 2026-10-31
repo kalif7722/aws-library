@@ -608,5 +608,337 @@
       "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/predictive-auto-scaling.html",
       "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/tasks-scheduled-eventbridge-scheduler.html"
     ]
+  },
+  {
+    "moduleId": "13",
+    "title": "API front doors and real-time service choices",
+    "rows": [
+      {
+        "service": "API Gateway · REST API",
+        "icon": "Amazon-API-Gateway",
+        "choose": "Feature-rich managed APIs needing supported usage plans, validation, stage cache, WAF, private endpoints or canary releases.",
+        "operations": "Choose endpoint type, deployment/stage, integration, caller authorization and backend permission independently. Use compatible OpenAPI definitions and request/response mapping.",
+        "watch": "Buffered payload 10 MB; backend Lambda 6 MB may constrain earlier. Qualify timeout by endpoint/transfer mode. REST feature support is not HTTP API feature support."
+      },
+      {
+        "service": "API Gateway · HTTP API",
+        "icon": "Amazon-API-Gateway",
+        "choose": "A leaner RESTful API when its lower-feature operating model meets the requirement.",
+        "operations": "Supported JWT/IAM/Lambda authorization, compatible Lambda/HTTP/AWS integrations, private backend options and optional automatic deployments.",
+        "watch": "Maximum integration timeout 30 seconds; payload 10 MB. No REST stage cache, usage-plan API keys, resource policies, private API endpoints, REST canary or native WAF feature parity."
+      },
+      {
+        "service": "API Gateway · WebSocket API",
+        "icon": "Amazon-API-Gateway",
+        "choose": "Persistent bidirectional applications such as chat, collaboration or live notifications.",
+        "operations": "Manage connect/message/disconnect routes, trusted connection/user associations, compatible integrations and signed HTTPS backend callbacks.",
+        "watch": "Frame 32 KB/message 128 KB; connection 2 hours and idle 10 minutes. Reconnect, stale state and missed updates need handling; socket persistence is not durable message history."
+      },
+      {
+        "service": "AWS AppSync · GraphQL",
+        "icon": "AWS-AppSync",
+        "choose": "A typed GraphQL contract assembling selected fields from compatible data sources, with supported real-time subscriptions.",
+        "operations": "Define schema, resolver logic, caller/field authorization, tenant/item predicates and scoped data-source IAM. Monitor resolver cost/fan-out.",
+        "watch": "GraphQL schema alone does not enforce every tenant boundary or implement offline synchronization. Subscription delivery follows its own authorization/filtering and mutation semantics."
+      },
+      {
+        "service": "AWS AppSync · Events",
+        "icon": "AWS-AppSync",
+        "choose": "Managed real-time publish/subscribe event APIs with supported channel authorization.",
+        "operations": "Use the Events API/channel contract and compatible publishing/subscribing clients; validate auth, message sizing, recovery and limits.",
+        "watch": "A separate product contract from GraphQL resolvers and mutation-linked subscriptions. Do not assume identical client protocol, payload or synchronization behavior."
+      },
+      {
+        "service": "Lambda function URL · Lambda feature",
+        "icon": "AWS-Lambda",
+        "choose": "A simpler HTTP endpoint when supported IAM or intentional public access fits the requirement.",
+        "operations": "Configure URL auth, resource policy, qualified function and compatible response mode. Since October 2025 new URLs require both InvokeFunctionUrl and InvokeFunction permission.",
+        "watch": "No automatic API Gateway feature set. NONE is unauthenticated access with an effective public resource policy, not a private user identity boundary."
+      },
+      {
+        "service": "Application Load Balancer · Lambda targets",
+        "icon": "Elastic-Load-Balancing",
+        "choose": "HTTP routing across compatible Lambda and other target groups in a hybrid service architecture.",
+        "operations": "Listener rules select target groups; grant the service permission to invoke the qualified function. Validate the ALB event/response contract and supported WAF controls.",
+        "watch": "Lambda target request body 1 MB/response JSON1 MB; no WebSocket upgrade for that target. Same account/Region and one function per target group; network SG egress is not Lambda invoke authorization."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-quotas.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-execution-service-websocket-limits-table.html",
+      "https://docs.aws.amazon.com/appsync/latest/devguide/security-authz.html",
+      "https://docs.aws.amazon.com/appsync/latest/eventapi/event-api-welcome.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html",
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "Function execution and delivery controls",
+    "rows": [
+      {
+        "service": "AWS Lambda · standard Event Functions",
+        "icon": "AWS-Lambda",
+        "choose": "Event-triggered compute with compatible runtime/packaging and externalized durable state.",
+        "operations": "Tune memory/CPU, timeout, temporary storage, concurrency, IAM, source integration, retries and idempotent writes. Benchmark startup and downstream capacity.",
+        "watch": "Ordinary invocation 15 minutes,128–10,240 MB memory;1,769 MB≈one vCPU. Async, sync and poll-based sources have different failure contracts. Warm environment state is not durable."
+      },
+      {
+        "service": "Lambda Managed Instances · compute option",
+        "icon": "AWS-Lambda",
+        "choose": "Supported EC2 compute characteristics under Lambda-managed infrastructure operations.",
+        "operations": "Select compatible capacity provider, instance/workload configuration and permissions; validate concurrent worker model, billing, network and source support.",
+        "watch": "Eligible async and ESM invocation timeout 90 minutes, with MQ/DocumentDB exceptions. Do not apply every standard per-environment or cost assumption to this model."
+      },
+      {
+        "service": "Lambda durable functions · workflow feature",
+        "icon": "AWS-Lambda",
+        "choose": "Supported checkpointed multi-step application code with waits and recovery.",
+        "operations": "Use supported SDK/runtime and deterministic replay/step behavior; validate checkpoints, external side effects, retries and workflow-level limits.",
+        "watch": "Long wall-clock workflow duration is not one uninterrupted long-running invocation. General multi-service orchestration comparison continues in Module 14."
+      },
+      {
+        "service": "AWS CodeDeploy",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Automated Lambda alias traffic shifting with supported deployment modes, hooks, alarms and rollback.",
+        "operations": "Publish compatible versions and configure all-at-once, linear or canary policies. Retain old compatible code/data for recovery.",
+        "watch": "API Gateway stage deployment is a separate control. Completed deployment status alone does not prove correctness or data compatibility."
+      },
+      {
+        "service": "AWS SAM · CloudFormation framework",
+        "icon": "AWS-CloudFormation",
+        "choose": "Infrastructure-as-code definition of supported serverless functions, APIs and deployment preferences.",
+        "operations": "Transform/package/deploy supported templates and required permissions; version changes and inspect generated infrastructure and deployment configuration.",
+        "watch": "SAM is a framework, not an inline runtime hop. Native feature support, deployment safety and secrets handling still need validation."
+      },
+      {
+        "service": "Amazon ECR",
+        "icon": "Amazon-Elastic-Container-Registry",
+        "choose": "Store compatible Lambda container deployment artifacts by immutable image identity.",
+        "operations": "Build a Lambda Runtime API-compatible image, scope repository access and keep dependencies patched; retain proven rollback digests.",
+        "watch": "A ZIP deployment does not go through ECR. Image packaging is not permission to run an arbitrary always-on web server under standard Lambda semantics."
+      },
+      {
+        "service": "Amazon ECS · container alternative",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Compatible long-running or arbitrary container services that fit an orchestration/compute contract better.",
+        "operations": "Choose ECS service/task model and EC2/Fargate compute as taught in Module 12; plan networking, roles, health, rollout and capacity.",
+        "watch": "Container compute has a different operational/billing model. Packaging a service image does not make it a compatible Lambda runtime."
+      },
+      {
+        "service": "AWS Fargate · container compute alternative",
+        "icon": "AWS-Fargate",
+        "choose": "Compatible container tasks or Pods when that orchestration/compute contract fits better than standard Lambda.",
+        "operations": "Use supported ECS/EKS configurations, runtime resources, networking, roles, storage and rollout policies as taught in Module12.",
+        "watch": "Fargate is a compute option, not the orchestrator. ECS/EKS support differs; a long-running container remains subject to its selected platform and capacity constraints."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/lambda-managed-instances.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html",
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html",
+      "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/images-create.html"
+    ]
+  },
+  {
+    "moduleId": "13",
+    "title": "Supporting services in a serverless application path",
+    "rows": [
+      {
+        "service": "Amazon S3",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Objects, thumbnail inputs/outputs, direct large uploads and eligible failed-invocation archives.",
+        "operations": "Scope bucket/key access and KMS; constrain presigned requests; configure event filters, browser CORS where needed and completion checks.",
+        "watch": "Events can repeat; prevent output recursion. Object writes and metadata writes are separate. Response streaming does not enable API request streaming."
+      },
+      {
+        "service": "Amazon DynamoDB",
+        "icon": "Amazon-DynamoDB",
+        "choose": "Durable application/session state, idempotency records, image metadata and trusted connection associations.",
+        "operations": "Choose keys, conditional writes, consistency and capacity deliberately; process Streams through its poller/retry contract.",
+        "watch": "DynamoDB state does not make a Lambda environment or WebSocket durable. Enforce tenant data predicates; TTL cleanup is asynchronous."
+      },
+      {
+        "service": "Amazon RDS",
+        "icon": "Amazon-RDS",
+        "choose": "Supported relational dependencies or eligible AppSync Aurora/Data API integrations.",
+        "operations": "Validate private reachability, database grants, connection capacity and supported Data API/engine/Region features. Use a compatible proxy when justified.",
+        "watch": "Network access, IAM and database login/data permission differ. A burst of Lambda clients can overload connections; an API timeout does not extend DB capacity."
+      },
+      {
+        "service": "Amazon SQS",
+        "icon": "Amazon-Simple-Queue-Service",
+        "choose": "Buffer event work and support compatible poll-based Lambda processing or failure retention.",
+        "operations": "Set visibility, retention, source permissions, retry/DLQ policy, batching and idempotency; use supported partial-batch responses.",
+        "watch": "Queue-trigger polling is not the Lambda async invocation queue. Function destination/DLQ support uses the specified standard queue contract, not arbitrary FIFO substitution."
+      },
+      {
+        "service": "Amazon SNS",
+        "icon": "Amazon-Simple-Notification-Service",
+        "choose": "Fan out events to independent consumers and supported async/DLQ/destination paths.",
+        "operations": "Configure topic/subscription policies, raw/enveloped payload shape, delivery retries and subscriber processing separately.",
+        "watch": "Standard SNS destination message size 256 KB can reject a larger invocation record. Topic delivery and successful business processing are distinct."
+      },
+      {
+        "service": "Amazon Kinesis Data Streams",
+        "icon": "Amazon-Kinesis-Data-Streams",
+        "choose": "Replayable ordered-per-shard stream processing through supported Lambda event mappings.",
+        "operations": "Coordinate partitions/shards, source retention, batching, concurrency, checkpoints and failure age/retry behavior.",
+        "watch": "A poison record can affect progress; retries can repeat processing. Lambda scaling does not remove source throughput or downstream bottlenecks."
+      },
+      {
+        "service": "Amazon EventBridge / Scheduler",
+        "icon": "Amazon-EventBridge",
+        "choose": "Route supported events or invoke qualified functions on an explicit schedule.",
+        "operations": "Scheduler execution role, timezone/window, retries and failed-delivery retention differ from handler code outcomes; use appropriate rule or Scheduler contract.",
+        "watch": "Schedule delivery success is not function business success. Bounded retries and idempotent side effects remain necessary."
+      },
+      {
+        "service": "AWS IoT Core",
+        "icon": "AWS-IoT-Core",
+        "choose": "Supported device-rule routing into Lambda processing.",
+        "operations": "Authenticate devices, authorize rule actions and scope Lambda resource permission to the intended source; validate event format and retries.",
+        "watch": "An IoT event trigger has its own producer/permission contract. It is not automatically an HTTP API integration or stream poller."
+      },
+      {
+        "service": "Amazon Cognito",
+        "icon": "Amazon-Cognito",
+        "choose": "User-pool authentication, compatible JWTs/groups and supported user-pool Lambda triggers.",
+        "operations": "Validate issuer, audience/token type, expiry, scopes/groups and the selected API authorizer. Apply field/item authorization after authentication.",
+        "watch": "Cognito trigger timing/retry behavior differs from S3 async invocation. A valid token or group does not authorize every tenant record."
+      },
+      {
+        "service": "Amazon CloudWatch · Logs and metrics",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Execution evidence, access logs, alarms, latency and concurrency diagnosis.",
+        "operations": "Grant log-write permissions, set retention and correlate safe request/event identifiers. Use product-specific metrics, Logs subscription formats and log-delivery paths.",
+        "watch": "Default Lambda service log delivery does not prove application SDK network reachability. REST/HTTP API logging features differ; sensitive body logs can expose credentials."
+      },
+      {
+        "service": "AWS X-Ray",
+        "icon": "AWS-X-Ray",
+        "choose": "Distributed trace analysis with supported API/Lambda service tracing and instrumentation.",
+        "operations": "Use current compatible OpenTelemetry instrumentation and required trace permissions; correlate downstream spans with logs and latency.",
+        "watch": "SDK/daemon maintenance began 25 February 2026, support ends 25 February 2027. That timeline is not retirement of the X-Ray service."
+      },
+      {
+        "service": "AWS Distro for OpenTelemetry",
+        "icon": "AWS-Distro-for-OpenTelemetry",
+        "choose": "Supported OpenTelemetry instrumentation/collection for traces and observability.",
+        "operations": "Select a supported language/distribution/export path, sampling and permissions; validate network and telemetry cost.",
+        "watch": "Instrumentation is not a new application data hop; a dependency span must represent the actual caller, not an invented S3-to-database call chain."
+      },
+      {
+        "service": "AWS IAM",
+        "icon": "AWS-Identity-and-Access-Management",
+        "choose": "Authorize API callers, function invocation and dependency operations through different identities/policies.",
+        "operations": "Scope identity/resource policies, integration roles, execution roles and source conditions; sign supported AWS requests with SigV4.",
+        "watch": "Caller token/IAM permission does not become a backend role automatically. Explicit denies, cross-account gates and tenant data authorization still matter."
+      },
+      {
+        "service": "AWS Secrets Manager",
+        "icon": "AWS-Secrets-Manager",
+        "choose": "Retrieve supported runtime/database credentials without embedding secrets in images or source.",
+        "operations": "Scope secret/KMS permissions and network access, use safe caching/refresh and validate rotation behavior.",
+        "watch": "Environment variables and logs are not an unrestricted secret distribution channel. Rotated credentials require compatible client refresh."
+      },
+      {
+        "service": "AWS KMS",
+        "icon": "AWS-Key-Management-Service",
+        "choose": "Protect eligible function configuration, object data and archives through supported encryption integrations.",
+        "operations": "Validate key policy, grants and required decrypt/data-key actions in producer/consumer/recovery accounts.",
+        "watch": "Encryption permission is separate from function invoke, bucket, queue or database permission; key availability can affect recovery."
+      },
+      {
+        "service": "Amazon VPC · NAT and private networking",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Private dependency access and deliberate egress identity/reachability.",
+        "operations": "Configure subnet routes, DNS, security groups, endpoints and NAT/IGW where needed. Place an EIP on the supported egress NAT, not Lambda.",
+        "watch": "Public subnet attachment alone does not give Lambda internet access. Keep database, NAT and endpoint branches separate in the actual path."
+      },
+      {
+        "service": "AWS PrivateLink · API interface endpoints",
+        "icon": "AWS-PrivateLink",
+        "choose": "Supported private API/service endpoint reachability from compatible networks.",
+        "operations": "Configure execute-api endpoint DNS/SG/endpoint policy and REST resource/method authorization; validate cross-account/connected-network use.",
+        "watch": "A private API frontend and a VPC-link private backend are different directions. Endpoint existence is not access to every API or dependency."
+      },
+      {
+        "service": "Elastic Load Balancing · private backend",
+        "icon": "Elastic-Load-Balancing",
+        "choose": "Supported ALB/NLB targets behind current API Gateway private integrations.",
+        "operations": "Choose compatible VPC link version, same-account ownership where required, listener/security/TLS and stage-path mapping.",
+        "watch": "REST VPC link V2 support is broader than legacy V1. An ALB backend does not imply every API Gateway product supports every private target type."
+      },
+      {
+        "service": "Amazon CloudFront",
+        "icon": "Amazon-CloudFront",
+        "choose": "Edge delivery/cache behavior in front of a compatible Regional API or the managed edge-optimized REST path.",
+        "operations": "Configure origin, cache identity, TLS and response/idle timeouts deliberately; separate regional API deployments and data recovery.",
+        "watch": "An edge entry point is not multi-Region backend recovery. Cache identity must not expose private tenant data."
+      },
+      {
+        "service": "Amazon Route 53",
+        "icon": "Amazon-Route-53",
+        "choose": "Custom-domain DNS and tested routing between independent regional deployments.",
+        "operations": "Use supported alias/CNAME mappings, health signals and client DNS/reconnect behavior; validate certificates and backend readiness.",
+        "watch": "DNS does not deploy code, replicate data or promote a database. Source illustrative TTL is not a permanent universal service value."
+      },
+      {
+        "service": "AWS Certificate Manager",
+        "icon": "AWS-Certificate-Manager",
+        "choose": "Eligible API/ALB TLS certificates and custom-domain integrations.",
+        "operations": "Validate names, ownership, renewal and region attachment: edge-optimized API certificate us-east-1; Regional certificate in the API Region.",
+        "watch": "A certificate does not authorize invocation or create private networking. Select supported DNS mapping and mTLS configuration separately."
+      },
+      {
+        "service": "AWS WAF",
+        "icon": "AWS-WAF",
+        "choose": "Supported web-request filtering for REST API stages, ALB or CloudFront designs.",
+        "operations": "Choose the supported attachment point, rule scope, logging and false-positive testing; correlate blocked requests with application evidence.",
+        "watch": "Direct REST WAF integration is not an HTTP API feature. WAF complements authentication and tenant/data authorization."
+      },
+      {
+        "service": "AWS Step Functions · workflow integration",
+        "icon": "AWS-Step-Functions",
+        "choose": "Supported direct API workflow start and multi-service orchestration.",
+        "operations": "Scope integration StartExecution or supported operation, validate input/response mode and distinguish intake from workflow completion.",
+        "watch": "Detailed workflow types, retries and orchestration are covered in Module 14. Removing a pass-through function does not make an async workflow synchronous."
+      },
+      {
+        "service": "Amazon Aurora · AppSync data source",
+        "icon": "Amazon-Aurora",
+        "choose": "Supported relational GraphQL/data access through eligible Aurora/Data API configurations.",
+        "operations": "Validate engine/Region/Data API availability, resolver request mapping, IAM, secret/KMS access and database grants.",
+        "watch": "AppSync does not bypass the Data API or database security contract. A compatible relational data source is not generic direct SQL access to any database endpoint."
+      },
+      {
+        "service": "Amazon Data Firehose",
+        "icon": "Amazon-Data-Firehose",
+        "choose": "Supported REST API access-log delivery and buffered delivery to compatible destinations.",
+        "operations": "Configure the supported log destination and role, buffering, transformation, failed-record handling and delivery monitoring.",
+        "watch": "REST access-log Firehose support is not HTTP API monitoring parity. Delivery buffering adds latency and does not replace function/request logs or trace evidence."
+      },
+      {
+        "service": "Amazon OpenSearch Service",
+        "icon": "Amazon-OpenSearch-Service",
+        "choose": "A compatible AppSync search data source or asynchronous derived search view.",
+        "operations": "Validate supported AppSync data-source configuration, resolver request/response mapping, IAM/domain or collection access policies, network reachability and index design.",
+        "watch": "A search index can lag its authoritative source. GraphQL field selection does not remove search authorization, shard/capacity limits or backfill/reconciliation requirements."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html",
+      "https://docs.aws.amazon.com/lambda/latest/dg/services-iot.html",
+      "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-working-with-lambda-triggers.html",
+      "https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/private-integration.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html",
+      "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html"
+    ]
   }
 ]
