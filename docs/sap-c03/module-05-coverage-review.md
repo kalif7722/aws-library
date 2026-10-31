@@ -34,3 +34,7 @@ Official references checked:
 - https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-dnssec-validation.html
 
 Whole-course accepted count after this module: 158 of 800 planned visuals. Full syllabus and reference-PDF topic audit remains open; no exam pass guarantee is implied.
+
+## 31 October 2026 depth and mapping review
+
+Additional/replaced visuals: 23–25. See produced-modules-depth-audit.md for findings, source scope and dispositions; audit-repair-qa.json for accepted asset hashes. The readable service comparison below the visual lessons preserves exact exceptions and current-service qualifications. Earlier image counts in this historical review describe its original batch; the lesson map is authoritative for the current count.

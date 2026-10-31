@@ -33,3 +33,7 @@ Supporting AWS documentation:
 - https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
 - https://docs.aws.amazon.com/global-accelerator/latest/api/
 - https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html
+
+## 31 October 2026 depth and mapping review
+
+Additional/replaced visuals: 08,09,11,41,42. See produced-modules-depth-audit.md for findings, source scope and dispositions; audit-repair-qa.json for accepted asset hashes. The readable service comparison below the visual lessons preserves exact exceptions and current-service qualifications. Earlier image counts in this historical review describe its original batch; the lesson map is authoritative for the current count.

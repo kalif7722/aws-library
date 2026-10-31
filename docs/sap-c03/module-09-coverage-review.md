@@ -46,3 +46,8 @@ Additional protection material:03–07 cover policies/ownership, endpoint author
 - Modern interfaces: Mountpoint and S3 Metadata prevent outdated blanket assertions about file access or metadata discovery. They do not make S3 a general POSIX filesystem or DynamoDB an automatically consistent object index.
 
 Primary-source details and lesson mappings are recorded in module-09-source-verification.json. Visual selection, exact final copy and asset hashes are recorded in module-09-visual-plan.json and module-09-visual-qa.json.
+
+
+## 31 October 2026 depth and mapping review
+
+Additional/replaced visuals: 34–37. See produced-modules-depth-audit.md for findings, source scope and dispositions; audit-repair-qa.json for accepted asset hashes. The readable service comparison below the visual lessons preserves exact exceptions and current-service qualifications. Earlier image counts in this historical review describe its original batch; the lesson map is authoritative for the current count.

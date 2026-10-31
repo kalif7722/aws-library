@@ -1,587 +1,1315 @@
-{
-  "module": "10",
-  "plannedVisuals": 34,
-  "status": "reviewed",
-  "referencePages": "321–337; 358–366; 624–630",
-  "slides": [
-    {
-      "sequence": 1,
-      "title": "EBS persists within one Availability Zone",
-      "copy": [
-        "EC2 uses a network block device in its own AZ.",
-        "A detached volume can attach to another compatible instance in the same AZ.",
-        "To move across AZs, create a new volume from a snapshot."
-      ],
-      "layout": "Two AZ islands; solid same-AZ attachment and a clearly separate snapshot bridge.",
-      "referencePages": [
-        321
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 2,
-      "title": "EBS: choose the disk for the access pattern",
-      "copy": [
-        "gp2/gp3 and io1/io2 are SSD boot or data volumes.",
-        "st1 handles frequent large sequential I/O; sc1 suits colder sequential data.",
-        "st1/sc1 are data only and cannot be boot volumes."
-      ],
-      "layout": "Three glossy workload lanes: SSD random I/O, provisioned SSD transactions, HDD sequential blocks.",
-      "referencePages": [
-        322
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 3,
-      "title": "gp2 and gp3 separate capacity from performance differently",
-      "copy": [
-        "gp2 baseline IOPS scales with volume capacity; smaller volumes can burst using credits.",
-        "gp3 lets you provision capacity, IOPS and throughput independently within supported limits.",
-        "io1/io2 serve provisioned-IOPS workloads; io2 emphasizes durability and consistent low latency."
-      ],
-      "layout": "Capacity, IOPS and throughput as independent tuning controls; gp2 capacity linkage contrasted with gp3.",
-      "referencePages": [
-        322
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 4,
-      "title": "Find the narrowest point in the EBS path",
-      "copy": [
-        "Application I/O size and concurrency affect useful throughput.",
-        "The volume has IOPS and throughput limits.",
-        "The instance also has EBS bandwidth and IOPS limits; increasing volume performance alone may not help."
-      ],
-      "layout": "A glossy data pipeline with three visible bottleneck valves: application, EC2, EBS.",
-      "referencePages": [
-        321,
-        322
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 5,
-      "title": "Snapshots capture changed blocks, not application intent",
-      "copy": [
-        "After the first snapshot, later snapshots save changed blocks.",
-        "Quiesce applications and flush writes when application consistency is required.",
-        "Snapshots are managed by EBS; their backing S3 storage is not your ordinary bucket."
-      ],
-      "layout": "Three point-in-time block stacks highlighting only changed blocks plus an application flush gate.",
-      "referencePages": [
-        323
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 6,
-      "title": "Restore in the target AZ and plan first-read latency",
-      "copy": [
-        "Restore a snapshot into a new volume in the required AZ.",
-        "Restored blocks may initialize on first access; measure recovery performance.",
-        "Fast Snapshot Restore can provide fully initialized volumes in enabled AZs; it has additional cost."
-      ],
-      "layout": "Snapshot vault between AZs; new target volume with cold-to-ready blocks and optional FSR fast lane.",
-      "referencePages": [
-        323
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 7,
-      "title": "Automate recovery points with the right policy service",
-      "copy": [
-        "Data Lifecycle Manager manages policies for EBS snapshots and EBS-backed AMIs.",
-        "Tags identify resources; schedules and retention control lifecycle.",
-        "AWS Backup centralizes protection across supported services; test restore procedures."
-      ],
-      "layout": "A tagged EC2/EBS group under DLM and a wider multi-service AWS Backup vault, visually distinct scopes.",
-      "referencePages": [
-        324,
-        325
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 8,
-      "title": "Encryption needs a working recovery key",
-      "copy": [
-        "EBS encryption by default is a per-Region account setting for new volumes and snapshot copies.",
-        "Enabling it does not encrypt existing unencrypted volumes in place.",
-        "Use snapshot-based migration and verify KMS permissions for copies, sharing and recovery."
-      ],
-      "layout": "Regional default-encryption switch, old unencrypted disk staying unchanged, snapshot-copy path to locked new disk.",
-      "referencePages": [
-        326
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 9,
-      "title": "Multi-Attach shares a block device, not a normal file share",
-      "copy": [
-        "Supported io1/io2 volumes can attach to multiple supported instances in the same AZ.",
-        "Every writer sees the same block device.",
-        "Use cluster-aware coordination and supported fencing; ordinary ext4/XFS shared mounting is unsafe."
-      ],
-      "layout": "One io2 block volume connected to two EC2 instances inside one AZ with a coordination lock between writers.",
-      "referencePages": [
-        327
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 10,
-      "title": "Grow EBS deliberately; treat instance store as disposable",
-      "copy": [
-        "Elastic Volumes can change supported volume size, type and performance; extend the OS filesystem too.",
-        "EBS cannot shrink in place: migrate data to a smaller new volume.",
-        "Instance store is host-local: reboot preserves it, but stop, termination or host loss can destroy it."
-      ],
-      "layout": "Persistent EBS growth control and OS resize step beside temporary host-local scratch bin.",
-      "referencePages": [
-        328,
-        329
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 11,
-      "title": "EFS shares files across clients and AZs",
-      "copy": [
-        "EFS provides a managed NFS filesystem with POSIX semantics.",
-        "Regional storage spans AZs; One Zone accepts a single-AZ failure boundary.",
-        "Linux applications can share a file namespace without managing file servers."
-      ],
-      "layout": "Multiple Linux clients in two AZs mounting one regional shared file namespace, separate One Zone option.",
-      "referencePages": [
-        330,
-        331,
-        333
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 12,
-      "title": "A mount target is the network doorway to EFS",
-      "copy": [
-        "Mount targets expose network interfaces; clients need routes and NFS TCP 2049 access.",
-        "Prefer a mount target in the client AZ where available.",
-        "On-premises and peered clients need private connectivity, working DNS or target IPs, and return routing."
-      ],
-      "layout": "Local-AZ EFS mount doorway plus on-premises private network path; route and security-group gates.",
-      "referencePages": [
-        330,
-        334
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 13,
-      "title": "EFS authorization has several independent layers",
-      "copy": [
-        "Security groups control network reachability; IAM policies can control ClientMount and ClientWrite.",
-        "POSIX ownership and permissions still control file access.",
-        "Access points enforce a root directory and POSIX identity; use TLS and KMS encryption."
-      ],
-      "layout": "Application entering network gate, IAM gate and POSIX directory gate via a dedicated access point.",
-      "referencePages": [
-        331,
-        335,
-        336
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 14,
-      "title": "Choose EFS throughput to match demand",
-      "copy": [
-        "General Purpose is recommended for current workloads; Max I/O is a previous-generation mode.",
-        "Elastic throughput scales with variable demand.",
-        "Provisioned throughput sets a chosen rate; Bursting depends on Standard storage and credits."
-      ],
-      "layout": "Variable workload stream matched to Elastic, steady reserved pipe for Provisioned, credit reservoir for Bursting.",
-      "referencePages": [
-        332
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 15,
-      "title": "EFS lifecycle changes cost and access behavior",
-      "copy": [
-        "Lifecycle policies move eligible files between Standard, Infrequent Access and Archive.",
-        "Colder classes trade lower storage cost for access charges and different latency.",
-        "Regional supports Archive; One Zone has a different storage-class set and failure boundary."
-      ],
-      "layout": "Frequently used files on bright warm shelf, idle files moving to IA and Archive tiers, Regional versus One Zone boundary.",
-      "referencePages": [
-        333
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 16,
-      "title": "EFS replication is asynchronous recovery",
-      "copy": [
-        "Replication maintains a destination filesystem in the same or another Region.",
-        "The protected destination is read-only while replication is active.",
-        "Plan failover, application remounts and recovery point monitoring; replication is not an independent backup history."
-      ],
-      "layout": "Primary regional file tree sending asynchronous updates to read-only destination, controlled failover gate.",
-      "referencePages": [
-        337
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 17,
-      "title": "Choose FSx by filesystem semantics",
-      "copy": [
-        "Windows File Server: SMB and Active Directory.",
-        "Lustre: parallel compute and S3-linked datasets.",
-        "ONTAP: NFS, SMB and iSCSI; OpenZFS: managed NFS with ZFS capabilities."
-      ],
-      "layout": "Four distinct filesystem workstations associated with their protocol and workload.",
-      "referencePages": [
-        358,
-        359,
-        360,
-        362,
-        363
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 18,
-      "title": "Windows file shares keep Windows access controls",
-      "copy": [
-        "FSx for Windows File Server provides managed SMB shares with NTFS semantics.",
-        "Active Directory, ACLs, quotas and DFS Namespaces support enterprise file workflows.",
-        "Compatible Linux SMB clients and on-premises clients can connect through supported private networking."
-      ],
-      "layout": "Windows user identity badge opening managed SMB share, NTFS ACL and quota labels, Linux SMB client and private on-prem path.",
-      "referencePages": [
-        359
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 19,
-      "title": "Multi-AZ Windows file storage protects the server tier",
-      "copy": [
-        "A Multi-AZ deployment uses active and standby file servers in different AZs.",
-        "Managed failover changes the serving node; clients must reconnect correctly.",
-        "Backups address recovery history; Multi-AZ alone does not undo accidental deletion."
-      ],
-      "layout": "Two AZs containing active and standby Windows file servers, distinct independent backup vault.",
-      "referencePages": [
-        359
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 20,
-      "title": "Change Windows file-system layout through migration",
-      "copy": [
-        "For Single-AZ to Multi-AZ, create a suitable target and migrate or restore a supported backup.",
-        "To reduce allocated storage, create a smaller target and copy data; do not assume in-place shrinking.",
-        "DataSync can support a staged copy, final synchronization, validation and application cutover."
-      ],
-      "layout": "Existing large Single-AZ share, staged DataSync bridge and smaller Multi-AZ target with deliberate cutover switch.",
-      "referencePages": [
-        364,
-        365
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 21,
-      "title": "Lustre feeds parallel compute",
-      "copy": [
-        "FSx for Lustre supplies a shared parallel filesystem for HPC, ML and media workloads.",
-        "Many compute clients access a shared dataset concurrently.",
-        "Choose storage and throughput for the workload; S3 integration links an object repository to file processing."
-      ],
-      "layout": "HPC worker cluster consuming parallel bright data lanes from Lustre, S3 repository beside it.",
-      "referencePages": [
-        360
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 22,
-      "title": "Lustre scratch and persistent protect different jobs",
-      "copy": [
-        "Scratch suits temporary processing whose data can be recreated.",
-        "Persistent deployments replicate data within an AZ and replace failed servers.",
-        "Neither choice alone is cross-AZ disaster recovery; protect source data and important outputs separately."
-      ],
-      "layout": "Disposable scratch workspace contrasted with replicated same-AZ persistent workspace and separate durable source repository.",
-      "referencePages": [
-        361
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 23,
-      "title": "Lazy loading brings the working set to Lustre",
-      "copy": [
-        "A linked S3 repository can expose file metadata before every data block is loaded.",
-        "Reading an uncached file loads its content into Lustre.",
-        "Configure import and export behavior deliberately; changed outputs do not magically synchronize under every configuration."
-      ],
-      "layout": "S3 dataset with only selected working-set files lighting up across a lazy-load path into Lustre, explicit export arrow for results.",
-      "referencePages": [
-        360,
-        366
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 24,
-      "title": "ONTAP combines file and block protocols",
-      "copy": [
-        "FSx for NetApp ONTAP serves NFS, SMB and iSCSI through storage virtual machines and volumes.",
-        "Snapshots, clones, compression and deduplication support enterprise data workflows.",
-        "SSD capacity and capacity-pool tiering are distinct; plan HA, networking and capacity rather than assuming unlimited auto-shrink."
-      ],
-      "layout": "ONTAP central system with NFS SMB iSCSI doors, snapshot clone branch, hot SSD and colder capacity pool tiers.",
-      "referencePages": [
-        362
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 25,
-      "title": "OpenZFS brings ZFS capabilities to managed NFS",
-      "copy": [
-        "FSx for OpenZFS provides NFS shares for compatible clients.",
-        "Snapshots and clones support testing and point-in-time workflows; compression reduces stored data where effective.",
-        "Select deployment, capacity and throughput explicitly; managed storage does not remove application recovery design."
-      ],
-      "layout": "NFS file tree on OpenZFS with space-efficient snapshot and clone branches, compression metaphor.",
-      "referencePages": [
-        363
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 26,
-      "title": "S3 File Gateway translates file access into objects",
-      "copy": [
-        "On-premises applications use NFS or SMB; the gateway caches active data locally.",
-        "File content is stored as S3 objects with asynchronous upload.",
-        "Plan cache capacity, upload health and external-change refresh; object access does not turn S3 into a general shared POSIX filesystem."
-      ],
-      "layout": "Office NFS/SMB clients, local cache appliance, buffered upload path to S3 object bucket.",
-      "referencePages": [
-        624,
-        625,
-        630
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 27,
-      "title": "Volume Gateway: decide where the primary data lives",
-      "copy": [
-        "Cached volumes keep primary data in AWS and a working set locally.",
-        "Stored volumes keep the full primary dataset locally and send snapshot backups to AWS.",
-        "Both expose iSCSI block volumes; local disks, connectivity and recovery requirements drive the choice."
-      ],
-      "layout": "Clearly contrasted cached and stored volume paths with primary-data badges and local cache versus full local data.",
-      "referencePages": [
-        627,
-        630
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 28,
-      "title": "Tape Gateway preserves the backup interface",
-      "copy": [
-        "Existing backup software writes to an iSCSI virtual tape library.",
-        "Virtual tapes can move from online storage to archive for longer retention.",
-        "FSx File Gateway is a legacy option unavailable to new customers; use current supported designs for new deployments."
-      ],
-      "layout": "Backup application feeding virtual tape library then cloud archive, small separate legacy FSx gateway notice.",
-      "referencePages": [
-        624,
-        626,
-        628,
-        629,
-        630
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 29,
-      "title": "EBS walkthrough: modify, extend and verify",
-      "copy": [
-        "In a sandbox, inspect the volume AZ, attachment, encryption and performance settings.",
-        "Modify a supported volume; wait for the operation state, then extend the partition/filesystem as required.",
-        "Verify OS-visible capacity and workload performance; confirm snapshots and cleanup."
-      ],
-      "layout": "Clearly labelled illustrative console walkthrough, three original simplified educational panels Inspect, Modify and extend, Verify; not a real screenshot and no invented console status values.",
-      "referencePages": [
-        321,
-        322,
-        323
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 30,
-      "title": "EFS walkthrough: mount, authorize and prove sharing",
-      "copy": [
-        "Create a sandbox filesystem, mount target and narrow NFS security-group rule.",
-        "Mount with the EFS helper using TLS and required IAM/access-point options.",
-        "Write a test file from one authorized client, read it from another, then test a denied path and clean up."
-      ],
-      "layout": "Clearly labelled illustrative educational console walkthrough with network/security setup, two Linux client terminals and shared test file; no claim to be an actual AWS screenshot.",
-      "referencePages": [
-        330,
-        331,
-        334,
-        335,
-        336
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 31,
-      "title": "A snapshot, an AMI and a regional recovery copy solve different jobs",
-      "copy": [
-        "A snapshot preserves block data; an EBS-backed AMI references backing snapshots and supplies boot metadata.",
-        "Copy snapshots or AMIs to the recovery Region before a regional failure.",
-        "For encrypted copies, plan regional KMS keys, permissions and a tested instance launch."
-      ],
-      "layout": "Three recovery artifacts: data snapshot, launchable AMI with metadata, and separately prepared regional recovery copy; clear conceptual distinctions.",
-      "referencePages": [
-        323
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 32,
-      "title": "DLM owns the recovery points created by its policies",
-      "copy": [
-        "Tag target EC2 instances or EBS volumes; schedule snapshots or EBS-backed AMIs.",
-        "Retention and copy rules govern recovery points created by that DLM policy.",
-        "DLM does not take over arbitrary external snapshots or instance-store-backed AMIs; use AWS Backup for wider service governance."
-      ],
-      "layout": "Tagged resources pass through a DLM policy factory into owned snapshot and AMI lifecycle; external snapshots stay outside the factory.",
-      "referencePages": [
-        324,
-        325
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 33,
-      "title": "Choose file-storage performance without changing its semantics",
-      "copy": [
-        "FSx for Windows offers SSD and HDD storage; latency-sensitive and metadata-heavy work usually needs SSD.",
-        "Lustre storage and throughput choices must fit parallel small-random or large-sequential I/O.",
-        "ONTAP and OpenZFS add snapshots, clones and space efficiency; clients still need the correct protocol, networking and capacity plan."
-      ],
-      "layout": "Windows metadata search on SSD versus sequential shared files on HDD; parallel Lustre lane; snapshot clone tree for ONTAP/OpenZFS.",
-      "referencePages": [
-        359,
-        360,
-        362,
-        363
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    },
-    {
-      "sequence": 34,
-      "title": "Deploy a gateway with identity, cache and recovery in mind",
-      "copy": [
-        "S3 File Gateway uses a bucket-access IAM role; SMB can authenticate with Active Directory.",
-        "Plan local cache and upload capacity; archive lifecycle rules can require object restore before file access.",
-        "Choose a supported virtual deployment for new systems. FSx File Gateway is closed to new customers; the AWS hardware appliance is no longer sold."
-      ],
-      "layout": "Gateway with IAM bucket-key and AD user badges, local cache/upload buffer, S3 lifecycle to archive with restore gate; separate small legacy hardware and FSx gateway notice.",
-      "referencePages": [
-        624,
-        625,
-        626,
-        629,
-        630
-      ],
-      "status": "reviewed",
-      "generationMethod": "built-in imagegen",
-      "sourceVerifiedDate": "2026-10-31"
-    }
-  ]
-}
+[
+  {
+    "sequence": 1,
+    "title": "EBS is persistent block storage within one AZ",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      321
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Attach inside the AZ",
+        "text": "An EBS volume is a network block device. Attach it to a compatible EC2 instance in the same Availability Zone; most volumes have one attached instance. Multi-Attach is a specific io1/io2 exception."
+      },
+      {
+        "heading": "Reattach or restore",
+        "text": "Detach safely and reattach within the same AZ. To move to another AZ, create a snapshot and restore a new volume in the target AZ; a volume itself does not span AZs."
+      },
+      {
+        "heading": "Plan persistence and performance",
+        "text": "A volume can outlive its instance, depending on Delete on termination. Resize with supported Elastic Volumes operations, extend the OS filesystem, and check the instance EBS bandwidth."
+      }
+    ],
+    "remember": "Persistence, AZ scope and attachment rules are separate design decisions.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 2,
+    "title": "EBS: choose the disk for the access pattern",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      322
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "General-purpose SSD",
+        "text": "gp2 and gp3 balance price and performance for transactional applications, boot disks and general workloads."
+      },
+      {
+        "heading": "Provisioned-IOPS SSD",
+        "text": "io1/io2 suit sustained IOPS demand. io2 Block Express targets stronger durability and consistent low latency."
+      },
+      {
+        "heading": "Throughput-oriented HDD",
+        "text": "st1 serves frequent sequential processing; sc1 serves colder throughput workloads. Both exclude boot-volume use."
+      }
+    ],
+    "remember": "Choose the access pattern before the volume type.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 3,
+    "title": "gp2 and gp3 separate capacity from performance differently",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      322
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Capacity-linked gp2",
+        "text": "Smaller gp2 volumes use a credit balance for bursts. Capacity, IOPS and throughput must be evaluated together."
+      },
+      {
+        "heading": "Independent gp3 controls",
+        "text": "gp3 includes a baseline and permits additional IOPS and throughput within configuration constraints; capacity alone need not buy performance."
+      },
+      {
+        "heading": "Consistent io2 performance",
+        "text": "Check I/O size, required latency and the complete instance-to-volume path; a published maximum is not an application guarantee."
+      }
+    ],
+    "remember": "Capacity, IOPS, throughput and latency are different constraints.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 4,
+    "title": "Find the narrowest point in the EBS path",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      321,
+      322
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Application demand",
+        "text": "I/O size and queue depth change the relation between operations per second and transferred bytes."
+      },
+      {
+        "heading": "Volume limits",
+        "text": "Inspect latency, queueing and throughput alongside provisioned IOPS. A large sequential read behaves differently from small random writes."
+      },
+      {
+        "heading": "Instance limits",
+        "text": "Use suitable EBS-optimized instances and verify the instance bandwidth/IOPS ceiling before increasing the volume specification."
+      }
+    ],
+    "remember": "Measure every link before paying to widen one.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 5,
+    "title": "Snapshots capture changed blocks, not application intent",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      323
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Incremental blocks",
+        "text": "The first snapshot includes written blocks; later snapshots capture changes. Deleting an earlier snapshot does not automatically invalidate later snapshots."
+      },
+      {
+        "heading": "Application consistency",
+        "text": "Flush and quiesce appropriately before capture. Detachment is not mandatory; coordinate the database and all related volumes."
+      },
+      {
+        "heading": "Managed snapshot storage",
+        "text": "Snapshots are EBS-managed recovery resources backed by S3; they are not ordinary objects in a customer-accessible snapshot bucket."
+      }
+    ],
+    "remember": "A block snapshot is only as application-consistent as its capture procedure.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 6,
+    "title": "Restore in the target AZ and plan first-read latency",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      323
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Restore into a new volume",
+        "text": "The restored volume must be created in the required AZ and attached to a compatible instance."
+      },
+      {
+        "heading": "Initialize the working data",
+        "text": "First-read initialization can affect latency after restoring a snapshot. Test startup and application recovery rather than only volume creation."
+      },
+      {
+        "heading": "Accelerate deliberately",
+        "text": "FSR, manual block reads and provisioned-rate initialization solve different timing/cost needs; their constraints are compared separately."
+      }
+    ],
+    "remember": "Volume creation is not proof of application recovery readiness.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 7,
+    "title": "Automate recovery points with the right policy service",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      324,
+      325
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Target with tags",
+        "text": "DLM policies can target supported instances or volumes and create EBS snapshots or EBS-backed AMIs."
+      },
+      {
+        "heading": "Schedule and retain",
+        "text": "Creation, retention, deletion and supported copy rules must match recovery and compliance requirements."
+      },
+      {
+        "heading": "Choose the governance scope",
+        "text": "AWS Backup offers wider supported-service governance; successful backup creation must be followed by restore testing."
+      }
+    ],
+    "remember": "Retention policies are useful only when the recovery points can be restored.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 8,
+    "title": "Encryption needs a working recovery key",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      326
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Regional default setting",
+        "text": "Encryption by default applies prospectively to new volumes and snapshot copies in that account/Region."
+      },
+      {
+        "heading": "Existing data needs migration",
+        "text": "Use an encrypted snapshot copy or encrypted new volume from a snapshot, then test and cut over. Enabling the setting does not alter old volumes."
+      },
+      {
+        "heading": "Authorize the recovery key",
+        "text": "KMS policies and IAM permissions must permit the intended source, destination and recovery principals; cross-account keys need particular care."
+      }
+    ],
+    "remember": "Test key access as part of recovery, not after a failure.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 9,
+    "title": "Multi-Attach shares a block device, not a normal file share",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      327
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Shared block device",
+        "text": "Each attached instance can read and write the same blocks. Multi-Attach is not an NFS/SMB server."
+      },
+      {
+        "heading": "Supported attachment scope",
+        "text": "Up to 16 supported Nitro instances in one AZ; Linux supports io1/io2, Windows supports io2. Check current instance and driver requirements."
+      },
+      {
+        "heading": "Coordinate every writer",
+        "text": "Use a cluster-aware filesystem or application and appropriate fencing. Mounting ordinary ext4/XFS concurrently can corrupt data."
+      }
+    ],
+    "remember": "Shared blocks require coordinated writers.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 10,
+    "title": "Grow EBS deliberately; treat instance store as disposable",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      328,
+      329
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Resize persistent storage",
+        "text": "Supported size/type/performance changes are separate from extending the partition and filesystem in the guest OS."
+      },
+      {
+        "heading": "Migrate to shrink",
+        "text": "EBS cannot shrink in place. Copy validated data to an appropriately smaller new volume, then perform a controlled cutover."
+      },
+      {
+        "heading": "Protect host-local data",
+        "text": "Instance-store disks have instance-defined capacity and high local I/O. Use them for recreated scratch/cache; back up or replicate irreplaceable data."
+      }
+    ],
+    "remember": "Persist required data beyond the lifetime of its host.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 11,
+    "title": "EFS shares files across clients and AZs",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      330,
+      331,
+      333
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Managed shared NFS",
+        "text": "NFSv4.1 and POSIX semantics suit Linux applications that require concurrent shared-file access; EFS is not native Windows SMB."
+      },
+      {
+        "heading": "Regional or One Zone",
+        "text": "Regional storage spans AZs; One Zone accepts a single-AZ boundary. File capacity grows automatically, but network and performance planning remain."
+      },
+      {
+        "heading": "Choose a file workload",
+        "text": "CMS, WordPress, web serving and shared application content are common fits. Pay for used storage and applicable access/throughput features."
+      }
+    ],
+    "remember": "Choose shared-file semantics and the right failure boundary.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 12,
+    "title": "A mount target is the network doorway to EFS",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      330,
+      334
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Mount-target network path",
+        "text": "Allow NFS TCP 2049 between the client and mount-target security groups; verify subnets, routes and return traffic."
+      },
+      {
+        "heading": "Keep the path local",
+        "text": "Use an available mount target in the client AZ to avoid unnecessary cross-AZ paths. Mount-target availability differs for One Zone."
+      },
+      {
+        "heading": "Extend private connectivity",
+        "text": "DX/VPN or supported VPC connectivity needs working DNS resolution or explicit target addressing. Provide redundant links and endpoints where required."
+      }
+    ],
+    "remember": "A correct mount needs a working private path in both directions.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 13,
+    "title": "EFS authorization has several independent layers",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      331,
+      335,
+      336
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Network and IAM gates",
+        "text": "Security groups provide reachability. Authenticated NFS mounts use the EFS helper and relevant IAM filesystem/client policies."
+      },
+      {
+        "heading": "POSIX file permissions",
+        "text": "File UID/GID and directory read/write/execute permissions remain meaningful; IAM authorization does not replace POSIX checks."
+      },
+      {
+        "heading": "Access-point identity",
+        "text": "Enforce an application root directory and identity. Restrict access-point use in policy; TLS protects transit and KMS protects stored data."
+      }
+    ],
+    "remember": "Reachability, IAM and POSIX permissions solve different access questions.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 14,
+    "title": "Choose EFS throughput to match demand",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      332
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Choose the performance mode",
+        "text": "General Purpose is the recommended low-latency mode. Previous-generation Max I/O has higher operation latency and configuration restrictions."
+      },
+      {
+        "heading": "Match variable demand",
+        "text": "Elastic throughput follows changing demand without requiring stored capacity to purchase throughput."
+      },
+      {
+        "heading": "Provision or use credits",
+        "text": "Provisioned sets throughput separately from capacity. Bursting earns/spends credits based on Standard-class bytes; read metering differs from writes."
+      }
+    ],
+    "remember": "Choose a throughput mechanism that matches demand.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 15,
+    "title": "EFS lifecycle changes cost and access behavior",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      333
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Choose the access tier",
+        "text": "Standard serves frequent file access; IA and Archive lower storage cost for less-used eligible files through lifecycle policies."
+      },
+      {
+        "heading": "Model the complete cost",
+        "text": "Include retrieval/access costs, minimum durations, eligibility and latency. A lower storage rate does not guarantee a lower total bill."
+      },
+      {
+        "heading": "Respect the AZ boundary",
+        "text": "Regional supports Archive; One Zone has a different class set. Automatic backups and restore readiness must fit the accepted failure boundary."
+      }
+    ],
+    "remember": "Model access and recovery costs with storage costs.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 16,
+    "title": "EFS replication is asynchronous recovery",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      337
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Asynchronous copy",
+        "text": "Initial synchronization must finish before the destination data is available. Continued replication is asynchronous."
+      },
+      {
+        "heading": "Protected destination",
+        "text": "The active destination is protected against application writes; prepare its mount targets, key access and policies before failover."
+      },
+      {
+        "heading": "Recover the application",
+        "text": "Monitor TimeSinceLastSync and test a deliberate writable failover and client remount. Replication does not preserve an independent backup history."
+      }
+    ],
+    "remember": "Monitor the recovery point and prove the failover steps.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 17,
+    "title": "Choose FSx by filesystem semantics",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      358,
+      359,
+      360,
+      362,
+      363
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Windows file semantics",
+        "text": "Windows File Server: SMB and Active Directory."
+      },
+      {
+        "heading": "Parallel compute",
+        "text": "Lustre: parallel compute and S3-linked datasets."
+      },
+      {
+        "heading": "ONTAP or OpenZFS",
+        "text": "ONTAP: NFS, SMB and iSCSI; OpenZFS: managed NFS with ZFS capabilities."
+      }
+    ],
+    "remember": "Start with protocol and application semantics.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 18,
+    "title": "Windows file shares keep Windows access controls",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      359
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Native Windows access",
+        "text": "SMB with native NTFS semantics supports traditional enterprise shares, home directories and compatible Windows applications."
+      },
+      {
+        "heading": "Directory and permissions",
+        "text": "Integrate Microsoft AD for authentication and use ACLs, quotas and DFS Namespaces to manage access and file organization."
+      },
+      {
+        "heading": "Compatible private clients",
+        "text": "Linux needs a compatible SMB client. On-premises access needs private routing, DNS and AD connectivity over supported DX/VPN paths."
+      }
+    ],
+    "remember": "Windows file access needs both directory and network design.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 19,
+    "title": "Multi-AZ Windows file storage protects the server tier",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      359
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Active and standby servers",
+        "text": "Managed Multi-AZ deployments keep active and standby Windows file servers in different AZs."
+      },
+      {
+        "heading": "Reconnect after failover",
+        "text": "Failover changes the serving node; applications must tolerate the interruption and reconnect through supported names."
+      },
+      {
+        "heading": "Keep recovery history",
+        "text": "FSx-managed automatic daily backups are enabled by default. They preserve recovery history; Multi-AZ alone does not reverse a mistaken delete."
+      }
+    ],
+    "remember": "Availability replicas and historical backups protect different failures.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 20,
+    "title": "Change Windows file-system layout through migration",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      364,
+      365
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Create the target layout",
+        "text": "For a different AZ deployment or smaller allocated filesystem, provision a compatible new target."
+      },
+      {
+        "heading": "Copy and validate",
+        "text": "Use a supported backup restore or DataSync migration. A backup restore is not a general way to shrink storage; migrate to a smaller target instead."
+      },
+      {
+        "heading": "Cut over deliberately",
+        "text": "Stage the copy, pause writes, perform final synchronization, validate ACLs/data and switch application paths or DNS aliases."
+      }
+    ],
+    "remember": "Plan migration and cutover before changing the storage layout.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 21,
+    "title": "Lustre feeds parallel compute",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      360
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Parallel shared files",
+        "text": "Lustre provides concurrent shared-file access for HPC, ML, video processing, financial modeling and engineering workloads."
+      },
+      {
+        "heading": "Compute and storage together",
+        "text": "Select storage media and throughput for metadata, small/random I/O or large/sequential I/O; benchmark the parallel workload."
+      },
+      {
+        "heading": "Link durable source data",
+        "text": "Supported S3 repository linkage enables file processing without making S3 itself a general POSIX filesystem. Private hybrid clients still need supported connectivity."
+      }
+    ],
+    "remember": "Parallel compute needs an appropriate shared-data path.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 22,
+    "title": "Lustre durability depends on deployment and storage type",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      361
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Scratch is recreatable",
+        "text": "Scratch does not replicate data or replace failed file servers. Keep inputs and valuable outputs independently recoverable."
+      },
+      {
+        "heading": "Persistent SSD and HDD",
+        "text": "These persistent configurations replicate data within one AZ and replace failed file servers. Plan independent protection for an AZ failure."
+      },
+      {
+        "heading": "Persistent Intelligent-Tiering",
+        "text": "Current Intelligent-Tiering replicates data across multiple AZs. Data durability and filesystem serving availability are different properties; test application recovery."
+      }
+    ],
+    "remember": "Specify deployment and storage type before describing the failure boundary.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 23,
+    "title": "Lazy loading brings the working set to Lustre",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      360,
+      366
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Import the namespace",
+        "text": "Linked S3 metadata can be imported before all file content is present in Lustre."
+      },
+      {
+        "heading": "Load data on demand",
+        "text": "Reads fetch the needed file data, allowing a job to start without downloading the complete repository; retained working data reduces repeated fetches."
+      },
+      {
+        "heading": "Export results explicitly",
+        "text": "Configure automatic import/export or explicit repository tasks as supported. Changed output reaches S3 only through the configured export behavior."
+      }
+    ],
+    "remember": "Import and export behavior must be configured deliberately.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 24,
+    "title": "ONTAP combines file and block protocols",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      362
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Serve file and block clients",
+        "text": "Storage virtual machines and volumes expose NFS, SMB and iSCSI to compatible Linux, Windows, macOS and application clients."
+      },
+      {
+        "heading": "Protect and clone data",
+        "text": "Snapshots, replication, efficient clones, compression and deduplication support migration and testing; changed data can consume additional space."
+      },
+      {
+        "heading": "Manage storage tiers",
+        "text": "Manage SSD capacity, IOPS and capacity-pool tiering separately. Automatic tiering is not unlimited capacity or an unconditional automatic-shrink promise."
+      }
+    ],
+    "remember": "Tiering, capacity and high availability are separate controls.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 25,
+    "title": "OpenZFS brings ZFS capabilities to managed NFS",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      363
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Managed NFS access",
+        "text": "OpenZFS exposes supported NFS v3/v4 variants; compatible clients need the right protocol, DNS and network permissions."
+      },
+      {
+        "heading": "Snapshots and clones",
+        "text": "Point-in-time snapshots and writable clones support data recovery and safe testing. Compression saves space only where data compresses."
+      },
+      {
+        "heading": "Provision the failure model",
+        "text": "Select Single-AZ or Multi-AZ capabilities, throughput and capacity deliberately. Managed service operations do not replace application-level recovery design."
+      }
+    ],
+    "remember": "A snapshot, a clone and a deployment choice solve different jobs.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 26,
+    "title": "S3 File Gateway translates file access into objects",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      624,
+      625,
+      630
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Translate NFS or SMB",
+        "text": "On-premises clients use NFS or SMB while the gateway stores file data as S3 objects."
+      },
+      {
+        "heading": "Cache before asynchronous upload",
+        "text": "Local cache absorbs writes and serves active reads; cloud upload is asynchronous. Size the cache for the working set and dirty data."
+      },
+      {
+        "heading": "Monitor object and cache behavior",
+        "text": "Watch upload completion and cache pressure. External S3 changes require supported refresh behavior; coordinate writers to avoid object conflicts."
+      }
+    ],
+    "remember": "Local file access and asynchronous cloud durability are separate events.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 27,
+    "title": "Volume Gateway: decide where the primary data lives",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      627,
+      630
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Cached primary in AWS",
+        "text": "Cached volumes store primary data in managed AWS storage and retain a local working set."
+      },
+      {
+        "heading": "Stored primary on premises",
+        "text": "Stored volumes keep the full primary dataset locally and back it up asynchronously to AWS."
+      },
+      {
+        "heading": "Recover through snapshots",
+        "text": "Both expose iSCSI blocks. Plan local storage/upload buffers, snapshot recovery and connectivity; an EBS snapshot can restore a recovery volume."
+      }
+    ],
+    "remember": "Locate the primary data before choosing the gateway mode.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 28,
+    "title": "Tape Gateway preserves the backup interface",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      624,
+      626,
+      628,
+      629,
+      630
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Preserve the tape workflow",
+        "text": "Existing compatible backup software writes through an iSCSI virtual tape library rather than replacing its backup workflow."
+      },
+      {
+        "heading": "Eject and archive",
+        "text": "Online virtual tapes are managed in S3-backed storage; ejected archived tapes use supported Glacier archive destinations with restore timing/cost."
+      },
+      {
+        "heading": "Understand legacy alternatives",
+        "text": "FSx File Gateway is closed to new customers. Its historical SMB/local-cache design is distinct from S3 File Gateway and current new-deployment choices."
+      }
+    ],
+    "remember": "Keep the tape interface while planning cloud retrieval behavior.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 29,
+    "title": "EBS walkthrough: modify, extend and verify",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      321,
+      322,
+      323
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Inspect the sandbox volume",
+        "text": "Illustrative sandbox: inspect attachment, AZ, encryption, volume type and the instance EBS limits; take an appropriate recovery point."
+      },
+      {
+        "heading": "Modify and extend",
+        "text": "Choose a supported volume modification. Wait for the required operation state and extend the guest partition/filesystem using OS-specific steps."
+      },
+      {
+        "heading": "Verify and clean up",
+        "text": "Check lsblk/df and application behavior, validate the recovery point and remove sandbox resources. Never format an existing data volume just to expand it."
+      }
+    ],
+    "remember": "Modify, extend and verify; never replace verification with a success icon.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 30,
+    "title": "EFS walkthrough: mount, authorize and prove sharing",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      330,
+      331,
+      334,
+      335,
+      336
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Create the authorized path",
+        "text": "Illustrative sandbox: create a filesystem, suitable mount targets, a narrow TCP 2049 rule and configured application identity/access point."
+      },
+      {
+        "heading": "Mount with TLS",
+        "text": "Install the EFS helper and mount with TLS plus the intended IAM/access-point options. Replace example IDs and check directory UID/GID permissions."
+      },
+      {
+        "heading": "Prove sharing and denial",
+        "text": "Write/read a file from two authorized clients. Configure a separate denied policy or directory for the negative test; then unmount and clean up."
+      }
+    ],
+    "remember": "Test both the intended allow and a deliberately configured deny.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 31,
+    "title": "A snapshot, an AMI and a regional recovery copy solve different jobs",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      323
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Preserve volume blocks",
+        "text": "Snapshots preserve block data; a data-volume snapshot alone is not complete application boot metadata."
+      },
+      {
+        "heading": "Define a bootable image",
+        "text": "An EBS-backed AMI references snapshots and includes relevant boot characteristics and block mappings. Instance type belongs to the launch decision/template."
+      },
+      {
+        "heading": "Prepare regional recovery",
+        "text": "Copy snapshots or AMIs before a regional outage, authorize destination-region KMS keys and prove that a recovery instance can launch."
+      }
+    ],
+    "remember": "An AMI supplies boot metadata; a launch template defines a launch configuration.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 32,
+    "title": "DLM owns the recovery points created by its policies",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      324,
+      325
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Select tagged resources",
+        "text": "Choose supported instance/volume targets using the policy's selection rules; custom schedules commonly use tags."
+      },
+      {
+        "heading": "Manage policy-created backups",
+        "text": "DLM creates and retains snapshots or EBS-backed AMIs and applies configured lifecycle/copy actions."
+      },
+      {
+        "heading": "Know the ownership boundary",
+        "text": "DLM does not take over arbitrary external snapshots or instance-store-backed AMIs. Wider supported-service governance belongs to AWS Backup."
+      }
+    ],
+    "remember": "A lifecycle policy has a defined resource-ownership boundary.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 33,
+    "title": "Choose file-storage performance without changing its semantics",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      359,
+      360,
+      362,
+      363
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Windows SSD or HDD",
+        "text": "Windows SSD suits latency-sensitive or metadata-heavy access; HDD can fit suitable sequential, cost-sensitive shares."
+      },
+      {
+        "heading": "Lustre I/O pattern",
+        "text": "Lustre performance depends on media, throughput and the degree of concurrent compute demand, not just filesystem capacity."
+      },
+      {
+        "heading": "Enterprise file features",
+        "text": "ONTAP/OpenZFS features preserve their filesystem semantics; select the correct client protocol, connectivity, deployment and protection model."
+      }
+    ],
+    "remember": "Performance selection must preserve required file semantics.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 34,
+    "title": "Deploy a gateway with identity, cache and recovery in mind",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "referencePages": [
+      624,
+      625,
+      626,
+      629,
+      630
+    ],
+    "status": "qa-passed",
+    "generationMethod": "built-in imagegen",
+    "sourceVerifiedDate": "2026-10-31",
+    "revision": "module09-style-and-depth",
+    "sections": [
+      {
+        "heading": "Separate client and bucket identity",
+        "text": "S3 File Gateway uses an IAM role for bucket access; SMB can authenticate users through Active Directory."
+      },
+      {
+        "heading": "Size gateway resources",
+        "text": "File Gateway allocates local disks as cache, including dirty uploads. Separate upload-buffer requirements belong to other gateway types; size resources for the selected type."
+      },
+      {
+        "heading": "Choose supported deployment",
+        "text": "Choose supported virtual host deployment. The historical AWS hardware appliance is no longer sold, and FSx File Gateway is unavailable to new customers."
+      }
+    ],
+    "remember": "Client authentication, bucket authorization and local resources need separate plans.",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 35,
+    "title": "Snapshot capture: protect the application's state",
+    "sections": [
+      {
+        "heading": "Coordinate writes",
+        "text": "A snapshot captures block storage, not an arbitrary database transaction. Flush writes, pause or quiesce applications as appropriate, and coordinate related volumes."
+      },
+      {
+        "heading": "Detach is not mandatory",
+        "text": "A volume can remain attached while a snapshot is created. For stronger consistency, use a supported application-consistent procedure rather than assuming every attached snapshot is complete."
+      },
+      {
+        "heading": "Schedule around real load",
+        "text": "Snapshot activity and application I/O share resources. Plan capture windows, monitor application impact and test restoration before relying on the recovery point."
+      }
+    ],
+    "remember": "Consistency comes from the capture procedure and a tested restore.",
+    "referencePages": [
+      323
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 36,
+    "title": "Snapshot initialization: choose the recovery mechanism",
+    "sections": [
+      {
+        "heading": "Manual read initialization",
+        "text": "Read the restored device's blocks with a supported fio or dd procedure when appropriate. Read into /dev/null; do not overwrite production data during initialization."
+      },
+      {
+        "heading": "Fast Snapshot Restore",
+        "text": "Enable FSR for the required snapshot/AZ pairs. It has eligibility, performance and volume-creation-credit limits plus additional charges."
+      },
+      {
+        "heading": "Provisioned initialization",
+        "text": "A supported provisioned initialization rate gives more predictable block-download timing at extra cost. Specifying it overrides FSR for that volume; monitor initialization before application tests."
+      }
+    ],
+    "remember": "Compare recovery timing, limits and cost rather than assuming every restored volume is warm.",
+    "referencePages": [
+      323
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 37,
+    "title": "EFS access points: give each application its own view",
+    "sections": [
+      {
+        "heading": "Enforce identity",
+        "text": "Example: application A uses UID/GID 2101 through access point A. EFS can replace the client-supplied POSIX identity with the access-point identity."
+      },
+      {
+        "heading": "Override the root",
+        "text": "Access point A exposes /app-a as the client root; application B uses a separate /app-b root and identity. Configure directory ownership and permissions correctly."
+      },
+      {
+        "heading": "Authorize the entry point",
+        "text": "Use filesystem/IAM conditions to restrict the allowed access point and require the intended TLS/IAM mount. An access point does not remove the need for network or POSIX permissions."
+      }
+    ],
+    "remember": "A scoped directory view and an enforced identity complement policy authorization.",
+    "referencePages": [
+      335
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 38,
+    "title": "EFS policy defaults: do not confuse network access with IAM",
+    "sections": [
+      {
+        "heading": "Understand the default",
+        "text": "Without a user-configured filesystem policy, network-reachable anonymous NFS clients are allowed by the default policy. POSIX permissions still apply."
+      },
+      {
+        "heading": "Use authenticated mounts",
+        "text": "The EFS mount helper with IAM authorization evaluates relevant identity and filesystem policies. ClientMount, ClientWrite and ClientRootAccess represent different permissions."
+      },
+      {
+        "heading": "Restrict deliberately",
+        "text": "Enforce TLS and the intended principals/access points; configure root access appropriately. Test allowed and denied mounts after policy propagation."
+      }
+    ],
+    "remember": "IAM is an explicit client authorization design, not an automatic replacement for NFS permissions.",
+    "referencePages": [
+      336
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 39,
+    "title": "EFS burst credits: connect storage size to throughput",
+    "sections": [
+      {
+        "heading": "Earn the baseline",
+        "text": "Bursting throughput earns credits according to Standard-class storage. A larger Standard working set can earn a higher baseline; cold-class bytes do not purchase the same baseline."
+      },
+      {
+        "heading": "Spend credits on peaks",
+        "text": "Unused baseline accumulates credits. Demand above baseline spends them; after depletion, sustained performance follows the available baseline and applicable limits."
+      },
+      {
+        "heading": "Separate read metering",
+        "text": "Reads are metered differently from writes. Use the exact current formula and Region/client limits in the comparison reference; choose Elastic or Provisioned when the credit model does not fit."
+      }
+    ],
+    "remember": "File capacity, metered throughput and application read rate are different measurements.",
+    "referencePages": [
+      332
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 40,
+    "title": "EFS replication: measure RPO and rehearse RTO",
+    "sections": [
+      {
+        "heading": "Finish the initial sync",
+        "text": "The initial copy depends on data size and file count; destination data is not available until that sync completes. It is not an instant empty-to-ready recovery."
+      },
+      {
+        "heading": "Monitor the recovery point",
+        "text": "AWS targets a 15-minute RPO for most filesystems after initial sync, with documented workload exceptions. Track TimeSinceLastSync and the last replicated timestamp."
+      },
+      {
+        "heading": "Test the complete failover",
+        "text": "A writable destination, mount targets, DNS, KMS/IAM access and application remounts determine practical RTO. Replication uses managed capacity and does not consume the source's provisioned throughput allocation."
+      }
+    ],
+    "remember": "An RPO target is not a guarantee of application recovery time.",
+    "referencePages": [
+      337
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 41,
+    "title": "File Gateway data can feed cloud processing",
+    "sections": [
+      {
+        "heading": "Upload then process",
+        "text": "NFS/SMB clients write through the local gateway to S3. Trigger downstream work only when the intended object/upload is ready; local close alone is not proof of completed cloud upload."
+      },
+      {
+        "heading": "Extend the workflow",
+        "text": "S3 events can invoke Lambda, while Athena, Redshift Spectrum or EMR consume supported datasets from S3. Handle duplicated events and concurrent changes in the consumer design."
+      },
+      {
+        "heading": "Replicate deliberately",
+        "text": "Supported S3 replication can move objects to another bucket/Region. Validate versioning, permissions and destination access; replication does not coordinate multiple gateway writers."
+      }
+    ],
+    "remember": "A file bridge can feed object workflows without turning every consumer into a shared filesystem client.",
+    "referencePages": [
+      631
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 42,
+    "title": "Read-only gateway replicas need refresh and writer discipline",
+    "sections": [
+      {
+        "heading": "Choose one writer",
+        "text": "Use one authoritative write share for an object set. Multiple gateways writing the same objects can create conflicts; a shared bucket is not a distributed file-lock manager."
+      },
+      {
+        "heading": "Expose read-only shares",
+        "text": "Other sites can use read-only gateway shares backed by the intended S3 data. Network/file permissions and gateway caching still control what readers see."
+      },
+      {
+        "heading": "Refresh the inventory",
+        "text": "External changes need supported cache refresh or refresh settings. RefreshCache updates cached object inventory, not a full eager download; wait for completion before validating new files."
+      }
+    ],
+    "remember": "Read-only distribution still needs freshness, authorization and a defined writer.",
+    "referencePages": [
+      632
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 43,
+    "title": "File Gateway backups: lifecycle, versions and WORM",
+    "sections": [
+      {
+        "heading": "Tier backup objects",
+        "text": "A backup application can write files through the gateway to S3. Apply deliberate Standard/IA/archive lifecycle and retention rules, including retrieval time and minimum-duration charges."
+      },
+      {
+        "heading": "Recover a previous version",
+        "text": "Versioning can retain overwritten objects. Restore the intended object version through S3, then refresh the gateway inventory so file clients see the recovered state; test the recovery workflow."
+      },
+      {
+        "heading": "Retain protected versions",
+        "text": "S3 Object Lock protects eligible object versions with retention or legal hold. A client modification can create a new version; it does not rewrite an already protected version."
+      }
+    ],
+    "remember": "Lifecycle, version history and immutable retention protect different recovery requirements.",
+    "referencePages": [
+      633,
+      634
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "sequence": 44,
+    "title": "Gateway recovery: restore the correct storage interface",
+    "sections": [
+      {
+        "heading": "Recover block volumes",
+        "text": "Volume Gateway exposes iSCSI. Its cloud snapshot recovery can create an EBS volume for an EC2 recovery workload; adapt the application and validate data consistency."
+      },
+      {
+        "heading": "Retrieve virtual tapes",
+        "text": "Tape Gateway presents an iSCSI virtual tape library. Ejection and archive change retrieval time and cost; use compatible backup software to retrieve and restore the tape data."
+      },
+      {
+        "heading": "Protect the whole path",
+        "text": "Use supported encrypted cloud transport over internet or private connectivity. Local cache, upload buffers and host resources depend on gateway type; loss of unuploaded data remains a separate risk."
+      }
+    ],
+    "remember": "Recovery must reproduce the application's required interface and usable data.",
+    "referencePages": [
+      627,
+      628,
+      630
+    ],
+    "status": "qa-passed",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "styleReference": "module-09/slide-12.webp",
+    "moduleId": "10"
+  },
+  {
+    "moduleId": "10",
+    "sequence": 45,
+    "title": "Lustre Intelligent-Tiering changes the storage comparison",
+    "referencePages": [
+      359,
+      360,
+      361
+    ],
+    "sections": [
+      {
+        "heading": "Elastic storage",
+        "text": "Persistent Intelligent-Tiering grows with stored data and moves eligible data among Frequent Access, Infrequent Access and Archive Instant Access tiers."
+      },
+      {
+        "heading": "Choose throughput and cache",
+        "text": "Throughput is provisioned separately; an optional SSD read cache accelerates eligible reads. This differs from the SSD or HDD capacity-based comparison in older course tables."
+      },
+      {
+        "heading": "Keep recovery explicit",
+        "text": "Intelligent-Tiering replicates data across multiple AZs. Do not translate that durability feature into an unqualified promise of continuous client access or application disaster recovery."
+      }
+    ],
+    "remember": "Keep historical PDF figures separate from the current configuration's documented capabilities.",
+    "revision": "current-service-addition",
+    "layout": "Module 09 panels with functional conceptual diagrams",
+    "status": "qa-passed",
+    "styleReference": "module-09/slide-12.webp"
+  }
+]

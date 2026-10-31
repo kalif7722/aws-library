@@ -1,0 +1,111 @@
+[
+  {
+    "moduleId": "04",
+    "sequence": 8,
+    "title": "Security groups versus network ACLs",
+    "sections": [
+      {
+        "heading": "Choose the enforcement boundary",
+        "text": "Security groups attach to supported resources/ENIs and are stateful. Network ACLs apply at the subnet boundary and are stateless. A route and both applicable control layers must permit the intended path."
+      },
+      {
+        "heading": "Evaluate the rule model",
+        "text": "Security groups use allow rules with implicit denial otherwise. Network ACLs support numbered allow/deny rules, evaluated in ascending order until a match; the first matching rule determines the result."
+      },
+      {
+        "heading": "Validate the return flow",
+        "text": "Stateful security-group tracking normally permits response traffic for an allowed connection. NACLs need explicit return-direction rules, including the actual client ephemeral-port range; do not assume one OS's range fits every client."
+      }
+    ],
+    "remember": "Statefulness changes return-traffic behavior; it does not create a route.",
+    "referencePages": [
+      673,
+      727
+    ],
+    "revision": "replace-wrong-image-mapping"
+  },
+  {
+    "moduleId": "04",
+    "sequence": 9,
+    "title": "VPC Flow Logs: what they show and miss",
+    "sections": [
+      {
+        "heading": "Choose the observation scope",
+        "text": "Create supported flow logging at VPC, subnet or ENI scope. Records summarize observed network flows and can be delivered to supported destinations such as CloudWatch Logs or S3."
+      },
+      {
+        "heading": "Read network evidence",
+        "text": "Inspect interface, addresses, ports, protocol, byte/packet counts, time range, action and log status. Correlate forward and return directions; ACCEPT/REJECT alone does not identify every security or routing cause."
+      },
+      {
+        "heading": "Know the blind spots",
+        "text": "Flow Logs are not packet captures, payload inspection or proof of application success. Some traffic is excluded, records may be delayed or skipped, and no flow record can also mean the packet never reached that observation point."
+      }
+    ],
+    "remember": "A flow record is evidence at an interface, not a complete end-to-end diagnosis.",
+    "referencePages": [
+      674,
+      725,
+      726,
+      727,
+      728
+    ],
+    "revision": "replace-wrong-image-mapping"
+  },
+  {
+    "moduleId": "04",
+    "sequence": 11,
+    "title": "Private DNS for interface endpoints",
+    "sections": [
+      {
+        "heading": "Resolve to the private interface",
+        "text": "With supported private DNS enabled, the normal service hostname resolves to the endpoint's private addresses within the configured DNS scope. This changes name resolution, not the application's IAM permissions."
+      },
+      {
+        "heading": "Prepare VPC and hybrid DNS",
+        "text": "Check VPC DNS settings, private-zone conflicts and supported Resolver forwarding for other VPCs or on-premises clients. Creating an endpoint in one VPC does not automatically redirect every external client's DNS."
+      },
+      {
+        "heading": "Prove the complete request",
+        "text": "Verify the resolved address, route, endpoint security group and applicable endpoint/resource/identity policies. Private addressing alone does not prove the intended access path or authorization."
+      }
+    ],
+    "remember": "Private DNS selects an address; networking and authorization still have to work.",
+    "referencePages": [
+      688,
+      690,
+      697,
+      698
+    ],
+    "revision": "remove-irrelevant-AIF-AIP-branding"
+  },
+  {
+    "moduleId": "03",
+    "sequence": 32,
+    "title": "CloudHSM TLS offload: keep the private key in the HSM",
+    "sections": [
+      {
+        "heading": "Locate TLS termination",
+        "text": "An ALB can terminate supported TLS with its configured certificate. A server-side TLS design instead terminates the connection at the application server; these are different key-placement choices."
+      },
+      {
+        "heading": "Use a supported HSM integration",
+        "text": "For a supported web-server/cryptographic integration, an EC2 application invokes CloudHSM-backed private-key operations through the client/provider stack. CloudHSM does not become a transparent network proxy in the traffic path."
+      },
+      {
+        "heading": "Operate the dependency",
+        "text": "Plan the HSM cluster, client configuration, private connectivity, certificate deployment and application recovery. HSM-backed keys do not remove TLS policy, trust-chain or availability responsibilities."
+      }
+    ],
+    "remember": "Identify where the TLS session terminates and which system can use its private key.",
+    "referencePages": [
+      119,
+      120,
+      121,
+      124,
+      125,
+      126
+    ],
+    "revision": "add-missing-reference-depth"
+  }
+]

@@ -1,0 +1,401 @@
+[
+  {
+    "moduleId": "01",
+    "title": "Directory and authorization details",
+    "rows": [
+      [
+        "AD DS / AD FS",
+        "AD DS provides a directory/domain. AD FS federates authentication; it does not replace a domain controller."
+      ],
+      [
+        "Managed Microsoft AD",
+        "Managed domain controllers across two AZs; supported trusts, integrations, sharing and multi-Region replication have separate prerequisites."
+      ],
+      [
+        "AD Connector / Simple AD",
+        "Connector proxies supported requests to an existing directory. Simple AD is a limited Samba-compatible directory, with no forest trusts or MFA support."
+      ],
+      [
+        "Policy attachment",
+        "AWS-managed and customer-managed policies are reusable; inline policies belong to one identity. Inspect current AWS-managed policy versions."
+      ],
+      [
+        "ForAllValues / ForAnyValue",
+        "Compare supplied values of multivalued request keys. ForAllValues can match a missing key; use Null/presence checks and separate required-tag conditions."
+      ],
+      [
+        "STS sessions",
+        "AssumeRole, AssumeRoleWithSAML, AssumeRoleWithWebIdentity, GetSessionToken and GetFederationToken create different session types. Trust, caller authorization and session restrictions differ."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html",
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html"
+    ]
+  },
+  {
+    "moduleId": "02",
+    "title": "Organization setup and policy boundaries",
+    "rows": [
+      [
+        "Created / invited accounts",
+        "Organizations normally creates OrganizationAccountAccessRole for a created member account. Invitation does not automatically create that role."
+      ],
+      [
+        "Account moves",
+        "Meet removal prerequisites, leave/remove the old organization, then invite and accept into the new one. Recheck effective policies, service integrations and billing."
+      ],
+      [
+        "Feature modes",
+        "Consolidated billing aggregates usage/payment. All features adds governance; enabling it can require invited-account approval and cannot be downgraded to billing-only."
+      ],
+      [
+        "Discount sharing",
+        "Eligible RI/Savings Plans sharing is controlled through billing settings. It does not grant resource access or automatically share capacity reservations."
+      ],
+      [
+        "Tag policy",
+        "Supported key/value/capitalization enforcement is different from requiring every tag to exist. Use supported request-tag/provisioning controls for mandatory presence."
+      ],
+      [
+        "AI opt-out / backup policy",
+        "AI opt-out applies to eligible service data use. Backup policies express organization intent; verify assignments, successful jobs, retention and tested restores."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html",
+      "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
+    ]
+  },
+  {
+    "moduleId": "03",
+    "title": "Parameter, secret and key details",
+    "rows": [
+      [
+        "Parameter Store Standard",
+        "10,000 parameters per account/Region; values up to 4 KB. Standard parameters do not support advanced parameter policies or cross-account sharing."
+      ],
+      [
+        "Parameter Store Advanced",
+        "100,000 parameters per account/Region; values up to 8 KB. Supports parameter policies and supported cross-account sharing; additional charges apply. An advanced parameter cannot be downgraded."
+      ],
+      [
+        "Policies / throughput",
+        "Expiration deletes the parameter; ExpirationNotification and NoChangeNotification emit notifications. Storage tier and throughput settings are separate decisions."
+      ],
+      [
+        "Recursive paths",
+        "An allowed recursive GetParametersByPath parent can expose descendants. Design hierarchy authorization deliberately rather than treating child-path restrictions as a guaranteed boundary."
+      ],
+      [
+        "Secret rotation / CloudFormation",
+        "Dynamic references resolve during relevant stack resource operations. Changing a secret alone does not automatically refresh the resource that consumed it."
+      ],
+      [
+        "Cross-account secrets",
+        "Align the secret resource policy, caller identity permissions and customer-managed KMS key authorization."
+      ],
+      [
+        "Key custody",
+        "AWS KMS key material origin, imported material, CloudHSM custom key stores and external key stores have different custody and availability dependencies."
+      ],
+      [
+        "TLS with CloudHSM",
+        "The application server terminates TLS and uses supported HSM-backed private-key operations. CloudHSM is not a transparent traffic proxy."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html",
+      "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-secretsmanager.html"
+    ]
+  },
+  {
+    "moduleId": "04",
+    "title": "Network controls and diagnostic precision",
+    "rows": [
+      [
+        "Security groups",
+        "Stateful allow rules at supported resource/ENI scope. They do not create routes."
+      ],
+      [
+        "Network ACLs",
+        "Stateless subnet controls; numbered allow/deny rules use first match. Permit return traffic and the actual client ephemeral-port range."
+      ],
+      [
+        "Flow Log fields",
+        "Read interface, srcaddr/dstaddr, ports, protocol, counts, start/end, action and log-status. pkt-srcaddr/pkt-dstaddr can preserve original packet addresses across intermediaries."
+      ],
+      [
+        "Diagnostic limits",
+        "ACCEPT is not proof of application success; REJECT alone does not identify the complete cause. Excluded traffic, delays and SKIPDATA limit observations."
+      ],
+      [
+        "NAT instance",
+        "Configure both route directions, public connectivity, security controls and disabled source/destination checking. Operate capacity, patching and recovery yourself."
+      ],
+      [
+        "Private DNS",
+        "Verify VPC DNS settings, endpoint scope, zone conflicts and hybrid Resolver forwarding. DNS resolution, connectivity and authorization are separate checks."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html"
+    ]
+  },
+  {
+    "moduleId": "05",
+    "title": "DNS routing and health details",
+    "rows": [
+      [
+        "IP-based routing",
+        "Uses configured source CIDR collections; account for recursive resolver behavior and EDNS Client Subnet support."
+      ],
+      [
+        "Geolocation / geoproximity",
+        "Geolocation uses geographic policy; geoproximity uses resource location and bias. Current geoproximity records can be managed directly; Traffic Flow is not universally mandatory."
+      ],
+      [
+        "Weighted records",
+        "Weights influence eligible DNS answers, not an exact percentage of HTTP requests. Resolver/client caching, TTLs and health affect observed traffic."
+      ],
+      [
+        "Endpoint health",
+        "HTTP/HTTPS checks evaluate supported response status and optional string matching in the first 5,120 response bytes. Route 53 global checker aggregation differs from one probe result."
+      ],
+      [
+        "Private endpoints",
+        "Public Route 53 checkers cannot directly probe arbitrary private addresses; use appropriate CloudWatch-alarm or calculated health designs."
+      ],
+      [
+        "Calculated checks",
+        "AWS documentation describes child-check limits differently across overview and console pages (255/256). Check the current API/console constraint for the operation instead of assuming interchangeability."
+      ],
+      [
+        "Traffic Flow",
+        "Policies and policy records are versioned configuration. A policy change and DNS cache expiry are separate events."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html",
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html"
+    ]
+  },
+  {
+    "moduleId": "09",
+    "title": "S3 access and legacy feature boundaries",
+    "rows": [
+      [
+        "Multi-Region Access Points",
+        "A global access/routing endpoint does not automatically replicate bucket data. Configure replication and test failover independently."
+      ],
+      [
+        "Presigned URLs",
+        "They carry the signing principal's permitted operation. They expire no later than the underlying credentials and remain subject to applicable policy restrictions."
+      ],
+      [
+        "Object Lambda",
+        "Since 7 November 2025, availability is restricted to existing customers and selected APN partners. Treat older PDF designs as eligibility-dependent."
+      ],
+      [
+        "Glacier Vault Lock",
+        "A legacy Glacier vault policy lock is different from S3 Object Lock and from using an S3 Glacier storage class."
+      ],
+      [
+        "Observability",
+        "Server access logs, CloudTrail data events and CloudWatch metrics answer different questions; configuration does not prove complete event capture."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html",
+      "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html"
+    ]
+  },
+  {
+    "moduleId": "10",
+    "title": "EBS volume limits and comparison",
+    "rows": [
+      [
+        "gp3",
+        "1 GiB\u201364 TiB; up to 80,000 IOPS and 2,000 MiB/s. Includes 3,000 IOPS and 125 MiB/s baseline; provisioning ratios, instance limits and platform constraints apply."
+      ],
+      [
+        "gp2",
+        "1 GiB\u201316 TiB; up to 16,000 IOPS and 250 MiB/s. Performance and burst behavior depend on size."
+      ],
+      [
+        "io2 Block Express",
+        "4 GiB\u201364 TiB; up to 256,000 IOPS and 4,000 MiB/s on compatible instances/configurations; designed for 99.999% durability."
+      ],
+      [
+        "io1",
+        "4 GiB\u201316 TiB; up to 64,000 IOPS and 1,000 MiB/s under supported instance/configuration conditions."
+      ],
+      [
+        "st1 / sc1",
+        "125 GiB\u201316 TiB; up to 500/250 MiB/s and 500/250 IOPS at 1 MiB I/O respectively. Throughput-oriented HDD; cannot be boot volumes."
+      ],
+      [
+        "Multi-Attach",
+        "Supported io1/io2 volumes: up to 16 Nitro instances in one AZ. Linux supports io1/io2; Windows supports io2. Coordinate concurrent writes with a suitable application/filesystem."
+      ],
+      [
+        "Scope exceptions",
+        "Outposts gp3 limits differ from regional gp3. The PDF's 7.5/60 TiB instance-store examples describe particular instance configurations, not a universal current limit."
+      ],
+      [
+        "Instance store lifecycle",
+        "Host-local block storage survives a normal reboot, but data is lost on stop/termination and can be lost on host failure. Capacity cannot be expanded like EBS; operate independent backups."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+      "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"
+    ]
+  },
+  {
+    "moduleId": "10",
+    "title": "Snapshot recovery and EFS details",
+    "rows": [
+      [
+        "Capture consistency",
+        "Detachment is optional. Quiesce the application and flush pending writes; coordinate related volumes. A crash-consistent block capture is not automatically application-consistent."
+      ],
+      [
+        "Fast Snapshot Restore",
+        "Enable per snapshot/AZ and account for additional charges and volume-creation credits. Snapshot size is limited to 16 TiB; full performance benefits have documented 64,000 IOPS / 1,000 MiB/s boundaries."
+      ],
+      [
+        "Provisioned initialization",
+        "Choose 100\u2013300 MiB/s where supported. Initialization concerns snapshot data size, not simply allocated volume size. Specifying a rate takes precedence over FSR."
+      ],
+      [
+        "Manual initialization",
+        "Read every required block safely using a supported read-only method such as fio/dd to /dev/null. Do not overwrite the restored device."
+      ],
+      [
+        "EFS bursting",
+        "Baseline is 50 MiB/s per TiB of Standard storage, with a minimum baseline. Burst credits and capacity determine burst performance; read requests are metered at one-third the write rate."
+      ],
+      [
+        "EFS access controls",
+        "Network reachability, IAM client permissions and POSIX permissions are separate gates. Access points can enforce a root directory and UID/GID; they do not bypass missing permissions."
+      ],
+      [
+        "Default EFS policy",
+        "Without a user-configured filesystem policy, the default allows anonymous network-reachable clients, subject to POSIX permissions. Use the mount helper and supported IAM authorization deliberately."
+      ],
+      [
+        "EFS replication",
+        "Initial synchronization precedes destination availability. Most filesystems target a 15-minute RPO; high-churn very large filesystems/files can exceed it. Monitor TimeSinceLastSync and test RTO."
+      ],
+      [
+        "Current performance",
+        "Regional Elastic throughput limits vary by Region and supported client. Older universal ceilings in the PDF are historical; check the current performance table for the selected configuration."
+      ],
+      [
+        "EFS protocol and scale",
+        "Managed NFSv4.0/v4.1 with POSIX semantics; scalable to petabytes and thousands of concurrent clients. Linux file workloads differ from native Windows SMB."
+      ],
+      [
+        "Performance modes",
+        "General Purpose is recommended for low latency. Max I/O is a creation-time choice, has higher per-operation latency, and is unavailable for One Zone filesystems or Elastic throughput."
+      ],
+      [
+        "Storage class eligibility",
+        "Regional supports Standard, IA and Archive; One Zone supports One Zone and One Zone-IA, with automatic backups enabled by default. Archive requires supported Regional/Elastic configuration. Lifecycle eligibility and minimum storage charges apply."
+      ],
+      [
+        "Hybrid mount paths",
+        "Use supported private DX/VPN or peering paths, NFS TCP 2049, mount-target security groups and correct DNS or explicit target addressing. Design redundant connectivity and mount targets."
+      ],
+      [
+        "Cost comparisons",
+        "The PDF\u2019s 3\u00d7 gp2, 50% Archive and >90% savings figures are scenario/price illustrations, not universal current prices. Compare Region-specific storage, access, retrieval, throughput and minimum-duration charges."
+      ],
+      [
+        "Replication throughput",
+        "Replication uses managed capacity rather than consuming the source filesystem\u2019s provisioned throughput allocation. This does not eliminate initial-copy duration, lag or failover work."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/ebs/latest/userguide/initalize-volume.html",
+      "https://docs.aws.amazon.com/efs/latest/ug/performance.html",
+      "https://docs.aws.amazon.com/efs/latest/ug/efs-replication.html"
+    ]
+  },
+  {
+    "moduleId": "10",
+    "title": "FSx and Storage Gateway details",
+    "rows": [
+      [
+        "FSx for Windows",
+        "SMB/NTFS, AD authentication, ACLs, quotas and supported DFS patterns. Distinguish SSD/HDD, backup protection and Single-AZ/Multi-AZ availability."
+      ],
+      [
+        "Lustre scratch",
+        "Data is not replicated; failed file servers are not replaced. Scratch can burst up to six times a 200 MBps/TiB baseline. Keep recreatable inputs and valuable outputs independently protected."
+      ],
+      [
+        "Lustre persistent SSD/HDD",
+        "Replicates data within one AZ and replaces failed servers. Persistent 1/2 and media choices have different capacity, throughput and deployment constraints."
+      ],
+      [
+        "Lustre Intelligent-Tiering",
+        "Current persistent Intelligent-Tiering replicates data across multiple AZs, offers elastic tiered storage and optional SSD read cache. Data durability is distinct from serving availability and application DR."
+      ],
+      [
+        "ONTAP / OpenZFS",
+        "ONTAP supports NFS/SMB/iSCSI and storage-management features. OpenZFS serves NFS; do not treat older headline IOPS/latency figures as guarantees for every configuration."
+      ],
+      [
+        "File Gateway disks",
+        "S3 File Gateway uses local cache disks. Volume/Tape Gateway upload buffers are separate type-specific concepts; do not apply their disk model to File Gateway."
+      ],
+      [
+        "S3 event workflows",
+        "Newly uploaded objects can trigger supported event processing and feed Athena, Redshift Spectrum or EMR. Configure replication separately for a second Region."
+      ],
+      [
+        "Multiple gateways",
+        "Prefer one authoritative writer per object set with read-only consumers where appropriate. RefreshCache updates inventory; it does not eagerly download all object bytes."
+      ],
+      [
+        "Recovery and immutability",
+        "Lifecycle can reduce storage cost but archive retrieval may require restoration. Recover a previous version deliberately, refresh gateway metadata, and understand Object Lock protects object versions rather than freezing every filename forever."
+      ],
+      [
+        "Volume / Tape Gateway",
+        "Volume Gateway recovery uses EBS snapshots with type-specific local storage. Tape Gateway eject/archive and virtual-library recovery are different workflows."
+      ],
+      [
+        "Legacy availability",
+        "Storage Gateway hardware appliances stopped new sales in May 2025, with existing support scheduled through May 2028. FSx File Gateway is unavailable to new customers; retain historical context without recommending an ineligible new deployment."
+      ],
+      [
+        "Supported client examples",
+        "ONTAP and OpenZFS can serve compatible Linux, Windows and macOS clients, on-premises systems, EC2 and container workloads. VMware, WorkSpaces and application-streaming integrations require supported protocol/client/network configurations."
+      ],
+      [
+        "Gateway deployment",
+        "Use a supported VM/host deployment and type-specific CPU, memory, disk and network sizing. The PDF\u2019s hardware-purchase path is historical; private or encrypted internet transport remains a separate design choice."
+      ],
+      [
+        "S3 File Gateway storage classes",
+        "Supported active-object destinations include Standard, Standard-IA, One Zone-IA and Intelligent-Tiering. Lifecycle transitions into archive classes change retrieval behavior; confirm current gateway compatibility and restore requirements."
+      ],
+      [
+        "FSx File Gateway historical architecture",
+        "The historical service exposed FSx for Windows via SMB with NTFS/AD compatibility and a local hot-data cache, commonly for home directories/group shares. It is closed to new customers."
+      ],
+      [
+        "Lustre repository behavior",
+        "Import namespace/metadata and load needed file contents on demand. Retained data can avoid repeated reads, but eviction and configured import/export behavior determine later S3 requests. Supported private connectivity is required for on-premises clients."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html",
+      "https://docs.aws.amazon.com/filegateway/latest/files3/what-is-file-s3.html"
+    ]
+  }
+]
