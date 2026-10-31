@@ -1,0 +1,1938 @@
+[
+  {
+    "moduleId": "11",
+    "sequence": 1,
+    "title": "Choose the database from the access pattern",
+    "referencePages": [
+      411,
+      421,
+      425,
+      434,
+      522,
+      524
+    ],
+    "sections": [
+      {
+        "heading": "Relational transactions",
+        "text": "RDS and Aurora serve relational models and SQL workloads. Select engine compatibility, transaction needs and recovery objectives before choosing an instance."
+      },
+      {
+        "heading": "Key-based operations",
+        "text": "DynamoDB fits known key-based access patterns. Design keys and indexes from queries; a flexible item schema does not create arbitrary relational joins."
+      },
+      {
+        "heading": "Specialized access",
+        "text": "OpenSearch serves indexed search, DocumentDB compatible document APIs, and time-series engines time-based analysis. A cache accelerates a path without replacing every source-of-truth requirement."
+      }
+    ],
+    "remember": "Choose semantics before scale claims.",
+    "recoveryImage": "exec-e849243e-8eba-4ea3-a332-73061a8e0f62.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 2,
+    "title": "RDS manages the platform while you own the database design",
+    "referencePages": [
+      425
+    ],
+    "sections": [
+      {
+        "heading": "Select a supported engine",
+        "text": "RDS offers supported PostgreSQL, MySQL, MariaDB, Oracle, SQL Server and Db2 configurations. Engine, version, edition and licensing affect features."
+      },
+      {
+        "heading": "Delegate platform work",
+        "text": "Managed provisioning, patching, backups and monitoring reduce administration. You still own schema, indexes, query design, permissions and capacity decisions."
+      },
+      {
+        "heading": "Scale deliberately",
+        "text": "Storage autoscaling can grow eligible storage within configured limits. It does not solve every CPU, connection or query bottleneck, and does not imply automatic storage shrink."
+      }
+    ],
+    "remember": "Managed infrastructure still needs database engineering.",
+    "recoveryImage": "exec-2436e2bc-20de-48a8-8528-a2fa2804feff.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 3,
+    "title": "An RDS connection needs network and database permission",
+    "referencePages": [
+      425,
+      428
+    ],
+    "sections": [
+      {
+        "heading": "Prepare the private path",
+        "text": "Place databases in an appropriate DB subnet group. Validate routes, DNS, security groups and the engine port from the actual application environment."
+      },
+      {
+        "heading": "Keep Lambda connected",
+        "text": "A function needs a supported private network path to a private database or proxy. Merely granting IAM permission does not create that path."
+      },
+      {
+        "heading": "Separate access gates",
+        "text": "TLS protects transport; database authentication identifies the user; database grants authorize SQL operations. Test the complete connection, not only a reachable port."
+      }
+    ],
+    "remember": "Reachability, authentication and SQL authorization are separate gates.",
+    "recoveryImage": "exec-2bf4d04e-3b83-49a7-ba4d-68c465320691.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 4,
+    "title": "Backups preserve recovery history; replicas serve another purpose",
+    "referencePages": [
+      425
+    ],
+    "sections": [
+      {
+        "heading": "Use automated recovery",
+        "text": "Automated backups and transaction logs support point-in-time recovery within the retained window. Confirm the latest restorable time and retention settings."
+      },
+      {
+        "heading": "Retain deliberate snapshots",
+        "text": "Manual snapshots remain until deleted and can support eligible cross-account or cross-Region copies. Encrypted copies also depend on usable KMS keys."
+      },
+      {
+        "heading": "Restore into a new resource",
+        "text": "A successful backup is not a tested restore. Validate data, security settings, endpoints and application cutover on the restored database."
+      }
+    ],
+    "remember": "Recovery succeeds when the application can use the restored data.",
+    "recoveryImage": "exec-46de4d10-6e03-4243-ab27-31ea53bc318c.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4",
+      "3.4.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 5,
+    "title": "RDS Multi-AZ and read replicas protect different requirements",
+    "referencePages": [
+      426
+    ],
+    "sections": [
+      {
+        "heading": "Protect the writer",
+        "text": "A classic Multi-AZ DB instance synchronously replicates to a standby in another AZ. The standby supports failover and does not serve ordinary application reads."
+      },
+      {
+        "heading": "Scale reads",
+        "text": "Read replicas receive asynchronous changes and can serve read traffic. Replication lag matters; eligible cross-Region replicas can support regional recovery."
+      },
+      {
+        "heading": "Plan client recovery",
+        "text": "Failover and replica promotion change the serving database. Reconnect, refresh DNS appropriately and validate the application rather than assuming existing sessions survive."
+      }
+    ],
+    "remember": "Availability replication and read scaling are different jobs.",
+    "recoveryImage": "exec-3bc28612-3635-438b-bd84-7757d0f47d4d.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 6,
+    "title": "A Multi-AZ DB cluster is different from a classic standby",
+    "referencePages": [
+      426
+    ],
+    "sections": [
+      {
+        "heading": "Name the deployment",
+        "text": "The PDF's non-readable standby describes the classic Multi-AZ DB instance deployment. It does not describe every current RDS Multi-AZ architecture."
+      },
+      {
+        "heading": "Use cluster readers",
+        "text": "Supported Multi-AZ DB clusters have a writer and two readable instances in three AZs. Check engine, Region, instance and feature compatibility."
+      },
+      {
+        "heading": "Keep the distinction useful",
+        "text": "Choose the deployment from availability, read scale, failover behavior and cost. A similarly named feature is not evidence of identical replication semantics."
+      }
+    ],
+    "remember": "State the deployment type before describing its readers.",
+    "recoveryImage": "exec-bc991a98-1c84-4f85-a9ea-d4d45eee5311.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 7,
+    "title": "Replica routing balances connections, not identical query loads",
+    "referencePages": [
+      427
+    ],
+    "sections": [
+      {
+        "heading": "Select eligible readers",
+        "text": "Send read-only work to healthy replicas that satisfy the application's tolerated lag. Keep writes and read-after-write requirements on a suitable path."
+      },
+      {
+        "heading": "Understand weighted DNS",
+        "text": "Weighted records influence DNS answers. Resolver caching, client connection pools and long-lived sessions prevent an exact per-query traffic split."
+      },
+      {
+        "heading": "Monitor the result",
+        "text": "Compare replica lag, connection counts and query load. Health checks for private endpoints need a supported monitoring signal rather than direct public probes."
+      }
+    ],
+    "remember": "Equal DNS weights do not guarantee equal database work.",
+    "recoveryImage": "exec-c7f902b3-b887-4b4d-ae54-bc6e6fc21375.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 8,
+    "title": "RDS encryption and auditing protect different layers",
+    "referencePages": [
+      428
+    ],
+    "sections": [
+      {
+        "heading": "Protect stored data",
+        "text": "KMS encryption covers supported storage and snapshots. Oracle and SQL Server TDE is a separate engine feature with edition and configuration requirements."
+      },
+      {
+        "heading": "Protect the session",
+        "text": "Use supported TLS with certificate verification. An encrypted snapshot copy can support migration from an unencrypted source snapshot; plan a tested restore."
+      },
+      {
+        "heading": "Observe the right activity",
+        "text": "CloudTrail records supported service API actions, not every SQL statement. Enable suitable engine audit or query logs and secure their destinations."
+      }
+    ],
+    "remember": "A control-plane audit trail is not a SQL audit log.",
+    "recoveryImage": "exec-50c395fe-a70c-4630-afce-8a9450f3aa2e.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 9,
+    "title": "IAM database authentication supplies a short-lived login token",
+    "referencePages": [
+      429
+    ],
+    "sections": [
+      {
+        "heading": "Prepare both identities",
+        "text": "Supported RDS MySQL, MariaDB and PostgreSQL configurations can use IAM database authentication. Configure the database user and the caller's rds-db:connect permission."
+      },
+      {
+        "heading": "Connect with TLS",
+        "text": "Generate a token for the intended endpoint, port and database user. It is valid for 15 minutes for authentication; use the supported TLS connection path."
+      },
+      {
+        "heading": "Retain SQL grants",
+        "text": "IAM authentication does not replace database authorization. Token expiry does not itself terminate an already established database session."
+      }
+    ],
+    "remember": "A login token identifies a connection; database grants govern its SQL.",
+    "recoveryImage": "exec-a63acff4-7496-4196-bf2e-6304b96b14d1.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 10,
+    "title": "Oracle recovery depends on the destination platform",
+    "referencePages": [
+      430
+    ],
+    "sections": [
+      {
+        "heading": "Restore to managed RDS",
+        "text": "Use supported RDS backup and restore workflows for RDS for Oracle. Managed access differs from a self-managed Oracle host."
+      },
+      {
+        "heading": "Export supported RMAN backups",
+        "text": "RDS administrative packages can produce supported RMAN backups. Transfer eligible files through S3 for recovery to a compatible self-managed Oracle host; RMAN cannot directly restore an RDS instance."
+      },
+      {
+        "heading": "Check engine constraints",
+        "text": "RDS for Oracle does not support Oracle RAC. TDE and DMS have their own prerequisites; using Oracle on EC2 transfers more operating responsibility to you."
+      }
+    ],
+    "remember": "Match the backup format to a supported restore destination.",
+    "recoveryImage": "exec-f9ae2788-cf51-4906-8ac8-5598005aca64.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 11,
+    "title": "A MySQL migration needs a consistent seed and controlled cutover",
+    "referencePages": [
+      431
+    ],
+    "sections": [
+      {
+        "heading": "Create a consistent export",
+        "text": "A supported mysqldump workflow can seed a compatible external MySQL target. Preserve schema objects, character sets and an appropriate consistency strategy."
+      },
+      {
+        "heading": "Catch up the target",
+        "text": "Where supported, configure replication from the correct binary-log position or GTID state. Monitor errors and lag; a completed file import is not a completed migration."
+      },
+      {
+        "heading": "Cut over deliberately",
+        "text": "Quiesce writes, verify synchronization and target behavior, then switch the application. Stop or retire replication only after validation and a defined rollback decision."
+      }
+    ],
+    "remember": "Export, catch up and cut over are separate phases.",
+    "recoveryImage": "exec-1dcb0ab8-1d24-43e2-8508-cff539ebb25c.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 12,
+    "title": "RDS Proxy pools connections through a private endpoint",
+    "referencePages": [
+      432
+    ],
+    "sections": [
+      {
+        "heading": "Reduce connection pressure",
+        "text": "Bursty application clients can exhaust database connections. RDS Proxy manages a reusable pool, subject to database capacity and configured limits."
+      },
+      {
+        "heading": "Build the private path",
+        "text": "The proxy is not publicly accessible. Place it in the database VPC with required subnets, security groups and a reachable client path."
+      },
+      {
+        "heading": "Keep application discipline",
+        "text": "Use supported IAM or secret-based authentication. Transaction state and session pinning can reduce multiplexing; the proxy does not fix slow SQL or unlimited concurrency."
+      }
+    ],
+    "remember": "A connection pool reduces overhead; it does not create database capacity.",
+    "recoveryImage": "exec-54fce5e4-209d-40ce-b670-17a8eadaebb7.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 13,
+    "title": "Proxy read-only endpoints target eligible Aurora readers",
+    "referencePages": [
+      443
+    ],
+    "sections": [
+      {
+        "heading": "Separate read and write paths",
+        "text": "Use the appropriate proxy endpoint for writer traffic. An additional supported read-only endpoint sends connections to Aurora reader instances."
+      },
+      {
+        "heading": "Prepare actual readers",
+        "text": "A read-only endpoint needs eligible healthy replicas. Verify permissions, topology and supported engine configuration; an endpoint name does not create a replica."
+      },
+      {
+        "heading": "Observe pool behavior",
+        "text": "Connection reuse, pinning and reader lag affect the workload. The proxy's read-only routing is different from attaching an RDS proxy directly to an ordinary RDS read replica."
+      }
+    ],
+    "remember": "Choose a supported proxy target and the correct endpoint role.",
+    "recoveryImage": "exec-28584f6d-da6a-4a19-8561-fc66909c86d2.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 14,
+    "title": "Cross-Region RDS recovery requires promotion and application cutover",
+    "referencePages": [
+      433
+    ],
+    "sections": [
+      {
+        "heading": "Replicate before failure",
+        "text": "An eligible cross-Region read replica receives asynchronous changes. Track lag and accept that the latest committed source data may not be present during an outage."
+      },
+      {
+        "heading": "Detect and decide",
+        "text": "Use an application health route or supported metric/alarm signal to drive a controlled recovery workflow. Avoid promoting solely because one transient probe failed."
+      },
+      {
+        "heading": "Recover the serving path",
+        "text": "Promote the intended replica, validate data and permissions, then update the application's endpoint or DNS. Fence the old writer and plan later reconciliation."
+      }
+    ],
+    "remember": "Detection, promotion and cutover together determine recovery time.",
+    "recoveryImage": "exec-48a0736d-489e-4f83-9319-a17a00c0caa1.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 15,
+    "title": "Aurora separates database compute from distributed storage",
+    "referencePages": [
+      434,
+      435
+    ],
+    "sections": [
+      {
+        "heading": "Choose compatible SQL",
+        "text": "Aurora offers MySQL-compatible and PostgreSQL-compatible engines. Compatibility does not mean every upstream feature or operational behavior is identical."
+      },
+      {
+        "heading": "Share a cluster volume",
+        "text": "Database instances use distributed storage replicated across three AZs. Storage growth and reader compute scaling are separate mechanisms."
+      },
+      {
+        "heading": "Use current limits",
+        "text": "Maximum storage depends on engine version; the PDF's 128 TB figure is not a universal current ceiling. Compare eligible 128 TiB and 256 TiB configurations explicitly."
+      }
+    ],
+    "remember": "Separate compute scaling from storage capacity.",
+    "recoveryImage": "exec-70c54c69-1cac-4826-aa96-c6ad3e17d8b2.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 16,
+    "title": "Aurora storage replication is different from reader replication",
+    "referencePages": [
+      435
+    ],
+    "sections": [
+      {
+        "heading": "Protect storage across AZs",
+        "text": "Aurora maintains six storage copies across three AZs, with self-healing distributed storage. The storage system is separate from application-facing reader instances."
+      },
+      {
+        "heading": "Understand quorum concepts",
+        "text": "The classic architecture uses four-of-six write and three-of-six read quorum concepts. These describe storage durability operations, not a rule for counting SQL reader nodes."
+      },
+      {
+        "heading": "Prepare compute failover",
+        "text": "Eligible Aurora replicas provide promotion targets. Failover duration depends on detection, topology and client recovery; an older sub-30-second figure is not an application guarantee."
+      }
+    ],
+    "remember": "Six storage copies do not mean six SQL database instances.",
+    "recoveryImage": "exec-f1695690-5290-449d-b56c-dca1e16a052c.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 17,
+    "title": "Aurora endpoints select different connection destinations",
+    "referencePages": [
+      437
+    ],
+    "sections": [
+      {
+        "heading": "Writer and reader",
+        "text": "The cluster writer endpoint follows the current primary. The reader endpoint distributes connections among eligible readers, rather than load-balancing each SQL statement."
+      },
+      {
+        "heading": "Custom subsets",
+        "text": "A custom endpoint represents a chosen group of instances. Use it when a workload needs a particular subset, while retaining other endpoints where appropriate."
+      },
+      {
+        "heading": "Instance diagnostics",
+        "text": "An instance endpoint addresses one specific instance. Useful for diagnosis, it does not automatically follow a different promoted instance."
+      }
+    ],
+    "remember": "Choose an endpoint by its routing behavior, not its label alone.",
+    "recoveryImage": "exec-37516a0b-0ad9-4d77-abc2-3573b1dc52a2.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 18,
+    "title": "Custom endpoints isolate a deliberate reader workload",
+    "referencePages": [
+      438
+    ],
+    "sections": [
+      {
+        "heading": "Create a useful subset",
+        "text": "Group compatible larger replicas for analytical queries or another defined workload. Check membership and custom-endpoint type as the topology changes."
+      },
+      {
+        "heading": "Route the application",
+        "text": "Configure the analytical connection pool to use that custom endpoint. Ordinary reads can continue to use the reader endpoint; creating a custom endpoint does not retire it."
+      },
+      {
+        "heading": "Validate isolation",
+        "text": "Measure CPU, waits and lag on the selected readers. A connection-routing subset does not guarantee complete resource or storage isolation."
+      }
+    ],
+    "remember": "Custom endpoints express routing intent; verify the actual workload.",
+    "recoveryImage": "exec-c014faa3-490c-44fa-9dca-03374a93e56d.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 19,
+    "title": "Aurora reader scaling follows demand within configured bounds",
+    "referencePages": [
+      436
+    ],
+    "sections": [
+      {
+        "heading": "Scale reader compute",
+        "text": "Supported Aurora Auto Scaling changes the number of replicas from configured targets and minimum/maximum bounds. Storage auto-expansion is independent."
+      },
+      {
+        "heading": "Allow time to respond",
+        "text": "Creating and warming readers takes time. Persistent connections can remain on existing instances; a new reader does not instantly rebalance all sessions."
+      },
+      {
+        "heading": "Keep write capacity visible",
+        "text": "More readers do not directly increase a single writer's write capacity. Measure writer load and route only suitable read traffic away."
+      }
+    ],
+    "remember": "Scale the constrained layer and test the response time.",
+    "recoveryImage": "exec-ce1946af-f91e-4158-9b2d-6a93b1774687.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 20,
+    "title": "Aurora logs reveal different kinds of database activity",
+    "referencePages": [
+      439
+    ],
+    "sections": [
+      {
+        "heading": "Choose the engine signal",
+        "text": "Aurora MySQL can expose error, slow-query, general and supported audit logs. Aurora PostgreSQL has different logging controls; do not copy parameter names blindly."
+      },
+      {
+        "heading": "Collect deliberately",
+        "text": "Download or publish supported logs to CloudWatch Logs. Configure engine parameters, retention, access controls and encryption as required."
+      },
+      {
+        "heading": "Control cost and sensitivity",
+        "text": "Verbose query logs can increase cost and reveal sensitive SQL values. Enable the evidence required for diagnosis or audit and verify that records arrive."
+      }
+    ],
+    "remember": "Select logs by the question and the database engine.",
+    "recoveryImage": "exec-5ff096b8-7288-4f27-a601-887577f0aa16.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.5"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 21,
+    "title": "Diagnose database load before resizing the instance",
+    "referencePages": [
+      440
+    ],
+    "sections": [
+      {
+        "heading": "Start with waits and SQL",
+        "text": "Use current CloudWatch Database Insights capabilities to inspect database load, waits and high-impact SQL. Correlate the time window with the user-visible symptom."
+      },
+      {
+        "heading": "Compare system evidence",
+        "text": "CloudWatch metrics show resource trends. Enhanced Monitoring adds supported operating-system and process detail; slow-query logs reveal expensive statements."
+      },
+      {
+        "heading": "Resolve the cause",
+        "text": "CPU pressure, lock waits, storage latency and connection exhaustion require different fixes. The older Performance Insights console workflow has changed; preserve the diagnostic method."
+      }
+    ],
+    "remember": "A slow database needs evidence before a larger instance.",
+    "recoveryImage": "exec-e4c39ada-e462-48c6-96d1-feaab2fbe137.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.5"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 22,
+    "title": "Aurora Serverless v2 scales capacity within your chosen range",
+    "referencePages": [
+      441
+    ],
+    "sections": [
+      {
+        "heading": "Choose a capacity envelope",
+        "text": "Serverless v2 adjusts supported database-instance capacity in Aurora Capacity Units within configured bounds. Engine version, Region and workload compatibility still matter."
+      },
+      {
+        "heading": "Plan for variable demand",
+        "text": "Intermittent or unpredictable work can benefit from elastic capacity. Test warm-up, connection management and the minimum capacity required by the application."
+      },
+      {
+        "heading": "Price the whole service",
+        "text": "Supported auto-pause to zero depends on engine/version and settings. Storage, I/O and other charges may remain; serverless is not automatically the cheapest option."
+      }
+    ],
+    "remember": "Automatic scaling still needs limits, compatibility checks and cost modeling.",
+    "recoveryImage": "exec-07e3a988-cb9a-43cc-b1a3-94f0a426d9a1.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 23,
+    "title": "The Data API runs SQL over HTTPS with explicit permissions",
+    "referencePages": [
+      442
+    ],
+    "sections": [
+      {
+        "heading": "Use the service interface",
+        "text": "Supported Aurora configurations expose the RDS Data API so clients can execute SQL through HTTPS without managing a persistent database socket."
+      },
+      {
+        "heading": "Authorize the request",
+        "text": "Grant the required Data API and Secrets Manager access, plus applicable KMS permissions. Database credentials and SQL privileges still exist behind the interface."
+      },
+      {
+        "heading": "Match the workload",
+        "text": "Check engine/Region support, response-size and transaction constraints. Current Data API support extends beyond the PDF's older Serverless-only description."
+      }
+    ],
+    "remember": "Removing a client socket does not remove authentication or SQL authorization.",
+    "recoveryImage": "exec-ff6d8d5a-1c24-459b-b4c3-151eb44f047f.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 24,
+    "title": "Aurora Global Database separates regional reads from the writer",
+    "referencePages": [
+      444
+    ],
+    "sections": [
+      {
+        "heading": "Use the primary Region",
+        "text": "One primary Region owns the writer. Secondary clusters serve local read workloads using asynchronously replicated storage changes."
+      },
+      {
+        "heading": "Plan the current topology",
+        "text": "Current supported configurations allow up to ten secondary Regions, with constraints on primary readers and secondary clusters. Do not reuse the PDF's older five-Region limit."
+      },
+      {
+        "heading": "Measure recovery",
+        "text": "Planned switchover and unplanned failover have different data-loss conditions. Monitor lag, validate eligible versions and rehearse application reconnection."
+      }
+    ],
+    "remember": "Regional replicas reduce read latency; regional recovery remains a procedure.",
+    "recoveryImage": "exec-496aaeaa-3232-44a0-bfd9-a2a3dffdf23c.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 25,
+    "title": "Write forwarding still commits changes in the primary Region",
+    "referencePages": [
+      445
+    ],
+    "sections": [
+      {
+        "heading": "Enter through a secondary",
+        "text": "Supported global write forwarding allows an application on a secondary cluster to submit eligible write statements without managing a separate writer connection."
+      },
+      {
+        "heading": "Forward to the writer",
+        "text": "The primary cluster performs the change first, then replication propagates it. This is not an independent multi-writer database in every Region."
+      },
+      {
+        "heading": "Choose consistency behavior",
+        "text": "Supported session/read consistency settings affect when secondary reads observe forwarded changes. Cross-Region latency and statement restrictions still apply."
+      }
+    ],
+    "remember": "A local endpoint does not make the write local.",
+    "recoveryImage": "exec-16876df1-4f42-4e5d-b97c-3e3fcb5ca106.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 26,
+    "title": "Move to Aurora through a supported migration path",
+    "referencePages": [
+      446
+    ],
+    "sections": [
+      {
+        "heading": "Check source compatibility",
+        "text": "Eligible RDS engines and versions can migrate using supported snapshot restore or Aurora replica workflows. Validate extensions, parameters and application SQL."
+      },
+      {
+        "heading": "Seed and synchronize",
+        "text": "A snapshot path creates a new target from a recovery point. A supported replica path can reduce the final catch-up window before promotion."
+      },
+      {
+        "heading": "Validate the cutover",
+        "text": "Compare data, performance, security and connection settings. Switch applications deliberately and retain the agreed rollback source until validation is complete."
+      }
+    ],
+    "remember": "A new engine endpoint is not proof of a completed migration.",
+    "recoveryImage": "exec-94376290-7e4f-4d21-abb2-632af190ae13.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 27,
+    "title": "DynamoDB items use a fixed key and flexible attributes",
+    "referencePages": [
+      411,
+      412
+    ],
+    "sections": [
+      {
+        "heading": "Define the table identity",
+        "text": "Choose the table's primary-key schema at creation. Each item needs the required key attributes; non-key attributes can vary between items."
+      },
+      {
+        "heading": "Use supported values",
+        "text": "Scalar values include strings, numbers, binary, Boolean and Null. Lists and maps hold documents; supported set types hold unique scalar values."
+      },
+      {
+        "heading": "Respect item limits",
+        "text": "An item is limited to 400 KB including attribute names and values. Managed storage growth does not make individual items or request capacity unlimited."
+      }
+    ],
+    "remember": "Flexible attributes do not remove a deliberate key design.",
+    "recoveryImage": "exec-75f74559-822d-4a32-83fa-d0c46b813656.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 28,
+    "title": "Partition and sort keys encode the access pattern",
+    "referencePages": [
+      413,
+      414
+    ],
+    "sections": [
+      {
+        "heading": "Distribute partition values",
+        "text": "A partition-key-only table requires a unique key per item. Choose a diverse workload key rather than concentrating all requests on one hot value."
+      },
+      {
+        "heading": "Group related items",
+        "text": "A composite key uses partition key plus sort key; their combination is unique. Items sharing a partition key can be queried in sort-key order."
+      },
+      {
+        "heading": "Work an example",
+        "text": "Use USER#42 with GAME#101 and GAME#102 for one user's games. Time-oriented sort keys can support ranges when their encoding preserves the required order."
+      }
+    ],
+    "remember": "A good key makes the important query direct.",
+    "recoveryImage": "exec-de2ca38d-614c-4370-bc81-b3f6b5f84040.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 29,
+    "title": "Query and Scan do different amounts of work",
+    "referencePages": [
+      415
+    ],
+    "sections": [
+      {
+        "heading": "Query a known partition",
+        "text": "A Query uses partition-key equality on a table or index, with an optional supported sort-key condition. Model access patterns around those keys."
+      },
+      {
+        "heading": "Treat filters correctly",
+        "text": "A filter removes results after items are read. It does not turn a broad read into a cheap key lookup or remove the capacity already consumed."
+      },
+      {
+        "heading": "Control scans and pagination",
+        "text": "A Scan reads across the target; large results require pagination. Parallel scans increase throughput demand and can compete with production traffic."
+      }
+    ],
+    "remember": "Returning fewer rows does not prove fewer items were read.",
+    "recoveryImage": "exec-b6cb465b-b3cc-4200-af45-0de6e54a4606.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 30,
+    "title": "LSIs and GSIs create different alternate access paths",
+    "referencePages": [
+      415
+    ],
+    "sections": [
+      {
+        "heading": "Local secondary index",
+        "text": "An LSI retains the table partition key and changes the sort key. It must be created with the table and shares table capacity."
+      },
+      {
+        "heading": "Global secondary index",
+        "text": "A GSI can use a different partition key and optional sort key. It can be added later, with its own index capacity behavior and eventual read consistency."
+      },
+      {
+        "heading": "Plan projected data",
+        "text": "Choose projected attributes, uniqueness assumptions and storage/write cost. Indexes support specified queries rather than unrestricted relational search."
+      }
+    ],
+    "remember": "Choose an index from the query and its consistency needs.",
+    "recoveryImage": "exec-f37f4f86-2f92-4bce-87f6-a169b8b37847.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 31,
+    "title": "DynamoDB capacity mode changes billing and scaling behavior",
+    "referencePages": [
+      411
+    ],
+    "sections": [
+      {
+        "heading": "Provision planned capacity",
+        "text": "Provisioned mode uses read and write capacity units, with optional Auto Scaling within bounds. Scaling response and hot-key distribution still matter."
+      },
+      {
+        "heading": "Use on-demand deliberately",
+        "text": "On-demand mode bills for requests and adapts capacity under documented limits. Sudden growth, per-partition limits and configured maxima still need testing."
+      },
+      {
+        "heading": "Size actual operations",
+        "text": "Read size, consistency and transactional operations affect consumed capacity; writes are rounded by item size. Compare measured demand rather than only request count."
+      }
+    ],
+    "remember": "A capacity mode is not a promise of unlimited instantaneous throughput.",
+    "recoveryImage": "exec-50c68010-01cc-45f4-910e-43b779e69300.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 32,
+    "title": "Choose read consistency for the result the user needs",
+    "referencePages": [
+      411,
+      415
+    ],
+    "sections": [
+      {
+        "heading": "Eventually consistent reads",
+        "text": "A read can briefly return an older committed version. This is often acceptable for catalogs or feeds and has different capacity cost."
+      },
+      {
+        "heading": "Strong reads in supported paths",
+        "text": "Strongly consistent reads are available on supported table and LSI operations. GSIs and Streams do not offer strong reads."
+      },
+      {
+        "heading": "Separate global semantics",
+        "text": "A strong read in an eventually replicated global table does not guarantee the latest write from every Region. Current multi-Region strong consistency is a distinct mode."
+      }
+    ],
+    "remember": "State both the read path and the replication mode.",
+    "recoveryImage": "exec-d792524e-bf93-472f-b54f-c5d23f0afd37.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 33,
+    "title": "Transactions and conditional writes protect different invariants",
+    "referencePages": [
+      411
+    ],
+    "sections": [
+      {
+        "heading": "Use a condition for a guard",
+        "text": "A supported conditional write can prevent overwriting an unexpected version or consuming an already-used token. Retry logic must handle failed conditions deliberately."
+      },
+      {
+        "heading": "Group transactional operations",
+        "text": "Transactions can coordinate supported items across tables in one account and Region. Limits, conflict handling and extra capacity cost apply."
+      },
+      {
+        "heading": "Keep regional scope clear",
+        "text": "Regional transaction atomicity does not make asynchronous global replication transactional across Regions. Multi-Region strong global tables have separate feature restrictions."
+      }
+    ],
+    "remember": "Choose the smallest operation that protects the business invariant.",
+    "recoveryImage": "exec-04f7d3bc-e5fe-4cb4-8737-bdf8de36ff29.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 34,
+    "title": "TTL expiration is asynchronous cleanup, not an exact scheduler",
+    "referencePages": [
+      416
+    ],
+    "sections": [
+      {
+        "heading": "Store the expiry correctly",
+        "text": "Use the configured TTL attribute with a numeric Unix epoch value in seconds. An application's date string is not the same representation."
+      },
+      {
+        "heading": "Expect delayed deletion",
+        "text": "Expired items can remain until DynamoDB removes them. Filter or reject stale records in the application when expiry affects correctness."
+      },
+      {
+        "heading": "Observe downstream effects",
+        "text": "TTL removals can appear in Streams; replicated deletes and backup retention have separate behavior. TTL is not an authorization boundary or a scheduled job guarantee."
+      }
+    ],
+    "remember": "Enforce business expiry even while the item still exists.",
+    "recoveryImage": "exec-76d4f8a9-2bc3-40ab-9bc2-c3fa2a49bd93.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 35,
+    "title": "DynamoDB Streams exposes ordered changes per item",
+    "referencePages": [
+      416
+    ],
+    "sections": [
+      {
+        "heading": "Choose the record view",
+        "text": "Configure keys-only, new image, old image or both images as required. Stream records are retained for 24 hours."
+      },
+      {
+        "heading": "Build a resilient consumer",
+        "text": "Supported Lambda or custom consumers process changes. Preserve idempotency, retries, partial-failure handling and monitoring."
+      },
+      {
+        "heading": "Keep ordering scoped",
+        "text": "Changes for one item preserve their sequence; there is no universal order across every table item. A stream is change capture, not the database's permanent backup."
+      }
+    ],
+    "remember": "Process each change safely even if the consumer retries.",
+    "recoveryImage": "exec-a84d0086-c0d9-4ce2-90b0-7c91083ad5ff.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 36,
+    "title": "Kinesis capture extends the DynamoDB change-processing design",
+    "referencePages": [
+      417
+    ],
+    "sections": [
+      {
+        "heading": "Choose the capture path",
+        "text": "DynamoDB can publish item-level changes to Kinesis Data Streams. This differs from consuming the native 24-hour DynamoDB Stream."
+      },
+      {
+        "heading": "Set retention and consumers",
+        "text": "Kinesis supports configurable retention beyond 24 hours. Account for delivery duplication, ordering considerations and consumer checkpoint/replay behavior."
+      },
+      {
+        "heading": "Connect processing and delivery",
+        "text": "Use supported Lambda, Managed Service for Apache Flink or Data Firehose integrations to transform and deliver records to destinations such as S3, Redshift or OpenSearch."
+      }
+    ],
+    "remember": "Longer retention helps replay only when consumers handle records correctly.",
+    "recoveryImage": "exec-c6ab6420-4a66-499f-a089-d0c9d4aa34d1.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.2"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 37,
+    "title": "Eventually consistent global tables support regional local writes",
+    "referencePages": [
+      416
+    ],
+    "sections": [
+      {
+        "heading": "Replicate between Regions",
+        "text": "Multi-Region eventual consistency global tables accept supported writes in replica Regions and asynchronously propagate changes."
+      },
+      {
+        "heading": "Understand conflict behavior",
+        "text": "Concurrent updates need a deliberate conflict-aware application design. Regional transactions and strong local reads do not remove replication delay."
+      },
+      {
+        "heading": "Separate routing and caching",
+        "text": "Route clients to a healthy Region and monitor replication. Cross-Region writes bypass another Region's DAX cache, so cached values can remain stale until refresh."
+      }
+    ],
+    "remember": "Active regional writes still need conflict, lag and cache planning.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 38,
+    "title": "Strong global tables use a different replication contract",
+    "referencePages": [
+      416
+    ],
+    "sections": [
+      {
+        "heading": "Choose MRSC explicitly",
+        "text": "Current multi-Region strong consistency synchronously replicates a write to another Region before successful completion. It is distinct from the PDF's asynchronous model."
+      },
+      {
+        "heading": "Design the quorum topology",
+        "text": "Supported MRSC uses exactly three Regions: three replicas, or two replicas plus a witness. A witness cannot serve application reads or writes."
+      },
+      {
+        "heading": "Review feature trade-offs",
+        "text": "Region combinations, latency, transactions and TTL support have mode-specific constraints. Test the selected topology rather than treating MRSC as a checkbox on every existing table."
+      }
+    ],
+    "remember": "Global strong consistency changes latency, topology and supported features.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 39,
+    "title": "DynamoDB table classes and backups answer different cost questions",
+    "referencePages": [
+      411
+    ],
+    "sections": [
+      {
+        "heading": "Choose the table class",
+        "text": "Standard and Standard-IA trade request and storage costs differently. Standard-IA remains an online table class; it is not a cold archive requiring restoration."
+      },
+      {
+        "heading": "Preserve recovery points",
+        "text": "On-demand backups and point-in-time recovery protect against logical damage. Restoration creates a new table; recreate and validate required integrations and application routing."
+      },
+      {
+        "heading": "Protect the full design",
+        "text": "Check keys, indexes, encryption, IAM, TTL and stream configuration after recovery. Multi-Region replication is not a substitute for historical recovery."
+      }
+    ],
+    "remember": "A lower storage rate and a recoverable table are separate decisions.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 40,
+    "title": "Index object metadata so the application can query it",
+    "referencePages": [
+      418
+    ],
+    "sections": [
+      {
+        "heading": "Capture object changes",
+        "text": "S3 notifications can invoke processing that records supported object metadata in DynamoDB. Handle duplicate and out-of-order events safely."
+      },
+      {
+        "heading": "Design queryable keys",
+        "text": "Model customer/date or other access keys and indexes for object lists and date ranges. Store the S3 object reference and required metadata, not oversized payloads."
+      },
+      {
+        "heading": "Maintain derived values",
+        "text": "A customer's total storage needs a maintained aggregate or a deliberate computation path. A metadata table does not calculate correct totals automatically."
+      }
+    ],
+    "remember": "An index stays useful only if its update and reconciliation paths are correct.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 41,
+    "title": "DAX accelerates supported DynamoDB reads inside a Region",
+    "referencePages": [
+      419
+    ],
+    "sections": [
+      {
+        "heading": "Cache the hot read path",
+        "text": "DynamoDB Accelerator serves eligible cached reads and queries with very low latency. It does not remove write-capacity bottlenecks or every hot-partition problem."
+      },
+      {
+        "heading": "Use the DAX client",
+        "text": "Applications use a supported DAX-aware client and endpoint. Supported writes through DAX reach DynamoDB and update relevant item-cache behavior."
+      },
+      {
+        "heading": "Operate the cluster",
+        "text": "Deploy privately with suitable IAM, encryption and monitoring. Production designs typically use at least three nodes across AZs; node count and cache settings remain explicit."
+      }
+    ],
+    "remember": "DAX is specialized caching with its own client and availability design.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 42,
+    "title": "DAX item and query caches have different freshness behavior",
+    "referencePages": [
+      419
+    ],
+    "sections": [
+      {
+        "heading": "Select the read path",
+        "text": "Strongly consistent reads pass through DAX to DynamoDB rather than being satisfied from the cache. Cached reads use eventual consistency."
+      },
+      {
+        "heading": "Understand two caches",
+        "text": "An item-cache entry and a cached Query/Scan result are separate. A write-through item update does not automatically repair every previously cached query result."
+      },
+      {
+        "heading": "Plan expiry and bypasses",
+        "text": "Default TTL is five minutes unless configured otherwise. Writes that bypass DAX, including global-table replication, can leave cached results stale until expiration or refresh."
+      }
+    ],
+    "remember": "A cache hit is fast; verify whether its freshness is acceptable.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 43,
+    "title": "DAX and ElastiCache serve different cache contracts",
+    "referencePages": [
+      420
+    ],
+    "sections": [
+      {
+        "heading": "Choose DynamoDB-aware caching",
+        "text": "DAX understands supported DynamoDB item and query operations through its client. It is useful when those access patterns dominate."
+      },
+      {
+        "heading": "Choose application-managed caching",
+        "text": "ElastiCache can hold aggregates, rendered results, sessions and other application-defined values. The application owns serialization, keys and refresh logic."
+      },
+      {
+        "heading": "Account for the work",
+        "text": "Neither choice removes IAM, network, capacity or failure planning. A computed aggregate in a cache needs a correct invalidation or rebuild path."
+      }
+    ],
+    "remember": "Match the cache interface to the value and query being accelerated.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 44,
+    "title": "Cache-aside makes the miss path part of the architecture",
+    "referencePages": [
+      405,
+      406
+    ],
+    "sections": [
+      {
+        "heading": "Read the cache first",
+        "text": "The application looks up a stable cache key. A valid hit can avoid a database read and reduce latency."
+      },
+      {
+        "heading": "Fill on a miss",
+        "text": "On a miss, read the authoritative database, then store an appropriate value with an expiry policy. The application still returns the database result."
+      },
+      {
+        "heading": "Keep the database protected",
+        "text": "Concurrent misses can cause a stampede. Use suitable request coalescing, bounded retries, jitter or other controls and monitor hit rate and database load."
+      }
+    ],
+    "remember": "A cache that misses safely is more useful than one with a pretty hit path.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 45,
+    "title": "Cache invalidation connects writes to future reads",
+    "referencePages": [
+      406
+    ],
+    "sections": [
+      {
+        "heading": "Choose a write strategy",
+        "text": "A database update can invalidate a cached value or refresh it through an application-controlled write path. Define the ordering and failure behavior."
+      },
+      {
+        "heading": "Use TTL as a bound",
+        "text": "Expiration limits how long some stale data may remain, but cannot guarantee immediate correctness after every write. Sensitive workflows may need source reads."
+      },
+      {
+        "heading": "Handle races",
+        "text": "A slow reader can refill old data after an invalidation. Versioned keys, conditional updates or suitable coordination can prevent stale resurrection."
+      }
+    ],
+    "remember": "Cache correctness depends on ordering as well as expiry.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 46,
+    "title": "A shared session store helps application instances stay replaceable",
+    "referencePages": [
+      407
+    ],
+    "sections": [
+      {
+        "heading": "Write session state centrally",
+        "text": "After authentication, store the required session state with a suitable identifier and expiry. Keep credentials and tokens protected."
+      },
+      {
+        "heading": "Read from any instance",
+        "text": "Another application instance retrieves the same authorized session. Load-balancer stickiness is no longer the only way to reach that state."
+      },
+      {
+        "heading": "Plan loss and expiry",
+        "text": "Cache eviction, failover or expiration can end sessions. Define acceptable reauthentication behavior and secure transport, access and cookie settings."
+      }
+    ],
+    "remember": "Stateless application servers still depend on state somewhere.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 47,
+    "title": "Compare cache engines and deployment models separately",
+    "referencePages": [
+      408
+    ],
+    "sections": [
+      {
+        "heading": "Valkey or Redis OSS",
+        "text": "Supported deployments provide rich data structures, replication, snapshots and failover capabilities. Verify the exact engine/version and operating mode."
+      },
+      {
+        "heading": "Node-based Memcached",
+        "text": "Traditional Memcached nodes shard disposable data and use a multithreaded engine. They do not inherit Redis replication or snapshot behavior."
+      },
+      {
+        "heading": "Current serverless differences",
+        "text": "Serverless Memcached supports snapshots, so the PDF's blanket no-backup statement is too broad. Managed ElastiCache also should not be described as providing generic Redis AOF durability."
+      }
+    ],
+    "remember": "Engine family and deployment model both change the feature set.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 48,
+    "title": "Replication, sharding and persistence solve different cache risks",
+    "referencePages": [
+      408
+    ],
+    "sections": [
+      {
+        "heading": "Shard for capacity",
+        "text": "Distribute keys across shards to spread memory and request load. Hot keys and uneven key distribution can still constrain a shard."
+      },
+      {
+        "heading": "Replicate for availability",
+        "text": "Supported Valkey/Redis deployments use replicas and Multi-AZ automatic failover. Reader traffic may see replication lag."
+      },
+      {
+        "heading": "Recover deliberate state",
+        "text": "Snapshots and tested restore procedures protect eligible cache data. Replication is not a backup, and persistence support depends on the selected deployment."
+      }
+    ],
+    "remember": "Availability, scale and recovery need separate evidence.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6",
+      "1.5.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 49,
+    "title": "Find the limiting layer during an extreme-rate event",
+    "referencePages": [
+      409
+    ],
+    "sections": [
+      {
+        "heading": "Trace the complete request",
+        "text": "Edge caches, API throttles, compute concurrency, connection pools, database partitions and encryption APIs can each constrain the path."
+      },
+      {
+        "heading": "Measure demand units",
+        "text": "Requests per second, concurrent work, I/O size and cache hit rate are different quantities. A fast cache does not fix an overloaded write path."
+      },
+      {
+        "heading": "Use current quotas",
+        "text": "The PDF's combined rate chart contains historical defaults and simplifications. Confirm Region/account quotas, burst behavior and service-specific limits instead of treating any layer as unlimited."
+      }
+    ],
+    "remember": "The smallest effective capacity on the actual path sets the limit.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 50,
+    "title": "OpenSearch is a search index with a chosen operating model",
+    "referencePages": [
+      421
+    ],
+    "sections": [
+      {
+        "heading": "Choose the search use case",
+        "text": "Full-text search, log analytics, clickstream exploration and security analysis benefit from indexed documents and suitable mappings."
+      },
+      {
+        "heading": "Select managed or serverless",
+        "text": "Managed domains expose cluster capacity choices. Serverless collections use a different capacity and security model; confirm workload and feature support."
+      },
+      {
+        "heading": "Keep a durable authority",
+        "text": "An indexed copy can lag behind its source. Plan reindexing, retention, availability and recovery rather than assuming the search engine replaces every transactional database."
+      }
+    ],
+    "remember": "Search freshness and transactional correctness are different promises.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 51,
+    "title": "Ingestion, search and dashboards are separate components",
+    "referencePages": [
+      422
+    ],
+    "sections": [
+      {
+        "heading": "Ingest and transform",
+        "text": "Supported Logstash or managed ingestion pipelines collect and transform events. Protect credentials, buffer failures and monitor rejected records."
+      },
+      {
+        "heading": "Index the documents",
+        "text": "Mappings, shard design and lifecycle settings affect search behavior, scale and storage cost. Validate document shape before indexing at volume."
+      },
+      {
+        "heading": "Explore the results",
+        "text": "OpenSearch Dashboards queries indexed data for visual analysis. It does not itself replace every log collector or define the source's retention policy."
+      }
+    ],
+    "remember": "A dashboard is only as complete as the data pipeline behind it.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 52,
+    "title": "A DynamoDB search index is an asynchronously maintained view",
+    "referencePages": [
+      423
+    ],
+    "sections": [
+      {
+        "heading": "Keep transactional operations on DynamoDB",
+        "text": "Use the table's API for authoritative item reads and writes. Search uses a separate OpenSearch endpoint."
+      },
+      {
+        "heading": "Process changes into documents",
+        "text": "The PDF's Streams-to-Lambda pattern can maintain the index. Handle retries, deletes, duplicate delivery and event ordering or document versioning."
+      },
+      {
+        "heading": "Build a repair path",
+        "text": "Monitor lag and failed indexing. Backfill or reindex from a trusted source after gaps; current managed integration options also need their own compatibility checks."
+      }
+    ],
+    "remember": "A successful database write is not proof the search index is current.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 53,
+    "title": "Choose a CloudWatch Logs delivery path by latency and operations",
+    "referencePages": [
+      424
+    ],
+    "sections": [
+      {
+        "heading": "Use a supported subscription",
+        "text": "A subscription filter can deliver matching log events through a supported Lambda-based OpenSearch integration. Permissions, retries and destination capacity matter."
+      },
+      {
+        "heading": "Buffer through Firehose",
+        "text": "A supported Data Firehose path buffers delivery into OpenSearch. Buffer settings trade latency for throughput and request behavior."
+      },
+      {
+        "heading": "Verify both paths",
+        "text": "Do not describe either route as zero-latency or loss-proof. Monitor delivery errors, rejected documents, retry limits and recovery storage."
+      }
+    ],
+    "remember": "Choose the pipeline from measured latency and failure requirements.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.5"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 54,
+    "title": "DocumentDB compatibility requires application validation",
+    "referencePages": [
+      522
+    ],
+    "sections": [
+      {
+        "heading": "Use the document model",
+        "text": "DocumentDB supports selected MongoDB-compatible APIs for JSON-like documents, queries and indexes. It is not the MongoDB engine itself."
+      },
+      {
+        "heading": "Understand the deployment",
+        "text": "Supported instance-based clusters use a primary, replicas and distributed storage across three AZs. Other deployment types have different limits and behavior."
+      },
+      {
+        "heading": "Test real compatibility",
+        "text": "Validate drivers, operators, indexes, transactions and failover with the actual application. A compatibility label is not proof that every MongoDB feature works."
+      }
+    ],
+    "remember": "Test the application's API usage before committing to a migration.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 55,
+    "title": "DocumentDB cost depends on storage configuration and workload",
+    "referencePages": [
+      523
+    ],
+    "sections": [
+      {
+        "heading": "Account for compute and storage",
+        "text": "Instance-based deployments charge for database instances and stored data. Reader replicas add compute cost even when storage is shared."
+      },
+      {
+        "heading": "Compare I/O models",
+        "text": "Standard and supported I/O-Optimized configurations have different pricing structures. The PDF's separate per-I/O model is not universal across current configurations."
+      },
+      {
+        "heading": "Include recovery and traffic",
+        "text": "Backup storage, data transfer and workload growth affect total cost. Benchmark representative reads/writes and verify current Region-specific pricing."
+      }
+    ],
+    "remember": "Compare the complete bill for a measured workload.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 56,
+    "title": "Time-series databases organize values around time and dimensions",
+    "referencePages": [
+      524
+    ],
+    "sections": [
+      {
+        "heading": "Model the observations",
+        "text": "Use timestamps, dimensions and measures for IoT or operational metrics. Multi-measure records and time-aware queries can reduce repetitive application logic."
+      },
+      {
+        "heading": "Understand historical LiveAnalytics",
+        "text": "Its design combines recent memory storage with historical magnetic storage, SQL, scheduled queries and time-series functions, with encryption in transit and at rest."
+      },
+      {
+        "heading": "Check current eligibility",
+        "text": "Timestream for LiveAnalytics closed to new customers on 20 June 2025. Evaluate the current Timestream for InfluxDB options separately; do not assume identical APIs or tiering."
+      }
+    ],
+    "remember": "Preserve the time-series concept while choosing an available product.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 57,
+    "title": "A time-series pipeline needs validated producers and consumers",
+    "referencePages": [
+      525
+    ],
+    "sections": [
+      {
+        "heading": "Ingest supported records",
+        "text": "IoT applications, Kinesis, Lambda or supported stream-processing components can transform events into the selected time-series service's write format."
+      },
+      {
+        "heading": "Control event time",
+        "text": "Handle late arrivals, retries, duplicates and retention. Producer throughput does not prove successful persistence or query readiness."
+      },
+      {
+        "heading": "Expose useful analysis",
+        "text": "Use supported SQL/JDBC, dashboard or machine-learning integrations for the chosen product. The PDF's LiveAnalytics integrations do not automatically apply to InfluxDB."
+      }
+    ],
+    "remember": "Validate each integration against the selected time-series engine.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.2"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 58,
+    "title": "DynamoDB walkthrough: prove a key query and index query",
+    "referencePages": [
+      412,
+      414,
+      415
+    ],
+    "sections": [
+      {
+        "heading": "Create an illustrative table",
+        "text": "In a sandbox, create a table with PK and SK. Write USER#42/GAME#101 and USER#42/GAME#102 items with different result values."
+      },
+      {
+        "heading": "Verify the access path",
+        "text": "Query PK=USER#42 and a supported SK condition. Compare it with a Scan and inspect consumed capacity and pagination behavior."
+      },
+      {
+        "heading": "Test an alternate key",
+        "text": "Create an appropriate GSI for the alternate access pattern, wait for it to become active and query it. Expect eventual consistency and clean up sandbox resources."
+      }
+    ],
+    "remember": "A successful query demonstrates the key design better than a table screenshot.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 59,
+    "title": "RDS recovery walkthrough: restore before changing production DNS",
+    "referencePages": [
+      425,
+      433
+    ],
+    "sections": [
+      {
+        "heading": "Inspect the recovery point",
+        "text": "In a sandbox, confirm a usable snapshot or latest restorable time, the engine/version and the required KMS key permissions."
+      },
+      {
+        "heading": "Restore and validate",
+        "text": "Create a new private database with the intended subnet/security settings. Connect using authorized credentials and verify representative records and application operations."
+      },
+      {
+        "heading": "Rehearse cutover",
+        "text": "Update only the sandbox application's endpoint, reconnect and measure recovery time. Retain a clear rollback decision and remove test resources afterwards."
+      }
+    ],
+    "remember": "A restore test ends with usable data and a working client.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "1.5.4",
+      "3.4.4"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 60,
+    "title": "Proxy walkthrough: test pooling under a controlled burst",
+    "referencePages": [
+      432,
+      443
+    ],
+    "sections": [
+      {
+        "heading": "Prepare the sandbox path",
+        "text": "Create a supported proxy for the intended database. Configure private reachability, security groups and the selected authentication method."
+      },
+      {
+        "heading": "Compare connection behavior",
+        "text": "Send a bounded test workload through the proxy and compare client connections with database connections. Inspect borrow latency, capacity and session pinning."
+      },
+      {
+        "heading": "Validate failure and cleanup",
+        "text": "Test a denied principal or blocked path deliberately, then restore the configuration. Close clients and remove temporary resources after collecting the evidence."
+      }
+    ],
+    "remember": "Verify pooling and failure behavior with observed metrics.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 61,
+    "title": "Cache walkthrough: demonstrate a hit, stale value and refresh",
+    "referencePages": [
+      406,
+      407
+    ],
+    "sections": [
+      {
+        "heading": "Observe the first read",
+        "text": "Use a sandbox application with a database and cache. Start with a missing cache key; confirm the source read and cache fill."
+      },
+      {
+        "heading": "Make freshness visible",
+        "text": "Read again to demonstrate a hit, then change the source value. Observe the selected invalidation or TTL behavior rather than claiming instant refresh."
+      },
+      {
+        "heading": "Verify recovery",
+        "text": "Remove or expire the cache value and prove the application returns the correct source result. Test a controlled cache outage, then clean up the sandbox."
+      }
+    ],
+    "remember": "A cache demo must prove correctness as well as speed.",
+    "recoveryImage": null,
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 62,
+    "title": "Aurora imports and exports S3 data through engine-specific features",
+    "referencePages": [
+      434
+    ],
+    "sections": [
+      {
+        "heading": "Choose the engine operation",
+        "text": "Supported Aurora MySQL configurations use LOAD DATA FROM S3 and SELECT INTO OUTFILE S3. Aurora PostgreSQL uses supported aws_s3 extension functions instead."
+      },
+      {
+        "heading": "Prepare both permission layers",
+        "text": "Grant the cluster the required S3 and applicable KMS permissions and network path. The database user also needs the engine-specific SQL privilege or role."
+      },
+      {
+        "heading": "Validate the data movement",
+        "text": "Check format, engine/version, Region and account restrictions. A data export is not a complete transactional database backup; verify the intended import or query result."
+      }
+    ],
+    "remember": "A common S3 destination does not make the two engines' commands interchangeable.",
+    "recoveryImage": "exec-2e42d507-326d-4842-9467-e3b5b254ae2c.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  },
+  {
+    "moduleId": "11",
+    "sequence": 63,
+    "title": "RDS event notifications complement metrics and query evidence",
+    "referencePages": [
+      425,
+      440
+    ],
+    "sections": [
+      {
+        "heading": "Subscribe to useful events",
+        "text": "An RDS event subscription selects supported resources and categories such as backup, failover or configuration changes, using an SNS topic for notifications."
+      },
+      {
+        "heading": "Prepare reliable consumers",
+        "text": "Confirm required subscriptions and permissions. Notifications can be delayed and are not guaranteed to arrive in event order; design automation around verified resource state."
+      },
+      {
+        "heading": "Correlate the symptom",
+        "text": "An operational event is different from CPU metrics, database waits and SQL audit records. Combine the signals that answer the question before taking a recovery action."
+      }
+    ],
+    "remember": "An event message is a signal to investigate, not proof that recovery is complete.",
+    "recoveryImage": "exec-7016ca8e-db06-4188-9c5b-33eb4ce344e3.png",
+    "requiredEdit": null,
+    "examSkills": [
+      "1.5.3",
+      "3.4.5"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen; original educational artwork; reviewed corrected variants where needed"
+  }
+]

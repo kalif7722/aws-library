@@ -217,23 +217,23 @@
     "rows": [
       [
         "gp3",
-        "1 GiB\u201364 TiB; up to 80,000 IOPS and 2,000 MiB/s. Includes 3,000 IOPS and 125 MiB/s baseline; provisioning ratios, instance limits and platform constraints apply."
+        "1 GiB–64 TiB; up to 80,000 IOPS and 2,000 MiB/s. Includes 3,000 IOPS and 125 MiB/s baseline; provisioning ratios, instance limits and platform constraints apply."
       ],
       [
         "gp2",
-        "1 GiB\u201316 TiB; up to 16,000 IOPS and 250 MiB/s. Performance and burst behavior depend on size."
+        "1 GiB–16 TiB; up to 16,000 IOPS and 250 MiB/s. Performance and burst behavior depend on size."
       ],
       [
         "io2 Block Express",
-        "4 GiB\u201364 TiB; up to 256,000 IOPS and 4,000 MiB/s on compatible instances/configurations; designed for 99.999% durability."
+        "4 GiB–64 TiB; up to 256,000 IOPS and 4,000 MiB/s on compatible instances/configurations; designed for 99.999% durability."
       ],
       [
         "io1",
-        "4 GiB\u201316 TiB; up to 64,000 IOPS and 1,000 MiB/s under supported instance/configuration conditions."
+        "4 GiB–16 TiB; up to 64,000 IOPS and 1,000 MiB/s under supported instance/configuration conditions."
       ],
       [
         "st1 / sc1",
-        "125 GiB\u201316 TiB; up to 500/250 MiB/s and 500/250 IOPS at 1 MiB I/O respectively. Throughput-oriented HDD; cannot be boot volumes."
+        "125 GiB–16 TiB; up to 500/250 MiB/s and 500/250 IOPS at 1 MiB I/O respectively. Throughput-oriented HDD; cannot be boot volumes."
       ],
       [
         "Multi-Attach",
@@ -267,7 +267,7 @@
       ],
       [
         "Provisioned initialization",
-        "Choose 100\u2013300 MiB/s where supported. Initialization concerns snapshot data size, not simply allocated volume size. Specifying a rate takes precedence over FSR."
+        "Choose 100–300 MiB/s where supported. Initialization concerns snapshot data size, not simply allocated volume size. Specifying a rate takes precedence over FSR."
       ],
       [
         "Manual initialization",
@@ -311,11 +311,11 @@
       ],
       [
         "Cost comparisons",
-        "The PDF\u2019s 3\u00d7 gp2, 50% Archive and >90% savings figures are scenario/price illustrations, not universal current prices. Compare Region-specific storage, access, retrieval, throughput and minimum-duration charges."
+        "The PDF’s 3× gp2, 50% Archive and >90% savings figures are scenario/price illustrations, not universal current prices. Compare Region-specific storage, access, retrieval, throughput and minimum-duration charges."
       ],
       [
         "Replication throughput",
-        "Replication uses managed capacity rather than consuming the source filesystem\u2019s provisioned throughput allocation. This does not eliminate initial-copy duration, lag or failover work."
+        "Replication uses managed capacity rather than consuming the source filesystem’s provisioned throughput allocation. This does not eliminate initial-copy duration, lag or failover work."
       ]
     ],
     "sources": [
@@ -378,7 +378,7 @@
       ],
       [
         "Gateway deployment",
-        "Use a supported VM/host deployment and type-specific CPU, memory, disk and network sizing. The PDF\u2019s hardware-purchase path is historical; private or encrypted internet transport remains a separate design choice."
+        "Use a supported VM/host deployment and type-specific CPU, memory, disk and network sizing. The PDF’s hardware-purchase path is historical; private or encrypted internet transport remains a separate design choice."
       ],
       [
         "S3 File Gateway storage classes",
@@ -396,6 +396,329 @@
     "sources": [
       "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html",
       "https://docs.aws.amazon.com/filegateway/latest/files3/what-is-file-s3.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "RDS deployment, security and recovery",
+    "rows": [
+      [
+        "Classic Multi-AZ instance",
+        "Synchronous standby provides availability and automatic endpoint failover. The standby does not serve reads. Read replicas are asynchronous and may require explicit promotion."
+      ],
+      [
+        "Multi-AZ DB cluster",
+        "Supported MySQL/PostgreSQL deployments use a writer and two readable replicas across three AZs with semisynchronous replication. This differs from the classic non-readable standby."
+      ],
+      [
+        "Private connection path",
+        "Validate subnet routing, DNS, security groups, supported port and database grants. Lambda needs supported private reachability to the database or proxy."
+      ],
+      [
+        "Backups and snapshots",
+        "Automated backups enable point-in-time recovery within the configured retention window, up to 35 days. A standard RDS DB instance supports 0–35 days (0 disables automated backups); a Multi-AZ DB cluster requires 1–35 days. Defaults depend on the creation interface. Manual snapshots persist until deleted. Restore creates another database endpoint. Check encryption keys, engine compatibility and application consistency."
+      ],
+      [
+        "Regional recovery",
+        "Copy eligible snapshots or use eligible cross-Region asynchronous replicas. Detect failure, fence the former writer, promote deliberately, validate data and cut over application endpoints. DNS changes alone do not promote a database."
+      ],
+      [
+        "Encryption layers",
+        "KMS protects eligible storage, backups and snapshots. TLS protects the connection. Oracle/SQL Server TDE depends on engine/edition support; it is not interchangeable with network encryption."
+      ],
+      [
+        "Encrypt existing data",
+        "Use a supported encrypted snapshot-copy and restore workflow; verify KMS policies and grants before cutover. Changing a connection setting does not encrypt an old volume."
+      ],
+      [
+        "IAM login",
+        "Supported MySQL, MariaDB and PostgreSQL configurations accept a signed login token valid for 15 minutes. Caller rds-db:connect permission, database-user setup/grants and TLS remain required. Token expiry does not terminate an authenticated session."
+      ],
+      [
+        "Proxy constraints",
+        "RDS Proxy uses private endpoints and supported database targets. Validate VPC connectivity, authentication and capacity. Session pinning reduces connection multiplexing; a proxy does not create unlimited database capacity."
+      ],
+      [
+        "Read-only proxy endpoint",
+        "An additional read-only proxy endpoint can target eligible Aurora readers. It is not a generic endpoint for arbitrary ordinary RDS read replicas."
+      ],
+      [
+        "Oracle RMAN boundary",
+        "Supported rdsadmin packages can produce RMAN backups for export and self-managed restoration. You cannot restore an arbitrary RMAN backup directly into managed RDS. Standard RDS Oracle does not provide RAC."
+      ],
+      [
+        "MySQL migration",
+        "Export a consistent logical seed to a compatible external EC2/on-premises target, catch up replication where supported, stop/fence writes and test a controlled cutover. DMS has separate source/target and logging prerequisites."
+      ],
+      [
+        "Audit evidence",
+        "CloudTrail records supported control-plane API actions, not every SQL statement. Use supported engine audit/general/slow/error logs for database evidence. RDS events through SNS complement CloudWatch metrics and query diagnosis."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.Oracle.CommonDBATasks.RMAN.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.overview.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.BackupRetention.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "Aurora topology and operational exceptions",
+    "rows": [
+      [
+        "Storage versus compute",
+        "Six storage copies across three AZs are separate from writer/reader compute instances. Classic storage-quorum concepts use four of six for writes and three of six for reads, with self-healing distributed storage."
+      ],
+      [
+        "Current storage capacity",
+        "Eligible Aurora PostgreSQL 17.5+, 16.9+, 15.13+ and Aurora MySQL 3.10+ configurations support up to 256 TiB; older supported configurations can retain a 128-TiB maximum. Confirm engine/version eligibility."
+      ],
+      [
+        "Reader count and balancing",
+        "An ordinary Aurora cluster supports up to 15 reader replicas. The reader endpoint balances new connections rather than individual SQL queries. With no reader, it connects to the writer and can accept writes."
+      ],
+      [
+        "Endpoint identity",
+        "The writer endpoint follows the primary. Reader endpoints serve eligible reader connections; instance endpoints select a particular instance for diagnosis. Reconnect after failover and account for DNS/client connection caching."
+      ],
+      [
+        "Custom endpoint membership",
+        "ANY versus READER types and static/exclusion membership affect routing. Console-created custom endpoints use ANY. A selected analytical subset does not remove those instances from the built-in reader endpoint. Custom endpoints are not restored from snapshots."
+      ],
+      [
+        "Scaling controls",
+        "Storage grows independently from compute. Reader Auto Scaling changes eligible reader count within configured bounds, not the writer size. Serverless v2 scales supported ACUs within configured minimum/maximum bounds."
+      ],
+      [
+        "Serverless eligibility and costs",
+        "Zero-ACU auto-pause requires supported versions/configurations and idle conditions. Capacity billing does not eliminate storage, I/O, backup or transfer charges. The old Serverless v1 proxy-fleet illustration is not the v2 architecture."
+      ],
+      [
+        "Data API",
+        "Supported provisioned and Serverless Aurora configurations can execute SQL through HTTPS. Validate engine/Region eligibility, Data API IAM authorization, Secrets Manager access, applicable KMS permissions and database grants. Credentials remain necessary behind the interface."
+      ],
+      [
+        "Global topology",
+        "Current eligible configurations allow up to 10 secondary Regions. Primary readers plus secondary clusters must not exceed 15; a secondary cluster supports up to 16 instances. Replication is asynchronous and applies database storage changes, not arbitrary selected tables."
+      ],
+      [
+        "Global recovery",
+        "A planned synchronized switchover avoids data loss; unplanned failover can lose recent unreplicated changes. Measure lag, RPO, RTO and application reconnection. Supported Aurora PostgreSQL rds.global_db_rpo controls can block commits when all secondaries exceed the target lag."
+      ],
+      [
+        "Write forwarding",
+        "A secondary forwards eligible writes to the primary, which commits before changes replicate back. Forwarding does not create independent regional writers or eliminate network latency and consistency restrictions."
+      ],
+      [
+        "Diagnosis",
+        "Use current CloudWatch Database Insights console workflows for database load/waits and SQL/host/user dimensions, CloudWatch CPU/memory/swap metrics, Enhanced Monitoring host/process detail and engine slow-query evidence. Historical Performance Insights references require the current console/API distinction."
+      ],
+      [
+        "S3 integration",
+        "Aurora MySQL LOAD DATA FROM S3 and SELECT INTO OUTFILE S3 need supported versions, cluster IAM-role configuration and bucket/KMS access. Aurora PostgreSQL aws_s3 import/export functions need extension setup, permissions and supported data formats. These are engine-specific operations, not arbitrary S3 filesystem access."
+      ],
+      [
+        "Migration",
+        "Use an eligible RDS snapshot restore or supported Aurora read-replica migration/promotion path. Validate source version, extensions, parameters, client behavior, reconciliation, rollback and cutover before production traffic."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Endpoints.Reader.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Endpoints.Custom.Considerations.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.configuration.requirements.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DatabaseInsights.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.enabling.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html",
+      "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-security.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.LoadFromS3.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.SaveIntoS3.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_PostgreSQL.S3Import.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/postgresql-s3-export.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "DynamoDB exact limits and consistency",
+    "rows": [
+      [
+        "Item model",
+        "Maximum item size is 400 KB including attribute names and values. Scalar types include String, Number, Binary, Boolean and Null; documents use List/Map; sets use String/Number/Binary. The Cassandra analogy does not imply compatible APIs."
+      ],
+      [
+        "Primary keys",
+        "A partition-only key uniquely identifies an item. With a composite key, the partition-plus-sort-key pair is unique; related items can share a partition key. Diverse workload keys help distribute load."
+      ],
+      [
+        "Query versus Scan",
+        "Query requires partition-key equality and supports optional sort-key conditions. Scan reads across items. Filter expressions are applied after reads and do not erase the read capacity already consumed; paginate results."
+      ],
+      [
+        "LSI",
+        "Same partition key, alternate sort key; create only with the table. Up to five per table, 10-GB item-collection limit per partition-key value, shared table capacity. Supported LSI reads can request strong consistency."
+      ],
+      [
+        "GSI",
+        "An alternate partition/sort key can be added later. Default quota is 20 per table, subject to approved increases. A GSI has separate provisioned capacity when that mode applies and supports eventual consistency only. Projections affect available attributes and cost."
+      ],
+      [
+        "Capacity mode",
+        "Provisioned mode allocates capacity and can use configured Auto Scaling; on-demand mode charges for requests and adapts within supported limits. Neither design removes throttling, hot-partition risks or account/table quotas."
+      ],
+      [
+        "Read units",
+        "For an individual read, round item size up to 4-KB units: strong = one unit, eventual = half a unit, transactional = two units. An 8-KB item needs 2, 1 or 4 units respectively. Batch/Query aggregation rules require the operation-specific calculation."
+      ],
+      [
+        "Write units",
+        "For an individual standard write, round size up to 1-KB units; transactional writes use twice the units. A 2-KB item needs 2 standard or 4 transactional write units. Updates/deletes have their own charged-size rules."
+      ],
+      [
+        "Consistency scope",
+        "Regional table and supported LSI reads may use strong consistency; GSIs remain eventual. A strongly consistent read of an MREC regional replica does not guarantee the latest write made in another Region."
+      ],
+      [
+        "Transactions",
+        "Up to 100 distinct items/actions and 4 MB per transaction, within one account and Region. Conditional writes protect an individual precondition; multi-item transactions provide a different atomicity boundary."
+      ],
+      [
+        "TTL",
+        "Use a numeric Unix-epoch timestamp in seconds. Removal is asynchronous and expired items can remain visible; enforce authorization/session expiry in application logic. TTL is not an exact scheduler."
+      ],
+      [
+        "Streams versus Kinesis",
+        "Native Streams retains records for 24 hours with per-item order. Consumer retries can repeat processing even though native stream records themselves are not duplicated. Kinesis capture offers configured 24-hour to 365-day retention, but can deliver duplicates and changes out of order; checkpoint, deduplicate and reconcile."
+      ],
+      [
+        "MREC",
+        "Multi-Region eventual consistency supports regional writes with asynchronous replication and conflict resolution. It uses Streams. The application selects suitable regional endpoints and handles failures; Route 53 does not automatically route DynamoDB SDK table operations."
+      ],
+      [
+        "MRSC",
+        "Multi-Region strong consistency uses supported three-Region groups, with either three replicas or two replicas plus a non-client-serving witness. It does not require Streams. TTL, LSIs and transactions are not supported; GSIs remain eventual."
+      ],
+      [
+        "Table classes and backups",
+        "Standard offers lower request cost and higher storage cost than Standard-IA. Both remain online; Standard-IA is not archive storage. On-demand backups and point-in-time recovery solve recovery history, independently of table class. DynamoDB PITR supports a configured 1–35-day window, default 35 days, with per-second recovery points; restore creates a new table."
+      ],
+      [
+        "S3 metadata index",
+        "Store queryable object metadata in DynamoDB; the object remains in S3. Process supported object events reliably and reconcile missed/duplicate/out-of-order updates. Storage totals require maintained aggregates, not a free sum over all objects."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Constraints.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ServiceQuotas.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/read-write-operations.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/streamsmain.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/kds.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/PointInTimeRecovery_Howitworks.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "DAX and ElastiCache decisions",
+    "rows": [
+      [
+        "DAX topology",
+        "DynamoDB Accelerator is a managed regional DynamoDB cache requiring a DAX-aware client. Maximum cluster size is 11 nodes: one primary and up to 10 replicas. At least three nodes across AZs is the production availability recommendation; the source PDF ten-total limit is obsolete."
+      ],
+      [
+        "DAX request paths",
+        "Hits return from DAX. Misses read DynamoDB and populate the cache. Writes through DAX go to DynamoDB and update applicable item-cache entries. Strong and transactional reads pass through without populating the cache."
+      ],
+      [
+        "DAX freshness",
+        "Default TTL is five minutes with separately controlled item and query caches. Updating an item does not invalidate cached Query/Scan results. Direct-table or cross-Region updates can bypass a local cache; eventual reads may remain stale until expiry/refresh."
+      ],
+      [
+        "DAX security",
+        "Deploy with supported private VPC connectivity and security groups, IAM authorization, at-rest KMS encryption and supported audit controls. DAX does not solve every write-heavy or hot-partition workload."
+      ],
+      [
+        "Cache contract",
+        "DAX understands supported DynamoDB operations. ElastiCache stores application-selected values such as computed aggregates or sessions; the application owns keys, serialization, invalidation and fallback behavior."
+      ],
+      [
+        "Cache-aside",
+        "The application checks the cache. On a miss it reads the database and fills the cache. The cache does not independently query an arbitrary RDS database. Test expiry, stampedes, outages, eviction and source load."
+      ],
+      [
+        "Write/invalidation order",
+        "Write the authoritative store, then perform a selected update/invalidation strategy with race/retry handling. TTL bounds retained data age but does not guarantee immediate freshness. Session authorization must check its actual expiry."
+      ],
+      [
+        "Engine/deployment differences",
+        "Valkey/Redis OSS replication and automatic failover differ from sharding for capacity. Replica reads may lag. Memcached multithreading and horizontal distribution do not imply the same persistence/failover contract."
+      ],
+      [
+        "Persistence exception",
+        "Managed ElastiCache Valkey/Redis OSS does not provide generic self-managed AOF configuration. Node-based Memcached has no snapshot backup; Serverless Memcached supports snapshots. Validate engine, deployment and current feature support separately."
+      ],
+      [
+        "Extreme-rate bottlenecks",
+        "Measure client, DNS, edge, API throttling, Lambda concurrency, network, database partitions, cache misses and cost as one path. The PDF historic node capacities, API/Lambda/edge defaults and unbounded queue claims are not current universal guarantees. S3 baseline is 5,500 GET/HEAD requests per second per partitioned prefix, not the PDF 5,550 typo; KMS can impose another quota. Detailed quotas belong to Modules 07/09 and later Modules 13–16."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.concepts.cluster.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.consistency.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/dax-deploy-cluster.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/backups-automatic.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/redis-ug.pdf"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "Search, documents and time-series boundaries",
+    "rows": [
+      [
+        "OpenSearch modes",
+        "Managed domains and Serverless collections have different scaling and operational contracts. Serverless encryption/network/data-access policies and identity authorization are separate controls. OpenSearch is a derived search index, not a drop-in relational source of truth."
+      ],
+      [
+        "Pipeline roles",
+        "Logstash or supported ingestion components transform/deliver data; OpenSearch indexes and searches it; Dashboards visualizes results. Retention and granularity depend on configuration, not a universal advantage over CloudWatch."
+      ],
+      [
+        "DynamoDB search index",
+        "Source CRUD operations remain in DynamoDB. A supported Streams/Lambda or ingestion pipeline maintains the search view asynchronously. Handle initial backfill, updates, deletions, duplicates, retries and reconciliation; search is not immediately authoritative."
+      ],
+      [
+        "CloudWatch delivery",
+        "Supported subscription/Lambda paths prioritize low-latency processing. Amazon Data Firehose buffers and delivers supported destinations. Validate destination compatibility, retry/rejected records and latency rather than assuming identical real-time behavior."
+      ],
+      [
+        "DocumentDB compatibility",
+        "A managed document database with supported MongoDB-compatible APIs is not the identical MongoDB engine. Validate operators, drivers, indexes, transactions and workload behavior. Instance-based storage grows in 10-GB increments; eligible engine 8+ supports 256 TiB, earlier configurations 128 TiB; up to 15 readers."
+      ],
+      [
+        "DocumentDB pricing",
+        "On-demand instance compute is billed per second with a ten-minute minimum. Standard charges supported I/O separately; I/O-Optimized changes the storage/I/O pricing model. Include reader instances, storage, backups, transfer and Region-specific prices; benchmark rather than asserting a universal throughput gain."
+      ],
+      [
+        "LiveAnalytics availability",
+        "Timestream for LiveAnalytics stopped accepting new customers on 20 June 2025. Existing-service memory/magnetic tiering, SQL, scheduled queries, multi-measure records, time-series functions and encryption remain teaching concepts. Evaluate current Timestream for InfluxDB independently; APIs, connectors and tiering are not interchangeable."
+      ],
+      [
+        "Time-series pipeline",
+        "Validate producer write formats, event time, late arrivals, retention, duplicates and retries. Supported IoT/Kinesis/Lambda/Flink, SQL/JDBC/BI/ML integrations depend on the chosen product. Historic marketing speed/price ratios are not architecture guarantees."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-security.html",
+      "https://docs.aws.amazon.com/documentdb/latest/devguide/what-is.html",
+      "https://docs.aws.amazon.com/documentdb/latest/devguide/db-cluster-storage-configs.html",
+      "https://aws.amazon.com/documentdb/pricing/",
+      "https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html"
     ]
   }
 ]
