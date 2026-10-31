@@ -1,0 +1,1187 @@
+[
+  {
+    "moduleId": "12",
+    "sequence": 1,
+    "title": "A container packages an application, not an entire machine",
+    "referencePages": [
+      204
+    ],
+    "sections": [
+      {
+        "heading": "Package dependencies",
+        "text": "An image bundles application code and required user-space dependencies. A running container is an instance of that image; keep durable state outside its replaceable writable layer."
+      },
+      {
+        "heading": "Match the runtime",
+        "text": "CPU architecture, operating-system family and kernel compatibility still matter. A Linux image does not run natively on every Windows host simply because it is a container."
+      },
+      {
+        "heading": "Control resources",
+        "text": "Set suitable CPU and memory reservations or limits. Shared-kernel efficiency can improve density, but startup time and isolation depend on the workload and runtime."
+      }
+    ],
+    "remember": "Portability requires compatible platforms and externalized state.",
+    "diagram": "Image→two compatible Linux containers on shared kernel; separate incompatible Windows host crossed. No universal any-OS claim.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 2,
+    "title": "Choose orchestration separately from container compute",
+    "referencePages": [
+      205,
+      210,
+      217
+    ],
+    "sections": [
+      {
+        "heading": "Select an API",
+        "text": "ECS uses AWS-native task and service concepts. EKS exposes managed Kubernetes APIs and its ecosystem. Existing Kubernetes practices can favor EKS, with operational trade-offs."
+      },
+      {
+        "heading": "Select compute",
+        "text": "EC2 gives instance-level control and capacity responsibility. Fargate runs supported ECS tasks or EKS Pods without customer-managed worker instances."
+      },
+      {
+        "heading": "Keep ownership clear",
+        "text": "Serverless compute does not remove image maintenance, permissions, networking, application health or cost control. Match platform constraints before migrating."
+      }
+    ],
+    "remember": "Orchestration and compute are two design decisions.",
+    "diagram": "Matrix ECS/EKS rows EC2/Fargate columns, four compatible deployment choices, ownership symbols.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 3,
+    "title": "ECS turns task definitions into running work",
+    "referencePages": [
+      207,
+      208
+    ],
+    "sections": [
+      {
+        "heading": "Define the workload",
+        "text": "A versioned task definition describes one or more containers, their image, resources, ports and runtime settings. A task is a running instantiation of that definition."
+      },
+      {
+        "heading": "Maintain a service",
+        "text": "A service maintains desired task count and replaces failed tasks according to its configuration. A standalone task can run finite work without a continuously maintained service."
+      },
+      {
+        "heading": "Group the capacity",
+        "text": "A cluster is a logical grouping for tasks, services and capacity. It is not restricted to a collection of EC2 machines; eligible Fargate workloads also belong to clusters."
+      }
+    ],
+    "remember": "Definition describes; task runs; service maintains.",
+    "diagram": "Task definition revision→service desired2→two tasks inside logical ECS cluster, one finite task beside service.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 4,
+    "title": "A task definition makes deployment requirements explicit",
+    "referencePages": [
+      207,
+      208,
+      210
+    ],
+    "sections": [
+      {
+        "heading": "Pin a reproducible image",
+        "text": "Choose the image reference and compatible platform. A digest identifies immutable content more precisely than a movable tag; ensure the application listens on the declared container port."
+      },
+      {
+        "heading": "Budget the task",
+        "text": "Specify supported task CPU and memory combinations, container resource settings and essential containers. Add log configuration, environment references and required storage deliberately."
+      },
+      {
+        "heading": "Version and replace",
+        "text": "Register a new revision for changed settings, then update the service or run a new task. An old running task does not automatically become the new definition."
+      }
+    ],
+    "remember": "A new definition revision needs a deployment.",
+    "diagram": "Revision7 image digest+CPU+memory+port+logs→new tasks; old revision6 tasks retained until controlled replacement.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 5,
+    "title": "ECS application permissions differ from startup permissions",
+    "referencePages": [
+      207,
+      208,
+      211
+    ],
+    "sections": [
+      {
+        "heading": "Use a task role",
+        "text": "Application SDK calls use the task IAM role, such as permission for one S3 prefix or DynamoDB table. Avoid static keys inside the image."
+      },
+      {
+        "heading": "Use an execution role",
+        "text": "The ECS or Fargate agent uses the execution role for supported image pulls, log delivery and secret retrieval. Grant startup permissions separately from application data access."
+      },
+      {
+        "heading": "Protect host credentials",
+        "text": "EC2 container instances have their own instance profile. Restrict metadata access and host privileges; shared-host containers do not become a hard tenant boundary merely because roles differ."
+      }
+    ],
+    "remember": "Task role, execution role and host role have different callers.",
+    "diagram": "Three independent lanes App→S3 taskrole; Agent→ECR/logs executionrole; EC2host→ECS instanceprofile.",
+    "examSkills": [
+      "1.1.6",
+      "1.1.13"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 6,
+    "title": "Load-balancer targets must match the task network mode",
+    "referencePages": [
+      206,
+      209
+    ],
+    "sections": [
+      {
+        "heading": "Map bridge ports",
+        "text": "On eligible EC2 bridge-mode tasks, a dynamic host port lets multiple copies of one container port share a host. ECS registers the instance and selected host port with the target group."
+      },
+      {
+        "heading": "Target task addresses",
+        "text": "For awsvpc tasks, including Fargate, use IP target groups for the task ENI addresses. ALB HTTP routing and NLB connection behavior serve different ingress needs."
+      },
+      {
+        "heading": "Validate availability",
+        "text": "Allow the correct load-balancer-to-target security path and health-check port. Multiple tasks on one host do not protect against that host failing; spread tasks across failure domains."
+      }
+    ],
+    "remember": "Bridge targets host ports; awsvpc targets task IPs.",
+    "diagram": "Left ALB→EC2:32768/container8080 and EC2:32769/container8080. Right ALB→taskENI10.0.1.10:8080 and taskENI10.0.2.10:8080 acrossAZs.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 7,
+    "title": "ECS network modes change address and isolation boundaries",
+    "referencePages": [
+      211
+    ],
+    "sections": [
+      {
+        "heading": "Compare Linux EC2 modes",
+        "text": "Bridge uses a container network with host port mappings. Host shares the instance network and its port constraints. None provides no external connectivity or port mappings."
+      },
+      {
+        "heading": "Use awsvpc deliberately",
+        "text": "Each task receives an ENI and private address, with task-level security groups and Flow Logs visibility. Fargate requires this mode rather than merely defaulting to it."
+      },
+      {
+        "heading": "Check platform limits",
+        "text": "Windows and external-instance mode support differs from Linux EC2. Account for subnet addresses, ENI capacity and security controls before assuming another task can start."
+      }
+    ],
+    "remember": "Network mode changes both connectivity and capacity constraints.",
+    "diagram": "Four labeled mini-modes none/bridge/host/awsvpc with ENI boundary and task security group.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 8,
+    "title": "A private Fargate task still needs startup connectivity",
+    "referencePages": [
+      210,
+      211
+    ],
+    "sections": [
+      {
+        "heading": "Reach required services",
+        "text": "A task must retrieve its image, obtain required secrets and send configured logs. Private placement alone does not create these service paths."
+      },
+      {
+        "heading": "Choose the egress path",
+        "text": "Use suitable NAT connectivity or supported VPC endpoints. Private ECR pulls commonly need ECR API and registry endpoints plus S3 access for image layers; logs and secrets need their own paths."
+      },
+      {
+        "heading": "Separate network from IAM",
+        "text": "Check subnet routes, endpoint policies, security-group rules and execution-role permissions. An image-pull error can be a network or authorization problem."
+      }
+    ],
+    "remember": "Serverless tasks still need addresses, routes and service permissions.",
+    "diagram": "Private task→ECR API/registry interface endpoints; separate task→S3 gateway endpoint image layers; task→logs/secrets endpoints. No publicIP assumed.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 9,
+    "title": "Inject secrets without freezing credentials into images",
+    "referencePages": [
+      211
+    ],
+    "sections": [
+      {
+        "heading": "Reference protected values",
+        "text": "Use supported Secrets Manager or Parameter Store references in task configuration. The execution role needs retrieval permission and applicable KMS access."
+      },
+      {
+        "heading": "Understand refresh timing",
+        "text": "Environment-variable injection occurs when a task starts. Rotating the stored secret does not rewrite an existing process environment; deploy replacement tasks or use an application retrieval strategy."
+      },
+      {
+        "heading": "Limit exposure",
+        "text": "Avoid printing values in logs or embedding them in image layers. Secure diagnostic access and define how a failed rotation or rollout recovers."
+      }
+    ],
+    "remember": "A rotated secret and a refreshed application are separate events.",
+    "diagram": "Secretv1→taskstart envv1; secretrotatesv2→newtask envv2; oldtask staysv1 untilreplaced.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 10,
+    "title": "Choose a service for continuous work and tasks for finite work",
+    "referencePages": [
+      206
+    ],
+    "sections": [
+      {
+        "heading": "Serve microservices",
+        "text": "An ECS service can maintain replicas behind supported ALB or NLB integrations, with service discovery and configured scaling. Externalize shared state so tasks remain replaceable."
+      },
+      {
+        "heading": "Schedule finite jobs",
+        "text": "Run standalone tasks for batch-style work or invoke tasks through a supported scheduler. Define retries, idempotency and completion evidence; a schedule does not prove success."
+      },
+      {
+        "heading": "Migrate deliberately",
+        "text": "Containerize a legacy application, validate dependencies and storage, then test on compatible compute. On-Demand, Spot and eligible commitment discounts describe capacity or billing, not a special Reserved launch type."
+      }
+    ],
+    "remember": "Choose the lifecycle before the purchase option.",
+    "diagram": "Service persistent replicas vs scheduler→finite task→exit evidence; migrationonpremimage→ECR→ECS.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 11,
+    "title": "ECS service scaling changes tasks, not the EC2 fleet",
+    "referencePages": [
+      212
+    ],
+    "sections": [
+      {
+        "heading": "Track useful demand",
+        "text": "Application Auto Scaling adjusts desired task count within configured bounds. CPU, memory or a suitable request/backlog metric should reflect the bottleneck."
+      },
+      {
+        "heading": "Choose a policy",
+        "text": "Target tracking follows a metric target; step scaling reacts to alarm thresholds; scheduled scaling anticipates predictable time windows. Include cooldowns and startup delay in the design."
+      },
+      {
+        "heading": "Keep capacity separate",
+        "text": "More desired tasks need available compute and network capacity. For EC2-backed clusters, host scaling is a separate control; for Fargate, quotas and placement constraints still apply."
+      }
+    ],
+    "remember": "Task scaling cannot manufacture missing host capacity.",
+    "diagram": "Demandmetric→service desired2→desired4; separate EC2 capacity box insufficientslots vs hostcapacitycontroller.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 12,
+    "title": "Capacity providers connect task demand to available compute",
+    "referencePages": [
+      208,
+      212,
+      213
+    ],
+    "sections": [
+      {
+        "heading": "Manage EC2 slots",
+        "text": "An Auto Scaling group capacity provider can manage cluster capacity for eligible EC2 workloads. Task placement still depends on resources, architecture and placement constraints."
+      },
+      {
+        "heading": "Protect running work",
+        "text": "Coordinate instance draining and termination protection where supported. Removing a host before tasks move can interrupt requests or jobs."
+      },
+      {
+        "heading": "Distinguish newer options",
+        "text": "Current ECS also offers Managed Instances capacity providers. Compare supported features and infrastructure ownership instead of treating every non-Fargate option as manually operated EC2."
+      }
+    ],
+    "remember": "Place tasks and scale capacity as coordinated controls.",
+    "diagram": "Pendingtasks→capacityprovider→ASG addsnode→tasksplaced; drainingoldnode→replacementtasks beforeterminate.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 13,
+    "title": "Spot savings require an interruption-tolerant task design",
+    "referencePages": [
+      213
+    ],
+    "sections": [
+      {
+        "heading": "Keep a baseline",
+        "text": "A capacity-provider strategy can place a base number of tasks on FARGATE, then distribute additional tasks using configured weights including FARGATE_SPOT."
+      },
+      {
+        "heading": "Plan interruption",
+        "text": "EC2 Spot or Fargate Spot capacity can be reclaimed. Handle termination signals, checkpoint finite work and keep enough healthy replicas across suitable failure domains."
+      },
+      {
+        "heading": "Do not promise fallback",
+        "text": "Unavailable Spot capacity does not imply automatic replacement by On-Demand capacity. Test the selected strategy, capacity availability and graceful shutdown."
+      }
+    ],
+    "remember": "A lower capacity price is not an availability guarantee.",
+    "diagram": "Base2FARGATE steady tasks, additionalSpot interruptedsignals→drain/checkpoint; no automaticfallback arrow.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 14,
+    "title": "ECR access combines identity, repository policy and network reachability",
+    "referencePages": [
+      214
+    ],
+    "sections": [
+      {
+        "heading": "Store and reference images",
+        "text": "ECR provides private repositories and a public registry offering. An image digest identifies content; tags are references used by build and deployment processes."
+      },
+      {
+        "heading": "Authorize the caller",
+        "text": "Grant the correct pull or push actions to the actual principal. Cross-account private access requires appropriate identity and repository policies; registry authentication alone does not authorize every repository."
+      },
+      {
+        "heading": "Trace the pull path",
+        "text": "The runtime must reach the registry and required image-layer storage. Use the ECS execution role for supported agent pulls rather than expanding the application task role unnecessarily."
+      }
+    ],
+    "remember": "Authenticate, authorize and connect are separate checks.",
+    "diagram": "Buildrole→pushECR; executionroleagent→pullECR→task; appSDKrole shownseparate.",
+    "examSkills": [
+      "1.1.8",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 15,
+    "title": "Image retention must preserve deployable rollback versions",
+    "referencePages": [
+      214
+    ],
+    "sections": [
+      {
+        "heading": "Make versions reproducible",
+        "text": "Use a versioned release process and suitable tag-immutability settings. Record the deployed digest so an overwritten tag cannot silently change the intended release."
+      },
+      {
+        "heading": "Preview cleanup",
+        "text": "Lifecycle rules select image sets for supported retention actions. Preview matching images and account for multi-architecture manifests or reference artifacts before activating deletion."
+      },
+      {
+        "heading": "Retain recovery evidence",
+        "text": "Keep the known-good digest and images needed by running or rollback deployments. A registry cleanup policy does not verify that an application can still redeploy."
+      }
+    ],
+    "remember": "An image that cannot be pulled cannot be your rollback.",
+    "diagram": "Releasev1digest retained rollback;v2current;oldtestimages→policy preview→cleanup.",
+    "examSkills": [
+      "1.1.8"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 16,
+    "title": "ECR replication distributes images, not the entire application",
+    "referencePages": [
+      215
+    ],
+    "sections": [
+      {
+        "heading": "Configure destinations",
+        "text": "Private-registry rules can replicate matching images across Regions and accounts. Cross-account destinations need the required registry permissions."
+      },
+      {
+        "heading": "Validate the replica",
+        "text": "Replication applies to images pushed or restored after configuration; do not assume an existing repository is automatically backfilled. Verify destination image digest before deployment."
+      },
+      {
+        "heading": "Recreate controls",
+        "text": "Repository permissions, lifecycle rules and other settings need destination configuration or supported creation templates. Deletions and application deployments are separate operations."
+      }
+    ],
+    "remember": "Replicated image content does not mean replicated runtime configuration.",
+    "diagram": "SourceECR newimage→RegionB/accountB ECR; existingimage labeled verify/backfill; IAM/lifecycle/runtimeconfig separate.",
+    "examSkills": [
+      "1.1.8"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 17,
+    "title": "Scanning findings need a remediation and deployment decision",
+    "referencePages": [
+      216
+    ],
+    "sections": [
+      {
+        "heading": "Choose coverage",
+        "text": "Basic ECR scanning checks supported operating-system vulnerabilities. Enhanced scanning integrates Amazon Inspector for supported OS and language-package findings and configured rescan behavior."
+      },
+      {
+        "heading": "Inspect current findings",
+        "text": "Configure registry filters and scan frequency. Use supported finding APIs or console views; a scan event or an old summary field is not proof that an image is safe."
+      },
+      {
+        "heading": "Close the loop",
+        "text": "Route supported events for triage, rebuild a patched image and verify the replacement digest. Scanning does not patch the image or automatically stop every deployment."
+      }
+    ],
+    "remember": "Find, prioritize, rebuild and redeploy.",
+    "diagram": "ECR→basicOSfindings OR InspectorOS+packages→EventBridge→triage→rebuildimage→deploy.",
+    "examSkills": [
+      "1.1.8"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 18,
+    "title": "EKS manages Kubernetes control-plane availability",
+    "referencePages": [
+      217,
+      218
+    ],
+    "sections": [
+      {
+        "heading": "Keep the API contract",
+        "text": "EKS supplies a managed Kubernetes control plane. Kubernetes knowledge helps portability, but IAM, VPC networking, storage and load-balancer integrations remain platform-specific."
+      },
+      {
+        "heading": "Own the workloads",
+        "text": "You still configure worker compute or Fargate, namespaces, deployments, services, permissions and application health. Managed control plane does not make every Pod highly available."
+      },
+      {
+        "heading": "Design regional recovery",
+        "text": "An EKS cluster is regional. Use separate regional clusters for multi-Region designs, with image, configuration, state and traffic-routing recovery plans."
+      }
+    ],
+    "remember": "A managed control plane does not replace workload architecture.",
+    "diagram": "AWSmanagedcontrolplane abovecluster privateworkers2AZs; separateregionalcluster forDR.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 19,
+    "title": "EKS compute choices carry different operational responsibilities",
+    "referencePages": [
+      219
+    ],
+    "sections": [
+      {
+        "heading": "Compare EC2 ownership",
+        "text": "Managed node groups automate supported node provisioning and lifecycle integration with an Auto Scaling group. Self-managed nodes leave more bootstrap, patching and upgrade work to you."
+      },
+      {
+        "heading": "Use eligible capacity",
+        "text": "EC2 node groups can use supported On-Demand or Spot configurations. Current EKS Auto Mode manages additional compute and platform functions with its own constraints."
+      },
+      {
+        "heading": "Respect Fargate limits",
+        "text": "Fargate runs matching Pods without customer-managed worker nodes, but does not support every DaemonSet, storage or privileged-workload pattern. EKS Fargate does not offer Fargate Spot."
+      }
+    ],
+    "remember": "A compute option is a feature and ownership contract.",
+    "diagram": "Managednodegroup/selfmanaged/AutoMode/Fargate comparison4icons with explicitownershiplabels.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 20,
+    "title": "Public ingress and private worker placement are separate choices",
+    "referencePages": [
+      218
+    ],
+    "sections": [
+      {
+        "heading": "Expose only intended entry",
+        "text": "An internet-facing load balancer uses suitable public subnets while application Pods or nodes can remain private. An internal load balancer serves a private access pattern."
+      },
+      {
+        "heading": "Provide required paths",
+        "text": "Private workers need supported access to the Kubernetes API, image registry, logs and dependent services through appropriate private endpoints or egress."
+      },
+      {
+        "heading": "Protect each hop",
+        "text": "Validate controller permissions, subnet selection, target type, security groups and health checks. A load balancer in front of unhealthy Pods does not create availability."
+      }
+    ],
+    "remember": "Trace client ingress and worker egress independently.",
+    "diagram": "Internet→publicALB→privatePods twoAZs; separateinternalLB→privatePods; workers→endpoint/NAT forrequiredservices.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 21,
+    "title": "Kubernetes authorization and AWS workload identity solve different gates",
+    "referencePages": [
+      217,
+      219
+    ],
+    "sections": [
+      {
+        "heading": "Authorize cluster actions",
+        "text": "EKS access configuration and Kubernetes RBAC govern who can inspect or change cluster objects. Scope roles and service accounts to the intended namespace and operations."
+      },
+      {
+        "heading": "Authorize AWS API calls",
+        "text": "Use supported EKS Pod Identity or IAM roles for service accounts to grant application permissions. Node IAM permissions are not a substitute for per-workload least privilege."
+      },
+      {
+        "heading": "Match compute support",
+        "text": "Pod Identity requires supported compute and its agent; it is not supported on EKS Fargate. Restrict node metadata and use an eligible identity mechanism for the selected platform."
+      }
+    ],
+    "remember": "RBAC controls Kubernetes; workload IAM controls AWS APIs.",
+    "diagram": "Developer→EKSaccess→RBAC→namespace; Podserviceaccount→IAMrole→S3 separatelane;nodecredentialblocked.",
+    "examSkills": [
+      "1.1.6",
+      "1.1.13"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 22,
+    "title": "Persistent Kubernetes storage needs a compatible provisioner",
+    "referencePages": [
+      220
+    ],
+    "sections": [
+      {
+        "heading": "Declare desired storage",
+        "text": "A PersistentVolumeClaim requests storage. A StorageClass can describe dynamic provisioning through the selected CSI driver; static provisioning is another supported pattern."
+      },
+      {
+        "heading": "Respect EBS placement",
+        "text": "EBS is AZ-scoped block storage. Schedule compatible Pods with the volume topology and supported access mode; an EBS volume does not become a shared multi-AZ filesystem."
+      },
+      {
+        "heading": "Use EFS appropriately",
+        "text": "EFS provides supported shared filesystem access, including eligible EKS Fargate Pods. Fargate storage support differs from EC2; EBS-backed Pod volumes are not supported there."
+      }
+    ],
+    "remember": "A claim needs both a driver and compatible compute.",
+    "diagram": "PVC→StorageClass→CSI→EBS sameAZsinglePod vs EFSsharedPodsAZA/B; Fargate→EFS onlyshown.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 23,
+    "title": "FSx integration depends on the driver and filesystem contract",
+    "referencePages": [
+      220
+    ],
+    "sections": [
+      {
+        "heading": "Choose Lustre for its workload",
+        "text": "Supported FSx for Lustre integrations serve parallel filesystem workloads. Install and authorize the appropriate CSI components and verify node and network compatibility."
+      },
+      {
+        "heading": "Choose ONTAP deliberately",
+        "text": "FSx for NetApp ONTAP can serve eligible Kubernetes persistent storage through supported integrations such as Trident. Protocol, access modes and provisioning behavior differ from Lustre."
+      },
+      {
+        "heading": "Test lifecycle behavior",
+        "text": "Check StorageClass parameters, reclaim policy, backup and restore, and workload rescheduling. Listing a storage service does not prove it works on every node or Fargate configuration."
+      }
+    ],
+    "remember": "Match protocol, driver, compute and recovery together.",
+    "diagram": "K8sPVC branches LustreCSI→FSxLustre andTrident→FSxONTAP; compatibility/reclaim/restorechecklist.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 24,
+    "title": "Scale Pods and nodes as two coordinated feedback loops",
+    "referencePages": [
+      217,
+      219
+    ],
+    "sections": [
+      {
+        "heading": "Scale application replicas",
+        "text": "Horizontal Pod Autoscaling uses configured resource or custom metrics. Requests, limits, readiness and startup time influence whether extra replicas help."
+      },
+      {
+        "heading": "Scale schedulable capacity",
+        "text": "Eligible node autoscaling mechanisms add or replace nodes when capacity is needed. Pod placement constraints, topology and quotas can still leave work Pending."
+      },
+      {
+        "heading": "Protect availability",
+        "text": "Use suitable replica spreading, disruption budgets and graceful termination. More Pods on one failing node are not equivalent to replicas across failure domains."
+      }
+    ],
+    "remember": "Replica demand and node supply must stay compatible.",
+    "diagram": "HPA metrics→replicas2to4; PendingPod→nodeautoscaler→newnode; AZspread.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 25,
+    "title": "Container observability connects symptoms to the failing layer",
+    "referencePages": [
+      208,
+      217
+    ],
+    "sections": [
+      {
+        "heading": "Collect separate signals",
+        "text": "Application logs, service events, control-plane evidence and container or node metrics answer different questions. Configure supported CloudWatch Container Insights or other collectors explicitly."
+      },
+      {
+        "heading": "Trace a failed request",
+        "text": "Correlate load-balancer health, service discovery, task or Pod readiness, throttling and downstream errors. A running process can still fail its real request path."
+      },
+      {
+        "heading": "Verify recovery",
+        "text": "After a change, compare latency, error rate and resource pressure over the relevant period. Preserve logs and deployment identity so a temporary improvement is not mistaken for a fix."
+      }
+    ],
+    "remember": "Diagnose the request path before adding capacity.",
+    "diagram": "Clienterror→LBhealth→readiness→logs/metrics→dependency; correlateclock/releaseid.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 26,
+    "title": "App Runner concepts remain useful, but new-customer availability changed",
+    "referencePages": [
+      221
+    ],
+    "sections": [
+      {
+        "heading": "Understand the managed path",
+        "text": "For existing eligible customers, App Runner accepts supported source code or container images and manages build or deployment, HTTPS ingress, health checks and configured scaling."
+      },
+      {
+        "heading": "Apply the current boundary",
+        "text": "App Runner closed to new customers from 31 March 2026. Existing customers can continue using it, but AWS does not plan new features; do not teach it as an unrestricted new deployment choice."
+      },
+      {
+        "heading": "Evaluate the migration option",
+        "text": "AWS recommends evaluating ECS Express Mode. It provisions an application stack using Fargate, an ALB, scaling and networking in your account; validate IAM roles and the resources you will own and pay for."
+      }
+    ],
+    "remember": "Historical service capability and current eligibility are different facts.",
+    "diagram": "Existingcustomercode/image→AppRunnerURL; newcustomerblockedlabel31Mar2026; migrationcandidateECSExpressFargateALB.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 27,
+    "title": "An App Runner VPC connector controls outbound application traffic",
+    "referencePages": [
+      221
+    ],
+    "sections": [
+      {
+        "heading": "Reach private dependencies",
+        "text": "An outbound VPC connector lets an eligible service reach private databases, caches or queues through selected subnets and security groups."
+      },
+      {
+        "heading": "Restore required egress",
+        "text": "VPC-connected application traffic does not automatically retain public internet access. Use appropriate NAT or supported endpoints for required destinations; selecting a public subnet alone is insufficient."
+      },
+      {
+        "heading": "Configure ingress separately",
+        "text": "A public service URL and a private incoming endpoint are separate settings. Private ingress uses the supported VPC endpoint and ingress-connection configuration; an outbound connector does not make ingress private."
+      }
+    ],
+    "remember": "Outbound VPC access does not define who can call the service.",
+    "diagram": "AppRunner→outboundconnector→privateRDS; incomingpublicORprivateendpoint separatearrows; NATegressoptional.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 28,
+    "title": "A multi-Region application needs image, data and traffic plans",
+    "referencePages": [
+      222
+    ],
+    "sections": [
+      {
+        "heading": "Deploy each Region",
+        "text": "Run an independently configured eligible service in each Region. ECR replication distributes matching images; verify destination permissions, image digest and deployment success."
+      },
+      {
+        "heading": "Choose data semantics",
+        "text": "DynamoDB global tables provide regional access with a selected replication mode. Design conflict, consistency and failover behavior rather than assuming every regional read is instantly current."
+      },
+      {
+        "heading": "Route compatible endpoints",
+        "text": "Use supported custom-domain and DNS or traffic-management configurations. The PDF endpoint-hostname sketch is not a valid literal A-record value; health, TLS, client caching and regional recovery must be tested."
+      }
+    ],
+    "remember": "Replicating an image is only one part of regional recovery.",
+    "diagram": "RegionAservice+ECR+DDB andRegionBsame;ECRreplicationdistinctDDBreplication;DNSlabelvalidatedhostnameconfiguration,noAvaluehostnames.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 29,
+    "title": "ECS Anywhere keeps control in AWS and compute on your infrastructure",
+    "referencePages": [
+      223
+    ],
+    "sections": [
+      {
+        "heading": "Register supported hosts",
+        "text": "Install the ECS agent and Systems Manager agent with the required registration identity. EXTERNAL tasks run on customer-managed servers or VMs attached to an ECS cluster."
+      },
+      {
+        "heading": "Plan disconnected behavior",
+        "text": "Regional connectivity is needed for management operations. Already running tasks can continue during a lost connection, but do not assume new scheduling and control remain available."
+      },
+      {
+        "heading": "Respect external limits",
+        "text": "External tasks use supported bridge, host or none networking; awsvpc, ECS service load balancing and service discovery are not supported. Recheck the current supported operating-system list."
+      }
+    ],
+    "remember": "Customer-managed compute retains customer-managed failure risks.",
+    "diagram": "AWS ECS/SSMcontrolplane→onpremagenthosttasks; brokencontrollinkexistingtaskscontinue; exclusionsawsvpcELBdiscovery.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 30,
+    "title": "EKS Anywhere can operate without an AWS-hosted control plane",
+    "referencePages": [
+      224
+    ],
+    "sections": [
+      {
+        "heading": "Own the local cluster",
+        "text": "EKS Anywhere provides tooling for Kubernetes clusters outside AWS using supported infrastructure and EKS Distro components. You operate the local cluster and its lifecycle."
+      },
+      {
+        "heading": "Choose connected features",
+        "text": "An optional EKS Connector can expose supported cluster visibility in the EKS console. Connecting a cluster does not move its control plane into the managed EKS regional service."
+      },
+      {
+        "heading": "Prepare an air gap",
+        "text": "Current EKS Anywhere supports disconnected and air-gapped operation with prepared dependencies and registry mirrors. The PDF suggestion that disconnection requires abandoning EKS Anywhere is too broad."
+      }
+    ],
+    "remember": "Local Kubernetes operations and optional AWS visibility are separate.",
+    "diagram": "Localcontrolplane+workernodes→localregistry; optionalconnector dashed→EKSconsole;airgaplocalopsworks.",
+    "examSkills": [
+      "1.1.6"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 31,
+    "title": "Cloud Map discovery returns locations; clients still make connections",
+    "referencePages": [
+      206,
+      589
+    ],
+    "sections": [
+      {
+        "heading": "Register useful identity",
+        "text": "A namespace groups services. Register service instances with endpoints, attributes and supported health information so clients do not hard-code changing backend addresses."
+      },
+      {
+        "heading": "Discover then connect",
+        "text": "Use an eligible DNS or API discovery path. The client receives endpoint information and connects directly to the backend; Cloud Map is not an inline reverse proxy."
+      },
+      {
+        "heading": "Control freshness and health",
+        "text": "Account for DNS TTL, client caching and the chosen health mechanism. API health filters and DNS fail-open behavior can differ; discovery alone is not an authorization boundary."
+      }
+    ],
+    "remember": "Discovery locates a service; networking and authorization allow its use.",
+    "diagram": "1backendregister→CloudMap;2clientlookup→CloudMapresponse;3client→backendDIRECT,noCloudMapinlineproxy.",
+    "examSkills": [
+      "1.1.7"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 32,
+    "title": "Service Connect adds managed proxies to ECS service communication",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Group connected services",
+        "text": "Service Connect uses a Cloud Map namespace and ECS service configuration to give participating services stable short names. Compatible services can span clusters with required network reachability."
+      },
+      {
+        "heading": "Follow the data path",
+        "text": "Each participating task has a managed proxy container. Clients use the configured endpoint name; proxy behavior supplies supported connection handling and observability."
+      },
+      {
+        "heading": "Keep boundaries explicit",
+        "text": "A namespace is not a VPC tunnel or a tenant firewall. Check routes, security groups, supported port configuration and the extra method needed by clients outside Service Connect."
+      }
+    ],
+    "remember": "A short name does not replace a working network path.",
+    "diagram": "TaskA app→proxyA→proxyB→appB;CloudMapnamespaceabovecontrolonly;tasksecuritygroupsnetworkallowed.",
+    "examSkills": [
+      "1.1.7"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 33,
+    "title": "Service-mesh concepts survive the retirement of App Mesh",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Preserve the problem",
+        "text": "Microservices need controlled communication, telemetry, encryption and failure handling. Sidecar proxies can provide these functions, with CPU, memory and operational costs."
+      },
+      {
+        "heading": "Apply the retirement",
+        "text": "AWS App Mesh support ended on 30 September 2026 and its resources are no longer available as a current service choice. Retain its architectural concepts without recommending a new deployment."
+      },
+      {
+        "heading": "Choose supported capabilities",
+        "text": "Evaluate ECS Service Connect, VPC Lattice or an appropriate Kubernetes ecosystem solution. Validate TLS, identity, retry and traffic-policy requirements; replacements are not automatically feature-equivalent."
+      }
+    ],
+    "remember": "Migrate required capabilities, not just product names.",
+    "diagram": "RetiredAppMeshdated→capabilitychecklistTLSidentitytelemetryretries→ServiceConnect/Lattice/K8ssupportedoptions.",
+    "examSkills": [
+      "1.1.7"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 34,
+    "title": "VPC Lattice combines service connectivity with explicit authorization",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Build a service network",
+        "text": "Associate eligible services, target groups and VPCs, including supported cross-account sharing. Lattice can connect applications across supported compute types and account boundaries."
+      },
+      {
+        "heading": "Authorize requests",
+        "text": "Network association is not sufficient authorization. Configure supported auth policies and IAM caller permissions, and use the required signed-request identity when IAM authentication is enabled."
+      },
+      {
+        "heading": "Validate targets and telemetry",
+        "text": "Check target registration, protocol, listener rules, health and security paths. Use access logs and metrics to distinguish an authorization rejection from an unhealthy target."
+      }
+    ],
+    "remember": "Connectivity and application authorization need separate evidence.",
+    "diagram": "VPC_Acaller→Lattice service network IAMgate→VPC_Btarget;policygatebeforetarget;sharedaccountboundary.",
+    "examSkills": [
+      "1.1.7",
+      "1.1.13"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 35,
+    "title": "Tenant isolation starts with a trust and blast-radius decision",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Compare silo and pool",
+        "text": "Silo designs dedicate resources such as accounts or clusters to a tenant. Pooled designs share resources and enforce tenant boundaries in identity, networking and data access."
+      },
+      {
+        "heading": "Use a bridge where needed",
+        "text": "Different layers can use different models: shared ingress with dedicated data stores, or shared control with separate compute. State the boundary and recovery ownership at each layer."
+      },
+      {
+        "heading": "Enforce tenant context",
+        "text": "Derive tenant identity from trusted authentication and authorization. Never accept an arbitrary tenant identifier as proof of access to another tenant’s data."
+      }
+    ],
+    "remember": "Authentication identifies a user; isolation constrains tenant access.",
+    "diagram": "Silo2separateaccounts vsPoolsharedappwithtenant-scopedDBpartitions vsBridge shareappdedicatedDB.",
+    "examSkills": [
+      "1.1.13"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 36,
+    "title": "A Kubernetes namespace alone is not a hard tenant boundary",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Constrain operations",
+        "text": "Use scoped RBAC, service accounts, quotas and admission controls. Namespace names do not stop a privileged or over-authorized principal from accessing another tenant."
+      },
+      {
+        "heading": "Constrain traffic and identity",
+        "text": "Use an enforcing network-policy implementation, required DNS allowances, least-privilege workload IAM and restricted metadata access. Default-deny intent needs an actual policy engine."
+      },
+      {
+        "heading": "Choose stronger separation",
+        "text": "Shared nodes share a kernel and other resources. For untrusted tenants, evaluate dedicated nodes, clusters or accounts and test both data access and resource-exhaustion boundaries."
+      }
+    ],
+    "remember": "Test the boundary with negative access attempts.",
+    "diagram": "TenantAnamespace andBnamespace separatedpolicywall butsharedkernelwarning; strongeraccount/clusteroption.",
+    "examSkills": [
+      "1.1.13"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 37,
+    "title": "ECS walkthrough: prove rollout health before retiring old tasks",
+    "referencePages": [
+      207,
+      209,
+      210,
+      212
+    ],
+    "sections": [
+      {
+        "heading": "Prepare a sandbox service",
+        "text": "Use a trusted test image and explicit container port, execution role, subnets and security groups. Select a supported target group and a useful health endpoint."
+      },
+      {
+        "heading": "Deploy and inspect",
+        "text": "Create a service with two replicas across suitable AZs. Inspect service events, running tasks and target health; send a test request and confirm the expected release response."
+      },
+      {
+        "heading": "Change and verify",
+        "text": "Deploy a new task-definition revision and observe replacement health. Deliberately test a failing health endpoint in the sandbox, recover or roll back, collect evidence and remove temporary resources."
+      }
+    ],
+    "remember": "A running task count is not proof of a healthy rollout.",
+    "diagram": "IllustrativeconsoleECS desired2/running2,ALB2healthy,revisionv2→healthverify→retirev1. No claimactualAWSexecution.",
+    "examSkills": [
+      "1.1.6",
+      "1.1.10"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 38,
+    "title": "ECR walkthrough: verify digest, findings and retention before release",
+    "referencePages": [
+      214,
+      215,
+      216
+    ],
+    "sections": [
+      {
+        "heading": "Push a sandbox release",
+        "text": "Create an authorized private repository, authenticate with a short-lived registry credential and push a trusted test image. Record the resulting digest and intended tag."
+      },
+      {
+        "heading": "Inspect the controls",
+        "text": "Inspect supported scan findings, repository access and tag settings. Preview a lifecycle policy and verify that the known-good rollback digest remains outside the deletion set."
+      },
+      {
+        "heading": "Verify distribution",
+        "text": "If testing replication, push a new image after rules are active and verify its destination digest. Remove test images or repositories only after collecting evidence and considering dependent deployments."
+      }
+    ],
+    "remember": "Release identity is the digest, not the appearance of a tag.",
+    "diagram": "IllustrativeECRdigestsha256… source/destinationmatch;scanfindingsreview;lifecyclepreviewrollbackretained.",
+    "examSkills": [
+      "1.1.8"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 39,
+    "title": "EKS walkthrough: follow a Pending Pod to its scheduling constraint",
+    "referencePages": [
+      217,
+      219,
+      220
+    ],
+    "sections": [
+      {
+        "heading": "Deploy bounded test work",
+        "text": "Use a sandbox namespace, trusted image, resource requests and a non-production service account. Apply a small deployment and inspect Pod and node status."
+      },
+      {
+        "heading": "Read the evidence",
+        "text": "Use kubectl get pods, kubectl describe pod and suitable logs to distinguish scheduling, image-pull, readiness and runtime failures. Match events to the actual layer before changing settings."
+      },
+      {
+        "heading": "Validate the correction",
+        "text": "Correct the specific resource, node-selector or storage-topology constraint in the sandbox. Observe Ready replicas and a successful request, then remove test resources and confirm no persistent storage is unintentionally left behind."
+      }
+    ],
+    "remember": "A Pending Pod needs event evidence before more nodes.",
+    "diagram": "Illustrativekubectl PodPending eventInsufficientcpu→adjustboundedrequest/eligiblecapacity→Ready2/2; no fabricatedrealexecution.",
+    "examSkills": [
+      "1.1.6",
+      "1.1.9"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  },
+  {
+    "moduleId": "12",
+    "sequence": 40,
+    "title": "Isolation walkthrough: prove allowed traffic and denied tenant access",
+    "referencePages": [],
+    "sections": [
+      {
+        "heading": "Define the expected matrix",
+        "text": "In a sandbox, write down which tenant identities may call each service or data path. Include DNS and required platform dependencies before applying default-deny network policies."
+      },
+      {
+        "heading": "Exercise both outcomes",
+        "text": "Run an authorized same-tenant request and a cross-tenant negative test. Check application authorization, workload IAM and supported network-policy logs or evidence independently."
+      },
+      {
+        "heading": "Record the boundary",
+        "text": "Confirm the denied request cannot read another tenant’s records. Preserve policy versions and results, then remove test resources; one network timeout alone does not prove data isolation."
+      }
+    ],
+    "remember": "A boundary is demonstrated by both allowed and denied behavior.",
+    "diagram": "TenantA→AdataALLOW;TenantA→BdataDENY;network/IAM/appauth3gates;testmatrix.",
+    "examSkills": [
+      "1.1.13",
+      "1.1.7"
+    ],
+    "status": "qa-passed",
+    "generationMethod": "image_gen built-in, original educational artwork; selected corrected variants reviewed"
+  }
+]

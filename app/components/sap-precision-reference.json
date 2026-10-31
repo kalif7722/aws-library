@@ -720,5 +720,259 @@
       "https://aws.amazon.com/documentdb/pricing/",
       "https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html"
     ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Container runtime, ECS networking and identity",
+    "rows": [
+      [
+        "Platform portability",
+        "Image OS family, CPU architecture, runtime and kernel requirements must match. Containers share host resources; their writable layer is not a durable shared database."
+      ],
+      [
+        "ECS objects",
+        "Cluster: logical grouping, including eligible Fargate capacity. Task definition: versioned configuration. Task: running one or more containers. Service: maintains desired tasks. A Reserved Instance is a billing/capacity arrangement, not an ECS launch type."
+      ],
+      [
+        "Roles",
+        "Task role authorizes application AWS API access. Execution role authorizes supported agent startup operations such as ECR pulls, awslogs and secret retrieval. EC2 instance profile supports the host/agent. Scope trust, actions, resources and applicable KMS access to the actual caller."
+      ],
+      [
+        "Bridge and host",
+        "On Linux EC2, bridge supports dynamic host-port mapping. Host mode shares the host network, so the same host port cannot be reused by competing copies. An ALB target for bridge uses the instance and registered host port."
+      ],
+      [
+        "awsvpc and none",
+        "awsvpc supplies a task ENI/private IP and security groups; Fargate requires it. Use IP target groups for supported awsvpc service load balancing. None provides no external task networking or port mappings. Windows mode support differs."
+      ],
+      [
+        "Fargate private startup",
+        "Provide subnet IP capacity and required IAM/network paths. ECR image pull commonly needs ECR API and registry interface endpoints plus an S3 gateway endpoint for layers; CloudWatch Logs and Secrets Manager need their own access. NAT is another appropriate egress option."
+      ],
+      [
+        "Secret refresh",
+        "Environment references are resolved at task start. Rotation does not update a running process environment; redeploy tasks or implement supported application retrieval/caching. Do not expose secrets in image layers, logs or broad diagnostic access."
+      ],
+      [
+        "Health and replacement",
+        "Configure the application port, health-check path, security-group source and target type. Rolling updates need sufficient healthy capacity and deployment settings. Several tasks on one EC2 host share its failure boundary."
+      ],
+      [
+        "Task versus host scaling",
+        "Application Auto Scaling changes desired service tasks with target tracking, step or scheduled policies. EC2 capacity-provider/ASG scaling supplies eligible slots. CPU, memory, ENIs, subnet IPs, quotas and placement constraints can each block placement."
+      ],
+      [
+        "Spot strategy",
+        "Only one capacity provider in a strategy can have a base. Base is fulfilled first; weights distribute subsequent placements. FARGATE_SPOT can be interrupted or unavailable; it does not automatically fall back to FARGATE. Plan graceful stop, replicas and checkpointing."
+      ],
+      [
+        "Managed Instances",
+        "Current ECS Managed Instances adds a managed compute option with its own supported task/network settings. Confirm current migration and capacity-provider compatibility instead of generalizing old EC2/Fargate-only statements."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/security-ecs-iam-role-overview.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-task-networking.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/capacity-launch-type-comparison.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_definition_parameters.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking-awsvpc.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere-troubleshooting.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-vpc-lattice.html"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Image registry, scanning and regional distribution",
+    "rows": [
+      [
+        "Image identity",
+        "A tag is a reference; the digest identifies content. Use reproducible build inputs and record the digest deployed. Appropriate tag-immutability settings reduce accidental release changes."
+      ],
+      [
+        "Repository access",
+        "Authentication is separate from permission to pull/push. Cross-account pulls need applicable identity and repository policy authorization; registry token acquisition alone is insufficient. Image network reachability remains required."
+      ],
+      [
+        "Lifecycle preview",
+        "Preview retention rules, preserve deployed and rollback images, and account for manifest lists/reference artifacts. An image still running from a local cache may later fail to redeploy if its registry content was removed."
+      ],
+      [
+        "Cross-account replication",
+        "Source registry rules specify destinations. Destination registry permissions grant ecr:ReplicateImage and, for automatic repository creation, ecr:CreateRepository. Without creation permission, precreate matching destination repositories."
+      ],
+      [
+        "Replication completeness",
+        "Automatic replication does not simply synchronize every historical image and deletion. Validate eligible push/restore triggers and use supported replication backfill deliberately. Destination settings, policies, lifecycle and deployment remain separate; verify destination digest and status."
+      ],
+      [
+        "Basic scanning",
+        "Current ECR Basic Scanning uses AWS-native OS vulnerability detection, with supported manual/on-push operation. Retrieve current findings through supported APIs; old DescribeImages summary/status fields are not the current findings interface."
+      ],
+      [
+        "Enhanced scanning",
+        "Inspector covers supported OS and programming-language packages, configured repository filters and rescan rules. Current eligibility/history and rescan-duration settings matter; enabling scanning does not guarantee every old image was assessed."
+      ],
+      [
+        "Events and remediation",
+        "Basic and enhanced scan events have different producers/details. Process supported EventBridge events, prioritize exploitable findings, rebuild and scan a patched image, then deploy the new digest. Scanning itself does not patch or universally block deployment."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/replication.html",
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning-basic.html",
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning-enhanced.html",
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Kubernetes compute, storage and tenant boundaries",
+    "rows": [
+      [
+        "Control plane and Region",
+        "EKS manages a regional Kubernetes control plane. Deploy separate clusters for regional recovery; restore workload definitions, image availability, secrets, state and routing. Kubernetes API portability does not remove cloud-specific integrations. The EKS management API PrivateLink endpoint does not carry Kubernetes API traffic; configure the separate cluster API endpoint and private access path."
+      ],
+      [
+        "Compute ownership",
+        "Managed node groups automate supported EC2/ASG lifecycle operations; self-managed nodes require more bootstrap and patching ownership, including compatible optimized AMIs. EKS Auto Mode manages additional supported compute/platform functions. Verify workload and platform support."
+      ],
+      [
+        "Fargate restrictions",
+        "EKS Fargate has no Fargate Spot and does not support arbitrary DaemonSets, privileged patterns or EBS-backed Pod volumes. Select compatible storage and identity rather than assuming ECS Fargate feature parity."
+      ],
+      [
+        "Cluster and workload authorization",
+        "EKS access entries/configuration and Kubernetes RBAC authorize cluster actions. IRSA or supported EKS Pod Identity authorizes workload AWS API calls. IRSA requires the cluster IAM OIDC provider and a trust policy scoped to the expected service-account subject and STS audience. Pod Identity uses its supported association and agent path and is not supported on Fargate; restrict IMDS and avoid broad node-role inheritance."
+      ],
+      [
+        "PVC/PV and provisioning",
+        "StorageClass describes dynamic-provisioning parameters through a compatible provisioner; statically provisioned volumes are also valid. Match access mode, topology, reclaim policy, driver identity, filesystem/network permissions and backup/restore."
+      ],
+      [
+        "EBS and EFS",
+        "EBS data volumes are AZ-scoped; compatible scheduling must follow volume topology. EFS supports shared access. EKS Fargate supports eligible EFS static provisioning and does not support dynamic persistent-volume provisioning for Fargate workloads."
+      ],
+      [
+        "FSx drivers",
+        "FSx for Lustre uses supported CSI components and compatible nodes; ONTAP integrations such as Trident have different protocols and provisioning contracts. FSx for Lustre CSI is not supported on Fargate. The current ONTAP CSI integration is not compatible with EKS Hybrid Nodes; validate the selected driver and compute. This list does not promise universal backend support."
+      ],
+      [
+        "Soft tenancy",
+        "Namespaces, scoped RBAC, quotas, admission restrictions and workload identities support pooled isolation. A namespace by itself is not a security boundary; separate cluster/account choices can reduce trust and blast-radius exposure."
+      ],
+      [
+        "Network enforcement",
+        "Start with default-deny intent and explicit required DNS/dependency paths, using a supported enforcing network-policy implementation. Shared nodes share kernel risks; combine traffic controls with data authorization, metadata restrictions and resource limits."
+      ],
+      [
+        "Tenant context",
+        "Derive tenant identity from authenticated trusted context and enforce it in every data access path. Silo dedicates resources, pool shares them with isolation controls, and bridge combines models. Test cross-tenant reads/writes, not only network reachability."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/eks/latest/userguide/fsx-csi-create.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/fsx-ontap.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/automode.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/vpc-interface-endpoints.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/associate-service-account-role.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html",
+      "https://docs.aws.amazon.com/eks/latest/best-practices/tenant-isolation.html",
+      "https://anywhere.eks.amazonaws.com/docs/overview/faq/"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Service discovery, mesh and cross-account connectivity",
+    "rows": [
+      [
+        "Cloud Map data path",
+        "Register endpoint identity/attributes/health and use eligible API or DNS discovery. The caller connects directly to the discovered backend; Cloud Map is not an inline load balancer or a network tunnel."
+      ],
+      [
+        "Health and caching",
+        "DiscoverInstances supports HEALTHY, UNHEALTHY, ALL and HEALTHY_OR_ELSE_ALL filtering. Without configured health checks, filtering may not exclude instances. DNS routing/fail-open behavior and TTL/client caches differ; do not assume instant removal or an authorization boundary."
+      ],
+      [
+        "Service Connect scope",
+        "Each service joins one namespace; compatible participating services can span ECS clusters in the same Region and supported shared namespaces/accounts. They still need routes and security-group reachability. Outside clients need another discovery/interconnection method."
+      ],
+      [
+        "Service Connect TLS",
+        "Supported TLS configuration uses AWS Private CA and an ECS infrastructure role, with managed certificate secrets/rotation. Configure required permissions and protect those secrets. Encryption/rotation behavior does not automatically supply all tenant authorization or legacy mesh features."
+      ],
+      [
+        "App Mesh disposition",
+        "Support ended 30 September 2026 and resources are no longer available as a current choice. Preserve mesh concepts and evaluate supported Service Connect, Lattice or Kubernetes options against explicit telemetry, TLS, retries and traffic-control requirements."
+      ],
+      [
+        "Lattice controls",
+        "Service networks, VPC associations, listeners, target groups and supported sharing provide connectivity. IAM-auth policies and caller IAM authorization are distinct controls; signed requests are required when using IAM authentication. Verify target health, security paths and logs."
+      ],
+      [
+        "Isolation validation",
+        "Use an allow/deny matrix across application authorization, IAM and network policies. A timeout may indicate DNS or routing failure rather than an enforced tenant boundary. Preserve policy versions and negative-test evidence."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html",
+      "https://docs.aws.amazon.com/cloud-map/latest/dg/services-route53.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-tls.html",
+      "https://docs.aws.amazon.com/app-mesh/latest/userguide/getting-started-ecs.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-vpc-lattice.html",
+      "https://docs.aws.amazon.com/vpc-lattice/latest/ug/auth-policies.html"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "App Runner and hybrid operating-model exceptions",
+    "rows": [
+      [
+        "Current eligibility",
+        "App Runner closed to new customers on 31 March 2026. Existing eligible customers can continue creating/using services, with continued security/availability investment but no planned new features. Retain code/image, deployment, health, scaling, HTTPS and encryption concepts as historical/current-existing-customer knowledge."
+      ],
+      [
+        "Migration candidate",
+        "AWS recommends evaluating ECS Express Mode, which creates a Fargate service, ALB, scaling and networking in the account using an image and required IAM roles. It has no separate Express Mode charge; underlying resources remain billable. Validate ownership, private dependencies and deployment parity."
+      ],
+      [
+        "Ingress versus egress",
+        "An App Runner VPC connector controls application outbound private-network traffic. It does not make incoming traffic private. Private ingress uses supported VPC interface endpoint and ingress-connection configuration; VPC egress may require NAT or endpoints for public dependencies."
+      ],
+      [
+        "Regional example correction",
+        "Use independent supported regional services and validated custom-domain, certificate and routing configurations. A hostname is not a literal A-record IP value. Image replication, global-table data replication and traffic failover have separate configuration and verification."
+      ],
+      [
+        "ECS Anywhere",
+        "Register supported external hosts with ECS/SSM agents, IAM and EXTERNAL launch type. Management depends on regional connectivity, while already-running tasks may continue during disconnection. External networking supports bridge/host/none, not awsvpc; service load balancing/discovery are not supported."
+      ],
+      [
+        "Hybrid host support",
+        "Current ECS Anywhere operating-system support changed in August 2026. Validate the current supported list rather than using an old host image. Customer-owned infrastructure, patching, capacity, local access and recovery remain operational responsibilities."
+      ],
+      [
+        "EKS Anywhere correction",
+        "A customer-operated local Kubernetes control plane can run connected, disconnected or air-gapped using prepared dependencies/mirrors. Optional EKS Connector provides console visibility; it does not make the local control plane a managed regional EKS cluster. Full disconnection does not require abandoning EKS Anywhere for bare EKS Distro."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/apprunner/latest/dg/apprunner-availability-change.html",
+      "https://docs.aws.amazon.com/apprunner/latest/dg/network-vpc.html",
+      "https://docs.aws.amazon.com/apprunner/latest/dg/network-pl.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere-troubleshooting.html",
+      "https://anywhere.eks.amazonaws.com/docs/overview/faq/"
+    ]
   }
 ]
