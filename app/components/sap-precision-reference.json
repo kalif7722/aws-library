@@ -666,6 +666,14 @@
       [
         "Extreme-rate bottlenecks",
         "Measure client, DNS, edge, API throttling, Lambda concurrency, network, database partitions, cache misses and cost as one path. The PDF historic node capacities, API/Lambda/edge defaults and unbounded queue claims are not current universal guarantees. S3 baseline is 5,500 GET/HEAD requests per second per partitioned prefix, not the PDF 5,550 typo; KMS can impose another quota. Detailed quotas belong to Modules 07/09 and later Modules 13–16."
+      ],
+      [
+        "Valkey optional durability",
+        "Eligible node-based ElastiCache for Valkey supports optional Multi-AZ transactional-log durability. Synchronous mode persists before acknowledging and adds write latency; asynchronous mode acknowledges first and can lose up to 10 seconds of uncommitted writes during failure. Durability is configuration-specific and is not generic Redis AOF. Compare this selected contract with MemoryDB rather than assuming all ElastiCache data is disposable."
+      ],
+      [
+        "Serverless public endpoint exception",
+        "Eligible ElastiCache Serverless for Valkey 9.0+ supports a public connection option requiring IAM authentication and TLS 1.3. VPC/private designs remain separate choices; validate engine, version, connection type and authorization rather than describing every ElastiCache deployment as VPC-only."
       ]
     ],
     "sources": [
@@ -673,7 +681,9 @@
       "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.consistency.html",
       "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/dax-deploy-cluster.html",
       "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/backups-automatic.html",
-      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/redis-ug.pdf"
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/redis-ug.pdf",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/durability.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/serverless-public-endpoints-chapter.html"
     ]
   },
   {
@@ -768,6 +778,10 @@
       [
         "Managed Instances",
         "Current ECS Managed Instances adds a managed compute option with its own supported task/network settings. Confirm current migration and capacity-provider compatibility instead of generalizing old EC2/Fargate-only statements."
+      ],
+      [
+        "Predictive service scaling",
+        "Current ECS predictive scaling adds forecast-based service task scale-out alongside target tracking, step and scheduled scaling. It requires at least 24 hours of historical load data; evaluate forecast-only mode before enabling forecast-and-scale. It does not scale in tasks by itself: combine appropriate dynamic scaling. A forecast can analyze up to 14 days, project hourly needs for 48 hours and refresh every six hours. Capacity limits and optional automatic maximum increases need cost/guardrail review; host capacity remains a separate loop."
       ]
     ],
     "sources": [
@@ -782,7 +796,8 @@
       "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html",
       "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere.html",
       "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere-troubleshooting.html",
-      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-vpc-lattice.html"
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-vpc-lattice.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/predictive-auto-scaling.html"
     ]
   },
   {

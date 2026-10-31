@@ -1,0 +1,612 @@
+[
+  {
+    "moduleId": "11",
+    "title": "Relational, key-value and cache services",
+    "rows": [
+      {
+        "service": "Amazon RDS",
+        "icon": "Amazon-RDS",
+        "choose": "Relational SQL, joins and transactions with a supported managed engine. Choose engine, edition and workload compatibility first.",
+        "operations": "AWS manages underlying infrastructure and supported backups/patching; you own schema, queries, grants, maintenance choices and capacity. Classic Multi-AZ has a non-readable synchronous standby; read replicas are asynchronous.",
+        "watch": "Multi-AZ DB clusters instead have a writer plus two readable replicas across three AZs. Backup retention is up to 35 days; restore creates a new endpoint. TLS, KMS and database authorization solve separate layers."
+      },
+      {
+        "service": "Amazon Aurora",
+        "icon": "Amazon-Aurora",
+        "choose": "MySQL/PostgreSQL-compatible relational workloads needing distributed storage, readers, Serverless v2 or eligible global deployments.",
+        "operations": "Storage copies span three AZs independently of compute. Writer, reader, instance and custom endpoints select different destinations; up to 15 readers. Provisioned instances or supported ACU ranges determine compute.",
+        "watch": "Reader endpoint balances new connections, not queries; with no readers it can reach the writer. Global replication is asynchronous; write forwarding still commits at the primary. Version/Region limits and pause eligibility matter."
+      },
+      {
+        "service": "Amazon RDS Proxy · RDS feature",
+        "icon": "Amazon-RDS",
+        "choose": "Pool and reuse eligible RDS/Aurora connections for bursty applications and controlled failover.",
+        "operations": "Private endpoint; validate supported engine/version, VPC routing, security groups and configured authentication. Measure database connections, client connections and pinned sessions.",
+        "watch": "Session state can pin connections and reduce multiplexing. Extra read-only proxy endpoints target eligible Aurora readers; a proxy neither scales SQL capacity indefinitely nor serves arbitrary RDS replicas."
+      },
+      {
+        "service": "Amazon DynamoDB",
+        "icon": "Amazon-DynamoDB",
+        "choose": "Managed key-value/document access with known partition/sort-key patterns, conditional writes and supported transactions.",
+        "operations": "Choose on-demand or provisioned capacity. Query uses partition-key equality; GSIs enable alternate keys. Regional table/LSI reads can be strong; GSIs remain eventual. PITR restores to a new table.",
+        "watch": "400-KB items; 100 actions/4 MB per transaction. Filters run after reads. TTL deletion is asynchronous. MREC and MRSC global tables have different consistency, topology and feature support; hot keys can still throttle."
+      },
+      {
+        "service": "DynamoDB Accelerator (DAX)",
+        "icon": "dax",
+        "choose": "Accelerate supported eventually consistent DynamoDB reads with a DynamoDB-aware cache client.",
+        "operations": "Regional VPC cluster; primary plus replicas, up to 11 nodes. Plan at least three nodes across AZs for production availability. Separate item/query caches have configurable TTL, default five minutes.",
+        "watch": "Strong/transactional reads pass through without populating cache. Writes through DAX do not invalidate Query/Scan results. Direct or remote-Region writes can leave cached data stale; it is not a generic SQL/session cache."
+      },
+      {
+        "service": "Amazon ElastiCache · Valkey / Redis OSS",
+        "icon": "Amazon-ElastiCache",
+        "choose": "Application-managed caching, sessions, counters and supported data structures; choose node-based or Serverless explicitly.",
+        "operations": "Application owns keys, serialization, cache-aside/write strategy, TTL, invalidation and fallback. Replication/failover protect availability; sharding adds capacity. Benchmark hits, misses, evictions and source load.",
+        "watch": "Check the selected engine/deployment: eligible node-based Valkey supports optional synchronous/asynchronous Multi-AZ-log durability; it is not generic Redis AOF. Eligible Valkey 9+ Serverless public endpoints require IAM and TLS 1.3. Replica freshness and application expiry still need explicit handling."
+      },
+      {
+        "service": "Amazon ElastiCache · Memcached",
+        "icon": "Amazon-ElastiCache",
+        "choose": "Simple distributed key/value caching where the application can refill lost data.",
+        "operations": "Distribute keys and manage miss/stampede behavior. Multithreading and horizontal distribution differ from Valkey/Redis replication and failover.",
+        "watch": "Node-based Memcached has no snapshot backup; Serverless Memcached supports snapshots. Do not infer durable primary-database semantics or another engine’s feature set."
+      },
+      {
+        "service": "Amazon MemoryDB · adjacent choice",
+        "icon": "Amazon-MemoryDB",
+        "choose": "A compatible in-memory primary database when durability is required rather than a disposable cache alone.",
+        "operations": "Multi-AZ transactional log supports durability and recovery. Select supported engine/version and validate application/client compatibility, network and access controls.",
+        "watch": "Compare its exact durability, write latency, API, recovery and cost contract with the selected ElastiCache configuration, including eligible durable node-based Valkey. Do not infer identical features from a compatible client API."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_Limits.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Constraints.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html",
+      "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/durability.html",
+      "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/serverless-public-endpoints-chapter.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "Search, document, graph and time-series services",
+    "rows": [
+      {
+        "service": "Amazon OpenSearch Service",
+        "icon": "Amazon-OpenSearch-Service",
+        "choose": "Full-text search, log exploration and derived analytical indexes. Compare managed domains with Serverless collections.",
+        "operations": "Plan mappings, shards/capacity, ingestion, retention and access. Serverless network, encryption and data-access policies are separate from caller IAM permissions.",
+        "watch": "An asynchronous search view can lag the source. Backfill, duplicates, deletions, rejected records and reconciliation need explicit handling. Dashboards is the presentation layer, not the ingest engine."
+      },
+      {
+        "service": "Amazon DocumentDB",
+        "icon": "Amazon-DocumentDB",
+        "choose": "Managed document workloads that pass validation against the supported MongoDB-compatible API.",
+        "operations": "Validate drivers, operators, indexes, transaction behavior and connection handling. Instance-based clusters support readers; Standard and I/O-Optimized change the I/O cost model.",
+        "watch": "Compatibility is not engine identity. Up to 15 readers; storage maximum depends on engine/configuration (eligible engine 8+ 256 TiB, earlier 128 TiB). Include readers, backup, I/O and transfer in cost estimates."
+      },
+      {
+        "service": "Amazon Neptune · adjacent choice",
+        "icon": "Amazon-Neptune",
+        "choose": "Highly connected graph traversals, knowledge graphs and relationship-heavy fraud/recommendation queries.",
+        "operations": "Choose property-graph Gremlin/openCypher or RDF/SPARQL semantics. Plan private connectivity, IAM/database access, TLS/KMS, query design and recovery.",
+        "watch": "Graph access is a distinct data model; it does not replace a document API or relational joins without redesign. Validate supported query language and chosen Neptune product/deployment."
+      },
+      {
+        "service": "Amazon Timestream for LiveAnalytics",
+        "icon": "Amazon-Timestream",
+        "choose": "Existing eligible customers: SQL time-series analysis with memory/magnetic retention and time-oriented functions.",
+        "operations": "Model time, dimensions and measures; validate late arrivals, retention, scheduled queries, multi-measure records and supported ingestion integrations.",
+        "watch": "Closed to new customers on 20 June 2025. Existing eligible payer accounts continue. Historical performance/price ratios are not guarantees; preserve this availability qualification."
+      },
+      {
+        "service": "Amazon Timestream for InfluxDB",
+        "icon": "Amazon-Timestream",
+        "choose": "Evaluate a current time-series alternative with the selected InfluxDB product/version and workload.",
+        "operations": "Validate query APIs/languages, endpoint/client compatibility, supported deployment size, retention, ingestion, backup and monitoring for the chosen offering.",
+        "watch": "It is not a drop-in LiveAnalytics API or memory/magnetic-tier implementation. InfluxDB 2 and 3 offerings differ; verify actual integrations before migration."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-security.html",
+      "https://docs.aws.amazon.com/documentdb/latest/devguide/what-is.html",
+      "https://docs.aws.amazon.com/neptune/latest/userguide/intro.html",
+      "https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html",
+      "https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influxdb.html"
+    ]
+  },
+  {
+    "moduleId": "11",
+    "title": "Supporting services in the database architecture",
+    "rows": [
+      {
+        "service": "AWS Database Migration Service",
+        "icon": "AWS-Database-Migration-Service",
+        "choose": "Supported full-load and change-data-capture migration paths.",
+        "operations": "Check source/target compatibility, source logging/permissions, replication capacity, lag and reconciliation. Fence writes and validate controlled cutover.",
+        "watch": "CDC is not zero-loss magic or a complete backup strategy. Schema/extension conversion and application compatibility need separate work."
+      },
+      {
+        "service": "Amazon S3",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Objects, supported import/export, snapshots and metadata-index patterns.",
+        "operations": "Use bucket policies, IAM, encryption/KMS and supported engine integrations. DynamoDB can hold queryable object metadata; S3 holds the object.",
+        "watch": "S3 is not a mounted database filesystem. Object events may repeat or arrive out of order; maintain and reconcile metadata aggregates."
+      },
+      {
+        "service": "AWS Lambda",
+        "icon": "AWS-Lambda",
+        "choose": "Event processing, supported stream consumers and bursty database clients.",
+        "operations": "Choose workload role, private network path, concurrency and idempotent retry/checkpoint behavior. Use a compatible proxy for connection pressure when appropriate.",
+        "watch": "A VPC attachment alone does not grant database access. Repeated records and connection storms require deliberate handling."
+      },
+      {
+        "service": "Amazon Kinesis Data Streams",
+        "icon": "Amazon-Kinesis-Data-Streams",
+        "choose": "Replayable streaming, including supported DynamoDB change capture.",
+        "operations": "Choose capacity and retention (supported 24 hours to 365 days); checkpoint and monitor consumer lag.",
+        "watch": "DynamoDB capture can duplicate/reorder changes. Native DynamoDB Streams instead retains 24 hours with per-item ordering; consumers can still repeat processing."
+      },
+      {
+        "service": "Amazon Data Firehose",
+        "icon": "Amazon-Data-Firehose",
+        "choose": "Buffered delivery into supported storage/search destinations.",
+        "operations": "Configure IAM, transformation, buffering, destination security, failed-record backup and delivery monitoring.",
+        "watch": "Buffering adds latency. It is a delivery service, not identical to a replayable Kinesis stream or an immediate per-record query path."
+      },
+      {
+        "service": "Amazon CloudWatch · Database Insights",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Metrics, alarms, logs and supported database-load diagnosis.",
+        "operations": "Correlate load/waits/SQL with CPU, memory, swap and Enhanced Monitoring evidence; validate log retention and delivery routes.",
+        "watch": "CloudTrail API evidence does not replace SQL audit logs. Subscription/Lambda and Firehose delivery have different latency/retry contracts."
+      },
+      {
+        "service": "AWS CloudTrail",
+        "icon": "AWS-CloudTrail",
+        "choose": "Audit supported database and infrastructure API activity.",
+        "operations": "Configure trails/event selection, retention, access and protected destinations; correlate identity and time with operational evidence.",
+        "watch": "Do not assume every SQL statement is a control-plane event. Use the engine’s supported audit/query logs for that requirement."
+      },
+      {
+        "service": "Amazon SNS",
+        "icon": "Amazon-Simple-Notification-Service",
+        "choose": "Deliver supported RDS event notifications to subscribed consumers.",
+        "operations": "Configure event categories, subscription confirmation, target policy and monitoring of downstream delivery.",
+        "watch": "Notifications complement alarms and query logs; they do not diagnose every slow query or provide a full data audit."
+      },
+      {
+        "service": "AWS KMS",
+        "icon": "AWS-Key-Management-Service",
+        "choose": "Protect eligible database, snapshot and backup data at rest with encryption keys.",
+        "operations": "Plan key policy, grants, cross-account/cross-Region recovery and key retention. Test restore permissions before an incident.",
+        "watch": "Encryption at rest does not supply TLS or database grants. Disabling/deleting a required key can block recovery."
+      },
+      {
+        "service": "AWS Secrets Manager",
+        "icon": "AWS-Secrets-Manager",
+        "choose": "Store and rotate supported credentials used by database clients, proxies and Data API.",
+        "operations": "Scope retrieval/rotation permissions and KMS access; refresh application connections and validate rotation workflows.",
+        "watch": "A stored secret is not automatic database authorization. Rotation needs compatible database/app behavior and error handling."
+      },
+      {
+        "service": "AWS IAM",
+        "icon": "AWS-Identity-and-Access-Management",
+        "choose": "Authorize AWS APIs and eligible IAM database-login requests.",
+        "operations": "Use least-privilege roles; supported IAM DB auth requires rds-db:connect plus database user setup and TLS. Login tokens last 15 minutes.",
+        "watch": "Token expiry does not terminate an already authenticated session. Control-plane IAM and SQL/database grants remain distinct."
+      },
+      {
+        "service": "Amazon Route 53",
+        "icon": "Amazon-Route-53",
+        "choose": "DNS-based application endpoint cutover and validated regional routing.",
+        "operations": "Account for health signals, DNS TTL, client caches and reconnect behavior; test promotion and endpoint changes together.",
+        "watch": "DNS does not promote a replica or automatically redirect DynamoDB SDK operations. Fence the former writer before controlled recovery."
+      },
+      {
+        "service": "Amazon API Gateway",
+        "icon": "Amazon-API-Gateway",
+        "choose": "Managed API front door for data-backed applications.",
+        "operations": "Validate authentication, throttling, integration timeout, payload and downstream database/concurrency limits.",
+        "watch": "Historic default quotas are not universal throughput guarantees. Cache misses and backend hot partitions still constrain the full request path."
+      },
+      {
+        "service": "Amazon CloudFront",
+        "icon": "Amazon-CloudFront",
+        "choose": "Edge distribution and eligible response caching ahead of application origins.",
+        "operations": "Select cache keys/TTL, authorization handling, origin protection and observability for the specific workload.",
+        "watch": "Do not cache private tenant data under a shared key. Edge capacity does not eliminate API, compute or database bottlenecks."
+      },
+      {
+        "service": "Amazon SQS",
+        "icon": "Amazon-Simple-Queue-Service",
+        "choose": "Buffer asynchronous work when latency and processing semantics allow decoupling.",
+        "operations": "Configure visibility timeout, retries, dead-letter handling, idempotency and consumer capacity.",
+        "watch": "A queue is not unbounded capacity or a synchronous database accelerator. Backlogs and downstream write limits still require monitoring."
+      },
+      {
+        "service": "AWS IoT Core",
+        "icon": "AWS-IoT-Core",
+        "choose": "Authenticate devices and route supported telemetry toward time-series processing.",
+        "operations": "Validate device identity, policies, rule actions, payload formats, event time and downstream retry/error handling.",
+        "watch": "A producer/rule integration must match the selected time-series service; connectors are not interchangeable."
+      },
+      {
+        "service": "Amazon Managed Service for Apache Flink",
+        "icon": "Amazon-Managed-Service-for-Apache-Flink",
+        "choose": "Stateful stream transforms, windows and supported event-time processing.",
+        "operations": "Plan checkpoints, state recovery, capacity, source/sink permissions and late-event behavior.",
+        "watch": "A processing engine is not the durable query store. Validate sink compatibility and exactly-once boundaries end to end."
+      },
+      {
+        "service": "Amazon Quick · formerly QuickSight",
+        "icon": "Amazon-Quick",
+        "choose": "Supported BI visualization over prepared analytical data.",
+        "operations": "Validate connector, dataset refresh/direct-query behavior, row-level access and dashboard permissions.",
+        "watch": "A dashboard does not define ingestion correctness or source freshness; enforce tenant visibility and understand refresh lag."
+      },
+      {
+        "service": "Amazon SageMaker AI",
+        "icon": "Amazon-SageMaker-AI",
+        "choose": "Supported machine-learning consumption/analysis of prepared data.",
+        "operations": "Validate data extraction, format, roles, encryption and pipeline reproducibility.",
+        "watch": "A historical integration illustration is not proof every time-series product exposes the same connector."
+      },
+      {
+        "service": "Amazon VPC",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Private database placement and validated application/database reachability.",
+        "operations": "Check subnets, routes, DNS, security groups, port and client connection paths; separate private AWS API access from database protocol access.",
+        "watch": "Private placement does not grant SQL permissions or guarantee egress. A database endpoint is not the same as an AWS control-plane API endpoint."
+      },
+      {
+        "service": "Amazon EC2 · self-managed databases",
+        "icon": "Amazon-EC2",
+        "choose": "OS/database control or a supported migration destination whose requirements exceed a managed service contract.",
+        "operations": "You own host/database patching, storage, backup, replication, failover, licensing and monitoring. Validate consistent seed and catch-up before cutover.",
+        "watch": "An RDS backup/export path is not universally reversible. Supported Oracle RMAN exports can target self-managed recovery; arbitrary RMAN restores into managed RDS are not supported."
+      },
+      {
+        "service": "Amazon MSK · integration option",
+        "icon": "Amazon-Managed-Streaming-for-Apache-Kafka",
+        "choose": "Supported Kafka-based telemetry or ingestion pipelines.",
+        "operations": "Plan broker/serverless operating model, client authentication, topics, retention, consumer lag and compatible downstream connectors.",
+        "watch": "A supported Kafka source is not automatic compatibility with every Timestream offering. Validate delivery semantics, event time, duplicates and reconciliation."
+      },
+      {
+        "service": "Amazon Managed Grafana · integration option",
+        "icon": "Amazon-Managed-Grafana",
+        "choose": "Managed dashboards over compatible data sources.",
+        "operations": "Configure workspace identity, data-source permissions, supported query integration and user access.",
+        "watch": "Dashboard freshness follows source ingestion and query behavior. Grafana does not create source-data durability or tenant isolation automatically."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/kds.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html",
+      "https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DatabaseInsights.html"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Container platforms, registries and compute",
+    "rows": [
+      {
+        "service": "Amazon ECS",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "AWS-native orchestration with task definitions, services and finite tasks.",
+        "operations": "Choose compute independently: EC2, supported managed capacity or Fargate. A service maintains desired tasks; task and execution roles separate runtime AWS calls from startup actions.",
+        "watch": "Service scaling changes tasks, not automatically an unmanaged EC2 fleet. awsvpc needs IP target groups; bridge can use instance/dynamic-port targets. Secrets injected at startup need task replacement after rotation."
+      },
+      {
+        "service": "Amazon EKS",
+        "icon": "Amazon-Elastic-Kubernetes-Service",
+        "choose": "Managed regional Kubernetes control plane with Kubernetes APIs/ecosystem.",
+        "operations": "Choose managed/self-managed EC2, supported Auto Mode or Fargate. Kubernetes RBAC/access entries authorize cluster actions; IRSA/Pod Identity authorize workload AWS APIs.",
+        "watch": "Worker, driver, network and identity compatibility remain your design. The EKS management PrivateLink endpoint is not the Kubernetes API private endpoint. Namespace alone is not a hard tenant boundary."
+      },
+      {
+        "service": "AWS Fargate · ECS",
+        "icon": "AWS-Fargate",
+        "choose": "Run compatible ECS tasks without operating worker hosts.",
+        "operations": "awsvpc is required; select supported CPU/memory/OS/storage and private startup reachability. Execution role covers supported image pull/log/secret actions.",
+        "watch": "Task IAM role is separate. Private tasks may need ECR API + registry, S3 layers, Logs and Secrets paths. Fargate Spot interruptions need tolerant tasks; no automatic On-Demand fallback guarantee."
+      },
+      {
+        "service": "AWS Fargate · EKS",
+        "icon": "AWS-Fargate",
+        "choose": "Run supported Pods selected by Fargate profiles without managing worker nodes.",
+        "operations": "Match namespace/labels, scheduling, supported resource shape and workload identity. Eligible EFS static provisioning can supply persistent shared storage.",
+        "watch": "No Fargate Spot, arbitrary DaemonSets, privileged workloads, EBS Pod volumes or Pod Identity agent path. Do not assume feature parity with ECS Fargate or EC2 nodes."
+      },
+      {
+        "service": "Amazon EC2 · container hosts",
+        "icon": "Amazon-EC2",
+        "choose": "Host control, instance selection and workloads that need compatible host-level capabilities.",
+        "operations": "Plan AZ spread, AMI/OS patching, agents, bootstrap, IAM, capacity and draining. ECS capacity providers or compatible EKS node autoscaling coordinate host capacity.",
+        "watch": "Host scaling and task/Pod scaling are separate loops. Running two tasks on one host is not independent host availability; Spot and drain behavior need testing."
+      },
+      {
+        "service": "Amazon ECR",
+        "icon": "Amazon-Elastic-Container-Registry",
+        "choose": "Store OCI/container images and distribute eligible artifacts by digest.",
+        "operations": "Combine caller/repository policy and network access. Use digest-pinned release records, scan configuration, lifecycle previews and deliberate cross-Region/account replication.",
+        "watch": "Scanning does not patch. Replication does not deploy applications or mirror deletions/settings automatically; historical content needs deliberate backfill. Retention must preserve rollback images."
+      },
+      {
+        "service": "Amazon Inspector",
+        "icon": "Amazon-Inspector",
+        "choose": "Enhanced ECR vulnerability scanning for supported OS and language packages.",
+        "operations": "Configure eligible repositories and scan frequency; route findings to triage, rebuild, rescan and deployment decisions.",
+        "watch": "Basic and Enhanced scanning have different coverage/reporting contracts. A finding-free image is not a guarantee of secure configuration or runtime behavior."
+      },
+      {
+        "service": "ECS Express Mode · ECS feature",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Evaluate simplified image-to-application provisioning in your AWS account, including App Runner migration.",
+        "operations": "Provide image and required IAM roles; ECS provisions supported Fargate service, ALB, scaling and networking. Underlying resources remain visible and billable.",
+        "watch": "No separate Express Mode fee does not mean free infrastructure. Validate private dependencies, networking, ownership and rollout/rollback parity."
+      },
+      {
+        "service": "AWS App Runner",
+        "icon": "AWS-App-Runner",
+        "choose": "Existing eligible customers: managed code/image web-service deployment, HTTPS, health and scaling.",
+        "operations": "Outbound private access uses a VPC connector. Private incoming access uses separate endpoint/ingress-connection configuration; public ingress is an alternative.",
+        "watch": "Closed to new customers 31 March 2026; no planned new features. AWS recommends evaluating ECS Express Mode. VPC egress alone does not make ingress private."
+      },
+      {
+        "service": "Amazon ECS Anywhere",
+        "icon": "Amazon-ECS-Anywhere",
+        "choose": "Regional ECS management with tasks on supported customer-operated external hosts.",
+        "operations": "Install/register ECS and Systems Manager agents, scope IAM and use EXTERNAL launch type. You own hardware, host patching, capacity, local security and recovery.",
+        "watch": "Management requires regional connectivity; already-running tasks can continue during a disconnect. bridge/host/none only; no awsvpc or supported ECS service load balancing/discovery on external instances."
+      },
+      {
+        "service": "Amazon EKS Anywhere",
+        "icon": "Amazon-EKS-Anywhere",
+        "choose": "Customer-operated local Kubernetes control plane on supported infrastructure.",
+        "operations": "Prepare local registry/dependencies and lifecycle operations for connected, disconnected or air-gapped operation. Optional Connector provides console visibility.",
+        "watch": "It is not a managed regional EKS control plane. You retain upgrades, backups, security, capacity and recovery; disconnection does not require switching to bare EKS Distro."
+      },
+      {
+        "service": "Amazon EKS Distro",
+        "icon": "Amazon-EKS-Distro",
+        "choose": "Kubernetes distribution components when the customer needs to assemble and operate the platform.",
+        "operations": "Own control-plane installation, infrastructure, upgrades, compatibility, backup and recovery. Distinguish distribution packaging from the EKS Anywhere lifecycle tooling.",
+        "watch": "Not a hosted EKS service and not the sole way to operate disconnected. Assess operational capability before choosing this lower-level contract."
+      },
+      {
+        "service": "ECS Managed Instances · ECS compute option",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "EC2 hardware selection with supported infrastructure provisioning, scaling, patching and maintenance managed by ECS.",
+        "operations": "Use a compatible capacity provider, task definition, infrastructure role and instance profile. Validate Linux/architecture, resource requirements, networking and workload compatibility.",
+        "watch": "It is distinct from self-managed EC2 and Fargate. A capacity-provider strategy cannot mix Managed Instances, ASG and Fargate provider types; compute management does not remove application security/availability responsibilities."
+      },
+      {
+        "service": "EKS Auto Mode · EKS feature",
+        "icon": "Amazon-Elastic-Kubernetes-Service",
+        "choose": "Extend managed Kubernetes operations into supported compute, networking, load balancing and block-storage functions.",
+        "operations": "Use supported NodePools/NodeClasses and workload settings; AWS manages appliance-like nodes and platform components. Plan Pod/NodePool disruption budgets and compatible identity/storage.",
+        "watch": "It is not EKS Fargate. Nodes have no direct SSH/SSM access and have a maximum 21-day lifetime; blocking disruption settings can require intervention. Workload policies and data recovery remain your responsibility."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/capacity-launch-type-comparison.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ManagedInstances.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/automode.html",
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/replication.html",
+      "https://docs.aws.amazon.com/apprunner/latest/dg/apprunner-availability-change.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere.html",
+      "https://anywhere.eks.amazonaws.com/docs/overview/faq/"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Discovery, ingress and service connectivity",
+    "rows": [
+      {
+        "service": "AWS Cloud Map",
+        "icon": "AWS-Cloud-Map",
+        "choose": "Discover registered endpoints/attributes through supported DNS or API queries.",
+        "operations": "Maintain namespace, services, registrations and applicable health checks. Clients connect directly to returned backends; health filtering and TTL affect discovery.",
+        "watch": "Not an inline proxy, load balancer or tunnel. DNS fail-open/client caching and DiscoverInstances filters differ; registration alone does not authorize a tenant."
+      },
+      {
+        "service": "ECS Service Connect · ECS feature",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Managed task proxies and consistent ECS service-to-service names within supported namespaces.",
+        "operations": "Configure discovery aliases/ports, namespace membership and proxy resources. Routes/security groups must permit traffic. Supported TLS uses Private CA, infrastructure role and managed certificate secrets.",
+        "watch": "One namespace per service; compatible same-Region clusters/shared accounts require supported setup. It is not automatic cross-Region networking or every legacy mesh traffic-control feature."
+      },
+      {
+        "service": "Amazon VPC Lattice",
+        "icon": "Amazon-VPC-Lattice",
+        "choose": "Application-layer connectivity and explicit authorization across supported VPC/account service boundaries.",
+        "operations": "Configure service networks, associations/sharing, listeners, targets and health. IAM authentication combines auth policy, caller permission and signed requests.",
+        "watch": "Network association is not permission. Validate supported target/protocol behavior, security paths and access logs; connectivity does not replace application tenant authorization."
+      },
+      {
+        "service": "AWS App Mesh · historical",
+        "icon": "AWS-App-Mesh",
+        "choose": "Retain mesh concepts: proxy-based routing, telemetry, TLS, retries and traffic control.",
+        "operations": "Map each required capability to a supported Service Connect, Lattice or Kubernetes alternative and test migration behavior.",
+        "watch": "Support ended 30 September 2026; console/resources are no longer available. Do not select it for a new deployment or assume a replacement offers every feature."
+      },
+      {
+        "service": "Elastic Load Balancing · ALB",
+        "icon": "Elastic-Load-Balancing",
+        "choose": "HTTP/HTTPS ingress and health-based routing to compatible service targets.",
+        "operations": "Choose scheme, subnets, listeners, TLS/certificates, target type, security groups, health checks and deregistration behavior. awsvpc/Fargate task targets use IP.",
+        "watch": "An ALB does not grant workload IAM permissions. Match network mode and target registration; drain old targets and verify health before retiring tasks."
+      },
+      {
+        "service": "AWS PrivateLink",
+        "icon": "AWS-PrivateLink",
+        "choose": "Private connectivity to supported service APIs or endpoint services through interface endpoints.",
+        "operations": "Configure endpoint subnets, security groups, private DNS, endpoint policy and the destination’s IAM/resource policy.",
+        "watch": "Endpoint existence does not imply authorization or access to all APIs. EKS management endpoints do not carry Kubernetes API traffic; S3 gateway endpoints have a different routing model."
+      },
+      {
+        "service": "Amazon VPC",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Define network placement, routing and reachability for tasks, nodes, ingress and private dependencies.",
+        "operations": "Separate ingress from egress. Validate route tables, NAT/endpoints, DNS, security groups, subnet addresses and supported network-policy enforcement.",
+        "watch": "Private subnet placement is not complete isolation. Preserve DNS and required dependencies with deny policies; shared kernels and data access need additional controls."
+      },
+      {
+        "service": "Amazon Route 53",
+        "icon": "Amazon-Route-53",
+        "choose": "DNS names, supported routing/health policies and tested regional application cutover.",
+        "operations": "Plan independent regional images, application stacks and data recovery, then validate domains, records, certificates, health signals and client caches.",
+        "watch": "DNS routing does not replicate images/data or promote a database. A hostname is not a literal A-record IP value; use the record type/alias supported by the target."
+      },
+      {
+        "service": "AWS Certificate Manager",
+        "icon": "AWS-Certificate-Manager",
+        "choose": "Manage eligible public or imported TLS certificates for supported service integrations.",
+        "operations": "Validate domain ownership, certificate Region/attachment requirements, renewal and hostname coverage for the selected endpoint.",
+        "watch": "A certificate does not create private reachability or workload authorization. Regional custom-domain behavior must be tested per service."
+      },
+      {
+        "service": "AWS Private CA",
+        "icon": "AWS-Private-Certificate-Authority",
+        "choose": "Issue private certificates for supported service-to-service TLS, including Service Connect.",
+        "operations": "Scope issuance/CA access, infrastructure roles and required managed secret permissions; monitor certificate lifecycle and cost.",
+        "watch": "Private certificate issuance and trust do not by themselves enforce tenant data permissions; TLS support is integration-specific."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-tls.html",
+      "https://docs.aws.amazon.com/vpc-lattice/latest/ug/auth-policies.html",
+      "https://docs.aws.amazon.com/app-mesh/latest/userguide/meshes.html"
+    ]
+  },
+  {
+    "moduleId": "12",
+    "title": "Persistent storage and supporting controls",
+    "rows": [
+      {
+        "service": "Amazon EBS",
+        "icon": "Amazon-Elastic-Block-Store",
+        "choose": "AZ-scoped block volumes for supported EC2-backed Kubernetes workloads.",
+        "operations": "Use compatible CSI driver/identity, StorageClass or static PV, access mode and AZ-aware scheduling. Plan reclaim policy, snapshots and restore.",
+        "watch": "No EBS-backed Pod volumes on EKS Fargate. AZ scope and access mode matter; do not turn them into a universal one-Pod-per-volume claim."
+      },
+      {
+        "service": "Amazon EFS",
+        "icon": "Amazon-EFS",
+        "choose": "Shared filesystem access from compatible workloads.",
+        "operations": "Configure mount targets, NFS security paths, access points/permissions and supported CSI provisioning. Match backup and recovery requirements.",
+        "watch": "EKS Fargate supports eligible static provisioning; dynamic persistent-volume provisioning is not supported for Fargate workloads. Filesystem sharing still requires tenant authorization."
+      },
+      {
+        "service": "Amazon FSx for Lustre",
+        "icon": "Amazon-FSx-for-Lustre",
+        "choose": "Compatible high-performance shared filesystem workloads with supported EKS integration.",
+        "operations": "Install compatible CSI components and identity; validate node/kernel support, subnet/security paths, topology and filesystem lifecycle.",
+        "watch": "The Lustre CSI driver is not supported on Fargate. A generic StorageClass does not make every compute/backend combination compatible."
+      },
+      {
+        "service": "Amazon FSx for NetApp ONTAP",
+        "icon": "Amazon-FSx-for-NetApp-ONTAP",
+        "choose": "Supported ONTAP filesystem/protocol requirements and Kubernetes provisioning integrations.",
+        "operations": "Validate selected CSI/Trident integration, storage virtual machines, credentials, access modes, network and data lifecycle.",
+        "watch": "Different contract from Lustre. Current documented ONTAP CSI integration is not compatible with EKS Hybrid Nodes; validate driver and compute explicitly."
+      },
+      {
+        "service": "Amazon S3",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Object storage, including ECR image-layer download paths and supported application data.",
+        "operations": "For private ECR pulls, provide required S3 connectivity plus separate ECR API/registry paths. Scope bucket/endpoint/IAM policy and encryption access.",
+        "watch": "S3 gateway endpoint connectivity is not a substitute for ECR authentication or registry connectivity. Objects are not generic Pod POSIX volumes."
+      },
+      {
+        "service": "AWS IAM",
+        "icon": "AWS-Identity-and-Access-Management",
+        "choose": "Authorize workload, startup and infrastructure AWS API operations.",
+        "operations": "ECS task role, execution role and host instance profile are distinct. EKS IRSA uses scoped OIDC trust; supported Pod Identity uses association/agent.",
+        "watch": "Kubernetes RBAC authorizes cluster operations separately. Pod Identity is not supported on EKS Fargate; restrict metadata access and broad node-role inheritance."
+      },
+      {
+        "service": "AWS Secrets Manager",
+        "icon": "AWS-Secrets-Manager",
+        "choose": "Retrieve supported startup/runtime credentials and managed certificate secrets.",
+        "operations": "Scope secret/KMS access and network paths. ECS injection happens at task start; rotate and replace tasks or implement safe runtime refresh.",
+        "watch": "Rotating a secret does not rewrite a running container’s environment. Keep credentials out of images/logs and test refresh failures."
+      },
+      {
+        "service": "AWS KMS",
+        "icon": "AWS-Key-Management-Service",
+        "choose": "Protect eligible image repositories, secrets and persistent data at rest.",
+        "operations": "Validate key policy, service integration, grants and cross-account/Region key choices before pull, mount and restore workflows.",
+        "watch": "A decryption permission does not replace repository, secret or filesystem authorization. Key availability can affect startup and recovery."
+      },
+      {
+        "service": "Amazon CloudWatch",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Task/Pod/application logs, metrics, alarms and supported Container Insights.",
+        "operations": "Connect symptoms to scheduling, capacity, image pull, IAM, network, health checks and application readiness. Configure log drivers/agents, permissions, network path and retention.",
+        "watch": "Healthy infrastructure metrics alone do not prove tenant authorization or application correctness. Collect events, rollout state and negative-test evidence too."
+      },
+      {
+        "service": "AWS Systems Manager",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Supported external-host management and ECS Anywhere registration/control dependencies.",
+        "operations": "Install/maintain required agents and IAM, validate supported operating systems and service connectivity; retain local recovery access.",
+        "watch": "It does not transfer hardware/patching ownership to AWS. Running tasks and regional management availability have different disconnect behavior."
+      },
+      {
+        "service": "AWS Application Auto Scaling",
+        "icon": "AWS-Application-Auto-Scaling",
+        "choose": "Adjust supported ECS service desired task count using configured policies.",
+        "operations": "Target tracking, step, scheduled and predictive scaling serve different demand patterns. Set min/max, metrics and cooldowns; coordinate with host capacity. Predictive scaling uses historical cycles and should be evaluated in forecast-only mode first.",
+        "watch": "It does not directly add unmanaged EC2 hosts. Deployment state, capacity shortages, image startup and health timing can delay usable capacity."
+      },
+      {
+        "service": "Amazon EC2 Auto Scaling",
+        "icon": "Amazon-EC2-Auto-Scaling",
+        "choose": "Scale supported EC2 host fleets used by container capacity.",
+        "operations": "Coordinate launch templates, AMIs, instance roles, AZ capacity, lifecycle/draining and the selected ECS/EKS capacity integration.",
+        "watch": "Adding hosts does not automatically change application desired tasks/replicas. Scale-in must respect compatible termination and disruption handling."
+      },
+      {
+        "service": "Amazon DynamoDB · regional application dependency",
+        "icon": "Amazon-DynamoDB",
+        "choose": "Managed application data with a deliberate regional/global-table consistency model.",
+        "operations": "Keep image replication, application rollout, table replication, authorization and traffic recovery as separate tested controls.",
+        "watch": "Global tables do not deploy containers or route SDK traffic automatically. Validate consistency mode and cross-tenant partition/key authorization."
+      },
+      {
+        "service": "AWS Resource Access Manager",
+        "icon": "AWS-Resource-Access-Manager",
+        "choose": "Share supported namespaces/service-network resources across AWS account boundaries.",
+        "operations": "Configure supported resource shares, principals/organization permissions, acceptance where needed and underlying service associations.",
+        "watch": "Resource sharing does not replace caller IAM, network reachability or application authorization. Verify feature and Region eligibility."
+      },
+      {
+        "service": "Amazon EventBridge · scheduling/events",
+        "icon": "Amazon-EventBridge",
+        "choose": "Route supported operational events and trigger finite tasks with a supported scheduling integration.",
+        "operations": "For scheduled work, select EventBridge Scheduler or a supported rule pattern, execution role, target/task network configuration, retries and dead-letter handling.",
+        "watch": "A successful schedule trigger is not successful application completion. Finite tasks need completion/error monitoring and idempotency; continuous service desired-count behavior solves a different problem."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/fsx-csi-create.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/fsx-ontap.html",
+      "https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/predictive-auto-scaling.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/tasks-scheduled-eventbridge-scheduler.html"
+    ]
+  }
+]
