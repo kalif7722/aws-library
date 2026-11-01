@@ -1,0 +1,626 @@
+[
+  {
+    "sequence": 1,
+    "title": "Choose the security question first",
+    "layout": "service landscape",
+    "points": [
+      "CloudTrail records API activity; Config records resource configuration",
+      "Inspector finds software vulnerabilities and network exposure",
+      "GuardDuty detects suspicious activity; Macie discovers sensitive S3 data",
+      "Security Hub prioritizes issues; Detective supplies investigation context"
+    ],
+    "diagram": "Independent service tiles grouped by question: activity, configuration, vulnerability, threat, sensitive data, investigation. No sequential arrows between alternatives.",
+    "remember": "Match the question to its evidence source.",
+    "referencePages": [
+      157,
+      159,
+      162,
+      163,
+      171,
+      173,
+      771
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 2,
+    "title": "Amazon Inspector: coverage before findings",
+    "layout": "coverage map",
+    "points": [
+      "EC2: supported packages and network reachability",
+      "ECR: supported image OS and application packages",
+      "Lambda standard: dependency vulnerabilities; optional code scanning: application code",
+      "Coverage status, supported runtimes and exclusions determine what was assessed"
+    ],
+    "diagram": "Three resource branches enter Inspector, then findings branch to Security Hub and EventBridge. Scan eligibility is a gate before assessment.",
+    "remember": "Check coverage before interpreting an empty finding list.",
+    "referencePages": [
+      157,
+      158
+    ],
+    "service": "Amazon-Inspector"
+  },
+  {
+    "sequence": 3,
+    "title": "EC2 scanning: agent and snapshot paths",
+    "layout": "two-path architecture",
+    "points": [
+      "Agent-based scanning uses Systems Manager inventory on supported instances",
+      "Hybrid mode can use EBS snapshots for eligible unmanaged instances",
+      "Network reachability analysis is separate from package inventory",
+      "Check scan mode, coverage, permissions, exclusions and last scan time"
+    ],
+    "diagram": "EC2 has two alternative inventory paths: SSM agent to Inspector, or eligible EBS snapshot to Inspector. Both lead to package findings. Distinct configuration-analysis line for reachability.",
+    "remember": "Agentless scanning has eligibility and permission requirements.",
+    "referencePages": [
+      157,
+      158
+    ],
+    "service": "Amazon-Inspector"
+  },
+  {
+    "sequence": 4,
+    "title": "Image and function scans follow the artifact",
+    "layout": "paired lifecycle",
+    "points": [
+      "ECR enhanced scanning uses Inspector with repository filters and rescan settings",
+      "Lambda standard scans dependencies; code scanning adds supported code checks",
+      "Deployment, updates and relevant new vulnerabilities can trigger reassessment",
+      "Rebuild or update the artifact, deploy it, then verify the new resource coverage"
+    ],
+    "diagram": "Left lifecycle: ECR image digest → scan → rebuild → new digest. Right lifecycle: Lambda code and layers → scan → update → rescan. Independent paths.",
+    "remember": "Scanning reports risk; your release process delivers the fix.",
+    "referencePages": [
+      157,
+      158
+    ],
+    "service": "Amazon-Inspector"
+  },
+  {
+    "sequence": 5,
+    "title": "Prioritize and close a vulnerability",
+    "layout": "risk decision board",
+    "points": [
+      "Combine severity with exploitability, exposure and business impact",
+      "Assign owner and remediation deadline; record accepted exceptions",
+      "Patch EC2 or rebuild images and functions through controlled deployment",
+      "Verify the affected version is gone and the finding state is updated"
+    ],
+    "diagram": "Risk inputs feed prioritization, then owner remediation and verification loop. Include finding version and resource identity.",
+    "remember": "A patched build must reach the running workload.",
+    "referencePages": [
+      157,
+      158
+    ],
+    "service": "Amazon-Inspector"
+  },
+  {
+    "sequence": 6,
+    "title": "AWS Config records the resource story",
+    "layout": "resource timeline",
+    "points": [
+      "A recorder captures supported resource configuration and relationships",
+      "Recording scope, resource types and Region determine visibility",
+      "Config rules evaluate compliance against desired configuration",
+      "An aggregator centralizes recorded data; it does not turn on remote recorders"
+    ],
+    "diagram": "Resource changes on a horizontal timeline create configuration items in Config; an aggregator receives data from two account/Region boxes.",
+    "remember": "A central view depends on recording at the source.",
+    "referencePages": [
+      159
+    ],
+    "service": "AWS-Config"
+  },
+  {
+    "sequence": 7,
+    "title": "Configuration history and API history",
+    "layout": "aligned timelines",
+    "points": [
+      "Config history shows what a resource looked like and when it changed",
+      "Compliance history shows rule evaluation results over time",
+      "CloudTrail supplies recorded API activity for investigation",
+      "Correlate resource ID, Region, principal and timestamps before attributing a change"
+    ],
+    "diagram": "Aligned rows: configuration state, compliance result and CloudTrail API event. Match times with vertical guides, no claim that every change has a human caller.",
+    "remember": "Use Config state and CloudTrail activity together.",
+    "referencePages": [
+      160
+    ],
+    "service": "AWS-Config"
+  },
+  {
+    "sequence": 8,
+    "title": "Config rules: managed, Lambda or Guard",
+    "layout": "three alternatives",
+    "points": [
+      "Managed rules provide AWS-maintained evaluations",
+      "Custom Lambda rules implement supported logic in a function",
+      "Custom Policy rules use Guard policy language",
+      "Scope and trigger settings determine which resources are evaluated"
+    ],
+    "diagram": "Three equal alternative rule cards, all point to compliance evaluation. Example desired properties: approved volume type or allowed instance family.",
+    "remember": "Custom Config rules are not limited to Lambda.",
+    "referencePages": [
+      161
+    ],
+    "service": "AWS-Config"
+  },
+  {
+    "sequence": 9,
+    "title": "Detective and proactive evaluations",
+    "layout": "before-after split",
+    "points": [
+      "Detective evaluation checks deployed resource configuration",
+      "Triggers can be configuration changes or periodic evaluations, depending on rule",
+      "Supported proactive rules evaluate supplied properties before deployment",
+      "Evaluation results do not themselves deny an API request"
+    ],
+    "diagram": "Left before-deployment resource properties → proactive evaluation result. Right deployed change → detective evaluation result. A separate deployment control gate is clearly labeled separately.",
+    "remember": "Assessment and enforcement are different controls.",
+    "referencePages": [
+      159,
+      161
+    ],
+    "service": "AWS-Config"
+  },
+  {
+    "sequence": 10,
+    "title": "Remediate safely with Systems Manager",
+    "layout": "feedback loop",
+    "points": [
+      "A noncompliant result can start a configured SSM Automation runbook",
+      "Grant a scoped execution role and validate current resource state",
+      "Use retries, exception handling and approval for disruptive changes",
+      "Re-evaluate and retain execution evidence after the change"
+    ],
+    "diagram": "Config NON_COMPLIANT → current-state check → SSM Automation → resource change → Config re-evaluation. Failure branch to operator.",
+    "remember": "Recheck current state before acting on an older evaluation.",
+    "referencePages": [
+      161
+    ],
+    "service": "AWS-Systems-Manager"
+  },
+  {
+    "sequence": 11,
+    "title": "Logs answer different investigation questions",
+    "layout": "evidence matrix",
+    "points": [
+      "CloudTrail: API activity; Config: configuration history",
+      "VPC Flow Logs: network flow metadata, not packet payload",
+      "Load balancer, S3 and CloudFront access logs: request evidence",
+      "Route 53 public query logs and Resolver query logs cover different DNS paths"
+    ],
+    "diagram": "Central investigation case surrounded by six evidence cards. Small destination labels: S3, CloudWatch Logs or Firehose as applicable. No claim all logs support every destination.",
+    "remember": "Select the needed log type and enable its delivery path.",
+    "referencePages": [
+      162
+    ],
+    "service": "AWS-CloudTrail"
+  },
+  {
+    "sequence": 12,
+    "title": "GuardDuty foundational threat detection",
+    "layout": "inputs to detector",
+    "points": [
+      "Analyze CloudTrail management events, VPC flow metadata and DNS activity",
+      "Threat intelligence, anomaly detection and behavioral signals create findings",
+      "Foundational monitoring uses service data streams without your own trail or flow-log export",
+      "This detection path needs no workload agent; Runtime Monitoring is separate"
+    ],
+    "diagram": "Three foundational data inputs feed GuardDuty, then a finding card for suspicious API or network behavior. No customer log bucket prerequisite.",
+    "remember": "Detection data and customer-retained audit logs serve different needs.",
+    "referencePages": [
+      163,
+      164
+    ],
+    "service": "Amazon-GuardDuty"
+  },
+  {
+    "sequence": 13,
+    "title": "GuardDuty protection plans extend coverage",
+    "layout": "protection map",
+    "points": [
+      "S3 data access, EKS audit, RDS login and Lambda network activity add signals",
+      "Runtime Monitoring uses a security agent for eligible compute workloads",
+      "Malware protection examines supported EBS, S3 or backup data paths",
+      "Enablement, default settings, Region support and resource coverage must be checked"
+    ],
+    "diagram": "GuardDuty center with distinct plan branches: data activity, runtime agent, malware scan. Label optional capabilities; do not depict all plans as agentless.",
+    "remember": "Verify each protection plan and its resource coverage.",
+    "referencePages": [
+      163,
+      164
+    ],
+    "service": "Amazon-GuardDuty"
+  },
+  {
+    "sequence": 14,
+    "title": "Turn a finding into an owned response",
+    "layout": "branching response",
+    "points": [
+      "A finding describes observed suspicious behavior and affected resources",
+      "EventBridge can route matching findings to SNS, Lambda or an orchestration workflow",
+      "Enrich with resource context; preserve evidence before containment",
+      "Approve high-impact actions and verify the result; a finding alone does not block traffic"
+    ],
+    "diagram": "GuardDuty finding → EventBridge. Branch to SNS notification and controlled response workflow; workflow includes evidence, approval and containment.",
+    "remember": "Detection requires a response owner and tested action.",
+    "referencePages": [
+      163,
+      164
+    ],
+    "service": "Amazon-GuardDuty"
+  },
+  {
+    "sequence": 15,
+    "title": "GuardDuty across accounts and Regions",
+    "layout": "organization topology",
+    "points": [
+      "The management account designates a member as delegated administrator",
+      "Trusted access and service permissions enable organization administration",
+      "Account enrollment and protection-plan coverage require explicit management",
+      "GuardDuty is regional: verify every target account and Region"
+    ],
+    "diagram": "Organizations management account designates security account; security account manages members in two Region columns. No implied global activation.",
+    "remember": "Delegation does not prove complete regional coverage.",
+    "referencePages": [
+      165
+    ],
+    "service": "Amazon-GuardDuty"
+  },
+  {
+    "sequence": 16,
+    "title": "Security Hub and Security Hub CSPM",
+    "layout": "two complementary panels",
+    "points": [
+      "Security Hub CSPM evaluates controls and security posture",
+      "Security Hub correlates security issues to prioritize exposures and response",
+      "Findings from services such as Inspector and GuardDuty add context",
+      "Enablement and administration differ between the two services"
+    ],
+    "diagram": "Two linked panels: CSPM posture findings → Security Hub prioritization; Inspector and GuardDuty also feed Security Hub. Clearly label current service names.",
+    "remember": "Posture checks and issue prioritization complement each other.",
+    "referencePages": [
+      171,
+      172
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 17,
+    "title": "CSPM control checks need recording",
+    "layout": "prerequisite branching",
+    "points": [
+      "Most AWS CSPM controls use Config rules and resource recording",
+      "With both Security Hub and CSPM, a service-linked recorder is created",
+      "With CSPM alone, configure the required Config recording yourself",
+      "Check account, Region, resource coverage and permissions before trusting results"
+    ],
+    "diagram": "Decision split: both services → service-linked recorder; CSPM alone → configure Config recorder. Both lead to control evaluations and findings.",
+    "remember": "Recording prerequisites depend on the enablement path.",
+    "referencePages": [
+      171
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 18,
+    "title": "Aggregate findings without losing scope",
+    "layout": "account-region grid",
+    "points": [
+      "Service integrations publish findings with resource and source context",
+      "CSPM central configuration and aggregation have distinct roles",
+      "Cross-Region aggregation does not enable detection in linked Regions",
+      "Track severity, workflow state, owner and evidence links"
+    ],
+    "diagram": "Two member accounts in two Regions publish findings to a designated aggregation view. Show enablement required at each source, and a separate administration control line.",
+    "remember": "An aggregated dashboard is only as complete as its sources.",
+    "referencePages": [
+      171,
+      172
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 19,
+    "title": "Security automation needs an exit test",
+    "layout": "controlled workflow",
+    "points": [
+      "Filter events by source, finding type and resource scope",
+      "Use a scoped role and idempotent actions with retry handling",
+      "Require approval for disruptive isolation or access changes",
+      "Verify control state, record evidence and route failures to an owner"
+    ],
+    "diagram": "Finding → filter → context check → approval where needed → action → verification. Separate failure path to manual handling.",
+    "remember": "Closing a ticket is not verification of the control.",
+    "referencePages": [
+      172
+    ],
+    "service": "Amazon-EventBridge"
+  },
+  {
+    "sequence": 20,
+    "title": "Amazon Detective: investigate relationships",
+    "layout": "investigation graph",
+    "points": [
+      "Detective organizes activity into behavior graphs and visual context",
+      "CloudTrail, VPC flow data and GuardDuty context support investigations",
+      "Pivot across principal, IP address, resource and time window",
+      "Correlate evidence before deciding the root cause and containment scope"
+    ],
+    "diagram": "Behavior graph with principal, IP, EC2 resource and finding connected by labeled observed activity. Time-window selector below; no unsupported accusation labels.",
+    "remember": "A graph supplies context; an investigator validates the conclusion.",
+    "referencePages": [
+      173
+    ],
+    "service": "Amazon-Detective"
+  },
+  {
+    "sequence": 21,
+    "title": "Amazon Macie: discover sensitive S3 data",
+    "layout": "data discovery architecture",
+    "points": [
+      "Macie inventories supported S3 buckets and discovers sensitive data",
+      "Managed identifiers and custom identifiers find selected data patterns",
+      "Automated discovery and scoped discovery jobs have different coverage",
+      "Findings route through EventBridge and integrations for response"
+    ],
+    "diagram": "S3 objects → Macie discovery → sensitive-data finding → EventBridge → controlled response. Show IAM/KMS access gate before content analysis.",
+    "remember": "Sensitive-data discovery depends on object accessibility and scope.",
+    "referencePages": [
+      771
+    ],
+    "service": "Amazon-Macie"
+  },
+  {
+    "sequence": 22,
+    "title": "Macie coverage, identifiers and remediation",
+    "layout": "coverage and response board",
+    "points": [
+      "Choose buckets, prefixes, sampling and schedule to fit the question",
+      "Validate supported formats, storage classes, encryption and key access",
+      "Distinguish bucket policy findings from sensitive-content findings",
+      "Restrict exposure through approved S3 and IAM changes, then verify"
+    ],
+    "diagram": "Two finding lanes: bucket access posture and sensitive content. Both feed triage; remediation changes S3/IAM, not the classifier itself.",
+    "remember": "No sensitive-data finding does not prove every object was analyzed.",
+    "referencePages": [
+      771
+    ],
+    "service": "Amazon-Macie"
+  },
+  {
+    "sequence": 23,
+    "title": "Compare the security evidence services",
+    "layout": "comparison cards",
+    "points": [
+      "Inspector: vulnerable software or network exposure",
+      "GuardDuty: suspicious activity; Macie: sensitive S3 data",
+      "Config and CSPM: configuration posture and controls",
+      "Detective: investigation; Security Hub: issue prioritization"
+    ],
+    "diagram": "Six independent service cards grouped by purpose, with correct official icons and explicit question labels. No pipeline arrows between alternatives.",
+    "remember": "Combine complementary evidence rather than choosing one universal scanner.",
+    "referencePages": [
+      157,
+      159,
+      163,
+      171,
+      173,
+      771
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 24,
+    "title": "Findings and security data for investigation",
+    "layout": "two data products",
+    "points": [
+      "A finding summarizes a detected issue with resource and severity context",
+      "Security Lake centralizes supported security logs, events and findings in a data lake",
+      "OCSF normalizes supported records; Lake Formation governs subscriber access",
+      "Retain CloudTrail and service logs according to your evidence requirements"
+    ],
+    "diagram": "Parallel security findings response workflow and Security Lake ingestion of supported logs, events and findings; normalized OCSF records in S3 with authorized subscriber access.",
+    "remember": "Choose the data product needed for response or investigation.",
+    "referencePages": [],
+    "service": "Amazon-Security-Lake"
+  },
+  {
+    "sequence": 25,
+    "title": "Audit evidence and AWS assurance reports",
+    "layout": "evidence portfolio",
+    "points": [
+      "Audit Manager organizes control evidence from supported sources and manual uploads",
+      "An assessment report packages selected evidence for review",
+      "Artifact provides AWS and eligible third-party assurance reports and agreements",
+      "Customer compliance still requires scope, operating procedures and reviewer judgment"
+    ],
+    "diagram": "Two distinct folders: customer control evidence via Audit Manager; provider assurance via Artifact. Both support audit review, no certification stamp.",
+    "remember": "Evidence collection does not certify the workload.",
+    "referencePages": [],
+    "service": "AWS-Audit-Manager"
+  },
+  {
+    "sequence": 26,
+    "title": "Data residency is an end-to-end constraint",
+    "layout": "data movement map",
+    "points": [
+      "Select allowed Regions for data, replicas, backups, logs and recovery copies",
+      "Map service processing locations, global endpoints and cross-Region integrations",
+      "Use policy guardrails plus service configuration and tested transfer controls",
+      "Include support access, keys, metadata and third-party processors in the review"
+    ],
+    "diagram": "Approved Region boundary contains app, data, logs and backups. Cross-boundary export arrow passes a labeled policy and service-configuration gate to a blocked destination.",
+    "remember": "A Region condition alone is not a complete residency design.",
+    "referencePages": [],
+    "service": "AWS-Organizations"
+  },
+  {
+    "sequence": 27,
+    "title": "Threat modelling begins at trust boundaries",
+    "layout": "data flow model",
+    "points": [
+      "Identify assets, actors, entry points and sensitive data flows",
+      "Draw trust boundaries across internet, account, VPC and external service edges",
+      "Ask how identity, data integrity, disclosure or availability can fail",
+      "Assign mitigations, owners, test cases and residual-risk decisions"
+    ],
+    "diagram": "Generic logical data flow: external User to Public API, Worker and Data store inside application account boundary. Worker has separate external vendor API branch. Threats attach to flows; this is not an AWS deployment topology.",
+    "remember": "Every important boundary needs a threat and a tested mitigation.",
+    "referencePages": [],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 28,
+    "title": "Work a data-export threat scenario",
+    "layout": "threat-control mapping",
+    "points": [
+      "Threat: stolen role credentials read sensitive objects and export data",
+      "Prevent: scoped roles, data access policy and approved destination controls",
+      "Detect: CloudTrail data events, GuardDuty signals and Macie classification context",
+      "Respond: preserve evidence, revoke sessions or restrict access, then validate"
+    ],
+    "diagram": "Scenario diagram with role → S3 sensitive data → external destination. Red dashed attempted export and separate prevention, detection and response annotations.",
+    "remember": "Classification, access prevention and threat detection are separate controls.",
+    "referencePages": [],
+    "service": "Amazon-Macie"
+  },
+  {
+    "sequence": 29,
+    "title": "Least privilege for security automation",
+    "layout": "permission boundaries",
+    "points": [
+      "Read-only investigation and state-changing remediation need different roles",
+      "Scope actions to resource tags, accounts and supported resource ARNs",
+      "Protect automation against untrusted event fields and confused-deputy paths",
+      "Log execution, require approvals where needed and test denied paths"
+    ],
+    "diagram": "Two roles: investigator can read evidence; remediator changes only scoped resources. Event validation precedes role assumption and actions.",
+    "remember": "A response system should not become a new escalation path.",
+    "referencePages": [],
+    "service": "AWS-Identity-and-Access-Management"
+  },
+  {
+    "sequence": 30,
+    "title": "Access Analyzer: reason about access",
+    "layout": "access analysis board",
+    "points": [
+      "External access findings examine supported resource policies and trust",
+      "Internal and unused access capabilities answer different permission questions",
+      "Validate policies and review public or cross-account exposure",
+      "A policy finding does not prove that a principal actually used the access"
+    ],
+    "diagram": "Resource policy → Access Analyzer → exposure finding. Separate CloudTrail activity evidence card. Clearly distinguish potential access from recorded use.",
+    "remember": "Possible access and observed activity require different evidence.",
+    "referencePages": [],
+    "service": "AWS-Identity-and-Access-Management"
+  },
+  {
+    "sequence": 31,
+    "title": "AI security evidence and human oversight",
+    "layout": "AI control map",
+    "points": [
+      "Record supported model and agent API activity and scoped application telemetry",
+      "Protect prompts, outputs, retrieval data and invocation logs as sensitive data",
+      "Apply content safeguards, tool permissions and approval for high-impact actions",
+      "Correlate security signals with application evidence and data-retention policy"
+    ],
+    "diagram": "AI application orchestrator has independent model, authorized retrieval and tool branches. Human approval precedes scoped tool execution; protected audit evidence receives application and tool activity.",
+    "remember": "Model safeguards do not replace tool authorization or audit evidence.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 32,
+    "title": "An organization security architecture",
+    "layout": "layered operating model",
+    "points": [
+      "Delegate security administration and retain workload ownership",
+      "Enable regional detection and configuration coverage across accounts",
+      "Centralize findings, retain protected logs and route owned responses",
+      "Measure coverage, detection, remediation and evidence freshness separately"
+    ],
+    "diagram": "Organizations management designates separate delegated security tooling account. Workload findings feed Security Hub and owned response; customer audit logs independently feed protected S3 archive.",
+    "remember": "Measure coverage as well as finding counts.",
+    "referencePages": [
+      165,
+      171,
+      172
+    ],
+    "service": "AWS-Security-Hub"
+  },
+  {
+    "sequence": 33,
+    "title": "Walkthrough: Config rule to verified correction",
+    "layout": "five-stage walkthrough",
+    "points": [
+      "Record the target resource and enable a relevant Config rule",
+      "Introduce a controlled noncompliant configuration in a lab",
+      "Inspect evaluation timestamp and current state before remediation",
+      "Run approved Automation, re-evaluate and retain execution evidence"
+    ],
+    "diagram": "Five clearly labeled stages: record, evaluate, inspect, remediate, verify. Illustrative compliance transition NON_COMPLIANT → COMPLIANT only after re-evaluation. No fabricated AWS execution claim.",
+    "remember": "A fresh evaluation must confirm the correction.",
+    "referencePages": [
+      159,
+      160,
+      161
+    ],
+    "service": "AWS-Config"
+  },
+  {
+    "sequence": 34,
+    "title": "Walkthrough: Inspector finding to deployed fix",
+    "layout": "artifact version walkthrough",
+    "points": [
+      "Confirm affected resource, package version, scan coverage and exposure",
+      "Select a fix or documented mitigation and test it",
+      "Patch or rebuild, deploy the corrected artifact, then verify the running version",
+      "Review rescan and finding status; retain release and exception evidence"
+    ],
+    "diagram": "Illustrative single EC2 package example: vulnerable v1, Inspector finding, approved patch/test, corrected v2, rescan and finding review.",
+    "remember": "Verify the deployed version rather than only the build result.",
+    "referencePages": [
+      157,
+      158
+    ],
+    "service": "Amazon-Inspector"
+  },
+  {
+    "sequence": 35,
+    "title": "Walkthrough: investigate suspicious credentials",
+    "layout": "investigation decision tree",
+    "points": [
+      "Review finding details, principal, resource, Region and event times",
+      "Correlate CloudTrail activity and Detective context with the expected workflow",
+      "Preserve evidence and choose proportionate credential or access containment",
+      "Check sessions, permissions and workload recovery after response"
+    ],
+    "diagram": "GuardDuty finding leads to CloudTrail/Detective evidence correlation and expected-versus-suspicious decision; preserve evidence before controlled containment and validation.",
+    "remember": "Investigate context before making a disruptive identity change.",
+    "referencePages": [
+      163,
+      164,
+      173
+    ],
+    "service": "Amazon-GuardDuty"
+  },
+  {
+    "sequence": 36,
+    "title": "Walkthrough: sensitive data in an exposed bucket",
+    "layout": "two-evidence walkthrough",
+    "points": [
+      "Confirm bucket access posture and Macie discovery scope separately",
+      "Review object classification and authorized business access",
+      "Restrict unintended access with approved S3/IAM controls",
+      "Retest access and classification coverage, preserve evidence and notify the owner"
+    ],
+    "diagram": "Two inputs: access-policy evidence and Macie sensitive-data finding merge into triage → approved access correction → denied unauthorized test plus allowed intended access. Illustrative lab only.",
+    "remember": "Verify both reduced exposure and intended application access.",
+    "referencePages": [
+      771
+    ],
+    "service": "Amazon-Macie"
+  }
+]

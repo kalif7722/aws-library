@@ -2095,5 +2095,390 @@
       "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
       "https://docs.aws.amazon.com/quicksight/latest/user/welcome.html"
     ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Inspector coverage and vulnerability lifecycle",
+    "rows": [
+      [
+        "EC2 inventory",
+        "Agent-based collection uses Systems Manager. Hybrid scanning also uses EBS snapshots for eligible unmanaged instances."
+      ],
+      [
+        "Eligibility",
+        "Supported operating systems, inventory freshness, tags, volume/filesystem constraints and permissions determine scan coverage."
+      ],
+      [
+        "Network reachability",
+        "EC2 network exposure analysis is distinct from software-package CVE detection."
+      ],
+      [
+        "ECR images",
+        "Enhanced scanning assesses supported OS and programming-language packages. Repository filters, ACTIVE images and rescan settings determine eligibility."
+      ],
+      [
+        "Lambda standard",
+        "Scans supported function and layer dependencies for package vulnerabilities; function eligibility and supported runtimes apply."
+      ],
+      [
+        "Lambda code",
+        "Optional code scanning checks supported application code; standard scanning is a prerequisite."
+      ],
+      [
+        "Lambda encryption",
+        "Current Inspector documentation excludes Lambda functions encrypted with customer managed keys; inspect coverage rather than assuming assessment."
+      ],
+      [
+        "Expanded portfolio",
+        "The PDF three-resource list is not an exhaustive current portfolio: Inspector Code Security also assesses supported code, dependencies and IaC."
+      ],
+      [
+        "Prioritization",
+        "Use finding risk context, exploitability, exposure and workload impact with severity to assign response priority."
+      ],
+      [
+        "Closure",
+        "Patch or rebuild, deploy the corrected version, confirm coverage and review the updated finding; document justified exceptions."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/inspector/latest/user/scanning-resources.html",
+      "https://docs.aws.amazon.com/inspector/latest/user/scanning-ec2.html",
+      "https://docs.aws.amazon.com/inspector/latest/user/scanning-lambda.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Config recording, evaluations and remediation",
+    "rows": [
+      [
+        "Recorder scope",
+        "Record required resource types in every relevant account and Region; check recorder permissions and health."
+      ],
+      [
+        "Resource history",
+        "Configuration items, relationships and compliance timelines answer what changed and when."
+      ],
+      [
+        "CloudTrail correlation",
+        "Where recorded, API activity can help identify the principal and operation associated with a configuration change."
+      ],
+      [
+        "Managed rules",
+        "Use supported AWS-maintained checks; avoid the PDF historical fixed rule count."
+      ],
+      [
+        "Custom rules",
+        "Use Custom Lambda rules or Custom Policy rules written in Guard; custom does not mean Lambda-only."
+      ],
+      [
+        "Triggers",
+        "Configuration-change and periodic triggers depend on the rule. Supported proactive evaluation assesses supplied properties before deployment."
+      ],
+      [
+        "Enforcement",
+        "A compliance result is an evaluation, not an IAM deny. Preventive policy or deployment controls must enforce a gate."
+      ],
+      [
+        "Aggregation",
+        "An aggregator provides a central recorded-data view; source recording and rule deployment remain separate configuration tasks."
+      ],
+      [
+        "Remediation role",
+        "Configure an appropriate AutomationAssumeRole and supported runbook parameters. Scope permissions to the intended action and resource."
+      ],
+      [
+        "Stale evaluation",
+        "Automatic remediation can use an older compliance snapshot, even after a resource becomes compliant; validate live state in the runbook."
+      ],
+      [
+        "Verification",
+        "Use retries, bounded failures, exceptions and approval for disruptive actions; re-evaluate and preserve runbook evidence."
+      ],
+      [
+        "Change notifications",
+        "A configured Config delivery channel can publish configuration-change notifications to SNS; authorize the delivery path and monitor delivery health."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html",
+      "https://docs.aws.amazon.com/config/latest/developerguide/evaluating-your-resources.html",
+      "https://docs.aws.amazon.com/config/latest/developerguide/setup-autoremediation.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "GuardDuty coverage and organization operations",
+    "rows": [
+      [
+        "Foundational sources",
+        "CloudTrail management events, VPC flow information and DNS signals supply the foundational detector."
+      ],
+      [
+        "Independent source delivery",
+        "Your own trail, VPC Flow Log export or DNS log destination is not a prerequisite for GuardDuty foundational analysis; retain your own audit evidence separately."
+      ],
+      [
+        "Detection method",
+        "Threat intelligence, statistical/behavioral analysis and machine learning identify suspicious patterns rather than configuration compliance."
+      ],
+      [
+        "S3 and EKS",
+        "S3 Protection examines data access events; EKS Protection examines audit activity. These are distinct from malware scanning and runtime events."
+      ],
+      [
+        "RDS and Lambda",
+        "RDS Protection examines supported database login activity; Lambda Protection examines network activity."
+      ],
+      [
+        "Runtime Monitoring",
+        "Eligible EKS, ECS/Fargate and EC2 resources require security-agent coverage. Agent deployment and health must be managed."
+      ],
+      [
+        "Malware plans",
+        "Supported EBS, S3 and AWS Backup malware protection have distinct prerequisites, scope and operational behavior."
+      ],
+      [
+        "Newer protection",
+        "Current plans include AI Protection for supported Bedrock/SageMaker activity. Check Region support and enablement for each plan."
+      ],
+      [
+        "Cryptocurrency indicators",
+        "Dedicated cryptocurrency-related findings can indicate malicious resource use; confirm whether the activity is expected before containment."
+      ],
+      [
+        "Finding response",
+        "EventBridge rules can send notification through SNS or invoke Lambda/workflow targets; detections do not automatically block access."
+      ],
+      [
+        "Delegation",
+        "The organization management account establishes trusted access and designates a member administrator. Verify members, Regions and every protection plan."
+      ],
+      [
+        "Cost and trial",
+        "Review current per-plan pricing, trial eligibility and usage estimates. Do not treat a historical 30-day trial as a permanent pricing guarantee."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html",
+      "https://aws.amazon.com/guardduty/faqs/",
+      "https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-guardduty.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Security Hub, CSPM and investigation boundaries",
+    "rows": [
+      [
+        "Service distinction",
+        "Security Hub prioritizes and responds to correlated issues; Security Hub CSPM evaluates enabled controls and posture."
+      ],
+      [
+        "Config prerequisite",
+        "Most AWS CSPM controls rely on Config recording. Both Hub and CSPM use the current service-linked recorder path; CSPM alone requires customer setup."
+      ],
+      [
+        "Regional control",
+        "Enable relevant services and required recording in each source account and Region. An aggregation view does not create missing source coverage."
+      ],
+      [
+        "Integration inventory",
+        "The source includes GuardDuty, Inspector, Macie, Config, IAM Access Analyzer, Systems Manager, Firewall Manager, AWS Health and partner inputs; use the current integration catalog and required product permissions."
+      ],
+      [
+        "Control versus threat",
+        "A failed posture control and a detected attack can affect the same resource, but represent different evidence and response priorities."
+      ],
+      [
+        "Administration",
+        "Security Hub organization policies and CSPM central configuration have different enablement/configuration behavior."
+      ],
+      [
+        "Finding lifecycle",
+        "Preserve source, resource, account, Region, event time, severity, workflow status, owner and evidence references."
+      ],
+      [
+        "Detective graph",
+        "Behavior graph visualizations correlate entities and time-based activity using supported CloudTrail, VPC and GuardDuty context."
+      ],
+      [
+        "Investigation scope",
+        "A graph is investigative context. Validate expected behavior, affected principals and resources before selecting containment."
+      ],
+      [
+        "Finding format",
+        "Security Hub CSPM normalizes findings into ASFF. Supported custom products submit ASFF through BatchImportFindings; arbitrary personal formats are not accepted unchanged."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
+      "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-setup-prereqs.html",
+      "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html",
+      "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings.html",
+      "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-custom-providers.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Macie discovery and sensitive-data response",
+    "rows": [
+      [
+        "Supported estate",
+        "Macie inventories supported S3 general purpose buckets in the enabled Region; it is not a general scanner for every AWS datastore."
+      ],
+      [
+        "Automated discovery",
+        "Automated sensitive-data discovery samples eligible objects to provide broad visibility; review coverage and exclusions."
+      ],
+      [
+        "Discovery jobs",
+        "Choose bucket/object scope, sampling and one-time or recurring schedule appropriate to the question."
+      ],
+      [
+        "Identifiers",
+        "Managed identifiers provide supported built-in detection. Custom data identifiers and allow lists tune relevant matching and exclusions."
+      ],
+      [
+        "Object access",
+        "Supported file formats, object size/storage class and encryption affect eligibility. IAM/bucket and KMS key access must permit analysis."
+      ],
+      [
+        "Two finding classes",
+        "Bucket-policy/security posture findings differ from findings about sensitive object content such as PII."
+      ],
+      [
+        "Delivery",
+        "Use EventBridge and supported integrations to route findings to an owner or controlled response."
+      ],
+      [
+        "Remediation",
+        "Apply approved S3/IAM controls to reduce exposure, validate intended access and retain discovery and remediation evidence."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/macie/latest/user/data-classification.html",
+      "https://docs.aws.amazon.com/macie/latest/user/discovery-jobs-create.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Log types, destinations and limitations",
+    "rows": [
+      [
+        "ALB and CLB access",
+        "Access logs deliver request information to S3 when configured. Grant the required bucket delivery permissions."
+      ],
+      [
+        "NLB access",
+        "NLB access logs cover TLS listener requests and deliver to S3; they are not a log of every TCP or UDP flow."
+      ],
+      [
+        "CloudTrail activity",
+        "Trails can deliver to S3 and optionally CloudWatch Logs. Select management/data events, accounts and Regions required for the audit."
+      ],
+      [
+        "VPC Flow Logs",
+        "Deliver supported flow records to CloudWatch Logs, S3 or Data Firehose. Flow metadata is not packet capture or application payload."
+      ],
+      [
+        "Public DNS queries",
+        "Route 53 public hosted-zone query logs go to CloudWatch Logs with the documented us-east-1 setup; cached resolver responses do not produce new authoritative queries."
+      ],
+      [
+        "Resolver queries",
+        "Resolver query logging covers the VPC DNS path and supports configured CloudWatch Logs, S3 or Firehose destinations; it is distinct from public hosted-zone logging."
+      ],
+      [
+        "S3 server access",
+        "Deliver bucket request access records to a suitable S3 target; delivery is best effort. CloudTrail data events provide a separate audit mechanism."
+      ],
+      [
+        "CloudFront requests",
+        "Legacy standard logs deliver to S3; standard logging v2 supports configured S3, CloudWatch Logs or Firehose delivery. Request logging and API activity are different."
+      ],
+      [
+        "Config delivery",
+        "Config can deliver history and snapshots to S3 using the delivery-channel configuration; recording and compliance evaluation remain distinct."
+      ],
+      [
+        "Retention and integrity",
+        "Set retention, encryption, access controls, key policy and delivery monitoring. Treat raw logs and summarized findings as separate evidence products."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/enable-access-logs.html",
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html",
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html",
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging.html",
+      "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html",
+      "https://docs.aws.amazon.com/config/latest/developerguide/evaluating-your-resources.html",
+      "https://docs.aws.amazon.com/config/latest/developerguide/setup-autoremediation.html"
+    ]
+  },
+  {
+    "moduleId": "17",
+    "title": "Audit, residency, threat modelling and AI controls",
+    "rows": [
+      [
+        "Security Lake records",
+        "Normalize supported sources to OCSF and store lake data in S3. Custom sources must meet schema and ingestion requirements."
+      ],
+      [
+        "Subscriber access",
+        "Lake Formation/query or object-access subscribers receive only authorized source and Region scope; grant and review access deliberately."
+      ],
+      [
+        "Audit Manager",
+        "Frameworks map controls to automated and manual evidence; reviewers select evidence and generate assessment reports."
+      ],
+      [
+        "Evidence judgment",
+        "Automated collection does not include all operational evidence or certify compliance; human assessment of scope and effectiveness remains necessary."
+      ],
+      [
+        "Artifact reports",
+        "Provider reports and agreements support assurance review; select the period and service scope and follow sharing terms."
+      ],
+      [
+        "Residency controls",
+        "Review primary data, replicas, backups, logs, service processing, support paths and external processors against allowed jurisdictions."
+      ],
+      [
+        "Region key limitation",
+        "aws:RequestedRegion controls the service endpoint called; some actions have cross-Region effects. Add service-specific data movement controls."
+      ],
+      [
+        "Threat model",
+        "Identify assets, actors, data flows, entry points and trust boundaries; enumerate threats and assign mitigations, owners, tests and residual-risk decisions."
+      ],
+      [
+        "Access Analyzer",
+        "External, internal and unused access require the appropriate analysis capability and scope. Policy validation complements activity evidence."
+      ],
+      [
+        "Response privilege",
+        "Validate event fields, separate investigation and remediation roles, scope resources/actions and record approval and verification outcomes."
+      ],
+      [
+        "AI audit scope",
+        "CloudTrail event categories differ by Bedrock API; configure required data selectors and protect separately enabled invocation/application logs."
+      ],
+      [
+        "AI control layers",
+        "Content guardrails, retrieval-data access, tool authorization, approval and audit evidence address different failure modes; test their combined behavior."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/security-lake/latest/userguide/source-management.html",
+      "https://docs.aws.amazon.com/security-lake/latest/userguide/service-concepts.html",
+      "https://docs.aws.amazon.com/audit-manager/latest/userguide/concepts.html",
+      "https://docs.aws.amazon.com/audit-manager/latest/userguide/how-evidence-is-collected.html",
+      "https://aws.amazon.com/artifact/faq/",
+      "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/infrastructure-protection.html",
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html",
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html"
+    ]
   }
 ]

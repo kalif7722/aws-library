@@ -7,7 +7,27 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
- const defaults=moduleId==='16'?['AWS-Data-Exchange','Amazon-Kinesis','Amazon-Data-Firehose','AWS-Batch','Amazon-EMR','Amazon-Redshift']:moduleId==='15'?['Amazon-CloudFront','Amazon-CloudFront','Amazon-CloudFront','AWS-Lambda','AWS-Global-Accelerator']:moduleId==='14'?['AWS-Step-Functions','Amazon-Simple-Queue-Service','Amazon-Simple-Notification-Service','Amazon-EventBridge','Amazon-EventBridge']:moduleId==='13'?['AWS-Lambda','AWS-Lambda','AWS-Lambda','Amazon-API-Gateway','Amazon-API-Gateway','Amazon-API-Gateway','AWS-AppSync']:moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
+ if(moduleId==='17'){
+  if(index===3&&/Detective|Investigation scope/.test(topic))return 'Amazon-Detective';
+  if(index===5){
+   if(/VPC Flow/.test(topic))return 'Amazon-Virtual-Private-Cloud';
+   if(/ALB|CLB|NLB/.test(topic))return 'Elastic-Load-Balancing';
+   if(/Public DNS|Resolver/.test(topic))return 'Amazon-Route-53';
+   if(/CloudFront/.test(topic))return 'Amazon-CloudFront';
+   if(/S3 server/.test(topic))return 'Amazon-S3';
+   if(/Config/.test(topic))return 'AWS-Config';
+  }
+  if(index===6){
+   if(/Security Lake/.test(topic))return 'Amazon-Security-Lake';
+   if(/Subscriber/.test(topic))return 'AWS-Lake-Formation';
+   if(/Artifact/.test(topic))return 'AWS-Artifact';
+   if(/Residency|Region key/.test(topic))return 'AWS-Organizations';
+   if(/Threat model/.test(topic))return 'AWS-Security-Hub';
+   if(/Access Analyzer|Response privilege/.test(topic))return 'AWS-Identity-and-Access-Management';
+   if(/AI /.test(topic))return 'Amazon-Bedrock';
+  }
+ }
+ const defaults=moduleId==='17'?['Amazon-Inspector','AWS-Config','Amazon-GuardDuty','AWS-Security-Hub','Amazon-Macie','AWS-CloudTrail','AWS-Audit-Manager']:moduleId==='16'?['AWS-Data-Exchange','Amazon-Kinesis','Amazon-Data-Firehose','AWS-Batch','Amazon-EMR','Amazon-Redshift']:moduleId==='15'?['Amazon-CloudFront','Amazon-CloudFront','Amazon-CloudFront','AWS-Lambda','AWS-Global-Accelerator']:moduleId==='14'?['AWS-Step-Functions','Amazon-Simple-Queue-Service','Amazon-Simple-Notification-Service','Amazon-EventBridge','Amazon-EventBridge']:moduleId==='13'?['AWS-Lambda','AWS-Lambda','AWS-Lambda','Amazon-API-Gateway','Amazon-API-Gateway','Amazon-API-Gateway','AWS-AppSync']:moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
  if(moduleId==='15'&&/Global Accelerator|Anycast|Endpoint|Traffic dial|Client IP|Inspection caveat/.test(topic))return 'AWS-Global-Accelerator';
  if(moduleId==='15'&&/Lambda|Origin rewrite/.test(topic))return 'AWS-Lambda';
  if(moduleId==='15'&&/S3|OAC|OAI/.test(topic))return 'Amazon-Simple-Storage-Service';
