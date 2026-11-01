@@ -1608,5 +1608,262 @@
       "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rule-dlq.html",
       "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-archive.html"
     ]
+  },
+  {
+    "moduleId": "15",
+    "title": "CloudFront caching and distribution contract",
+    "rows": [
+      [
+        "Hit versus miss",
+        "A hit returns from an edge cache; a miss forwards via CloudFront origin path. Origin events do not run on a hit."
+      ],
+      [
+        "Cache key",
+        "Cache policy includes selected headers, cookies and query strings; the resulting key isolates variants."
+      ],
+      [
+        "Origin request",
+        "Origin request policy can forward values without placing them in the cache key."
+      ],
+      [
+        "TTL controls",
+        "Min/default/max TTL combine with origin Cache-Control or Expires according to policy."
+      ],
+      [
+        "Stale content",
+        "Use versioned URLs or invalidations; inspect cache and origin headers before changing TTL."
+      ],
+      [
+        "Dynamic API",
+        "CloudFront can accelerate HTTP APIs without caching sensitive responses by default."
+      ],
+      [
+        "Price classes",
+        "All, 200 and 100 change edge coverage; pricing varies by geography and current schedule."
+      ],
+      [
+        "Geo restriction",
+        "Country allow/block uses GeoIP and is not user authentication."
+      ],
+      [
+        "Custom error",
+        "Error page, status mapping and Error Caching Minimum TTL may alter viewer-visible failure."
+      ],
+      [
+        "Security overlay",
+        "AWS Shield, AWS WAF and TLS are separate from cache-key correctness."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/understanding-the-cache-key.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html"
+    ]
+  },
+  {
+    "moduleId": "15",
+    "title": "Origins, OAC and failover",
+    "rows": [
+      [
+        "Private S3 REST",
+        "Use OAC with distribution-scoped bucket policy and KMS grant for SSE-KMS objects where needed."
+      ],
+      [
+        "OAC versus OAI",
+        "OAC is recommended for current S3 origins, KMS and dynamic methods."
+      ],
+      [
+        "S3 website",
+        "Website endpoint is custom HTTP origin; OAC/OAI do not apply and origin HTTPS is unsupported."
+      ],
+      [
+        "S3 upload",
+        "CloudFront PUT/DELETE to S3 needs OAC and narrow bucket policy; prevent unintended deletion."
+      ],
+      [
+        "ALB origin",
+        "An ordinary custom origin endpoint must be reachable; ALB may serve private EC2 targets."
+      ],
+      [
+        "ALB direct access",
+        "CloudFront managed prefix list plus secret custom origin header/listener rule can restrict direct requests."
+      ],
+      [
+        "VPC origin",
+        "CloudFront supports private ALB, NLB and EC2 in VPC subnets through the VPC origins feature; check restrictions and connectivity separately from public custom origins."
+      ],
+      [
+        "Origin failover",
+        "Only GET, HEAD and cached OPTIONS eligible; configured error codes and timeouts determine fallback."
+      ],
+      [
+        "Failover scope",
+        "Each request first tries primary; secondary is selected only after qualifying primary failure."
+      ],
+      [
+        "Cross-Region replication",
+        "S3 CRR creates regional copies; edge caching serves transient copies with TTL."
+      ],
+      [
+        "Origin response",
+        "Status and headers can change caching/failover; test error handling separately."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/high_availability_origin_failover.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-vpc-origins.html"
+    ]
+  },
+  {
+    "moduleId": "15",
+    "title": "Signed viewer access and policy",
+    "rows": [
+      [
+        "Trusted key group",
+        "Application signs with private key; CloudFront verifies with associated public key group."
+      ],
+      [
+        "Signed URL",
+        "Use for individual object or custom policy with expiry and optional IP or start-time constraints."
+      ],
+      [
+        "Signed cookies",
+        "Use when restricting multiple files or leaving URLs unchanged; URL policy can override cookie on same request."
+      ],
+      [
+        "S3 presign",
+        "SigV4 signs a specific S3 API request using a principal\u2019s permission; separate from CloudFront signed access."
+      ],
+      [
+        "Viewer versus origin",
+        "Signed URL/cookie controls viewer; OAC controls CloudFront-to-S3; configure both for private delivery."
+      ],
+      [
+        "Key rotation",
+        "Manage public keys and key groups independently of obsolete root-account key pair guidance."
+      ],
+      [
+        "Direct origin bypass",
+        "A public origin can bypass CloudFront signed access; protect origin access as well."
+      ],
+      [
+        "Geo and auth",
+        "Country restriction is coarse; validate identity/token claims for user authorization."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-cookies.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html"
+    ]
+  },
+  {
+    "moduleId": "15",
+    "title": "CloudFront Functions and Lambda@Edge",
+    "rows": [
+      [
+        "Function triggers",
+        "CloudFront Functions run only on viewer request or viewer response."
+      ],
+      [
+        "Lambda triggers",
+        "Lambda@Edge runs viewer request/response and origin request/response."
+      ],
+      [
+        "Cache hits",
+        "Origin request/response Lambda@Edge runs only when request reaches origin."
+      ],
+      [
+        "Shared viewer event",
+        "Do not combine CloudFront Function and Lambda@Edge on viewer events for the same cache behavior."
+      ],
+      [
+        "Valid combination",
+        "A Function on viewer event may combine with Lambda@Edge on origin event."
+      ],
+      [
+        "Functions runtime",
+        "JavaScript runtime; KVS requires runtime 2.0; no network, file system or request body."
+      ],
+      [
+        "Lambda runtime",
+        "Supported Node.js/Python versions and published version in us-east-1, replicated by CloudFront."
+      ],
+      [
+        "Function response",
+        "Viewer response functions are skipped for origin 4xx/5xx; origin response Lambda sees origin errors."
+      ],
+      [
+        "JWT checks",
+        "Validate signature, expiry, issuer/audience and policy; decoding alone is insufficient."
+      ],
+      [
+        "Origin rewrite",
+        "Lambda@Edge origin request can select origin on misses; preserve host/DNS and policy correctness."
+      ],
+      [
+        "Quota drift",
+        "Execution time, memory, deployment size and pricing can change; use linked AWS quota page."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-functions-choosing.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-function-restrictions-all.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-function-restrictions.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-cloudfront-trigger-events.html"
+    ]
+  },
+  {
+    "moduleId": "15",
+    "title": "Global Accelerator traffic and endpoints",
+    "rows": [
+      [
+        "Anycast",
+        "Standard accelerator supplies static entry IPs on the AWS global network to regional endpoints."
+      ],
+      [
+        "Listener",
+        "TCP or UDP listener port/range receives client traffic; no HTTP object cache."
+      ],
+      [
+        "Endpoint choices",
+        "Standard endpoints include ALB, NLB, EC2 and Elastic IP; custom routing uses subnets."
+      ],
+      [
+        "Health",
+        "New connections route based on endpoint health; if none healthy, fallback behavior needs evaluation."
+      ],
+      [
+        "Traffic dial",
+        "Percentage applies to traffic already directed to that regional endpoint group."
+      ],
+      [
+        "Endpoint weight",
+        "Relative weights distribute traffic among endpoints within group; health can change selection."
+      ],
+      [
+        "Client IP",
+        "Preservation support/default depends on endpoint type and configuration."
+      ],
+      [
+        "Inspection caveat",
+        "With preserved client IP, certain VPC inspection paths may be bypassed; assess security groups and WAF."
+      ],
+      [
+        "CloudFront difference",
+        "Global Accelerator proxies TCP/UDP to applications; CloudFront delivers HTTP(S) with edge caching."
+      ],
+      [
+        "DNS difference",
+        "Stable anycast addresses avoid dependence on DNS failover cache timing for entry point."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/preserve-client-ip-address.how-to-enable-preservation.html"
+    ]
   }
 ]

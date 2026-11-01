@@ -1100,5 +1100,188 @@
       "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html",
       "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
     ]
+  },
+  {
+    "moduleId": "15",
+    "title": "Edge delivery, acceleration and private origins",
+    "rows": [
+      {
+        "service": "Amazon CloudFront",
+        "icon": "Amazon-CloudFront",
+        "choose": "Deliver HTTP(S) content and APIs through AWS edge with optional cache.",
+        "operations": "Distribution, behavior, origin, cache/origin-request policies, TLS, WAF and logs.",
+        "watch": "Cache key and TTL determine sharing and staleness; dynamic content can still use the edge."
+      },
+      {
+        "service": "AWS Global Accelerator",
+        "icon": "AWS-Global-Accelerator",
+        "choose": "Provide static anycast entry for TCP/UDP to healthy regional endpoints.",
+        "operations": "Listener, regional endpoint groups, health, traffic dials and endpoint weights.",
+        "watch": "No HTTP object cache; client-IP preservation depends on endpoint type and configuration."
+      },
+      {
+        "service": "Amazon Route 53",
+        "icon": "Amazon-Route-53",
+        "choose": "Resolve DNS names with routing and health-aware policies.",
+        "operations": "Hosted zone, records, TTL, health checks and routing policy.",
+        "watch": "DNS caching/failover is not equivalent to fixed-IP anycast or edge object caching."
+      },
+      {
+        "service": "Amazon S3 REST origin with OAC",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Keep origin objects private behind CloudFront.",
+        "operations": "OAC SigV4, bucket SourceArn policy, KMS policy where required.",
+        "watch": "Viewer signed URL and origin OAC solve different access boundaries."
+      },
+      {
+        "service": "Amazon S3 website custom origin",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Serve S3 static website behavior including redirects.",
+        "operations": "CloudFront custom HTTP origin and appropriate public website access.",
+        "watch": "OAC/OAI cannot apply to S3 website endpoint; origin connection is HTTP."
+      },
+      {
+        "service": "Application Load Balancer custom origin",
+        "icon": "Elastic-Load-Balancing",
+        "choose": "Route dynamic HTTP(S) requests to application targets.",
+        "operations": "Publicly reachable ALB, CloudFront managed prefix list, secret origin header and listener rule.",
+        "watch": "Private ALB targets are possible; the ALB endpoint must be reachable by CloudFront standard custom-origin path."
+      },
+      {
+        "service": "CloudFront VPC origin",
+        "icon": "Amazon-CloudFront",
+        "choose": "Reach private ALB, NLB or EC2 origin in VPC private subnets.",
+        "operations": "Configure VPC origin and CloudFront-managed network connectivity; assess documented restrictions.",
+        "watch": "Different from the ordinary public custom-origin path and its prefix-list/header controls."
+      },
+      {
+        "service": "CloudFront origin group",
+        "icon": "Amazon-CloudFront",
+        "choose": "Fail eligible reads to a secondary origin.",
+        "operations": "Primary/secondary origins, configured failover codes and timeouts.",
+        "watch": "GET/HEAD and configured cached OPTIONS only; no POST/PUT failover."
+      },
+      {
+        "service": "CloudFront signed URL",
+        "icon": "Amazon-CloudFront",
+        "choose": "Grant restricted access to one file/path with signed policy.",
+        "operations": "Trusted key group public key, application private signer and expiry/IP policy.",
+        "watch": "Unlike S3 presign, viewer checks happen at CloudFront before cache/origin."
+      },
+      {
+        "service": "CloudFront signed cookie",
+        "icon": "Amazon-CloudFront",
+        "choose": "Grant restricted access to multiple files without changing URLs.",
+        "operations": "Trusted key group, cookie policy and viewer access.",
+        "watch": "Signed URL takes precedence when both URL and cookies are present."
+      },
+      {
+        "service": "S3 presigned URL",
+        "icon": "Amazon-Simple-Storage-Service",
+        "choose": "Grant a specific S3 request under the signer\u2019s permission.",
+        "operations": "SigV4 principal credentials and expiry; S3 evaluates request.",
+        "watch": "Does not automatically provide CloudFront caching or edge authorization."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/understanding-the-cache-key.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/high_availability_origin_failover.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/preserve-client-ip-address.how-to-enable-preservation.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-vpc-origins.html"
+    ]
+  },
+  {
+    "moduleId": "15",
+    "title": "Caching, edge code and access choices",
+    "rows": [
+      {
+        "service": "CloudFront Functions",
+        "icon": "Amazon-CloudFront",
+        "choose": "Run lightweight JavaScript at viewer request/response.",
+        "operations": "Published LIVE version, cache behavior association, compute utilization and runtime.",
+        "watch": "No origin events, network/file access or request body; KVS requires runtime 2.0."
+      },
+      {
+        "service": "Lambda@Edge",
+        "icon": "AWS-Lambda",
+        "choose": "Run Node.js/Python at viewer or origin event when richer code is needed.",
+        "operations": "Publish version in us-east-1; CloudFront replication, permissions and quotas.",
+        "watch": "Origin events occur on misses; viewer event combinations with Functions are restricted."
+      },
+      {
+        "service": "CloudFront cache policy",
+        "icon": "Amazon-CloudFront",
+        "choose": "Choose cache key and TTL for object variants.",
+        "operations": "Headers, cookies, query strings, min/default/max TTL.",
+        "watch": "Forwarded values need not all enter cache key; avoid cache fragmentation or leaks."
+      },
+      {
+        "service": "CloudFront origin request policy",
+        "icon": "Amazon-CloudFront",
+        "choose": "Forward selected viewer values to origin without cache-key variation.",
+        "operations": "Headers, cookies and query strings forwarded to origin.",
+        "watch": "If origin response varies by a value absent from key, cached response may be shared incorrectly."
+      },
+      {
+        "service": "CloudFront invalidation",
+        "icon": "Amazon-CloudFront",
+        "choose": "Remove cached objects under stable URLs.",
+        "operations": "Path/wildcard and deployment validation.",
+        "watch": "Versioned URLs often give more predictable release behavior."
+      },
+      {
+        "service": "CloudFront geo restriction",
+        "icon": "Amazon-CloudFront",
+        "choose": "Allow/block distribution access by country.",
+        "operations": "GeoIP country list and access policy.",
+        "watch": "Country location is approximate; not user authentication."
+      },
+      {
+        "service": "CloudFront price classes",
+        "icon": "Amazon-CloudFront",
+        "choose": "Trade serving-edge coverage for cost.",
+        "operations": "All, 200 or 100; assess traffic geography and current price schedule.",
+        "watch": "Fewer edge regions can increase latency; no fixed price claim."
+      },
+      {
+        "service": "CloudFront custom error response",
+        "icon": "Amazon-CloudFront",
+        "choose": "Return a branded page/status for selected origin errors.",
+        "operations": "Error mapping, page path and Error Caching Minimum TTL.",
+        "watch": "A viewer-friendly status can hide origin failure from simplistic monitoring."
+      },
+      {
+        "service": "Global Accelerator endpoint group",
+        "icon": "AWS-Global-Accelerator",
+        "choose": "Distribute TCP/UDP to regional healthy endpoints.",
+        "operations": "Listener, Region group, dial, endpoint weights and health.",
+        "watch": "Dial percentage applies to traffic already directed to that Region."
+      },
+      {
+        "service": "Global Accelerator client IP",
+        "icon": "AWS-Global-Accelerator",
+        "choose": "Preserve source IP for supported endpoint types.",
+        "operations": "Endpoint type, enabled setting and security group/WAF controls.",
+        "watch": "Defaults and NLB/EIP behavior vary; validate network inspection implications."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-functions-choosing.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/edge-function-restrictions-all.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-function-restrictions.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-cloudfront-trigger-events.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-urls.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-signed-cookies.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/understanding-the-cache-key.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html"
+    ]
   }
 ]

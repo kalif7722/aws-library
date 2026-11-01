@@ -1,0 +1,399 @@
+[
+  {
+    "sequence": 1,
+    "title": "Global Accelerator anycast entry and AWS global network",
+    "referencePages": [
+      301
+    ],
+    "layout": "topology",
+    "thesis": "Two anycast static IPs route TCP/UDP from nearest edge into the AWS network, then to healthy regional endpoints.",
+    "diagram": "Draw clients in two geographies -> same two anycast addresses -> edge -> regional ALBs. Distinguish global edge ingress from HTTP content cache.",
+    "remember": "Static entry points and regional endpoints are separate decisions.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 2,
+    "title": "Global Accelerator listener, endpoint groups and health",
+    "referencePages": [
+      302
+    ],
+    "layout": "annotated topology",
+    "thesis": "Standard accelerator listener protocol/ports, regional endpoint groups, traffic dials, endpoint weights and health checks.",
+    "diagram": "Draw listener -> two regional endpoint groups -> ALB/NLB/EC2/EIP. Healthy endpoint selection and failover for new connections; client-IP preservation depends on endpoint type/configuration.",
+    "remember": "Traffic dial is a share of traffic already directed to that Region, not a global split.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 3,
+    "title": "Global Accelerator versus CloudFront",
+    "referencePages": [
+      303
+    ],
+    "layout": "service comparison table",
+    "thesis": "Both enter AWS global edge; CloudFront serves HTTP(S) content and can cache; Global Accelerator proxies TCP/UDP to regional applications with static IPs.",
+    "diagram": "Large five-row comparison matrix: protocol, cache, endpoint, fixed IP, failover; miniature side-by-side flow below.",
+    "remember": "Use Global Accelerator for non-HTTP or static IP/regional failover; CloudFront for HTTP content delivery.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 4,
+    "title": "CloudFront request path and cache hierarchy",
+    "referencePages": [
+      379
+    ],
+    "layout": "wide data-flow",
+    "thesis": "Viewer request to edge cache; cache hit returns at edge; miss may traverse regional cache to origin; separate request and response arrows.",
+    "diagram": "Large cache hit/miss branch with icon for CloudFront, Regional Edge Cache and origin. Add Shield/WAF as security overlays, not cache stages.",
+    "remember": "Cache hit avoids origin; miss and uncacheable paths still benefit from edge connectivity.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 5,
+    "title": "CloudFront origin types and protocol contract",
+    "referencePages": [
+      380
+    ],
+    "layout": "origin decision tree",
+    "thesis": "S3 REST origin with OAC; S3 website endpoint as custom HTTP origin without OAC; ALB, EC2, API Gateway and other HTTP origins; media origins.",
+    "diagram": "Decision tree keyed on origin type, HTTPS support and access control.",
+    "remember": "An S3 website endpoint is a custom origin and cannot use OAC.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 6,
+    "title": "Private S3 origin with OAC and policy",
+    "referencePages": [
+      381
+    ],
+    "layout": "security boundary diagram",
+    "thesis": "CloudFront OAC signs requests to private S3 REST endpoint; bucket policy scopes SourceArn to distribution; KMS policy when SSE-KMS.",
+    "diagram": "Viewer -> CloudFront -> signed origin request -> private S3 with bucket policy; show direct S3 request denied.",
+    "remember": "OAC secures the origin; viewer authorization is a separate control.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 7,
+    "title": "CloudFront caching versus S3 replication",
+    "referencePages": [
+      382
+    ],
+    "layout": "two-column comparison",
+    "thesis": "Edge TTL-based caching worldwide versus S3 replication to chosen Regions; propagation, storage, update and use cases differ.",
+    "diagram": "Two equal architecture diagrams plus comparison table, no numbering.",
+    "remember": "Choose CDN for global reads, replication for regional copies and residency or recovery.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 8,
+    "title": "ALB and EC2 custom origin reachability",
+    "referencePages": [
+      383
+    ],
+    "layout": "network topology",
+    "thesis": "Publicly reachable CloudFront custom origin endpoint; ALB can route to private EC2 targets; security group and origin request protocol.",
+    "diagram": "CloudFront -> public ALB -> private EC2 instances, with explicit Internet-facing ALB; alternate public EC2 origin.",
+    "remember": "CloudFront cannot directly use a private EC2-only endpoint as an ordinary custom origin.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 9,
+    "title": "Restrict direct ALB origin access",
+    "referencePages": [
+      384
+    ],
+    "layout": "security controls matrix",
+    "thesis": "CloudFront-managed prefix list in ALB security group and a secret custom origin header checked by ALB listener rule; origin protection is layered.",
+    "diagram": "Diagram attack path direct ALB blocked and CloudFront path allowed; small control matrix.",
+    "remember": "A secret header alone is not a complete network boundary.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 10,
+    "title": "Origin group failover contract",
+    "referencePages": [
+      385
+    ],
+    "layout": "failure sequence",
+    "thesis": "Primary/secondary origin group; configured status codes and connection timeout; only GET/HEAD and cached OPTIONS eligible.",
+    "diagram": "Large failure sequence: cache miss -> primary failure -> secondary; inset ineligible POST/PUT path.",
+    "remember": "Failover is per eligible request, not a permanent regional switch.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 11,
+    "title": "CloudFront geographic restrictions",
+    "referencePages": [
+      386
+    ],
+    "layout": "policy map",
+    "thesis": "Distribution country allowlist/blocklist uses GeoIP; distinguish coarse content restriction from robust user authorization.",
+    "diagram": "Map-style regions with allowed/blocked examples and viewer request policy decision.",
+    "remember": "Geo restriction is country-based and does not replace authentication or licensing logic.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 12,
+    "title": "Price class and delivery-cost choices",
+    "referencePages": [
+      387,
+      388,
+      389
+    ],
+    "layout": "pricing comparison table",
+    "thesis": "Price Class All, 200, 100 trade edge coverage and potential latency for cost; data transfer/request prices vary by geography and commitment.",
+    "diagram": "Three-column price class table and conceptual reach map without exact prices.",
+    "remember": "Price class changes the set of serving edges; assess latency and actual traffic geography.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 13,
+    "title": "CloudFront signed URL and signed cookies",
+    "referencePages": [
+      390
+    ],
+    "layout": "authorization sequence",
+    "thesis": "Application authenticates viewer then signs URL/cookie with private key; CloudFront validates via trusted key group public key before cache/origin.",
+    "diagram": "Sequence with app signer -> viewer -> CloudFront trusted key group -> OAC private S3; signed cookie for multiple objects inset.",
+    "remember": "Trusted key groups replace obsolete root-account key pair advice.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 14,
+    "title": "CloudFront signed URL versus S3 presigned URL",
+    "referencePages": [
+      391
+    ],
+    "layout": "comparison table",
+    "thesis": "CloudFront authorization and cache/path policy versus S3 SigV4 request signed by principal; origin exposure and delivery differ.",
+    "diagram": "Large table with path, signer, caching, expiry, IP/date restrictions and origin control; short two flows.",
+    "remember": "CloudFront signature protects distribution access; S3 presign grants a specific S3 API request.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 15,
+    "title": "Custom errors and error caching",
+    "referencePages": [
+      392
+    ],
+    "layout": "decision flow",
+    "thesis": "Map selected origin 4xx/5xx to custom response page/status; Error Caching Minimum TTL and monitoring may affect recovery.",
+    "diagram": "Origin error -> CloudFront custom error policy -> S3 custom page -> viewer; preserve separate true origin status in logs.",
+    "remember": "Custom errors improve experience but can mask origin health if monitored only by viewer status.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 16,
+    "title": "Cache key, TTL and invalidation",
+    "referencePages": [
+      379,
+      392
+    ],
+    "layout": "cache policy board",
+    "thesis": "Cache policy decides headers/cookies/query strings in cache key, min/default/max TTL; origin request policy can forward data without adding to key; versioned URLs or invalidation refresh stale content.",
+    "diagram": "Key composition equation on left, hit/miss branch on right, short operational refresh panel.",
+    "remember": "Forwarding a value and including it in the cache key are distinct choices.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 17,
+    "title": "Edge function event lifecycle",
+    "referencePages": [
+      393,
+      394
+    ],
+    "layout": "event timeline",
+    "thesis": "Viewer request/response at edge and origin request/response on misses; functions alter request/response but do not provide storage cache themselves.",
+    "diagram": "Four-event event-order timeline with cache-hit short path and origin-miss long path.",
+    "remember": "Origin events do not run on a cache hit.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 18,
+    "title": "CloudFront Functions viewer events",
+    "referencePages": [
+      395
+    ],
+    "layout": "capability card",
+    "thesis": "Lightweight JavaScript at viewer request or response for header, URI, redirect and JWT-like validation; runtime 2.0 KeyValueStore; no network/file system/request body.",
+    "diagram": "One dominant viewer-edge path with a compact capability/limit table, no 3 steps.",
+    "remember": "Use Functions for short viewer-side logic; publish LIVE before association.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 19,
+    "title": "Lambda@Edge four triggers and replication",
+    "referencePages": [
+      396
+    ],
+    "layout": "event topology",
+    "thesis": "Node.js/Python published version in us-east-1 replicated globally; viewer/origin request and response; network/body capabilities subject to restrictions.",
+    "diagram": "Timeline with four trigger anchors and origin-miss boundary, regional edge cache label; version deployment callout.",
+    "remember": "Viewer and origin trigger semantics differ, especially on cache hits.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 20,
+    "title": "Combining Functions with Lambda@Edge",
+    "referencePages": [
+      397
+    ],
+    "layout": "compatibility matrix",
+    "thesis": "CloudFront Function viewer event may pair with Lambda@Edge origin event, but cannot pair with Lambda@Edge viewer event on same behavior.",
+    "diagram": "2x4 allowed/blocked matrix and one valid combined path.",
+    "remember": "Check cache-behavior/event association conflicts before deployment.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 21,
+    "title": "When Lambda@Edge is necessary",
+    "referencePages": [
+      398
+    ],
+    "layout": "decision tree",
+    "thesis": "Choose Lambda@Edge when origin event, network call, request body, longer execution or third-party library is needed; otherwise Functions often fit viewer changes.",
+    "diagram": "Decision tree with branches for origin event, body/network, lightweight viewer.",
+    "remember": "Use the least complex edge runtime that satisfies the actual event and capability.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 22,
+    "title": "CloudFront Functions versus Lambda@Edge limits",
+    "referencePages": [
+      399
+    ],
+    "layout": "detailed comparison table",
+    "thesis": "Compare runtime, trigger, location, network/file/body, memory and execution quota; avoid older fixed numeric limits unless verified.",
+    "diagram": "Large readable capability table using checkmarks and footnote current quotas vary; official service icons.",
+    "remember": "Feature support and trigger placement drive selection more reliably than stale quota snapshots.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 23,
+    "title": "Edge code use cases and cache-key normalization",
+    "referencePages": [
+      400
+    ],
+    "layout": "use-case gallery",
+    "thesis": "Functions: URI/header transforms, redirects, token checks, cache-key normalization. Lambda@Edge: body, origin logic, network, libraries.",
+    "diagram": "Four original mini workflows arranged 2x2 with practical input-output examples.",
+    "remember": "Normalize before cache lookup to avoid unnecessary cache variants.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 24,
+    "title": "Authentication at the edge",
+    "referencePages": [
+      401
+    ],
+    "layout": "security sequence",
+    "thesis": "Viewer token validation at viewer request, protected origin via OAC or origin controls; distinguish function denial and origin authorization.",
+    "diagram": "JWT verification sequence with valid/expired branches and cache placement.",
+    "remember": "An edge auth check must validate signature, expiry, audience and policy, not only decode a token.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 25,
+    "title": "User-Agent content adaptation",
+    "referencePages": [
+      402
+    ],
+    "layout": "request transformation flow",
+    "thesis": "Inspect User-Agent or supported device hints and rewrite URI for mobile image, avoiding cache collisions; origin may hold variants.",
+    "diagram": "Desktop/mobile bifurcation into distinct cache keys and objects with response labels.",
+    "remember": "Cache key must vary with transformed resource identity, or users may receive the wrong variant.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 26,
+    "title": "Global application and dynamic API path",
+    "referencePages": [
+      403
+    ],
+    "layout": "layered architecture",
+    "thesis": "CloudFront distributes static S3 content and accelerates dynamic API requests; Lambda@Edge logic can modify routing; DynamoDB access is through application API, not direct edge cache.",
+    "diagram": "Static branch cache hit S3; dynamic branch CloudFront -> regional API/Lambda -> DynamoDB.",
+    "remember": "Do not treat dynamic application data as static cached content without an explicit policy.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 27,
+    "title": "Lambda@Edge origin selection",
+    "referencePages": [
+      404
+    ],
+    "layout": "origin routing topology",
+    "thesis": "Origin-request Lambda@Edge on cache miss may select a different configured S3 origin; permissions, DNS/host header and cache behavior matter.",
+    "diagram": "Cache miss -> origin-request Lambda@Edge -> S3 origin A/B with geo/business rule; show S3 replication separately.",
+    "remember": "Origin-request selection runs only when CloudFront forwards to origin.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 28,
+    "title": "CloudFront, Global Accelerator and Route 53 selection",
+    "referencePages": [
+      303,
+      379
+    ],
+    "layout": "service decision matrix",
+    "thesis": "DNS routing, HTTP CDN cache and TCP/UDP anycast acceleration solve different layers; combine when architecture calls for them.",
+    "diagram": "Large three-service purpose/traffic/health/static-entry table, with small layered example.",
+    "remember": "A DNS response is not itself an edge content cache or packet proxy.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 29,
+    "title": "Cache update and observability workflow",
+    "referencePages": [
+      379,
+      392
+    ],
+    "layout": "operations workflow",
+    "thesis": "Versioned asset path, cache-policy TTL, invalidation and cache-hit/error metrics; inspect logs and origin response when stale or failing.",
+    "diagram": "Before/after timeline of deployment, old cache, invalidation/versioned URL and validation.",
+    "remember": "Prefer versioned asset URLs for repeatable releases; invalidate when a stable URL must change.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 30,
+    "title": "Walkthrough: private S3 via CloudFront OAC",
+    "referencePages": [
+      380,
+      381,
+      390
+    ],
+    "layout": "console walkthrough",
+    "thesis": "Create private S3 origin and OAC, scope bucket policy, use viewer controls, test CloudFront success and direct S3 denial, clean up.",
+    "diagram": "Illustrative console view with 4 sequential actions and evidence/results; no live AWS execution claim.",
+    "remember": "Test both allowed distribution access and denied direct origin access.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 31,
+    "title": "Walkthrough: ALB origin failover and error path",
+    "referencePages": [
+      383,
+      384,
+      385,
+      392
+    ],
+    "layout": "console walkthrough",
+    "thesis": "Configure primary/secondary origin group, failover status, GET test, ALB origin control and error response; verify POST does not fail over.",
+    "diagram": "Illustrative configuration/evidence screenshots with 4 actions, not generic 3 cards.",
+    "remember": "Origin group failover eligibility and direct-origin restriction must be tested separately.",
+    "status": "qa-passed"
+  },
+  {
+    "sequence": 32,
+    "title": "Walkthrough: Global Accelerator regional failover",
+    "referencePages": [
+      301,
+      302,
+      303
+    ],
+    "layout": "console walkthrough",
+    "thesis": "Create standard accelerator, listener, endpoint groups and healthy ALBs; test stable IPs and region failure, monitor new-connection rerouting, cleanup.",
+    "diagram": "Illustrative endpoint health and traffic flow, step numbers only for actual operations.",
+    "remember": "Static anycast IPs remain while endpoint selection responds to health.",
+    "status": "qa-passed"
+  }
+]

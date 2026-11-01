@@ -7,7 +7,11 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
- const defaults=moduleId==='14'?['AWS-Step-Functions','Amazon-Simple-Queue-Service','Amazon-Simple-Notification-Service','Amazon-EventBridge','Amazon-EventBridge']:moduleId==='13'?['AWS-Lambda','AWS-Lambda','AWS-Lambda','Amazon-API-Gateway','Amazon-API-Gateway','Amazon-API-Gateway','AWS-AppSync']:moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
+ const defaults=moduleId==='15'?['Amazon-CloudFront','Amazon-CloudFront','Amazon-CloudFront','AWS-Lambda','AWS-Global-Accelerator']:moduleId==='14'?['AWS-Step-Functions','Amazon-Simple-Queue-Service','Amazon-Simple-Notification-Service','Amazon-EventBridge','Amazon-EventBridge']:moduleId==='13'?['AWS-Lambda','AWS-Lambda','AWS-Lambda','Amazon-API-Gateway','Amazon-API-Gateway','Amazon-API-Gateway','AWS-AppSync']:moduleId==='11'?['Amazon-RDS','Amazon-Aurora','Amazon-DynamoDB','Amazon-ElastiCache','Amazon-OpenSearch-Service']:['Amazon-Elastic-Container-Service','Amazon-Elastic-Container-Registry','Amazon-Elastic-Kubernetes-Service','AWS-Cloud-Map','AWS-App-Runner'];
+ if(moduleId==='15'&&/Global Accelerator|Anycast|Endpoint|Traffic dial|Client IP|Inspection caveat/.test(topic))return 'AWS-Global-Accelerator';
+ if(moduleId==='15'&&/Lambda|Origin rewrite/.test(topic))return 'AWS-Lambda';
+ if(moduleId==='15'&&/S3|OAC|OAI/.test(topic))return 'Amazon-Simple-Storage-Service';
+ if(moduleId==='15'&&/ALB/.test(topic))return 'Elastic-Load-Balancing';
  if(moduleId==='14'&&/Amazon MQ|Migration|Broker/.test(topic))return 'Amazon-MQ';
  if(moduleId==='14'&&/Scheduler|Schedule delivery/.test(topic))return 'Amazon-EventBridge';
  if(moduleId==='14'&&/Pipes/.test(topic))return 'Amazon-EventBridge';
