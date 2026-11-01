@@ -1,0 +1,508 @@
+[
+  {
+    "sequence": 1,
+    "title": "Choose the AI service by input and outcome",
+    "layout": "decision matrix",
+    "points": [
+      "Images and video → Rekognition; documents → Textract",
+      "Speech → Transcribe; text to speech → Polly; languages → Translate",
+      "Text insight → Comprehend; conversation → Lex and Connect",
+      "Custom models → SageMaker AI; foundation models → Bedrock"
+    ],
+    "diagram": "Independent input-to-outcome service cards, not a sequential pipeline.",
+    "remember": "Choose the data modality and output first.",
+    "referencePages": [
+      734,
+      736,
+      737,
+      739,
+      740,
+      741,
+      743,
+      747,
+      748
+    ],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 2,
+    "title": "Rekognition analyzes visual media",
+    "layout": "capability map",
+    "points": [
+      "Image and video labels, objects, scenes and text",
+      "Face detection, analysis, search, comparison and celebrity recognition",
+      "Video person tracking/pathing and content moderation have separate APIs",
+      "Identity verification needs consent and a threshold appropriate to the risk"
+    ],
+    "diagram": "Image/video source branches into labeling, moderation, face analysis and video tracking.",
+    "remember": "A detected face is not a verified identity.",
+    "referencePages": [
+      734
+    ],
+    "service": "Amazon-Rekognition"
+  },
+  {
+    "sequence": 3,
+    "title": "Moderation threshold and human review",
+    "layout": "threshold plot",
+    "points": [
+      "DetectModerationLabels returns labels at or above MinConfidence",
+      "Lower threshold yields more candidates and more false positives",
+      "A human-review range or sample can resolve uncertain cases",
+      "A2I remains for existing customers; new designs need another review workflow"
+    ],
+    "diagram": "Confidence axis with automatic allow, review and flag decisions; explain threshold calibration.",
+    "remember": "A confidence score is evidence for a review policy, not a verdict.",
+    "referencePages": [
+      735
+    ],
+    "service": "Amazon-Rekognition"
+  },
+  {
+    "sequence": 4,
+    "title": "Transcribe converts speech into text",
+    "layout": "audio pipeline",
+    "points": [
+      "ASR creates a transcript from audio",
+      "Automatic language identification helps multilingual input",
+      "PII redaction is an optional configured output control",
+      "Captions, contact-center analysis and searchable media are use cases"
+    ],
+    "diagram": "Audio waveform → language identification → ASR transcript → optional PII-redacted output.",
+    "remember": "Protect both the audio and the transcript.",
+    "referencePages": [
+      736
+    ],
+    "service": "Amazon-Transcribe"
+  },
+  {
+    "sequence": 5,
+    "title": "Polly speaks, lexicons pronounce",
+    "layout": "speech synthesis split",
+    "points": [
+      "Text or supported SSML → synthesized speech",
+      "Pronunciation lexicons map unusual names and acronyms to spoken forms",
+      "SSML can control emphasis, phonemes and pauses, subject to voice support",
+      "Attach a lexicon to SynthesizeSpeech; test the selected voice and engine"
+    ],
+    "diagram": "Plain text and SSML inputs merge into Polly; optional pronunciation lexicon alters speech output.",
+    "remember": "Lexicon controls pronunciation; SSML controls supported speech behavior.",
+    "referencePages": [
+      737,
+      738
+    ],
+    "service": "Amazon-Polly"
+  },
+  {
+    "sequence": 6,
+    "title": "Translate localizes content",
+    "layout": "localization loop",
+    "points": [
+      "Amazon Translate converts text between supported languages",
+      "Use cases include websites, applications and document text",
+      "Check source language, target support, terminology and human quality review",
+      "Translation is distinct from speech recognition and speech synthesis"
+    ],
+    "diagram": "Source text → Translate → localized text → reviewer → published content.",
+    "remember": "A localized release still needs domain and cultural review.",
+    "referencePages": [
+      739
+    ],
+    "service": "Amazon-Translate"
+  },
+  {
+    "sequence": 7,
+    "title": "Lex and Connect serve different roles",
+    "layout": "contact-center architecture",
+    "points": [
+      "Connect receives calls and runs contact flows",
+      "Lex recognizes spoken or typed intent with ASR and NLU",
+      "A fulfillment step may invoke Lambda and CRM integration",
+      "Route unresolved requests to an agent with context and permission boundaries"
+    ],
+    "diagram": "Caller → Connect flow → Lex intent → Lambda fulfillment → CRM; escalation branch back to human agent.",
+    "remember": "Connect manages the contact center; Lex interprets the conversation.",
+    "referencePages": [
+      740
+    ],
+    "service": "Amazon-Lex"
+  },
+  {
+    "sequence": 8,
+    "title": "Comprehend finds meaning in text",
+    "layout": "NLP capability grid",
+    "points": [
+      "Detect language, entities, key phrases and sentiment",
+      "Syntax analyzes tokens and parts of speech",
+      "Topic modeling groups collections of documents",
+      "Analyze customer messages with privacy and quality checks"
+    ],
+    "diagram": "Document and email inputs → Comprehend capability cards; outputs include language, entities, sentiment, syntax and topics.",
+    "remember": "NLP outputs require interpretation in business context.",
+    "referencePages": [
+      741
+    ],
+    "service": "Amazon-Comprehend"
+  },
+  {
+    "sequence": 9,
+    "title": "Clinical text needs PHI controls",
+    "layout": "medical extraction",
+    "points": [
+      "Comprehend Medical extracts medical entities and relationships from clinical text",
+      "DetectPHI identifies protected health information in supported text",
+      "Notes, discharge summaries, test results and narratives are source examples",
+      "S3, transcribed speech and streaming ingestion need scoped access and review"
+    ],
+    "diagram": "Clinical sources → protected text processing → medical entities and PHI findings → authorized reviewer.",
+    "remember": "Detection does not replace healthcare governance.",
+    "referencePages": [
+      742
+    ],
+    "service": "Amazon-Comprehend-Medical"
+  },
+  {
+    "sequence": 10,
+    "title": "SageMaker AI model lifecycle",
+    "layout": "lifecycle loop",
+    "points": [
+      "Prepare labeled training data and select features",
+      "Train and tune a model; evaluate on held-out data",
+      "Deploy to appropriate inference mode, monitor drift and retrain",
+      "Separate experiment permissions, data access, model artifacts and endpoint access"
+    ],
+    "diagram": "Data → training → evaluation → deployment → monitored predictions → retraining loop.",
+    "remember": "Training accuracy alone does not establish production quality.",
+    "referencePages": [
+      743
+    ],
+    "service": "Amazon-SageMaker"
+  },
+  {
+    "sequence": 11,
+    "title": "Forecasting: legacy service and current path",
+    "layout": "choice board",
+    "points": [
+      "Historical time-series plus related features can predict demand",
+      "Forecast is closed to new customers; existing customers can continue",
+      "For new work, assess SageMaker Canvas time-series or SageMaker AI",
+      "Avoid historical percentage-improvement or delivery-time guarantees"
+    ],
+    "diagram": "Legacy Forecast path beside current SageMaker Canvas/Amazon SageMaker AI path, both consume time-series; no implied migration automation.",
+    "remember": "Preserve the forecasting requirement while checking service availability.",
+    "referencePages": [
+      744
+    ],
+    "service": "Amazon-Forecast"
+  },
+  {
+    "sequence": 12,
+    "title": "Kendra search and knowledge retrieval",
+    "layout": "search architecture",
+    "points": [
+      "Index documents and supported connectors for natural-language search",
+      "Rank results using relevance, freshness and feedback controls",
+      "Kendra is closed to new customers; existing deployments remain",
+      "New solutions can evaluate Bedrock Knowledge Bases for RAG"
+    ],
+    "diagram": "Existing Kendra index retrieval versus new Bedrock Knowledge Base retrieval; distinguish search results from generated answers.",
+    "remember": "Search returns evidence; generation creates an answer from it.",
+    "referencePages": [
+      745
+    ],
+    "service": "Amazon-Kendra"
+  },
+  {
+    "sequence": 13,
+    "title": "Personalize recommendations",
+    "layout": "recommendation loop",
+    "points": [
+      "Historical interactions and item metadata train recommendations",
+      "Real-time events update user context; API serves tailored items",
+      "Websites, mobile apps and outreach channels consume results",
+      "Evaluate cold-start behavior, consent, bias and relevance"
+    ],
+    "diagram": "S3 history and real-time events feed Personalize; recommendation API serves web, mobile, email/SMS applications.",
+    "remember": "Recommendations require data quality and an evaluation metric.",
+    "referencePages": [
+      746
+    ],
+    "service": "Amazon-Personalize"
+  },
+  {
+    "sequence": 14,
+    "title": "Textract extracts document structure",
+    "layout": "document extraction",
+    "points": [
+      "PDF or image input → text, handwriting, tables or form fields",
+      "Expense and identity document APIs target specialized structures",
+      "Store raw documents and extracted outputs under separate access controls",
+      "Validate low-confidence fields before downstream decisions"
+    ],
+    "diagram": "Document image → Textract → typed structured fields → review → application.",
+    "remember": "OCR text and structured field extraction are different outputs.",
+    "referencePages": [
+      747
+    ],
+    "service": "Amazon-Textract"
+  },
+  {
+    "sequence": 15,
+    "title": "Managed AI service comparison",
+    "layout": "comparison gallery",
+    "points": [
+      "Rekognition, Textract, Transcribe, Polly and Translate solve distinct modalities",
+      "Comprehend and Comprehend Medical analyze different text domains",
+      "Lex/Connect handle conversations/contact routing",
+      "Personalize, Kendra, Forecast and SageMaker AI solve recommendations/search/forecast/custom ML"
+    ],
+    "diagram": "Four clusters of independent services with official icon labels and precise input/output pairs.",
+    "remember": "Do not substitute one AI service merely because it contains ML.",
+    "referencePages": [
+      748
+    ],
+    "service": "Amazon-SageMaker"
+  },
+  {
+    "sequence": 16,
+    "title": "Foundation model request path",
+    "layout": "runtime architecture",
+    "points": [
+      "Application invokes an allowed Bedrock model using IAM and regional access",
+      "Choose a model and inference profile based on capability, latency, cost and residency",
+      "Input and output safeguards are configured explicitly",
+      "CloudTrail API activity differs from optional prompt/output invocation logs"
+    ],
+    "diagram": "Client → app role → Bedrock runtime → selected foundation model → response; separate optional guardrail and logging controls.",
+    "remember": "Model access, content safety and audit logging are separate settings.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 17,
+    "title": "RAG ingestion and retrieval are separate",
+    "layout": "two-lane architecture",
+    "points": [
+      "Ingestion reads approved source documents, chunks and embeds content",
+      "Index stores vectors and metadata with update and deletion lifecycle",
+      "Query embeds/retrieves relevant passages before model answer generation",
+      "Permissions and citations should correspond to the retrieved source"
+    ],
+    "diagram": "Top ingestion lane S3 documents → chunk/embedding → knowledge base. Bottom user query → retrieve → prompt with sources → model answer/citation.",
+    "remember": "A prompt cannot retrieve a document that was never indexed.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 18,
+    "title": "Knowledge Base choices and access",
+    "layout": "decision topology",
+    "points": [
+      "Managed Knowledge Base manages indexing and retrieval infrastructure",
+      "Customer-managed variant gives more control over vector store and parsing",
+      "Connector, ACL-filtering and feature support vary by type and Region",
+      "Scope data-source role, encryption, network path and retrieval caller"
+    ],
+    "diagram": "Two knowledge-base architecture options as alternatives; permissions at ingestion and query boundaries.",
+    "remember": "Validate document-level authorization before exposing answers.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 19,
+    "title": "RAG freshness and answer reliability",
+    "layout": "failure and recovery map",
+    "points": [
+      "Source updates require ingestion/synchronization and index verification",
+      "Handle stale, missing, conflicting and unauthorized passages explicitly",
+      "Evaluate retrieval relevance and grounded answer quality separately",
+      "Return a safe no-answer or escalation when evidence is insufficient"
+    ],
+    "diagram": "Source version → sync → retrieval → grounded response; stale-index and no-evidence branches to correction/abstention.",
+    "remember": "A fluent answer is not proof of current source grounding.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 20,
+    "title": "Bedrock guardrails at inference",
+    "layout": "guardrail boundary",
+    "points": [
+      "Input and output checks can use configured content and sensitive-information policies",
+      "A blocked input prevents usable model inference; output policy can mask/block response",
+      "Guardrails do not grant access to tools, data or models",
+      "Embedding and reranking models are outside this guardrail path"
+    ],
+    "diagram": "User prompt → input policy gate → model → output policy gate → app; separate IAM gate for access.",
+    "remember": "A guardrail complements authorization; it does not replace it.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 21,
+    "title": "Model invocation logs and data protection",
+    "layout": "audit paths",
+    "points": [
+      "Invocation logging is disabled by default and configured per account/Region",
+      "Supported bedrock-runtime calls can log request, response and metadata",
+      "Same-account/Region CloudWatch Logs or S3 destination and permissions are required",
+      "Retain, encrypt and restrict prompts and outputs as sensitive data"
+    ],
+    "diagram": "Bedrock runtime branches optional invocation logs to same-Region CloudWatch Logs/S3; CloudTrail API activity separate.",
+    "remember": "Logging content creates another sensitive data store.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 22,
+    "title": "AI service permission boundaries",
+    "layout": "security decision board",
+    "points": [
+      "Caller needs only selected API/model, resource and data access",
+      "Service roles for ingestion and vector store access differ from end-user authorization",
+      "KMS permissions and private networking may be prerequisites",
+      "Test denied paths across accounts, Regions and unsupported resources"
+    ],
+    "diagram": "Three roles: application caller, knowledge-base ingestion role, reviewer; arrows only for authorized actions.",
+    "remember": "Scope the identity for each stage of the data flow.",
+    "referencePages": [],
+    "service": "AWS-Identity-and-Access-Management"
+  },
+  {
+    "sequence": 23,
+    "title": "Choose the pattern for the request",
+    "layout": "architecture comparison",
+    "points": [
+      "Fixed AI API for specialized extraction, speech or vision",
+      "SageMaker AI for trained/custom predictive models",
+      "Bedrock direct inference for foundation-model tasks",
+      "RAG when grounded private knowledge and citations are needed"
+    ],
+    "diagram": "Four independent pattern cards with example, data need, operational control and failure mode.",
+    "remember": "Start with the required output and evidence boundary.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 24,
+    "title": "Walkthrough: media moderation review",
+    "layout": "decision walkthrough",
+    "points": [
+      "Upload approved media and invoke Rekognition moderation",
+      "Set threshold using measured false positives and misses",
+      "Route uncertain results to an available human-review workflow",
+      "Preserve decision, model version and reviewer outcome"
+    ],
+    "diagram": "Media → labels/confidence → threshold branch → review or decision → recorded outcome.",
+    "remember": "Test policy thresholds with representative content.",
+    "referencePages": [
+      734,
+      735
+    ],
+    "service": "Amazon-Rekognition"
+  },
+  {
+    "sequence": 25,
+    "title": "Walkthrough: accessible contact bot",
+    "layout": "contact walkthrough",
+    "points": [
+      "Connect accepts the call and Lex identifies intent",
+      "Lambda validates booking request and checks authorized CRM record",
+      "Fulfill or transfer to a human with relevant context",
+      "Inspect transcript handling, fallback rate and call outcome"
+    ],
+    "diagram": "Caller → Connect → Lex → Lambda/CRM; low-confidence branch → human agent.",
+    "remember": "Fallback is part of the designed customer journey.",
+    "referencePages": [
+      740
+    ],
+    "service": "Amazon-Connect"
+  },
+  {
+    "sequence": 26,
+    "title": "Walkthrough: extract invoice fields",
+    "layout": "document walkthrough",
+    "points": [
+      "Place source in protected storage and invoke Textract",
+      "Extract line items, totals and form keys with confidence",
+      "Validate mismatches and review ambiguous fields",
+      "Store approved structured output with traceable document version"
+    ],
+    "diagram": "Invoice → Textract tables/forms → validation rule → reviewer when needed → approved record.",
+    "remember": "Do not post an invoice solely because OCR returned text.",
+    "referencePages": [
+      747
+    ],
+    "service": "Amazon-Textract"
+  },
+  {
+    "sequence": 27,
+    "title": "Walkthrough: grounded internal answer",
+    "layout": "RAG walkthrough",
+    "points": [
+      "Sync an approved document into the knowledge base",
+      "Query with caller authorization and retrieval filters",
+      "Provide retrieved passages to the model and return source references",
+      "Test an absent document, stale version and unauthorized query"
+    ],
+    "diagram": "Approved document → index; query → authorized retrieval → cited answer, with abstain branch.",
+    "remember": "Evaluate retrieval and generation separately.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 28,
+    "title": "Walkthrough: train and deploy a model",
+    "layout": "model lifecycle walkthrough",
+    "points": [
+      "Prepare labeled data with training/validation split",
+      "Train, tune and compare against a baseline",
+      "Deploy to suitable endpoint or batch inference path",
+      "Monitor performance and trigger retraining with approval"
+    ],
+    "diagram": "Dataset → train → evaluate gate → deploy → predictions → monitoring.",
+    "remember": "Only a validated model should reach an endpoint.",
+    "referencePages": [
+      743
+    ],
+    "service": "Amazon-SageMaker"
+  },
+  {
+    "sequence": 29,
+    "title": "Cost and availability architecture",
+    "layout": "tradeoff board",
+    "points": [
+      "Account for ingestion, storage, inference tokens and data transfer",
+      "Choose provisioned/throughput options only after workload measurement",
+      "Review model/feature/Region availability and service lifecycle",
+      "Set budgets, retries and throttling behavior for user-facing flows"
+    ],
+    "diagram": "Cost drivers grouped by indexing, requests, output tokens and storage; Region availability gate.",
+    "remember": "A working prototype is not yet an operational cost design.",
+    "referencePages": [],
+    "service": "Amazon-Bedrock"
+  },
+  {
+    "sequence": 30,
+    "title": "AI architecture exam decisions",
+    "layout": "scenario decision table",
+    "points": [
+      "Visual content moderation → Rekognition with review policy",
+      "Clinical PHI → Comprehend Medical; general sentiment → Comprehend",
+      "Existing Kendra or Forecast versus new-customer alternatives",
+      "Private source grounding → Bedrock Knowledge Bases with access controls"
+    ],
+    "diagram": "Four scenario cards each point to a selected service and one disqualifying condition.",
+    "remember": "Read the input, requested output and customer availability.",
+    "referencePages": [
+      734,
+      735,
+      741,
+      742,
+      744,
+      745,
+      748
+    ],
+    "service": "Amazon-Bedrock"
+  }
+]

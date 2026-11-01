@@ -7,6 +7,22 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
+ if(moduleId==='18'){
+  if(/Rekognition|Moderation|Face|A2I/.test(topic))return 'Amazon-Rekognition';
+  if(/Textract|Extraction|Document security/.test(topic))return 'Amazon-Textract';
+  if(/Transcribe|Transcript/.test(topic))return 'Amazon-Transcribe';
+  if(/Polly/.test(topic))return 'Amazon-Polly';
+  if(/Translate/.test(topic))return 'Amazon-Translate';
+  if(/Lex/.test(topic))return 'Amazon-Lex';
+  if(/Connect|Fallback/.test(topic))return 'Amazon-Connect';
+  if(/Comprehend Medical|DetectPHI/.test(topic))return 'Amazon-Comprehend-Medical';
+  if(/Comprehend|Entities|Sentiment/.test(topic))return 'Amazon-Comprehend';
+  if(/Personalize|Recommendation/.test(topic))return 'Amazon-Personalize';
+  if(/Forecast/.test(topic))return 'Amazon-Forecast';
+  if(/Kendra/.test(topic))return 'Amazon-Kendra';
+  if(/SageMaker|Canvas/.test(topic))return 'Amazon-SageMaker';
+  return ['Amazon-Rekognition','Amazon-Transcribe','Amazon-Comprehend','Amazon-SageMaker','Amazon-Bedrock'][index];
+ }
  if(moduleId==='17'){
   if(index===3&&/Detective|Investigation scope/.test(topic))return 'Amazon-Detective';
   if(index===5){
@@ -59,7 +75,7 @@ export default function SapPrecisionReference({moduleId}:{moduleId:string}) {
  const count=groups.reduce((sum,group)=>sum+group.rows.length,0);
  const detailCount=own.reduce((sum,section)=>sum+section.rows.length,0);
  return <section className={`sap-s3-ref${enhanced?' sap-precision-enhanced':''}`} id="module-precision-reference" aria-label="Detailed service comparison">
-  <header><p className="sap-s3-kicker">DETAILS AND EXCEPTIONS · REVIEWED 31 OCTOBER 2026</p><h2>{enhanced?'Compare the services. Master the details.':'Inspect the limits. Keep the exceptions.'}</h2><p>{enhanced?'Choose the right service, then check the operating model, security gates, recovery behavior and exceptions. These comparisons cover the core services, service features and supporting integrations taught in this module.':'Use these readable comparisons alongside the visual lessons. Numerical maxima depend on the selected Region, instance, configuration and current service documentation.'}</p>
+  <header><p className="sap-s3-kicker">DETAILS AND EXCEPTIONS · REVIEWED 1 NOVEMBER 2026</p><h2>{enhanced?'Compare the services. Master the details.':'Inspect the limits. Keep the exceptions.'}</h2><p>{enhanced?'Choose the right service, then check the operating model, security gates, recovery behavior and exceptions. These comparisons cover the core services, service features and supporting integrations taught in this module.':'Use these readable comparisons alongside the visual lessons. Numerical maxima depend on the selected Region, instance, configuration and current service documentation.'}</p>
   {enhanced&&<><div className="sap-reference-stats"><span><strong>{count}</strong> service &amp; feature comparisons</span><span><strong>{detailCount}</strong> precision details</span><span><strong>AWS</strong> official architecture icons</span></div><nav aria-label="Comparison sections">{groups.map((group,index)=><a key={group.title} href={`#sap-${moduleId}-compare-${index}`}>{group.title}</a>)}<a href={`#sap-${moduleId}-precision`}>Limits &amp; exceptions ↓</a></nav></>}
   </header>
   {enhanced&&<div className="sap-comparison-guide"><strong>Read across to make a decision.</strong> Compare purpose → operating contract → caveat. Supporting services are building blocks, not interchangeable alternatives. Feature rows use the parent AWS service icon. On a small screen, scroll each table sideways; service names stay visible.</div>}
