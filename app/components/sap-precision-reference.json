@@ -2778,5 +2778,167 @@
       "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
       "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
     ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Agent orchestration and action contracts",
+    "rows": [
+      [
+        "InvokeAgent",
+        "The agent can classify, choose retrieval or action, request missing inputs, observe results and iterate until response."
+      ],
+      [
+        "Action schema",
+        "An action group defines supported parameters and function or API shape; executor validates all input."
+      ],
+      [
+        "Lambda fulfillment",
+        "Action-group Lambda requires resource-based permission for Bedrock; Lambda execution role governs downstream APIs."
+      ],
+      [
+        "Return control",
+        "InvokeAgent returns invocationInputs and invocationId; app executes only after its own policy and returns result with the same IDs in sessionState."
+      ],
+      [
+        "Session history",
+        "Context can influence orchestration but must not become authorization."
+      ],
+      [
+        "Version and alias",
+        "Test prepared agent version/alias and permission scope before production invocation."
+      ],
+      [
+        "Retrieval data",
+        "A KB supplies answer context; retrieved instructions are untrusted content."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+    ]
+  },
+  {
+    "moduleId": "19",
+    "title": "AgentCore identity and tool policy",
+    "rows": [
+      [
+        "Inbound access",
+        "Use appropriate IAM/JWT authorization to identify callers of runtime or gateway."
+      ],
+      [
+        "Outbound access",
+        "Credential provider can vend scoped OAuth or API credentials to tool integrations; do not place secrets in prompts."
+      ],
+      [
+        "User versus workload",
+        "Separate end-user delegation from machine-to-machine access; retain request origin in audit."
+      ],
+      [
+        "Gateway policy",
+        "A configured policy engine can authorize CallTool against caller, tool and context; test default-deny behavior."
+      ],
+      [
+        "Target permissions",
+        "Gateway authorization and the downstream target permissions are distinct checks."
+      ],
+      [
+        "Cross-boundary",
+        "Verify account, Region and session identity propagation limits before relying on a delegated pattern."
+      ],
+      [
+        "Resource scope",
+        "Limit agent, KB, tool and secret ARNs/permissions; avoid universal administrative roles."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html"
+    ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Content safety and responsible AI",
+    "rows": [
+      [
+        "Input/output guardrail",
+        "Configure supported content, denied-topic, word and sensitive-information policies; evaluate both directions."
+      ],
+      [
+        "Prompt attack",
+        "Treat retrieved documents and tool responses as data; configure filters and enforce independent tool policy."
+      ],
+      [
+        "Automated Reasoning",
+        "Policy logic can identify contradictions and assumptions only for modeled variables; it is not prompt-injection defense."
+      ],
+      [
+        "Current limitations",
+        "Automated Reasoning checks are English US, non-streaming and limited to modeled policy scope per AWS docs reviewed 2 November 2026."
+      ],
+      [
+        "Fairness and accuracy",
+        "Evaluate representative cohorts and edge cases; record failures and affected user groups."
+      ],
+      [
+        "Human escalation",
+        "Provide abstention, appeal and ownership for high-impact decisions."
+      ],
+      [
+        "Policy version",
+        "Retain configuration/version with test evidence and decision records."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+    ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Approval, recovery and evidence",
+    "rows": [
+      [
+        "Confirmation timing",
+        "Obtain approval before invoking a state-changing action; denial must not call executor."
+      ],
+      [
+        "Approval context",
+        "Show exact target, parameters, consequence and supporting evidence; protect reviewer authentication."
+      ],
+      [
+        "Callback token",
+        "Step Functions task-token workflow pauses until authorized callback or timeout."
+      ],
+      [
+        "Stale approvals",
+        "After approval, recheck current resource and policy before side effect; bind approved payload to execution."
+      ],
+      [
+        "Idempotency",
+        "Deduplicate retries with business request ID and store execution outcome."
+      ],
+      [
+        "Denial and timeout",
+        "Record reject/expired state and route to safe response or escalation without action."
+      ],
+      [
+        "Traces and logs",
+        "Agent trace, CloudTrail API events and app approval logs answer different questions; redact sensitive prompts/outputs."
+      ],
+      [
+        "Telemetry defaults",
+        "AgentCore service metrics and optional spans/logs vary by resource; explicitly configure destinations where needed."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+      "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/trace-events.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html"
+    ]
   }
 ]

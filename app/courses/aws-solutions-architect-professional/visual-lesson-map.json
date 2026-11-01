@@ -425,8 +425,22 @@
       "id": "19",
       "title": "Agents, responsible AI and human oversight",
       "plannedVisuals": 22,
-      "acceptedVisuals": 0,
-      "status": "planned"
+      "acceptedVisuals": 22,
+      "status": "visuals-complete",
+      "coverageReview": {
+        "date": "2026-11-02",
+        "source": "Official SAP-C03 guide Domain 2 Task 2.5 and AWS service documentation; legacy source PDF has no dedicated agent section.",
+        "acceptedLessons": 22,
+        "walkthroughs": 3,
+        "comparisonRows": 14,
+        "precisionRows": 29,
+        "officialSkills": [
+          "2.5.1",
+          "2.5.2",
+          "2.5.3"
+        ],
+        "scope": "Module 19 only; later modules remain planned."
+      }
     },
     {
       "id": "20",
@@ -2504,7 +2518,14 @@
         "sap-18-027",
         "sap-18-028",
         "sap-18-029",
-        "sap-18-030"
+        "sap-18-030",
+        "sap-19-004",
+        "sap-19-011",
+        "sap-19-012",
+        "sap-19-013",
+        "sap-19-014",
+        "sap-19-018",
+        "sap-19-020"
       ],
       "status": "in-progress"
     },
@@ -2531,7 +2552,21 @@
         "sap-18-027",
         "sap-18-028",
         "sap-18-029",
-        "sap-18-030"
+        "sap-18-030",
+        "sap-19-001",
+        "sap-19-002",
+        "sap-19-003",
+        "sap-19-004",
+        "sap-19-005",
+        "sap-19-006",
+        "sap-19-008",
+        "sap-19-009",
+        "sap-19-010",
+        "sap-19-012",
+        "sap-19-018",
+        "sap-19-019",
+        "sap-19-020",
+        "sap-19-022"
       ],
       "status": "in-progress"
     },
@@ -2543,7 +2578,16 @@
         "19"
       ],
       "acceptedVisuals": [
-        "sap-17-031"
+        "sap-17-031",
+        "sap-19-001",
+        "sap-19-006",
+        "sap-19-007",
+        "sap-19-014",
+        "sap-19-015",
+        "sap-19-016",
+        "sap-19-017",
+        "sap-19-019",
+        "sap-19-021"
       ],
       "status": "in-progress"
     },
@@ -32937,11 +32981,997 @@
         ],
         "contentReviewedDate": "2026-11-01"
       }
+    ],
+    "19": [
+      {
+        "id": "sap-19-001",
+        "moduleId": "19",
+        "sequence": 1,
+        "title": "Agentic AI changes the trust boundary",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2",
+          "2.5.3"
+        ],
+        "imageBrief": "User to agent; model proposes tool call; policy gate and optional human approval precede tool, then observation returns to agent.",
+        "visualElements": [
+          "architecture landscape",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "A model proposes actions; the application and tools perform them",
+          "Separate user, agent, model, retrieval, tool and protected data roles",
+          "Every tool call crosses an authorization and data boundary",
+          "Human approval is a control for consequential actions",
+          "A model suggestion is not authorization."
+        ],
+        "decisionCue": "A model suggestion is not authorization.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-01.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-002",
+        "moduleId": "19",
+        "sequence": 2,
+        "title": "Bedrock Agent orchestration loop",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Question→agent→model decision; branch to knowledge base or action group; observation loops back; final response exits.",
+        "visualElements": [
+          "loop architecture",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "InvokeAgent can use preprocessing and orchestration",
+          "The agent may retrieve knowledge, request missing parameters or invoke an action group",
+          "A tool result becomes an observation that informs another iteration",
+          "The session returns a response after sufficient evidence",
+          "An agent can iterate; it is not a fixed three-step pipeline."
+        ],
+        "decisionCue": "An agent can iterate; it is not a fixed three-step pipeline.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-02.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-003",
+        "moduleId": "19",
+        "sequence": 3,
+        "title": "Action groups are executable contracts",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Agent action group schema→parameter validation→Lambda OR return-control application executor→business system.",
+        "visualElements": [
+          "tool contract",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Define function or API parameters in action-group schema",
+          "Fulfillment can use Lambda or return control to the application",
+          "Validate types, resource IDs, tenancy and business rules in the executor",
+          "Use least privilege and idempotent handling for retries",
+          "The tool implementation enforces the contract."
+        ],
+        "decisionCue": "The tool implementation enforces the contract.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-03.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-004",
+        "moduleId": "19",
+        "sequence": 4,
+        "title": "Knowledge retrieval is not tool permission",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1",
+          "2.5.2"
+        ],
+        "imageBrief": "Parallel retrieval read lane and action write lane; explicit authorization gate before write.",
+        "visualElements": [
+          "split data/action",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Knowledge Bases return scoped evidence for grounding",
+          "Action groups can change external state",
+          "Retrieved content is untrusted input, not an instruction to bypass controls",
+          "Separate read access from write capability and track provenance",
+          "A document cannot grant the agent new privileges."
+        ],
+        "decisionCue": "A document cannot grant the agent new privileges.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-04.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-005",
+        "moduleId": "19",
+        "sequence": 5,
+        "title": "Agent service role and Lambda permission",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Four identities with labeled permissions, not one universal role.",
+        "visualElements": [
+          "permission map",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Bedrock Agents service role needs only approved model, KB and action integration access",
+          "Action-group Lambda needs a resource policy permitting the agent to invoke it",
+          "Lambda execution role separately scopes downstream actions",
+          "Caller needs InvokeAgent on intended alias",
+          "Permission to invoke a tool differs from the tool’s own permissions."
+        ],
+        "decisionCue": "Permission to invoke a tool differs from the tool’s own permissions.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-05.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-006",
+        "moduleId": "19",
+        "sequence": 6,
+        "title": "Return control keeps execution in the app",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2",
+          "2.5.3"
+        ],
+        "imageBrief": "Agent→application invocationInputs; app policy/approval→external API; app result→agent via sessionState; denied branch returns no execution.",
+        "visualElements": [
+          "sequence with control handoff",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "RETURN_CONTROL sends elicited parameters and invocationId to the application",
+          "Application checks policy and approval before executing an API",
+          "Submit the result with matching invocationId and action group in a later InvokeAgent request",
+          "Handle denial, timeout and replay explicitly",
+          "Return control makes the application the execution boundary."
+        ],
+        "decisionCue": "Return control makes the application the execution boundary.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-06.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-007",
+        "moduleId": "19",
+        "sequence": 7,
+        "title": "User confirmation before high-impact action",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.3"
+        ],
+        "imageBrief": "Proposed action→confirmation→allowed branch→fresh validation→tool; denied branch→safe response.",
+        "visualElements": [
+          "approval gate",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Configure confirmation for selected Bedrock Agent action-group functions",
+          "Present exact target, parameters and consequence to the user",
+          "Deny must prevent the action; never execute first and ask later",
+          "Revalidate authorization and resource state after approval",
+          "Approval belongs before the side effect."
+        ],
+        "decisionCue": "Approval belongs before the side effect.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-07.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-008",
+        "moduleId": "19",
+        "sequence": 8,
+        "title": "AgentCore Identity: inbound and outbound",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Caller identity→AgentCore inbound→agent; separate outbound credential provider→tool.",
+        "visualElements": [
+          "identity boundary",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Inbound auth verifies who may invoke the runtime or gateway",
+          "Outbound credentials enable scoped access to AWS or third-party tools",
+          "User-delegated and machine-to-machine credentials serve different ownership models",
+          "Avoid embedding long-lived API keys in prompts or agent code",
+          "Authentication into an agent does not authorize every tool."
+        ],
+        "decisionCue": "Authentication into an agent does not authorize every tool.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-08.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-009",
+        "moduleId": "19",
+        "sequence": 9,
+        "title": "Gateway authorization before tool calls",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Agent→authenticated Gateway→policy decision→tool target; denied branch stops before target.",
+        "visualElements": [
+          "gateway policy",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "AgentCore Gateway exposes governed tool targets",
+          "IAM or JWT protects entry; a policy engine can authorize tool actions",
+          "Default deny and caller/resource conditions limit tool reach",
+          "Keep schema validation and downstream permissions in place",
+          "One governed gateway does not remove downstream checks."
+        ],
+        "decisionCue": "One governed gateway does not remove downstream checks.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-09.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-010",
+        "moduleId": "19",
+        "sequence": 10,
+        "title": "Three identities in delegated tool access",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "User principal→agent identity→credential provider→external tool, each with explicit scope.",
+        "visualElements": [
+          "delegation diagram",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Distinguish end user, agent workload and outbound service credential",
+          "Preserve caller context where the pattern supports it",
+          "Use dedicated scopes, consent and expiry for external SaaS access",
+          "Audit who requested and which credential executed the operation",
+          "A shared agent role can hide the real requester without context propagation."
+        ],
+        "decisionCue": "A shared agent role can hide the real requester without context propagation.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-10.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-011",
+        "moduleId": "19",
+        "sequence": 11,
+        "title": "Guardrails evaluate input and output",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1"
+        ],
+        "imageBrief": "User input→input guardrail→model→output guardrail→response; blocked branches explicit.",
+        "visualElements": [
+          "policy gates",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Configure content, denied topic, word and sensitive-information policies",
+          "Input and output intervention behavior differs",
+          "A guardrail can attach to supported agent/model paths",
+          "Test policy versions with representative prompts and responses",
+          "A guardrail is one layer, not an access policy."
+        ],
+        "decisionCue": "A guardrail is one layer, not an access policy.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-11.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-012",
+        "moduleId": "19",
+        "sequence": 12,
+        "title": "Prompt injection crosses a data boundary",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1",
+          "2.5.2"
+        ],
+        "imageBrief": "Attacker document→retrieval→agent; attempted tool call→policy/approval gate denies.",
+        "visualElements": [
+          "attack-and-control",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "An attacker can place instructions in retrieved documents or tool results",
+          "Treat those bytes as data even when the model reads them",
+          "Use scoped retrieval, output checks, tool authorization and confirmation",
+          "Test exfiltration and unintended action attempts",
+          "Untrusted content must not become tool authority."
+        ],
+        "decisionCue": "Untrusted content must not become tool authority.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-12.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-013",
+        "moduleId": "19",
+        "sequence": 13,
+        "title": "Automated reasoning has a narrow proof scope",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1"
+        ],
+        "imageBrief": "Response→policy logic check→structured feedback; separate prompt-attack filter and human review.",
+        "visualElements": [
+          "verification board",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Policy-backed checks can flag contradiction and unstated assumptions",
+          "Validation is limited to variables represented in the policy",
+          "It does not detect prompt injection or off-topic material",
+          "Current documented limitations include English US and no streaming",
+          "A valid policy result is not a universal truth guarantee."
+        ],
+        "decisionCue": "A valid policy result is not a universal truth guarantee.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-13.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-014",
+        "moduleId": "19",
+        "sequence": 14,
+        "title": "Responsible AI is a lifecycle",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1",
+          "2.5.3"
+        ],
+        "imageBrief": "Design→test→release gate→monitor→revise loop, with human owner at each decision.",
+        "visualElements": [
+          "risk lifecycle",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Define intended use, affected users and unacceptable harms",
+          "Evaluate accuracy, harmful content, bias and privacy on representative cases",
+          "Monitor incidents and drift after release",
+          "Assign owners, version evidence and escalation paths",
+          "Safety needs continuous measurement and ownership."
+        ],
+        "decisionCue": "Safety needs continuous measurement and ownership.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-14.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-015",
+        "moduleId": "19",
+        "sequence": 15,
+        "title": "Human review must be meaningful",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.3"
+        ],
+        "imageBrief": "Agent proposal→reviewer evidence panel→approve/reject/revise; only approved path reaches executor.",
+        "visualElements": [
+          "review workbench",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Show source evidence, proposed action, target and impact",
+          "Reviewer can approve, reject or request more information",
+          "Record decision, identity, time and policy version",
+          "Protect against rubber-stamping, stale context and dual-control bypass",
+          "A click without context is not effective oversight."
+        ],
+        "decisionCue": "A click without context is not effective oversight.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-15.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-016",
+        "moduleId": "19",
+        "sequence": 16,
+        "title": "Step Functions approval with callback",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.3"
+        ],
+        "imageBrief": "State machine→wait for callback→approved action OR rejected close; timeout branch escalates.",
+        "visualElements": [
+          "durable workflow",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "A Standard workflow can pause using a callback task token",
+          "Deliver approval request through an application/notification channel",
+          "Authorized decision returns the token and outcome",
+          "Set timeout, denial, duplicate and expired-token behavior",
+          "The workflow must resume only from an authorized callback."
+        ],
+        "decisionCue": "The workflow must resume only from an authorized callback.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-16.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-017",
+        "moduleId": "19",
+        "sequence": 17,
+        "title": "Approval and automation need failure boundaries",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.3"
+        ],
+        "imageBrief": "Failure branches around approval token, validation, executor, and audit record.",
+        "visualElements": [
+          "failure tree",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Expired approval must not trigger execution",
+          "Retries must avoid duplicate side effects",
+          "Changed target state requires fresh pre-action validation",
+          "Record partial failures and compensating or manual recovery",
+          "Approval of old parameters is not approval of changed reality."
+        ],
+        "decisionCue": "Approval of old parameters is not approval of changed reality.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-17.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-018",
+        "moduleId": "19",
+        "sequence": 18,
+        "title": "Agent trace and protected evidence",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1",
+          "2.5.2"
+        ],
+        "imageBrief": "Agent runtime→trace; API→CloudTrail; business approval→protected audit store, distinct evidence streams.",
+        "visualElements": [
+          "observability split",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "InvokeAgent traces show orchestration, KB queries and action group steps when enabled",
+          "CloudTrail records supported API activity; application logs record business decisions",
+          "AgentCore telemetry settings vary by resource and signal",
+          "Redact secrets and protect prompt, tool and trace data",
+          "A trace explains a path; it is not an access-control boundary."
+        ],
+        "decisionCue": "A trace explains a path; it is not an access-control boundary.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-18.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/trace-events.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-019",
+        "moduleId": "19",
+        "sequence": 19,
+        "title": "Choose agent or deterministic workflow",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2",
+          "2.5.3"
+        ],
+        "imageBrief": "Three independent patterns: direct API, agent selection, deterministic workflow; combined handoff for controlled execution.",
+        "visualElements": [
+          "decision matrix",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Use an agent when open-ended interpretation and tool selection are required",
+          "Use Step Functions for known, durable and auditable state transitions",
+          "Combine them: agent proposes, workflow validates and obtains approval",
+          "Bound latency, cost, retries and blast radius",
+          "Do not make a deterministic approval process depend on model discretion."
+        ],
+        "decisionCue": "Do not make a deterministic approval process depend on model discretion.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-19.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+          "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-020",
+        "moduleId": "19",
+        "sequence": 20,
+        "title": "Walkthrough: deny injected export request",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.1",
+          "2.5.2"
+        ],
+        "imageBrief": "Query→retrieval with injected instruction→proposed export→deny gate; no tool execution.",
+        "visualElements": [
+          "threat walkthrough",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Retrieved document contains malicious export instruction",
+          "Agent tries to propose an external tool call",
+          "Gateway policy and app validation deny unauthorized destination",
+          "Trace records attempt; user receives grounded answer without export",
+          "The data source cannot rewrite the tool policy."
+        ],
+        "decisionCue": "The data source cannot rewrite the tool policy.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-20.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-021",
+        "moduleId": "19",
+        "sequence": 21,
+        "title": "Walkthrough: approve a scoped refund",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.3"
+        ],
+        "imageBrief": "Proposal→policy→review callback→fresh validation→refund API→receipt; denial/timeout separate.",
+        "visualElements": [
+          "approval walkthrough",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Agent proposes exact account, amount and refund reason",
+          "Policy caps and reviewer context determine approval",
+          "Step Functions callback pauses before executor",
+          "Executor rechecks order and idempotency; audit captures outcome",
+          "The approved payload must match the executed payload."
+        ],
+        "decisionCue": "The approved payload must match the executed payload.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-21.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+          "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      },
+      {
+        "id": "sap-19-022",
+        "moduleId": "19",
+        "sequence": 22,
+        "title": "Walkthrough: investigate an agent denial",
+        "visualType": "architecture-explainer",
+        "examSkills": [
+          "2.5.2"
+        ],
+        "imageBrief": "Caller→agent→gateway→tool with four diagnostic checkpoints; no automatic blanket grant.",
+        "visualElements": [
+          "diagnostic walkthrough",
+          "Original technical illustration",
+          "Readable explanation",
+          "Remember takeaway"
+        ],
+        "learningNotes": [
+          "Inspect caller authentication and resource policy first",
+          "Review Gateway policy denial and outbound credential scope",
+          "Compare trace, request ID and target service rejection",
+          "Fix the narrowest missing permission and retest denied paths",
+          "A tool error is not always a model problem."
+        ],
+        "decisionCue": "A tool error is not always a model problem.",
+        "asset": "/course-visuals/sap-c03/module-19/slide-22.webp",
+        "status": "qa-passed",
+        "draftAsset": null,
+        "qa": {
+          "technical": true,
+          "text": true,
+          "readability": true,
+          "imageFirst": true,
+          "sourceCoverage": true,
+          "publicationFormat": true
+        },
+        "sources": [
+          "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+          "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html"
+        ],
+        "sourcePdfPages": [],
+        "contentReviewedDate": "2026-11-02"
+      }
     ]
   },
   "audit": {
     "plannedVisuals": 947,
-    "acceptedVisuals": 705,
+    "acceptedVisuals": 727,
     "officialSkills": 115,
     "officialSkillsCoveredByAcceptedVisuals": 73,
     "pdfDistinctTopicsReviewed": false,

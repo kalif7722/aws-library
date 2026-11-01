@@ -1737,5 +1737,142 @@
       "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html",
       "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html"
     ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Agent runtime, tools and retrieval",
+    "rows": [
+      {
+        "service": "Amazon Bedrock Agents",
+        "icon": "Amazon-Bedrock",
+        "choose": "Managed orchestration of model, action groups and knowledge bases.",
+        "operations": "InvokeAgent uses agent alias, service role, optional guardrail, trace and session context.",
+        "watch": "Agent chooses a possible action; it does not create business authorization."
+      },
+      {
+        "service": "Bedrock action groups",
+        "icon": "Amazon-Bedrock",
+        "choose": "Define typed tool/API contract and parameter elicitation.",
+        "operations": "Fulfill through Lambda or return control to your application; optional user confirmation.",
+        "watch": "Validate parameters and current state in executor; handle retries and denial."
+      },
+      {
+        "service": "Bedrock Knowledge Bases",
+        "icon": "Amazon-Bedrock",
+        "choose": "Ground answers in indexed private evidence.",
+        "operations": "Scope source ingestion and query access; trace retrieved data.",
+        "watch": "Retrieved text is untrusted data and cannot grant tool access."
+      },
+      {
+        "service": "AWS Lambda action executor",
+        "icon": "AWS-Lambda",
+        "choose": "Run bounded business logic for agent action group.",
+        "operations": "Lambda resource policy allows Bedrock invocation; its execution role separately scopes downstream calls.",
+        "watch": "Avoid broad privileges and duplicate side effects."
+      },
+      {
+        "service": "AgentCore Runtime",
+        "icon": "Amazon-Bedrock-AgentCore",
+        "choose": "Host custom agent workload with managed runtime.",
+        "operations": "Protect inbound access and configure appropriate observability.",
+        "watch": "Distinct from the Bedrock Agents managed orchestration service."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-how.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/action-handle.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-returncontrol.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-permissions.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html"
+    ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Identity, authorization and content controls",
+    "rows": [
+      {
+        "service": "AgentCore Identity",
+        "icon": "Amazon-Bedrock-AgentCore",
+        "choose": "Inbound and outbound agent identity and credential management.",
+        "operations": "Configure IAM/JWT or OAuth patterns and scoped outbound providers.",
+        "watch": "Caller authentication is not blanket authority for external tools."
+      },
+      {
+        "service": "AgentCore Gateway and Policy",
+        "icon": "Amazon-Bedrock-AgentCore",
+        "choose": "Expose and govern tool targets through a central gateway.",
+        "operations": "Protect entry and attach fine-grained policy where supported; retain downstream enforcement.",
+        "watch": "Default denial and scope must be tested, including absent caller context."
+      },
+      {
+        "service": "Bedrock Guardrails",
+        "icon": "Amazon-Bedrock",
+        "choose": "Supported input/output content, topic, word and sensitive-information checks.",
+        "operations": "Attach to supported inference or agent flows and evaluate interventions.",
+        "watch": "Guardrails do not authorize tool calls or replace IAM."
+      },
+      {
+        "service": "Automated Reasoning checks",
+        "icon": "Amazon-Bedrock",
+        "choose": "Check a response against modeled policy logic.",
+        "operations": "Inspect contradiction/assumption feedback and policy coverage.",
+        "watch": "Does not stop prompt injection; no streaming, English US and modeled-variable limits per current docs."
+      },
+      {
+        "service": "Amazon CloudTrail",
+        "icon": "AWS-CloudTrail",
+        "choose": "Recorded supported API activity and principal context.",
+        "operations": "Correlate request IDs and Region with trace and application decision record.",
+        "watch": "API activity alone does not capture full prompt, approval rationale or tool result."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-inbound-auth.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/use-gateway-with-policy.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/trace-events.html"
+    ]
+  },
+  {
+    "moduleId": "19",
+    "title": "Human approval and operational evidence",
+    "rows": [
+      {
+        "service": "Bedrock action confirmation",
+        "icon": "Amazon-Bedrock",
+        "choose": "Request end-user confirmation for selected actions.",
+        "operations": "Present proposed function, target and parameters; deny stops action.",
+        "watch": "A confirmation should precede execution and the app still validates permissions."
+      },
+      {
+        "service": "AWS Step Functions callback",
+        "icon": "AWS-Step-Functions",
+        "choose": "Durable workflow that pauses for a reviewer decision.",
+        "operations": "Use task token, authorized callback, timeout and reject branch.",
+        "watch": "A notification or click alone is not a secure approval record."
+      },
+      {
+        "service": "Agent trace",
+        "icon": "Amazon-Bedrock",
+        "choose": "Troubleshoot orchestration, retrieval and action steps.",
+        "operations": "Enable trace and protect sensitive parameters/observations.",
+        "watch": "A trace explains path selection; it is not a preventive control."
+      },
+      {
+        "service": "AgentCore observability",
+        "icon": "Amazon-Bedrock-AgentCore",
+        "choose": "Runtime and gateway metrics, logs and traces.",
+        "operations": "Resource-specific telemetry and log destinations need configuration.",
+        "watch": "Do not assume all resource types produce all signals by default."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/agents-userconfirmation.html",
+      "https://docs.aws.amazon.com/step-functions/latest/dg/tutorial-human-approval.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/trace-events.html",
+      "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html"
+    ]
   }
 ]

@@ -7,6 +7,13 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
+ if(moduleId==='19'){
+  if(/AgentCore|Gateway|Inbound|Outbound|User versus workload|Target permissions|Cross-boundary|Resource scope|Telemetry defaults/.test(topic))return 'Amazon-Bedrock-AgentCore';
+  if(/Lambda fulfillment|Action schema/.test(topic))return 'AWS-Lambda';
+  if(/Callback token|Stale approvals|Idempotency|Denial and timeout/.test(topic))return 'AWS-Step-Functions';
+  if(/Traces and logs/.test(topic))return 'AWS-CloudTrail';
+  return ['Amazon-Bedrock','Amazon-Bedrock-AgentCore','Amazon-Bedrock','AWS-Step-Functions'][index];
+ }
  if(moduleId==='18'){
   if(/Rekognition|Moderation|Face|A2I/.test(topic))return 'Amazon-Rekognition';
   if(/Textract|Extraction|Document security/.test(topic))return 'Amazon-Textract';

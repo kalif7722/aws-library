@@ -1,0 +1,362 @@
+[
+  {
+    "sequence": 1,
+    "title": "Agentic AI changes the trust boundary",
+    "layout": "architecture landscape",
+    "points": [
+      "A model proposes actions; the application and tools perform them",
+      "Separate user, agent, model, retrieval, tool and protected data roles",
+      "Every tool call crosses an authorization and data boundary",
+      "Human approval is a control for consequential actions"
+    ],
+    "diagram": "User to agent; model proposes tool call; policy gate and optional human approval precede tool, then observation returns to agent.",
+    "remember": "A model suggestion is not authorization.",
+    "examSkills": [
+      "2.5.2",
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 2,
+    "title": "Bedrock Agent orchestration loop",
+    "layout": "loop architecture",
+    "points": [
+      "InvokeAgent can use preprocessing and orchestration",
+      "The agent may retrieve knowledge, request missing parameters or invoke an action group",
+      "A tool result becomes an observation that informs another iteration",
+      "The session returns a response after sufficient evidence"
+    ],
+    "diagram": "Question\u2192agent\u2192model decision; branch to knowledge base or action group; observation loops back; final response exits.",
+    "remember": "An agent can iterate; it is not a fixed three-step pipeline.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 3,
+    "title": "Action groups are executable contracts",
+    "layout": "tool contract",
+    "points": [
+      "Define function or API parameters in action-group schema",
+      "Fulfillment can use Lambda or return control to the application",
+      "Validate types, resource IDs, tenancy and business rules in the executor",
+      "Use least privilege and idempotent handling for retries"
+    ],
+    "diagram": "Agent action group schema\u2192parameter validation\u2192Lambda OR return-control application executor\u2192business system.",
+    "remember": "The tool implementation enforces the contract.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 4,
+    "title": "Knowledge retrieval is not tool permission",
+    "layout": "split data/action",
+    "points": [
+      "Knowledge Bases return scoped evidence for grounding",
+      "Action groups can change external state",
+      "Retrieved content is untrusted input, not an instruction to bypass controls",
+      "Separate read access from write capability and track provenance"
+    ],
+    "diagram": "Parallel retrieval read lane and action write lane; explicit authorization gate before write.",
+    "remember": "A document cannot grant the agent new privileges.",
+    "examSkills": [
+      "2.5.1",
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 5,
+    "title": "Agent service role and Lambda permission",
+    "layout": "permission map",
+    "points": [
+      "Bedrock Agents service role needs only approved model, KB and action integration access",
+      "Action-group Lambda needs a resource policy permitting the agent to invoke it",
+      "Lambda execution role separately scopes downstream actions",
+      "Caller needs InvokeAgent on intended alias"
+    ],
+    "diagram": "Four identities with labeled permissions, not one universal role.",
+    "remember": "Permission to invoke a tool differs from the tool\u2019s own permissions.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 6,
+    "title": "Return control keeps execution in the app",
+    "layout": "sequence with control handoff",
+    "points": [
+      "RETURN_CONTROL sends elicited parameters and invocationId to the application",
+      "Application checks policy and approval before executing an API",
+      "Submit the result with matching invocationId and action group in a later InvokeAgent request",
+      "Handle denial, timeout and replay explicitly"
+    ],
+    "diagram": "Agent\u2192application invocationInputs; app policy/approval\u2192external API; app result\u2192agent via sessionState; denied branch returns no execution.",
+    "remember": "Return control makes the application the execution boundary.",
+    "examSkills": [
+      "2.5.2",
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 7,
+    "title": "User confirmation before high-impact action",
+    "layout": "approval gate",
+    "points": [
+      "Configure confirmation for selected Bedrock Agent action-group functions",
+      "Present exact target, parameters and consequence to the user",
+      "Deny must prevent the action; never execute first and ask later",
+      "Revalidate authorization and resource state after approval"
+    ],
+    "diagram": "Proposed action\u2192confirmation\u2192allowed branch\u2192fresh validation\u2192tool; denied branch\u2192safe response.",
+    "remember": "Approval belongs before the side effect.",
+    "examSkills": [
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 8,
+    "title": "AgentCore Identity: inbound and outbound",
+    "layout": "identity boundary",
+    "points": [
+      "Inbound auth verifies who may invoke the runtime or gateway",
+      "Outbound credentials enable scoped access to AWS or third-party tools",
+      "User-delegated and machine-to-machine credentials serve different ownership models",
+      "Avoid embedding long-lived API keys in prompts or agent code"
+    ],
+    "diagram": "Caller identity\u2192AgentCore inbound\u2192agent; separate outbound credential provider\u2192tool.",
+    "remember": "Authentication into an agent does not authorize every tool.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 9,
+    "title": "Gateway authorization before tool calls",
+    "layout": "gateway policy",
+    "points": [
+      "AgentCore Gateway exposes governed tool targets",
+      "IAM or JWT protects entry; a policy engine can authorize tool actions",
+      "Default deny and caller/resource conditions limit tool reach",
+      "Keep schema validation and downstream permissions in place"
+    ],
+    "diagram": "Agent\u2192authenticated Gateway\u2192policy decision\u2192tool target; denied branch stops before target.",
+    "remember": "One governed gateway does not remove downstream checks.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 10,
+    "title": "Three identities in delegated tool access",
+    "layout": "delegation diagram",
+    "points": [
+      "Distinguish end user, agent workload and outbound service credential",
+      "Preserve caller context where the pattern supports it",
+      "Use dedicated scopes, consent and expiry for external SaaS access",
+      "Audit who requested and which credential executed the operation"
+    ],
+    "diagram": "User principal\u2192agent identity\u2192credential provider\u2192external tool, each with explicit scope.",
+    "remember": "A shared agent role can hide the real requester without context propagation.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 11,
+    "title": "Guardrails evaluate input and output",
+    "layout": "policy gates",
+    "points": [
+      "Configure content, denied topic, word and sensitive-information policies",
+      "Input and output intervention behavior differs",
+      "A guardrail can attach to supported agent/model paths",
+      "Test policy versions with representative prompts and responses"
+    ],
+    "diagram": "User input\u2192input guardrail\u2192model\u2192output guardrail\u2192response; blocked branches explicit.",
+    "remember": "A guardrail is one layer, not an access policy.",
+    "examSkills": [
+      "2.5.1"
+    ]
+  },
+  {
+    "sequence": 12,
+    "title": "Prompt injection crosses a data boundary",
+    "layout": "attack-and-control",
+    "points": [
+      "An attacker can place instructions in retrieved documents or tool results",
+      "Treat those bytes as data even when the model reads them",
+      "Use scoped retrieval, output checks, tool authorization and confirmation",
+      "Test exfiltration and unintended action attempts"
+    ],
+    "diagram": "Attacker document\u2192retrieval\u2192agent; attempted tool call\u2192policy/approval gate denies.",
+    "remember": "Untrusted content must not become tool authority.",
+    "examSkills": [
+      "2.5.1",
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 13,
+    "title": "Automated reasoning has a narrow proof scope",
+    "layout": "verification board",
+    "points": [
+      "Policy-backed checks can flag contradiction and unstated assumptions",
+      "Validation is limited to variables represented in the policy",
+      "It does not detect prompt injection or off-topic material",
+      "Current documented limitations include English US and no streaming"
+    ],
+    "diagram": "Response\u2192policy logic check\u2192structured feedback; separate prompt-attack filter and human review.",
+    "remember": "A valid policy result is not a universal truth guarantee.",
+    "examSkills": [
+      "2.5.1"
+    ]
+  },
+  {
+    "sequence": 14,
+    "title": "Responsible AI is a lifecycle",
+    "layout": "risk lifecycle",
+    "points": [
+      "Define intended use, affected users and unacceptable harms",
+      "Evaluate accuracy, harmful content, bias and privacy on representative cases",
+      "Monitor incidents and drift after release",
+      "Assign owners, version evidence and escalation paths"
+    ],
+    "diagram": "Design\u2192test\u2192release gate\u2192monitor\u2192revise loop, with human owner at each decision.",
+    "remember": "Safety needs continuous measurement and ownership.",
+    "examSkills": [
+      "2.5.1",
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 15,
+    "title": "Human review must be meaningful",
+    "layout": "review workbench",
+    "points": [
+      "Show source evidence, proposed action, target and impact",
+      "Reviewer can approve, reject or request more information",
+      "Record decision, identity, time and policy version",
+      "Protect against rubber-stamping, stale context and dual-control bypass"
+    ],
+    "diagram": "Agent proposal\u2192reviewer evidence panel\u2192approve/reject/revise; only approved path reaches executor.",
+    "remember": "A click without context is not effective oversight.",
+    "examSkills": [
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 16,
+    "title": "Step Functions approval with callback",
+    "layout": "durable workflow",
+    "points": [
+      "A Standard workflow can pause using a callback task token",
+      "Deliver approval request through an application/notification channel",
+      "Authorized decision returns the token and outcome",
+      "Set timeout, denial, duplicate and expired-token behavior"
+    ],
+    "diagram": "State machine\u2192wait for callback\u2192approved action OR rejected close; timeout branch escalates.",
+    "remember": "The workflow must resume only from an authorized callback.",
+    "examSkills": [
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 17,
+    "title": "Approval and automation need failure boundaries",
+    "layout": "failure tree",
+    "points": [
+      "Expired approval must not trigger execution",
+      "Retries must avoid duplicate side effects",
+      "Changed target state requires fresh pre-action validation",
+      "Record partial failures and compensating or manual recovery"
+    ],
+    "diagram": "Failure branches around approval token, validation, executor, and audit record.",
+    "remember": "Approval of old parameters is not approval of changed reality.",
+    "examSkills": [
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 18,
+    "title": "Agent trace and protected evidence",
+    "layout": "observability split",
+    "points": [
+      "InvokeAgent traces show orchestration, KB queries and action group steps when enabled",
+      "CloudTrail records supported API activity; application logs record business decisions",
+      "AgentCore telemetry settings vary by resource and signal",
+      "Redact secrets and protect prompt, tool and trace data"
+    ],
+    "diagram": "Agent runtime\u2192trace; API\u2192CloudTrail; business approval\u2192protected audit store, distinct evidence streams.",
+    "remember": "A trace explains a path; it is not an access-control boundary.",
+    "examSkills": [
+      "2.5.1",
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 19,
+    "title": "Choose agent or deterministic workflow",
+    "layout": "decision matrix",
+    "points": [
+      "Use an agent when open-ended interpretation and tool selection are required",
+      "Use Step Functions for known, durable and auditable state transitions",
+      "Combine them: agent proposes, workflow validates and obtains approval",
+      "Bound latency, cost, retries and blast radius"
+    ],
+    "diagram": "Three independent patterns: direct API, agent selection, deterministic workflow; combined handoff for controlled execution.",
+    "remember": "Do not make a deterministic approval process depend on model discretion.",
+    "examSkills": [
+      "2.5.2",
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 20,
+    "title": "Walkthrough: deny injected export request",
+    "layout": "threat walkthrough",
+    "points": [
+      "Retrieved document contains malicious export instruction",
+      "Agent tries to propose an external tool call",
+      "Gateway policy and app validation deny unauthorized destination",
+      "Trace records attempt; user receives grounded answer without export"
+    ],
+    "diagram": "Query\u2192retrieval with injected instruction\u2192proposed export\u2192deny gate; no tool execution.",
+    "remember": "The data source cannot rewrite the tool policy.",
+    "examSkills": [
+      "2.5.1",
+      "2.5.2"
+    ]
+  },
+  {
+    "sequence": 21,
+    "title": "Walkthrough: approve a scoped refund",
+    "layout": "approval walkthrough",
+    "points": [
+      "Agent proposes exact account, amount and refund reason",
+      "Policy caps and reviewer context determine approval",
+      "Step Functions callback pauses before executor",
+      "Executor rechecks order and idempotency; audit captures outcome"
+    ],
+    "diagram": "Proposal\u2192policy\u2192review callback\u2192fresh validation\u2192refund API\u2192receipt; denial/timeout separate.",
+    "remember": "The approved payload must match the executed payload.",
+    "examSkills": [
+      "2.5.3"
+    ]
+  },
+  {
+    "sequence": 22,
+    "title": "Walkthrough: investigate an agent denial",
+    "layout": "diagnostic walkthrough",
+    "points": [
+      "Inspect caller authentication and resource policy first",
+      "Review Gateway policy denial and outbound credential scope",
+      "Compare trace, request ID and target service rejection",
+      "Fix the narrowest missing permission and retest denied paths"
+    ],
+    "diagram": "Caller\u2192agent\u2192gateway\u2192tool with four diagnostic checkpoints; no automatic blanket grant.",
+    "remember": "A tool error is not always a model problem.",
+    "examSkills": [
+      "2.5.2"
+    ]
+  }
+]
