@@ -3192,5 +3192,141 @@
       "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
       "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html"
     ]
+  },
+  {
+    "moduleId": "21",
+    "title": "Artifact identity and release safety",
+    "rows": [
+      [
+        "Immutable candidate",
+        "Build once and promote a versioned artifact or image digest with the same test evidence."
+      ],
+      [
+        "Manual approval",
+        "An approval action gates a pipeline stage; it does not run a test or validate runtime health."
+      ],
+      [
+        "Cross-account release",
+        "Separate source and target roles, artifact access, encryption key policy and deploy permissions."
+      ],
+      [
+        "Secret exposure",
+        "Revoke and rotate the credential, investigate usage and history, then prevent reintroduction."
+      ],
+      [
+        "Rollback boundary",
+        "Traffic rollback does not automatically reverse schema migrations, messages or writes."
+      ],
+      [
+        "Legacy review",
+        "CodeGuru Reviewer repository associations are legacy context; use currently supported review paths."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html",
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html"
+    ]
+  },
+  {
+    "moduleId": "21",
+    "title": "Platform deployment qualifications",
+    "rows": [
+      [
+        "EC2 in-place versus blue/green",
+        "In-place updates existing instances; blue/green provisions a replacement environment and redirects traffic."
+      ],
+      [
+        "Lambda alias",
+        "CodeDeploy traffic shifting targets function versions through an alias; watch errors and latency."
+      ],
+      [
+        "ECS controller",
+        "Check whether the service uses CodeDeploy or ECS native blue/green; configuration and lifecycle differ."
+      ],
+      [
+        "Baking and alarms",
+        "Alarm configuration, evaluation timing and bake period determine whether a regression is observed."
+      ],
+      [
+        "AI release gate",
+        "Evaluate representative prompts, retrieval failures, safety and latency before promoting a model or RAG change."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/migrate-codedeploy-to-ecs-bluegreen.html"
+    ]
+  },
+  {
+    "moduleId": "22",
+    "title": "Telemetry scope and missing evidence",
+    "rows": [
+      [
+        "CloudWatch agent",
+        "EC2 memory and disk metrics require an agent or another custom metric producer; standard EC2 metrics do not include them."
+      ],
+      [
+        "Metric dimensions",
+        "A high-cardinality custom dimension combination increases the number of metric series and cost."
+      ],
+      [
+        "Logs ingestion",
+        "Inspect emission, agent/runtime, log group, IAM permission, Region and subscription path separately."
+      ],
+      [
+        "Trace context",
+        "Sampling and missing propagated context can break an otherwise healthy end-to-end trace."
+      ],
+      [
+        "Synthetics versus RUM",
+        "Controlled scripted tests and actual sampled browsers answer different questions."
+      ],
+      [
+        "SLO budget",
+        "Define the SLI, target and interval first; burn-rate alerts should lead to owned response."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html",
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html"
+    ]
+  },
+  {
+    "moduleId": "22",
+    "title": "Automation, capacity and incident closure",
+    "rows": [
+      [
+        "Managed-node prerequisites",
+        "SSM Agent, identity, network endpoint access and permissions must be correct before node actions work."
+      ],
+      [
+        "Session audit",
+        "CloudTrail records session API calls; configured session logs capture supported session content."
+      ],
+      [
+        "Fleet command scope",
+        "Tags, concurrency, errors and reviewed documents bound Run Command impact."
+      ],
+      [
+        "Patch verification",
+        "Baseline compliance indicates patch state, not application health; test and verify between waves."
+      ],
+      [
+        "Quota headroom",
+        "Include both primary and failover Regions in planned scale and quota requests."
+      ],
+      [
+        "Retry budget",
+        "Use deadlines, jitter and idempotency; do not multiply load on an unhealthy dependency."
+      ],
+      [
+        "Close on outcome",
+        "Confirm error rate, latency, backlog and user-facing SLO recovery, not merely action completion."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-tools.html",
+      "https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html"
+    ]
   }
 ]

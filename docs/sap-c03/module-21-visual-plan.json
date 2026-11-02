@@ -388,5 +388,41 @@
       "Traffic rollback does not reverse writes, messages or schema changes."
     ],
     "remember": "Traffic rollback does not reverse writes, messages or schema changes."
+  },
+  {
+    "sequence": 25,
+    "title": "Choose the release service by job",
+    "points": [
+      "CodePipeline | Orchestrate stages and approvals | Source \u2192 build \u2192 test \u2192 deploy | Coordinate the release",
+      "CodeBuild | Build and test in managed compute | Source + buildspec \u2192 artifacts | Compile, test, package",
+      "CodeDeploy | Deploy application revisions | Artifact \u2192 EC2, Lambda or ECS | Traffic shift and rollback",
+      "CodeArtifact | Store packages and dependencies | Package version \u2192 repository | Govern reusable packages"
+    ],
+    "layout": "decision table",
+    "remember": "Pipeline orchestrates; build creates artifacts; deploy changes running workloads."
+  },
+  {
+    "sequence": 26,
+    "title": "Choose a rollout by risk and rollback",
+    "points": [
+      "All at once | Replace all capacity together | Small or tolerant workloads | Fast rollout, largest blast radius",
+      "Rolling | Replace batches in place | Capacity can shrink temporarily | Track health between batches",
+      "Blue/green | New environment beside old | Fast switch and rollback | Verify green, shift traffic",
+      "Canary | Small traffic slice first | High-risk releases | Watch errors and latency before expand"
+    ],
+    "layout": "decision table",
+    "remember": "Match release pattern to blast radius, capacity headroom, health signals and recovery time."
+  },
+  {
+    "sequence": 27,
+    "title": "Place release gates at the right boundary",
+    "points": [
+      "Source | Secret scan, reviewed change | Reject compromised commit | Revoke leaked credential",
+      "Build | Tests, image scan, SBOM | Promote immutable artifact | Fix and rebuild",
+      "Pre-deploy | Policy, template, approval | Permit scoped rollout | Block unsafe change",
+      "Post-deploy | Canary health, SLOs, alarms | Expand or stop traffic shift | Roll back and investigate"
+    ],
+    "layout": "decision table",
+    "remember": "A passing build does not prove a healthy production release."
   }
 ]

@@ -2051,5 +2051,298 @@
       "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html",
       "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references-ssm-secure-strings.html"
     ]
+  },
+  {
+    "moduleId": "21",
+    "title": "Build, artifact and pipeline boundaries",
+    "rows": [
+      {
+        "service": "AWS CodePipeline",
+        "icon": "AWS-CodePipeline",
+        "choose": "Orchestrate source, build, test, approval and deployment actions.",
+        "operations": "Stages and action providers coordinate a release; artifacts pass between actions.",
+        "watch": "A pipeline is orchestration, not the build runtime or proof that production is healthy."
+      },
+      {
+        "service": "AWS CodeBuild",
+        "icon": "AWS-CodePipeline",
+        "choose": "Compile, test, scan and package in managed build environments.",
+        "operations": "Buildspec commands and environment settings produce logs and versioned output artifacts.",
+        "watch": "A successful build does not deploy or validate customer experience."
+      },
+      {
+        "service": "AWS CodeArtifact",
+        "icon": "AWS-CodePipeline",
+        "choose": "Store and govern versioned software packages and dependencies.",
+        "operations": "Repositories, domains and upstreams govern package publishing and consumption.",
+        "watch": "Package storage is distinct from a pipeline artifact store or container image registry."
+      },
+      {
+        "service": "Amazon ECR",
+        "icon": "Amazon-Elastic-Container-Registry",
+        "choose": "Store versioned container images for ECS and EKS releases.",
+        "operations": "Scan images, pin an immutable digest and promote the same tested image.",
+        "watch": "A mutable tag can resolve to different bytes; repository policy and runtime pull permissions differ."
+      },
+      {
+        "service": "AWS CodeDeploy",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Automate deployments to EC2/on-premises, Lambda and ECS.",
+        "operations": "Deployment group, configuration, hooks and alarms control rollout and rollback.",
+        "watch": "Traffic rollback does not undo database writes, queued messages or schema changes."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html",
+      "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html",
+      "https://docs.aws.amazon.com/codeartifact/latest/ug/welcome.html",
+      "https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html",
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+    ]
+  },
+  {
+    "moduleId": "21",
+    "title": "Deployment pattern and rollback decisions",
+    "rows": [
+      {
+        "service": "All at once",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Rapid replacement when brief unavailability or broad exposure is acceptable.",
+        "operations": "Replace the current fleet or shift all eligible traffic in one step.",
+        "watch": "Largest immediate blast radius; the rollback mechanism depends on the platform."
+      },
+      {
+        "service": "Rolling",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Update batches when existing capacity can serve during rollout.",
+        "operations": "Batch size and minimum healthy capacity constrain the in-place change.",
+        "watch": "Capacity and deployment time trade off; validate between batches."
+      },
+      {
+        "service": "Blue/green",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Maintain old and new environments for a controlled switch.",
+        "operations": "Verify green, shift traffic and retain blue during the rollback window.",
+        "watch": "Requires duplicate capacity and careful state/schema compatibility."
+      },
+      {
+        "service": "Canary and linear",
+        "icon": "AWS-CodeDeploy",
+        "choose": "Expose a small traffic share before expansion.",
+        "operations": "Traffic shift increments, bake time and CloudWatch alarms gate promotion.",
+        "watch": "An alarm must represent user impact; rollback is not data reversal."
+      },
+      {
+        "service": "ECS native blue/green",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Use the ECS service-managed blue/green controller where supported.",
+        "operations": "Task sets and deployment lifecycle are managed in ECS instead of CodeDeploy.",
+        "watch": "Check the selected ECS deployment controller; CodeDeploy and native ECS models differ."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/migrate-codedeploy-to-ecs-bluegreen.html"
+    ]
+  },
+  {
+    "moduleId": "21",
+    "title": "Release security and verification gates",
+    "rows": [
+      {
+        "service": "Source and secret gate",
+        "icon": "AWS-Secrets-Manager",
+        "choose": "Reject exposed credentials and unreviewed changes before build.",
+        "operations": "Scan commits, revoke a leaked credential, rotate and search downstream use.",
+        "watch": "Deleting a secret from the latest commit does not erase history or revoke access."
+      },
+      {
+        "service": "Artifact and image gate",
+        "icon": "Amazon-Elastic-Container-Registry",
+        "choose": "Promote tested, scanned and identified packages or images.",
+        "operations": "Tie test evidence, vulnerability findings and digest to one immutable candidate.",
+        "watch": "Rebuilding for production creates a different artifact requiring validation."
+      },
+      {
+        "service": "Infrastructure policy gate",
+        "icon": "AWS-CloudFormation",
+        "choose": "Block unsafe templates before an execution change.",
+        "operations": "Validate templates and policy decisions before applying to the target account.",
+        "watch": "Static checks and deployment permissions do not prove runtime health."
+      },
+      {
+        "service": "Production health gate",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Continue or roll back on alarms, canary outcomes and SLOs.",
+        "operations": "Observe errors, latency, capacity and customer journeys through a bake period.",
+        "watch": "A green deployment API status alone is not evidence of recovery."
+      },
+      {
+        "service": "Bedrock model evaluation gate",
+        "icon": "Amazon-Bedrock",
+        "choose": "Check quality, safety and failure cases before changing an AI release.",
+        "operations": "Version prompts and datasets, run representative evaluation, then monitor live outcomes.",
+        "watch": "A single happy-path answer cannot establish quality or safety."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring.html",
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html",
+      "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html"
+    ]
+  },
+  {
+    "moduleId": "22",
+    "title": "Telemetry, user experience and service health",
+    "rows": [
+      {
+        "service": "CloudWatch metrics and alarms",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Measure aggregate health and detect thresholds over time.",
+        "operations": "Choose dimensions and statistics; composite alarms can combine alarm states.",
+        "watch": "A metric does not explain an individual request; missing data needs an explicit policy."
+      },
+      {
+        "service": "CloudWatch Logs and Logs Insights",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Inspect event details and query retained log streams.",
+        "operations": "Set retention, access, encryption and ingestion paths per log group.",
+        "watch": "No log event can mean no emission, permission, Region or delivery failure."
+      },
+      {
+        "service": "AWS X-Ray and OpenTelemetry",
+        "icon": "AWS-X-Ray",
+        "choose": "Trace a request across instrumented dependencies.",
+        "operations": "Propagate context and control sampling; inspect spans and service maps.",
+        "watch": "Missing instrumentation or sampling can hide a hop."
+      },
+      {
+        "service": "CloudWatch Synthetics",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Exercise scheduled API or browser journeys from controlled locations.",
+        "operations": "Canary runs can produce metrics, screenshots and failure artifacts.",
+        "watch": "A healthy canary does not represent every real customer path."
+      },
+      {
+        "service": "CloudWatch RUM",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Observe actual browser performance and errors.",
+        "operations": "Client instrumentation, sampling and privacy settings shape telemetry.",
+        "watch": "Browser sessions do not capture every backend request or uninstrumented client."
+      },
+      {
+        "service": "CloudWatch Application Signals",
+        "icon": "Amazon-CloudWatch",
+        "choose": "View service operations, dependencies and service-level objectives.",
+        "operations": "Instrument supported workloads and correlate metrics with traces and client evidence.",
+        "watch": "Check instrumentation coverage and SLO definition before trusting a service map."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM.html",
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html",
+      "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Services.html",
+      "https://docs.aws.amazon.com/xray/latest/devguide/xray-services-cloudwatch.html"
+    ]
+  },
+  {
+    "moduleId": "22",
+    "title": "Systems Manager operational actions",
+    "rows": [
+      {
+        "service": "Session Manager",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Interactive access to a managed node without inbound SSH.",
+        "operations": "IAM authorizes sessions; agent connectivity and optional session logging support audit.",
+        "watch": "CloudTrail API events and optional session content logs are different evidence."
+      },
+      {
+        "service": "Run Command",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Run a command document across selected managed nodes.",
+        "operations": "Target by tags or resource groups; bound concurrency and error thresholds.",
+        "watch": "Broad targeting or unchecked output creates a fleet-wide blast radius."
+      },
+      {
+        "service": "Automation",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Execute a repeatable multi-step operational runbook.",
+        "operations": "Steps, roles, parameter validation, rate controls and approval constrain changes.",
+        "watch": "A runbook needs explicit failure, stop and recovery behavior."
+      },
+      {
+        "service": "Patch Manager",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Scan or install approved operating system patches.",
+        "operations": "Patch baseline, targets and maintenance windows govern execution.",
+        "watch": "Patch compliance is not proof that the application is healthy."
+      },
+      {
+        "service": "State Manager",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Apply desired configuration through associations.",
+        "operations": "Schedule a document against targets and inspect association compliance.",
+        "watch": "Association success and actual application behavior require separate validation."
+      },
+      {
+        "service": "OpsCenter",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Collect operational issues with context and ownership.",
+        "operations": "OpsItems can correlate events, resources and runbook outcomes.",
+        "watch": "A recorded action is not incident closure until recovery is verified."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-tools.html",
+      "https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html",
+      "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html"
+    ]
+  },
+  {
+    "moduleId": "22",
+    "title": "Resilience signals and safe intervention",
+    "rows": [
+      {
+        "service": "AWS Health",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Determine account-specific impact and planned events.",
+        "operations": "Route relevant Health events through EventBridge to owned response workflows.",
+        "watch": "Public service health and account-specific affected-resource context have different scope."
+      },
+      {
+        "service": "Service Quotas",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Plan headroom for scale and failover Region capacity.",
+        "operations": "Monitor account/Region usage and request adjustable increases ahead of demand.",
+        "watch": "A quota error can resemble a deployment or Auto Scaling failure."
+      },
+      {
+        "service": "AWS Cloud Map",
+        "icon": "AWS-Cloud-Map",
+        "choose": "Discover registered healthy service endpoints.",
+        "operations": "Register instances with attributes and health; resolve through DNS or API.",
+        "watch": "Discovery is not traffic policy or load balancing."
+      },
+      {
+        "service": "Application Auto Scaling",
+        "icon": "AWS-Application-Auto-Scaling",
+        "choose": "Scale supported targets with workload demand.",
+        "operations": "Select target tracking, step or scheduled policies and meaningful metrics.",
+        "watch": "Warmup, cooldown, quotas and a poor metric can delay or misdirect scaling."
+      },
+      {
+        "service": "Retry and circuit-breaker pattern",
+        "icon": "Amazon-API-Gateway",
+        "choose": "Limit transient-failure amplification at dependency boundaries.",
+        "operations": "Use deadlines, bounded backoff with jitter, idempotency and isolated pools.",
+        "watch": "Unbounded retries can worsen an outage; stale fallback needs correctness limits."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html",
+      "https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html",
+      "https://docs.aws.amazon.com/cloud-map/latest/dg/what-is-cloud-map.html",
+      "https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html"
+    ]
   }
 ]
