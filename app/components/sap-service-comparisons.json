@@ -2614,5 +2614,149 @@
     "sources": [
       "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html"
     ]
+  },
+  {
+    "moduleId": "25",
+    "title": "DR postures and recovery objectives",
+    "rows": [
+      {
+        "service": "Backup and restore",
+        "icon": "Amazon-S3",
+        "choose": "Meet an RPO/RTO that permits rebuilding from protected recovery points.",
+        "operations": "Keep data, configuration, infrastructure as code, secrets and restore steps available in target Region/account.",
+        "watch": "Backup success does not prove restoration; control-plane restores may be slow during a disruption."
+      },
+      {
+        "service": "Pilot light",
+        "icon": "Amazon-RDS",
+        "choose": "Keep core data and minimum critical services ready in recovery Region.",
+        "operations": "Replicate data, preconfigure network and launch templates, test scale-up and routing.",
+        "watch": "Application capacity and dependencies must be started and validated before traffic shift."
+      },
+      {
+        "service": "Warm standby",
+        "icon": "Amazon-EC2",
+        "choose": "Keep a functional reduced-capacity secondary deployment.",
+        "operations": "Test expansion, replication lag, endpoint health, quotas and user journeys.",
+        "watch": "A healthy small standby may still fail at production scale."
+      },
+      {
+        "service": "Multi-site active-active",
+        "icon": "Amazon-Route-53",
+        "choose": "Serve users from multiple Regions when the application can handle distributed writes.",
+        "operations": "Define data ownership, consistency, conflict handling, session behavior and failback.",
+        "watch": "More running capacity and write coordination increase cost and complexity."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html",
+      "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+    ]
+  },
+  {
+    "moduleId": "25",
+    "title": "Protected data and recoverable servers",
+    "rows": [
+      {
+        "service": "AWS Backup",
+        "icon": "Amazon-S3",
+        "choose": "Centralize supported backup plans, copies, retention and audit.",
+        "operations": "Apply policy across accounts, monitor jobs and restore tests; isolate protected copies.",
+        "watch": "A backup plan assignment does not mean every resource is protected or restorable."
+      },
+      {
+        "service": "AWS Elastic Disaster Recovery",
+        "icon": "Amazon-EC2",
+        "choose": "Continuously replicate supported servers for disaster recovery.",
+        "operations": "Stage block changes, monitor replication, launch drill/recovery instances and plan failback.",
+        "watch": "DRS is server replication, not application-level consistency or automatic traffic cutover."
+      },
+      {
+        "service": "S3 Object Lock / versioning",
+        "icon": "Amazon-S3",
+        "choose": "Retain recoverable object versions and immutable copies where configured.",
+        "operations": "Set retention mode and policy; test clean version selection and restore permissions.",
+        "watch": "Replication can spread corruption or deletes; versioning alone is not immutability."
+      },
+      {
+        "service": "EBS snapshot lock / Backup Vault Lock",
+        "icon": "Amazon-Elastic-Block-Store",
+        "choose": "Protect snapshots or vault recovery points against unwanted deletion.",
+        "operations": "Configure lock scope/mode and retention with governance and recovery accounts.",
+        "watch": "Lock modes and lifecycle rules differ; validate protected resource and restore path."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html",
+      "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+    ]
+  },
+  {
+    "moduleId": "25",
+    "title": "Traffic failover and resilience assessment",
+    "rows": [
+      {
+        "service": "Amazon Route 53 failover",
+        "icon": "Amazon-Route-53",
+        "choose": "Steer DNS clients to healthy endpoints.",
+        "operations": "Use health checks and failover policies; validate secondary dependencies and client resolution.",
+        "watch": "TTL and client caches affect observed transition; health check must represent service readiness."
+      },
+      {
+        "service": "AWS Global Accelerator",
+        "icon": "AWS-Global-Accelerator",
+        "choose": "Shift new traffic using static anycast IPs and endpoint health.",
+        "operations": "Preprovision endpoints and test application/session behavior.",
+        "watch": "Routing cannot create missing secondary data or capacity."
+      },
+      {
+        "service": "Amazon Application Recovery Controller",
+        "icon": "Amazon-Route-53",
+        "choose": "Coordinate preprovisioned routing controls and supported zonal recovery actions.",
+        "operations": "Apply safety rules and exercise controls before an incident.",
+        "watch": "Zonal shift addresses supported AZ traffic; it is not Region DR."
+      },
+      {
+        "service": "AWS Resilience Hub",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Assess resilience posture against RTO/RPO policy and validate with tests.",
+        "operations": "Describe application, assess, implement recommendations, reassess and measure.",
+        "watch": "Estimated recovery values are not measured drill results."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html",
+      "https://docs.aws.amazon.com/resilience-hub/latest/userguide/what-is.html"
+    ]
+  },
+  {
+    "moduleId": "25",
+    "title": "Recovery automation and controlled tests",
+    "rows": [
+      {
+        "service": "AWS Systems Manager Automation",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Run versioned recovery procedures with permissions and gates.",
+        "operations": "Validate parameters, execute ordered steps, record evidence and rollback triggers.",
+        "watch": "Automating an untested runbook can amplify a bad decision."
+      },
+      {
+        "service": "AWS Fault Injection Service",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Test a steady-state hypothesis with controlled faults.",
+        "operations": "Bound targets, duration, stop conditions and monitoring; compare observed user outcome.",
+        "watch": "Injection scope and IAM must be constrained; an experiment is not a full Region outage."
+      },
+      {
+        "service": "ECS / EKS multi-cluster recovery",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Keep container workloads available across failure domains.",
+        "operations": "Replicate images, manifests, secrets, capacity and data; test traffic and dependency readiness.",
+        "watch": "A second cluster without state and networking recovery does not meet DR targets."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html"
+    ]
   }
 ]
