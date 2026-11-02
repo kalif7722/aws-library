@@ -2501,5 +2501,118 @@
     "sources": [
       "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html"
     ]
+  },
+  {
+    "moduleId": "24",
+    "title": "Discovery, migration strategy and wave gates",
+    "rows": [
+      {
+        "service": "Portfolio discovery and dependency mapping",
+        "icon": "AWS-CloudFormation",
+        "choose": "Inventory application components, owners, flows and criticality before selecting waves.",
+        "operations": "Validate observed traffic, data gravity, licensing, identity and operational dependencies with owners.",
+        "watch": "A server inventory alone does not reveal application transaction dependencies."
+      },
+      {
+        "service": "Seven migration strategies",
+        "icon": "AWS-CloudFormation",
+        "choose": "Select retain, retire, relocate, rehost, replatform, repurchase or refactor per workload.",
+        "operations": "Balance downtime, change effort, cost, target operation and long-term value.",
+        "watch": "A single strategy for an entire portfolio hides application-level constraints."
+      },
+      {
+        "service": "Wave planning and migration factory",
+        "icon": "AWS-CloudFormation",
+        "choose": "Move dependent workloads in coherent, repeatable waves.",
+        "operations": "Establish landing zone, network, identity, test evidence, rollback and owner handoff before cutover.",
+        "watch": "A successful test launch is not a production cutover or decommission approval."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html"
+    ]
+  },
+  {
+    "moduleId": "24",
+    "title": "Rehosting, data transfer and database movement",
+    "rows": [
+      {
+        "service": "AWS Transform MGN",
+        "icon": "AWS-Database-Migration-Service",
+        "choose": "Rehost supported physical, virtual or cloud servers to EC2.",
+        "operations": "Install replication agent, continuously replicate to staging, test launch, validate and cut over.",
+        "watch": "MGN is the renamed Application Migration Service; it does not by itself refactor application code."
+      },
+      {
+        "service": "AWS Transform",
+        "icon": "AWS-CloudFormation",
+        "choose": "Orchestrate supported migration and modernization workflows at portfolio scale.",
+        "operations": "Review discovered inventory, generated plans, wave approvals and target validation.",
+        "watch": "Scope and supported transformations vary; retain human review and application testing."
+      },
+      {
+        "service": "AWS DataSync / Transfer Family",
+        "icon": "Amazon-S3",
+        "choose": "Move files/objects or expose managed file-transfer endpoints.",
+        "operations": "DataSync schedules and verifies bulk/incremental transfer; Transfer Family supports SFTP/FTPS/FTP endpoint scenarios.",
+        "watch": "Different source protocols, authentication and target storage determine the service."
+      },
+      {
+        "service": "AWS Data Transfer Terminal",
+        "icon": "Amazon-S3",
+        "choose": "Upload large physical datasets when network transfer is impractical.",
+        "operations": "Bring customer-owned storage devices to a reserved secure facility and validate imported data.",
+        "watch": "Snowball Edge is unavailable to new customers; Data Transfer Terminal is a distinct physical-location model."
+      },
+      {
+        "service": "AWS DMS / schema conversion",
+        "icon": "AWS-Database-Migration-Service",
+        "choose": "Migrate data with full load and CDC, with schema conversion when engine changes.",
+        "operations": "Assess compatibility, convert schema/code as needed, monitor replication lag and validate target rows.",
+        "watch": "DMS data replication does not automatically convert all heterogeneous schema or application SQL."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html",
+      "https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html",
+      "https://docs.aws.amazon.com/mgn/latest/ug/General-Questions-FAQ.html"
+    ]
+  },
+  {
+    "moduleId": "24",
+    "title": "Replatform, refactor and cutover validation",
+    "rows": [
+      {
+        "service": "Amazon RDS / Aurora",
+        "icon": "Amazon-RDS",
+        "choose": "Replatform compatible database operations to managed services.",
+        "operations": "Validate engine features, schema, connectivity, backup and performance before switch.",
+        "watch": "Managed infrastructure does not remove query, data-model or application compatibility work."
+      },
+      {
+        "service": "Amazon ECS / AWS Lambda",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Move runtime toward managed containers or event-driven functions.",
+        "operations": "Design packaging, state handling, IAM, deployment and observability.",
+        "watch": "Runtime change is not a zero-effort lift-and-shift; test latency and integration contracts."
+      },
+      {
+        "service": "API façade / Amazon MQ",
+        "icon": "Amazon-API-Gateway",
+        "choose": "Extract capabilities incrementally while integrating legacy protocols.",
+        "operations": "Set contract, auth, retries, idempotency, data ownership and rollback boundary.",
+        "watch": "Distributed calls and duplicate delivery can create new failure modes."
+      },
+      {
+        "service": "Cutover and stabilization",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Switch production with a rehearsed, observable gate.",
+        "operations": "Freeze writes as needed, drain/redirect traffic, smoke test, monitor, retain fallback window and hand off.",
+        "watch": "DNS TTL does not guarantee every client switches instantly; decommission only after acceptance."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html"
+    ]
   }
 ]
