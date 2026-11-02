@@ -10,16 +10,16 @@
       {
         "title": "Find EC2 and check the Region",
         "path": "Console Home → Services → EC2 → Instances",
-        "action": "Select an approved Region, open Instances, then Launch instances.",
-        "why": "The Region and account define where the resource is created.",
+        "action": "Confirm account and Region. Open Instances, then choose Launch instances.",
+        "why": "Resources are created in the selected account and Region.",
         "rows": [
           [
             "Region",
             "US East (N. Virginia) · us-east-1"
           ],
           [
-            "EC2 navigation",
-            "Instances"
+            "Navigation",
+            "EC2 → Instances"
           ],
           [
             "Action",
@@ -28,34 +28,46 @@
         ]
       },
       {
-        "title": "Choose image and size",
-        "path": "Launch an instance → Name and tags → Application and OS Images → Instance type",
-        "action": "Name architect-console-lab; select Amazon Linux 2023 and an available small type.",
-        "why": "The AMI sets the OS; instance type sets compute and price.",
+        "title": "Name the instance and choose an AMI",
+        "path": "EC2 → Instances → Launch instances → Name and tags / Application and OS Images",
+        "action": "Enter architect-console-lab and choose the Amazon Linux 2023 AMI.",
+        "why": "Name is a tag; the AMI selects OS, publisher and architecture.",
         "rows": [
           [
             "Name",
             "architect-console-lab"
           ],
           [
-            "AMI",
-            "Amazon Linux 2023"
-          ],
-          [
-            "Instance type",
-            "t3.micro (verify availability/pricing)"
+            "Application and OS Images (Amazon Machine Image)",
+            "Amazon Linux 2023 AMI"
           ]
         ]
       },
       {
-        "title": "Configure login and network",
-        "path": "Launch an instance → Key pair (login) → Network settings → Edit",
-        "action": "Select or create a lab key; choose a VPC/public subnet, public IP, and SSH from My IP.",
-        "why": "A public address alone does not make SSH reachable. Routes, security group and credentials matter.",
+        "title": "Choose instance type and key pair",
+        "path": "Launch an instance → Instance type / Key pair (login)",
+        "action": "Choose an available small instance type and select/create a lab key pair.",
+        "why": "Instance type sets capacity; the private key must be downloaded and stored safely.",
         "rows": [
           [
-            "Key pair",
+            "Instance type",
+            "t3.micro (verify Region and pricing)"
+          ],
+          [
+            "Key pair name",
             "lab-key · private key retained locally"
+          ]
+        ]
+      },
+      {
+        "title": "Edit VPC and subnet settings",
+        "path": "Launch an instance → Network settings → Edit",
+        "action": "Choose a lab VPC, public subnet and enable public IPv4 for this connection exercise.",
+        "why": "A public subnet needs an internet gateway route, and the instance needs a public address.",
+        "rows": [
+          [
+            "VPC",
+            "Approved lab VPC"
           ],
           [
             "Subnet",
@@ -64,18 +76,30 @@
           [
             "Auto-assign public IP",
             "Enable"
+          ]
+        ]
+      },
+      {
+        "title": "Scope the security group",
+        "path": "Launch an instance → Network settings → Firewall (security groups)",
+        "action": "Use a lab security group with SSH TCP 22 allowed only from My IP.",
+        "why": "Do not use Anywhere for SSH. The actual source must match your public IP.",
+        "rows": [
+          [
+            "Firewall (security groups)",
+            "Create security group (lab only)"
           ],
           [
-            "Security group",
-            "SSH TCP 22 · My IP /32"
+            "Allow SSH traffic from",
+            "My IP (current public IPv4 /32)"
           ]
         ]
       },
       {
         "title": "Review storage and launch",
-        "path": "Launch an instance → Configure storage → Summary → Launch instance",
-        "action": "Check gp3 root volume and delete on termination, then review Summary and launch.",
-        "why": "Review access, networking, encryption, storage and estimated charges before committing.",
+        "path": "Launch an instance → Configure storage → Summary",
+        "action": "Review gp3 root volume, delete-on-termination, all summary choices and estimated cost; choose Launch instance.",
+        "why": "The right Summary panel is the final review before resources can incur charges.",
         "rows": [
           [
             "Root volume",
@@ -84,38 +108,82 @@
           [
             "Delete on termination",
             "Yes"
-          ],
-          [
-            "Summary",
-            "AMI · type · VPC · SG · storage"
-          ],
-          [
-            "Action",
-            "Launch instance"
           ]
         ]
       },
       {
-        "title": "Verify, connect and clean up",
-        "path": "EC2 → Instances → Details / Security / Storage / Monitoring → Connect",
-        "action": "Confirm running and 2/2 checks; inspect addresses and security, connect, then terminate and verify residual resources.",
-        "why": "Running is not end-to-end health. Termination may leave separately created resources.",
+        "title": "Inspect status and resource details",
+        "path": "EC2 → Instances → Select instance → Details / Security / Storage / Monitoring",
+        "action": "Open the instance ID. Check running, 2/2 status checks, public/private IP, security group and EBS volume.",
+        "why": "Running alone does not prove guest health or network reachability.",
         "rows": [
+          [
+            "Instance state",
+            "Running"
+          ],
           [
             "Status checks",
             "2/2 passed"
           ],
           [
-            "Connect",
-            "EC2 Instance Connect (prerequisites apply)"
+            "Public IPv4 address",
+            "198.51.100.24 (documentation example)"
+          ],
+          [
+            "Private IPv4 address",
+            "10.0.1.24 (illustrative)"
+          ],
+          [
+            "Storage",
+            "Root EBS gp3 · delete on termination"
+          ]
+        ]
+      },
+      {
+        "title": "Connect and check the guest",
+        "path": "EC2 → Instances → Select instance → Connect → EC2 Instance Connect",
+        "action": "Choose EC2 Instance Connect, confirm the user, then run whoami and uptime in the browser session.",
+        "why": "Connection requires a supported image, permissions and a reachable network path.",
+        "rows": [
+          [
+            "Connection type",
+            "EC2 Instance Connect"
+          ],
+          [
+            "Username",
+            "ec2-user"
+          ],
+          [
+            "Connection",
+            "Public IP address"
           ],
           [
             "Read-only checks",
             "whoami · uptime"
+          ]
+        ]
+      },
+      {
+        "title": "Terminate and verify cleanup",
+        "path": "EC2 → Instances → Instance state → Terminate (delete) instance",
+        "action": "Confirm Terminate (delete), monitor Shutting-down, then review volumes, snapshots, key pair and IP allocations.",
+        "why": "Termination is permanent; some separately created resources can remain billable.",
+        "rows": [
+          [
+            "Instance state menu",
+            "Terminate (delete) instance"
           ],
           [
-            "Cleanup",
-            "Terminate; review volumes, key pair, IPs"
+            "Confirmation",
+            "Terminate (delete)"
+          ],
+          [
+            "Expected state",
+            "Shutting-down → Terminated"
+          ],
+          [
+            "Cleanup inventory",
+            "EBS · snapshots · key pair · IPs"
           ]
         ]
       }
