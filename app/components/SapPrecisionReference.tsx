@@ -7,6 +7,16 @@ function ServiceIcon({icon}:{icon:string}) {
  return <img className="sap-service-icon" src={`/course-visuals/aws-service-icons/${icon}.svg`} width="40" height="40" alt="" loading="lazy" decoding="async"/>;
 }
 function detailIcon(moduleId:string,index:number,topic:string) {
+ if(moduleId==='20'){
+  if(/SSM |Runtime retrieval|Versioned references/.test(topic))return 'AWS-Systems-Manager';
+  if(/SCP /.test(topic))return 'AWS-Organizations';
+  if(/Config evaluation/.test(topic))return 'AWS-Config';
+  if(/Catalog|Portfolio|Launch role/.test(topic))return 'AWS-Service-Catalog';
+  if(/SAM /.test(topic))return 'AWS-CloudFormation';
+  if(/CDK /.test(topic))return 'AWS-Cloud-Development-Kit';
+  if(/Secret|Rotation/.test(topic))return 'AWS-Secrets-Manager';
+  return ['AWS-CloudFormation','AWS-CloudFormation','AWS-CloudFormation','AWS-Service-Catalog','AWS-CloudFormation'][index];
+ }
  if(moduleId==='19'){
   if(/AgentCore|Gateway|Inbound|Outbound|User versus workload|Target permissions|Cross-boundary|Resource scope|Telemetry defaults/.test(topic))return 'Amazon-Bedrock-AgentCore';
   if(/Lambda fulfillment|Action schema/.test(topic))return 'AWS-Lambda';
