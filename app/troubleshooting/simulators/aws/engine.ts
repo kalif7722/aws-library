@@ -838,6 +838,9 @@ export type LaunchAwsInstanceInput = {
   subnetId: string;
   securityGroupIds: string[];
   imageId?: string;
+  keyPairName?: string;
+  publicIpEnabled?: boolean;
+  rootVolume?: string;
   availabilityZone?: string;
   tags?: Record<string, string>;
 };
@@ -866,9 +869,16 @@ export function launchAwsInstance(state: AwsLabState, input: LaunchAwsInstanceIn
     privateIp, subnetId: input.subnetId,
     securityGroupIds: [...input.securityGroupIds], guestSsh: "listening",
     instanceType: input.instanceType, availabilityZone: input.availabilityZone ?? subnet?.availabilityZone ?? "eu-west-1a",
-    imageId: input.imageId ?? "ami-0a1b2c3d4e5f67890", tags: { Name: name, ...(input.tags ?? {}) }
+    imageId: input.imageId ?? "ami-0a1b2c3d4e5f67890", keyPairName: input.keyPairName, publicIpEnabled: input.publicIpEnabled, rootVolume: input.rootVolume, tags: { Name: name, ...(input.tags ?? {}) }
   };
   return { state: { ...state, instances: [...currentInstances, instance] }, instance, error: null };
+}
+
+export function terminateAwsInstance(state: AwsLabState, instanceId: string): { state: AwsLabState; error: string | null } {
+  if (instanceId === state.instance.id) return { state, error: "Seeded training instance cannot be terminated; reset the account to restore it." };
+  const instances = getAwsInstances(state);
+  if (!instances.some(item => item.id === instanceId)) return { state, error: "Instance not found." };
+  return { state: { ...state, instances: instances.filter(item => item.id !== instanceId) }, error: null };
 }
 
 export function setAwsInstanceState(state: AwsLabState, instanceId: string, nextState: "running" | "stopped"): AwsLabState {
