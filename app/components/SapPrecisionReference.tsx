@@ -41,6 +41,14 @@ function detailIcon(moduleId:string,index:number,topic:string) {
   if(/FIS|experiment|test/.test(topic))return 'Amazon-CloudWatch';
   return ['Amazon-S3','Amazon-Route-53','Amazon-CloudWatch'][index];
  }
+ if(moduleId==='26'){
+  if(/DNS|Route 53/.test(topic))return 'Amazon-Route-53';
+  if(/S3|object/.test(topic))return 'Amazon-S3';
+  if(/IAM|KMS|Policy|Access/.test(topic))return 'AWS-Identity-and-Access-Management';
+  if(/EC2|Network|NAT|VPC/.test(topic))return 'Amazon-Virtual-Private-Cloud';
+  if(/Bedrock|RAG/.test(topic))return 'Amazon-Bedrock';
+  return ['Amazon-CloudWatch','AWS-Systems-Manager','Amazon-CloudWatch'][index];
+ }
  if(moduleId==='20'){
   if(/SSM |Runtime retrieval|Versioned references/.test(topic))return 'AWS-Systems-Manager';
   if(/SCP /.test(topic))return 'AWS-Organizations';
@@ -125,7 +133,7 @@ export default function SapPrecisionReference({moduleId}:{moduleId:string}) {
  const groups=comparisons.filter(group=>group.moduleId===moduleId);
  const count=groups.reduce((sum,group)=>sum+group.rows.length,0);
  const detailCount=own.reduce((sum,section)=>sum+section.rows.length,0);
- const tableVisuals=moduleId==='21'?[25,26,27]:moduleId==='22'?[43,44,45]:moduleId==='23'?[28]:moduleId==='24'?[23,24]:moduleId==='25'?[27,28]:[];
+ const tableVisuals=moduleId==='21'?[25,26,27]:moduleId==='22'?[43,44,45]:moduleId==='23'?[28]:moduleId==='24'?[23,24]:moduleId==='25'?[27,28]:moduleId==='26'?[27,28]:[];
  return <section className={`sap-s3-ref${enhanced?' sap-precision-enhanced':''}`} id="module-precision-reference" aria-label="Detailed service comparison">
   <header><p className="sap-s3-kicker">DETAILS AND EXCEPTIONS · REVIEWED {tableVisuals.length?'2':'1'} NOVEMBER 2026</p><h2>{enhanced?'Compare the services. Master the details.':'Inspect the limits. Keep the exceptions.'}</h2><p>{enhanced?'Choose the right service, then check the operating model, security gates, recovery behavior and exceptions. These comparisons cover the core services, service features and supporting integrations taught in this module.':'Use these readable comparisons alongside the visual lessons. Numerical maxima depend on the selected Region, instance, configuration and current service documentation.'}</p>
   {enhanced&&<><div className="sap-reference-stats"><span><strong>{count}</strong> service &amp; feature comparisons</span><span><strong>{detailCount}</strong> precision details</span><span><strong>AWS</strong> official architecture icons</span></div><nav aria-label="Comparison sections">{groups.map((group,index)=><a key={group.title} href={`#sap-${moduleId}-compare-${index}`}>{group.title}</a>)}<a href={`#sap-${moduleId}-precision`}>Limits &amp; exceptions ↓</a></nav></>}
@@ -135,6 +143,7 @@ export default function SapPrecisionReference({moduleId}:{moduleId:string}) {
   {enhanced&&<div className="sap-detail-heading" id={`sap-${moduleId}-precision`}><p className="sap-s3-kicker">THE PRECISION LAYER</p><h3>Limits, prerequisites &amp; operational exceptions</h3><p>Retain every qualification below alongside the visual lessons. Numerical maxima depend on Region, engine, version, deployment and configuration; linked AWS documentation is authoritative.</p></div>}
   {own.map((section,index)=><details key={section.title} open><summary>{enhanced?<><span className="sap-summary-label"><ServiceIcon icon={detailIcon(moduleId,index,'')}/>{section.title}</span><span className="sap-row-count">{section.rows.length} details</span></>:section.title}</summary><div className="sap-s3-detail"><div className="sap-s3-table sap-precision-table" role="region" aria-label={section.title} tabIndex={0}><table>{enhanced&&<caption>{section.title}<span>Exact boundaries that can change an architecture decision.</span></caption>}<thead><tr><th scope="col">Topic</th><th scope="col">Detail to retain</th></tr></thead><tbody>{section.rows.map(([topic,detail])=><tr key={topic}><th scope="row">{enhanced?<span className="sap-service-label"><ServiceIcon icon={detailIcon(moduleId,index,topic)}/><span>{topic}</span></span>:topic}</th><td>{detail}</td></tr>)}</tbody></table></div><div className={enhanced?'sap-reference-sources':''}><p>{enhanced?'Primary AWS documentation':'Primary references:'}</p>{section.sources.map((source,sourceIndex)=><a key={source} href={source} target="_blank" rel="noreferrer">{enhanced?new URL(source).pathname.split('/').pop()?.replace(/\.html$/,'').replace(/[_.-]/g,' '):`AWS reference ${sourceIndex+1}`} ↗ </a>)}</div></div></details>)}
   {tableVisuals.length>0&&<div className="sap-table-visuals" aria-label={`Module ${moduleId} visual comparison tables`}><h3>Visual decision tables</h3><p>Use these images as a quick recap after the detailed web tables above.</p>{tableVisuals.map((sequence)=><figure key={sequence}><img src={`/course-visuals/sap-c03/module-${moduleId}/slide-${String(sequence).padStart(2,'0')}.webp`} alt={`Module ${moduleId} visual comparison, slide ${sequence}`} width="2048" height="1152" loading="lazy" decoding="async"/><figcaption>Module {moduleId} · visual comparison {sequence}</figcaption></figure>)}</div>}
+  {moduleId==='26'&&<div className="sap-lab-links"><h3>Practice in the console labs</h3><p>Use the walkthrough to form a hypothesis, make the exact console change in a lab, and verify the result.</p><div><a href="/troubleshooting/labs/vm-unreachable">EC2 unreachable ↗</a><a href="/troubleshooting/labs/private-connectivity">Private connectivity ↗</a><a href="/troubleshooting/labs/access-denied">S3 AccessDenied ↗</a><a href="/troubleshooting/labs/ai-access-denied">Bedrock access denied ↗</a><a href="/troubleshooting/labs/cloud-cost-spike">Cloud cost spike ↗</a></div></div>}
   {enhanced&&<p className="sap-icon-attribution">Icons: <a href="https://aws.amazon.com/architecture/icons/" target="_blank" rel="noreferrer">official AWS Architecture Icons</a>, July 2026 package. Service features share their parent icon; an icon is not an availability guarantee. Check service-specific qualifications in the tables above.</p>}
  </section>;
 }

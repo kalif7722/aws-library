@@ -2758,5 +2758,174 @@
     "sources": [
       "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html"
     ]
+  },
+  {
+    "moduleId": "26",
+    "title": "Network and edge evidence",
+    "rows": [
+      {
+        "service": "VPC Reachability Analyzer",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Analyze a modeled network path between supported AWS source and destination resources.",
+        "operations": "Inspect route tables, NACLs, security groups and endpoint policies; then run an actual client/application test.",
+        "watch": "An external client is not the analyzer source; a reachable model does not prove the process responds."
+      },
+      {
+        "service": "Route 53 Resolver",
+        "icon": "Amazon-Route-53",
+        "choose": "Diagnose hybrid or private name resolution.",
+        "operations": "Check forwarding rule, endpoint security, VPC association and authoritative answer from each side.",
+        "watch": "Public DNS success does not prove private-zone or on-premises resolution."
+      },
+      {
+        "service": "ALB target health",
+        "icon": "Elastic-Load-Balancing",
+        "choose": "Find unhealthy app targets and wrong health-check paths.",
+        "operations": "Read target health reason, path/port response, target SG and application logs.",
+        "watch": "Changing a health-check path is valid only if the application exposes the intended readiness endpoint."
+      },
+      {
+        "service": "CloudFront / ACM",
+        "icon": "Amazon-CloudFront",
+        "choose": "Isolate edge TLS, certificate and origin connectivity.",
+        "operations": "Check hostname, SNI, certificate chain, distribution/ALB listener and origin status.",
+        "watch": "TLS handshakes, HTTP status and DNS resolution fail at different boundaries."
+      },
+      {
+        "service": "NAT Gateway / VPC endpoint",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Diagnose private-subnet egress and service-specific private access.",
+        "operations": "Trace subnet route, NAT public route, IGW, DNS and endpoint policy; inspect flow logs and costs.",
+        "watch": "Never add an inbound opening to fix outbound traffic."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain5.html"
+    ]
+  },
+  {
+    "moduleId": "26",
+    "title": "Identity and data failure boundaries",
+    "rows": [
+      {
+        "service": "IAM / resource policy / SCP",
+        "icon": "AWS-Identity-and-Access-Management",
+        "choose": "Trace a denied principal, action and resource.",
+        "operations": "Inspect caller role, trust, permissions boundary, resource policy, SCP and CloudTrail event context.",
+        "watch": "An explicit deny wins; changing unrelated policies broadens access without fixing root cause."
+      },
+      {
+        "service": "AWS KMS",
+        "icon": "AWS-Key-Management-Service",
+        "choose": "Diagnose decrypt failure on an encrypted resource.",
+        "operations": "Check key state, Region, principal, key policy, grant, IAM permission and encryption context.",
+        "watch": "Data-resource permission alone does not confer key access."
+      },
+      {
+        "service": "Amazon RDS",
+        "icon": "Amazon-RDS",
+        "choose": "Isolate query, connection, lock, I/O or failover latency.",
+        "operations": "Correlate application p95 with database metrics and query evidence before capacity changes.",
+        "watch": "A larger instance does not fix every lock or inefficient query."
+      },
+      {
+        "service": "Amazon DynamoDB",
+        "icon": "Amazon-DynamoDB",
+        "choose": "Identify throttling caused by capacity or hot keys.",
+        "operations": "Inspect throttled requests, partition-key distribution, GSI limits and retry behavior.",
+        "watch": "Table-level capacity can look sufficient while one partition or GSI is constrained."
+      },
+      {
+        "service": "Amazon SQS",
+        "icon": "Amazon-Simple-Queue-Service",
+        "choose": "Diagnose old messages and poison jobs.",
+        "operations": "Compare oldest age, consumer errors, concurrency, visibility timeout and DLQ.",
+        "watch": "Scaling consumers without idempotency can amplify duplicate side effects."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain5.html"
+    ]
+  },
+  {
+    "moduleId": "26",
+    "title": "Runtime, telemetry and AI incidents",
+    "rows": [
+      {
+        "service": "AWS Lambda",
+        "icon": "AWS-Lambda",
+        "choose": "Diagnose timeouts and downstream errors.",
+        "operations": "Read duration, max memory, concurrency, VPC networking, logs and trace segments.",
+        "watch": "Increasing timeout may hide a dependency fault and cause retry amplification."
+      },
+      {
+        "service": "Amazon ECS / EKS",
+        "icon": "Amazon-Elastic-Container-Service",
+        "choose": "Diagnose task rollback or pod crash loops.",
+        "operations": "Inspect deployment events, image, secrets, probes, limits, target health and ready replicas.",
+        "watch": "A running task is not necessarily a ready application."
+      },
+      {
+        "service": "Amazon CloudWatch Logs",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Trace missing log collection or delivery.",
+        "operations": "Check producer/agent, role, group/stream, Region, ingestion delay and one test event.",
+        "watch": "Wrong query scope can look like an ingestion failure."
+      },
+      {
+        "service": "Amazon Bedrock",
+        "icon": "Amazon-Bedrock",
+        "choose": "Isolate denied invocation or stale RAG responses.",
+        "operations": "For denial inspect model ARN/Region and caller policy; for staleness inspect ingestion, index and retrieved chunks.",
+        "watch": "A model answer alone cannot prove the retrieval source is current."
+      },
+      {
+        "service": "AWS Cost Explorer",
+        "icon": "AWS-Organizations",
+        "choose": "Trace a cost spike to service, Region and usage type.",
+        "operations": "Correlate NAT bytes or other usage with VPC flow evidence and recent architecture changes.",
+        "watch": "Costs are a symptom; compare endpoint and NAT pricing before routing changes."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain5.html"
+    ]
+  },
+  {
+    "moduleId": "26",
+    "title": "Controlled remediation and verification",
+    "rows": [
+      {
+        "service": "AWS Systems Manager Automation",
+        "icon": "AWS-Systems-Manager",
+        "choose": "Execute approved operational runbooks.",
+        "operations": "Parameter validation, scoped IAM, approval gate, rollback and evidence prevent unsafe automation.",
+        "watch": "A successful automation status is not proof of user-facing recovery."
+      },
+      {
+        "service": "Circuit breaker / bounded retry",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Keep a dependency failure from cascading.",
+        "operations": "Set deadlines, exponential backoff with jitter, rate limits and bulkhead isolation.",
+        "watch": "Unbounded retries multiply load and can delay recovery."
+      },
+      {
+        "service": "Service Quotas / Auto Scaling",
+        "icon": "AWS-Application-Auto-Scaling",
+        "choose": "Diagnose capacity and replacement behavior.",
+        "operations": "Check metric, warmup, desired capacity, quota, unhealthy replacement and downstream headroom.",
+        "watch": "A green desired-capacity count can mask unhealthy targets or a bottleneck elsewhere."
+      },
+      {
+        "service": "Functional test and SLO",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Prove that users recovered after a change.",
+        "operations": "Repeat the original request and compare error rate, p95, target health and logs to baseline.",
+        "watch": "A green console icon alone is not a successful incident resolution."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain5.html"
+    ]
   }
 ]
