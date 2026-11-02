@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from html import escape
 from textwrap import wrap
+import re
 
 root = Path(__file__).resolve().parents[1]
 labs = json.loads((root / 'app/troubleshooting/walkthroughs/labs.json').read_text())
@@ -48,6 +49,24 @@ VIEW = {
     'cloudformation-stack': ('list','form','detail','detail'),
     'ecs-service': ('list','form','form','detail'),
     'cost-explorer': ('list','detail','detail','detail'),
+}
+
+PAGE_TITLES = {
+ 'iam-role':['Roles','Create role','Create role','ec2-lab-s3-read'],
+ 'vpc-public-subnet':['Create VPC','Create subnet','Edit routes','Route tables'],
+ 's3-bucket':['Create bucket','Create bucket','Create bucket','architect-lab-bucket'],
+ 'rds-private-db':['Create database','Create database','Create database','architect-lab-db'],
+ 'lambda-function':['Create function','Create function','architect-lab-function','architect-lab-function'],
+ 'cloudwatch-alarm':['All metrics','Create alarm','Create alarm','Alarms'],
+ 'route53-record':['Hosted zones','Create record','Create record','Records'],
+ 'security-group':['Security groups','Inbound rules','Edit inbound rules','Security group details'],
+ 'ebs-volume':['Volumes','Create volume','Attach volume','Volume details'],
+ 'alb-targets':['Create Application Load Balancer','Create Application Load Balancer','Create target group','Target groups'],
+ 'dynamodb-table':['Create table','Create table','Explore table items','Table overview'],
+ 'cloudtrail-events':['Event history','Event history','Event details','CloudTrail event'],
+ 'cloudformation-stack':['Stacks','Create change set','Change set details','Stack events'],
+ 'ecs-service':['Clusters','Create task definition','Create service','Service details'],
+ 'cost-explorer':['Cost and usage','Cost and usage','Cost and usage','Cost and usage'],
 }
 
 LIST_CONTENT = {
@@ -92,10 +111,8 @@ def base(lab,screen,number):
         if active: p.append(rect(8,y-24,202,34,'#e2f2fa','none',3))
         p.append(text(item,23,y,14,'#0873a2' if active else '#465b6c',700 if active else 400))
     p += [rect(218,54,1062,44,'#fff','#dce5eb'),text('Services  ›  '+lab['service']+'  ›  '+('Launch an instance' if lab['id']=='ec2-first-instance' and number in (2,3,4,5,6) else screen['path'].split('→')[-1].strip()),242,83,13,'#47728b'),
-          text(screen['title'],246,143,26,'#1f2f3e',700),
-          rect(218,655,1062,65,'#e7f4fa'),text('NEXT CLICK / CHOICE',240,679,12,'#0b77a0',700),
-          multi(screen['action'],240,702,115,13,'#23465a',700,1),
-          rect(1010,104,245,23,'#fff3df','#e1bb65',4),text(f'GUIDED VIEW  {number:02d}/{len(lab["screens"]):02d}',1023,120,11,'#8b6315',700)]
+          text(PAGE_TITLES.get(lab['id'],[screen['title']]*len(lab['screens']))[number-1],246,143,26,'#1f2f3e',700),
+          ]
     return p
 
 def field(k,v,x,y,w,focus=False):
@@ -114,7 +131,7 @@ def form(lab,screen,num,ec2=False):
     rows=screen['rows']; x=242; w=720 if ec2 else 1012
     heading = ({2:'Name and tags / Application and OS Images',3:'Instance type / Key pair (login)',4:'Network settings · Edit',5:'Firewall (security groups)',6:'Configure storage'}).get(num,'Launch an instance') if ec2 else screen['path'].split('→')[-1].strip()
     p=[rect(x,162,w,475,'#fff','#d3dce4',8),text(heading,x+20,198,20,'#243647',700),
-       text('Configure the settings shown below, then review before continuing.',x+20,222,13,'#617787')]
+       rect(x+20,220,w-40,1,'#e1e8ee')]
     # Real AWS wizard uses stacked settings. The selected field is outlined in blue.
     control_width=610 if ec2 else 750
     spacing=69 if len(rows)>4 else 82
@@ -129,7 +146,7 @@ def form(lab,screen,num,ec2=False):
             sy=289+i*68;p += [text(k,998,sy,12,'#526b7d'),multi(v,998,sy+22,27,14,'#213544',700,1)]
         p.append(button('Launch instance',998,575,231))
     else:
-        action='Create' if any(x in screen['path'].lower() for x in ('create','launch')) else 'Save changes'
+        action={'s3-bucket':'Create bucket','iam-role':'Next','vpc-public-subnet':'Create VPC','rds-private-db':'Create database','lambda-function':'Create function','cloudwatch-alarm':'Create alarm','route53-record':'Create record','security-group':'Save rules','ebs-volume':'Create volume','alb-targets':'Create load balancer','dynamodb-table':'Create table','cloudformation-stack':'Create change set','ecs-service':'Create service'}.get(lab['id'],'Save changes')
         p.append(button(action,x+w-175,582,151))
     return p
 
@@ -155,7 +172,7 @@ def listing(lab,screen,num):
 def detail(lab,screen,num):
     rows=screen['rows'];p=[rect(242,162,1012,474,'#fff','#d4dee6',8),
         text(DETAIL_TITLE.get(lab['id'],screen['path'].split('→')[-1].strip()),263,201,21,'#253747',700),button('Actions  ⌄',1085,177,140,False),
-        text('●  Available / running',264,229,13,'#168560',700),rect(265,249,958,1,'#d8e4eb')]
+        text('●  '+{'cloudtrail-events':'Event recorded','cloudformation-stack':'CREATE_COMPLETE','ec2-first-instance':'Running','rds-private-db':'Available','lambda-function':'Active','s3-bucket':'Bucket created'}.get(lab['id'],'Available'),264,229,13,'#168560',700),rect(265,249,958,1,'#d8e4eb')]
     tabs=['Details','Security','Networking','Storage','Status checks','Monitoring']
     if lab['id']=='rds-private-db':tabs=['Connectivity & security','Monitoring','Logs & events','Configuration','Maintenance & backups']
     if lab['id']=='s3-bucket':tabs=['Objects','Properties','Permissions','Metrics','Management']
@@ -198,9 +215,14 @@ def ec2_terminate(screen):
 
 for lab in labs:
     for number,screen in enumerate(lab['screens'],1):
+        if screen.get('asset'):
+            (out/f'{lab["id"]}-{number:02d}.svg').unlink(missing_ok=True)
+            continue
         p=base(lab,screen,number)
         view=VIEW[lab['id']][number-1]
         p.extend(form(lab,screen,number,ec2=view=='ec2-form') if view in ('form','ec2-form') else listing(lab,screen,number) if view=='list' else ec2_connect(screen) if view=='connect' else ec2_terminate(screen) if view=='terminate' else detail(lab,screen,number))
-        p += [text('ANNOTATED RECONSTRUCTION',18,623,10,'#57768a',700),text('VERIFY CURRENT AWS CONSOLE',18,642,9,'#57768a',700),'</svg>']
+        p += ['</svg>']
         (out/f'{lab["id"]}-{number:02d}.svg').write_text(''.join(p))
-print(f'Generated {sum(len(x["screens"]) for x in labs)} service-shaped console views.')
+import runpy
+runpy.run_path(str(root/'scripts/render-ec2-console-walkthrough.py'))
+print(f'Generated {sum(len(x["screens"]) for x in labs)} console walkthrough views.')
