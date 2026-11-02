@@ -18,7 +18,7 @@
         "watch": "Reader endpoint balances new connections, not queries; with no readers it can reach the writer. Global replication is asynchronous; write forwarding still commits at the primary. Version/Region limits and pause eligibility matter."
       },
       {
-        "service": "Amazon RDS Proxy \u00b7 RDS feature",
+        "service": "Amazon RDS Proxy · RDS feature",
         "icon": "Amazon-RDS",
         "choose": "Pool and reuse eligible RDS/Aurora connections for bursty applications and controlled failover.",
         "operations": "Private endpoint; validate supported engine/version, VPC routing, security groups and configured authentication. Measure database connections, client connections and pinned sessions.",
@@ -39,21 +39,21 @@
         "watch": "Strong/transactional reads pass through without populating cache. Writes through DAX do not invalidate Query/Scan results. Direct or remote-Region writes can leave cached data stale; it is not a generic SQL/session cache."
       },
       {
-        "service": "Amazon ElastiCache \u00b7 Valkey / Redis OSS",
+        "service": "Amazon ElastiCache · Valkey / Redis OSS",
         "icon": "Amazon-ElastiCache",
         "choose": "Application-managed caching, sessions, counters and supported data structures; choose node-based or Serverless explicitly.",
         "operations": "Application owns keys, serialization, cache-aside/write strategy, TTL, invalidation and fallback. Replication/failover protect availability; sharding adds capacity. Benchmark hits, misses, evictions and source load.",
         "watch": "Check the selected engine/deployment: eligible node-based Valkey supports optional synchronous/asynchronous Multi-AZ-log durability; it is not generic Redis AOF. Eligible Valkey 9+ Serverless public endpoints require IAM and TLS 1.3. Replica freshness and application expiry still need explicit handling."
       },
       {
-        "service": "Amazon ElastiCache \u00b7 Memcached",
+        "service": "Amazon ElastiCache · Memcached",
         "icon": "Amazon-ElastiCache",
         "choose": "Simple distributed key/value caching where the application can refill lost data.",
         "operations": "Distribute keys and manage miss/stampede behavior. Multithreading and horizontal distribution differ from Valkey/Redis replication and failover.",
-        "watch": "Node-based Memcached has no snapshot backup; Serverless Memcached supports snapshots. Do not infer durable primary-database semantics or another engine\u2019s feature set."
+        "watch": "Node-based Memcached has no snapshot backup; Serverless Memcached supports snapshots. Do not infer durable primary-database semantics or another engine’s feature set."
       },
       {
-        "service": "Amazon MemoryDB \u00b7 adjacent choice",
+        "service": "Amazon MemoryDB · adjacent choice",
         "icon": "Amazon-MemoryDB",
         "choose": "A compatible in-memory primary database when durability is required rather than a disposable cache alone.",
         "operations": "Multi-AZ transactional log supports durability and recovery. Select supported engine/version and validate application/client compatibility, network and access controls.",
@@ -90,7 +90,7 @@
         "watch": "Compatibility is not engine identity. Up to 15 readers; storage maximum depends on engine/configuration (eligible engine 8+ 256 TiB, earlier 128 TiB). Include readers, backup, I/O and transfer in cost estimates."
       },
       {
-        "service": "Amazon Neptune \u00b7 adjacent choice",
+        "service": "Amazon Neptune · adjacent choice",
         "icon": "Amazon-Neptune",
         "choose": "Highly connected graph traversals, knowledge graphs and relationship-heavy fraud/recommendation queries.",
         "operations": "Choose property-graph Gremlin/openCypher or RDF/SPARQL semantics. Plan private connectivity, IAM/database access, TLS/KMS, query design and recovery.",
@@ -159,7 +159,7 @@
         "watch": "Buffering adds latency. It is a delivery service, not identical to a replayable Kinesis stream or an immediate per-record query path."
       },
       {
-        "service": "Amazon CloudWatch \u00b7 Database Insights",
+        "service": "Amazon CloudWatch · Database Insights",
         "icon": "Amazon-CloudWatch",
         "choose": "Metrics, alarms, logs and supported database-load diagnosis.",
         "operations": "Correlate load/waits/SQL with CPU, memory, swap and Enhanced Monitoring evidence; validate log retention and delivery routes.",
@@ -170,7 +170,7 @@
         "icon": "AWS-CloudTrail",
         "choose": "Audit supported database and infrastructure API activity.",
         "operations": "Configure trails/event selection, retention, access and protected destinations; correlate identity and time with operational evidence.",
-        "watch": "Do not assume every SQL statement is a control-plane event. Use the engine\u2019s supported audit/query logs for that requirement."
+        "watch": "Do not assume every SQL statement is a control-plane event. Use the engine’s supported audit/query logs for that requirement."
       },
       {
         "service": "Amazon SNS",
@@ -243,7 +243,7 @@
         "watch": "A processing engine is not the durable query store. Validate sink compatibility and exactly-once boundaries end to end."
       },
       {
-        "service": "Amazon Quick \u00b7 formerly QuickSight",
+        "service": "Amazon Quick · formerly QuickSight",
         "icon": "Amazon-Quick",
         "choose": "Supported BI visualization over prepared analytical data.",
         "operations": "Validate connector, dataset refresh/direct-query behavior, row-level access and dashboard permissions.",
@@ -264,21 +264,21 @@
         "watch": "Private placement does not grant SQL permissions or guarantee egress. A database endpoint is not the same as an AWS control-plane API endpoint."
       },
       {
-        "service": "Amazon EC2 \u00b7 self-managed databases",
+        "service": "Amazon EC2 · self-managed databases",
         "icon": "Amazon-EC2",
         "choose": "OS/database control or a supported migration destination whose requirements exceed a managed service contract.",
         "operations": "You own host/database patching, storage, backup, replication, failover, licensing and monitoring. Validate consistent seed and catch-up before cutover.",
         "watch": "An RDS backup/export path is not universally reversible. Supported Oracle RMAN exports can target self-managed recovery; arbitrary RMAN restores into managed RDS are not supported."
       },
       {
-        "service": "Amazon MSK \u00b7 integration option",
+        "service": "Amazon MSK · integration option",
         "icon": "Amazon-Managed-Streaming-for-Apache-Kafka",
         "choose": "Supported Kafka-based telemetry or ingestion pipelines.",
         "operations": "Plan broker/serverless operating model, client authentication, topics, retention, consumer lag and compatible downstream connectors.",
         "watch": "A supported Kafka source is not automatic compatibility with every Timestream offering. Validate delivery semantics, event time, duplicates and reconciliation."
       },
       {
-        "service": "Amazon Managed Grafana \u00b7 integration option",
+        "service": "Amazon Managed Grafana · integration option",
         "icon": "Amazon-Managed-Grafana",
         "choose": "Managed dashboards over compatible data sources.",
         "operations": "Configure workspace identity, data-source permissions, supported query integration and user access.",
@@ -312,21 +312,21 @@
         "watch": "Worker, driver, network and identity compatibility remain your design. The EKS management PrivateLink endpoint is not the Kubernetes API private endpoint. Namespace alone is not a hard tenant boundary."
       },
       {
-        "service": "AWS Fargate \u00b7 ECS",
+        "service": "AWS Fargate · ECS",
         "icon": "AWS-Fargate",
         "choose": "Run compatible ECS tasks without operating worker hosts.",
         "operations": "awsvpc is required; select supported CPU/memory/OS/storage and private startup reachability. Execution role covers supported image pull/log/secret actions.",
         "watch": "Task IAM role is separate. Private tasks may need ECR API + registry, S3 layers, Logs and Secrets paths. Fargate Spot interruptions need tolerant tasks; no automatic On-Demand fallback guarantee."
       },
       {
-        "service": "AWS Fargate \u00b7 EKS",
+        "service": "AWS Fargate · EKS",
         "icon": "AWS-Fargate",
         "choose": "Run supported Pods selected by Fargate profiles without managing worker nodes.",
         "operations": "Match namespace/labels, scheduling, supported resource shape and workload identity. Eligible EFS static provisioning can supply persistent shared storage.",
         "watch": "No Fargate Spot, arbitrary DaemonSets, privileged workloads, EBS Pod volumes or Pod Identity agent path. Do not assume feature parity with ECS Fargate or EC2 nodes."
       },
       {
-        "service": "Amazon EC2 \u00b7 container hosts",
+        "service": "Amazon EC2 · container hosts",
         "icon": "Amazon-EC2",
         "choose": "Host control, instance selection and workloads that need compatible host-level capabilities.",
         "operations": "Plan AZ spread, AMI/OS patching, agents, bootstrap, IAM, capacity and draining. ECS capacity providers or compatible EKS node autoscaling coordinate host capacity.",
@@ -347,7 +347,7 @@
         "watch": "Basic and Enhanced scanning have different coverage/reporting contracts. A finding-free image is not a guarantee of secure configuration or runtime behavior."
       },
       {
-        "service": "ECS Express Mode \u00b7 ECS feature",
+        "service": "ECS Express Mode · ECS feature",
         "icon": "Amazon-Elastic-Container-Service",
         "choose": "Evaluate simplified image-to-application provisioning in your AWS account, including App Runner migration.",
         "operations": "Provide image and required IAM roles; ECS provisions supported Fargate service, ALB, scaling and networking. Underlying resources remain visible and billable.",
@@ -382,14 +382,14 @@
         "watch": "Not a hosted EKS service and not the sole way to operate disconnected. Assess operational capability before choosing this lower-level contract."
       },
       {
-        "service": "ECS Managed Instances \u00b7 ECS compute option",
+        "service": "ECS Managed Instances · ECS compute option",
         "icon": "Amazon-Elastic-Container-Service",
         "choose": "EC2 hardware selection with supported infrastructure provisioning, scaling, patching and maintenance managed by ECS.",
         "operations": "Use a compatible capacity provider, task definition, infrastructure role and instance profile. Validate Linux/architecture, resource requirements, networking and workload compatibility.",
         "watch": "It is distinct from self-managed EC2 and Fargate. A capacity-provider strategy cannot mix Managed Instances, ASG and Fargate provider types; compute management does not remove application security/availability responsibilities."
       },
       {
-        "service": "EKS Auto Mode \u00b7 EKS feature",
+        "service": "EKS Auto Mode · EKS feature",
         "icon": "Amazon-Elastic-Kubernetes-Service",
         "choose": "Extend managed Kubernetes operations into supported compute, networking, load balancing and block-storage functions.",
         "operations": "Use supported NodePools/NodeClasses and workload settings; AWS manages appliance-like nodes and platform components. Plan Pod/NodePool disruption budgets and compatible identity/storage.",
@@ -418,7 +418,7 @@
         "watch": "Not an inline proxy, load balancer or tunnel. DNS fail-open/client caching and DiscoverInstances filters differ; registration alone does not authorize a tenant."
       },
       {
-        "service": "ECS Service Connect \u00b7 ECS feature",
+        "service": "ECS Service Connect · ECS feature",
         "icon": "Amazon-Elastic-Container-Service",
         "choose": "Managed task proxies and consistent ECS service-to-service names within supported namespaces.",
         "operations": "Configure discovery aliases/ports, namespace membership and proxy resources. Routes/security groups must permit traffic. Supported TLS uses Private CA, infrastructure role and managed certificate secrets.",
@@ -432,14 +432,14 @@
         "watch": "Network association is not permission. Validate supported target/protocol behavior, security paths and access logs; connectivity does not replace application tenant authorization."
       },
       {
-        "service": "AWS App Mesh \u00b7 historical",
+        "service": "AWS App Mesh · historical",
         "icon": "AWS-App-Mesh",
         "choose": "Retain mesh concepts: proxy-based routing, telemetry, TLS, retries and traffic control.",
         "operations": "Map each required capability to a supported Service Connect, Lattice or Kubernetes alternative and test migration behavior.",
         "watch": "Support ended 30 September 2026; console/resources are no longer available. Do not select it for a new deployment or assume a replacement offers every feature."
       },
       {
-        "service": "Elastic Load Balancing \u00b7 ALB",
+        "service": "Elastic Load Balancing · ALB",
         "icon": "Elastic-Load-Balancing",
         "choose": "HTTP/HTTPS ingress and health-based routing to compatible service targets.",
         "operations": "Choose scheme, subnets, listeners, TLS/certificates, target type, security groups, health checks and deregistration behavior. awsvpc/Fargate task targets use IP.",
@@ -449,7 +449,7 @@
         "service": "AWS PrivateLink",
         "icon": "AWS-PrivateLink",
         "choose": "Private connectivity to supported service APIs or endpoint services through interface endpoints.",
-        "operations": "Configure endpoint subnets, security groups, private DNS, endpoint policy and the destination\u2019s IAM/resource policy.",
+        "operations": "Configure endpoint subnets, security groups, private DNS, endpoint policy and the destination’s IAM/resource policy.",
         "watch": "Endpoint existence does not imply authorization or access to all APIs. EKS management endpoints do not carry Kubernetes API traffic; S3 gateway endpoints have a different routing model."
       },
       {
@@ -540,7 +540,7 @@
         "icon": "AWS-Secrets-Manager",
         "choose": "Retrieve supported startup/runtime credentials and managed certificate secrets.",
         "operations": "Scope secret/KMS access and network paths. ECS injection happens at task start; rotate and replace tasks or implement safe runtime refresh.",
-        "watch": "Rotating a secret does not rewrite a running container\u2019s environment. Keep credentials out of images/logs and test refresh failures."
+        "watch": "Rotating a secret does not rewrite a running container’s environment. Keep credentials out of images/logs and test refresh failures."
       },
       {
         "service": "AWS KMS",
@@ -578,7 +578,7 @@
         "watch": "Adding hosts does not automatically change application desired tasks/replicas. Scale-in must respect compatible termination and disruption handling."
       },
       {
-        "service": "Amazon DynamoDB \u00b7 regional application dependency",
+        "service": "Amazon DynamoDB · regional application dependency",
         "icon": "Amazon-DynamoDB",
         "choose": "Managed application data with a deliberate regional/global-table consistency model.",
         "operations": "Keep image replication, application rollout, table replication, authorization and traffic recovery as separate tested controls.",
@@ -592,7 +592,7 @@
         "watch": "Resource sharing does not replace caller IAM, network reachability or application authorization. Verify feature and Region eligibility."
       },
       {
-        "service": "Amazon EventBridge \u00b7 scheduling/events",
+        "service": "Amazon EventBridge · scheduling/events",
         "icon": "Amazon-EventBridge",
         "choose": "Route supported operational events and trigger finite tasks with a supported scheduling integration.",
         "operations": "For scheduled work, select EventBridge Scheduler or a supported rule pattern, execution role, target/task network configuration, retries and dead-letter handling.",
@@ -614,49 +614,49 @@
     "title": "API front doors and real-time service choices",
     "rows": [
       {
-        "service": "API Gateway \u00b7 REST API",
+        "service": "API Gateway · REST API",
         "icon": "Amazon-API-Gateway",
         "choose": "Feature-rich managed APIs needing supported usage plans, validation, stage cache, WAF, private endpoints or canary releases.",
         "operations": "Choose endpoint type, deployment/stage, integration, caller authorization and backend permission independently. Use compatible OpenAPI definitions and request/response mapping.",
         "watch": "Buffered payload 10 MB; backend Lambda 6 MB may constrain earlier. Qualify timeout by endpoint/transfer mode. REST feature support is not HTTP API feature support."
       },
       {
-        "service": "API Gateway \u00b7 HTTP API",
+        "service": "API Gateway · HTTP API",
         "icon": "Amazon-API-Gateway",
         "choose": "A leaner RESTful API when its lower-feature operating model meets the requirement.",
         "operations": "Supported JWT/IAM/Lambda authorization, compatible Lambda/HTTP/AWS integrations, private backend options and optional automatic deployments.",
         "watch": "Maximum integration timeout 30 seconds; payload 10 MB. No REST stage cache, usage-plan API keys, resource policies, private API endpoints, REST canary or native WAF feature parity."
       },
       {
-        "service": "API Gateway \u00b7 WebSocket API",
+        "service": "API Gateway · WebSocket API",
         "icon": "Amazon-API-Gateway",
         "choose": "Persistent bidirectional applications such as chat, collaboration or live notifications.",
         "operations": "Manage connect/message/disconnect routes, trusted connection/user associations, compatible integrations and signed HTTPS backend callbacks.",
         "watch": "Frame 32 KB/message 128 KB; connection 2 hours and idle 10 minutes. Reconnect, stale state and missed updates need handling; socket persistence is not durable message history."
       },
       {
-        "service": "AWS AppSync \u00b7 GraphQL",
+        "service": "AWS AppSync · GraphQL",
         "icon": "AWS-AppSync",
         "choose": "A typed GraphQL contract assembling selected fields from compatible data sources, with supported real-time subscriptions.",
         "operations": "Define schema, resolver logic, caller/field authorization, tenant/item predicates and scoped data-source IAM. Monitor resolver cost/fan-out.",
         "watch": "GraphQL schema alone does not enforce every tenant boundary or implement offline synchronization. Subscription delivery follows its own authorization/filtering and mutation semantics."
       },
       {
-        "service": "AWS AppSync \u00b7 Events",
+        "service": "AWS AppSync · Events",
         "icon": "AWS-AppSync",
         "choose": "Managed real-time publish/subscribe event APIs with supported channel authorization.",
         "operations": "Use the Events API/channel contract and compatible publishing/subscribing clients; validate auth, message sizing, recovery and limits.",
         "watch": "A separate product contract from GraphQL resolvers and mutation-linked subscriptions. Do not assume identical client protocol, payload or synchronization behavior."
       },
       {
-        "service": "Lambda function URL \u00b7 Lambda feature",
+        "service": "Lambda function URL · Lambda feature",
         "icon": "AWS-Lambda",
         "choose": "A simpler HTTP endpoint when supported IAM or intentional public access fits the requirement.",
         "operations": "Configure URL auth, resource policy, qualified function and compatible response mode. Since October 2025 new URLs require both InvokeFunctionUrl and InvokeFunction permission.",
         "watch": "No automatic API Gateway feature set. NONE is unauthenticated access with an effective public resource policy, not a private user identity boundary."
       },
       {
-        "service": "Application Load Balancer \u00b7 Lambda targets",
+        "service": "Application Load Balancer · Lambda targets",
         "icon": "Elastic-Load-Balancing",
         "choose": "HTTP routing across compatible Lambda and other target groups in a hybrid service architecture.",
         "operations": "Listener rules select target groups; grant the service permission to invoke the qualified function. Validate the ALB event/response contract and supported WAF controls.",
@@ -678,21 +678,21 @@
     "title": "Function execution and delivery controls",
     "rows": [
       {
-        "service": "AWS Lambda \u00b7 standard Event Functions",
+        "service": "AWS Lambda · standard Event Functions",
         "icon": "AWS-Lambda",
         "choose": "Event-triggered compute with compatible runtime/packaging and externalized durable state.",
         "operations": "Tune memory/CPU, timeout, temporary storage, concurrency, IAM, source integration, retries and idempotent writes. Benchmark startup and downstream capacity.",
-        "watch": "Ordinary invocation 15 minutes,128\u201310,240 MB memory;1,769 MB\u2248one vCPU. Async, sync and poll-based sources have different failure contracts. Warm environment state is not durable."
+        "watch": "Ordinary invocation 15 minutes,128–10,240 MB memory;1,769 MB≈one vCPU. Async, sync and poll-based sources have different failure contracts. Warm environment state is not durable."
       },
       {
-        "service": "Lambda Managed Instances \u00b7 compute option",
+        "service": "Lambda Managed Instances · compute option",
         "icon": "AWS-Lambda",
         "choose": "Supported EC2 compute characteristics under Lambda-managed infrastructure operations.",
         "operations": "Select compatible capacity provider, instance/workload configuration and permissions; validate concurrent worker model, billing, network and source support.",
         "watch": "Eligible async and ESM invocation timeout 90 minutes, with MQ/DocumentDB exceptions. Do not apply every standard per-environment or cost assumption to this model."
       },
       {
-        "service": "Lambda durable functions \u00b7 workflow feature",
+        "service": "Lambda durable functions · workflow feature",
         "icon": "AWS-Lambda",
         "choose": "Supported checkpointed multi-step application code with waits and recovery.",
         "operations": "Use supported SDK/runtime and deterministic replay/step behavior; validate checkpoints, external side effects, retries and workflow-level limits.",
@@ -706,7 +706,7 @@
         "watch": "API Gateway stage deployment is a separate control. Completed deployment status alone does not prove correctness or data compatibility."
       },
       {
-        "service": "AWS SAM \u00b7 CloudFormation framework",
+        "service": "AWS SAM · CloudFormation framework",
         "icon": "AWS-CloudFormation",
         "choose": "Infrastructure-as-code definition of supported serverless functions, APIs and deployment preferences.",
         "operations": "Transform/package/deploy supported templates and required permissions; version changes and inspect generated infrastructure and deployment configuration.",
@@ -720,14 +720,14 @@
         "watch": "A ZIP deployment does not go through ECR. Image packaging is not permission to run an arbitrary always-on web server under standard Lambda semantics."
       },
       {
-        "service": "Amazon ECS \u00b7 container alternative",
+        "service": "Amazon ECS · container alternative",
         "icon": "Amazon-Elastic-Container-Service",
         "choose": "Compatible long-running or arbitrary container services that fit an orchestration/compute contract better.",
         "operations": "Choose ECS service/task model and EC2/Fargate compute as taught in Module 12; plan networking, roles, health, rollout and capacity.",
         "watch": "Container compute has a different operational/billing model. Packaging a service image does not make it a compatible Lambda runtime."
       },
       {
-        "service": "AWS Fargate \u00b7 container compute alternative",
+        "service": "AWS Fargate · container compute alternative",
         "icon": "AWS-Fargate",
         "choose": "Compatible container tasks or Pods when that orchestration/compute contract fits better than standard Lambda.",
         "operations": "Use supported ECS/EKS configurations, runtime resources, networking, roles, storage and rollout policies as taught in Module12.",
@@ -811,7 +811,7 @@
         "watch": "Cognito trigger timing/retry behavior differs from S3 async invocation. A valid token or group does not authorize every tenant record."
       },
       {
-        "service": "Amazon CloudWatch \u00b7 Logs and metrics",
+        "service": "Amazon CloudWatch · Logs and metrics",
         "icon": "Amazon-CloudWatch",
         "choose": "Execution evidence, access logs, alarms, latency and concurrency diagnosis.",
         "operations": "Grant log-write permissions, set retention and correlate safe request/event identifiers. Use product-specific metrics, Logs subscription formats and log-delivery paths.",
@@ -853,21 +853,21 @@
         "watch": "Encryption permission is separate from function invoke, bucket, queue or database permission; key availability can affect recovery."
       },
       {
-        "service": "Amazon VPC \u00b7 NAT and private networking",
+        "service": "Amazon VPC · NAT and private networking",
         "icon": "Amazon-Virtual-Private-Cloud",
         "choose": "Private dependency access and deliberate egress identity/reachability.",
         "operations": "Configure subnet routes, DNS, security groups, endpoints and NAT/IGW where needed. Place an EIP on the supported egress NAT, not Lambda.",
         "watch": "Public subnet attachment alone does not give Lambda internet access. Keep database, NAT and endpoint branches separate in the actual path."
       },
       {
-        "service": "AWS PrivateLink \u00b7 API interface endpoints",
+        "service": "AWS PrivateLink · API interface endpoints",
         "icon": "AWS-PrivateLink",
         "choose": "Supported private API/service endpoint reachability from compatible networks.",
         "operations": "Configure execute-api endpoint DNS/SG/endpoint policy and REST resource/method authorization; validate cross-account/connected-network use.",
         "watch": "A private API frontend and a VPC-link private backend are different directions. Endpoint existence is not access to every API or dependency."
       },
       {
-        "service": "Elastic Load Balancing \u00b7 private backend",
+        "service": "Elastic Load Balancing · private backend",
         "icon": "Elastic-Load-Balancing",
         "choose": "Supported ALB/NLB targets behind current API Gateway private integrations.",
         "operations": "Choose compatible VPC link version, same-account ownership where required, listener/security/TLS and stage-path mapping.",
@@ -902,14 +902,14 @@
         "watch": "Direct REST WAF integration is not an HTTP API feature. WAF complements authentication and tenant/data authorization."
       },
       {
-        "service": "AWS Step Functions \u00b7 workflow integration",
+        "service": "AWS Step Functions · workflow integration",
         "icon": "AWS-Step-Functions",
         "choose": "Supported direct API workflow start and multi-service orchestration.",
         "operations": "Scope integration StartExecution or supported operation, validate input/response mode and distinguish intake from workflow completion.",
         "watch": "Detailed workflow types, retries and orchestration are covered in Module 14. Removing a pass-through function does not make an async workflow synchronous."
       },
       {
-        "service": "Amazon Aurora \u00b7 AppSync data source",
+        "service": "Amazon Aurora · AppSync data source",
         "icon": "Amazon-Aurora",
         "choose": "Supported relational GraphQL/data access through eligible Aurora/Data API configurations.",
         "operations": "Validate engine/Region/Data API availability, resolver request mapping, IAM, secret/KMS access and database grants.",
@@ -1178,7 +1178,7 @@
       {
         "service": "S3 presigned URL",
         "icon": "Amazon-Simple-Storage-Service",
-        "choose": "Grant a specific S3 request under the signer\u2019s permission.",
+        "choose": "Grant a specific S3 request under the signer’s permission.",
         "operations": "SigV4 principal credentials and expiry; S3 evaluates request.",
         "watch": "Does not automatically provide CloudFront caching or edge authorization."
       }
@@ -1641,7 +1641,7 @@
         "icon": "Amazon-Connect",
         "choose": "Cloud contact center, call routing and contact flows.",
         "operations": "Connect flows can invoke Lex, Lambda and integrated CRM.",
-        "watch": "Avoid the PDF\u2019s unqualified percentage savings claim."
+        "watch": "Avoid the PDF’s unqualified percentage savings claim."
       },
       {
         "service": "Amazon Comprehend",
@@ -1705,7 +1705,7 @@
         "icon": "Amazon-Forecast",
         "choose": "Existing managed time-series forecasting.",
         "operations": "Historical time-series plus related data; existing users continue.",
-        "watch": "Closed to new customers since July 2024; avoid source\u2019s unqualified 50% improvement claim."
+        "watch": "Closed to new customers since July 2024; avoid source’s unqualified 50% improvement claim."
       },
       {
         "service": "Amazon Bedrock",
@@ -2343,6 +2343,163 @@
       "https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html",
       "https://docs.aws.amazon.com/cloud-map/latest/dg/what-is-cloud-map.html",
       "https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Purchase models, capacity and elastic compute",
+    "rows": [
+      {
+        "service": "EC2 On-Demand",
+        "icon": "Amazon-EC2",
+        "choose": "Uncertain or short-lived demand with no term commitment.",
+        "operations": "Scale capacity with measured demand and compare the full instance plus storage/network bill.",
+        "watch": "On-Demand pricing does not itself guarantee instance availability."
+      },
+      {
+        "service": "Compute Savings Plans",
+        "icon": "AWS-Organizations",
+        "choose": "Steady eligible compute spend needing flexibility across EC2, Fargate and Lambda.",
+        "operations": "Commit to dollars per hour for a 1- or 3-year term; coverage applies automatically to eligible usage.",
+        "watch": "A pricing commitment does not reserve EC2 capacity or cover Spot usage."
+      },
+      {
+        "service": "EC2 Instance Savings Plans / Reserved Instances",
+        "icon": "Amazon-EC2",
+        "choose": "Predictable EC2 shape where a narrower commitment can fit.",
+        "operations": "Compare family/Region scope, RI attributes and coverage/utilization before purchase.",
+        "watch": "RIs and Savings Plans have different flexibility; capacity reservation is a separate decision."
+      },
+      {
+        "service": "EC2 Spot / Fargate Spot",
+        "icon": "Amazon-EC2",
+        "choose": "Retryable, interruption-tolerant workers and batch capacity.",
+        "operations": "Use queues, checkpoints, diversified capacity and interruption handling.",
+        "watch": "Do not place a non-recoverable critical baseline entirely on Spot."
+      },
+      {
+        "service": "Compute Optimizer / Auto Scaling",
+        "icon": "Amazon-EC2",
+        "choose": "Find oversized capacity and match supply to load.",
+        "operations": "Use performance data and load tests; target tracking for changing demand and schedules for known peaks.",
+        "watch": "A recommendation needs workload validation; scale limits and warmup still matter."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html",
+      "https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Network path and data transfer cost",
+    "rows": [
+      {
+        "service": "Amazon CloudFront / Origin Shield",
+        "icon": "Amazon-CloudFront",
+        "choose": "Reduce repeat origin requests and improve delivery with caching.",
+        "operations": "Select cache key, TTL, origin shield and origin failover based on content behavior.",
+        "watch": "Poor cache keys or low hit ratios reduce benefit; origin and request costs remain."
+      },
+      {
+        "service": "NAT Gateway / VPC endpoints",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Choose a private-service route versus managed internet egress.",
+        "operations": "Compare NAT processing and hourly charges with gateway/interface endpoint scope and pricing.",
+        "watch": "An interface endpoint has its own hourly and processing charges; routes and DNS must match."
+      },
+      {
+        "service": "Transit Gateway / AWS PrivateLink",
+        "icon": "Amazon-Virtual-Private-Cloud",
+        "choose": "Choose routed multi-VPC connectivity or consumer-to-service private access.",
+        "operations": "Trace attachment, endpoint and per-GB processing at each boundary.",
+        "watch": "The cheaper topology depends on flow direction, volume, Region and endpoint count."
+      },
+      {
+        "service": "S3 replication / DynamoDB global tables",
+        "icon": "Amazon-S3",
+        "choose": "Meet explicit cross-Region recovery or active-active requirements.",
+        "operations": "Count replicated writes, storage, requests and cross-Region transfer.",
+        "watch": "Replicating everything can increase spend without improving the actual recovery objective."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Cost visibility, attribution and guardrails",
+    "rows": [
+      {
+        "service": "Cost allocation tags / tag policies",
+        "icon": "AWS-Organizations",
+        "choose": "Attribute resource spend to owners and standardize keys.",
+        "operations": "Activate allocation tags; use tag policy for format, supported SCP conditions for prevention, Config for detection.",
+        "watch": "Tags created late do not retroactively tag earlier resource usage."
+      },
+      {
+        "service": "Cost Explorer / Cost and Usage Report",
+        "icon": "AWS-Organizations",
+        "choose": "Find trends or analyze detailed line items.",
+        "operations": "Filter by account, service, Region and usage type; use detailed billing export for granular analysis.",
+        "watch": "A service total does not identify the exact traffic path or resource by itself."
+      },
+      {
+        "service": "Cost Categories / split charges",
+        "icon": "AWS-Organizations",
+        "choose": "Map billing lines to teams and allocate shared service charges.",
+        "operations": "Create rule-based business categories and review unallocated lines.",
+        "watch": "Split charges support allocation views; they do not change the underlying AWS bill."
+      },
+      {
+        "service": "AWS Budgets / Cost Anomaly Detection",
+        "icon": "Amazon-CloudWatch",
+        "choose": "Alert on planned thresholds or unusual deviations.",
+        "operations": "Set owner, scope and notification; investigate both budget variance and anomaly.",
+        "watch": "A budget threshold and anomaly model answer different questions."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html",
+      "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-cost-categories.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Storage, database and observability economics",
+    "rows": [
+      {
+        "service": "S3 Intelligent-Tiering / lifecycle",
+        "icon": "Amazon-S3",
+        "choose": "Match object access and recovery needs to storage tiers.",
+        "operations": "Track access patterns, transition/expiration policies and retrieval behavior.",
+        "watch": "Storage price alone ignores retrieval, request and monitoring charges."
+      },
+      {
+        "service": "EBS gp3 / EFS lifecycle",
+        "icon": "Amazon-Elastic-Block-Store",
+        "choose": "Tune block IOPS independently or tier cold shared files.",
+        "operations": "Provision gp3 capacity and performance; use EFS lifecycle for infrequently accessed files.",
+        "watch": "Test real throughput, latency and access patterns before changing tiers."
+      },
+      {
+        "service": "DynamoDB / RDS / Aurora",
+        "icon": "Amazon-DynamoDB",
+        "choose": "Select capacity mode and commitment for workload shape.",
+        "operations": "Compare DynamoDB on-demand/provisioned, RDS reserved capacity, Aurora Serverless and I/O-Optimized.",
+        "watch": "No one mode is universally cheapest; measure request, I/O and storage patterns."
+      },
+      {
+        "service": "AWS Backup / CloudWatch Logs",
+        "icon": "Amazon-S3",
+        "choose": "Retain recoverability and diagnostic evidence economically.",
+        "operations": "Align backup retention and copy with RPO/RTO; filter logs and set useful retention.",
+        "watch": "Deleting logs or backups solely to lower cost can violate recovery and audit needs."
+      }
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html"
     ]
   }
 ]

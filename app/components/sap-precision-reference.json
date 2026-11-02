@@ -217,23 +217,23 @@
     "rows": [
       [
         "gp3",
-        "1 GiB\u201364 TiB; up to 80,000 IOPS and 2,000 MiB/s. Includes 3,000 IOPS and 125 MiB/s baseline; provisioning ratios, instance limits and platform constraints apply."
+        "1 GiB–64 TiB; up to 80,000 IOPS and 2,000 MiB/s. Includes 3,000 IOPS and 125 MiB/s baseline; provisioning ratios, instance limits and platform constraints apply."
       ],
       [
         "gp2",
-        "1 GiB\u201316 TiB; up to 16,000 IOPS and 250 MiB/s. Performance and burst behavior depend on size."
+        "1 GiB–16 TiB; up to 16,000 IOPS and 250 MiB/s. Performance and burst behavior depend on size."
       ],
       [
         "io2 Block Express",
-        "4 GiB\u201364 TiB; up to 256,000 IOPS and 4,000 MiB/s on compatible instances/configurations; designed for 99.999% durability."
+        "4 GiB–64 TiB; up to 256,000 IOPS and 4,000 MiB/s on compatible instances/configurations; designed for 99.999% durability."
       ],
       [
         "io1",
-        "4 GiB\u201316 TiB; up to 64,000 IOPS and 1,000 MiB/s under supported instance/configuration conditions."
+        "4 GiB–16 TiB; up to 64,000 IOPS and 1,000 MiB/s under supported instance/configuration conditions."
       ],
       [
         "st1 / sc1",
-        "125 GiB\u201316 TiB; up to 500/250 MiB/s and 500/250 IOPS at 1 MiB I/O respectively. Throughput-oriented HDD; cannot be boot volumes."
+        "125 GiB–16 TiB; up to 500/250 MiB/s and 500/250 IOPS at 1 MiB I/O respectively. Throughput-oriented HDD; cannot be boot volumes."
       ],
       [
         "Multi-Attach",
@@ -267,7 +267,7 @@
       ],
       [
         "Provisioned initialization",
-        "Choose 100\u2013300 MiB/s where supported. Initialization concerns snapshot data size, not simply allocated volume size. Specifying a rate takes precedence over FSR."
+        "Choose 100–300 MiB/s where supported. Initialization concerns snapshot data size, not simply allocated volume size. Specifying a rate takes precedence over FSR."
       ],
       [
         "Manual initialization",
@@ -311,11 +311,11 @@
       ],
       [
         "Cost comparisons",
-        "The PDF\u2019s 3\u00d7 gp2, 50% Archive and >90% savings figures are scenario/price illustrations, not universal current prices. Compare Region-specific storage, access, retrieval, throughput and minimum-duration charges."
+        "The PDF’s 3× gp2, 50% Archive and >90% savings figures are scenario/price illustrations, not universal current prices. Compare Region-specific storage, access, retrieval, throughput and minimum-duration charges."
       ],
       [
         "Replication throughput",
-        "Replication uses managed capacity rather than consuming the source filesystem\u2019s provisioned throughput allocation. This does not eliminate initial-copy duration, lag or failover work."
+        "Replication uses managed capacity rather than consuming the source filesystem’s provisioned throughput allocation. This does not eliminate initial-copy duration, lag or failover work."
       ]
     ],
     "sources": [
@@ -378,7 +378,7 @@
       ],
       [
         "Gateway deployment",
-        "Use a supported VM/host deployment and type-specific CPU, memory, disk and network sizing. The PDF\u2019s hardware-purchase path is historical; private or encrypted internet transport remains a separate design choice."
+        "Use a supported VM/host deployment and type-specific CPU, memory, disk and network sizing. The PDF’s hardware-purchase path is historical; private or encrypted internet transport remains a separate design choice."
       ],
       [
         "S3 File Gateway storage classes",
@@ -416,7 +416,7 @@
       ],
       [
         "Backups and snapshots",
-        "Automated backups enable point-in-time recovery within the configured retention window, up to 35 days. A standard RDS DB instance supports 0\u201335 days (0 disables automated backups); a Multi-AZ DB cluster requires 1\u201335 days. Defaults depend on the creation interface. Manual snapshots persist until deleted. Restore creates another database endpoint. Check encryption keys, engine compatibility and application consistency."
+        "Automated backups enable point-in-time recovery within the configured retention window, up to 35 days. A standard RDS DB instance supports 0–35 days (0 disables automated backups); a Multi-AZ DB cluster requires 1–35 days. Defaults depend on the creation interface. Manual snapshots persist until deleted. Restore creates another database endpoint. Check encryption keys, engine compatibility and application consistency."
       ],
       [
         "Regional recovery",
@@ -604,7 +604,7 @@
       ],
       [
         "Table classes and backups",
-        "Standard offers lower request cost and higher storage cost than Standard-IA. Both remain online; Standard-IA is not archive storage. On-demand backups and point-in-time recovery solve recovery history, independently of table class. DynamoDB PITR supports a configured 1\u201335-day window, default 35 days, with per-second recovery points; restore creates a new table."
+        "Standard offers lower request cost and higher storage cost than Standard-IA. Both remain online; Standard-IA is not archive storage. On-demand backups and point-in-time recovery solve recovery history, independently of table class. DynamoDB PITR supports a configured 1–35-day window, default 35 days, with per-second recovery points; restore creates a new table."
       ],
       [
         "S3 metadata index",
@@ -665,7 +665,7 @@
       ],
       [
         "Extreme-rate bottlenecks",
-        "Measure client, DNS, edge, API throttling, Lambda concurrency, network, database partitions, cache misses and cost as one path. The PDF historic node capacities, API/Lambda/edge defaults and unbounded queue claims are not current universal guarantees. S3 baseline is 5,500 GET/HEAD requests per second per partitioned prefix, not the PDF 5,550 typo; KMS can impose another quota. Detailed quotas belong to Modules 07/09 and later Modules 13\u201316."
+        "Measure client, DNS, edge, API throttling, Lambda concurrency, network, database partitions, cache misses and cost as one path. The PDF historic node capacities, API/Lambda/edge defaults and unbounded queue claims are not current universal guarantees. S3 baseline is 5,500 GET/HEAD requests per second per partitioned prefix, not the PDF 5,550 typo; KMS can impose another quota. Detailed quotas belong to Modules 07/09 and later Modules 13–16."
       ],
       [
         "Valkey optional durability",
@@ -996,7 +996,7 @@
     "rows": [
       [
         "Memory and CPU",
-        "Standard Event Functions configure 128\u201310,240 MB in 1-MB increments; CPU scales with memory. At 1,769 MB the allocation is equivalent to one vCPU, correcting the source two-vCPU claim. Supported maximum-memory configurations can reach six vCPUs; profile single-threaded versus parallel code."
+        "Standard Event Functions configure 128–10,240 MB in 1-MB increments; CPU scales with memory. At 1,769 MB the allocation is equivalent to one vCPU, correcting the source two-vCPU claim. Supported maximum-memory configurations can reach six vCPUs; profile single-threaded versus parallel code."
       ],
       [
         "Timeout scope",
@@ -1004,7 +1004,7 @@
       ],
       [
         "Temporary storage",
-        "/tmp can be 512\u201310,240 MB in 1-MB increments for supported standard configurations; it is temporary, separate from memory and not durable state. Reuse does not guarantee retention across environments."
+        "/tmp can be 512–10,240 MB in 1-MB increments for supported standard configurations; it is temporary, separate from memory and not durable state. Reuse does not guarantee retention across environments."
       ],
       [
         "ZIP and layers",
@@ -1059,7 +1059,7 @@
       ],
       [
         "Capacity sizing",
-        "Approximate steady concurrency=RPS\u00d7average duration in seconds.200 RPS\u00d70.5s\u2248100concurrent. Tail latency, spikes, initialization and retries need headroom; this arithmetic is not a burst guarantee."
+        "Approximate steady concurrency=RPS×average duration in seconds.200 RPS×0.5s≈100concurrent. Tail latency, spikes, initialization and retries need headroom; this arithmetic is not a burst guarantee."
       ],
       [
         "SnapStart support",
@@ -1071,7 +1071,7 @@
       ],
       [
         "Asynchronous function errors",
-        "Default code/runtime error behavior: initial attempt plus two retries, ordinarily about 1minute then 2 minutes later. Configure maximum retry attempts 0\u20132 and maximum event age 60\u201321,600 seconds where supported. This is not the universal retry count for throttles/system failures."
+        "Default code/runtime error behavior: initial attempt plus two retries, ordinarily about 1minute then 2 minutes later. Configure maximum retry attempts 0–2 and maximum event age 60–21,600 seconds where supported. This is not the universal retry count for throttles/system failures."
       ],
       [
         "Throttles and async queue age",
@@ -1183,7 +1183,7 @@
       ],
       [
         "Buffered REST payload/time",
-        "Payload 10 MB. Usual integration timeout 50ms\u201329s; Regional/private REST can request greater timeouts, potentially reducing regional account throttle. Edge-optimized buffered timeout cannot be increased through that ordinary limit. Lambda 6 MB buffered payload may constrain the chain earlier."
+        "Payload 10 MB. Usual integration timeout 50ms–29s; Regional/private REST can request greater timeouts, potentially reducing regional account throttle. Edge-optimized buffered timeout cannot be increased through that ordinary limit. Lambda 6 MB buffered payload may constrain the chain earlier."
       ],
       [
         "HTTP API limits",
@@ -1255,7 +1255,7 @@
       ],
       [
         "REST cache sizing and TTL",
-        "Supported cacheClusterSize choices include 0.5,1.6,6.1,13.5,28.4,58.2,118 and 237 GB; verify current API values. TTL default 300s, configurable 0\u20133600; zero disables. Maximum cached response 1,048,576bytes; encryption can increase its stored size. Cache provisioning/resizing can take minutes and resizing clears data."
+        "Supported cacheClusterSize choices include 0.5,1.6,6.1,13.5,28.4,58.2,118 and 237 GB; verify current API values. TTL default 300s, configurable 0–3600; zero disables. Maximum cached response 1,048,576bytes; encryption can increase its stored size. Cache provisioning/resizing can take minutes and resizing clears data."
       ],
       [
         "Method and key behavior",
@@ -1307,7 +1307,7 @@
       ],
       [
         "WebSocket limits",
-        "Connection maximum 2 hours; idle timeout 10 minutes; frame 32 KB; message 128 KB requiring compliant framing. Integration timeout 50ms\u201329s. Typical new connection default 500/s per account/Region, subject to increase. No explicit concurrent-connection quota does not mean unlimited practical capacity."
+        "Connection maximum 2 hours; idle timeout 10 minutes; frame 32 KB; message 128 KB requiring compliant framing. Integration timeout 50ms–29s. Typical new connection default 500/s per account/Region, subject to increase. No explicit concurrent-connection quota does not mean unlimited practical capacity."
       ],
       [
         "Management callback",
@@ -1734,7 +1734,7 @@
       ],
       [
         "S3 presign",
-        "SigV4 signs a specific S3 API request using a principal\u2019s permission; separate from CloudFront signed access."
+        "SigV4 signs a specific S3 API request using a principal’s permission; separate from CloudFront signed access."
       ],
       [
         "Viewer versus origin",
@@ -2687,7 +2687,7 @@
       ],
       [
         "Forecast legacy claims",
-        "The PDF\u2019s 50% accuracy and months-to-hours figures are marketing examples, not guaranteed SLOs."
+        "The PDF’s 50% accuracy and months-to-hours figures are marketing examples, not guaranteed SLOs."
       ],
       [
         "Kendra availability",
@@ -3327,6 +3327,90 @@
     "sources": [
       "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-tools.html",
       "https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Commitments, capacity and workload fit",
+    "rows": [
+      [
+        "Savings Plans",
+        "Hourly spend commitment applies to eligible usage; it is not an EC2 capacity reservation and does not cover Spot."
+      ],
+      [
+        "Reserved Instances",
+        "Pricing scope and capacity benefits depend on RI type and tenancy; compare coverage and utilization before buying."
+      ],
+      [
+        "Spot interruption",
+        "Diversify capacity and checkpoint or retry work; use a durable queue to prevent job loss."
+      ],
+      [
+        "Compute Optimizer",
+        "Recommendations rely on observed metrics and configuration; validate performance and business peaks."
+      ],
+      [
+        "AI cost drivers",
+        "Model tier, input/output tokens, batching, cache hit rate and provisioned capacity all affect total spend."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html",
+      "https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Transfer and allocation boundaries",
+    "rows": [
+      [
+        "Cross-AZ and cross-Region",
+        "Trace each charged boundary; availability requirements may justify transfer rather than eliminate it."
+      ],
+      [
+        "NAT versus endpoints",
+        "Gateway and interface endpoint capabilities and pricing differ; examine traffic volume, hourly costs and DNS/routing."
+      ],
+      [
+        "Tag enforcement",
+        "Tag policy standardizes; supported SCP request-tag conditions can prevent; Config detects noncompliance."
+      ],
+      [
+        "Cost categories",
+        "Group billing lines by business rules; split charges distribute shared cost in allocation views."
+      ],
+      [
+        "Budgets versus anomalies",
+        "Threshold alerts answer whether planned spend is exceeded; anomaly alerts flag unusual patterns."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html"
+    ]
+  },
+  {
+    "moduleId": "23",
+    "title": "Storage, databases and retention",
+    "rows": [
+      [
+        "S3 lifecycle",
+        "Transition and expiration need object age, retrieval and minimum-duration considerations."
+      ],
+      [
+        "gp3 and gp2",
+        "gp3 allows independent performance provisioning; gp2 performance is linked to volume size."
+      ],
+      [
+        "Database capacity",
+        "DynamoDB, RDS and Aurora capacity and purchase modes suit different variability and I/O shapes."
+      ],
+      [
+        "Backup and observability",
+        "Choose retention and copies from recovery and compliance needs; filter and aggregate telemetry without losing diagnostic evidence."
+      ]
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html"
     ]
   }
 ]

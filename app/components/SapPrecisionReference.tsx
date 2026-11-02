@@ -20,6 +20,14 @@ function detailIcon(moduleId:string,index:number,topic:string) {
   if(/Quota/.test(topic))return 'Service-Quotas';
   return 'AWS-Systems-Manager';
  }
+ if(moduleId==='23'){
+  if(/Savings|Commit|Spot|Compute|Reserved/.test(topic))return 'Amazon-EC2';
+  if(/NAT|Cross-AZ|Cross-Region/.test(topic))return 'Amazon-Virtual-Private-Cloud';
+  if(/Tag|Cost categor/.test(topic))return 'AWS-Organizations';
+  if(/S3|lifecycle/.test(topic))return 'Amazon-S3';
+  if(/Database|gp3|gp2/.test(topic))return 'Amazon-DynamoDB';
+  return ['Amazon-EC2','Amazon-Virtual-Private-Cloud','Amazon-S3'][index];
+ }
  if(moduleId==='20'){
   if(/SSM |Runtime retrieval|Versioned references/.test(topic))return 'AWS-Systems-Manager';
   if(/SCP /.test(topic))return 'AWS-Organizations';
@@ -104,7 +112,7 @@ export default function SapPrecisionReference({moduleId}:{moduleId:string}) {
  const groups=comparisons.filter(group=>group.moduleId===moduleId);
  const count=groups.reduce((sum,group)=>sum+group.rows.length,0);
  const detailCount=own.reduce((sum,section)=>sum+section.rows.length,0);
- const tableVisuals=moduleId==='21'?[25,26,27]:moduleId==='22'?[43,44,45]:[];
+ const tableVisuals=moduleId==='21'?[25,26,27]:moduleId==='22'?[43,44,45]:moduleId==='23'?[28]:[];
  return <section className={`sap-s3-ref${enhanced?' sap-precision-enhanced':''}`} id="module-precision-reference" aria-label="Detailed service comparison">
   <header><p className="sap-s3-kicker">DETAILS AND EXCEPTIONS · REVIEWED {tableVisuals.length?'2':'1'} NOVEMBER 2026</p><h2>{enhanced?'Compare the services. Master the details.':'Inspect the limits. Keep the exceptions.'}</h2><p>{enhanced?'Choose the right service, then check the operating model, security gates, recovery behavior and exceptions. These comparisons cover the core services, service features and supporting integrations taught in this module.':'Use these readable comparisons alongside the visual lessons. Numerical maxima depend on the selected Region, instance, configuration and current service documentation.'}</p>
   {enhanced&&<><div className="sap-reference-stats"><span><strong>{count}</strong> service &amp; feature comparisons</span><span><strong>{detailCount}</strong> precision details</span><span><strong>AWS</strong> official architecture icons</span></div><nav aria-label="Comparison sections">{groups.map((group,index)=><a key={group.title} href={`#sap-${moduleId}-compare-${index}`}>{group.title}</a>)}<a href={`#sap-${moduleId}-precision`}>Limits &amp; exceptions ↓</a></nav></>}
