@@ -214,7 +214,12 @@
             "Create role"
           ]
         ],
-        "asset": "iam-role-01.png"
+        "asset": "iam-role-01.png",
+        "steps": [
+          "In the AWS Management Console, search for IAM in the top bar and open the IAM service. IAM is a global service; note the account shown in the header.",
+          "In the left navigation under Access management, choose Roles. Review the existing roles before creating another one.",
+          "Choose Create role in the upper-right of the Roles page."
+        ]
       },
       {
         "title": "Select trusted entity",
@@ -231,7 +236,12 @@
             "EC2"
           ]
         ],
-        "asset": "iam-role-02.png"
+        "asset": "iam-role-02.png",
+        "steps": [
+          "Under Trusted entity type, select AWS service. This defines which AWS service can assume the new role.",
+          "Under Service or use case, choose EC2 and select its EC2 use case.",
+          "Choose Next to reach Add permissions. Confirm the trust principal is ec2.amazonaws.com when reviewing the role later."
+        ]
       },
       {
         "title": "Define scoped policy",
@@ -249,7 +259,13 @@
           ]
         ],
         "warning": "Use an approved bucket that you own. A bucket policy or explicit deny can still block access.",
-        "asset": "iam-role-03.png"
+        "asset": "iam-role-03.png",
+        "steps": [
+          "On Add permissions, choose Create policy. AWS opens the policy editor in another browser tab; keep the Create role tab open.",
+          "In the policy editor, choose JSON, replace the starter document with the policy below, and change architect-lab-bucket to the approved bucket name in your sandbox.",
+          "Check the editor validation and choose Next. The resource is an object ARN ending in examples/*, not the bucket ARN alone."
+        ],
+        "code": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:GetObject\",\n      \"Resource\": \"arn:aws:s3:::architect-lab-bucket/examples/*\"\n    }\n  ]\n}"
       },
       {
         "title": "Create the policy",
@@ -266,7 +282,12 @@
             "S3 GetObject on example objects"
           ]
         ],
-        "asset": "iam-role-04.png"
+        "asset": "iam-role-04.png",
+        "steps": [
+          "On Review and create, enter LabS3ReadObjects as Policy name and a description explaining its S3 object scope.",
+          "Expand or inspect Permissions defined in this policy. Verify Allow, s3:GetObject and the intended object ARN only.",
+          "Choose Create policy. Return to the original Create role tab."
+        ]
       },
       {
         "title": "Attach permissions",
@@ -283,7 +304,12 @@
             "AdministratorAccess"
           ]
         ],
-        "asset": "iam-role-05.png"
+        "asset": "iam-role-05.png",
+        "steps": [
+          "On Add permissions in the role wizard, refresh the policy list if the new policy is absent.",
+          "Search for LabS3ReadObjects and select its checkbox. Check that one customer managed policy is selected.",
+          "Choose Next. Do not choose AdministratorAccess for this exercise."
+        ]
       },
       {
         "title": "Name and create role",
@@ -304,7 +330,12 @@
             "LabS3ReadObjects"
           ]
         ],
-        "asset": "iam-role-06.png"
+        "asset": "iam-role-06.png",
+        "steps": [
+          "Enter ec2-lab-s3-read in Role name and add a description that identifies the lab workload.",
+          "Review Step 1: Select trusted entities for AWS service: EC2 and Step 2: Add permissions for LabS3ReadObjects. Use Edit if either is wrong.",
+          "Choose Create role. The role name must be unique within your AWS account."
+        ]
       },
       {
         "title": "Verify trust relationship",
@@ -325,7 +356,12 @@
             "Delete role and lab policy"
           ]
         ],
-        "asset": "iam-role-07.png"
+        "asset": "iam-role-07.png",
+        "steps": [
+          "In IAM → Roles, open ec2-lab-s3-read. On Permissions, confirm LabS3ReadObjects is attached.",
+          "Open Trust relationships and verify Principal.Service is ec2.amazonaws.com and Action is sts:AssumeRole.",
+          "To use the role, select its instance profile in EC2 launch Advanced details or attach it to an existing instance. After practice, remove the role from any instance, delete the lab role, then delete the customer managed policy."
+        ]
       }
     ]
   },
