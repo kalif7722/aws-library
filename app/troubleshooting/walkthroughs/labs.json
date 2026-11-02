@@ -201,9 +201,9 @@
     "screens": [
       {
         "title": "Open Roles",
-        "path": "Console Home → IAM → Access management → Roles",
-        "action": "Choose Create role and inspect existing roles first.",
-        "why": "IAM is account-wide; roles are assumed identities.",
+        "path": "IAM → Access management → Roles",
+        "action": "Open Roles, inspect existing roles, then choose Create role.",
+        "why": "An IAM role is an assumed identity with its own trust and permission policies.",
         "rows": [
           [
             "Navigation",
@@ -213,13 +213,14 @@
             "Action",
             "Create role"
           ]
-        ]
+        ],
+        "asset": "iam-role-01.png"
       },
       {
         "title": "Select trusted entity",
         "path": "Create role → Select trusted entity",
-        "action": "Choose AWS service and EC2 use case for a workload role.",
-        "why": "Trust policy controls who may assume the role.",
+        "action": "Choose AWS service, select EC2 under Service or use case, then choose Next.",
+        "why": "This creates the trust relationship that lets EC2 assume the role.",
         "rows": [
           [
             "Trusted entity type",
@@ -229,47 +230,102 @@
             "Use case",
             "EC2"
           ]
-        ]
+        ],
+        "asset": "iam-role-02.png"
       },
       {
-        "title": "Add scoped permissions",
-        "path": "Create role → Add permissions",
-        "action": "Choose a narrowly scoped policy for a lab S3 read example; review its actions and resources.",
-        "why": "Permission policy determines what the role may do after assumption.",
+        "title": "Define scoped policy",
+        "path": "Add permissions → Create policy → Specify permissions",
+        "action": "Open Create policy in a new tab. Choose JSON; allow s3:GetObject only on arn:aws:s3:::architect-lab-bucket/examples/*, then choose Next.",
+        "why": "The action and object ARN scope limit what the role can read. Replace the example bucket with your approved lab bucket.",
         "rows": [
           [
-            "Permission",
+            "Action",
             "s3:GetObject"
           ],
           [
-            "Resource scope",
-            "One lab bucket/prefix"
+            "Resource",
+            "arn:aws:s3:::architect-lab-bucket/examples/*"
+          ]
+        ],
+        "warning": "Use an approved bucket that you own. A bucket policy or explicit deny can still block access.",
+        "asset": "iam-role-03.png"
+      },
+      {
+        "title": "Create the policy",
+        "path": "Create policy → Review and create",
+        "action": "Name the customer managed policy LabS3ReadObjects, review its action and resource, then choose Create policy. Return to the role wizard tab.",
+        "why": "The policy has to exist before it can be selected in the role wizard.",
+        "rows": [
+          [
+            "Policy name",
+            "LabS3ReadObjects"
+          ],
+          [
+            "Review",
+            "S3 GetObject on example objects"
+          ]
+        ],
+        "asset": "iam-role-04.png"
+      },
+      {
+        "title": "Attach permissions",
+        "path": "Create role → Add permissions",
+        "action": "Refresh the policy list if necessary, search LabS3ReadObjects, select its checkbox, and choose Next.",
+        "why": "The attached permissions policy controls actions after EC2 assumes the role.",
+        "rows": [
+          [
+            "Policy",
+            "LabS3ReadObjects"
           ],
           [
             "Avoid",
             "AdministratorAccess"
           ]
-        ]
+        ],
+        "asset": "iam-role-05.png"
       },
       {
-        "title": "Name and verify",
-        "path": "Create role → Name, review, and create → Role details",
-        "action": "Name the role, inspect trust and permissions tabs, then remove the lab role after use.",
-        "why": "A policy attachment is not proof the trust path or resource policy allows access.",
+        "title": "Name and create role",
+        "path": "Create role → Name, review, and create",
+        "action": "Enter ec2-lab-s3-read, verify the EC2 trusted entity and LabS3ReadObjects policy, then choose Create role.",
+        "why": "Review trust and permissions together before creating an account-wide identity.",
         "rows": [
           [
             "Role name",
             "ec2-lab-s3-read"
           ],
           [
-            "Inspect",
-            "Trust relationships · Permissions"
+            "Trust",
+            "EC2"
+          ],
+          [
+            "Permission",
+            "LabS3ReadObjects"
+          ]
+        ],
+        "asset": "iam-role-06.png"
+      },
+      {
+        "title": "Verify trust relationship",
+        "path": "Roles → ec2-lab-s3-read → Trust relationships",
+        "action": "Open the created role. In Trust relationships, verify ec2.amazonaws.com and sts:AssumeRole; in Permissions, confirm the attached policy. Delete the role and policy after the lab.",
+        "why": "A policy attachment alone does not prove the trust path or resource policy permits access.",
+        "rows": [
+          [
+            "Principal",
+            "ec2.amazonaws.com"
+          ],
+          [
+            "Action",
+            "sts:AssumeRole"
           ],
           [
             "Cleanup",
-            "Detach lab policy and delete role"
+            "Delete role and lab policy"
           ]
-        ]
+        ],
+        "asset": "iam-role-07.png"
       }
     ]
   },
