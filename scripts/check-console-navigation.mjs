@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {resolvePracticeView,findPracticeLabs} from '../app/troubleshooting/simulators/aws/practice/navigation.ts';
+const labs=JSON.parse(readFileSync(new URL('../app/troubleshooting/walkthroughs/labs.json',import.meta.url),'utf8'));
+const ec2=resolvePracticeView(labs,'ec2-first-instance',8);
+assert.equal(ec2.safeStep,8);
+const tower=resolvePracticeView(labs,'control-tower',ec2.safeStep);
+assert.equal(tower.lab.id,'control-tower');assert.equal(tower.safeStep,2);
+assert.equal(resolvePracticeView(labs,'unknown-lab',99).lab.id,labs[0].id);
+assert.equal(findPracticeLabs(labs,'  SQS  ')[0].id,'sqs-dlq');
+assert.equal(findPracticeLabs(labs,'')[0],undefined);
+assert.equal(findPracticeLabs(labs,'postgresql').length,0);
+console.log('Search matching and 9-to-3 screen lab switch passed');
