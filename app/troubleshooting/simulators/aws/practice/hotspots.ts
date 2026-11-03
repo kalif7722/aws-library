@@ -1,6 +1,6 @@
 /** Locations of the highlighted controls in the authored 1672×941 console views.
  * The EC2 originals use 1920×1006. Each entry is [x, y, field index or next]. */
-export type Hotspot=[number,number,number|'next'|'previous'];
+export type Hotspot=[number,number,number|'next'|'previous'|'inspect'];
 export const hotspots:Record<string,Hotspot[][]>={
  'iam-role':[
   [[149,386,0],[1435,171,'next']],

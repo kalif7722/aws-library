@@ -1,3 +1,4 @@
+import {expandedStages} from './expanded-spec';
 export type Field={label:string;value:string;kind?:'text'|'select'|'check'|'choice'|'readonly';options?:string[];help?:string;required?:boolean};
 export type Stage={fields:Field[];button:string;note?:string};
 const f=(label:string,value:string,kind:Field['kind']='text',options?:string[],help?:string):Field=>({label,value,kind,options,help,required:kind==='text'});
@@ -54,4 +55,5 @@ export const stages:Record<string,Stage[]>={
  {fields:[f('Initial database name','labdb'),k('Enable automated backups'),s('Backup retention period','7 days',['7 days','1 day','14 days']),s('Encryption key','aws/rds',['aws/rds','Customer managed key']),k('Enable deletion protection'),r('Summary','PostgreSQL · private · gp3')],button:'Create database'},
  {fields:[r('Status','Available'),r('Endpoint','lab-postgres.example.us-east-1.rds.amazonaws.com'),r('Port','5432'),r('Publicly accessible','No'),r('DB subnet group','lab-db-subnets'),r('VPC security group','lab-db-sg')],button:'Review deletion protection'},
  {fields:[k('Create final snapshot'),f('Final snapshot name','architect-lab-db-final'),k('Retain automated backups'),f('Type delete to confirm',''),r('Deletion protection','Review before deleting'),r('Confirmation','A final snapshot can continue to incur charges')],button:'Finish database review'}
-]};
+],
+...expandedStages};
