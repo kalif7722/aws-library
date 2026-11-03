@@ -5,7 +5,8 @@ import slides from './sap-troubleshooting-slides.json';
 import './SapModule26.css';
 const incidentImages:Record<number,{title:string;description:string;folder:string;steps:[string,string][]}>={
  3:{title:'EC2 unreachable · console investigation',description:'Inspect the instance, isolate the missing SSH rule, make the scoped change, and verify an actual connection.',folder:'troubleshooting-ec2',steps:[['01-instance','Instance state'],['02-security','Inbound rules'],['03-path','Model VPC path'],['04-result','Blocked result'],['05-rule','Edit SSH rule'],['06-verify','Verify SSH']]},
- 4:{title:'Private EC2 has no egress · console investigation',description:'Confirm instance health, inspect the private subnet route, replace the unavailable NAT target, and verify outbound HTTPS.',folder:'troubleshooting-egress',steps:[['01-instance','Instance health'],['02-route','Blackhole route'],['03-repair','Correct NAT target'],['04-verify','Verify egress']]}
+ 4:{title:'Private EC2 has no egress · console investigation',description:'Confirm instance health, inspect the private subnet route, replace the unavailable NAT target, and verify outbound HTTPS.',folder:'troubleshooting-egress',steps:[['01-instance','Instance health'],['02-route','Blackhole route'],['03-repair','Correct NAT target'],['04-verify','Verify egress']]},
+ 5:{title:'Private service endpoint fails · console investigation',description:'Inspect the interface endpoint and DNS resolution, correct private DNS and HTTPS access, then verify the service API.',folder:'troubleshooting-endpoint',steps:[['01-endpoint','Endpoint details'],['02-diagnose','DNS and security group'],['03-repair','Correct endpoint'],['04-verify','Verify service API']]}
 };
 export default function SapModule26(){
  const [mode,setMode]=useState<'lessons'|'console'>('lessons'),[index,setIndex]=useState(0),[full,setFull]=useState(false),[incidentScreen,setIncidentScreen]=useState(0);
