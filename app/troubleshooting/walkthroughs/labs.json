@@ -1064,12 +1064,28 @@
         "asset": "cloudformation-stack-03-real.webp"
       },
       {
+        "title": "Confirm stack parameters",
+        "path": "Create change set → Specify stack details",
+        "action": "Keep the existing stack parameters or enter the approved lab values, then choose Next.",
+        "why": "Stack status alone does not describe every resource state.",
+        "rows": [],
+        "asset": "cloudformation-stack-04-real.webp"
+      },
+      {
         "title": "Review stack options",
         "path": "Configure stack options",
         "action": "Review execution role, tags and rollback settings.",
         "why": "Stack status alone does not describe every resource state.",
         "rows": [],
-        "asset": "cloudformation-stack-04-real.webp"
+        "asset": "cloudformation-stack-05-real.webp"
+      },
+      {
+        "title": "Review and create the change set",
+        "path": "Create change set → Review",
+        "action": "Review the template, execution role and parameters, then create the named change set without executing it.",
+        "why": "Stack status alone does not describe every resource state.",
+        "rows": [],
+        "asset": "cloudformation-stack-06-real.webp"
       },
       {
         "title": "Inspect proposed changes",
@@ -1077,7 +1093,7 @@
         "action": "Check Action and Replacement before execution.",
         "why": "Stack status alone does not describe every resource state.",
         "rows": [],
-        "asset": "cloudformation-stack-05-real.webp"
+        "asset": "cloudformation-stack-07-real.webp"
       },
       {
         "title": "Execute and follow events",
@@ -1085,7 +1101,7 @@
         "action": "Follow update or rollback events, then verify outputs.",
         "why": "Stack status alone does not describe every resource state.",
         "rows": [],
-        "asset": "cloudformation-stack-06-real.webp"
+        "asset": "cloudformation-stack-08-real.webp"
       }
     ],
     "console": "https://console.aws.amazon.com/cloudformation/home",
@@ -1220,78 +1236,48 @@
     "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
     "screens": [
       {
-        "title": "Inspect organization",
+        "title": "Select sandbox OU",
         "path": "Organizations → AWS accounts",
-        "action": "Confirm organization features and target OU.",
+        "action": "Select the approved OU and inspect member accounts.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Organization",
-            "All features"
-          ],
-          [
-            "Target",
-            "Sandbox OU"
-          ]
-        ],
-        "asset": "organizations-scp-01-sap.webp"
+        "rows": [],
+        "asset": "organizations-scp-01-real.webp"
       },
       {
-        "title": "Create SCP",
-        "path": "Policies → Service control policies → Create policy",
-        "action": "Create a narrow deny for a test Region.",
+        "title": "Open SCPs",
+        "path": "Organizations → Policies → Service control policies",
+        "action": "Confirm SCPs are enabled.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Policy name",
-            "DenyUnapprovedRegion"
-          ],
-          [
-            "Effect",
-            "Deny"
-          ],
-          [
-            "Condition",
-            "aws:RequestedRegion"
-          ]
-        ],
-        "asset": "organizations-scp-02-sap.webp"
+        "rows": [],
+        "asset": "organizations-scp-02-real.webp"
       },
       {
-        "title": "Attach to OU",
-        "path": "Policy details → Targets → Attach",
-        "action": "Attach to the sandbox OU and review inherited policies.",
+        "title": "Define a test deny",
+        "path": "SCPs → Create policy",
+        "action": "Create a narrow test deny for leaving the organization.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Target",
-            "Sandbox OU"
-          ],
-          [
-            "Scope",
-            "Member accounts"
-          ]
-        ],
-        "asset": "organizations-scp-03-sap.webp"
+        "rows": [],
+        "asset": "organizations-scp-03-real.webp",
+        "code": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Deny\",\n      \"Action\": \"organizations:LeaveOrganization\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
       },
       {
-        "title": "Verify effective guardrail",
-        "path": "AWS accounts → Sandbox OU → Policies",
-        "action": "Inspect attached and inherited SCPs; detach the test policy after validation.",
+        "title": "Attach to sandbox OU",
+        "path": "Policy → Targets → Attach",
+        "action": "Attach only to Sandbox OU.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Verify",
-            "SCP attachment"
-          ],
-          [
-            "Cleanup",
-            "Detach, then delete test SCP"
-          ]
-        ],
-        "asset": "organizations-scp-04-sap.webp"
+        "rows": [],
+        "asset": "organizations-scp-04-real.webp"
+      },
+      {
+        "title": "Review inherited policies",
+        "path": "Sandbox OU → Policies",
+        "action": "Verify direct and inherited policies, then remove the test attachment.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "organizations-scp-05-real.webp"
       }
-    ]
+    ],
+    "consoleFidelity": "service-specific"
   },
   {
     "section": "11 · Governance",
@@ -1464,7 +1450,9 @@
         "action": "Scope CloudFront access to the distribution SourceArn.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
         "rows": [],
-        "asset": "cloudfront-distribution-03-real.webp"
+        "asset": "cloudfront-distribution-03-real.webp",
+        "code": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowCloudFrontServicePrincipalReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Principal\": {\n        \"Service\": \"cloudfront.amazonaws.com\"\n      },\n      \"Action\": \"s3:GetObject\",\n      \"Resource\": \"arn:aws:s3:::architect-lab-123456789012/*\",\n      \"Condition\": {\n        \"StringEquals\": {\n          \"AWS:SourceArn\": \"arn:aws:cloudfront::123456789012:distribution/E123EXAMPLE\"\n        }\n      }\n    }\n  ]\n}",
+        "warning": "Replace the example bucket, account and distribution identifiers with your lab resources before saving the policy."
       },
       {
         "title": "Inspect cache behavior",
@@ -1609,76 +1597,45 @@
       {
         "title": "Inspect vault",
         "path": "AWS Backup → Backup vaults",
-        "action": "Review vault encryption, access policy and lock status.",
+        "action": "Review encryption, access policy and lock state.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Vault",
-            "Lab backup vault"
-          ],
-          [
-            "Encryption",
-            "KMS key"
-          ]
-        ],
-        "asset": "backup-plan-01-sap.webp"
+        "rows": [],
+        "asset": "backup-plan-01-real.webp"
       },
       {
-        "title": "Review plan rules",
-        "path": "Backup plans → Backup rules",
-        "action": "Inspect schedule, retention and copy actions.",
+        "title": "Create backup plan rule",
+        "path": "Backup plans → Create backup plan",
+        "action": "Set a daily lab rule and seven-day retention.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Frequency",
-            "Daily example"
-          ],
-          [
-            "Retention",
-            "Lab policy"
-          ],
-          [
-            "Copy",
-            "Approved destination"
-          ]
-        ],
-        "asset": "backup-plan-02-sap.webp"
+        "rows": [],
+        "asset": "backup-plan-02-real.webp"
       },
       {
-        "title": "Inspect assignments",
-        "path": "Backup plan → Resource assignments",
-        "action": "Confirm resources are selected by ARN or tags.",
+        "title": "Configure copy action",
+        "path": "Backup rule → Copy to destination",
+        "action": "Choose the approved destination Region and vault.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Assignment",
-            "Tagged resources"
-          ],
-          [
-            "IAM role",
-            "Backup service role"
-          ]
-        ],
-        "asset": "backup-plan-03-sap.webp"
+        "rows": [],
+        "asset": "backup-plan-03-real.webp"
       },
       {
-        "title": "Verify restore point",
-        "path": "Backup vault → Recovery points / Jobs",
-        "action": "Check completed job and restore point; test restore in sandbox.",
+        "title": "Assign resources",
+        "path": "Backup plan → Assign resources",
+        "action": "Select the backup role and tagged EC2 resources.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Job",
-            "Completed"
-          ],
-          [
-            "Recovery point",
-            "Available"
-          ]
-        ],
-        "asset": "backup-plan-04-sap.webp"
+        "rows": [],
+        "asset": "backup-plan-04-real.webp"
+      },
+      {
+        "title": "Verify recovery point",
+        "path": "AWS Backup → Jobs / Recovery points",
+        "action": "Inspect completed backup and recovery evidence; test restore separately.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "backup-plan-05-real.webp"
       }
-    ]
+    ],
+    "consoleFidelity": "service-specific"
   },
   {
     "section": "15 · Integration",
@@ -1690,74 +1647,64 @@
     "doc": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule.html",
     "screens": [
       {
-        "title": "Inspect event bus",
+        "title": "Select event bus",
         "path": "EventBridge → Event buses",
-        "action": "Select the bus and review resource policy.",
+        "action": "Inspect the intended bus and its permissions.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Bus",
-            "Default / custom"
-          ],
-          [
-            "Policy",
-            "Allowed producers"
-          ]
-        ],
-        "asset": "eventbridge-rule-01-sap.webp"
+        "rows": [],
+        "asset": "eventbridge-rule-01-real.webp"
       },
       {
-        "title": "Inspect rule pattern",
-        "path": "Rules → Event pattern",
-        "action": "Review source, detail-type and matching event fields.",
+        "title": "Define rule",
+        "path": "Rules → Create rule",
+        "action": "Name lab-ec2-state-change and choose an event pattern.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Source",
-            "aws.ec2"
-          ],
-          [
-            "Detail type",
-            "EC2 Instance State-change Notification"
-          ]
-        ],
-        "asset": "eventbridge-rule-02-sap.webp"
+        "rows": [],
+        "asset": "eventbridge-rule-02-real.webp"
       },
       {
-        "title": "Inspect target",
-        "path": "Rule → Targets",
-        "action": "Verify target ARN, role and input transformation.",
+        "title": "Build event pattern",
+        "path": "Create rule → Build event pattern",
+        "action": "Match EC2 running state notifications and test a sample.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Target",
-            "Approved Lambda / SQS"
-          ],
-          [
-            "Retry",
-            "Policy and DLQ"
-          ]
-        ],
-        "asset": "eventbridge-rule-03-sap.webp"
+        "rows": [],
+        "asset": "eventbridge-rule-03-real.webp",
+        "code": "{\n  \"source\": [\n    \"aws.ec2\"\n  ],\n  \"detail-type\": [\n    \"EC2 Instance State-change Notification\"\n  ],\n  \"detail\": {\n    \"state\": [\n      \"running\"\n    ]\n  }\n}"
       },
       {
-        "title": "Verify delivery",
-        "path": "Rule → Monitoring / CloudWatch metrics",
-        "action": "Check matched, invoked and failed events; inspect target logs.",
+        "title": "Select target and retries",
+        "path": "Create rule → Select targets",
+        "action": "Choose lab-events SQS and review retry and DLQ settings.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Metrics",
-            "Matched / failed"
-          ],
-          [
-            "Evidence",
-            "Target log or queue"
-          ]
-        ],
-        "asset": "eventbridge-rule-04-sap.webp"
+        "rows": [],
+        "asset": "eventbridge-rule-04-real.webp"
+      },
+      {
+        "title": "Add optional tags",
+        "path": "Create rule → Configure tags",
+        "action": "Add Environment=lab, then choose Next.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "eventbridge-rule-05-real.webp"
+      },
+      {
+        "title": "Review and create the rule",
+        "path": "Create rule → Review and create",
+        "action": "Confirm the default bus, running-state pattern and SQS target, then choose Create rule.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "eventbridge-rule-06-real.webp"
+      },
+      {
+        "title": "Inspect rule metrics",
+        "path": "Rule → Monitoring",
+        "action": "Review matched, invoked and failed events.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "eventbridge-rule-07-real.webp"
       }
-    ]
+    ],
+    "consoleFidelity": "service-specific"
   },
   {
     "section": "15 · Integration",
@@ -1769,73 +1716,46 @@
     "doc": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-dead-letter-queue.html",
     "screens": [
       {
-        "title": "Inspect queue",
-        "path": "SQS → Queues",
-        "action": "Open standard or FIFO queue and inspect ARN.",
+        "title": "Create DLQ",
+        "path": "SQS → Queues → Create queue",
+        "action": "Create the same-type dead-letter queue first.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Queue type",
-            "Standard / FIFO"
-          ],
-          [
-            "State",
-            "Available"
-          ]
-        ],
-        "asset": "sqs-dlq-01-sap.webp"
+        "rows": [],
+        "asset": "sqs-dlq-01-real.webp"
       },
       {
-        "title": "Review delivery settings",
-        "path": "Queue → Configuration",
-        "action": "Inspect visibility timeout and retention relative to consumer processing.",
+        "title": "Configure source queue",
+        "path": "SQS → Create queue → Configuration",
+        "action": "Choose visibility, retention and long polling for lab-events.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Visibility timeout",
-            "Longer than processing"
-          ],
-          [
-            "Retention",
-            "Lab policy"
-          ]
-        ],
-        "asset": "sqs-dlq-02-sap.webp"
+        "rows": [],
+        "asset": "sqs-dlq-02-real.webp"
       },
       {
-        "title": "Review DLQ",
-        "path": "Queue → Dead-letter queue",
-        "action": "Verify redrive policy and maxReceiveCount; inspect DLQ access.",
+        "title": "Set encryption and access",
+        "path": "Create queue → Encryption / Access policy",
+        "action": "Keep encryption and scope producer permissions.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "DLQ",
-            "Approved queue"
-          ],
-          [
-            "maxReceiveCount",
-            "Defined threshold"
-          ]
-        ],
-        "asset": "sqs-dlq-03-sap.webp"
+        "rows": [],
+        "asset": "sqs-dlq-03-real.webp"
       },
       {
-        "title": "Verify encryption and metrics",
-        "path": "Queue → Encryption / Monitoring",
-        "action": "Check SSE setting, queue depth and oldest message age.",
+        "title": "Enable DLQ redrive",
+        "path": "Create queue → Dead-letter queue",
+        "action": "Select lab-events-dlq and Maximum receives 5.",
         "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
-        "rows": [
-          [
-            "Encryption",
-            "SSE-SQS / KMS"
-          ],
-          [
-            "Metrics",
-            "Age and visible messages"
-          ]
-        ],
-        "asset": "sqs-dlq-04-sap.webp"
+        "rows": [],
+        "asset": "sqs-dlq-04-real.webp"
+      },
+      {
+        "title": "Inspect metrics and messages",
+        "path": "Queue → Monitoring",
+        "action": "Review visible message count and oldest message age.",
+        "why": "Architecture review: confirm the selected scope, dependencies and operational evidence before changing production.",
+        "rows": [],
+        "asset": "sqs-dlq-05-real.webp"
       }
-    ]
+    ],
+    "consoleFidelity": "service-specific"
   }
 ]

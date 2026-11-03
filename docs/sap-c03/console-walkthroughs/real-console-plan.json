@@ -449,10 +449,22 @@
       "ui": "Prepare template step1 Replace current template selected Usecurrent alternate; Upload a template file lab-stack-v2.yaml; Next. Leftwizard Specify stack details Configure stack options Review."
     },
     {
+      "title": "Confirm stack parameters",
+      "path": "Create change set \u2192 Specify stack details",
+      "action": "Keep the existing stack parameters or enter the approved lab values, then choose Next.",
+      "ui": "CloudFormation Specify stack details wizard step2. Existing stack name architect-lab-stack read only. Parameters section says No parameters with this template. Next and Previous buttons."
+    },
+    {
       "title": "Review stack options",
       "path": "Configure stack options",
       "action": "Review execution role, tags and rollback settings.",
       "ui": "CloudFormation Configure stack options TagsEnvironmentlab, IAM roleapproved-cfn-role, Roll back all stack resources selected, Advancedoptionscollapsed Next."
+    },
+    {
+      "title": "Review and create the change set",
+      "path": "Create change set \u2192 Review",
+      "action": "Review the template, execution role and parameters, then create the named change set without executing it.",
+      "ui": "CloudFormation review page for architect-lab-stack. Template lab-stack-v2.yaml, IAM role approved-cfn-role. Create change set button opens dialog. Dialog Change set name lab-review-01, Description optional; orange Create change set. No execute action yet."
     },
     {
       "title": "Inspect proposed changes",
@@ -817,6 +829,18 @@
       "path": "Create rule \u2192 Select targets",
       "action": "Choose lab-events SQS and review retry and DLQ settings.",
       "ui": "TargetAWSservice SQSqueue lab-events AdditionalretryMaxage24hours Attempts185 Deadletterqueuelab-events-dlq. Queuepolicypermissionsnote Next."
+    },
+    {
+      "title": "Add optional tags",
+      "path": "Create rule \u2192 Configure tags",
+      "action": "Add Environment=lab, then choose Next.",
+      "ui": "Amazon EventBridge Create rule step4 Configure tags optional. Key Environment, Value lab, Remove button, Add new tag button. Next and Previous. Five real wizard steps."
+    },
+    {
+      "title": "Review and create the rule",
+      "path": "Create rule \u2192 Review and create",
+      "action": "Confirm the default bus, running-state pattern and SQS target, then choose Create rule.",
+      "ui": "EventBridge Create rule step5 Review and create. Rule lab-ec2-state-change, event bus default, enabled. Event pattern EC2 running state notifications. Target SQS lab-events, retry24hours185attempts, DLQ lab-events-dlq. Tags Environment=lab. Edit links for each section; orange Create rule."
     },
     {
       "title": "Inspect rule metrics",
