@@ -1,0 +1,27 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import plan from '../courses/aws-solutions-architect-associate/visual-plan.json';
+import './SaaVisualCourse.css';
+
+type Lesson={id:string;title:string;pdfPages:string;summary:string;asset:string;status:string};
+type Module=(typeof plan.modules)[number] & {lessons?:Lesson[];pdfCoverageNote?:string};
+const modules=plan.modules as Module[];
+const base='/courses/aws-solutions-architect-associate/visual/module-';
+
+export function SaaOverview(){
+ return <main className="saa-course"><section className="saa-hero"><p className="saa-kicker">AWS SAA-C03 · VISUAL LEARNING PATH</p><h1>See the architecture.<br/><span>Understand the choice.</span></h1><p>The course follows the source PDF’s topic sequence. SAP visuals are assessed for reuse; original SAA visuals fill the gaps. Lessons appear as they are produced and checked.</p><a className="saa-primary" href={`${base}00`}>Start with AWS foundations →</a><div className="saa-hero-facts"><span>22 PDF-aligned modules</span><span>About 750 visuals planned</span><span>Module 00 available</span></div></section>
+ <section className="saa-path"><div className="saa-heading"><p className="saa-kicker">COURSE MAP</p><h2>Follow the PDF chapters</h2><p>Targets guide production; readiness is determined by a page and exam-guide audit.</p></div><div className="saa-module-grid">{modules.map(m=><a key={m.id} href={`${base}${m.id}`} className="saa-module-card"><div><span>MODULE {m.id}</span><span className={m.lessons?.length?'saa-ready':'saa-pending'}>{m.lessons?.length?`${m.lessons.length} visuals available`:'In production'}</span></div><h3>{m.title}</h3><p>{m.scope}</p><small>PDF pages {m.pdfPages} · {m.targetReuse+m.targetNew} visuals targeted</small></a>)}</div></section>
+ <section className="saa-coverage"><h2>Coverage before release</h2><p>Every instructional concept in the course PDF and every SAA-C03 guide task must map to reviewed visuals or a working lab. Planned counts are not a claim of completed coverage.</p></section></main>;
+}
+
+export function SaaModule({id}:{id:string}){
+ const m=modules.find(x=>x.id===id),index=modules.findIndex(x=>x.id===id);const lessons=m?.lessons||[];
+ const [active,setActive]=useState<number|null>(null);const opener=useRef<HTMLElement|null>(null);
+ useEffect(()=>{if(active===null)return;const old=document.body.style.overflow;document.body.style.overflow='hidden';const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'){setActive(null);opener.current?.focus()}if(e.key==='ArrowLeft')setActive(n=>n===null?n:Math.max(0,n-1));if(e.key==='ArrowRight')setActive(n=>n===null?n:Math.min(lessons.length-1,n+1))};window.addEventListener('keydown',onKey);return()=>{document.body.style.overflow=old;window.removeEventListener('keydown',onKey)}},[active,lessons.length]);
+ if(!m)return null;
+ return <main className="saa-course saa-module"><nav className="saa-breadcrumb"><a href="/">Home</a> / <a href="/courses/aws-solutions-architect-associate">SAA course</a> / Module {id}</nav><section className="saa-hero saa-module-hero"><p className="saa-kicker">MODULE {id} · PDF PAGES {m.pdfPages}</p><h1>{m.title}</h1><p>{m.scope}</p><div className="saa-hero-facts"><span>{lessons.length} available visuals</span><span>{m.targetReuse+m.targetNew} visual target</span><span>{m.labs.length} related walkthroughs</span></div></section>
+ {lessons.length?<section className="saa-path"><div className="saa-heading"><h2>Visual lessons</h2><p>{m.pdfCoverageNote}</p></div><div className="saa-lesson-grid">{lessons.map((l,i)=><article key={l.id} className="saa-lesson"><button onClick={()=>{opener.current=document.activeElement as HTMLElement;setActive(i)}} aria-label={`Open ${l.title} fullscreen`}><img src={l.asset} alt={l.title} loading="lazy"/></button><div><small>LESSON {String(i+1).padStart(2,'0')} · PDF {l.pdfPages}</small><h3>{l.title}</h3><p>{l.summary}</p></div></article>)}</div></section>:<section className="saa-path"><div className="saa-heading"><h2>Content mapping in progress</h2><p>This module is planned from PDF pages {m.pdfPages}. Its visuals will appear after technical and visual review.</p></div><div className="saa-planned">{m.plannedTopics.map((t,i)=><div key={i}><span>{String(i+1).padStart(2,'0')}</span>{t}</div>)}</div></section>}
+ {m.labs.length>0&&<section className="saa-labs"><h2>Related console walkthroughs</h2><p>These SAP training walkthroughs are mapped to this topic. Their SAA integration and controls are being checked.</p><div>{m.labs.map(l=><a key={l.id} href={`/troubleshooting/walkthroughs?lab=${l.id}`}>{l.title}<span>{l.priority} · View walkthrough ↗</span></a>)}</div></section>}
+ <nav className="saa-pager"><span>{index>0&&<a href={`${base}${modules[index-1].id}`}>← {modules[index-1].title}</a>}</span><span>{index<modules.length-1&&<a href={`${base}${modules[index+1].id}`}>{modules[index+1].title} →</a>}</span></nav>
+ {active!==null&&lessons[active]&&<div className="saa-overlay" role="dialog" aria-modal="true" aria-label="SAA visual lesson fullscreen"><div className="saa-overlay-bar"><span>{lessons[active].title} · {active+1}/{lessons.length}</span><button autoFocus onClick={()=>{setActive(null);opener.current?.focus()}}>Close ✕</button></div><button disabled={active===0} onClick={()=>setActive(active-1)} aria-label="Previous slide">❮</button><img src={lessons[active].asset} alt={lessons[active].title}/><button disabled={active===lessons.length-1} onClick={()=>setActive(active+1)} aria-label="Next slide">❯</button></div>}</main>;
+}

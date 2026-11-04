@@ -1,10 +1,12 @@
 import CertificationCourse from "../../components/CertificationCourse";
 import AwsSaaCourseGuide from "../../components/AwsSaaCourseGuide";
 import { saaScope } from "../../course-data";
+import {SaaOverview} from '../../components/SaaVisualCourse';
 
 export default function SolutionsArchitectAssociate() {
   return (
     <>
+      <SaaOverview />
       <AwsSaaCourseGuide />
       <CertificationCourse
         code="SAA"
