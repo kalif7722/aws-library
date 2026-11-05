@@ -37,6 +37,18 @@ const rows:Record<string,[string,string,string,string][]>= {
   ['TLS / SNI','Encrypt the client connection / select a hostname certificate','Use an HTTPS listener with a trusted matching certificate.','The ALB-to-target connection is separate; configure HTTPS if needed.'],
   ['Deregistration delay','Allow in-flight requests to finish','Drain a target before replacement or scale-in.','A removed target should stop new requests while existing work completes.'],
   ['Target tracking / warmup','Keep demand per instance near a target / exclude new-instance metrics','Pick CPU or ALB requests per target to match the bottleneck.','Simple scaling cooldown and target-tracking warmup serve different purposes.']
+ ],
+ '05':[
+  ['RDS / Aurora','Managed relational databases','Choose engine compatibility, availability, scaling and workload pricing.','You still own schema, indexes, SQL and database permissions.'],
+  ['Multi-AZ DB instance / read replica','Failover standby / read offload','Use synchronous standby for availability and asynchronous replicas for read scaling.','A classic standby cannot serve reads; replica lag can affect freshness.'],
+  ['Multi-AZ DB cluster','Writer and two readable instances across three AZs','Use writer and reader endpoints for the correct connection type.','This is a different deployment from a DB instance with one standby.'],
+  ['Aurora endpoints / replicas','Write routing / read connection distribution','Send writes to the writer endpoint and read-only connections to eligible readers.','Reader endpoints balance connections rather than individual queries.'],
+  ['Serverless v2 / reader Auto Scaling','Instance ACUs / provisioned reader count','Set supported capacity bounds and reader scaling policies separately.','Zero-ACU auto-pause depends on engine version and configuration.'],
+  ['Backups / snapshots / clone','Recovery history / retained copy / test environment','RDS automated retention can be 0–35 days for eligible DB instances; Aurora uses 1–35 days. Restore and validate a new DB before cutover.','RDS Multi-AZ DB clusters require automated backups; an Aurora clone is not an independent backup policy.'],
+  ['RDS Proxy','Reusable database connection pool','Use a supported private proxy endpoint and authentication path.','Pinning can reduce pooling; a proxy does not fix slow queries.'],
+  ['Cache-aside / write-through','Load on miss / update cache with writes','Plan TTL, invalidation, eviction and failure behavior.','Write-through needs correct handling of every write path; it cannot universally guarantee fresh reads.'],
+  ['Valkey / Redis OSS / Memcached','Choose engine and deployment model','Use sorted sets for ranked data and shared sessions for replaceable app instances.','Replication and backup support depend on engine and deployment; Memcached Serverless supports snapshots.'],
+  ['TLS / KMS / IAM / security groups','Transport / stored data / login / network controls','Authorize the network and database identity separately.','An AWS API policy does not automatically grant database or cache login.']
  ]
 };
 
