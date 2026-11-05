@@ -8,6 +8,7 @@ import "./components/ServiceTypographyPolish.css";
 import ThemeToggle from "./components/ThemeToggle";
 import ArchitectureTooltip from "./components/ArchitectureTooltip";
 import SemanticSearch from "./components/SemanticSearch";
+import CourseReturnLink from "./components/CourseReturnLink";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aws-library.kalifs.workers.dev"),
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="antialiased"><ThemeToggle/>{children}<SemanticSearch/><ArchitectureTooltip/></body>
+      <body className="antialiased"><ThemeToggle/>{children}<CourseReturnLink/><SemanticSearch/><ArchitectureTooltip/></body>
     </html>
   );
 }

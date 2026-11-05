@@ -17,3 +17,5 @@ The broader Module 02 plan includes Auto Scaling, Lambda/Fargate and placement g
 ## Exam-guide extension batch
 
 The remaining module-plan concepts now have visible explanations: EC2 versus Lambda/Fargate (new SAA image), placement groups and networking (SAP EC2 lesson 09), and Auto Scaling safe range, target tracking, step scaling, scheduled/predictive scaling, warmup and warm pools (SAP EC2 lessons 12–16 and 21). This raises the displayed mapping to 20 visuals (5 original SAA and 15 SAP reuse). All 12 planned topic headings have at least one candidate visual, but this is **topic mapping, not 100% verified course coverage**. The original 40-visual target and per-image technical/visual QA remain open.
+
+A further original visual separates EC2 key pairs, first-boot user data and instance-profile API credentials; the displayed inventory is now 21 visuals (6 SAA, 15 selected reuse). AWS documentation confirms first-boot default for user data, key-pair public/private placement and instance-profile credentials. The target and full QA remain open.
