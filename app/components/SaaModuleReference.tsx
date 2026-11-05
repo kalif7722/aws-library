@@ -27,6 +27,16 @@ const rows:Record<string,[string,string,string,string][]>= {
   ['gp3 / io2 / st1 / sc1','General SSD / provisioned IOPS / throughput HDD / cold HDD','Measure IOPS, throughput and access pattern before choosing.','HDD volume types are not boot volumes; instance limits can constrain disk performance.'],
   ['EBS Multi-Attach','Shared io1/io2 block device in one AZ','Use only with a cluster-aware application and filesystem.','Multiple writers do not turn a block device into a normal shared file system.'],
   ['EFS','Regional managed NFS file system','Create mount targets and authorize the network and file access path.','EFS shares files across clients and AZs; storage tier and throughput choice affect behavior.']
+ ],
+ '04':[
+  ['Scale up / scale out','Increase one instance / add instances','Use horizontal scaling with multi-AZ capacity for replaceable web tiers.','Handling more load does not itself guarantee high availability.'],
+  ['ALB / NLB / GWLB','HTTP request routing / transport flows / appliance inspection','Choose from protocol and traffic behavior before selecting a target group.','An ALB listener rule is different from a network security rule.'],
+  ['Target health / ASG health','Route only to healthy targets / replace unhealthy instances','Set target group checks and configure ELB health checks on the ASG when needed.','An ALB health failure alone does not guarantee ASG replacement.'],
+  ['Sticky session / shared state','Target affinity / replaceable application tier','Use cookie affinity only when required; externalize session state for resilience.','A failed target can break a session even when affinity is enabled.'],
+  ['Cross-zone balancing','Distribute load among enabled AZ target pools','Check load-balancer and target-group settings and transfer behavior.','Disabled cross-zone can create uneven per-AZ capacity.'],
+  ['TLS / SNI','Encrypt the client connection / select a hostname certificate','Use an HTTPS listener with a trusted matching certificate.','The ALB-to-target connection is separate; configure HTTPS if needed.'],
+  ['Deregistration delay','Allow in-flight requests to finish','Drain a target before replacement or scale-in.','A removed target should stop new requests while existing work completes.'],
+  ['Target tracking / warmup','Keep demand per instance near a target / exclude new-instance metrics','Pick CPU or ALB requests per target to match the bottleneck.','Simple scaling cooldown and target-tracking warmup serve different purposes.']
  ]
 };
 

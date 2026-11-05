@@ -759,11 +759,11 @@
     },
     {
       "id": "04",
-      "title": "High availability and scalability",
+      "title": "High availability, load balancing and scaling",
       "pdfPages": "119–160",
-      "scope": "ELB, Auto Scaling, multi-AZ and scaling patterns",
-      "targetReuse": 24,
-      "targetNew": 10,
+      "scope": "Vertical and horizontal scale, ALB/NLB/GWLB, TLS, health, sessions and Auto Scaling",
+      "targetReuse": 28,
+      "targetNew": 6,
       "labs": [
         {
           "id": "alb-targets",
@@ -772,12 +772,296 @@
         }
       ],
       "plannedTopics": [
-        "ALB versus NLB versus Gateway Load Balancer",
-        "ALB target health and multi-AZ routing",
-        "RDS, Route 53 and ALB failover worked pattern",
-        "Three-tier application: edge, ALB, compute and database",
-        "ALB versus NLB versus Gateway Load Balancer worked choice"
-      ]
+        "Vertical versus horizontal scalability and high availability",
+        "Managed load balancers and target health checks",
+        "ALB listener rules, routing and target group types",
+        "NLB transport and static address behavior",
+        "Gateway Load Balancer appliance inspection",
+        "Security groups for load balancer and targets",
+        "Sticky sessions and cookie choices",
+        "Cross-zone load balancing and zonal locality",
+        "TLS certificates, ACM and SNI",
+        "Connection draining and deregistration delay",
+        "Auto Scaling launch templates, limits and health checks",
+        "Target tracking, step, scheduled and predictive scaling",
+        "Metrics, warmup and simple-scaling cooldown"
+      ],
+      "lessons": [
+        {
+          "id": "saa04-new-01",
+          "title": "Scale up, scale out and stay available",
+          "summary": "Vertical and horizontal scaling versus AZ failure resilience",
+          "pdfPages": "120–124",
+          "asset": "/course-visuals/saa-c03/module-04/slide-01.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa04-reuse-08-01",
+          "title": "Choose the load balancer from the traffic",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-01.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-02",
+          "title": "Listener, rule, target group: three decisions",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-02.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-03",
+          "title": "Public entry point, private application",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-03.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-05",
+          "title": "Health checks measure application readiness",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-05.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-22",
+          "title": "Classic Load Balancer: understand the legacy",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-22.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-new-02",
+          "title": "ALB listener rules route requests",
+          "summary": "Path, host, query and target-group decisions",
+          "pdfPages": "132–137",
+          "asset": "/course-visuals/saa-c03/module-04/slide-02.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa04-reuse-08-06",
+          "title": "ALB routes by the request's meaning",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-06.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-07",
+          "title": "ALB targets: instances, IPs and functions",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-07.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-10",
+          "title": "Choose how ALB distributes requests",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-10.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-13",
+          "title": "NLB: choose transport and TLS behavior",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-13.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-14",
+          "title": "NLB addresses, DNS and client identity",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-14.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-15",
+          "title": "NLB keeps flows together and checks health",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-15.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-17",
+          "title": "GWLB inserts an appliance inspection service",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-17.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-18",
+          "title": "GWLB flow affinity protects stateful inspection",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-18.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-19",
+          "title": "Secure both the entry point and the target",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-19.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-new-03",
+          "title": "Sticky sessions and failover",
+          "summary": "Cookie affinity, unhealthy target and shared session state",
+          "pdfPages": "143–144",
+          "asset": "/course-visuals/saa-c03/module-04/slide-03.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa04-reuse-08-04",
+          "title": "Cross-zone balancing changes the target pool",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-04.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-24",
+          "title": "Zonal locality: balance resilience and transfer cost",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-24.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-new-04",
+          "title": "TLS certificates and SNI",
+          "summary": "Certificate selection and separate backend connection",
+          "pdfPages": "147–150",
+          "asset": "/course-visuals/saa-c03/module-04/slide-04.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa04-reuse-08-08",
+          "title": "TLS termination: identify both connections",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-08.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-11",
+          "title": "Drain connections before removing capacity",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-11.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-20",
+          "title": "Diagnose ingress with evidence",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-20.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-08-21",
+          "title": "Choose ingress for the actual requirement",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-08/slide-21.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-new-05",
+          "title": "ALB health versus ASG health",
+          "summary": "Traffic exclusion and configured instance replacement",
+          "pdfPages": "128, 152–155",
+          "asset": "/course-visuals/saa-c03/module-04/slide-05.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa04-reuse-07-12",
+          "title": "Auto Scaling groups: define the safe operating range",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-12.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-13",
+          "title": "Target tracking: choose demand per unit of capacity",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-13-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-14",
+          "title": "Step scaling: react to the size of the breach",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-14.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-15",
+          "title": "Scheduled and predictive scaling: prepare ahead",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-15.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-16",
+          "title": "Warmup and warm pools: readiness is not one timer",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-16.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-17",
+          "title": "Lifecycle hooks: make transitions deliberate",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-17.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-18",
+          "title": "Instance refresh: roll a new launch definition safely",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-18.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-reuse-07-19",
+          "title": "Health checks: identify the failure before replacement",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "119–160",
+          "asset": "/course-visuals/sap-c03/module-07/slide-19-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa04-new-06",
+          "title": "Scale on demand per instance",
+          "summary": "Metric choice, warmup, cooldown and health replacement",
+          "pdfPages": "156–160",
+          "asset": "/course-visuals/saa-c03/module-04/slide-06.webp",
+          "status": "visual-review"
+        }
+      ],
+      "coverageAudit": "source-pages-mapped-visual-review",
+      "pdfCoverageNote": "All source-page topic groups from 119–160 have candidate visuals. Detailed technical and visual QA remains open."
     },
     {
       "id": "05",
