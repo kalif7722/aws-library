@@ -526,11 +526,11 @@
     },
     {
       "id": "03",
-      "title": "EC2 architecture and instance storage",
+      "title": "EC2 networking, lifecycle and storage",
       "pdfPages": "78–118",
-      "scope": "Purchasing, lifecycle, instance store, EBS, snapshots, EFS",
-      "targetReuse": 12,
-      "targetNew": 13,
+      "scope": "IP addressing, placement, ENIs, hibernation, EBS, snapshots, AMIs and EFS",
+      "targetReuse": 19,
+      "targetNew": 6,
       "labs": [
         {
           "id": "ebs-volume",
@@ -539,12 +539,223 @@
         }
       ],
       "plannedTopics": [
-        "EBS volume types, IOPS and throughput",
-        "EBS snapshot and cross-AZ recovery",
-        "S3 static website versus CloudFront origin access",
-        "API Gateway REST, HTTP and WebSocket decision",
-        "S3 and EBS performance bottlenecks"
-      ]
+        "Private, public and Elastic IPv4 addressing",
+        "Placement groups: cluster, spread, partition and precision time",
+        "ENI attributes, secondary attachment and AZ boundary",
+        "EC2 stop, hibernate and terminate state",
+        "EBS volume AZ scope and DeleteOnTermination",
+        "EBS snapshots, Archive, Recycle Bin and cross-AZ restore",
+        "AMI creation, EBS mappings and regional copy",
+        "EC2 instance store durability",
+        "EBS volume types and IOPS versus throughput",
+        "EBS Multi-Attach and encryption",
+        "EFS mount targets, NFS, access control and throughput",
+        "EFS storage classes and EBS versus EFS choice"
+      ],
+      "lessons": [
+        {
+          "id": "saa03-new-01",
+          "title": "Private, public and Elastic IPv4",
+          "summary": "Address persistence, routing and EIP reassociation",
+          "pdfPages": "79–84",
+          "asset": "/course-visuals/saa-c03/module-03/slide-01.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-reuse-07-09",
+          "title": "Placement groups: locality, isolation and operational limits",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "85–88",
+          "asset": "/course-visuals/sap-c03/module-07/slide-09-v4.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-07-23",
+          "title": "Precision time: placement for clock accuracy",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "89",
+          "asset": "/course-visuals/sap-c03/module-07/slide-23.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-new-02",
+          "title": "ENI network identity",
+          "summary": "Primary and secondary interfaces within an AZ",
+          "pdfPages": "90",
+          "asset": "/course-visuals/saa-c03/module-03/slide-02.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-new-03",
+          "title": "Stop, hibernate or terminate",
+          "summary": "RAM, EBS and instance-store survival",
+          "pdfPages": "91–93",
+          "asset": "/course-visuals/saa-c03/module-03/slide-03.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-reuse-10-01",
+          "title": "EBS is persistent block storage within one AZ",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "95–97, 117",
+          "asset": "/course-visuals/sap-c03/module-10/slide-01-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-new-06",
+          "title": "Delete on termination",
+          "summary": "Per-volume EBS retention and snapshot independence",
+          "pdfPages": "98",
+          "asset": "/course-visuals/saa-c03/module-03/slide-06.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-reuse-10-05",
+          "title": "Snapshots capture changed blocks, not application intent",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "99",
+          "asset": "/course-visuals/sap-c03/module-10/slide-05-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-new-05",
+          "title": "Snapshot recovery controls",
+          "summary": "Cross-AZ restore, archive and Recycle Bin",
+          "pdfPages": "99–100",
+          "asset": "/course-visuals/saa-c03/module-03/slide-05.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-reuse-10-06",
+          "title": "Restore in the target AZ and plan first-read latency",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "99–100",
+          "asset": "/course-visuals/sap-c03/module-10/slide-06-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-35",
+          "title": "Snapshot capture: protect the application's state",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "99",
+          "asset": "/course-visuals/sap-c03/module-10/slide-35-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-36",
+          "title": "Snapshot initialization: choose the recovery mechanism",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "99–100",
+          "asset": "/course-visuals/sap-c03/module-10/slide-36-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-new-04",
+          "title": "Build an AMI",
+          "summary": "Snapshots, launch definition and new instance",
+          "pdfPages": "101–102",
+          "asset": "/course-visuals/saa-c03/module-03/slide-04.webp",
+          "status": "visual-review"
+        },
+        {
+          "id": "saa03-reuse-10-31",
+          "title": "A snapshot, an AMI and a regional recovery copy solve different jobs",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "101–102",
+          "asset": "/course-visuals/sap-c03/module-10/slide-31-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-10",
+          "title": "Grow EBS deliberately; treat instance store as disposable",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "103–104",
+          "asset": "/course-visuals/sap-c03/module-10/slide-10-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-02",
+          "title": "EBS: choose the disk for the access pattern",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "105–109",
+          "asset": "/course-visuals/sap-c03/module-10/slide-02-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-03",
+          "title": "gp2 and gp3 separate capacity from performance differently",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "105–109",
+          "asset": "/course-visuals/sap-c03/module-10/slide-03-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-04",
+          "title": "Find the narrowest point in the EBS path",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "105–109",
+          "asset": "/course-visuals/sap-c03/module-10/slide-04-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-09",
+          "title": "Multi-Attach shares a block device, not a normal file share",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "110",
+          "asset": "/course-visuals/sap-c03/module-10/slide-09-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-08",
+          "title": "Encryption needs a working recovery key",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "111–112",
+          "asset": "/course-visuals/sap-c03/module-10/slide-08-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-11",
+          "title": "EFS shares files across clients and AZs",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "113–114, 118",
+          "asset": "/course-visuals/sap-c03/module-10/slide-11-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-12",
+          "title": "A mount target is the network doorway to EFS",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "113–114",
+          "asset": "/course-visuals/sap-c03/module-10/slide-12-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-13",
+          "title": "EFS authorization has several independent layers",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "113–114",
+          "asset": "/course-visuals/sap-c03/module-10/slide-13-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-14",
+          "title": "Choose EFS throughput to match demand",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "115",
+          "asset": "/course-visuals/sap-c03/module-10/slide-14-v2.webp",
+          "status": "sap-reuse-selected"
+        },
+        {
+          "id": "saa03-reuse-10-15",
+          "title": "EFS lifecycle changes cost and access behavior",
+          "summary": "Architecture mechanism and decision boundary.",
+          "pdfPages": "116",
+          "asset": "/course-visuals/sap-c03/module-10/slide-15-v2.webp",
+          "status": "sap-reuse-selected"
+        }
+      ],
+      "coverageAudit": "source-pages-mapped-visual-review",
+      "pdfCoverageNote": "Every source-page topic group from 78–118 has a candidate visual. Detailed technical and visual QA remains open."
     },
     {
       "id": "04",
