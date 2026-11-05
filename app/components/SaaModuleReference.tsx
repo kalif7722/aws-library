@@ -49,6 +49,16 @@ const rows:Record<string,[string,string,string,string][]>= {
   ['Cache-aside / write-through','Load on miss / update cache with writes','Plan TTL, invalidation, eviction and failure behavior.','Write-through needs correct handling of every write path; it cannot universally guarantee fresh reads.'],
   ['Valkey / Redis OSS / Memcached','Choose engine and deployment model','Use sorted sets for ranked data and shared sessions for replaceable app instances.','Replication and backup support depend on engine and deployment; Memcached Serverless supports snapshots.'],
   ['TLS / KMS / IAM / security groups','Transport / stored data / login / network controls','Authorize the network and database identity separately.','An AWS API policy does not automatically grant database or cache login.']
+ ],
+ '06':[
+  ['Public / private hosted zone','Internet-visible / associated VPC DNS view','Choose the zone that should answer the caller’s query.','Creating a private zone alone does not make on-premises resolvers aware of it.'],
+  ['A / AAAA / CNAME / Alias','IPv4 / IPv6 / hostname / supported target','Use alias A or AAAA for supported AWS targets at zone apex.','CNAME cannot occupy the apex; alias target types and TTL depend on target.'],
+  ['Simple / weighted / latency','One response / weighted answers / measured Region latency','Set the routing policy to match the actual goal.','Weights affect answers over time; DNS caching means no exact request split.'],
+  ['Geolocation / geoproximity / IP-based','Query origin geography / biased proximity / CIDR collection','Use the relevant record and sensible default where supported.','These policies do not mean lowest latency.'],
+  ['Endpoint / calculated / CloudWatch health','Public probes / combined state / private metric signal','Check that the health source is reachable or observable.','Public Route 53 health checkers cannot directly probe private subnet IPs.'],
+  ['Failover / multivalue','Primary-secondary / up to eight healthy values','Attach appropriate health checks and plan DNS cache behavior.','Multivalue answers do not replace a load balancer and do not support alias.'],
+  ['Domain registrar / delegation','Purchase name / authorize DNS name servers','Set registrar NS values to the public hosted zone’s name servers.','Creating a Route 53 hosted zone alone does not change domain delegation.'],
+  ['Resolver inbound / outbound','On-prem to AWS private names / VPC to on-prem names','Associate zones or rules and allow required TCP/UDP 53.','Avoid forwarding loops and keep the two directions distinct.']
  ]
 };
 

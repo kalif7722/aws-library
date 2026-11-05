@@ -33,3 +33,7 @@ Source-topic inventory: AWS Certified Solutions Architect Slides v49, pages 161â
 - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html
 - https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/backups.html
 - https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/auth-iam.html
+
+## 2026-11-05 source gap closure
+
+Added SAA 05-06 for same-Region versus cross-Region RDS read-replica replication-transfer charges (PDF p. 167), and SAA 05-07 for the physical MySQL backup stored in S3 and restored to a new RDS for MySQL instance or Aurora MySQL cluster (p. 183). The reused SAP 11-02 already covers RDS storage autoscaling (p. 164). Module now has 33 mapped visuals: 26 reused and 7 original SAA. All 33 image paths were checked against the PDF teaching-topic inventory.

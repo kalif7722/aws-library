@@ -22,3 +22,7 @@ Source inventory: AWS Certified Solutions Architect Slides v49, pages 119–160,
 - 12/12 source-page groups have candidate visuals; 34/34 lesson paths resolve at 2048×1152.
 - 6 new SAA images and 28 selected SAP images. Current AWS docs were used for target tracking, warmup, cooldown and target group stickiness so outdated source-deck defaults are not copied.
 - This is topic mapping. Detailed image-by-image technical and visual QA, SAA-C03 objective traceability and a rendered site check remain open; no `qa-passed` claim is made.
+
+## 2026-11-05 cookie gap closure
+
+Added SAA 04-07 to distinguish ALB duration-based AWSALB from application-based target cookie plus ALB AWSALBAPP. It also explains the target-failure and external-session-store consequence. Module now has 35 mapped visuals; all source-page groups 119–160 have explicit image coverage.

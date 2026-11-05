@@ -24,3 +24,7 @@ Source inventory: AWS Certified Solutions Architect Slides v49, pages 78–118. 
 - 6 new SAA images and 19 selected SAP visuals. The first public-IP draft incorrectly carried a Module 24 label and was excluded. A first DeleteOnTermination image suggested charges stopped on attachment; it was corrected before publication.
 - Current AWS documentation was used to avoid stale source-deck limits and pricing claims, including public IPv4 charges, hibernation prerequisites, EBS type capabilities and EFS storage classes.
 - This is a *topic mapping*, not 100% verified learning coverage. Detailed per-image technical and visual QA, exam-objective traceability and a rendered site check remain open. Do not mark lessons `qa-passed` yet.
+
+## 2026-11-05 correction
+
+The SAA snapshot-recovery image's module badge has been corrected from 05 to 03. Its restore, archive, Recycle Bin, regional-copy and Fast Snapshot Restore teaching content is retained. The 25 lesson paths and all PDF topic groups were checked against the actual images.
