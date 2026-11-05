@@ -13,3 +13,7 @@ Source deck pages 41–77. This is a topic-to-visual crosswalk; no source diagra
 The current batch has 12 displayed lessons: four new SAA visuals and eight SAP EC2 visuals. One generated security-group slide was excluded because its return-traffic arrow could suggest bypassing the load balancer; an earlier draft also incorrectly described security groups as having deny rules. Neither is published.
 
 The broader Module 02 plan includes Auto Scaling, Lambda/Fargate and placement groups beyond this source-page section. The original 40-visual target is not complete. Close those plan topics and inspect every mapped visual before claiming full module coverage.
+
+## Exam-guide extension batch
+
+The remaining module-plan concepts now have visible explanations: EC2 versus Lambda/Fargate (new SAA image), placement groups and networking (SAP EC2 lesson 09), and Auto Scaling safe range, target tracking, step scaling, scheduled/predictive scaling, warmup and warm pools (SAP EC2 lessons 12–16 and 21). This raises the displayed mapping to 20 visuals (5 original SAA and 15 SAP reuse). All 12 planned topic headings have at least one candidate visual, but this is **topic mapping, not 100% verified course coverage**. The original 40-visual target and per-image technical/visual QA remain open.
