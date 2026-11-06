@@ -59,10 +59,85 @@ const rows:Record<string,[string,string,string,string][]>= {
   ['Failover / multivalue','Primary-secondary / up to eight healthy values','Attach appropriate health checks and plan DNS cache behavior.','Multivalue answers do not replace a load balancer and do not support alias.'],
   ['Domain registrar / delegation','Purchase name / authorize DNS name servers','Set registrar NS values to the public hosted zone’s name servers.','Creating a Route 53 hosted zone alone does not change domain delegation.'],
   ['Resolver inbound / outbound','On-prem to AWS private names / VPC to on-prem names','Associate zones or rules and allow required TCP/UDP 53.','Avoid forwarding loops and keep the two directions distinct.']
+ ],
+ '07':[
+  ['Three-tier / serverless', 'Managed web, application and data tiers', 'Choose by traffic pattern and operational model.', 'Keep state outside replaceable compute.'],
+  ['Synchronous / asynchronous', 'Immediate response / buffered work', 'Queue work that can be processed later.', 'The user contract decides whether an immediate answer is required.'],
+  ['Multi-AZ / caching', 'Failure tolerance / latency reduction', 'Test AZ loss and cache invalidation.', 'A cache is not a durable source of truth.']
+ ],
+ '08':[
+  ['S3 Standard / Intelligent-Tiering', 'Frequent or changing access', 'Choose by measured access pattern and monitoring overhead.', 'Tiering and retrieval costs differ.'],
+  ['S3 Standard-IA / One Zone-IA', 'Infrequent access; one AZ for the latter', 'Compare resilience and minimum storage duration.', 'One Zone-IA is unsuitable for AZ-loss tolerance.'],
+  ['S3 Glacier classes', 'Archive with retrieval-time choices', 'Match restore latency and minimum duration to RTO.', 'Archive retrieval is not instant in all classes.']
+ ],
+ '09':[
+  ['S3 versioning / replication', 'Recover versions / copy to another bucket', 'Enable versioning and scope replication rules.', 'Replication is asynchronous and does not replace backup.'],
+  ['SSE-S3 / SSE-KMS', 'Managed encryption / key control and audit', 'Choose KMS when key policies and audit are needed.', 'KMS permissions and request costs matter.'],
+  ['Bucket policy / access point', 'Resource boundary / scoped access path', 'Test principal, action, resource and conditions together.', 'An explicit deny overrides any allow.']
+ ],
+ '10':[
+  ['CloudFront / Global Accelerator', 'HTTP caching / global network routing', 'Choose by protocol, caching and endpoint needs.', 'Global Accelerator does not cache objects.'],
+  ['Origin access control / public origin', 'Private S3 origin / internet-accessible origin', 'Restrict direct origin bypass when needed.', 'An S3 website endpoint uses a custom origin.'],
+  ['Cache key / invalidation', 'Cache variation / content refresh', 'Set TTL and vary only on needed request values.', 'Too many variations reduce hit ratio.']
+ ],
+ '11':[
+  ['EBS / EFS / FSx', 'Block / shared NFS / managed specialist file', 'Choose protocol, latency and sharing requirement.', 'EBS volume access is AZ scoped.'],
+  ['Storage Gateway / DataSync', 'Hybrid access / data movement', 'Choose gateway for ongoing access, DataSync for transfer.', 'Neither makes data automatically multi-Region.'],
+  ['Transfer Family / Snow Family', 'Managed file protocol endpoint / offline transfer', 'Match partner protocol, bandwidth and volume.', 'Validate transfer completion and permissions.']
+ ],
+ '12':[
+  ['SQS standard / FIFO', 'High throughput / ordered deduplication', 'Choose FIFO when ordering per message group matters.', 'Both require consumer idempotency planning.'],
+  ['SNS / EventBridge', 'Fan-out notification / event routing', 'Choose by routing, filtering and integration needs.', 'Delivery and retry behavior vary by target.'],
+  ['Step Functions / SQS', 'Workflow state / buffered work', 'Use workflows for coordinated steps, queues for decoupling.', 'A queue alone does not orchestrate a saga.']
+ ],
+ '13':[
+  ['ECS / EKS', 'AWS container orchestration / Kubernetes', 'Choose by team skills and platform integration.', 'Kubernetes adds operational complexity.'],
+  ['Fargate / EC2 capacity', 'Managed task compute / host control', 'Choose based on isolation, scaling and host requirements.', 'Capacity selection affects cost and operations.'],
+  ['ALB / Cloud Map', 'HTTP ingress / service discovery', 'Route by protocol and deployment topology.', 'Discovery alone does not enforce authorization.']
+ ],
+ '14':[
+  ['Lambda / Fargate', 'Event function / long-running container task', 'Match runtime, duration and scaling behavior.', 'Retries require idempotency.'],
+  ['API Gateway / ALB', 'API policies / HTTP application routing', 'Choose required authorization and routing features.', 'Products have different limits and pricing.'],
+  ['EventBridge / Step Functions', 'Event routing / workflow state', 'Use orchestration for coordinated multi-step work.', 'Event delivery is not a transaction.']
+ ],
+ '15':[
+  ['RDS / DynamoDB', 'Relational joins / key-value access patterns', 'Choose by query shape, consistency and scaling.', 'DynamoDB needs partition-key design.'],
+  ['Aurora / RDS', 'Distributed storage / managed engine choices', 'Compare compatibility, scaling, recovery and cost.', 'Aurora is not automatically cheaper.'],
+  ['ElastiCache / database', 'Fast derived data / durable system of record', 'Plan invalidation and cache failure.', 'Cache is not a replacement for durable writes.']
+ ],
+ '16':[
+  ['CloudWatch / CloudTrail / Config', 'Metrics and logs / API events / configuration history', 'Correlate evidence by time and resource.', 'Each observes a different aspect.'],
+  ['X-Ray / CloudWatch logs', 'Distributed traces / application events', 'Use traces to follow request paths.', 'Tracing needs instrumentation and sampling.'],
+  ['Compute Optimizer / Cost Explorer', 'Rightsizing suggestions / usage cost analysis', 'Validate performance and savings with actual load.', 'A recommendation is not a measured outcome.']
+ ],
+ '17':[
+  ['IAM policy / SCP / boundary', 'Permission grant / organization maximum / identity maximum', 'Evaluate intersections and explicit deny.', 'Guardrails do not grant access.'],
+  ['KMS / Secrets Manager', 'Key authorization / secret lifecycle', 'Check policies, rotation and application access.', 'Encryption alone does not authorize a principal.'],
+  ['WAF / Network Firewall / Shield', 'HTTP filtering / network inspection / DDoS protection', 'Place controls at supported layers and paths.', 'A firewall endpoint needs routing to inspect traffic.']
+ ],
+ '18':[
+  ['Security group / NACL', 'Stateful ENI filter / stateless subnet filter', 'Check both directions and ephemeral ports for NACL.', 'Rules do not create a route.'],
+  ['VPN / Direct Connect', 'Encrypted tunnel / dedicated connection', 'Compare throughput, latency, setup and resilience.', 'Direct Connect is not encrypted by default.'],
+  ['Peering / TGW / PrivateLink', 'Point-to-point / hub / service access', 'Select scope and transitivity to match the topology.', 'Peering is nontransitive.']
+ ],
+ '19':[
+  ['AWS Backup / native backup', 'Policy coordination / service-specific controls', 'Match retention, vault and restore needs.', 'Test restoration, not just backup success.'],
+  ['Pilot light / warm standby / active-active', 'Increasing readiness and cost', 'Select by RTO, RPO and operating complexity.', 'Failover paths need rehearsal.'],
+  ['DMS / DataSync', 'Database migration / file and object transfer', 'Choose by data type and cutover method.', 'Replication must be validated before switch.']
+ ],
+ '20':[
+  ['SQS / SNS / EventBridge', 'Queue / pub-sub / event bus', 'Choose delivery contract and consumer behavior.', 'Fan-out is different from buffering.'],
+  ['CloudFormation change set / stack', 'Preview / execute infrastructure changes', 'Review replacements and rollback implications.', 'A change set is not a successful deployment.'],
+  ['Cost Explorer / Budgets / CUR', 'Analyze / alert / detailed billing data', 'Use the level of detail required for attribution.', 'NAT, cross-AZ and egress can dominate transfer costs.']
+ ],
+ '21':[
+  ['Multipart upload / Transfer Acceleration', 'Parallel parts / edge-assisted transfer', 'Use multipart for large uploads; benchmark distance benefit.', 'Transfer Acceleration has separate charges.'],
+  ['On-Demand / Savings Plans / Spot', 'Flexibility / spend commitment / interruptible spare capacity', 'Match interruption tolerance and predictable spend.', 'Zonal RI can reserve capacity; Savings Plans do not.'],
+  ['AZ / Region recovery', 'Local failure / regional disruption', 'Set RTO/RPO and validate standby quotas.', 'Multi-AZ does not cover a whole Region failure.']
  ]
 };
 
 export default function SaaModuleReference({moduleId,topics}:{moduleId:string;topics:string[]}){
  const entries=rows[moduleId];
- return <section className="saa-reference" aria-label="Module decision reference"><div className="saa-reference-heading"><p>ARCHITECTURE DECISION REFERENCE</p><h2>Compare the choices</h2><span>{entries?'Use these boundaries when applying the visual lessons.':'Use the topic inventory while visual lessons are prepared.'}</span></div><div className="saa-reference-scroll" role="region" aria-label="Module comparison table" tabIndex={0}><table><thead><tr><th scope="col">{entries?'Service / feature':'Topic'}</th><th scope="col">{entries?'Purpose':'Learning focus'}</th><th scope="col">{entries?'Choose and configure':'Status'}</th><th scope="col">{entries?'Decision boundary':'Next step'}</th></tr></thead><tbody>{entries?entries.map(([name,purpose,choice,boundary])=><tr key={name}><th scope="row">{name}</th><td>{purpose}</td><td>{choice}</td><td>{boundary}</td></tr>):topics.map(topic=><tr key={topic}><th scope="row">{topic}</th><td>Architecture concept and relevant service decision</td><td>Visual lesson in preparation</td><td>Review the technical details before applying this choice.</td></tr>)}</tbody></table></div></section>;
+ return <section className="saa-reference" aria-label="Module decision reference"><div className="saa-reference-heading"><p>ARCHITECTURE DECISION REFERENCE</p><h2>Compare the choices</h2><span>{entries?'Use these boundaries when applying the visual lessons.':'Use the topic inventory while visual lessons are prepared.'}</span></div><div className="saa-reference-scroll" role="region" aria-label="Module comparison table" tabIndex={0}><table><thead><tr><th scope="col">{entries?'Service / feature':'Topic'}</th><th scope="col">{entries?'Purpose':'Learning focus'}</th><th scope="col">{entries?'Choose and configure':'Status'}</th><th scope="col">{entries?'Decision boundary':'Next step'}</th></tr></thead><tbody>{entries?entries.map(([name,purpose,choice,boundary])=><tr key={name}><th scope="row">{name}</th><td>{purpose}</td><td>{choice}</td><td>{boundary}</td></tr>):topics.map(topic=><tr key={topic}><th scope="row">{topic}</th><td>Architecture concept and relevant service decision</td><td>Explore the module lessons</td><td>Review the technical details before applying this choice.</td></tr>)}</tbody></table></div></section>;
 }

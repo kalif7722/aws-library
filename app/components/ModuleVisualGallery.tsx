@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import visualMap from "../courses/aws-generative-ai-developer-professional/visual-lesson-map.json";
 import { examTasksForLesson } from "./aipLessonTasks";
+import {StudyStatus,useStudyProgress} from "./StudyProgress";
+import "./CourseStudyTools.css";
 
 type ModuleLesson = {
   sourcePage: number;
@@ -75,6 +77,8 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [taskSearch, setTaskSearch] = useState("");
+  const [topicSearch,setTopicSearch]=useState("");
+  const deepLinked=useRef(false);
   const taskOptions = useMemo(() => [...new Set(visuals.flatMap((visual) => visual.examTasks))].sort((a,b) => a.localeCompare(b, undefined, { numeric: true })), [visuals]);
   const taskFilter = taskSearch.trim() ? (taskSearch.match(/(\d+)\s*[.\-]\s*(\d+)/)?.slice(1).join("-") ?? "none") : "all";
 
@@ -143,11 +147,12 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
 
   const navigableIndices = useMemo(
     () => visuals
-      .map((visual, index) => availableSlides.includes(visual.index) && !failed.includes(index) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))) ? index : -1)
+      .map((visual, index) => availableSlides.includes(visual.index) && !failed.includes(index) && `${visual.title} ${visual.focus||""}`.toLowerCase().includes(topicSearch.toLowerCase()) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))) ? index : -1)
       .filter((index) => index >= 0),
-    [availableSlides, failed, visuals, taskFilter],
+    [availableSlides, failed, visuals, taskFilter, topicSearch],
   );
 
+  useEffect(()=>{const slide=Number(new URLSearchParams(window.location.search).get("slide"));if(!deepLinked.current&&slide>0&&availableSlides.includes(slide)){deepLinked.current=true;setActiveIndex(slide-1)}},[moduleNumber,availableSlides]);
   const close = useCallback(() => setActiveIndex(null), []);
   const moveLightbox = useCallback((direction: -1 | 1) => {
     setActiveIndex((current) => {
@@ -177,9 +182,10 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
   }, [activeIndex, close, next, previous]);
 
   const active = activeIndex === null ? null : visuals[activeIndex];
+  const study=useStudyProgress("aip",active?`aip-${moduleNumber}-${active.index}`:null);
   const visibleVisuals = visuals
     .map((visual, index) => ({ visual, index }))
-    .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))));
+    .filter(({ visual, index }) => availableSlides.includes(visual.index) && !failed.includes(index) && `${visual.title} ${visual.focus||""}`.toLowerCase().includes(topicSearch.toLowerCase()) && (taskFilter === "all" || (taskFilter === "supporting" ? visual.examTasks.length === 0 : visual.examTasks.includes(taskFilter))));
   const moduleTitle = moduleMeta?.title ?? ("Module " + moduleNumber);
 
   return <>
@@ -221,7 +227,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
         <strong>{moduleTitle} · visual lessons</strong>
         <span>{visibleVisuals.length} slides</span>
       </div>
-      <details className="module-task-search"><summary>Find slides by exam task</summary><label>Task number <input type="search" inputMode="text" placeholder="e.g. 2-1" value={taskSearch} list={`module-${moduleNumber}-tasks`} onChange={(event) => {setTaskSearch(event.target.value);setActiveIndex(null)}} /><datalist id={`module-${moduleNumber}-tasks`}>{taskOptions.map(task => <option key={task} value={task} />)}</datalist></label></details>
+      <label className="module-task-search">Search title or service <input type="search" placeholder="e.g. Bedrock, agents, RAG…" value={topicSearch} onChange={e=>setTopicSearch(e.target.value)}/></label><details className="module-task-search"><summary>Find slides by exam task</summary><label>Task number <input type="search" inputMode="text" placeholder="e.g. 2-1" value={taskSearch} list={`module-${moduleNumber}-tasks`} onChange={(event) => {setTaskSearch(event.target.value);setActiveIndex(null)}} /><datalist id={`module-${moduleNumber}-tasks`}>{taskOptions.map(task => <option key={task} value={task} />)}</datalist></label></details>
       <div className="module-map-actions">
         <button type="button" className="module-map-refresh" onClick={() => setRefreshKey((value) => value + 1)} disabled={loadingAssets}>
           {loadingAssets ? "Checking lessons…" : "Refresh lessons"}
@@ -242,7 +248,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
     {!loadingAssets && !discoveryError && visibleVisuals.length > 0 ? <div className="module-visual-grid">
       {visibleVisuals.map(({ visual, index }) => <button type="button" className="module-visual-card" key={"Module " + moduleNumber + "-" + visual.index} onClick={() => setActiveIndex(index)} aria-label={"Open " + visual.alt + " full screen"}>
         <img className="module-visual-thumb module-visual-image-protected" src={resolvedSrc(visual)} alt={visual.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} loading="lazy" onError={() => setFailed((old) => old.includes(index) ? old : [...old, index])} />
-        <div className="module-visual-meta">SLIDE {String(visual.index).padStart(2,"0")}</div>
+        <div className="module-visual-meta">SLIDE {String(visual.index).padStart(2,"0")} · {visual.title} {study.completed.includes(`aip-${moduleNumber}-${visual.index}`)?"✓":""}</div>
       </button>)}
     </div> : null}
 
@@ -256,6 +262,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
         <div className="module-viewer-image-wrap"><img className="module-viewer-image module-visual-image-protected" src={resolvedSrc(active)} alt={active.alt} draggable={false} onContextMenu={(event) => event.preventDefault()} onDragStart={(event) => event.preventDefault()} onError={() => setFailed((old) => old.includes(activeIndex) ? old : [...old, activeIndex])} /></div>
         <button type="button" onClick={next} aria-label="Next visual" title="Next visual" style={{fontSize:30,flexShrink:0}}>›</button>
       </div>
+      <StudyStatus completed={study.completed.includes(`aip-${moduleNumber}-${active.index}`)} seconds={study.seconds} onAcknowledge={study.acknowledge}/>
     </div>}
   </>;
 }
