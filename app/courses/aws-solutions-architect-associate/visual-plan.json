@@ -1845,12 +1845,169 @@
         }
       ],
       "plannedTopics": [
-        "Object, block and file: selection flow",
-        "S3 storage classes and retrieval tradeoffs",
-        "S3 lifecycle, versioning and Object Lock",
-        "S3 bucket versus object and key fundamentals",
-        "S3 presigned URL, access point and bucket policy decision",
-        "S3 lifecycle and archive economics"
+        "Object, block and file storage choice",
+        "S3 buckets, keys, prefixes and consistency",
+        "Private access, ownership, policies and presigned URLs",
+        "Versioning, Object Lock and recovery",
+        "S3 Standard, infrequent and archive storage classes",
+        "Intelligent-Tiering and lifecycle economics",
+        "Private static delivery through CloudFront"
+      ],
+      "lessons": [
+        {
+          "id": "saa-08-001",
+          "title": "Choose object, block or file storage",
+          "pdfPages": "",
+          "summary": "Select S3, EBS or EFS by interface, AZ scope and sharing need.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-01.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-002",
+          "title": "A bucket holds objects addressed by keys",
+          "pdfPages": "",
+          "summary": "Identify bucket, Region, key, prefix, object data and metadata.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-02.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-01",
+          "title": "S3 starts with an object, a key and an access pattern",
+          "pdfPages": "",
+          "summary": "Choose storage semantics first, then the service and storage class.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-01.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-001"
+        },
+        {
+          "id": "saa-08-003",
+          "title": "Amazon S3 with EC2: durable, available, consistent storage",
+          "pdfPages": "",
+          "summary": "Place S3 outside the VPC and distinguish durability, availability and consistency.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-03.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-03",
+          "title": "S3 access: identity, resource policy and ownership",
+          "pdfPages": "",
+          "summary": "AccessDenied is an authorization result; diagnose the specific request and policy boundary.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-03.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-003"
+        },
+        {
+          "id": "saa-08-004",
+          "title": "Protect the bucket before sharing objects",
+          "pdfPages": "",
+          "summary": "Combine identity permissions, bucket policy, Block Public Access and ownership controls.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-04.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-06",
+          "title": "Versioning preserves object history",
+          "pdfPages": "",
+          "summary": "Versioning creates recovery options; lifecycle and permissions determine whether they remain useful.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-06.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-006"
+        },
+        {
+          "id": "saa-08-005",
+          "title": "Versioning changes delete and recovery behavior",
+          "pdfPages": "",
+          "summary": "Understand delete markers, retained versions and permanent version deletion.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-05.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-07",
+          "title": "Object Lock: retention and legal hold",
+          "pdfPages": "",
+          "summary": "Choose retention mode, duration and recovery procedures before applying irreversible protection.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-07.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-007"
+        },
+        {
+          "id": "saa-08-reuse-09",
+          "title": "Online storage classes: availability and recovery tradeoffs",
+          "pdfPages": "",
+          "summary": "Durability design, availability, retrieval charges and AZ failure tolerance are different dimensions.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-09.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-009"
+        },
+        {
+          "id": "saa-08-reuse-10",
+          "title": "Glacier classes: choose retrieval behavior",
+          "pdfPages": "",
+          "summary": "Archive selection must satisfy the time needed to restore usable data, not just the storage price.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-10.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-010"
+        },
+        {
+          "id": "saa-08-reuse-11",
+          "title": "Intelligent-Tiering follows changing access",
+          "pdfPages": "",
+          "summary": "Intelligent-Tiering optimizes access-tier placement; it does not decide whether an object should exist.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-11.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-011"
+        },
+        {
+          "id": "saa-08-006",
+          "title": "A lifecycle rule follows object age and version",
+          "pdfPages": "",
+          "summary": "Model current and noncurrent transitions, expiration and total cost.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-06.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-12",
+          "title": "Lifecycle rules manage the whole object history",
+          "pdfPages": "",
+          "summary": "A lifecycle rule is an automated data-retention decision; test the scope before applying it.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-12.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-012"
+        },
+        {
+          "id": "saa-08-007",
+          "title": "Give a client temporary S3 access",
+          "pdfPages": "",
+          "summary": "Authorize a presigned operation for a specific object and limited lifetime.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-07.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-36",
+          "title": "Presigned URLs delegate a bounded request",
+          "pdfPages": "",
+          "summary": "A presigned URL is delegated request authority, not a new public bucket policy.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-36-v2.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-036"
+        },
+        {
+          "id": "saa-08-008",
+          "title": "Deliver static files without public bucket access",
+          "pdfPages": "",
+          "summary": "Use CloudFront with Origin Access Control to serve a private S3 origin.",
+          "asset": "/course-visuals/saa-c03/module-08/slide-08.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-08-reuse-33",
+          "title": "Static assets: servers, shared files or an object origin?",
+          "pdfPages": "",
+          "summary": "Add compute and filesystem layers when their semantics are needed, rather than merely to hold unchanged static objects.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-33.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-033"
+        }
       ]
     },
     {
