@@ -33,6 +33,17 @@ const rows:Record<string,Row[]>={
   ['Conditional write / transaction','One-item state check / atomic multi-item operation','Use version conditions for optimistic locking; transactions for coordinated items.','A failed condition needs application conflict handling.'],
   ['Streams / TTL / DAX','Change records / asynchronous expiry / read cache','Use idempotent event handlers and distinguish expiry from an exact scheduler.','A stream is not a backup, and DAX is not a change log.']
  ],
+ '06':[
+  ['Public / private hosted zone','Internet DNS / associated VPC DNS','Choose the visibility boundary and check VPC DNS settings.','A private hosted zone does not make an endpoint publicly resolvable.'],
+  ['CNAME / Route 53 alias','Name-to-name / AWS resource target','Use an A or AAAA alias for supported resources at the zone apex.','A CNAME cannot be created at the zone apex.'],
+  ['Weighted / latency / failover','Traffic proportions / latency region / active-passive','Set records, health checks and TTL to match the rollout or recovery goal.','DNS caching means changes are not instantaneous.'],
+  ['Geolocation / geoproximity / IP-based','Client geography / resource proximity with bias / source CIDR','Choose from the actual routing signal and configure a default as needed.','IP-based routing uses defined CIDR collections, not geographic lookup.'],
+  ['Security group / network ACL','Stateful ENI rules / stateless subnet rules','Open the required request and return paths at the right boundary.','A security group cannot deny explicitly; a NACL can.'],
+  ['Gateway / interface endpoint / NAT','Prefix-list route / private ENI and DNS / IPv4 internet egress','Check route-table association, endpoint DNS and security group, or NAT public-subnet path.','An endpoint is service-specific; NAT does not provide private endpoint access.'],
+  ['VPC peering / VPN / Direct Connect','VPC link / encrypted internet tunnel / private circuit','Choose for topology and transport, then configure both directions of routing.','Peering is nontransitive; Direct Connect is not encrypted by default.'],
+  ['Flow Logs / application logs','IP flow metadata / request or code detail','Use both to debug SDK timeouts and rejected traffic.','Flow Logs do not include application payloads.'],
+  ['EC2 local storage / EFS / RDS','Instance-local files / shared uploads / relational data','Keep replaceable web nodes stateless and store shared state appropriately.','An EFS mount target is per AZ; RDS Multi-AZ is for database availability.']
+ ],
  '04':[
   ['ALB / NLB / GWLB','Layer 7 HTTP / transport flows / appliance insertion','Choose from protocol and request-routing or inspection needs.','NLB does not evaluate ALB host/path listener rules.'],
   ['Listener / rule / target group','Entry protocol / request decision / healthy destinations','Set rule priority, target group health checks and a default action.','A healthy target still needs reachable security-group and network paths.'],
