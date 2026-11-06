@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import type {CSSProperties} from 'react';
 
 const key=(course:string)=>`study-progress:v1:${course}`;
 export function readCompleted(course:string):string[]{
@@ -19,6 +20,9 @@ export function StudyStatus({completed,seconds,onAcknowledge}:{completed:boolean
 export function CourseProgress({course,lessons}:{course:string;lessons:{id:string;moduleId:string;title:string;href:string}[]}){
  const [done,setDone]=useState<string[]>([]);
  useEffect(()=>{const update=()=>setDone(readCompleted(course));update();window.addEventListener('storage',update);window.addEventListener('study-progress-change',update);return()=>{window.removeEventListener('storage',update);window.removeEventListener('study-progress-change',update)}},[course]);
- const finished=lessons.filter(l=>done.includes(l.id));const next=lessons.find(l=>!done.includes(l.id));
- return <section className="course-study-progress" id="study-progress"><h2>Your study progress</h2><p>{finished.length} of {lessons.length} available slides completed. A slide counts after two visible minutes in the viewer, or when you acknowledge it.</p><progress max={Math.max(1,lessons.length)} value={finished.length} aria-label="Course study progress"/>{next&&<p>Continue: <a href={next.href}>{next.title} →</a></p>}</section>
+ const finished=lessons.filter(l=>done.includes(l.id)).length;
+ const percent=lessons.length?Math.round(finished/lessons.length*100):0;
+ return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides completed`} title={`${finished} of ${lessons.length} slides completed`}>
+  <span className="course-progress-ring" style={{'--progress':`${percent}%`} as CSSProperties}><strong>{percent}%</strong></span><span className="course-progress-label">My progress</span>
+ </div>
 }
