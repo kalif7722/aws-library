@@ -24,6 +24,15 @@ const rows:Record<string,Row[]>={
   ['EFS Standard / One Zone / IA / Archive','Multi-AZ or single-AZ resilience / frequent or infrequent access','Pick the resilience boundary first, then apply lifecycle transitions for access frequency.','One Zone sacrifices AZ-loss resilience; retrieval charges and minimum durations can apply.'],
   ['EBS Multi-Attach / EFS','Shared block in one AZ / shared files across clients','Use a cluster-aware file system for concurrent EBS writers; EFS for NFS sharing.','Multi-Attach is not a general file-sharing substitute.']
  ],
+ '05':[
+  ['RDS Multi-AZ / read replica','Availability and failover / read scaling','Use a standby for resilience and a replica for read-heavy paths.','A standby is not normally a read target in the classic deployment.'],
+  ['RDS Proxy / storage autoscaling','Connection pooling / increasing allocated storage','Pool short-lived application connections; set a storage maximum for growth.','Storage autoscaling does not add database compute or shrink storage.'],
+  ['ElastiCache / MemoryDB','In-memory cache / durable Redis-compatible primary database','Choose cache-aside or write-through with invalidation and TTL.','TTL and eviction do not guarantee strict consistency.'],
+  ['GetItem / Query / Scan','Full key / partition-key range / broad read','Model primary and index keys around the application query.','A filter expression does not remove the read work of a Scan.'],
+  ['Provisioned / on-demand','Configured RCU/WCU / request-based capacity','Account for item size, consistency, hot keys and GSI write capacity.','On-demand can still throttle for hot partitions or other limits.'],
+  ['Conditional write / transaction','One-item state check / atomic multi-item operation','Use version conditions for optimistic locking; transactions for coordinated items.','A failed condition needs application conflict handling.'],
+  ['Streams / TTL / DAX','Change records / asynchronous expiry / read cache','Use idempotent event handlers and distinguish expiry from an exact scheduler.','A stream is not a backup, and DAX is not a change log.']
+ ],
  '04':[
   ['ALB / NLB / GWLB','Layer 7 HTTP / transport flows / appliance insertion','Choose from protocol and request-routing or inspection needs.','NLB does not evaluate ALB host/path listener rules.'],
   ['Listener / rule / target group','Entry protocol / request decision / healthy destinations','Set rule priority, target group health checks and a default action.','A healthy target still needs reachable security-group and network paths.'],
