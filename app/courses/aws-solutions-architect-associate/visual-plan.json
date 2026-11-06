@@ -2019,8 +2019,315 @@
       "targetNew": 16,
       "labs": [],
       "plannedTopics": [
-        "S3 public access and least privilege",
-        "S3 replication versus backup"
+        "Public access and least privilege",
+        "Bucket policies, access points and CORS",
+        "Default encryption, SSE-KMS and key access",
+        "Versioning, replication, Batch Replication and recovery",
+        "Multipart upload, byte-range reads and Transfer Acceleration",
+        "S3 events, asynchronous processing and EventBridge",
+        "Inventory, Storage Lens, access evidence and Batch Operations",
+        "S3 architecture decisions by access and failure model"
+      ],
+      "lessons": [
+        {
+          "id": "saa-09-001",
+          "title": "S3 public access has multiple guardrails",
+          "pdfPages": "",
+          "summary": "Evaluate public access blocks, policy, identity, ownership and explicit deny.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-01.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-002",
+          "title": "Grant least privilege to a specific prefix",
+          "pdfPages": "",
+          "summary": "Scope ListBucket to a prefix and object actions to matching keys.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-02.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-003",
+          "title": "Access points separate application permissions",
+          "pdfPages": "",
+          "summary": "Give each application a controlled access path while retaining bucket guardrails.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-03.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-04",
+          "title": "Access points and private network access",
+          "pdfPages": "",
+          "summary": "A private network path and permission to access an object are separate controls.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-04.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-004"
+        },
+        {
+          "id": "saa-09-015",
+          "title": "Browser CORS is separate from S3 authorization",
+          "pdfPages": "",
+          "summary": "Treat browser preflight rules and S3 request authorization as separate gates.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-15.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-004",
+          "title": "Default encryption protects new S3 objects",
+          "pdfPages": "",
+          "summary": "Understand SSE-S3 defaults and why a new encryption setting is not retroactive.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-04.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-005",
+          "title": "SSE-KMS needs S3 and KMS authorization",
+          "pdfPages": "",
+          "summary": "Check both S3 access and KMS key permissions, including cross-account access.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-05.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-05",
+          "title": "Encryption: protect data and authorize the key",
+          "pdfPages": "",
+          "summary": "Encryption is useful only when authorized applications can use the keys and unauthorized callers cannot.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-05.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-005"
+        },
+        {
+          "id": "saa-09-006",
+          "title": "Replication is not a complete backup",
+          "pdfPages": "",
+          "summary": "Use independent recovery controls for accidental deletion and compromised accounts.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-06.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-007",
+          "title": "S3 replication needs versioned buckets and a role",
+          "pdfPages": "",
+          "summary": "Enable versioning at both ends and authorize the replication role.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-07.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-13",
+          "title": "Replication: same Region or another Region?",
+          "pdfPages": "",
+          "summary": "A replicated copy is useful only if its permissions, keys and recovery design survive the intended failure.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-13.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-013"
+        },
+        {
+          "id": "saa-09-reuse-14",
+          "title": "Replication timing, existing objects and deletion",
+          "pdfPages": "",
+          "summary": "Asynchronous replication has a recovery-point implication and is not a substitute for independent retention.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-14.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-014"
+        },
+        {
+          "id": "saa-09-008",
+          "title": "Existing objects need a separate replication path",
+          "pdfPages": "",
+          "summary": "Use Batch Replication for existing objects and understand delete-marker handling.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-08.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-31",
+          "title": "Choose recovery controls for the actual failure",
+          "pdfPages": "",
+          "summary": "Test the full restore path; the existence of another copy does not prove a usable recovery.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-31.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-031"
+        },
+        {
+          "id": "saa-09-reuse-34",
+          "title": "Multi-Region Access Points: global entry and regional data",
+          "pdfPages": "",
+          "summary": "Global request routing and regional object replication are separate mechanisms.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-34-v2.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-034"
+        },
+        {
+          "id": "saa-09-009",
+          "title": "Multipart upload isolates and retries parts",
+          "pdfPages": "",
+          "summary": "Parallelize large uploads, retry failed parts and complete or abort the upload.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-09.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-18",
+          "title": "Multipart upload: parallelize and retry parts",
+          "pdfPages": "",
+          "summary": "Multipart upload is a managed transfer lifecycle, not just several simultaneous PUT requests.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-18.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-018"
+        },
+        {
+          "id": "saa-09-reuse-19",
+          "title": "Incomplete multipart uploads still consume storage",
+          "pdfPages": "",
+          "summary": "Successful cleanup requires the right lifecycle action, not merely deleting an object key.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-19.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-019"
+        },
+        {
+          "id": "saa-09-reuse-20",
+          "title": "Byte-range GET: fetch only the needed bytes",
+          "pdfPages": "",
+          "summary": "Less transferred data helps only when the application understands and correctly assembles the selected bytes.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-20.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-020"
+        },
+        {
+          "id": "saa-09-reuse-17",
+          "title": "Scale requests across useful key prefixes",
+          "pdfPages": "",
+          "summary": "High S3 capacity does not guarantee that the client, encryption path or network can keep up.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-17.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-017"
+        },
+        {
+          "id": "saa-09-010",
+          "title": "Choose the transfer path for distant clients",
+          "pdfPages": "",
+          "summary": "Evaluate direct regional transfer against acceleration for distant clients.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-10.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-21",
+          "title": "Transfer Acceleration helps distant uploads",
+          "pdfPages": "",
+          "summary": "Acceleration optimizes the journey to a bucket; it is not multi-Region object replication.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-21.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-021"
+        },
+        {
+          "id": "saa-09-011",
+          "title": "Events trigger work without coupling upload and processing",
+          "pdfPages": "",
+          "summary": "Route object events to asynchronous workers and handle duplicates.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-11.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-15",
+          "title": "S3 event notifications: react without coupling",
+          "pdfPages": "",
+          "summary": "An object event is a signal to process; it is not exactly-once execution.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-15.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-015"
+        },
+        {
+          "id": "saa-09-reuse-16",
+          "title": "EventBridge adds richer event routing",
+          "pdfPages": "",
+          "summary": "Richer routing does not remove duplication, permissions or downstream failure handling.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-16.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-016"
+        },
+        {
+          "id": "saa-09-012",
+          "title": "Observe who accessed an S3 object",
+          "pdfPages": "",
+          "summary": "Choose CloudTrail data events, server access logs and metrics for the evidence needed.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-12.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-37",
+          "title": "S3 evidence: access logs, data events and metrics",
+          "pdfPages": "",
+          "summary": "Choose evidence by the question: which API, which request, or what aggregate trend?",
+          "asset": "/course-visuals/sap-c03/module-09/slide-37-v2.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-037"
+        },
+        {
+          "id": "saa-09-013",
+          "title": "Inventory and Storage Lens answer different questions",
+          "pdfPages": "",
+          "summary": "Distinguish object-level Inventory reports from aggregate Storage Lens insights.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-13.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-23",
+          "title": "Storage Class Analysis informs lifecycle decisions",
+          "pdfPages": "",
+          "summary": "A recommendation informs the decision; a lifecycle rule performs the transition.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-23.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-023"
+        },
+        {
+          "id": "saa-09-reuse-24",
+          "title": "Storage Lens: see storage across the organization",
+          "pdfPages": "",
+          "summary": "Aggregated visibility helps locate problems; it does not apply the corrective policy by itself.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-24.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-024"
+        },
+        {
+          "id": "saa-09-014",
+          "title": "Use S3 Batch Operations for existing objects",
+          "pdfPages": "",
+          "summary": "Operate on existing objects in bulk with a manifest and completion report.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-14.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-29",
+          "title": "Build an object-metadata index for application queries",
+          "pdfPages": "",
+          "summary": "An application index must be maintained and repaired; object storage does not make that workflow atomic.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-29.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-029"
+        },
+        {
+          "id": "saa-09-reuse-30",
+          "title": "Keep static delivery separate from dynamic processing",
+          "pdfPages": "",
+          "summary": "Each layer should own one responsibility: delivery, computation, metadata lookup or durable object storage.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-30.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-030"
+        },
+        {
+          "id": "saa-09-016",
+          "title": "Choose the S3 protection and transfer design",
+          "pdfPages": "",
+          "summary": "Select protection, replication, transfer and observability by the failure model.",
+          "asset": "/course-visuals/saa-c03/module-09/slide-16.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-09-reuse-32",
+          "title": "S3 architecture decisions: fit the access and failure model",
+          "pdfPages": "",
+          "summary": "A strong S3 design balances access, security, recovery, performance and cost across the whole application.",
+          "asset": "/course-visuals/sap-c03/module-09/slide-32.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-09-032"
+        }
       ]
     },
     {
