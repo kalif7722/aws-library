@@ -13,6 +13,7 @@ const rows:Record<string,Row[]>={
   ['Security group / source SG','Stateful traffic filter / tier identity','Allow only the required port from the intended source group.','Security-group rules do not create network routes.'],
   ['Instance Connect / Session Manager / SSH','SSH key delivery / managed session / direct network SSH','Check IAM, agent and network prerequisites for the selected access path.','Session Manager can avoid inbound port 22.'],
   ['Savings Plans / RI / Spot','Spend commitment / term discount / interruptible capacity','Separate price discounts from interruption tolerance and capacity needs.','A Savings Plan does not reserve capacity.'],
+  ['Common access ports','SSH 22 / HTTP 80 / HTTPS 443 / RDP 3389','Open only the protocol and trusted source the workload needs.','A reachable port still requires a route and a listening service.'],
   ['Capacity Reservation / Dedicated Host','AZ capacity / physical host','Reserve capacity when needed; choose a host for licensing or isolation.','A Regional RI does not reserve AZ capacity.']
  ],
  '03':[
@@ -20,6 +21,7 @@ const rows:Record<string,Row[]>={
   ['Snapshot / AMI','Volume recovery point / launchable instance image','Restore data from a snapshot; launch a configured instance from an AMI.','A snapshot does not capture live process state.'],
   ['Archive / Recycle Bin / Fast Snapshot Restore','Retention / deletion recovery / low first-read latency','Choose each independent snapshot control for its recovery objective.','Archived snapshots must be restored before volume creation.'],
   ['gp3 / gp2 / io2 / st1 / sc1','General SSD / provisioned IOPS / throughput or colder HDD','Match the storage type and performance lever to the I/O pattern.','HDD volume types are not boot volumes.'],
+  ['EFS Standard / One Zone / IA / Archive','Multi-AZ or single-AZ resilience / frequent or infrequent access','Pick the resilience boundary first, then apply lifecycle transitions for access frequency.','One Zone sacrifices AZ-loss resilience; retrieval charges and minimum durations can apply.'],
   ['EBS Multi-Attach / EFS','Shared block in one AZ / shared files across clients','Use a cluster-aware file system for concurrent EBS writers; EFS for NFS sharing.','Multi-Attach is not a general file-sharing substitute.']
  ],
  '04':[
