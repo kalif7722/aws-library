@@ -1,24 +1,25 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import type {CSSProperties} from 'react';
-import {ArrowRight,BookOpen,Compass,GraduationCap,Layers,ShieldCheck} from 'lucide-react';
+import {ArrowRight,BookOpen,GraduationCap,Layers,ShieldCheck} from 'lucide-react';
 import plan from '../courses/aws-solutions-architect-associate/visual-plan.json';
 import SaaModuleReference from './SaaModuleReference';
+import {architectureModuleTile} from './ArchitectureModuleTiles';
 import './AifVisualCourse.css';
+import './ArchitectureModuleTiles.css';
 import './SaaVisualCourse.css';
 
 type Lesson={id:string;title:string;pdfPages:string;summary:string;asset:string;status:string};
 type Module=(typeof plan.modules)[number] & {lessons?:Lesson[];pdfCoverageNote?:string};
 const modules=plan.modules as Module[];
 const base='/courses/aws-solutions-architect-associate/visual/module-';
-const colors=['#d99a25','#8160cb','#1888b6','#ad65b8','#0c9c92','#e49544'];
 
 export function SaaOverview(){
  const available=modules.reduce((n,m)=>n+(m.lessons?.length||0),0);
  return <main className="aif-course"><section className="aif-hero"><div><p className="aif-eyebrow">VISUAL LEARNING PATH · AWS SAA-C03</p><h1>See the architecture.<br/>Understand the choice.</h1><p className="aif-hero-copy">Follow a clear sequence of visual explanations, AWS service decisions and architecture walkthroughs.</p><a className="aif-hero-action" href={`${base}00`}>Explore the learning path <ArrowRight size={17}/></a></div><div><img className="aif-hero-badge" src="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-badges/solutions-architect-associate.png" alt="AWS Certified Solutions Architect Associate badge"/><div className="aif-hero-stats"><div><Layers/><strong>{modules.length}</strong><span>learning modules</span></div><div><BookOpen/><strong>{plan.targetVisuals}</strong><span>visual lessons targeted</span></div><div><ShieldCheck/><strong>SAA-C03</strong><span>exam objectives tracked</span></div><div><GraduationCap/><strong>{available}</strong><span>visuals available</span></div></div></div></section>
  <nav className="aif-quicknav" aria-label="Course navigation"><a href="#learning-path">Learning modules</a><a href="https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf" target="_blank" rel="noreferrer">Exam objectives & tasks ↗</a><a href="#service-reference">AWS services reference</a><a href="#coverage">Course coverage</a><a href="#progress">Progress tracker</a><a href="https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf" target="_blank" rel="noreferrer">Official exam guide ↗</a></nav>
  <section className="aif-section-heading" id="learning-path"><div><p className="aif-eyebrow">ONE CONNECTED ARCHITECTURE JOURNEY</p><h2>Your learning path</h2><p>Start with AWS foundations, then connect security, networking, compute, data, resilience, performance, and cost decisions.</p></div><span className="aif-path-tag">Understand · Compare · Apply</span></section>
- <div className="aif-module-grid">{modules.map((m,index)=><a key={m.id} href={`${base}${m.id}`} className="aif-module-card" style={{'--aif-accent':colors[index%colors.length]} as CSSProperties}><div className="aif-card-top"><span className="aif-module-icon"><Compass size={27} strokeWidth={1.7}/></span><span>MODULE {m.id}</span></div><h3>{m.title}</h3><p>{m.scope}</p><div className="aif-card-meta"><span>{m.targetReuse+m.targetNew} visuals targeted</span><span>{m.lessons?.length?`${m.lessons.length} available`:'In preparation'}</span></div><div className="aif-card-footer">Explore topics <ArrowRight size={16}/></div></a>)}</div>
+ <div className="aif-module-grid architecture-module-grid">{modules.map(m=>{const {Icon,accent}=architectureModuleTile('saa',m.id);return <a key={m.id} href={`${base}${m.id}`} className="aif-module-card" style={{'--aif-accent':accent} as CSSProperties}><div className="aif-card-top"><span className="aif-module-icon"><Icon size={27} strokeWidth={1.7}/></span><span>MODULE {m.id}</span></div><h3>{m.title}</h3><p>{m.scope}</p><div className="aif-card-meta"><span>{m.targetReuse+m.targetNew} visuals targeted</span><span>{m.lessons?.length?`${m.lessons.length} available`:'In preparation'}</span></div><div className="aif-card-footer">Explore topics <ArrowRight size={16}/></div></a>})}</div>
  <section className="aif-coverage" id="service-reference"><div><p className="aif-eyebrow">AWS SERVICES REFERENCE</p><h2>Services in architecture context.</h2><p>Open a module to study its AWS services, access paths and design choices. IAM foundations begin in <a href={`${base}01`}>Module 01</a>.</p></div></section><section className="aif-coverage" id="coverage"><div><p className="aif-eyebrow">COVERAGE IS CHECKED BEFORE RELEASE</p><h2>Every teaching topic has a place in the plan.</h2><p>The 22-module map targets about 750 visuals against the SAA-C03 exam objectives. Planned targets are not completed coverage.</p></div><div className="aif-coverage-points"><p><strong>Concepts mapped</strong>Each teaching topic maps to a module lesson.</p><p><strong>Relevant visual explanations</strong>Existing architecture visuals are reviewed for Associate-level learning.</p><p><strong>Original SAA explanations</strong>Distinct Associate topics get new architecture images and relevant walkthroughs.</p></div></section><p className="aif-course-note" id="progress">The course is being produced and reviewed module by module. {available} visuals are currently available; full syllabus coverage awaits the complete topic and guide audit.</p></main>;
 }
 
