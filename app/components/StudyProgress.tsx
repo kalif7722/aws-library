@@ -15,7 +15,7 @@ export function useStudyProgress(course:string,lessonId:string|null){
 }
 function markCompleted(course:string,id:string,set:(ids:string[])=>void){const next=[...new Set([...readCompleted(course),id])];localStorage.setItem(key(course),JSON.stringify(next));set(next);window.dispatchEvent(new Event('study-progress-change'))}
 export function StudyStatus({completed,seconds,onAcknowledge}:{completed:boolean;seconds:number;onAcknowledge:()=>void}){
- return <div className="study-status" role="status"><span>{completed?'✓ Completed':`Study time ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} / 2:00`}</span>{!completed&&<button type="button" onClick={onAcknowledge}>I studied this slide · mark complete</button>}</div>
+ return <div className="study-status" role="status"><span>{completed?'✓ Complete':`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} / 2:00`}</span>{!completed&&<button type="button" onClick={onAcknowledge}>Mark complete</button>}</div>
 }
 export function CourseProgress({course,lessons}:{course:string;lessons:{id:string;moduleId:string;title:string;href:string}[]}){
  const [done,setDone]=useState<string[]>([]);

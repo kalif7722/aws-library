@@ -9,6 +9,7 @@ import './ArchitectureModuleTiles.css';
 import './SaaVisualCourse.css';
 import './CourseStudyTools.css';
 import CourseSearch from './CourseSearch';
+import DvaModuleReference from './DvaModuleReference';
 import {CourseProgress,StudyStatus,useStudyProgress} from './StudyProgress';
 
 type Lesson={id:string;title:string;summary:string;asset:string;status:string;terms:string};
@@ -36,7 +37,7 @@ export function DvaModule({id}:{id:string}){
  return <main className="aif-course saa-module"><section className="aif-hero aif-module-hero"><div><nav className="aif-breadcrumb"><a href="/courses/aws-developer-associate">Developer course</a> / Module {id}</nav><p className="aif-eyebrow">MODULE {id} · DVA-C03 VISUAL LEARNING</p><h1>{m.title}</h1><p className="aif-hero-copy">{m.scope}</p><div className="aif-module-facts"><span>{lessons.length} available visuals</span></div></div></section>
  {lessons.length?<section className="saa-path"><div className="saa-heading"><h2>Visual lessons</h2><p>Explore the architecture concepts and decisions in this module.</p></div><div className="saa-lesson-grid">{lessons.map((l,i)=><article key={l.id} className="saa-lesson"><button onClick={()=>{opener.current=document.activeElement as HTMLElement;setActive(i)}} aria-label={`Open ${l.title} fullscreen`}><img src={l.asset} alt={l.title} loading="lazy"/></button><div><small>LESSON {String(i+1).padStart(2,'0')} {study.completed.includes(l.id)?'· ✓ Complete':''}</small><h3>{l.title}</h3><p>{l.summary}</p></div></article>)}</div></section>:null}
 
- <CourseProgress course="dva" lessons={progressItems.filter(l=>l.href.includes(`/module-${id}`))}/>
+ <DvaModuleReference moduleId={id}/><CourseProgress course="dva" lessons={progressItems.filter(l=>l.href.includes(`/module-${id}`))}/>
  <nav className="saa-pager"><span>{index>0&&<a href={`${base}${modules[index-1].id}`}>← {modules[index-1].title}</a>}</span><span>{index<modules.length-1&&<a href={modules[index+1].lessons.length?`${base}${modules[index+1].id}`:"/courses/aws-developer-associate"}>{modules[index+1].title} →</a>}</span></nav>
  {active!==null&&lessons[active]&&<div className="saa-overlay" role="dialog" aria-modal="true" aria-label="Developer visual lesson fullscreen"><div className="saa-overlay-bar"><span>{lessons[active].title} · {active+1}/{lessons.length}</span><button autoFocus onClick={()=>{setActive(null);opener.current?.focus()}}>Close ✕</button></div><button disabled={active===0} onClick={()=>setActive(active-1)} aria-label="Previous slide">❮</button><img src={lessons[active].asset} alt={lessons[active].title}/><button disabled={active===lessons.length-1} onClick={()=>setActive(active+1)} aria-label="Next slide">❯</button><StudyStatus completed={study.completed.includes(lessons[active].id)} seconds={study.seconds} onAcknowledge={study.acknowledge}/></div>}</main>;
 }

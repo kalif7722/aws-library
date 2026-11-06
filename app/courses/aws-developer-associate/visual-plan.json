@@ -1,7 +1,7 @@
 {
   "examCode": "DVA-C03",
   "sourceEdition": "AWS Certified Developer Slides v46 (DVA-C02)",
-  "coverageStatus": "modules-01-03-in-review",
+  "coverageStatus": "modules-01-04-in-review",
   "targetLessons": 850,
   "modules": [
     {
@@ -640,16 +640,317 @@
     },
     {
       "id": "04",
-      "title": "Load balancing and scaling",
-      "scope": "Source coverage inventory and visual mapping in preparation",
-      "sourcePages": "95 onward; pending full boundary audit",
-      "lessons": []
+      "title": "Load balancing and Auto Scaling",
+      "scope": "Route healthy traffic, secure ingress and adjust EC2 capacity to demand",
+      "sourcePages": "95\u2013137",
+      "lessons": [
+        {
+          "id": "dva-04-001",
+          "title": "Scale up, scale out, and stay available",
+          "summary": "Vertical, horizontal and multi-AZ availability decisions",
+          "asset": "/course-visuals/dva-c03/module-04/slide-01.webp",
+          "status": "visual-review",
+          "sourceLessonId": null,
+          "sourcePages": "95\u2013100",
+          "terms": "Vertical, horizontal and multi-AZ availability decisions"
+        },
+        {
+          "id": "dva-04-002",
+          "title": "Choose the load balancer from the traffic",
+          "summary": "Select load balancing by protocol and workload",
+          "asset": "/course-visuals/sap-c03/module-08/slide-01.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-01",
+          "sourcePages": "101\u2013105",
+          "terms": "Select load balancing by protocol and workload"
+        },
+        {
+          "id": "dva-04-003",
+          "title": "Listener, rule, target group: three decisions",
+          "summary": "ELB request entry and destination",
+          "asset": "/course-visuals/sap-c03/module-08/slide-02.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-02",
+          "sourcePages": "103\u2013105",
+          "terms": "ELB request entry and destination"
+        },
+        {
+          "id": "dva-04-004",
+          "title": "Public entry point, private application",
+          "summary": "Managed ingress and private targets",
+          "asset": "/course-visuals/sap-c03/module-08/slide-03.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-03",
+          "sourcePages": "101\u2013103",
+          "terms": "Managed ingress and private targets"
+        },
+        {
+          "id": "dva-04-005",
+          "title": "Health checks measure application readiness",
+          "summary": "Target health and availability",
+          "asset": "/course-visuals/sap-c03/module-08/slide-05.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-05",
+          "sourcePages": "104",
+          "terms": "Target health and availability"
+        },
+        {
+          "id": "dva-04-006",
+          "title": "Classic Load Balancer: understand the legacy",
+          "summary": "Legacy ELB comparison",
+          "asset": "/course-visuals/sap-c03/module-08/slide-22.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-22",
+          "sourcePages": "105\u2013107",
+          "terms": "Legacy ELB comparison"
+        },
+        {
+          "id": "dva-04-007",
+          "title": "Secure both the entry point and the target",
+          "summary": "Load balancer and target security groups",
+          "asset": "/course-visuals/sap-c03/module-08/slide-19.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-19",
+          "sourcePages": "106",
+          "terms": "Load balancer and target security groups"
+        },
+        {
+          "id": "dva-04-008",
+          "title": "ALB listener rules route by the request",
+          "summary": "Ordered host, path and query-string rules",
+          "asset": "/course-visuals/dva-c03/module-04/slide-08.webp",
+          "status": "visual-review",
+          "sourceLessonId": null,
+          "sourcePages": "108\u2013113",
+          "terms": "Ordered host, path and query-string rules"
+        },
+        {
+          "id": "dva-04-009",
+          "title": "ALB routes by the request meaning",
+          "summary": "HTTP Layer 7 routing",
+          "asset": "/course-visuals/sap-c03/module-08/slide-06.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-06",
+          "sourcePages": "108\u2013110",
+          "terms": "HTTP Layer 7 routing"
+        },
+        {
+          "id": "dva-04-010",
+          "title": "ALB targets: instances, IPs and functions",
+          "summary": "Target groups and target types",
+          "asset": "/course-visuals/sap-c03/module-08/slide-07.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-07",
+          "sourcePages": "111\u2013113",
+          "terms": "Target groups and target types"
+        },
+        {
+          "id": "dva-04-011",
+          "title": "NLB: choose transport and TLS behavior",
+          "summary": "Layer 4 TCP, UDP and TLS choices",
+          "asset": "/course-visuals/sap-c03/module-08/slide-13.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-13",
+          "sourcePages": "114\u2013116",
+          "terms": "Layer 4 TCP, UDP and TLS choices"
+        },
+        {
+          "id": "dva-04-012",
+          "title": "NLB addresses, DNS and client identity",
+          "summary": "Addresses and target behavior",
+          "asset": "/course-visuals/sap-c03/module-08/slide-14.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-14",
+          "sourcePages": "114\u2013116",
+          "terms": "Addresses and target behavior"
+        },
+        {
+          "id": "dva-04-013",
+          "title": "NLB keeps flows together and checks health",
+          "summary": "NLB target group health",
+          "asset": "/course-visuals/sap-c03/module-08/slide-15.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-15",
+          "sourcePages": "116",
+          "terms": "NLB target group health"
+        },
+        {
+          "id": "dva-04-014",
+          "title": "GWLB inserts an appliance inspection service",
+          "summary": "Gateway Load Balancer service path",
+          "asset": "/course-visuals/sap-c03/module-08/slide-17.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-17",
+          "sourcePages": "117\u2013118",
+          "terms": "Gateway Load Balancer service path"
+        },
+        {
+          "id": "dva-04-015",
+          "title": "GWLB flow affinity protects stateful inspection",
+          "summary": "Appliance target continuity",
+          "asset": "/course-visuals/sap-c03/module-08/slide-18.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-18",
+          "sourcePages": "117\u2013118",
+          "terms": "Appliance target continuity"
+        },
+        {
+          "id": "dva-04-016",
+          "title": "Sticky sessions and failover",
+          "summary": "ALB affinity and target failure",
+          "asset": "/course-visuals/saa-c03/module-04/slide-03.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-new-03",
+          "sourcePages": "119\u2013120",
+          "terms": "ALB affinity and target failure"
+        },
+        {
+          "id": "dva-04-017",
+          "title": "ALB sticky-session cookie ownership",
+          "summary": "Duration and application cookie decisions",
+          "asset": "/course-visuals/saa-c03/module-04/slide-07.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-new-07",
+          "sourcePages": "120",
+          "terms": "Duration and application cookie decisions"
+        },
+        {
+          "id": "dva-04-018",
+          "title": "Cross-zone balancing changes the target pool",
+          "summary": "Cross-zone load distribution",
+          "asset": "/course-visuals/sap-c03/module-08/slide-04.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-04",
+          "sourcePages": "121\u2013122",
+          "terms": "Cross-zone load distribution"
+        },
+        {
+          "id": "dva-04-019",
+          "title": "TLS certificates and SNI",
+          "summary": "Multiple certificates on HTTPS listeners",
+          "asset": "/course-visuals/saa-c03/module-04/slide-04.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-new-04",
+          "sourcePages": "123\u2013126",
+          "terms": "Multiple certificates on HTTPS listeners"
+        },
+        {
+          "id": "dva-04-020",
+          "title": "TLS termination: identify both connections",
+          "summary": "Client-to-LB versus LB-to-target encryption",
+          "asset": "/course-visuals/sap-c03/module-08/slide-08.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-08",
+          "sourcePages": "123\u2013126",
+          "terms": "Client-to-LB versus LB-to-target encryption"
+        },
+        {
+          "id": "dva-04-021",
+          "title": "Drain connections before removing capacity",
+          "summary": "Deregistration and in-flight requests",
+          "asset": "/course-visuals/sap-c03/module-08/slide-11.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-08-11",
+          "sourcePages": "127",
+          "terms": "Deregistration and in-flight requests"
+        },
+        {
+          "id": "dva-04-022",
+          "title": "Auto Scaling groups: define the safe operating range",
+          "summary": "Launch template and min, max, desired",
+          "asset": "/course-visuals/sap-c03/module-07/slide-12.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-12",
+          "sourcePages": "128\u2013131",
+          "terms": "Launch template and min, max, desired"
+        },
+        {
+          "id": "dva-04-023",
+          "title": "ALB health versus ASG health",
+          "summary": "Target readiness and instance replacement",
+          "asset": "/course-visuals/saa-c03/module-04/slide-05.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-new-05",
+          "sourcePages": "129\u2013131",
+          "terms": "Target readiness and instance replacement"
+        },
+        {
+          "id": "dva-04-024",
+          "title": "Target tracking: choose demand per unit of capacity",
+          "summary": "CloudWatch signal and target metric",
+          "asset": "/course-visuals/sap-c03/module-07/slide-13-v2.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-13",
+          "sourcePages": "132\u2013135",
+          "terms": "CloudWatch signal and target metric"
+        },
+        {
+          "id": "dva-04-025",
+          "title": "Step scaling: react to the size of the breach",
+          "summary": "Alarm threshold scaling",
+          "asset": "/course-visuals/sap-c03/module-07/slide-14.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-14",
+          "sourcePages": "132\u2013134",
+          "terms": "Alarm threshold scaling"
+        },
+        {
+          "id": "dva-04-026",
+          "title": "Scheduled and predictive scaling: prepare ahead",
+          "summary": "Time and forecast approaches",
+          "asset": "/course-visuals/sap-c03/module-07/slide-15.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-15",
+          "sourcePages": "133\u2013134",
+          "terms": "Time and forecast approaches"
+        },
+        {
+          "id": "dva-04-027",
+          "title": "Auto Scaling: metric, policy, readiness",
+          "summary": "End-to-end ASG developer workflow",
+          "asset": "/course-visuals/dva-c03/module-04/slide-27.webp",
+          "status": "visual-review",
+          "sourceLessonId": null,
+          "sourcePages": "132\u2013137",
+          "terms": "End-to-end ASG developer workflow"
+        },
+        {
+          "id": "dva-04-028",
+          "title": "Warmup and warm pools: readiness is not one timer",
+          "summary": "Cooldown, warmup and serving readiness",
+          "asset": "/course-visuals/sap-c03/module-07/slide-16.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-16",
+          "sourcePages": "136",
+          "terms": "Cooldown, warmup and serving readiness"
+        },
+        {
+          "id": "dva-04-029",
+          "title": "Instance refresh: roll a new launch definition safely",
+          "summary": "Controlled rollout after template change",
+          "asset": "/course-visuals/sap-c03/module-07/slide-18.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-18",
+          "sourcePages": "137",
+          "terms": "Controlled rollout after template change"
+        },
+        {
+          "id": "dva-04-030",
+          "title": "Health checks: identify failure before replacement",
+          "summary": "Automatic replacement and application readiness",
+          "asset": "/course-visuals/sap-c03/module-07/slide-19-v2.webp",
+          "status": "reviewed",
+          "sourceLessonId": "saa04-reuse-07-19",
+          "sourcePages": "129\u2013130",
+          "terms": "Automatic replacement and application readiness"
+        }
+      ]
     },
     {
       "id": "05",
-      "title": "Amazon S3 and object storage",
+      "title": "RDS, Aurora and ElastiCache",
       "scope": "Source coverage inventory and visual mapping in preparation",
-      "sourcePages": "pending page-level audit",
+      "sourcePages": "138 onward; pending full boundary audit",
       "lessons": []
     },
     {
