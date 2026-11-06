@@ -1654,12 +1654,162 @@
       "title": "Classic solution architectures",
       "pdfPages": "228–267",
       "scope": "Three-tier, stateless sessions, decoupling, architecture tradeoffs",
-      "targetReuse": 2,
+      "targetReuse": 0,
       "targetNew": 18,
       "labs": [],
       "plannedTopics": [
-        "Stateless web tier and shared session design",
-        "Classic three-tier web architecture from request to persistence"
+        "Three-tier architecture and security boundaries",
+        "Stateless sessions and shared uploads",
+        "Asynchronous decoupling and shopping-cart failover",
+        "Tier scaling, Multi-AZ recovery and read replicas",
+        "Elastic Beanstalk deployment and reproducible launch paths",
+        "Health checks, security groups and architecture tradeoffs"
+      ],
+      "lessons": [
+        {
+          "id": "saa-07-001",
+          "title": "A three-tier architecture separates responsibilities",
+          "pdfPages": "",
+          "summary": "Trace users through presentation, application and private data tiers.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-01.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-002",
+          "title": "A web request crosses distinct trust boundaries",
+          "pdfPages": "",
+          "summary": "Place an internet-facing ALB and private application and database tiers across AZs.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-02.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-003",
+          "title": "Make the web tier stateless to scale safely",
+          "pdfPages": "",
+          "summary": "Externalize sessions and uploads so replacement instances can serve requests.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-03.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-004",
+          "title": "Choose where session state lives",
+          "pdfPages": "",
+          "summary": "Compare cookies, DynamoDB, ElastiCache and load balancer affinity.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-04.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-005",
+          "title": "Shared uploads need shared storage",
+          "pdfPages": "",
+          "summary": "Choose S3 objects or an EFS shared file system for multi-AZ uploads.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-05.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-006",
+          "title": "Amazon SQS and SNS: decouple, queue, and fan out events",
+          "pdfPages": "",
+          "summary": "Buffer asynchronous work with SQS and fan out independent events with SNS.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-06.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-007",
+          "title": "Design the shopping cart for failover",
+          "pdfPages": "",
+          "summary": "Keep carts and sessions available when an application instance fails.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-07.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-008",
+          "title": "Scale each tier for its own bottleneck",
+          "pdfPages": "",
+          "summary": "Match Auto Scaling, caching, replicas and Multi-AZ to distinct bottlenecks.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-08.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-009",
+          "title": "Amazon RDS topology: Multi-AZ and read replica",
+          "pdfPages": "",
+          "summary": "Distinguish RDS failover from asynchronous read replication.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-09.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-010",
+          "title": "The web tier survives an AZ loss",
+          "pdfPages": "",
+          "summary": "Route to healthy capacity in the surviving Availability Zone.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-10.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-011",
+          "title": "Elastic Beanstalk manages application deployment",
+          "pdfPages": "",
+          "summary": "Select a Beanstalk environment for traffic and availability requirements.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-11.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-012",
+          "title": "Promote application versions with low-risk traffic shift",
+          "pdfPages": "",
+          "summary": "Compare deployment strategies and retain a rollback path.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-12.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-013",
+          "title": "Choose a launch path for repeatable capacity",
+          "pdfPages": "",
+          "summary": "Combine an AMI, user data, launch template and Auto Scaling group.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-13.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-014",
+          "title": "Keep application data out of replaceable instances",
+          "pdfPages": "",
+          "summary": "Separate replaceable compute from shared application data.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-14.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-015",
+          "title": "An ALB health check controls routing",
+          "pdfPages": "",
+          "summary": "Use meaningful target health checks to control ALB routing.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-15.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-016",
+          "title": "Security groups follow the request path",
+          "pdfPages": "",
+          "summary": "Allow only the required ingress between ALB, app and database tiers.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-16.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-017",
+          "title": "Separate synchronous responses from background work",
+          "pdfPages": "",
+          "summary": "Keep critical writes in the response path and queue independent work.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-17.webp",
+          "status": "reviewed"
+        },
+        {
+          "id": "saa-07-018",
+          "title": "Choose the right architecture tradeoff",
+          "pdfPages": "",
+          "summary": "Choose architecture components from availability, latency and data needs.",
+          "asset": "/course-visuals/saa-c03/module-07/slide-18.webp",
+          "status": "reviewed"
+        }
       ]
     },
     {
