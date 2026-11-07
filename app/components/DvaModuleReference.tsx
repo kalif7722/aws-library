@@ -45,6 +45,18 @@ const rows:Record<string,Row[]>={
   ['EC2 local storage / EFS / RDS','Instance-local files / shared uploads / relational data','Keep replaceable web nodes stateless and store shared state appropriately.','An EFS mount target is per AZ; RDS Multi-AZ is for database availability.'],
   ['LAMP stack on EC2','Linux and Apache web server / PHP application / MySQL in RDS','Store local OS and software files on an EC2 EBS root volume; use EFS for shared WordPress uploads and optional ElastiCache for cache or sessions.','Per-instance EBS volumes are not a shared upload store for scaled web nodes.']
  ],
+ '07':[
+  ['IAM policy / bucket policy / Block Public Access','Principal permissions / resource permissions / public guardrail','Use roles for workloads and a bucket policy for cross-account or explicit restrictions; review public-access settings.','CORS and a presigned URL do not bypass S3 authorization.'],
+  ['Standard / Standard-IA / One Zone-IA','Frequent / infrequent with rapid retrieval / single-AZ infrequent','Choose by access pattern, availability and AZ-loss tolerance.','Lower storage price can add retrieval and minimum-duration charges.'],
+  ['Glacier Instant / Flexible / Deep Archive','Immediate archive read / restore-based archive / long-term archive','Match retrieval delay and cost to the recovery deadline.','An archived object that needs restoration is not a normal immediate GET.'],
+  ['Lifecycle transition / expiration','Change class / remove eligible data or versions','Manage current and noncurrent versions deliberately; use analytics to inform timing.','Versioning plus a delete marker does not automatically expire older versions.'],
+  ['Direct event / EventBridge','SNS, SQS or Lambda notification / broader filtering and targets','Grant S3 the destination resource permission and make processing idempotent.','Writing processed output under an unfiltered source prefix can create a loop.'],
+  ['SSE-S3 / SSE-KMS / DSSE-KMS / SSE-C','S3 key / KMS key / dual layer / caller-provided key','Select key control, KMS permissions and request headers deliberately.','Default encryption cannot satisfy a policy that requires an absent upload header.'],
+  ['Metadata / tags','Content descriptors / operational classification','Use HEAD for metadata and tagging APIs for tags; design lifecycle and IAM conditions around supported tags.','Tags are not a general purpose search index.'],
+  ['Presigned URL / access point','Bounded request delegation / application-specific access path','Scope method, key and expiry; use access-point and bucket policies together.','A VPC-origin access point still requires an S3 endpoint and authorization.'],
+  ['MFA Delete / server access logs','Destructive-version control / best-effort request evidence','Keep versioning recovery and same-Region logging destination separate.','Sending server access logs to the source bucket creates a logging loop.'],
+  ['S3 Object Lambda','Read-time response transformation','Know the existing architecture, then check eligibility and alternatives for a new workload.','Since November 2025, AWS limits availability to existing customers and select partners.']
+ ],
  '04':[
   ['ALB / NLB / GWLB','Layer 7 HTTP / transport flows / appliance insertion','Choose from protocol and request-routing or inspection needs.','NLB does not evaluate ALB host/path listener rules.'],
   ['Listener / rule / target group','Entry protocol / request decision / healthy destinations','Set rule priority, target group health checks and a default action.','A healthy target still needs reachable security-group and network paths.'],
