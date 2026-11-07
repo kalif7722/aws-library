@@ -42,7 +42,8 @@ const rows:Record<string,Row[]>={
   ['Gateway / interface endpoint / NAT','Prefix-list route / private ENI and DNS / IPv4 internet egress','Check route-table association, endpoint DNS and security group, or NAT public-subnet path.','An endpoint is service-specific; NAT does not provide private endpoint access.'],
   ['VPC peering / VPN / Direct Connect','VPC link / encrypted internet tunnel / private circuit','Choose for topology and transport, then configure both directions of routing.','Peering is nontransitive; Direct Connect is not encrypted by default.'],
   ['Flow Logs / application logs','IP flow metadata / request or code detail','Use both to debug SDK timeouts and rejected traffic.','Flow Logs do not include application payloads.'],
-  ['EC2 local storage / EFS / RDS','Instance-local files / shared uploads / relational data','Keep replaceable web nodes stateless and store shared state appropriately.','An EFS mount target is per AZ; RDS Multi-AZ is for database availability.']
+  ['EC2 local storage / EFS / RDS','Instance-local files / shared uploads / relational data','Keep replaceable web nodes stateless and store shared state appropriately.','An EFS mount target is per AZ; RDS Multi-AZ is for database availability.'],
+  ['LAMP stack on EC2','Linux and Apache web server / PHP application / MySQL in RDS','Store local OS and software files on an EC2 EBS root volume; use EFS for shared WordPress uploads and optional ElastiCache for cache or sessions.','Per-instance EBS volumes are not a shared upload store for scaled web nodes.']
  ],
  '04':[
   ['ALB / NLB / GWLB','Layer 7 HTTP / transport flows / appliance insertion','Choose from protocol and request-routing or inspection needs.','NLB does not evaluate ALB host/path listener rules.'],
