@@ -193,6 +193,13 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   const [results, setResults] = useState<Record<string, VideoResult>>({});
   const [selected, setSelected] = useState("01");
   const [checking, setChecking] = useState(true);
+  const [autoNext,setAutoNext]=useState(false);
+  const [autoStartPart,setAutoStartPart]=useState<string|null>(null);
+  const [notice,setNotice]=useState<string|null>(null);
+  useEffect(()=>{
+    try{setAutoNext(localStorage.getItem(AUTO_NEXT_KEY)==="true");}
+    catch{/* Site storage may be disabled */}
+  },[]);
   const [progressDone,setProgressDone]=useState<string[]>([]);
   useEffect(()=>{
     const refreshProgress=()=>setProgressDone(readCompleted("aip"));
@@ -205,14 +212,15 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     };
   },[]);
   const playerAnchor = useRef<HTMLDivElement>(null);
-  const parts=moduleId==="02"?PARTS_02:PARTS_01;
+  const parts=AIP_VIDEO_PARTS[moduleId]??[];
+  const videoStats=getAipVideoProgress(progressDone,moduleId);
   const moduleUrl=`${COURSE_URL}/visual/module-${moduleId}`;
   const readyParts = parts.filter(part => results[part.id]?.status === "ready");
   const active = parts.find(p => p.id === selected) ?? parts[0];
 
   const refresh = useCallback(async (signal?: AbortSignal) => {
     setChecking(true);
-    const ids = moduleId === "00" ? ["00"] : (moduleId==="02"?PARTS_02:PARTS_01).map(p => p.id);
+    const ids = (AIP_VIDEO_PARTS[moduleId]??[]).map(p=>p.id);
     const responsePairs = await Promise.all(ids.map(async id => {
       const endpoint = moduleId === "00" ? "/api/aip-video?module=00" : `/api/aip-video?module=${moduleId}&part=${id}`;
       try {
@@ -229,22 +237,44 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
 
   useEffect(() => {
     const ctrl = new AbortController();
+    setSelected("01");
     if (moduleId === "01" || moduleId === "02") {
       const current = new URLSearchParams(window.location.search).get("videoPart");
-      const available=moduleId==="02"?PARTS_02:PARTS_01;
+      const available=AIP_VIDEO_PARTS[moduleId]??[];
       if (available.some(p => p.id === current)) setSelected(current!);
     }
     void refresh(ctrl.signal);
     return () => ctrl.abort();
   }, [moduleId, refresh]);
 
-  const choose = (part: string) => {
+  const choose = (part: string, startPlaying = false) => {
     setSelected(part);
+    setAutoStartPart(startPlaying ? part : null);
+    setNotice(null);
     const url = new URL(window.location.href);
     url.searchParams.set("videoPart", part);
     url.hash = "video-lectures";
     window.history.replaceState(null, "", url.toString());
     playerAnchor.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const onVideoEnded = () => {
+    if(!autoNext || moduleId==="00")return;
+    const index=parts.findIndex(part=>part.id===selected);
+    const following=parts[index+1];
+    if(!following){
+      setNotice("You've finished the available lectures in this module.");
+    }else if(results[following.id]?.status==="ready"){
+      choose(following.id,true);
+    }else{
+      setNotice("The next lecture is not yet available. You can continue with the slides below.");
+    }
+  };
+
+  const changeAutoNext=(value:boolean)=>{
+    setAutoNext(value);
+    try{localStorage.setItem(AUTO_NEXT_KEY,String(value));}
+    catch{/* Optional browser preference */}
   };
 
   const selectedIndex = readyParts.findIndex(p => p.id === selected);
@@ -290,6 +320,9 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-action:hover:not(:disabled){background:#d8edff}
       .av-actions{margin-top:18px;padding-top:17px;border-top:1px solid #dce8f4;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
       .av-actions span{flex:1}
+      .av-auto-toggle{display:flex;gap:9px;align-items:center;cursor:pointer;font-size:12px;color:#284f71;font-weight:750;white-space:nowrap}
+      .av-auto-toggle input{width:16px;height:16px;accent-color:#1765ad}
+      .av-autoplay-notice{font-size:12px;color:#91551b;background:#fff7e9;padding:10px 12px;border-radius:9px}
       .av-empty{border:1px dashed #bfd2e6;background:#f6f9fc;padding:24px;border-radius:12px;color:#506883;font-size:13px;line-height:1.7}
       .av-empty a{color:#1466b2;text-decoration:underline}
       .av-chapters{border:1px solid #e0e9f3;border-radius:12px;margin-top:15px;overflow:hidden}
@@ -320,7 +353,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       <div className="av-actions"><a href={MODULE_01+"#video-lectures"}>Continue to Module 01 →</a></div>
     </div> : <div className="av-layout">
       <nav className="av-list" aria-label="Choose video part">
-        <div className="av-list-title">COURSE PLAYLIST · {readyParts.length}/{parts.length} AVAILABLE</div>
+        <div className="av-list-title">PLAYLIST · {readyParts.length}/{parts.length} AVAILABLE · {videoStats.completed} COMPLETED</div>
         {parts.map(p => {
           const ready = results[p.id]?.status === "ready";
           return <button key={p.id} type="button" className="av-lesson" aria-current={selected === p.id ? "true" : undefined} onClick={() => choose(p.id)}>
@@ -328,7 +361,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
             <span className="av-copy">
               <b>{p.title}</b>
               <small>{p.subtitle} · Slides {p.start}–{p.end}</small>
-              <span className={ready ? "av-status" : "av-status pending"}>{ready ? (progressDone.includes(`aip-video-${moduleId}-${p.id}`) ? "✓ Watched" : `▶ Watch · ${fmt((results[p.id] as Ready).durationSeconds ?? 0)}`) : "In preparation"}</span>
+              <span className={ready ? "av-status" : "av-status pending"}>{ready ? (videoStats.completedIds.includes(`aip-video-${moduleId}-${p.id}`) ? "✓ Completed" : videoStats.seenIds.includes(`aip-video-${moduleId}-${p.id}`) ? `◐ In progress · ${fmt((results[p.id] as Ready).durationSeconds ?? 0)}` : `▶ Watch · ${fmt((results[p.id] as Ready).durationSeconds ?? 0)}`) : "In preparation"}</span>
             </span>
           </button>;
         })}
@@ -345,14 +378,19 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </span>
         </div>
         {results[active.id]?.status === "ready"
-          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id}/>
+          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id} autoStart={autoStartPart===active.id} onFinished={onVideoEnded}/>
           : <div className="av-empty" role="status">{checking ? "Checking lecture availability…" : "This topic's video is in production. Its source slides are still available for study."}</div>}
         <div className="av-slidebar">
           <span>Want to inspect the actual architecture diagrams?</span>
           <a href={`${moduleUrl}?slide=${active.start}&videoPart=${active.id}#visual-lessons`}>Open slide {active.start} in full screen ↗</a>
           <a href="#visual-lessons">All slides ↓</a>
         </div>
+        {notice && <p className="av-autoplay-notice" role="status">{notice}</p>}
         <div className="av-actions">
+          <label className="av-auto-toggle">
+            <input type="checkbox" checked={autoNext} onChange={event=>changeAutoNext(event.currentTarget.checked)}/>
+            Auto-play next video
+          </label>
           <button type="button" className="av-action" disabled={!prev} onClick={() => prev && choose(prev.id)}>← Previous video</button>
           <button type="button" className="av-action" disabled={!next} onClick={() => next && choose(next.id)}>Next video →</button>
           <span/>
