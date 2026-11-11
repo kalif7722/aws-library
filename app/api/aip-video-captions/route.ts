@@ -1,14 +1,18 @@
 import { NextRequest } from "next/server";
 
-const CAPTIONS_URL =
-  "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip/module-00/aip-module-00.vtt";
+const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip";
+const CAPTIONS: Record<string, string> = {
+  "00": "module-00/aip-module-00.vtt",
+  "01-02": "module-01/part-02/aip-module-01-part-02.vtt",
+};
 
 export async function GET(request: NextRequest) {
-  if (request.nextUrl.searchParams.get("module") !== "00") {
-    return new Response("Not found", { status: 404 });
-  }
+  const module = request.nextUrl.searchParams.get("module") ?? "";
+  const part = request.nextUrl.searchParams.get("part");
+  const key = part ? `${module}-${part}` : module;
+  if (!CAPTIONS[key]) return new Response("Not found", { status: 404 });
   try {
-    const result = await fetch(CAPTIONS_URL, {
+    const result = await fetch(`${ROOT}/${CAPTIONS[key]}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(6500),
     });
