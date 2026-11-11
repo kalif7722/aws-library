@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: aip-module-00-lecture-preview
@@ -57,6 +57,7 @@ jobs:
           retention-days: 30
 
       - name: Upload review-only preview to Cloudflare R2
+        id: media
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -67,6 +68,7 @@ jobs:
         run: |
           if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
             echo "Skipping R2 preview upload: repository R2 secrets are not configured."
+            echo "published=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           PREFIX="aws-course-videos/previews/aip/module-00"
@@ -84,4 +86,40 @@ jobs:
             --endpoint-url "$R2_ENDPOINT" --content-type "text/plain; charset=utf-8" --no-progress
           aws s3 cp video-output/aip-module-00-manifest.json "s3://$R2_BUCKET/$PREFIX/aip-module-00-manifest.json" \
             --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress
-          echo "Uploaded draft media for manual QA; course navigation has not been changed."
+          echo "published=true" >> "$GITHUB_OUTPUT"
+          echo "Uploaded revised media; website player uses the embedded script revision gate."
+
+      - name: Record successful video upload for verification
+        if: steps.media.outputs.published == 'true'
+        run: |
+          mkdir -p content/video-releases
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          source = json.loads(Path("video-output/aip-module-00-manifest.json").read_text())
+          if source.get("script_revision") != "2026-11-11-visual-aligned-v2":
+              raise SystemExit("Refusing to publish an outdated narration revision.")
+          if len(source.get("scenes", [])) != 12:
+              raise SystemExit("Refusing to publish an incomplete course introduction.")
+          published = {
+              "status": "uploaded_pending_human_review",
+              "script_revision": source["script_revision"],
+              "created_utc": source["created_utc"],
+              "duration_seconds": source["duration_seconds"],
+              "slides": 12,
+              "video_url": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip/module-00/aip-module-00.mp4",
+              "course_page": "https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional/visual/module-00#video-lectures"
+          }
+          Path("content/video-releases/aip-module-00.json").write_text(
+              json.dumps(published, indent=2) + "\\n", encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/video-releases/aip-module-00.json
+          if git diff --cached --quiet; then
+            echo "Video release record unchanged."
+          else
+            git commit -m "Record uploaded AIP intro lecture revision"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
