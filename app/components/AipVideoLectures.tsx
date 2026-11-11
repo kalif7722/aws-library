@@ -33,10 +33,11 @@ function fmt(seconds: number) {
   return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
 }
 
-function VideoPlayer({ item, storageKey, slideBase }: {
+function VideoPlayer({ item, storageKey, slideBase, partId }: {
   item: Ready;
   storageKey: string;
   slideBase: string;
+  partId?: string;
 }) {
   const player = useRef<HTMLVideoElement>(null);
   const [resume, setResume] = useState(0);
@@ -102,7 +103,7 @@ function VideoPlayer({ item, storageKey, slideBase }: {
             <button type="button" onClick={() => jump(ch.startSeconds)} aria-label={`Play explanation for slide ${ch.slide}`}>
               <span>{fmt(ch.startSeconds)}</span> {String(ch.slide).padStart(2, "0")} · {ch.title}
             </button>
-            <a href={`${COURSE_URL}/visual/module-${slideBase.includes("module-00") ? "00" : "01"}?slide=${ch.slide}#visual-lessons`}
+            <a href={`${COURSE_URL}/visual/module-${slideBase.includes("module-00") ? "00" : "01"}?slide=${ch.slide}${partId ? `&videoPart=${partId}` : ""}#visual-lessons`}
               title={`Open full-size slide ${ch.slide}`} aria-label={`Open slide ${ch.slide} in viewer`}>Slide ↗</a>
           </div>
         ))}
@@ -253,11 +254,11 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </span>
         </div>
         {results[active.id]?.status === "ready"
-          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-01-${active.id}-progress`} slideBase={`module-01/slide-${String(active.start).padStart(2,"0")}.webp`}/>
+          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-01-${active.id}-progress`} slideBase={`module-01/slide-${String(active.start).padStart(2,"0")}.webp`} partId={active.id}/>
           : <div className="av-empty" role="status">{checking ? "Checking lecture availability…" : "This topic's video is in production. Its source slides are still available for study."}</div>}
         <div className="av-slidebar">
           <span>Want to inspect the actual architecture diagrams?</span>
-          <a href={`${MODULE_01}?slide=${active.start}#visual-lessons`}>Open slide {active.start} in full screen ↗</a>
+          <a href={`${MODULE_01}?slide=${active.start}&videoPart=${active.id}#visual-lessons`}>Open slide {active.start} in full screen ↗</a>
           <a href="#visual-lessons">All slides ↓</a>
         </div>
         <div className="av-actions">
