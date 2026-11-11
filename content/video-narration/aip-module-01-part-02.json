@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "01",
+  "part_id": "02",
+  "module_title": "Generative AI Fundamentals and Amazon Bedrock",
+  "part_title": "Fine-Tuning, Continued Pre-Training and LoRA",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m01-p02-visual-aligned-v1",
+  "review_basis": "Actual GitHub Actions JPEG previews of R2 slides 10, 11, 12, and 13 visually inspected on 2026-11-11",
+  "scenes": [
+    {
+      "slide": 10,
+      "title": "Fine-Tuning: Adapt an Existing Model",
+      "focus": "Labeled S3 examples → fine-tuning job → custom model → held-out evaluation → deploy and invoke; compare prompting and RAG",
+      "narration": "We are now entering model customization, and this first slide shows the complete fine-tuning process. Start at the far left with the Amazon S3 bucket. Here we store labeled training examples, such as customer reviews paired with sentiment labels, or writing examples paired with the desired response style. Follow the orange arrows: we submit those examples to a fine-tuning job using a supported base model. The training process updates model parameters to create a custom model version. But notice that training is not the final step. The next icon says test on held-out prompts, meaning prompts the model did not see during training. We need to measure whether the result is genuinely better, whether accuracy is acceptable, and whether the new behavior is consistent. Only after evaluation would we deploy and invoke that customized model in the application. Now look at the comparison panel along the bottom. Fine-tuning changes model weights and is useful when we need repeatable domain-specific behavior. Prompting provides instructions during inference without changing weights. And RAG retrieves external knowledge and adds it to the prompt, again without changing the model's weights. Here's the decision to remember: if a company needs today's policy answer, retrieving the current policy is often more suitable than training that policy into a model. If it needs consistently formatted classification output and has quality examples, fine-tuning may be worth considering. Always weigh improvement against training, testing, and operational cost."
+    },
+    {
+      "slide": 11,
+      "title": "Fine-Tune a Bedrock Custom Model",
+      "focus": "S3 prompt-completion pairs → supported model customization job → custom model → evaluation and invocation; connectivity/cost/model availability caveats",
+      "narration": "Let's zoom into how the previous process is represented with Amazon Bedrock. The left panel shows two kinds of training examples in Amazon S3. At the top, a text prompt asks the model to summarize an article, and the paired completion contains the desired summary. Below that is an image-description example, with a picture prompt paired with a detailed description. These are illustrations of labeled prompt-completion data; the formats and modalities actually supported depend on the chosen model. Now follow the large orange arrow into the gear icon. That's the customization job, where Bedrock adapts a supported base model using the training dataset. The output is the custom model shown in the centre-right. From there, we have two essential activities. Evaluation measures its performance against relevant test cases, and invocation integrates the resulting model into our application, using the inference options that apply to that model. Don't overlook the three notes along the bottom. First, sensitive data requires carefully designed security and connectivity; use private connectivity where the service and operation support it, along with encryption and access controls. Second, training cost depends on data volume, base model, and configuration, so compare the expense with the benefit. Third, customization availability varies by model and Region. For the exam, when you see a requirement for custom behavior, first check that the model supports the intended customization technique. Bedrock provides managed building blocks, but the developer still owns data quality, evaluation, and the decision to deploy."
+    },
+    {
+      "slide": 12,
+      "title": "Continued Pre-Training",
+      "focus": "Unlabeled enterprise documents → continued pre-training → adapted domain model; comparison with supervised fine-tuning and fresh-facts retrieval",
+      "narration": "This slide introduces a different way to adapt a model: continued pre-training. Look at the three main icons along the top. We begin with a collection of enterprise documents that are not labeled as question-and-answer pairs. An eligible foundation model is then trained further on that domain text. The model on the right becomes more familiar with the vocabulary, writing patterns, and terminology used in the organization. Think of a company with years of specialized engineering reports. Continued pre-training may help a supported model better handle that domain's language. Now look at the comparison at the bottom, because this is the part students often confuse. Supervised fine-tuning uses labeled examples: a particular input and the desired output. It teaches the model to perform tasks or respond in a specific style. Continued pre-training, by contrast, uses unlabeled text to adapt the model's underlying language knowledge. Neither is a live document search. Finally, read the orange reminder on the right: if the business facts change frequently, like prices, policies, or current inventory, the model should generally retrieve the latest information at runtime rather than rely on facts embedded during training. This is the bridge to the next topic, retrieval-augmented generation. In a scenario question, identify whether the requirement is stable domain language, predictable task behavior, or fresh facts before choosing a technique."
+    },
+    {
+      "slide": 13,
+      "title": "Low-Rank Adaptation (LoRA)",
+      "focus": "Frozen base weights + small trainable low-rank matrices A and B → adapted inference behavior; reduced training and storage footprint",
+      "narration": "Our final slide in this part is Low-Rank Adaptation, usually called LoRA. The main illustration tells the story. On the left, the large blue block represents the weights of a pre-trained foundation model. Notice the snowflake symbol. Those original weights stay frozen during this kind of adaptation. In the middle are two much smaller purple matrices, labeled A and B. Instead of updating every parameter in the original model, LoRA trains a compact, low-rank set of updates. The plus sign and multiplication sign illustrate how those updates contribute to the effective model behavior. Follow the white arrow to the right. During inference, the base model's weights are combined with the learned low-rank updates, producing task-adapted behavior. Why is that useful? The bottom left answers the first part: training and storing only a smaller set of parameters can reduce memory, compute, and storage requirements compared with full-model fine-tuning. The bottom right explains the outcome: we can customize a supported model for a domain or task more efficiently. One important clarification: LoRA is a parameter-efficient training technique, not a separate retrieval system. It doesn't automatically provide up-to-date external facts, and support depends on the model and platform. To summarize this video, we've compared supervised fine-tuning, continued pre-training, and LoRA. In the next part, we'll switch from changing models to bringing relevant documents into a model's prompt with RAG."
+    }
+  ]
+}
