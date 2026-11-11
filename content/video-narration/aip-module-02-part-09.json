@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 02 site-ready slide visuals 57–70 inspected from 2048×1152 WebP archive via contact sheets (slides 53–60 and 61–70). Renderer must verify every live R2 slide before publishing.",
+  "part_id": "09",
+  "part_title": "OpenSearch Performance, Serverless and Vector Search",
+  "script_revision": "2026-11-11-m02-p09-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 57,
+      "title": "Shard Pressure and Performance",
+      "narration": "We begin by revisiting an OpenSearch performance problem. Look at the Before panel on the left: three data nodes have very uneven shard counts, and the first node is already at eighty-five percent JVM memory. That is an operational warning, not just an untidy diagram. Too many shards on one node increase metadata, heap, and scheduling overhead, while the other two nodes still have spare capacity. Now follow the large arrow into the After panel. Shards are more evenly distributed across the nodes, and the memory pressure falls closer to one third on each node in this example. The boxes on the right show three actions: inspect shard allocation, right-size shards for your workload, and remove unused indexes where retention rules allow it. The bottom note reminds us to monitor both JVM memory and disk utilization over time. The main lesson is that improving shard layout can be more effective than simply adding more instances. A production remedy should be chosen from actual cluster metrics, not a fixed universal shard-count rule."
+    },
+    {
+      "slide": 58,
+      "title": "Amazon OpenSearch Serverless",
+      "narration": "Now we move from provisioned OpenSearch domains to Amazon OpenSearch Serverless. Start with the input sources on the left: application logs, metrics, clickstream events, and operational records. These are indexed into a serverless collection in the centre. Notice the two capacity blocks inside that collection: indexing capacity and search capacity are represented separately using OpenSearch Compute Units, or OCUs. Capacity can scale according to demand, without an administrator manually managing individual data nodes for a domain. On the right, there are three use-case cards: full-text search, time-series analytics, and vector search. Each has different indexing and query patterns, so collection configuration matters. The security panel underneath shows encryption and data access policies; serverless does not mean unsecured or automatically accessible. Finally, read the warning at the bottom. Automatic scaling is not the same as zero cost when idle. Evaluate collection type, baseline capacity, policies, and ongoing consumption when estimating the cost of this architecture."
+    },
+    {
+      "slide": 59,
+      "title": "OpenSearch as a Vector Store",
+      "narration": "This slide illustrates the full retrieval-augmented generation path. In the first numbered section, source documents are collected and split into meaningful chunks. An embedding model converts each chunk into a vector, and OpenSearch stores those vectors together with the original text and useful metadata. Focus on the fields in the index drawing: vector embedding, chunk text, metadata, and access information can all be important. Now look at the second section. A user asks a question; the application generates a compatible query embedding, searches for semantically related chunks, and passes the retrieved context to a model in Amazon Bedrock. The model produces an answer grounded in that retrieved material. The bottom section introduces hybrid search, which combines keyword and vector results for workloads that benefit from both exact terms and semantic meaning. Finally, the right-hand relevance checklist reminds us that chunk boundaries, metadata filters, and evaluation determine whether the retrieved evidence is genuinely useful. A vector store is one part of RAG, not the complete answering system."
+    },
+    {
+      "slide": 60,
+      "title": "Vector Search Engines and Methods",
+      "narration": "There are several ways to search a vector index, and this comparison is about performance trade-offs. The left panel shows exact search, also called brute force. It compares the query vector against the full candidate set. That can deliver high recall but becomes expensive as the collection grows. The middle panel shows HNSW, a graph-based approximate-nearest-neighbour method. It navigates connections between vectors rather than comparing every point, often improving latency for large indexes. The right panel shows IVF buckets, where vectors are partitioned into clusters and the search probes selected buckets. Look at the trade-off table at the bottom. Exact search favours accuracy but can be slower and more resource intensive; approximate methods favour speed and scale with possible recall loss. The engine examples include Lucene and Faiss. Supported engines, features and algorithm settings vary by deployment mode and version, so treat these as design concepts rather than interchangeable switches. Tune against real queries and measure relevance, latency and resource usage together."
+    },
+    {
+      "slide": 61,
+      "title": "Vector Compression Trade-Off",
+      "narration": "Here the focus is vector storage efficiency. At the top left, the original embedding uses float thirty-two values: each dimension typically takes four bytes. Follow the orange arrow to lower-precision quantization, then the purple arrow to a binary representation. Fewer bits per dimension can reduce memory and index storage substantially. But look carefully at the three bars along the bottom of the example: as the footprint decreases, recall can also fall. That matters because a retrieval system that is cheap but repeatedly misses the correct supporting passage is not useful to students or employees. The large blue panel gives the rule for this slide: evaluate on real queries before selecting a representation. Quantization and binary codes are not universally interchangeable with every embedding, similarity metric or search engine. To decide responsibly, compare nearest-neighbour recall, answer quality, indexing cost, and query latency for the actual workload, rather than choosing the smallest vector solely from its storage estimate."
+    },
+    {
+      "slide": 62,
+      "title": "Vector Sharding and Multi-Index Design",
+      "narration": "This diagram distinguishes two levels of organization. On the left, vectors are distributed across shards so no single node must store or search the entire index. But spreading data also creates query fan-out and coordination overhead, so excessive shards can hurt performance. On the right, the system separates different kinds of embeddings into different indexes: product embeddings, support-text embeddings and code embeddings. Follow the user's question, How do I reset my password? A query router sends it toward the support index rather than searching unrelated product and code vectors first. The results from matching shards are merged into a ranked response. This is a useful architectural pattern when corpora have distinct access rules, models, dimensions or query needs. Notice the warning along the bottom: there is no fixed recommendation for shard size that works everywhere. Choose indexes, routing and shard configuration based on data volume, query frequency, dimensions, permissions and measured performance."
+    },
+    {
+      "slide": 63,
+      "title": "Hierarchical Search Indices",
+      "narration": "The title says hierarchical search indices, but notice the subtitle: this is an architecture pattern, not a built-in OpenSearch feature. On the left, documents are separated into a support corpus and an engineering corpus. Each corpus has its own vector space and detail index. Between these sources and the user is a summary index containing short descriptions and pointers to the more specialized indexes. Follow the three numbered search steps on the right. First, a question about resetting a password searches the summary index to identify the likely topic. Second, the routing step follows the pointer to the support detail index. Third, the application returns the full relevant support passage and associated context. The advantage is that an initial lightweight search narrows where the detailed search will run. But the application must build and maintain the routing logic, pointer metadata and permissions. Don't assume that OpenSearch automatically creates this hierarchy. This is a useful pattern for large mixed-knowledge collections when one flat index would cause unnecessary search and irrelevant results."
+    },
+    {
+      "slide": 64,
+      "title": "Neural Search Pipelines",
+      "narration": "We finish the OpenSearch vector section with two alternative embedding architectures. Look at the upper row. An OpenSearch neural search pipeline can invoke a configured embedding model during document ingestion, convert source text into a vector, and index it. During query processing, a compatible model transforms the user's question into a query vector for vector search. This can simplify application code when the supported plugin, model connector and permissions are configured correctly. Now move to the lower row. The application can instead manage embeddings itself, invoke its chosen model, and send the resulting vectors directly to OpenSearch. At query time the application generates the query vector and submits it for similarity search. These approaches perform similar retrieval functions, but place integration, monitoring and model management in different layers. Whichever design you choose, keep document and query embeddings compatible, enforce service permissions, and evaluate retrieval quality. The next lesson moves to a separate storage option: Amazon S3 Vectors."
+    }
+  ]
+}
