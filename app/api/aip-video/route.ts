@@ -47,7 +47,17 @@ export async function GET(request: NextRequest) {
       signal: AbortSignal.timeout(6500),
     });
     await videoCheck.body?.cancel();
-    if (!videoCheck.ok) return response("processing");
+    if (!videoCheck.ok) {
+      // R2 gateways may deny HEAD while serving the same object via GET.
+      const rangeCheck = await fetch(mp4Url, {
+        method: "GET",
+        headers: { Range: "bytes=0-0" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(6500),
+      });
+      await rangeCheck.body?.cancel();
+      if (!rangeCheck.ok) return response("processing");
+    }
 
     return response("ready", {
       module: "00",
