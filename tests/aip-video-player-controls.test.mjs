@@ -43,3 +43,14 @@ test("fullscreen lecture navigation and saved positions remain wired",()=>{
   assert.match(player,/watch\.onSeeked\(destination\)/);
   assert.match(player,/onLoadedMetadata=\{event=>/);
 });
+
+
+test("playback speed preference is saved and applied to every new video",()=>{
+  assert.match(player,/const PLAYBACK_SPEED_KEY = "aip-video-playback-speed:v1"/);
+  assert.match(player,/\[0\.75,1,1\.25,1\.5,1\.75,2\] as const/);
+  assert.match(player,/aria-label="Video playback speed"/);
+  assert.match(player,/localStorage\.setItem\(PLAYBACK_SPEED_KEY,String\(value\)\)/);
+  assert.match(player,/video\.playbackRate=rate/);
+  assert.match(player,/if\(player\.current\)player\.current\.playbackRate=value/);
+  assert.match(player,/\.av-main:fullscreen \.av-custom-controls/);
+});
