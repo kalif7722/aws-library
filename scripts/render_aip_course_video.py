@@ -20,6 +20,7 @@ import requests
 from PIL import Image
 
 from aip_tts_reliability import synthesize_narration
+from aip_media_tools import ffmpeg_exe, media_seconds
 
 
 def run(*args: str) -> None:
@@ -30,12 +31,7 @@ def run(*args: str) -> None:
 
 
 def probe_seconds(path: Path) -> float:
-    output = subprocess.check_output(
-        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
-         "-of", "default=noprint_wrappers=1:nokey=1", str(path)], text=True
-    )
-    return float(output.strip())
-
+    return media_seconds(path)
 
 def download_slide(session: requests.Session, root: str, module: str,
                    number: int, folder: Path) -> tuple[Path, str]:
@@ -96,7 +92,7 @@ def render_clip(image: Path, audio: Path, output: Path, duration: float,
         f"setsar=1,fps={fps},format=yuv420p"
     )
     run(
-        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
         "-loop", "1", "-framerate", str(fps), "-i", str(image),
         "-i", str(audio),
         "-vf", video_filter, "-af", "apad=pad_dur=1.5",
@@ -171,7 +167,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         encoding="utf-8",
     )
     concatenated = scratch / "combined.mp4"
-    run("ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+    run(ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
         "-f", "concat", "-safe", "0", "-i", str(list_path),
         "-c", "copy", str(concatenated))
 
@@ -186,7 +182,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         ]
     chapter_path.write_text("\n".join(chapter_rows) + "\n", encoding="utf-8")
     mp4 = destination / f"{output_prefix}.mp4"
-    run("ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+    run(ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
         "-i", str(concatenated), "-f", "ffmetadata", "-i", str(chapter_path),
         "-map", "0:v:0", "-map", "0:a:0", "-map_metadata", "1",
         "-map_chapters", "1", "-c", "copy", "-movflags", "+faststart", str(mp4))
