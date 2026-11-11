@@ -47,6 +47,15 @@
 - **Release distinction:** Committed scripts and render jobs are **not** confirmed MP4 uploads. The website marks each part available only after an uploaded video and matching manifest pass the player validation.
 - **Watch-list caveat:** Module 02 Part 02 previously lacked a confirmed GitHub video release record; the R2 reconciliation workflow covers it without rerendering if the upload already exists.
 
+## Playback continuity and video progress — 11 November 2026
+
+- **Resume each video:** Its playback time is saved under the existing per-video browser storage key. When the same lecture is opened again, the HTML5 player automatically seeks to the saved position. Pausing, changing lectures, or closing the tab also saves the latest time; after a normal end it resets to the beginning.
+- **Video seen vs complete:** A part is **seen** once it accumulates 15 seconds of actual foreground playback or any of its slides receives study credit. It is **complete** after 85% of unique foreground video playback, or after studying all of its mapped slides. Seeking to the end does not count as watching. Previously saved watched-seconds arrays are checked when the player opens.
+- **Progress display:** Both course overview and module details show **videos seen / total and videos completed**, while the playlist shows In progress versus Completed. Progress uses the existing `study-progress:v1:aip` record and stays browser-local; it is not synchronized between devices.
+- **Automatic next video:** An optional, browser-persisted **Auto-play next video** checkbox moves to the immediately following published lecture when playback reaches the end. It does not skip an unavailable part, or leave the current module. Browser autoplay restrictions may require the user to press Play; the player shows a clear notice.
+- **Validation cases:** Watch 20 seconds and verify the videos-seen count increments; pause halfway and reload to verify automatic seek; finish at least 85% to check Completed; study every mapped slide to complete the corresponding part; seek directly to the end to confirm no false completion; enable Auto-play next and finish a part to verify next-part selection. Repeat on Modules 01 and 02.
+- **Scope:** Module 00–02 have published video mappings. Newly added modules must extend the shared `aipVideoCatalog.ts` first so that dashboards and playlist count the same parts.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
