@@ -15,6 +15,8 @@ from pathlib import Path
 
 import edge_tts
 
+from aip_media_tools import ffmpeg_exe, media_seconds
+
 MAX_CHARS = 420
 MAX_ATTEMPTS = 6
 
@@ -63,19 +65,9 @@ def chunks_for(text: str, max_chars: int = MAX_CHARS) -> list[str]:
 
 
 def valid_mp3(path: Path, min_seconds: float = 0.3) -> bool:
-    if not path.is_file() or path.stat().st_size < 1500:
-        return False
     try:
-        result = subprocess.run(
-            [
-                "ffprobe", "-v", "error",
-                "-show_entries", "format=duration",
-                "-of", "default=noprint_wrappers=1:nokey=1", str(path),
-            ],
-            capture_output=True, text=True, timeout=15, check=False,
-        )
-        return result.returncode == 0 and float(result.stdout.strip()) >= min_seconds
-    except (ValueError, OSError, subprocess.TimeoutExpired):
+        return media_seconds(path) >= min_seconds
+    except (ValueError, OSError):
         return False
 
 
@@ -152,7 +144,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
         candidate = target.with_name(f"{target.stem}-joined.mp3")
         result = subprocess.run(
             [
-                "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
                 "-f", "concat", "-safe", "0", "-i", str(concat_list),
                 "-c:a", "libmp3lame", "-b:a", "160k", str(candidate),
             ],
