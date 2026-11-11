@@ -161,6 +161,30 @@ const CONFIG: Record<string, {
     firstTitle: "NoSQL Data Modeling",
     title: "DynamoDB Data Modeling, Capacity and Consistency",
   },
+  "02-13": {
+    prefix: "module-02/part-13/aip-module-02-part-13",
+    revision: "2026-11-11-m02-p13-visual-aligned-v1",
+    firstSlide: 91,
+    count: 10,
+    firstTitle: "Read Capacity Units",
+    title: "DynamoDB Read Capacity, CRUD, Query and Batch Operations",
+  },
+  "02-14": {
+    prefix: "module-02/part-14/aip-module-02-part-14",
+    revision: "2026-11-11-m02-p14-visual-aligned-v1",
+    firstSlide: 101,
+    count: 10,
+    firstTitle: "PartiQL for DynamoDB",
+    title: "DynamoDB Integrations, DAX, TTL and Vector Index Freshness",
+  },
+  "02-15": {
+    prefix: "module-02/part-15/aip-module-02-part-15",
+    revision: "2026-11-11-m02-p15-visual-aligned-v1",
+    firstSlide: 111,
+    count: 10,
+    firstTitle: "Amazon S3 Storage Classes",
+    title: "Amazon S3 Storage Classes, Intelligent-Tiering and Lifecycle",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
