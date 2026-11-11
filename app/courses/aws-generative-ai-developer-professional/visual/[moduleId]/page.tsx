@@ -1,6 +1,8 @@
 import Link from "next/link";
 import ModuleVisualGallery from "../../../../components/ModuleVisualGallery";
 import AipVideoLectures from "../../../../components/AipVideoLectures";
+import {ModuleStudyProgress} from "../../../../components/StudyProgress";
+import "../../../../components/CourseStudyTools.css";
 import GenAITroubleshootingModule from "../../../../components/GenAITroubleshootingModule";
 import ExamPreparation from "../../../../components/genai-exam/ExamPreparation";
 import visualMap from "../../visual-lesson-map.json";
@@ -43,13 +45,14 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
       <h1>{title}</h1>
       <p>{desc}</p>
     </section>
-    {(id === "00" || id === "01") && <AipVideoLectures moduleId={id} />}
+    <ModuleStudyProgress course="aip" moduleId={num} totalSlides={visualMap.lessonsByModule[num as keyof typeof visualMap.lessonsByModule]?.length ?? 0}/>
+    {(id === "00" || id === "01" || id === "02" || id === "02") && <AipVideoLectures moduleId={id} />}
     <section id="visual-lessons" style={{scrollMarginTop:24}}>
-      {(id === "00" || id === "01") && <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:26}}>
+      {(id === "00" || id === "01" || id === "02") && <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:26}}>
         <h2 style={{color:"#223c60",margin:0}}>Visual lessons</h2>
         <a href="#video-lectures" style={{color:"#1766ac",fontWeight:750,fontSize:13}}>↑ Back to video lectures</a>
       </div>}
-      {!(id === "00" || id === "01") && <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>}
+      {!(id === "00" || id === "01" || id === "02") && <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>}
       <p style={{color:"#64748b"}}>Click any available visual to open the full-screen viewer. Use the left/right arrows or keyboard arrow keys to move between available visuals; press Esc to close.</p>
       <ModuleVisualGallery moduleNumber={num} imageBase={imageBase} />
     </section>
