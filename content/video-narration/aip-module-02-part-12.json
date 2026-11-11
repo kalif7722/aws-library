@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 02 site-ready 2048×1152 WebP images 71–90 inspected as individual labeled slide previews from archived source ZIPs. Renderer independently validates live R2 image at each slide.",
+  "part_id": "12",
+  "part_title": "DynamoDB Data Modeling, Capacity and Consistency",
+  "script_revision": "2026-11-11-m02-p12-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 81,
+      "title": "NoSQL Data Modeling",
+      "narration": "This slide compares two ways to represent related data. The left panel uses relational tables for customers, orders and order items. A query may join those tables to answer one customer question. The right panel shows a NoSQL, key-based model where an application retrieves an item by key and may store related information together in a denormalized document. Above the panels, data is distributed horizontally across multiple nodes rather than tied to a single server. The central concept is the access pattern: how the application will actually read and write records. In DynamoDB-style modelling, you often start with known requests and choose keys to serve those requests efficiently. There is no universal rule that NoSQL is always faster than SQL or that joins are bad; the storage model must match transactions, consistency, access patterns and scale. For generative AI applications, NoSQL is often useful for session state, interactions and fast key-value lookups, alongside separate retrieval storage."
+    },
+    {
+      "slide": 82,
+      "title": "Amazon DynamoDB",
+      "narration": "Let's introduce Amazon DynamoDB, the managed NoSQL service shown in the centre. Applications and mobile clients perform key-based operations such as PutItem and GetItem, or queries that depend on table key design. Inside the table, items are organized around partition keys and, where defined, sort keys. Look at the three Availability Zones beneath the table: the service distributes data for resilience. To the right, DynamoDB Streams records eligible table changes, which can drive Lambda functions, queue-based processing or analytics pipelines. Notice the small badges at the top for low-latency access, managed multi-AZ operation, IAM permissions and Streams. A DynamoDB table isn't a search engine for arbitrary document text. Its main strengths involve predictable key access and high-scale application data. For an AI assistant, it might hold conversation state or user preferences while a knowledge base handles document retrieval. The key design determines which requests remain efficient."
+    },
+    {
+      "slide": 83,
+      "title": "DynamoDB Basics",
+      "narration": "This diagram is a tour of DynamoDB item structure. Across the top is a table, and each row is an item with a primary key. The example shows scalar attributes, lists, map attributes and sets; individual items do not need identical non-key attributes. Read the first row: a user item can include a name, age, roles, address and tags. The next rows show different combinations of attributes, illustrating the flexible schema. Notice the bottom callout: individual item size has a service limit, so large files and documents generally belong in another store, such as S3, with references retained in DynamoDB. Flexible attributes do not mean the table is completely unconstrained. The primary key must be defined, types must be valid, and application code needs a consistent representation for data it relies on. DynamoDB is powerful when the key schema and item layout reflect the main access patterns."
+    },
+    {
+      "slide": 84,
+      "title": "Primary Key: Partition Only",
+      "narration": "This slide demonstrates the simplest DynamoDB primary key. In the Users table on the left, user_id uniquely identifies each item. The hash of that partition key determines how records distribute across the storage partitions shown on the right. Look at the user IDs and coloured arrows: different keys can route to different partitions. A partition key with many distinct values helps distribute work more evenly. But the partition key alone must be unique for every item in a simple-key table, so you cannot insert two items with the same user_id and expect them to coexist. This is a logical data model as well as a storage distribution choice. For exam questions, focus on uniqueness and how traffic concentrates on key values. Poorly chosen keys can cause uneven load even when the service scales overall capacity. This leads us to composite keys, which allow multiple related items under one partition key."
+    },
+    {
+      "slide": 85,
+      "title": "Composite Primary Key",
+      "narration": "Here the primary key contains two attributes: a partition key and a sort key. The left panel uses user_id as the partition key and game_id as the sort key. In the example table, user 42 has two game records with different game IDs, while user 57 has another. Notice the sorting arrow beside the records: items under one partition key can be organized by the sort key. Read the orange warning along the bottom. The combination of user_id and game_id must be unique, but user_id by itself can repeat across items. A common access pattern is to query all game records for one user, or select a range of sort-key values. The design works well when the application frequently retrieves related records together. Think carefully about item cardinality, partition hot spots and required query patterns before choosing which field should be the sort key."
+    },
+    {
+      "slide": 86,
+      "title": "Choose a Good Partition Key",
+      "narration": "The slide gives a visual example of why partition-key cardinality matters. On the left, movie_id has many different values. The workload heat map shows a relatively distributed access pattern across partitions. On the right, movie_language has only a few distinct values, such as English or Spanish. When many requests target the same popular language, one logical partition key can become disproportionately busy. Notice the red and blue heat map comparison. It illustrates skew rather than just a schema preference. The bottom trophy recommends movie_id for this particular workload because it spreads requests across more unique key values. In reality, the best key also depends on the application's primary read and write operations. Avoid choosing a high-cardinality attribute that makes the most important query inefficient. Good modelling balances efficient lookups with a manageable distribution of traffic."
+    },
+    {
+      "slide": 87,
+      "title": "DynamoDB Capacity Modes",
+      "narration": "DynamoDB offers two major capacity approaches. The left panel is provisioned mode, where you choose read and write capacity and can configure application auto scaling. The bar chart shows that the allocated capacity can be adjusted over time. The right panel is on-demand mode, where DynamoDB manages the capacity response to changing request traffic and charges based on request usage. The bottom callout says to choose based on workload predictability. Provisioned capacity can make sense for stable or well-understood traffic, while on-demand is useful when traffic is unpredictable or varies significantly. Neither mode means the application is immune to throttling under every possible traffic pattern; partitions and service limits still matter. Understanding the application's request sizes, consistency needs, peaks and cost profile helps you select the right mode. The following slide explains how provisioned throughput and throttling interact during bursts."
+    },
+    {
+      "slide": 88,
+      "title": "Provisioned Capacity and Throttling",
+      "narration": "Here the orange horizontal line represents provisioned capacity over time, while the blue curve is actual requests. When the request curve rises above the capacity line, the red region indicates throttled requests. The middle graph also shows that unused capacity or short burst headroom can sometimes absorb transient spikes; it is not unlimited. At the bottom, the slide separates read capacity units and write capacity units. These are charged and consumed differently depending on request size and consistency. A client receiving a throttling error should apply backoff and jitter rather than hammering the table continuously. But retries alone are not a capacity plan. When high traffic is sustained, the table may need more provisioned capacity or autoscaling adjustments. Also check whether a hot key is causing partition-specific pressure even when the overall table looks underused. This distinction is important for troubleshooting DynamoDB under production load."
+    },
+    {
+      "slide": 89,
+      "title": "Write Capacity Unit Calculation",
+      "narration": "Let's work through the two calculations shown on screen. One DynamoDB write capacity unit supports one standard write per second for an item up to one kilobyte in size. In example one, the application writes ten items per second and each item is two kilobytes. Round each item's size up to whole one-kilobyte units, then multiply by the write rate: ten times two equals twenty WCUs. In example two, the item is four and a half kilobytes, so round up to five. Six items per second multiplied by five units per item equals thirty WCUs. The purple and blue panels illustrate each calculation separately. Notice how item size can change capacity consumption even when request count decreases. This is a basic modelling technique for standard writes; transactional writes and other features can have different consumption rules. The exam often asks you to identify the item-size rounding before performing the multiplication."
+    },
+    {
+      "slide": 90,
+      "title": "Eventually Versus Strongly Consistent Reads",
+      "narration": "Our final slide compares two DynamoDB read-consistency behaviours. A write reaches the replicated data system, but replicas may not all reflect the newest value immediately. In the left orange panel, an eventually consistent read can return an older value during that brief interval, although it generally uses less read capacity. In the right blue panel, a strongly consistent read returns the latest successful write for supported table and local secondary index operations, but it consumes more read capacity. Notice the large note at the bottom: strong consistency is not supported on global secondary indexes, and global tables have their own cross-Region replication considerations. For a user-facing preference display, eventual consistency may be acceptable. For an operation that immediately needs to confirm a newly written state, a strong read may be appropriate where supported. Match consistency to correctness requirements rather than selecting the stronger mode for every request."
+    }
+  ]
+}
