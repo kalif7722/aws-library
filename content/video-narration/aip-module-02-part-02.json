@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "part_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "part_title": "Bedrock Data Automation and Multimodal Extraction",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m02-p02-visual-aligned-v1",
+  "review_basis": "Original 2048x1152 site-ready slides 08–15 inspected from Module 02 archive 01–20, validate live R2 source images at render",
+  "scenes": [
+    {
+      "slide": 8,
+      "title": "Amazon Bedrock Data Automation",
+      "narration": "In this section, we're moving from manually preparing content to a managed multimodal extraction workflow. Look at the four inputs on the left: documents, images, video, and audio. Each contains potentially useful enterprise information, but the information is not already arranged in neat rows and columns. Follow their arrows into the central Amazon Bedrock Data Automation service, or BDA. It processes supported media types and produces structured results. On the right are two kinds of output. One is JSON content with extracted fields, entities, or summaries; the other includes structured tables, key-value pairs, and other artifacts depending on the media and configuration. The bottom examples connect these capabilities to real applications: preparing content for vector storage, intelligent document processing, and searching or analysing video. The practical takeaway is that BDA helps extract and structure data; it doesn't remove the need for quality checks, authorization, or evaluation. A developer must decide which fields are needed, how the extraction will be validated, and where the outputs will be stored or indexed."
+    },
+    {
+      "slide": 9,
+      "title": "BDA Standard Output Versus Custom Output",
+      "narration": "Now compare the two large panels. The left side shows standard output: a driver's license is submitted, and BDA produces a predefined structured response that includes recognized document details. That is useful when the standard schema already meets the business requirement. On the right is custom output. The example invoice has specific fields such as vendor, invoice date, and line items. A BDA project uses a blueprint to define what it should extract and how the output should be organized. Follow the invoice through the project and blueprint into the structured JSON result on the right. Notice that a custom output is not simply a free-form prompt attached to every request; a defined project and blueprint control the expected fields. The bottom strip reminds us that API invocations use the configured project settings. When designing the pipeline, identify whether a standard output is sufficient or whether the business needs a controlled custom schema. Then validate extraction accuracy against representative source documents before using the results in financial or operational systems."
+    },
+    {
+      "slide": 10,
+      "title": "BDA Document Processing",
+      "narration": "This slide focuses on document extraction. On the left, BDA accepts common document formats shown here, including PDFs, TIFFs, images, and Word documents, subject to supported format limits. The central processing stage analyses the document content and layout. On the right are multiple output choices: JSON, Markdown, HTML, CSV, extracted tables, and extracted text where supported by the configured processing. Notice the granularity controls along the bottom. Page, document element, or word-level information can be useful for different tasks. A document-search application may need headings and sections, while an invoice-processing system may prioritize tables and fields. Also notice the optional features, such as bounding boxes and summaries, that can support downstream review. When evaluating a data extraction architecture, check what level of detail the application actually needs, and make sure the source location is preserved so results can be validated or cited. The output still needs quality assurance, especially when the scan is blurry, pages are rotated, or tables are unusually formatted."
+    },
+    {
+      "slide": 11,
+      "title": "BDA Image Processing",
+      "narration": "Let's look closely at image processing. The input on the left is a product photo containing a bag of coffee, cookies, a water bottle, and a green flask, with some visible price labels. These objects are all present in a single unstructured image. After BDA processes the image, the right-hand JSON output can describe several categories of information. The image caption gives a summary of what is visible. Text-detection results identify readable product names or labels. Logo detection can recognize visible brands where supported, while IAB categories or related classification labels characterize the overall content. The moderation section reports whether potentially harmful material was identified. Notice the example's safe status; it is a model output for this particular photo, not a guarantee for all images. For downstream retail search, extracted descriptions or labels could become indexed text. But do not assume every detected price or product association is perfectly accurate. Sensitive or business-critical fields still require validation or human review when appropriate."
+    },
+    {
+      "slide": 12,
+      "title": "BDA Video Processing",
+      "narration": "The diagram on this slide turns one long video file into a set of searchable segments. Follow the top timeline from left to right. BDA detects chapters or scene boundaries and attaches time ranges, thumbnails, and summary descriptions. Beneath the timeline are the resulting information types: an overall summary, a transcript with timing, on-screen text, detected logos, content categories, and moderation results. The structured JSON panel on the far right organizes these outputs for an application. Imagine a company with hundreds of recorded training sessions. Rather than watching every recording manually, it can use the extracted chapter summaries and transcripts to find the section that discusses a particular tool or policy. Timecodes are important because they allow the user to jump back to the source video for verification. The final accuracy will depend on video quality, audio clarity, language support, and the configured analysis features. Always retain access controls and consider whether sensitive video content should be indexed or exposed to search."
+    },
+    {
+      "slide": 13,
+      "title": "BDA Audio Processing",
+      "narration": "Here we examine audio-only information. The left side depicts a two-speaker customer-support call with separate waveforms. The call enters BDA in the middle. On the right are the principal outputs. A transcript contains the spoken words together with timestamps and speaker or channel labels. Topic extraction can identify the main issues discussed, such as an order-management or delivery request. A summary condenses the call into useful follow-up information. Finally, content moderation identifies configured categories that may need review. The lower cards distinguish audio channels from speaker identification. Channels describe separate signal sources, while speaker identification attempts to associate speech segments with different people; the supported output depends on the media and service configuration. For a support platform, these results could feed a searchable case history, sentiment workflow, or quality review process. But a transcription is not always perfect, especially with overlapping voices, noise, accents, or low-quality recordings. Consider privacy and consent before recording or analysing customer conversations."
+    },
+    {
+      "slide": 14,
+      "title": "Blueprints Define Custom Output",
+      "narration": "Let's return to custom extraction with a concrete invoice example. On the left, we have an invoice with vendor details, invoice number, date, item descriptions, quantities, and totals. The middle column introduces a BDA blueprint. This defines what the application expects to extract, such as basic invoice fields, a table of line items, grouped vendor information, and a structured address. Follow the arrow into the BDA processing component, and then look at the output JSON on the right. Each field is named and arranged for downstream software to read. A project can be configured to use multiple blueprints for different document classes, so the application doesn't have to treat every document as identical. Notice the example quantities and amounts in the output: those are extracted business values that should be checked, especially before posting an invoice to a financial system. The key distinction is between raw text extraction and the custom schema the business needs. The blueprint provides that target structure, while testing tells us whether extraction meets our quality requirements."
+    },
+    {
+      "slide": 15,
+      "title": "What Blueprints Can Do",
+      "narration": "The final slide in this video lays out a five-step blueprint workflow. At step one, classify the incoming document so the system knows what kind of source it is handling. At step two, extract the chosen fields, such as vendor name, invoice date, or total. Step three normalizes names and values—for example, turning multiple date spellings into a consistent date representation. Step four transforms or splits fields that need additional processing. In the example, a date can be broken into year, month, and day. Step five validates the resulting ranges or formats so the output is usable by the next system. Notice the large arrow from the invoice to the five stages. The important idea is that extraction alone doesn't produce reliable business data. You need a defined target schema, normalization rules, and validation. A blueprint can encode the desired output structure, while some normalization or business validation may still be performed by the application. Our next topic will move from document extraction to preparing tabular data with SageMaker Data Wrangler."
+    }
+  ]
+}
