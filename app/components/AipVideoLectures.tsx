@@ -23,8 +23,7 @@ const PARTS: LecturePart[] = [
   { id: "03", title: "RAG & Knowledge Bases", subtitle: "Retrieval, vectors and grounding", start: 14, end: 24 },
   { id: "04", title: "Chunking, Embeddings & RAG Quality", subtitle: "Retrieval quality and metadata", start: 25, end: 34 },
   { id: "05", title: "RAG Evaluation & Guardrails", subtitle: "Multimodal AI and prompt management", start: 35, end: 43 },
-  { id: "06", title: "Bedrock Flows & Prompt Design", subtitle: "Structured outputs and injection defense", start: 44, end: 54 },
-  { id: "07", title: "Responsible AI & GenAI Lifecycle", subtitle: "Enterprise integration and architecture", start: 55, end: 59 },
+  { id: "06", title: "Bedrock Flows & Effective Prompting", subtitle: "Structured responses and prompt anatomy", start: 44, end: 50 },
 ];
 
 function fmt(seconds: number) {
@@ -229,7 +228,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       <div className="av-actions"><a href={MODULE_01+"#video-lectures"}>Continue to Module 01 →</a></div>
     </div> : <div className="av-layout">
       <nav className="av-list" aria-label="Choose video part">
-        <div className="av-list-title">COURSE PLAYLIST · {readyParts.length}/7 AVAILABLE</div>
+        <div className="av-list-title">COURSE PLAYLIST · {readyParts.length}/{PARTS.length} AVAILABLE</div>
         {PARTS.map(p => {
           const ready = results[p.id]?.status === "ready";
           return <button key={p.id} type="button" className="av-lesson" aria-current={selected === p.id ? "true" : undefined} onClick={() => choose(p.id)}>
@@ -245,7 +244,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       <div className="av-main" ref={playerAnchor}>
         <div className="av-main-top">
           <div>
-            <small>PART {active.id} OF 07 · SLIDES {active.start}–{active.end}</small>
+            <small>PART {active.id} OF {String(PARTS.length).padStart(2, "0")} · SLIDES {active.start}–{active.end}</small>
             <h3>{active.title}</h3>
             <small>{active.subtitle}</small>
           </div>
