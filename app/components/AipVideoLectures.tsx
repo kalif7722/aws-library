@@ -619,6 +619,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       </div>
     </div>
     {moduleId === "00" ? <div className={`av-main av-fs-${hudZone}`} ref={playerAnchor}
+      tabIndex={fullscreen?0:undefined}
+      onFocus={()=>{if(fullscreen)revealHud("all",3500);}}
       onPointerMove={trackFullscreenPointer} onPointerLeave={()=>fullscreen&&hideHudSoon(650)}
       onPointerDown={event=>{if(fullscreen&&event.pointerType==="touch")revealHud("all",3500);}}
       onKeyDown={()=>{if(fullscreen)revealHud("all",3500);}}>
@@ -642,6 +644,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
         })}
       </nav>
       <div className={`av-main av-fs-${hudZone}`} ref={playerAnchor}
+        tabIndex={fullscreen?0:undefined}
+        onFocus={()=>{if(fullscreen)revealHud("all",3500);}}
         onPointerMove={trackFullscreenPointer} onPointerLeave={()=>fullscreen&&hideHudSoon(650)}
         onPointerDown={event=>{if(fullscreen&&event.pointerType==="touch")revealHud("all",3500);}}
         onKeyDown={()=>{if(fullscreen)revealHud("all",3500);}}>
