@@ -142,6 +142,9 @@ function VideoPlayer({
       playsInline
       preload="metadata"
       poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
+      onDoubleClick={event => {
+        if(onToggleFullscreen){event.preventDefault();onToggleFullscreen();}
+      }}
       onError={() => setError(true)}
       onLoadedMetadata={event => restorePosition(event.currentTarget)}
       onPlay={event => {
@@ -175,6 +178,9 @@ function VideoPlayer({
       <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English" />
       Your browser does not support this video.
     </video>
+    {!fullscreen && onToggleFullscreen && <button className="av-video-enter" type="button"
+      onClick={onToggleFullscreen} aria-label="Enter fullscreen with Previous and Next video navigation"
+      title="Fullscreen with Previous / Next video controls">⛶ Fullscreen + navigation</button>}
     {fullscreen && <div className="av-video-overlay" role="group" aria-label="Fullscreen lecture navigation">
       <button className="av-video-arrow" type="button"
         disabled={!onPrevious} onClick={onPrevious}
@@ -375,6 +381,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-video-arrow small{font-size:12px;color:#fff}
       .av-video-arrow:not(:disabled):hover,.av-video-arrow:not(:disabled):focus-visible{background:#0c4e84;outline:2px solid #8dd4ff}
       .av-video-arrow:disabled{opacity:.27;cursor:default}
+      .av-video-enter{position:absolute;right:12px;top:12px;z-index:2;background:#06182ee6;color:#fff;border:1px solid #a3d9ffb3;border-radius:9px;padding:8px 11px;font-size:12px;font-weight:750;cursor:pointer;box-shadow:0 3px 12px #0006}
+      .av-video-enter:hover,.av-video-enter:focus-visible{background:#075b92;outline:2px solid #88d7ff}
       .av-video-exit{position:absolute;right:18px;top:16px;background:#06182ed9;color:#fff;border:1px solid #cde5ff88;border-radius:9px;padding:9px 12px;font-weight:750;cursor:pointer}
       .av-fullscreen-playblocked{position:absolute;left:50%;bottom:74px;transform:translateX(-50%);background:#07182eea;border:1px solid #a3ceff;border-radius:12px;padding:12px 15px;color:white;display:flex;align-items:center;gap:14px;font-size:13px;max-width:90%;z-index:6}
       .av-fullscreen-playblocked button{background:#d7efff;color:#0a3258;font-weight:750;border:0;border-radius:8px;padding:9px 12px;cursor:pointer;white-space:nowrap}
