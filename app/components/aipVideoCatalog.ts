@@ -20,6 +20,11 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "05", title: "RAG Evaluation & Guardrails", subtitle: "Multimodal AI and prompt management", start: 35, end: 43 },
     { id: "06", title: "Bedrock Flows & Effective Prompting", subtitle: "Structured responses and prompt anatomy", start: 44, end: 50 },
   ],
+  "03": [
+    { id: "01", title: "Agentic AI and Bedrock Agents", subtitle: "Reasoning, tool calls, action groups and deployment", start: 1, end: 6 },
+    { id: "02", title: "Multi-Agent Orchestration Patterns", subtitle: "Supervisor-workers, routing, parallelization, chaining and memory", start: 7, end: 14 },
+    { id: "03", title: "Strands Agents and AgentCore", subtitle: "Agent loop, quickstart tools, Agent Squad and runtime", start: 15, end: 20 },
+  ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
     { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
