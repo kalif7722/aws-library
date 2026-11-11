@@ -62,7 +62,7 @@ def chunks_for(text: str, max_chars: int = MAX_CHARS) -> list[str]:
     return groups
 
 
-def valid_mp3(path: Path) -> bool:
+def valid_mp3(path: Path, min_seconds: float = 0.3) -> bool:
     if not path.is_file() or path.stat().st_size < 1500:
         return False
     try:
@@ -74,7 +74,7 @@ def valid_mp3(path: Path) -> bool:
             ],
             capture_output=True, text=True, timeout=15, check=False,
         )
-        return result.returncode == 0 and float(result.stdout.strip()) > 0.3
+        return result.returncode == 0 and float(result.stdout.strip()) >= min_seconds
     except (ValueError, OSError, subprocess.TimeoutExpired):
         return False
 
@@ -82,7 +82,8 @@ def valid_mp3(path: Path) -> bool:
 async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -> None:
     """Produce full slide audio using the same chosen voice, with resumable chunks."""
     target.parent.mkdir(parents=True, exist_ok=True)
-    if valid_mp3(target):
+    whole_minimum = max(1.0, len(text.split()) / 6.5)
+    if valid_mp3(target, whole_minimum):
         print(f"  Reusing complete cached narration: {target.name}", flush=True)
         return
 
@@ -95,7 +96,8 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
     for index, piece in enumerate(pieces, start=1):
         chunk_path = target.with_name(f"{target.stem}-chunk-{index:02}.mp3")
         chunk_paths.append(chunk_path)
-        if valid_mp3(chunk_path):
+        minimum = max(0.5, len(piece.split()) / 6.5)
+        if valid_mp3(chunk_path, minimum):
             print(f"  Chunk {index}/{len(pieces)}: cached", flush=True)
             continue
 
@@ -107,7 +109,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
                     edge_tts.Communicate(text=piece, voice=voice, rate=rate)
                     .save(str(chunk_path)), timeout=110,
                 )
-                if not valid_mp3(chunk_path):
+                if not valid_mp3(chunk_path, minimum):
                     raise RuntimeError("TTS response contained no valid playable audio")
                 print(
                     f"  Chunk {index}/{len(pieces)}: voice generated "
@@ -134,7 +136,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
         # Space calls to avoid hammering the service; not a change to speech rate.
         await asyncio.sleep(0.7)
 
-    if not all(valid_mp3(path) for path in chunk_paths):
+    if not all(valid_mp3(path, max(0.5, len(piece.split()) / 6.5)) for path, piece in zip(chunk_paths, pieces)):
         raise RuntimeError("Audio assembly blocked: a chunk is missing")
 
     if len(chunk_paths) == 1:
@@ -156,12 +158,12 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
             ],
             capture_output=True, text=True, timeout=180, check=False,
         )
-        if result.returncode or not valid_mp3(candidate):
+        if result.returncode or not valid_mp3(candidate, whole_minimum):
             raise RuntimeError(
                 "Could not assemble short speech chunks into one MP3: "
                 + result.stderr[-1600:]
             )
         os.replace(candidate, target)
-    if not valid_mp3(target):
+    if not valid_mp3(target, whole_minimum):
         raise RuntimeError(f"Final audio is invalid: {target}")
     print(f"  Complete slide narration ready: {target.name}", flush=True)
