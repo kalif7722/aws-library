@@ -6,7 +6,6 @@ on:
     paths:
       - "content/video-narration/aip-module-02-part-11.json"
       - "content/video-narration/aip-module-02-part-12.json"
-      - ".github/workflows/render-aip-m02-parts-11-12.yml"
   workflow_dispatch:
 
 permissions:
@@ -131,7 +130,11 @@ jobs:
           print(f"Ready: {stem}.mp4, {duration:.1f}s, {len(expected)} chapters")
           PY
 
-      - name: Save lecture video and transcript for review
+      # GitHub's artifact backend can return HTML instead of JSON.
+      # Cloudflare R2 is authoritative; enable previews only by explicit opt-in.
+      - name: Save optional GitHub preview artifact
+        if: ${{ vars.AIP_UPLOAD_GITHUB_PREVIEW == 'true' }}
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: aip-module-02-part-${{ matrix.part }}-lecture-preview
@@ -156,9 +159,8 @@ jobs:
           PART: ${{ matrix.part }}
         run: |
           if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
-            echo "R2 credentials not configured; videos remain in GitHub Actions artifacts."
-            echo "uploaded=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            echo "::error::Missing R2 credentials; the video cannot be published to the course site. Configure R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_ENDPOINT and R2_BUCKET."
+            exit 1
           fi
           STEM="aip-module-02-part-$PART"
           PREFIX="aws-course-videos/previews/aip/module-02/part-$PART"
