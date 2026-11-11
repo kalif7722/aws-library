@@ -145,6 +145,22 @@ const CONFIG: Record<string, {
     firstTitle: "Amazon S3 Vectors",
     title: "Amazon S3 Vectors and Bedrock Knowledge Bases",
   },
+  "02-11": {
+    prefix: "module-02/part-11/aip-module-02-part-11",
+    revision: "2026-11-11-m02-p11-visual-aligned-v1",
+    firstSlide: 71,
+    count: 10,
+    firstTitle: "Amazon RDS Overview",
+    title: "Amazon RDS, Aurora and PostgreSQL Vector Retrieval",
+  },
+  "02-12": {
+    prefix: "module-02/part-12/aip-module-02-part-12",
+    revision: "2026-11-11-m02-p12-visual-aligned-v1",
+    firstSlide: 81,
+    count: 10,
+    firstTitle: "NoSQL Data Modeling",
+    title: "DynamoDB Data Modeling, Capacity and Consistency",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
