@@ -200,6 +200,12 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
             )}
             <AipPartVideo
               moduleId="01"
+              partId="01"
+              title="Foundation Models, Amazon Bedrock and API Fundamentals"
+              posterSlide={1}
+            />
+            <AipPartVideo
+              moduleId="01"
               partId="03"
               title="RAG, Vector Search and Bedrock Knowledge Bases"
               posterSlide={14}
