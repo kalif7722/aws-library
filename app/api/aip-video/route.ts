@@ -65,6 +65,22 @@ const CONFIG: Record<string, {
     firstTitle: "Amazon Bedrock Flows",
     title: "Bedrock Flows, Structured Responses and Effective Prompting",
   },
+  "02-01": {
+    prefix: "module-02/part-01/aip-module-02-part-01",
+    revision: "2026-11-11-m02-p01-visual-aligned-v1",
+    firstSlide: 1,
+    count: 7,
+    firstTitle: "Managing Data for Generative AI",
+    title: "Structured Inputs, JSON, Unstructured Text and Conversations",
+  },
+  "02-02": {
+    prefix: "module-02/part-02/aip-module-02-part-02",
+    revision: "2026-11-11-m02-p02-visual-aligned-v1",
+    firstSlide: 8,
+    count: 8,
+    firstTitle: "Amazon Bedrock Data Automation",
+    title: "Bedrock Data Automation and Multimodal Extraction",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
