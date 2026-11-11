@@ -137,17 +137,21 @@ function VideoPlayer({
     video.scrollIntoView({behavior:"smooth",block:"center"});
   };
 
-  const skipSeconds=(delta:number)=>{
+  const seekTo=(requested:number)=>{
     const video=player.current;
-    if(!video)return;
-    const duration=Number.isFinite(video.duration) ? video.duration : (item.durationSeconds??0);
-    const end=duration>0 ? Math.max(0,duration-0.05) : Number.MAX_SAFE_INTEGER;
-    const destination=Math.min(end,Math.max(0,video.currentTime+delta));
-    // Explicit navigation: do not count the skipped seconds as watched.
+    if(!video || !Number.isFinite(requested))return;
+    const end=Number.isFinite(video.duration) ? video.duration : (item.durationSeconds??0);
+    const destination=Math.min(end>0?end:requested,Math.max(0,requested));
     video.currentTime=destination;
     setPosition(destination);
     watch.onSeeked(destination);
     persistPosition(destination);
+    // Scrubbing to the finish is intentional completion, not a watch-time claim.
+    if(end>0 && destination>=end-0.15)watch.markComplete();
+  };
+  const skipSeconds=(delta:number)=>{
+    const video=player.current;
+    if(video)seekTo(video.currentTime+delta);
   };
 
   const togglePlayback=()=>{
@@ -195,78 +199,105 @@ function VideoPlayer({
 
   return <>
     <div className="av-video-stage">
-    <video
-      key={storageKey}
-      className="av-player"
-      ref={player}
-      controls
-      controlsList="nofullscreen"
-      playsInline
-      preload="metadata"
-      poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
-      onDoubleClick={event => {
-        if(onToggleFullscreen){event.preventDefault();onToggleFullscreen();}
-      }}
-      onError={() => setError(true)}
-      onLoadedMetadata={event => restorePosition(event.currentTarget)}
-      onPlay={event => {
-        watch.onPlay(event.currentTarget.currentTime);
-        setAutoPlayBlocked(false);
-        setResume(0);
-      }}
-      onSeeked={event => {
-        watch.onSeeked(event.currentTarget.currentTime);
-        persistPosition(event.currentTarget.currentTime);
-      }}
-      onTimeUpdate={event => {
-        watch.onTimeUpdate(event.currentTarget);
-        persistPosition(event.currentTarget.currentTime);
-      }}
-      onPause={event => {
-        if(!event.currentTarget.ended){
-          persistPosition(event.currentTarget.currentTime);
-          setResume(event.currentTarget.currentTime);
-        }
-      }}
-      onEnded={() => {
-        watch.onEnded();
-        try { localStorage.removeItem(storageKey); }
-        catch { /* Storage may be disabled */ }
-        setResume(0);
-        onFinished?.();
-      }}
-    >
-      <source src={item.videoUrl} type="video/mp4"/>
-      <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English" />
-      Your browser does not support this video.
-    </video>
-    <div className="av-seek-controls" role="group" aria-label="Video skip controls">
-      <button type="button" onClick={()=>skipSeconds(-5)} aria-label="Rewind 5 seconds" title="Back 5 seconds">↶ <span>5s</span></button>
-      <button type="button" onClick={()=>skipSeconds(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds"><span>5s</span> ↷</button>
-    </div>
-    {!fullscreen && onToggleFullscreen && <button className="av-video-enter" type="button"
-      onClick={onToggleFullscreen} aria-label="Enter fullscreen with Previous and Next video navigation"
-      title="Fullscreen with Previous / Next video controls">⛶ Fullscreen + navigation</button>}
-    {fullscreen && <div className="av-video-overlay" role="group" aria-label="Fullscreen lecture navigation">
-      <button className="av-video-arrow" type="button"
-        disabled={!onPrevious} onClick={onPrevious}
-        aria-label={previousTitle ? `Previous video: ${previousTitle}` : "No previous video"}
-        title={previousTitle ? `Previous: ${previousTitle}` : "No previous video"}>
-        <span aria-hidden="true">❮</span><small>Previous video</small>
-      </button>
-      <button className="av-video-arrow av-video-arrow-next" type="button"
-        disabled={!onNext} onClick={onNext}
-        aria-label={nextTitle ? `Next video: ${nextTitle}` : "No next video"}
-        title={nextTitle ? `Next: ${nextTitle}` : "No next video"}>
-        <small>Next video</small><span aria-hidden="true">❯</span>
-      </button>
-    </div>}
-    {fullscreen && <button className="av-video-exit" type="button"
-      onClick={onToggleFullscreen} aria-label="Exit fullscreen video">Exit fullscreen ✕</button>}
-    {fullscreen && autoPlayBlocked && <div className="av-fullscreen-playblocked" role="status">
-      Your browser paused automatic playback.
-      <button type="button" onClick={()=>{void player.current?.play().catch(()=>setAutoPlayBlocked(true));}}>Play this video ▶</button>
-    </div>}
+      <video
+        key={storageKey}
+        className="av-player"
+        ref={player}
+        controls={false}
+        playsInline
+        preload="metadata"
+        aria-label="Lecture video. Use the custom controls below for playback and fullscreen navigation."
+        poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
+        onClick={togglePlayback}
+        onDoubleClick={event=>{
+          if(onToggleFullscreen){event.preventDefault();onToggleFullscreen();}
+        }}
+        onError={()=>setError(true)}
+        onLoadedMetadata={event=>{
+          const video=event.currentTarget;
+          setDuration(Number.isFinite(video.duration)?video.duration:(item.durationSeconds??0));
+          for(let i=0;i<video.textTracks.length;i++)video.textTracks[i].mode="disabled";
+          restorePosition(video);
+        }}
+        onDurationChange={event=>{
+          if(Number.isFinite(event.currentTarget.duration))
+            setDuration(event.currentTarget.duration);
+        }}
+        onPlay={event=>{
+          watch.onPlay(event.currentTarget.currentTime);
+          setPlaying(true);
+          setAutoPlayBlocked(false);
+          setResume(0);
+        }}
+        onSeeked={event=>{
+          const time=event.currentTarget.currentTime;
+          watch.onSeeked(time);
+          setPosition(time);
+          persistPosition(time);
+          if(Number.isFinite(event.currentTarget.duration) &&
+             time>=event.currentTarget.duration-0.15)watch.markComplete();
+        }}
+        onTimeUpdate={event=>{
+          watch.onTimeUpdate(event.currentTarget);
+          const time=event.currentTarget.currentTime;
+          setPosition(time);
+          persistPosition(time);
+        }}
+        onPause={event=>{
+          setPlaying(false);
+          if(!event.currentTarget.ended){
+            persistPosition(event.currentTarget.currentTime);
+            setResume(event.currentTarget.currentTime);
+          }
+        }}
+        onEnded={()=>{
+          watch.onEnded();
+          setPlaying(false);
+          setPosition(Number.isFinite(duration)?duration:0);
+          try{localStorage.removeItem(storageKey);}catch{/* Optional storage */}
+          setResume(0);
+          onFinished?.();
+        }}
+      >
+        <source src={item.videoUrl} type="video/mp4"/>
+        <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English"/>
+        Your browser does not support this video.
+      </video>
+      {fullscreen && <div className="av-fullscreen-nav" role="group" aria-label="Fullscreen lecture navigation">
+        <button type="button" className="av-nav-previous" disabled={!onPrevious} onClick={onPrevious}
+          aria-label={previousTitle?`Previous video: ${previousTitle}`:"No previous video"} title={previousTitle??"No previous video"}>❮ <span>Previous video</span></button>
+        <button type="button" className="av-nav-next" disabled={!onNext} onClick={onNext}
+          aria-label={nextTitle?`Next video: ${nextTitle}`:"No next video"} title={nextTitle??"No next video"}><span>Next video</span> ❯</button>
+      </div>}
+      {autoPlayBlocked && <div className="av-playblocked" role="status">
+        Browser autoplay is paused.
+        <button type="button" onClick={()=>{void player.current?.play().catch(()=>setAutoPlayBlocked(true));}}>▶ Play lecture</button>
+      </div>}
+      <div className="av-custom-controls" role="group" aria-label="Video playback controls">
+        <input className="av-timeline" type="range" min={0} max={Math.max(1,duration)} step={0.1}
+          value={Math.min(Math.max(0,position),Math.max(1,duration))}
+          onChange={event=>seekTo(Number(event.currentTarget.value))}
+          aria-label="Video playback position" aria-valuetext={`${fmt(position)} of ${fmt(duration)}`}/>
+        <div className="av-control-row">
+          <button type="button" onClick={togglePlayback} aria-label={playing?"Pause video":"Play video"} title={playing?"Pause":"Play"}>{playing?"❚❚":"▶"}</button>
+          <button type="button" onClick={()=>skipSeconds(-5)} aria-label="Rewind 5 seconds" title="Back 5 seconds">↶ 5s</button>
+          <button type="button" onClick={()=>skipSeconds(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds">5s ↷</button>
+          <span className="av-timestamp">{fmt(position)} / {fmt(duration)}</span>
+          <span className="av-controls-grow"/>
+          <button type="button" onClick={toggleCaptions} aria-pressed={captionsOn}
+            aria-label={captionsOn?"Turn off captions":"Turn on captions"} title="English subtitles">CC{captionsOn?" ✓":""}</button>
+          <button type="button" onClick={toggleMute} aria-label={muted?"Unmute":"Mute"} title={muted?"Unmute":"Mute"}>{muted?"🔇":"🔊"}</button>
+          <input className="av-volume" type="range" min={0} max={1} step={0.05} value={muted?0:volume}
+            onChange={event=>adjustVolume(Number(event.currentTarget.value))} aria-label="Volume"/>
+          <button type="button" className="av-mark-complete" onClick={completeManually}
+            disabled={completed} aria-label={completed?"Video completed":"Mark this video complete"}>
+            {completed?"✓ Completed":"✓ Mark complete"}
+          </button>
+          {onToggleFullscreen && <button type="button" onClick={onToggleFullscreen}
+            aria-label={fullscreen?"Exit fullscreen":"Fullscreen with navigation"}
+            title={fullscreen?"Exit fullscreen":"Fullscreen with navigation"}>{fullscreen?"⤢":"⛶"}</button>}
+        </div>
+      </div>
     </div>
     <div className="av-tools">
       {onToggleFullscreen && <button type="button" className="av-action av-fullscreen-button"
