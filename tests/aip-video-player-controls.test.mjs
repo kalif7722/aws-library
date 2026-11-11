@@ -54,3 +54,20 @@ test("playback speed preference is saved and applied to every new video",()=>{
   assert.match(player,/if\(player\.current\)player\.current\.playbackRate=value/);
   assert.match(player,/\.av-main:fullscreen \.av-custom-controls/);
 });
+
+
+test("fullscreen titles and controls fade out when idle and reveal at pointer edges",()=>{
+  assert.match(player,/const \[hudZone,setHudZone\]=useState/);
+  assert.match(player,/if\(fullscreen\)revealHud\("all",2600\)/);
+  assert.match(player,/if\(y<145\)revealHud\("top"\)/);
+  assert.match(player,/y>area\.height-175\)revealHud\("bottom"\)/);
+  assert.match(player,/x<135\|\|x>area\.width-135\)revealHud\("sides"\)/);
+  assert.match(player,/\.av-main:fullscreen \.av-main-top\{position:absolute/);
+  assert.match(player,/\.av-main:fullscreen \.av-custom-controls\{position:absolute/);
+  assert.match(player,/\.av-main:fullscreen \.av-fullscreen-nav\{padding:0 18px/);
+  assert.match(player,/\.av-main:fullscreen:is\(\.av-fs-all,\.av-fs-bottom\) \.av-custom-controls/);
+  assert.match(player,/\.av-main:fullscreen:is\(\.av-fs-all,\.av-fs-top\) \.av-main-top/);
+  assert.match(player,/\.av-main:fullscreen:is\(\.av-fs-all,\.av-fs-sides\) \.av-fullscreen-nav/);
+  assert.match(player,/onPointerDown=\{event=>\{if\(fullscreen&&event\.pointerType==="touch"\)revealHud/);
+  assert.match(player,/onFocus=\{\(\)=>\{if\(fullscreen\)revealHud/);
+});
