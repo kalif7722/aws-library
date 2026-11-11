@@ -6,6 +6,8 @@ on:
     paths:
       - "content/video-narration/aip-module-01-part-03.json"
       - "scripts/render_aip_course_video.py"
+      - "scripts/aip_tts_reliability.py"
+      - "scripts/render_aip_course_video.py"
       - ".github/workflows/render-aip-m01-part-03.yml"
   workflow_dispatch:
 
@@ -37,11 +39,27 @@ jobs:
           python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
           python -m py_compile scripts/render_aip_course_video.py
 
+      - name: Restore successful neural narration chunks
+        if: success()
+        uses: actions/cache/restore@v4
+        with:
+          path: video-output/part-03/_work/audio
+          key: aip-m01-p03-tts-${{ hashFiles('content/video-narration/aip-module-01-part-03.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            aip-m01-p03-tts-${{ hashFiles('content/video-narration/aip-module-01-part-03.json') }}-
+
       - name: Render Module 01 Part 03 using original slides 14–24
         run: |
           python scripts/render_aip_course_video.py \
             --manifest content/video-narration/aip-module-01-part-03.json \
             --output video-output/part-03 --width 1920 --height 1080 --fps 24
+
+      - name: Preserve completed speech chunks even if another TTS request fails
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: video-output/part-03/_work/audio
+          key: aip-m01-p03-tts-${{ hashFiles('content/video-narration/aip-module-01-part-03.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Validate manifest and video
         run: |
