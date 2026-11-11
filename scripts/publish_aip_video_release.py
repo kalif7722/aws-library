@@ -11,6 +11,7 @@ from pathlib import Path
 
 EXPECTED = {
     ("00", None): (list(range(1, 13)), "2026-11-11-visual-aligned-v2"),
+    ("01", "01"): (list(range(1, 10)), "2026-11-11-m01-p01-visual-aligned-v1"),
     ("01", "02"): (list(range(10, 14)), "2026-11-11-m01-p02-visual-aligned-v1"),
     ("01", "03"): (list(range(14, 25)), "2026-11-11-m01-p03-visual-aligned-v1"),
 }
