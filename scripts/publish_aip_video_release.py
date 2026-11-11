@@ -23,6 +23,8 @@ EXPECTED = {
     ("03", "04"): (list(range(21, 28)), "2026-11-12-m03-p04-visual-aligned-v1"),
     ("03", "05"): (list(range(28, 34)), "2026-11-12-m03-p05-visual-aligned-v1"),
     ("03", "06"): (list(range(34, 41)), "2026-11-12-m03-p06-visual-aligned-v1"),
+    ("03", "07"): (list(range(41, 46)), "2026-11-12-m03-p07-visual-aligned-v1"),
+    ("03", "08"): (list(range(46, 51)), "2026-11-12-m03-p08-visual-aligned-v1"),
     ("02", "01"): (list(range(1, 8)), "2026-11-11-m02-p01-visual-aligned-v1"),
     ("02", "02"): (list(range(8, 16)), "2026-11-11-m02-p02-visual-aligned-v1"),
     ("02", "03"): (list(range(16, 22)), "2026-11-11-m02-p03-visual-aligned-v1"),
