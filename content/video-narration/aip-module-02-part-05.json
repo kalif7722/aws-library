@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "part_id": "05",
+  "module_title": "Managing Data for Generative AI",
+  "part_title": "CloudWatch Metrics, Metric Streams and Amazon Transcribe",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m02-p05-visual-aligned-v1",
+  "review_basis": "Original AIP-C01 Module 02 site-ready WebP images individually checked through contact sheets and archived redesign ZIP; renderer verifies live R2 originals",
+  "scenes": [
+    {
+      "slide": 29,
+      "title": "CloudWatch Metrics Basics",
+      "narration": "Before we process speech or documents, we need to understand what our AWS applications are doing. This slide defines a CloudWatch metric as a time-stamped measurement, identified by a namespace, a metric name and dimensions. On the left, Amazon EC2 publishes CPUUtilization under AWS/EC2, with the InstanceId dimension identifying the particular virtual machine. Look at the middle panel: an application can also publish a custom QueueDepth metric under a namespace such as MyApp and a ServiceName dimension of orders. The graphs below those examples show how values change over time, not simply the last reading. Now follow the arrows to CloudWatch on the right. A dashboard combines system and application metrics into one operational view, including CPU, queue depth, request counts and latency. The key distinction is that a metric is numeric time-series data, while a log is an event record. Choose sensible dimensions and alarms so the dashboard leads to useful decisions instead of just showing attractive charts."
+    },
+    {
+      "slide": 30,
+      "title": "CloudWatch Metric Streams",
+      "narration": "Now imagine that the operations team needs to analyse CloudWatch metrics outside the CloudWatch console. The main diagram begins with metrics from AWS services, applications, and custom emitters. CloudWatch Metric Streams continuously delivers selected metric updates to Amazon Data Firehose. Follow the orange branches on the right: Firehose can send the stream to a supported destination such as Amazon S3, Redshift, OpenSearch, or an external monitoring platform, depending on the configured delivery path. The filter icon beneath the first arrow matters. We can include or exclude selected namespaces, metric names, or dimensions, depending on the stream configuration, to avoid unnecessary data. At the bottom, the slide contrasts metric streams with CloudWatch Logs. Logs hold event text and messages; Metric Streams are for delivering metric measurements. This is a near-real-time delivery architecture rather than a one-off export. In production, plan for delivery permissions, data volume, destination availability, and cost."
+    },
+    {
+      "slide": 31,
+      "title": "Amazon Transcribe",
+      "narration": "Let's move from numerical telemetry to spoken language. Amazon Transcribe converts audio or video speech into text, and this slide follows that pipeline from left to right. An audio recording from a call, meeting, or media file enters the service. Automatic speech recognition produces a transcript with timestamps, so an application can connect a word or phrase back to a place in the recording. Beneath the pipeline are optional capabilities: automatic language identification can help choose the appropriate recognition language, while PII redaction can identify and mask supported personal details. Notice the three example use cases at the bottom. A contact centre can analyse conversations; captions can improve accessibility; and a media archive can become searchable by its spoken content. The timestamps make these workflows more useful than a plain block of text. But transcripts depend on audio quality, language support, and speaker overlap, so important results must still be checked."
+    },
+    {
+      "slide": 32,
+      "title": "Improve Transcription Accuracy",
+      "narration": "This slide contrasts standard speech recognition with two ways to improve domain-specific transcription. The spoken example includes Aurora Global Database, a specialized AWS phrase that generic recognition might mishear. On the left, the ordinary transcript shows the mistaken phrase. The middle panel introduces custom vocabulary: supplying domain terms, brand names, acronyms and pronunciation hints can help the system recognize specific words. The next panel shows a custom language model, trained from relevant text to adapt to broader domain wording and context where supported. Read the warning along the bottom. These are different aids, not guaranteed corrections. A vocabulary is best for targeted terms; a language model may help with recurring domain language across an appropriate corpus. Neither replaces good microphone quality or evaluation. Test against real recordings, record word error rates where practical, and choose the least complex improvement that addresses the observed errors."
+    },
+    {
+      "slide": 33,
+      "title": "Transcribe Toxicity Detection",
+      "narration": "This example is a contact-centre recording. Follow the waveform from the caller on the left into speech and text cue analysis in the middle. A toxicity-detection system examines the conversation for categories such as threats, abuse, insults and profanity, shown in the orange column. On the right, the flagged conversation is reviewed with human validation rather than automatically treating every flagged phrase as a proven offence. Notice the difference between a detected category and a final business decision. Tone, timing, word choice and customer context can affect interpretation, and false positives or missed content are possible. The slide's review panel suggests a sensible workflow: flag potentially harmful material, provide the relevant evidence to an authorized reviewer, apply the organization's handling policy, and keep an appropriate audit trail. This closes our first group of operational and audio data services. Next we use Amazon Comprehend to extract meaning and business labels from written text."
+    }
+  ]
+}
