@@ -25,6 +25,14 @@ const CONFIG: Record<string, {
     firstTitle: "Fine-Tuning: Adapt an Existing Model",
     title: "Fine-Tuning, Continued Pre-Training and LoRA",
   },
+  "01-03": {
+    prefix: "module-01/part-03/aip-module-01-part-03",
+    revision: "2026-11-11-m01-p03-visual-aligned-v1",
+    firstSlide: 14,
+    count: 11,
+    firstTitle: "Retrieval-Augmented Generation",
+    title: "RAG, Vector Search and Bedrock Knowledge Bases",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
