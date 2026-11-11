@@ -42,9 +42,13 @@ jobs:
 
       - name: Install narration and video engine
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-          python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
+          # GitHub-hosted Ubuntu runners already include FFmpeg.
+          # Avoid apt-get: Ubuntu mirror DNS failures can stall video builds.
+          command -v ffmpeg || { echo "::error::FFmpeg is not on the runner PATH"; exit 1; }
+          command -v ffprobe || { echo "::error::FFprobe is not on the runner PATH"; exit 1; }
+          ffmpeg -version | sed -n '1p'
+          ffprobe -version | sed -n '1p'
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py
 
       - name: Confirm the actual original slide range and narration revision
