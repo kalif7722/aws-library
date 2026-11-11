@@ -36,6 +36,10 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "13", title: "DynamoDB Read and Write Operations", subtitle: "RCUs, partitions, throttling, Query, Scan and batch APIs", start: 91, end: 100 },
     { id: "14", title: "DynamoDB Integration and RAG Freshness", subtitle: "PartiQL, DAX, TTL, indexing, synchronization and reranking", start: 101, end: 110 },
     { id: "15", title: "Amazon S3 Storage Classes and Lifecycle", subtitle: "Durability, access tiers, cost, transitions and retention", start: 111, end: 120 },
+    { id: "16", title: "S3 Lifecycle and Replication", subtitle: "Photo retention, analytics, CRR, SRR and replication exceptions", start: 121, end: 125 },
+    { id: "17", title: "S3 Encryption and Transport Security", subtitle: "SSE-S3, SSE-KMS, SSE-C, client-side encryption and TLS", start: 126, end: 134 },
+    { id: "18", title: "S3 Logging and Access Points", subtitle: "Server access logs, logging loops, policies and VPC-origin access", start: 135, end: 138 },
+    { id: "19", title: "BDA and Data Wrangler Walkthroughs", subtitle: "Invoice extraction, output blueprint, data cleaning and export", start: 139, end: 144 },
   ],
 };
 
