@@ -17,6 +17,14 @@ const CONFIG: Record<string, {
     firstTitle: "Course Opening",
     title: "Course Introduction — Visual Lecture",
   },
+  "01-01": {
+    prefix: "module-01/part-01/aip-module-01-part-01",
+    revision: "2026-11-11-m01-p01-visual-aligned-v1",
+    firstSlide: 1,
+    count: 9,
+    firstTitle: "Generative AI Fundamentals and Amazon Bedrock",
+    title: "Foundation Models, Amazon Bedrock and API Fundamentals",
+  },
   "01-02": {
     prefix: "module-01/part-02/aip-module-01-part-02",
     revision: "2026-11-11-m01-p02-visual-aligned-v1",
