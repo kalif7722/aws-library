@@ -377,6 +377,37 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   const [autoStartPart,setAutoStartPart]=useState<string|null>(null);
   const [notice,setNotice]=useState<string|null>(null);
   const [fullscreen,setFullscreen]=useState(false);
+  // Immersive fullscreen: show each overlay only when the pointer approaches
+  // its edge. The UI is initially visible, then fades after inactivity.
+  const [hudZone,setHudZone]=useState<"all"|"top"|"bottom"|"sides"|"none">("none");
+  const hudTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const clearHudTimer=()=>{
+    if(hudTimer.current!==null){clearTimeout(hudTimer.current);hudTimer.current=null;}
+  };
+  const hideHudSoon=(delay=1000)=>{
+    if(hudTimer.current!==null)return;
+    hudTimer.current=setTimeout(()=>{hudTimer.current=null;setHudZone("none");},delay);
+  };
+  const revealHud=(zone:"all"|"top"|"bottom"|"sides",duration?:number)=>{
+    clearHudTimer();
+    setHudZone(zone);
+    if(duration)hideHudSoon(duration);
+  };
+  useEffect(()=>{
+    if(fullscreen)revealHud("all",2600);
+    else{clearHudTimer();setHudZone("none");}
+    return()=>clearHudTimer();
+  },[fullscreen]);
+  const trackFullscreenPointer=(event:React.PointerEvent<HTMLDivElement>)=>{
+    if(!fullscreen)return;
+    if(event.pointerType==="touch"){revealHud("all",3500);return;}
+    const area=event.currentTarget.getBoundingClientRect();
+    const x=event.clientX-area.left,y=event.clientY-area.top;
+    if(y<145)revealHud("top");
+    else if(y>area.height-175)revealHud("bottom");
+    else if(x<135||x>area.width-135)revealHud("sides");
+    else hideHudSoon(1100);
+  };
   useEffect(()=>{
     try{setAutoNext(localStorage.getItem(AUTO_NEXT_KEY)==="true");}
     catch{/* Site storage may be disabled */}
@@ -538,16 +569,22 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-fullscreen-nav button:not(:disabled):is(:hover,:focus-visible)::after{opacity:1;visibility:visible}
       .av-playblocked{position:absolute;left:50%;bottom:118px;transform:translateX(-50%);z-index:9;display:flex;gap:12px;align-items:center;justify-content:center;background:#061d33f2;border:1px solid #a7deff;border-radius:12px;padding:12px 14px;color:white;font-size:12px;box-shadow:0 5px 22px #0009}
       .av-playblocked button{background:#e3f4ff;color:#123c5c;padding:8px 10px;border:0;border-radius:7px;font-weight:800;white-space:nowrap}
-      .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;min-height:0;background:#061726;color:#fff;display:flex;flex-direction:column;padding:12px 18px;overflow:hidden}
-      .av-main:fullscreen .av-main-top{flex:none;margin:0 0 10px}
+      .av-main:fullscreen{box-sizing:border-box;position:relative;width:100vw;height:100vh;min-height:0;background:#061726;color:#fff;display:flex;flex-direction:column;padding:0;overflow:hidden}
+      .av-main:fullscreen .av-main-top{position:absolute;top:0;left:0;right:0;z-index:12;margin:0;padding:18px 28px 32px;background:linear-gradient(#06182ee8,#06182e00);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s}
       .av-main:fullscreen .av-main-top h3,.av-main:fullscreen .av-main-top small{color:#fff}
       .av-main:fullscreen .av-pill{display:none}
       .av-main:fullscreen .av-video-stage{flex:1 1 auto;min-height:0;width:100%;border-radius:0;overflow:hidden}
       .av-main:fullscreen .av-player{flex:1 1 auto;min-height:0;height:0;max-height:none;width:100%;aspect-ratio:auto;object-fit:contain;border-radius:0}
-      .av-main:fullscreen .av-custom-controls{flex:none;padding:10px 14px}
-      .av-main:fullscreen .av-fullscreen-nav{padding-bottom:83px}
+      .av-main:fullscreen .av-custom-controls{position:absolute;bottom:0;left:0;right:0;z-index:11;padding:24px 18px 13px;background:linear-gradient(transparent,#061423d9 22%,#061423f5);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(12px);transition:opacity .22s ease,visibility .22s,transform .22s ease}
+      .av-main:fullscreen .av-fullscreen-nav{padding:0 18px 28px;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s}
+      .av-main:fullscreen .av-fullscreen-nav button{pointer-events:none}
+      .av-main:fullscreen:is(.av-fs-all,.av-fs-top) .av-main-top,.av-main:fullscreen .av-main-top:focus-within{opacity:1;visibility:visible;pointer-events:auto}
+      .av-main:fullscreen:is(.av-fs-all,.av-fs-bottom) .av-custom-controls,.av-main:fullscreen .av-custom-controls:focus-within{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+      .av-main:fullscreen:is(.av-fs-all,.av-fs-sides) .av-fullscreen-nav,.av-main:fullscreen .av-fullscreen-nav:focus-within{opacity:1;visibility:visible}
+      .av-main:fullscreen:is(.av-fs-all,.av-fs-sides) .av-fullscreen-nav button,.av-main:fullscreen .av-fullscreen-nav:focus-within button{pointer-events:auto}
       .av-main:fullscreen .av-tools,.av-main:fullscreen .av-chapters,.av-main:fullscreen .av-slidebar,.av-main:fullscreen .av-actions,.av-main:fullscreen .av-autoplay-notice{display:none}
-      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-speed-control span{display:none}.av-speed-control select{padding:6px 3px;min-height:32px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
+      @media(prefers-reduced-motion:reduce){.av-main:fullscreen .av-main-top,.av-main:fullscreen .av-custom-controls,.av-main:fullscreen .av-fullscreen-nav{transition:none}}
+      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-speed-control span{display:none}.av-speed-control select{padding:6px 3px;min-height:32px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-main:fullscreen{padding:0}.av-main:fullscreen .av-main-top{padding:12px 16px 28px}.av-main:fullscreen .av-custom-controls{padding:16px 8px 8px}}
       .av-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#546b84;font-size:12px;margin:13px 0}
       .av-tools a,.av-actions a{font-weight:700;color:#1466b2;text-decoration:underline;text-underline-offset:3px}
       .av-action{border:1px solid #a7c8ea;background:#edf6ff;color:#104f85;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
@@ -581,7 +618,10 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
         {moduleId === "00" && <a href={MODULE_01+"#video-lectures"}>Next module: GenAI Fundamentals</a>}
       </div>
     </div>
-    {moduleId === "00" ? <div className="av-main" ref={playerAnchor}>
+    {moduleId === "00" ? <div className={`av-main av-fs-${hudZone}`} ref={playerAnchor}
+      onPointerMove={trackFullscreenPointer} onPointerLeave={()=>fullscreen&&hideHudSoon(650)}
+      onPointerDown={event=>{if(fullscreen&&event.pointerType==="touch")revealHud("all",3500);}}
+      onKeyDown={()=>{if(fullscreen)revealHud("all",3500);}}>
       {intro?.status === "ready"
         ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00" fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen} completed={videoStats.completedIds.includes("aip-video-00")}/>
         : <p className="av-empty">{checking ? "Checking the introduction video…" : "The revised video is not currently available. Open the original slides below."}</p>}
@@ -601,7 +641,10 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </button>;
         })}
       </nav>
-      <div className="av-main" ref={playerAnchor}>
+      <div className={`av-main av-fs-${hudZone}`} ref={playerAnchor}
+        onPointerMove={trackFullscreenPointer} onPointerLeave={()=>fullscreen&&hideHudSoon(650)}
+        onPointerDown={event=>{if(fullscreen&&event.pointerType==="touch")revealHud("all",3500);}}
+        onKeyDown={()=>{if(fullscreen)revealHud("all",3500);}}>
         <div className="av-main-top">
           <div>
             <small>PART {active.id} OF {String(parts.length).padStart(2, "0")} · SLIDES {active.start}–{active.end}</small>
