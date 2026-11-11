@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "01",
+  "part_id": "04",
+  "module_title": "Generative AI Fundamentals and Amazon Bedrock",
+  "part_title": "Chunking, Embeddings, Metadata and RAG Quality",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m01-p04-visual-aligned-v1",
+  "review_basis": "Actual R2 slide image review contact sheet for Module 01 slides 25–34, all 10 images marked available",
+  "scenes": [
+    {
+      "slide": 25,
+      "title": "Pre-Retrieval: Choose the Right Chunk",
+      "narration": "Look at the incident runbook on the left and the three ways of dividing it. A user asks how to restore a database after a failed deployment. If we embed one isolated sentence, the search may return a command without the conditions that make that command safe. That is the red loss-of-context example at the top. In the middle, a paragraph-sized chunk keeps the restore steps and important safeguards together. The green result is relevant and complete. At the bottom, a whole section can preserve even more detail, but may also bring unrelated material that distracts the model. The orange takeaway is our design rule: the ideal chunk is large enough to preserve meaning, yet small enough to retrieve precisely. In real RAG systems, evaluate this choice against representative questions rather than assuming that a smaller chunk is always better."
+    },
+    {
+      "slide": 26,
+      "title": "Semantic Chunking and Context Limits",
+      "narration": "Here we compare chunking strategies using the same cloud-storage source document. In the centre, fixed-size splitting counts tokens and cuts the text into uniformly sized pieces. Notice how the sentence about S3 access can fall across a boundary. The semantic approach below aims to keep related ideas together, even if the resulting chunks differ in length. On the right, the application retrieves relevant chunks for a particular query and adds only selected context to the model. The context-window budget diagram reminds us that retrieved material competes with instructions, the user's request, and the output allowance. The three approach cards distinguish embedding-based splitting, model-assisted splitting, and lighter semantic methods, each with a potential cost trade-off. Our objective is not the most sophisticated algorithm. It is preserving useful concepts within an affordable token budget and validating the quality of the returned evidence."
+    },
+    {
+      "slide": 27,
+      "title": "Bedrock Standard Chunking",
+      "narration": "Amazon Bedrock Knowledge Bases supports different chunking choices, and this slide compares three of them. The first panel shows default chunking into natural language segments with a target token size. The second panel is fixed-size tokens with overlap, where neighbouring chunks repeat some context to reduce boundary losses. In the example, the discussion about a fox and a forest crosses the chunk boundary, so overlapping text can preserve the connection. The third panel is no chunking, where the whole source is retained as one unit. That avoids splitting but can produce overly large retrieval units. Follow each miniature document through the embedding step to see what gets indexed. The numbers on screen are examples, not universal settings for every model or connector. Choose chunk size and overlap based on the document structure, retrieval relevance, model context limits, and operational cost."
+    },
+    {
+      "slide": 28,
+      "title": "Bedrock Hierarchical Chunking",
+      "narration": "This diagram introduces parent and child chunks. On the left, a policy document is divided into large parent sections, such as employee conduct, data security, and remote work. The middle panel expands one parent into smaller child chunks, including code of conduct, workplace behaviour, and reporting violations. Each child is a more precise search target. Now follow the three numbered stages on the right. First, the user asks a reporting-violations question. Second, vector search identifies a relevant child chunk using its embedding. Third, the application can return the corresponding parent chunk to the model, restoring the broader policy context that makes the small match useful. Notice that the parent-child relationship must be preserved by the indexing configuration. Hierarchical chunking can improve both search precision and contextual completeness, but it also requires tuning token limits and overlap. Use it when narrowly matching a paragraph while answering from a whole section would improve reliability."
+    },
+    {
+      "slide": 29,
+      "title": "Bedrock Semantic Chunking",
+      "narration": "Look at the source document in the first column. The first sentences discuss AWS cloud services, while later sentences discuss pizza. A fixed token count might split at an arbitrary location. Semantic chunking instead converts sentences into embeddings and compares nearby meanings. In the chart at the centre, the AWS sentences form one group and the pizza sentences form another. A semantic breakpoint separates these topics so the output chunks are coherent rather than merely equal in length. The three controls along the bottom influence that process: a maximum token limit, the number of surrounding sentences considered, and a threshold for declaring a topic change. The slide also shows an operational trade-off: more semantic analysis can require additional model processing. The value is better topical boundaries for retrieval. Always test with your actual documents, especially when topics overlap or sections are extremely short."
+    },
+    {
+      "slide": 30,
+      "title": "Optimize Embedding Dimensions",
+      "narration": "This slide combines three decisions: chunk the documents, embed each chunk, and store the resulting vectors for retrieval. The diagram at the top shows Amazon Bedrock producing embeddings and a vector store returning relevant results for a query. At the lower left, vector dimension controls how many numerical values represent each chunk. A shorter vector can reduce storage and index cost, but overly aggressive reduction may harm the semantic distinctions needed for search. The middle panel shows chunk size as a separate decision. Small chunks can improve precise matching, whereas larger chunks may preserve context but return irrelevant content. The evaluation panel on the right is the critical final step. Test multiple combinations with representative queries, measure relevance, and check the generated answer. Neither the highest dimension nor the smallest chunk is automatically best. Optimize for your workload's quality, latency, and cost together."
+    },
+    {
+      "slide": 31,
+      "title": "Sparse vs Dense Embeddings",
+      "narration": "The top of this slide compares sparse and dense vectors. On the left, a sparse representation uses a high-dimensional vector with mostly zero entries, often associated with terms or lexical signals. The dense representation beside it uses a more compact numerical vector designed to capture semantic similarity. Follow the arrows from a document through each embedding representation. The cosine-similarity diagram in the middle reminds us that vector comparisons are mathematical relationships, not keyword matches or confidence percentages. The bottom section distinguishes density from dimensionality: density describes how many vector elements are non-zero, while dimensionality is the number of elements in the vector. Finally, see the technical-documentation example. A user question about deploying a serverless application can retrieve related deployment guides using semantic vectors, even when wording differs. Hybrid systems may combine lexical and semantic signals when both exact terms and broader meaning matter."
+    },
+    {
+      "slide": 32,
+      "title": "Improve Retrieval with Metadata",
+      "narration": "This is a security-sensitive retrieval example. A parental-leave policy document contains the policy text plus structured metadata such as department, effective date, document identifier, topic, and access scope. The left branch keeps the content and metadata separate as they are indexed. The user on the right asks for the current HR parental-leave policy. Notice the filters applied before choosing a passage: department must be Human Resources, the effective date must be appropriate, and the document must fall within the user's allowed scope. Only then should a relevant chunk be added to the prompt. Metadata filters improve precision and reduce irrelevant answers, but they are not a replacement for actual authorization. Permissions must still be enforced end to end. For exam scenarios, identify whether the requirement is semantic relevance, structured filtering, or security isolation, and design each explicitly."
+    },
+    {
+      "slide": 33,
+      "title": "Keep a Knowledge Base Current",
+      "narration": "RAG depends on source freshness. This slide shows a practical update pipeline. On the far left, an S3 object is added or changed. In the event-driven path, a trigger invokes AWS Lambda, which coordinates a Bedrock Knowledge Bases ingestion job. The vector store is then updated to reflect the latest document state. The lower alternative is a scheduled batch sync, appropriate when freshness requirements are less urgent or changes are predictable. At the far right, a test question asks about the latest travel policy, and the answer reflects the revised document. Notice the distinction between detecting a source change and actually completing ingestion. A trigger alone does not mean the content is already indexed. Design for retries, duplicate events, deleted documents, and monitoring of sync success. Choose between event-driven updates and scheduled ingestion based on the business's tolerance for stale answers."
+    },
+    {
+      "slide": 34,
+      "title": "Measure a RAG System",
+      "narration": "We've reached the quality gate. Trace the example from left to right: a user asks for the CloudTrail log retention period, the retrieval system brings back a policy chunk and related documentation, and the model generates an answer citing the supporting sources. The right-hand panel then evaluates the result from several angles. Context relevance asks whether the retrieved documents match the question. Answer correctness and completeness compare the response with a known good answer or rubric. Groundedness asks whether the claimed facts are actually supported by the retrieved passages. Citation quality checks the links between claims and evidence. Safety and refusal checks inappropriate disclosure or unsupported requests. The lower loop shows the practical workflow: assemble a representative test set, run the RAG system, evaluate results, and improve chunking, retrieval, reranking, or prompting. Do not rely on a single average score; analyse which stage causes each failure."
+    }
+  ]
+}
