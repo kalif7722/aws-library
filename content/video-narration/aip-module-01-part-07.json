@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "01",
+  "part_id": "07",
+  "module_title": "Generative AI Fundamentals and Amazon Bedrock",
+  "part_title": "Responsible AI, Enterprise Integration and the GenAI Lifecycle",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m01-p07-visual-aligned-v1",
+  "review_basis": "Site-ready archived AIP Module 01 original WebP slides 55–59 visually reviewed; verify the live R2 slide sequence before rendering",
+  "scenes": [
+    {
+      "slide": 55,
+      "title": "Mitigate Bias in Generative AI",
+      "narration": "Responsible AI is a practical engineering process, and this slide shows five steps. On the left, an ambiguous request asks for an image of a doctor in a hospital. A model might interpret that prompt through narrow stereotypes or a limited training distribution. The second panel improves the request by specifying relevant attributes, while avoiding assumptions about unrelated personal characteristics. The third panel shows balanced representation and diverse examples. The fourth compares outputs across groups, asking whether some people or roles are systematically underrepresented. Finally, the fifth stage improves the prompt, evaluation data, or model configuration and tests again. Follow the curved arrow at the bottom: bias mitigation is iterative, not a single filter. The examples use AWS data and Bedrock services to support assessment, but tool choice alone cannot guarantee fairness. For production use, document the desired outcome, define measurable evaluation criteria, involve appropriate reviewers, and keep checking results as users and workloads change."
+    },
+    {
+      "slide": 56,
+      "title": "Enterprise Data Integration and Cross-Account Access",
+      "narration": "This slide contains two architectures, so let's separate them. The left side shows enterprise-data ingestion. Documents may arrive from Amazon S3, SharePoint, and Confluence. Amazon Bedrock Knowledge Bases prepares the content, creates supported embeddings, and stores them in a compatible vector store so applications can retrieve relevant facts later. Pay attention to source connector support, permissions, synchronization, and document-level access. Now move to the right-hand diagram. An application in AWS Account A runs semantic search using Amazon OpenSearch Service, and a foundation model in Account B is invoked across an account boundary. The arrow is labelled cross-account access and the shield represents an IAM role and trust relationship. Cross-account architecture must explicitly authorize the caller and the receiving service, protect data in transit, and account for service-specific capabilities. Do not assume that every Bedrock or OpenSearch operation supports the same cross-account arrangement. The purpose of the slide is to recognize data integration and account boundaries as separate design decisions."
+    },
+    {
+      "slide": 57,
+      "title": "Event-Driven Enterprise Integration",
+      "narration": "Here is a familiar event-driven pattern applied to AI-enabled enterprise applications. On the left, the application publishes an event to Amazon EventBridge. The same event can be routed to multiple SQS queues, shown as three independent lanes. Each queue feeds its own Lambda consumer. The top consumer updates a customer record, the middle writes an audit record, and the bottom sends a notification. Follow the three arrows separately: a slow notification does not have to block the customer update. SQS provides buffering, and the consumers can retry failures independently, although your application should still handle duplicates and configure dead-letter handling where appropriate. The bottom note mentions Amazon MSK as an alternative for streaming architectures that require Kafka-style processing. These services solve different integration needs. For an AI application, event-driven decoupling is especially useful when model output triggers multiple business actions that must be monitored and controlled without creating one fragile synchronous chain."
+    },
+    {
+      "slide": 58,
+      "title": "AWS Well-Architected Generative AI Lens",
+      "narration": "The diagram places a generative AI workload at the centre, surrounded by the six Well-Architected pillars. Begin with operational excellence: can the team deploy, monitor, evaluate, and improve the application? Security asks how prompts, retrieved data, models, identities, and tools are protected. Reliability covers retries, failure handling, fallback responses, and resilience under load. Performance efficiency examines model selection, latency, throughput, and context usage. Cost optimization considers token usage, inference modes, storage, and unnecessary repeated processing. Sustainability asks how to reduce the environmental resource footprint of the workload. These pillars are not isolated. For example, switching to a smaller model might improve cost and latency, but only if response quality remains acceptable. An effective architecture evaluates the trade-offs together and measures them with real operational data. As a student, use this diagram as a checklist whenever you compare two AWS GenAI solutions in an exam scenario."
+    },
+    {
+      "slide": 59,
+      "title": "The Generative AI Lifecycle",
+      "narration": "We end Module One by connecting all of these technologies into a lifecycle. Start at the top left with scoping: identify the business problem, users, data, and measurable success criteria. Next, choose the model based on the required capabilities and constraints. Third, decide whether prompt engineering, retrieval, or supported customization is needed. Follow the arrows down to development and integration, where APIs, Lambda, and other application services connect the model to users and enterprise systems. Deployment then moves the solution into an operational environment with monitoring and appropriate capacity. Finally, continuous improvement uses evaluation results, telemetry, user feedback, latency, and cost data to improve the system. The enterprise support-assistant example in the centre illustrates the process: the user asks about an account issue, and the application must answer using reliable context and appropriate controls. The long return arrow reminds us that production AI is iterative. We refine requirements, model choice, data, and safeguards as the workload evolves. That completes our first technical module."
+    }
+  ]
+}
