@@ -75,7 +75,7 @@ export function StudyStatus({completed}:{completed:boolean;seconds?:number;onAck
 }
 
 type ProgressLesson={id:string;moduleId:string;title:string;href:string};
-export function CourseProgress({course,lessons}:{course:string;lessons:ProgressLesson[]}){
+export function CourseProgress({course,lessons,detailed=false}:{course:string;lessons:ProgressLesson[];detailed?:boolean}){
  const [done,setDone]=useState<string[]>([]);
  useEffect(()=>{
   const update=()=>setDone(readCompleted(course));
@@ -90,6 +90,16 @@ export function CourseProgress({course,lessons}:{course:string;lessons:ProgressL
  const finished=lessons.filter(l=>done.includes(l.id)).length;
  const percent=lessons.length?Math.round(finished/lessons.length*100):0;
  const watched=done.filter(x=>x.startsWith(course+'-video-')).length;
+ if(detailed)return <section className="course-progress-dashboard" id="study-progress" aria-label="Course learning progress">
+  <div className="course-progress-dashboard-heading">
+   <div><strong>My course progress</strong><span>{finished} of {lessons.length} slides covered · {watched} {watched===1?'video':'videos'} watched</span></div>
+   <strong>{percent}%</strong>
+  </div>
+  <div className="course-progress-dashboard-track" role="progressbar" aria-label="Course slides covered" aria-valuemin={0} aria-valuemax={lessons.length} aria-valuenow={finished}>
+   <span style={{width:`${percent}%`}}/>
+  </div>
+  <p>Progress updates automatically as you study slides or watch their video chapters. The slide timer is hidden.</p>
+ </section>;
  return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides covered, ${watched} videos watched`}
   title={`${finished} of ${lessons.length} slides covered · ${watched} videos watched`}>
   <span className="course-progress-ring" style={{'--progress':`${percent}%`} as CSSProperties}><strong>{percent}%</strong></span>
