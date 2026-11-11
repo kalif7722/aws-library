@@ -2,7 +2,7 @@
 
 import {useCallback,useEffect,useRef} from 'react';
 import {readCompleted,recordStudyCompletions} from './StudyProgress';
-import {aipVideoId} from './aipVideoCatalog';
+import {aipVideoId,aipVideoStartedId} from './aipVideoCatalog';
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
 
@@ -24,6 +24,7 @@ export function useAipVideoWatchProgress({
   const credited=useRef<Set<number>>(new Set());
   const storeKey=`aip-watched-seconds:v1:${moduleId}:${partId??'intro'}`;
   const videoId=aipVideoId(moduleId,partId??'00');
+  const startedId=aipVideoStartedId(moduleId,partId??'00');
 
   const awardCredit=useCallback(()=>{
     const recorded=new Set(readCompleted('aip'));
@@ -42,6 +43,10 @@ export function useAipVideoWatchProgress({
         recorded.add(slideId);
       }
     }
+    if(!recorded.has(startedId) && watched.current.size>=15){
+      added.push(startedId);
+      recorded.add(startedId);
+    }
     if(!recorded.has(videoId)){
       const byPlayback=durationSeconds>0 &&
         watched.current.size>=Math.ceil(durationSeconds*.85);
@@ -50,7 +55,7 @@ export function useAipVideoWatchProgress({
       if(byPlayback || bySlides)added.push(videoId);
     }
     if(added.length)recordStudyCompletions('aip',added);
-  },[chapters,durationSeconds,moduleId,videoId]);
+  },[chapters,durationSeconds,moduleId,startedId,videoId]);
 
   useEffect(()=>{
     last.current=null;
