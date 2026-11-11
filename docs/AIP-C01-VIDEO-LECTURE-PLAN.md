@@ -4,6 +4,14 @@
 
 **Status:** Module 01 Parts 01–02 visually audited. Module 01 Part 02 covers slides 10–13; slide 14 is RAG and starts Part 03. R2 slide 4 was returned as an invalid image during QA. Other splits remain provisional. Slide counts below come from the course lesson map; they are NOT verified R2 asset inventories. Groupings and titles must be confirmed against actual images before recording.
 
+## Delivery progress (2026-11-11)
+
+- **M00 introduction:** corrected 12-slide, visual-aligned 13:31 video uploaded to R2; course Video Overview player is gated by manifest revision.
+- **M01 Part 02 (slides 10–13):** the four original visuals were inspected, narration written against the actual diagrams, and a 6:21 MP4 uploaded to R2.
+- **M01 Part 03 (slides 14–24):** all 11 original slide images passed the R2 inventory; visual-first script is committed and the video workflow is configured.
+- **M01 Part 01 (slides 1–9):** R2 slide 04 is an **empty 0-byte WebP**. The same empty entry exists in the latest redesigned Module 01 slide package. An older backup contains a valid slide 04, but its visual treatment and service examples differ from the redesigned set. Keep Part 01 unreleased until this slide is restored or redesigned and technically reviewed.
+- **Remaining videos:** no MP4 is considered complete merely because a script or workflow exists; publish only after upload and manifest verification.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
