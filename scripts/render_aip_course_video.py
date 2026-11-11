@@ -209,6 +209,14 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         ),
         encoding="utf-8",
     )
+    vtt = destination / f"{output_prefix}.vtt"
+    vtt.write_text(
+        "WEBVTT\\n\\n" + "".join(
+            f"{i}\\n{timecode(start).replace(',', '.')} --> {timecode(end).replace(',', '.')}\\n{text}\\n\\n"
+            for i, (start, end, text) in enumerate(captions, 1)
+        ),
+        encoding="utf-8",
+    )
     transcript = destination / f"{output_prefix}-transcript.txt"
     transcript.write_text(
         "\n\n".join(f"SLIDE {s['slide']:02} — {s['title']}\n\n{s['narration']}" for s in scenes) + "\n",
@@ -218,6 +226,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         "course": manifest["course"],
         "module": manifest["module_id"],
         "status": "rendered_preview_pending_human_qa",
+        "script_revision": manifest.get("script_revision", "unversioned"),
         "voice": voice,
         "speech_rate": rate,
         "resolution": f"{width}x{height}",
@@ -226,6 +235,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "video_filename": mp4.name,
         "captions_filename": subtitles.name,
+        "webvtt_filename": vtt.name,
         "scenes": segments,
     }
     (destination / f"{output_prefix}-manifest.json").write_text(
