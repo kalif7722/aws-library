@@ -113,6 +113,22 @@ const CONFIG: Record<string, {
     firstTitle: "Lab Preparation: Strands, AgentCore and Agent Squad",
     title: "Agent Labs, MCP, OpenAPI, Human Review and Amazon Q Business",
   },
+  "03-07": {
+    prefix: "module-03/part-07/aip-module-03-part-07",
+    revision: "2026-11-12-m03-p07-visual-aligned-v1",
+    firstSlide: 41,
+    count: 5,
+    firstTitle: "Amazon Q Business: A Grounded Answer",
+    title: "Amazon Q Business, Secure Enterprise Answers and Q Apps",
+  },
+  "03-08": {
+    prefix: "module-03/part-08/aip-module-03-part-08",
+    revision: "2026-11-12-m03-p08-visual-aligned-v1",
+    firstSlide: 46,
+    count: 5,
+    firstTitle: "Amazon Q Developer in AWS",
+    title: "Amazon Q Developer: Infrastructure, Coding and Project Rules",
+  },
   "02-01": {
     prefix: "module-02/part-01/aip-module-02-part-01",
     revision: "2026-11-11-m02-p01-visual-aligned-v1",
