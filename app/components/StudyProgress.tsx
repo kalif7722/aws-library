@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import type {CSSProperties} from 'react';
+import {getAipVideoProgress} from './aipVideoCatalog';
 
 // A visible, focused slide receives automatic credit after 40 seconds.
 // The dwell counter is intentionally never shown to learners.
@@ -90,9 +91,11 @@ export function CourseProgress({course,lessons,detailed=false}:{course:string;le
  const finished=lessons.filter(l=>done.includes(l.id)).length;
  const percent=lessons.length?Math.round(finished/lessons.length*100):0;
  const watched=done.filter(x=>x.startsWith(course+'-video-')).length;
+ const videoStats=course==='aip'?getAipVideoProgress(done):null;
+ const videoSummary=videoStats ? `${videoStats.seen}/${videoStats.total} videos seen · ${videoStats.completed} completed` : `${watched} videos watched`;
  if(detailed)return <section className="course-progress-dashboard" id="study-progress" aria-label="Course learning progress">
   <div className="course-progress-dashboard-heading">
-   <div><strong>My course progress</strong><span>{finished} of {lessons.length} slides covered · {watched} {watched===1?'video':'videos'} watched</span></div>
+   <div><strong>My course progress</strong><span>{finished} of {lessons.length} slides covered · {videoSummary}</span></div>
    <strong>{percent}%</strong>
   </div>
   <div className="course-progress-dashboard-track" role="progressbar" aria-label="Course slides covered" aria-valuemin={0} aria-valuemax={lessons.length} aria-valuenow={finished}>
@@ -100,8 +103,8 @@ export function CourseProgress({course,lessons,detailed=false}:{course:string;le
   </div>
   <p>Progress updates automatically as you study slides or watch their video chapters. The slide timer is hidden.</p>
  </section>;
- return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides covered, ${watched} videos watched`}
-  title={`${finished} of ${lessons.length} slides covered · ${watched} videos watched`}>
+ return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides covered, ${videoSummary}`}
+  title={`${finished} of ${lessons.length} slides covered · ${videoSummary}`}>
   <span className="course-progress-ring" style={{'--progress':`${percent}%`} as CSSProperties}><strong>{percent}%</strong></span>
   <span className="course-progress-label">My progress</span>
  </div>;
@@ -123,12 +126,14 @@ export function ModuleStudyProgress({course,moduleId,totalSlides}:{course:string
  const videoPrefix=`${course}-video-${moduleId}`;
  const count=Array.from({length:totalSlides},(_,i)=>`${slidePrefix}${i+1}`).filter(id=>done.includes(id)).length;
  const watched=done.filter(id=>id===videoPrefix||id.startsWith(videoPrefix+'-')).length;
+ const videoStats=course==='aip'?getAipVideoProgress(done,moduleId):null;
+ const videoSummary=videoStats&&videoStats.total>0?`${videoStats.seen}/${videoStats.total} videos seen · ${videoStats.completed} completed`:`${watched} videos watched`;
  const percent=totalSlides?Math.round(count*100/totalSlides):0;
  return <div className="module-study-progress" id="module-study-progress" role="status"
-   aria-label={`Module progress: ${count} of ${totalSlides} slides covered, ${watched} videos watched`}>
+   aria-label={`Module progress: ${count} of ${totalSlides} slides covered, ${videoSummary}`}>
    <div className="module-study-progress-details">
     <strong>My learning progress</strong>
-    <span>{count}/{totalSlides} slides covered · {watched} {watched===1?'video':'videos'} watched</span>
+    <span>{count}/{totalSlides} slides covered · {videoSummary}</span>
    </div>
    <div className="module-study-progress-meter" role="progressbar" aria-valuemin={0} aria-valuemax={totalSlides} aria-valuenow={count} aria-label="Slides covered">
     <span style={{width:`${percent}%`}}/>
