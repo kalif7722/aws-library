@@ -11,6 +11,8 @@ const CAPTIONS: Record<string, string> = {
   "01-06": "module-01/part-06/aip-module-01-part-06.vtt",
   "02-01": "module-02/part-01/aip-module-02-part-01.vtt",
   "02-02": "module-02/part-02/aip-module-02-part-02.vtt",
+  "02-03": "module-02/part-03/aip-module-02-part-03.vtt",
+  "02-04": "module-02/part-04/aip-module-02-part-04.vtt",
 };
 
 export async function GET(request: NextRequest) {
