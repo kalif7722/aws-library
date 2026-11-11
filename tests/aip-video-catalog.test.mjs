@@ -15,10 +15,10 @@ runInNewContext(js, { exports: exported, module: { exports: exported } });
 const { getAipVideoProgress, aipVideoId, aipVideoStartedId, aipVideoCompletionIds } = exported;
 
 test("the published AIP playlist has consistent module totals", () => {
-  assert.equal(getAipVideoProgress([]).total, 19);
+  assert.equal(getAipVideoProgress([]).total, 22);
   assert.equal(getAipVideoProgress([], "00").total, 1);
   assert.equal(getAipVideoProgress([], "01").total, 6);
-  assert.equal(getAipVideoProgress([], "02").total, 12);
+  assert.equal(getAipVideoProgress([], "02").total, 15);
 });
 
 test("watching a video briefly records seen without falsely completing it", () => {
@@ -74,7 +74,19 @@ test("completion IDs are unique even for repeated chapter metadata", () => {
 test("new module 02 lecture parts count in course completion denominator", () => {
   const completed=aipVideoCompletionIds("02","12",[81,82,83,84,85,86,87,88,89,90]);
   const stats=getAipVideoProgress(completed,"02");
-  assert.equal(stats.total,12);
+  assert.equal(stats.total,15);
   assert.equal(stats.completed,1);
   assert.equal(stats.seen,1);
+});
+
+test("Module 02 new video sections 13 through 15 align to real source slide ranges",()=>{
+  const sections=[
+    ["13",91,100],["14",101,110],["15",111,120],
+  ];
+  for(const [part,start,end] of sections){
+    const entries=Array.from({length:end-start+1},(_,i)=>`aip-02-${start+i}`);
+    const completed=getAipVideoProgress(entries,"02");
+    assert.equal(completed.completed,1);
+    assert.deepEqual(Array.from(completed.completedIds),[aipVideoId("02",part)]);
+  }
 });
