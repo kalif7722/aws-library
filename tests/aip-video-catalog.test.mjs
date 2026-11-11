@@ -12,13 +12,13 @@ const js = ts.transpileModule(source, {
 }).outputText;
 const exported = {};
 runInNewContext(js, { exports: exported, module: { exports: exported } });
-const { getAipVideoProgress, aipVideoId, aipVideoStartedId } = exported;
+const { getAipVideoProgress, aipVideoId, aipVideoStartedId, aipVideoCompletionIds } = exported;
 
 test("the published AIP playlist has consistent module totals", () => {
-  assert.equal(getAipVideoProgress([]).total, 15);
+  assert.equal(getAipVideoProgress([]).total, 19);
   assert.equal(getAipVideoProgress([], "00").total, 1);
   assert.equal(getAipVideoProgress([], "01").total, 6);
-  assert.equal(getAipVideoProgress([], "02").total, 8);
+  assert.equal(getAipVideoProgress([], "02").total, 12);
 });
 
 test("watching a video briefly records seen without falsely completing it", () => {
@@ -55,4 +55,26 @@ test("a video viewed in one module never counts toward another", () => {
   const done = [aipVideoStartedId("01", "01"),"aip-01-3"];
   assert.equal(getAipVideoProgress(done, "02").seen, 0);
   assert.equal(getAipVideoProgress(done, "01").seen, 1);
+});
+
+test("fast-forwarding or explicitly marking video complete credits all chapter slides", () => {
+  const ids = Array.from(aipVideoCompletionIds("01", "02", [10,11,12,13]));
+  assert.equal(ids.length,5);
+  assert.equal(ids[0],"aip-video-01-02");
+  assert.equal(getAipVideoProgress(ids,"01").completed,1);
+  assert.equal(getAipVideoProgress(ids,"01").inProgress,0);
+  assert.ok(ids.includes("aip-01-13"));
+});
+
+test("completion IDs are unique even for repeated chapter metadata", () => {
+  assert.deepEqual(Array.from(aipVideoCompletionIds("02","03",[16,17,17,18])),
+    ["aip-video-02-03","aip-02-16","aip-02-17","aip-02-18"]);
+});
+
+test("new module 02 lecture parts count in course completion denominator", () => {
+  const completed=aipVideoCompletionIds("02","12",[81,82,83,84,85,86,87,88,89,90]);
+  const stats=getAipVideoProgress(completed,"02");
+  assert.equal(stats.total,12);
+  assert.equal(stats.completed,1);
+  assert.equal(stats.seen,1);
 });
