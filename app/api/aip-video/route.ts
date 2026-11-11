@@ -129,6 +129,22 @@ const CONFIG: Record<string, {
     firstTitle: "Managed OpenSearch Domains",
     title: "Managed OpenSearch Domains, Index Lifecycle, Operations and Security",
   },
+  "02-09": {
+    prefix: "module-02/part-09/aip-module-02-part-09",
+    revision: "2026-11-11-m02-p09-visual-aligned-v1",
+    firstSlide: 57,
+    count: 8,
+    firstTitle: "Shard Pressure and Performance",
+    title: "OpenSearch Performance, Serverless and Vector Search",
+  },
+  "02-10": {
+    prefix: "module-02/part-10/aip-module-02-part-10",
+    revision: "2026-11-11-m02-p10-visual-aligned-v1",
+    firstSlide: 65,
+    count: 6,
+    firstTitle: "Amazon S3 Vectors",
+    title: "Amazon S3 Vectors and Bedrock Knowledge Bases",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
