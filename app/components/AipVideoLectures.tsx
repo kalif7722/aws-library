@@ -470,35 +470,36 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-main small{font-size:12px;color:#627b97}
       .av-pill{padding:5px 10px;border-radius:9px;font-size:11px;font-weight:800;background:#e9f7ef;color:#187347}
       .av-pill.pending{background:#eff3f8;color:#60728a}
-      .av-player{width:100%;display:block;background:#071a2b;border-radius:12px;aspect-ratio:16/9}
-      .av-video-stage{position:relative;min-width:0;min-height:0}
-      .av-seek-controls{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);z-index:4;display:flex;gap:12px;pointer-events:none}
-      .av-seek-controls button{pointer-events:auto;display:flex;align-items:center;gap:7px;padding:9px 15px;color:#fff;background:#071e36e8;border:1px solid #e0f3ffa3;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 3px 14px #0007}
-      .av-seek-controls button span{font-size:12px}
-      .av-seek-controls button:hover,.av-seek-controls button:focus-visible{background:#0d548a;outline:2px solid #8ad4ff}
-      .av-main:fullscreen .av-seek-controls{bottom:70px}
-      @media(max-width:600px){.av-seek-controls{bottom:52px;gap:7px}.av-seek-controls button{padding:7px 10px}}
-      .av-video-overlay{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;pointer-events:none}
-      .av-video-arrow{pointer-events:auto;background:#08223bd9;border:1px solid #e2f4ff8a;color:white;border-radius:12px;display:flex;align-items:center;gap:10px;padding:13px 14px;min-height:54px;font-weight:750;max-width:220px;box-shadow:0 5px 20px #0008;cursor:pointer}
-      .av-video-arrow span{font-size:22px;line-height:1}
-      .av-video-arrow small{font-size:12px;color:#fff}
-      .av-video-arrow:not(:disabled):hover,.av-video-arrow:not(:disabled):focus-visible{background:#0c4e84;outline:2px solid #8dd4ff}
-      .av-video-arrow:disabled{opacity:.27;cursor:default}
-      .av-video-enter{position:absolute;right:12px;top:12px;z-index:2;background:#06182ee6;color:#fff;border:1px solid #a3d9ffb3;border-radius:9px;padding:8px 11px;font-size:12px;font-weight:750;cursor:pointer;box-shadow:0 3px 12px #0006}
-      .av-video-enter:hover,.av-video-enter:focus-visible{background:#075b92;outline:2px solid #88d7ff}
-      .av-video-exit{position:absolute;right:18px;top:16px;background:#06182ed9;color:#fff;border:1px solid #cde5ff88;border-radius:9px;padding:9px 12px;font-weight:750;cursor:pointer}
-      .av-fullscreen-playblocked{position:absolute;left:50%;bottom:74px;transform:translateX(-50%);background:#07182eea;border:1px solid #a3ceff;border-radius:12px;padding:12px 15px;color:white;display:flex;align-items:center;gap:14px;font-size:13px;max-width:90%;z-index:6}
-      .av-fullscreen-playblocked button{background:#d7efff;color:#0a3258;font-weight:750;border:0;border-radius:8px;padding:9px 12px;cursor:pointer;white-space:nowrap}
-      .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;background:#071827;color:#fff;display:flex;flex-direction:column;padding:14px 22px;overflow:hidden}
-      .av-main:fullscreen .av-main-top{flex:0 0 auto;margin:0 0 12px}
+      .av-video-stage{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;border-radius:12px;background:#061726}
+      .av-player{width:100%;aspect-ratio:16/9;display:block;object-fit:contain;cursor:pointer;background:#061726}
+      .av-custom-controls{position:relative;z-index:10;flex:none;background:#071827;color:#f5faff;padding:9px 12px 10px}
+      .av-timeline{display:block;width:100%;height:13px;margin:0 0 8px;accent-color:#79d8ff;cursor:pointer}
+      .av-control-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+      .av-control-row button{border:1px solid #557b9a;border-radius:8px;padding:8px 10px;color:#effaff;background:#173b5b;font-size:12px;font-weight:750;white-space:nowrap;min-height:36px;cursor:pointer}
+      .av-control-row button:hover:not(:disabled),.av-control-row button:focus-visible{background:#17639b;outline:2px solid #8ddcff;outline-offset:1px}
+      .av-control-row button:disabled{opacity:.6;cursor:default}
+      .av-control-row .av-mark-complete{background:#14574f;border-color:#40a895}
+      .av-control-row .av-mark-complete:disabled{background:#183d39;color:#b9f5e2;opacity:1}
+      .av-timestamp{white-space:nowrap;font-size:12px;color:#dceffa;font-variant-numeric:tabular-nums}
+      .av-controls-grow{flex:1 1 8px}
+      .av-volume{width:65px;accent-color:#79d8ff;cursor:pointer}
+      .av-fullscreen-nav{position:absolute;inset:0;z-index:7;display:flex;align-items:center;justify-content:space-between;pointer-events:none;padding:0 12px 64px}
+      .av-fullscreen-nav button{pointer-events:auto;display:flex;align-items:center;gap:9px;justify-content:center;min-height:54px;padding:12px 16px;background:#082b49e8;border:1px solid #c8e7ffb8;border-radius:12px;color:#fff;box-shadow:0 6px 18px #0009;font-size:15px;font-weight:800}
+      .av-fullscreen-nav button:hover:not(:disabled),.av-fullscreen-nav button:focus-visible{background:#0e659d;outline:2px solid #8addff}
+      .av-fullscreen-nav button:disabled{opacity:.28;cursor:default}
+      .av-fullscreen-nav span{font-size:12px}
+      .av-playblocked{position:absolute;left:50%;bottom:118px;transform:translateX(-50%);z-index:9;display:flex;gap:12px;align-items:center;justify-content:center;background:#061d33f2;border:1px solid #a7deff;border-radius:12px;padding:12px 14px;color:white;font-size:12px;box-shadow:0 5px 22px #0009}
+      .av-playblocked button{background:#e3f4ff;color:#123c5c;padding:8px 10px;border:0;border-radius:7px;font-weight:800;white-space:nowrap}
+      .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;min-height:0;background:#061726;color:#fff;display:flex;flex-direction:column;padding:12px 18px;overflow:hidden}
+      .av-main:fullscreen .av-main-top{flex:none;margin:0 0 10px}
       .av-main:fullscreen .av-main-top h3,.av-main:fullscreen .av-main-top small{color:#fff}
-      .av-main:fullscreen .av-pill{background:#1f4b64;color:#e6faff}
-      .av-main:fullscreen .av-video-stage{flex:1;display:flex;align-items:center;justify-content:center}
-      .av-main:fullscreen .av-video-stage .av-player{height:100%;max-height:calc(100vh - 105px);width:100%;object-fit:contain;aspect-ratio:auto;border-radius:0}
-      .av-main:fullscreen .av-video-overlay{width:100%;box-sizing:border-box}
+      .av-main:fullscreen .av-pill{background:#204c65;color:#e6faff}
+      .av-main:fullscreen .av-video-stage{flex:1 1 auto;min-height:0;width:100%;border-radius:0;overflow:hidden}
+      .av-main:fullscreen .av-player{flex:1 1 auto;min-height:0;height:0;max-height:none;width:100%;aspect-ratio:auto;object-fit:contain;border-radius:0}
+      .av-main:fullscreen .av-custom-controls{flex:none;padding:10px 14px}
+      .av-main:fullscreen .av-fullscreen-nav{padding-bottom:83px}
       .av-main:fullscreen .av-tools,.av-main:fullscreen .av-chapters,.av-main:fullscreen .av-slidebar,.av-main:fullscreen .av-actions,.av-main:fullscreen .av-autoplay-notice{display:none}
-      .av-main:fullscreen .av-video-exit{z-index:5}
-      @media(max-width:600px){.av-video-arrow{padding:9px;min-height:43px}.av-video-arrow small{display:none}.av-video-overlay{padding:0 7px}.av-main:fullscreen{padding:8px}}
+      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-fullscreen-nav span{display:none}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
       .av-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#546b84;font-size:12px;margin:13px 0}
       .av-tools a,.av-actions a{font-weight:700;color:#1466b2;text-decoration:underline;text-underline-offset:3px}
       .av-action{border:1px solid #a7c8ea;background:#edf6ff;color:#104f85;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
@@ -534,7 +535,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     </div>
     {moduleId === "00" ? <div className="av-main" ref={playerAnchor}>
       {intro?.status === "ready"
-        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00" fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen}/>
+        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00" fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen} completed={videoStats.completedIds.includes("aip-video-00")}/>
         : <p className="av-empty">{checking ? "Checking the introduction video…" : "The revised video is not currently available. Open the original slides below."}</p>}
       <div className="av-actions"><a href={MODULE_01+"#video-lectures"}>Continue to Module 01 →</a></div>
     </div> : <div className="av-layout">
@@ -568,7 +569,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
               onFinished={onVideoEnded} fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen}
               onPrevious={prev ? () => choose(prev.id,true) : undefined}
               onNext={next ? () => choose(next.id,true) : undefined}
-              previousTitle={prev?.title} nextTitle={next?.title}/>
+              previousTitle={prev?.title} nextTitle={next?.title}
+              completed={videoStats.completedIds.includes(`aip-video-${moduleId}-${active.id}`)}/>
           : <div className="av-empty" role="status">{checking ? "Checking lecture availability…" : "This topic's video is in production. Its source slides are still available for study."}</div>}
         <div className="av-slidebar">
           <span>Want to inspect the actual architecture diagrams?</span>
