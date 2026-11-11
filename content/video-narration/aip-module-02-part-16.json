@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Visually inspected original 2048×1152 WebP slides 121–125 from the Module 02 redesign archives; exact on-screen diagrams and examples narrated. Validate R2 originals at render.",
+  "part_id": "16",
+  "part_title": "S3 Lifecycle Scenarios, Storage Class Analytics and Replication",
+  "script_revision": "2026-11-12-m02-p16-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 121,
+      "title": "Lifecycle Scenario: Photos",
+      "narration": "Let's apply S3 Lifecycle rules to a realistic photo application. The image has two separate timelines, not one rule for every object. On the upper path, a user uploads an original profile photo into S3 Standard on day zero. The photo needs to be available instantly for the first sixty days, while users may update or view their profile often. At day sixty, the original moves to S3 Glacier Flexible Retrieval, because older profile images are accessed less often and the application can tolerate restoration time. Now follow the lower cyan path. Re-creatable thumbnails begin in S3 One Zone-Infrequent Access, and at day sixty they are expired. Why delete thumbnails instead of archiving them? Because they can be generated again from the originals. This is a good example of designing separate prefixes or object tags with different lifecycle rules. Note the purple retrieval-timing callout: a Glacier Flexible Retrieval object isn't necessarily immediately available like Standard. The lesson is to choose transitions and expiration based on each object's business value and required recovery time."
+    },
+    {
+      "slide": 122,
+      "title": "Lifecycle Scenario: Deleted Files",
+      "narration": "This slide demonstrates a soft-delete experience built with S3 Versioning and lifecycle policies. Start at step one: a document is uploaded as version one. At step two the user deletes it, but the current version becomes a delete marker, leaving the original object version recoverable as a noncurrent version. Follow the horizontal timeline. For the first thirty days after deletion, the system keeps that noncurrent version in a fast-access class, such as Standard, so an accidental deletion can be reversed quickly. After thirty days, the lifecycle policy can transition the noncurrent version to S3 Deep Archive for less expensive retention. The diagram ends with retention up to three hundred sixty-five days, after which the example policy can expire it. Notice that the delete marker is not itself the original data. Recovery requires retrieving or restoring the appropriate older version and handling the marker. If a version is archived, retrieval will be slower. This is a planned recovery workflow, not an instant undo button guaranteed for every storage class."
+    },
+    {
+      "slide": 123,
+      "title": "S3 Storage Class Analysis",
+      "narration": "Now look at S3 Storage Class Analysis, which helps choose a transition based on observed access patterns. The first panel shows a bucket containing objects that are read frequently at first and less frequently as they age. In step two, S3 Analytics measures the object access pattern over time. Step three turns those observations into recommendations: keep objects in S3 Standard while access is frequent, and consider Standard-Infrequent Access after usage drops. The fourth panel outputs a CSV report, while the fifth reminds us to use those findings to tune S3 Lifecycle rules. Pay attention to the line chart along the bottom. Access frequency decreases after a period such as thirty to ninety days; the transition point should come from the actual pattern. The text across the top also sets an important limitation: this analysis is primarily for Standard versus Standard-IA transition timing. It isn't a recommendation engine that automatically chooses Glacier or One Zone classes. Use its measurements alongside availability needs, minimum-storage-duration charges, and retrieval cost before changing production lifecycle policies."
+    },
+    {
+      "slide": 124,
+      "title": "S3 Replication: CRR and SRR",
+      "narration": "S3 replication copies eligible objects from a versioned source bucket to a versioned destination bucket asynchronously. On this slide, the source bucket is on the left with multiple photo versions. Follow the cyan arrow across the top: Same-Region Replication, or SRR, copies to another bucket within the same AWS Region. The orange arrow underneath is Cross-Region Replication, or CRR, which sends copies to a destination in a different Region. The destination can be in the same or a different AWS account, subject to policy and configuration. Now read the three boxes along the bottom. Replication needs permissions to read the source and write to the destination; it isn't instant; and configured rules determine which objects, prefixes or tags are included. Existing objects require an appropriate backfill process, while new eligible changes can replicate after the rule is enabled. Also check which metadata and delete-marker behaviour the rule supports. Replication improves data placement and resilience, but doesn't replace versioning, security review or a tested backup strategy."
+    },
+    {
+      "slide": 125,
+      "title": "Replication Edge Cases",
+      "narration": "This slide has four numbered cases that often appear in AWS exam questions. In case one, the timeline shows objects created before a replication rule is enabled. Ordinary replication does not automatically backfill those earlier objects, whereas new eligible objects can replicate after the rule takes effect. Case two introduces S3 Batch Replication, which can process existing objects through a separately configured job. Case three concerns deletion. Replicating delete markers is optional and subject to the replication rule, while a permanent deletion of a specific version is not replicated in the same way. Now look at the bottom illustration, where bucket A replicates to bucket B. The dashed arrow from B to C has a red cross, because replication does not automatically chain across multiple buckets. To copy data from B to C you need a separately supported rule or workflow. These exceptions explain why seeing one destination update does not guarantee every object change has reached every bucket. Always test behaviour for new, existing, deleted and versioned objects."
+    }
+  ]
+}
