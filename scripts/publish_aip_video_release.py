@@ -27,6 +27,8 @@ EXPECTED = {
     ("02", "08"): (list(range(47, 57)), "2026-11-11-m02-p08-visual-aligned-v1"),
     ("02", "09"): (list(range(57, 65)), "2026-11-11-m02-p09-visual-aligned-v1"),
     ("02", "10"): (list(range(65, 71)), "2026-11-11-m02-p10-visual-aligned-v1"),
+    ("02", "11"): (list(range(71, 81)), "2026-11-11-m02-p11-visual-aligned-v1"),
+    ("02", "12"): (list(range(81, 91)), "2026-11-11-m02-p12-visual-aligned-v1"),
 }
 ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip"
 COURSE = "https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional"
