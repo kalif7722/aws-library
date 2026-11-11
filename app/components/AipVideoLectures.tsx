@@ -561,7 +561,9 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
             <small>{active.subtitle}</small>
           </div>
           <span className={results[active.id]?.status === "ready" ? "av-pill" : "av-pill pending"}>
-            {results[active.id]?.status === "ready" ? "Ready to watch" : "In preparation"}
+            {results[active.id]?.status === "ready"
+              ? (videoStats.completedIds.includes(`aip-video-${moduleId}-${active.id}`) ? "✓ Completed" : "Ready to watch")
+              : "In preparation"}
           </span>
         </div>
         {results[active.id]?.status === "ready"
