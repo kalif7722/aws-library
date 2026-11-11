@@ -44,6 +44,17 @@ export function aipVideoStartedId(moduleId: string, partId: string): string {
   return moduleId === "00" ? "aip-video-started-00" : `aip-video-started-${moduleId}-${partId}`;
 }
 
+/** A learner can finish by reaching the end or choosing Mark complete.
+ * The video's mapped slide lessons are credited in the same transaction. */
+export function aipVideoCompletionIds(moduleId: string, partId: string, slides: readonly number[]): string[] {
+  return [
+    aipVideoId(moduleId, partId),
+    ...[...new Set(slides.filter(slide=>Number.isInteger(slide) && slide>0))]
+      .map(slide=>`aip-${moduleId}-${slide}`),
+  ];
+}
+
+
 export type AipVideoProgress = {
   total: number;
   seen: number;
