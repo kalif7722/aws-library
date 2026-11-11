@@ -14,12 +14,12 @@ import json
 import re
 import subprocess
 import sys
-import time
 from pathlib import Path
 
-import edge_tts
 import requests
 from PIL import Image
+
+from aip_tts_reliability import synthesize_narration
 
 
 def run(*args: str) -> None:
@@ -63,21 +63,6 @@ def download_slide(session: requests.Session, root: str, module: str,
         except (requests.RequestException, OSError, ValueError) as exc:
             errors.append(f"{relative}: {exc}")
     raise RuntimeError(f"Missing or invalid original slide {number:02}: " + "; ".join(errors))
-
-
-async def speak(text: str, voice: str, rate: str, target: Path) -> None:
-    last_error = None
-    for attempt in range(3):
-        try:
-            await edge_tts.Communicate(text=text, voice=voice, rate=rate).save(str(target))
-            if target.stat().st_size < 1200:
-                raise RuntimeError("Synthesized audio was unexpectedly short")
-            return
-        except Exception as exc:
-            last_error = exc
-            if attempt < 2:
-                await asyncio.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"Voice synthesis failed for {target.name}: {last_error}")
 
 
 def timecode(seconds: float) -> str:
@@ -165,7 +150,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
         number = scene["slide"]
         print(f"Rendering narrated slide {number:02}/{len(scenes)}...", flush=True)
         audio_path = audio / f"audio-{number:02}.mp3"
-        await speak(scene["narration"], voice, rate, audio_path)
+        await synthesize_narration(scene["narration"], voice, rate, audio_path)
         speech_duration = probe_seconds(audio_path)
         duration = speech_duration + 0.85
         clip_path = clips / f"clip-{number:02}.mp4"
