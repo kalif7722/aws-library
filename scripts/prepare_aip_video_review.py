@@ -28,7 +28,14 @@ def font(size: int):
 
 def get_image(session: requests.Session, module: str, number: int):
     name = f"slide-{number:02}.webp"
-    paths = (f"module-{module}/{name}", f"module-{module}/module-{module}/{name}")
+    paths = (
+        f"module-{module}/{name}",
+        f"module-{module}/module-{module}/{name}",
+        f"module-{module}/slide-{number:02}.png",
+        f"module-{module}/slide-{number:02}.jpg",
+        f"module-{module}/slide-{number:03}.webp",
+        f"module-{module}/slide-{number}.webp",
+    )
     errors = []
     for path in paths:
         try:
@@ -43,7 +50,10 @@ def get_image(session: requests.Session, module: str, number: int):
                 continue
             return image, response.content, path
         except Exception as exc:
-            errors.append(f"{path}: {exc}")
+            details = ""
+            if "response" in locals() and response is not None:
+                details = f" (status {response.status_code}; type {response.headers.get('content-type')}; length {len(response.content)}; first bytes {response.content[:12]!r})"
+            errors.append(f"{path}: {exc}{details}")
     return None, b"", "; ".join(errors)
 
 
