@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original site-ready Module 02 WebP slides 126–134 visually inspected from 121–129 and 130–138 redesign ZIPs; explanations follow real encryption flow diagrams. R2 source checked by renderer.",
+  "part_id": "17",
+  "part_title": "Amazon S3 Encryption: SSE-S3, SSE-KMS, SSE-C and TLS Enforcement",
+  "script_revision": "2026-11-12-m02-p17-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 126,
+      "title": "S3 Encryption Choices",
+      "narration": "We begin the security section with four ways to encrypt Amazon S3 objects. Read the four columns across the slide. The first, SSE-S3, performs server-side encryption with S3-managed keys and is the default baseline for new objects. The second, SSE-KMS, also encrypts on the S3 side but uses a key managed through AWS Key Management Service, allowing key policies and KMS auditability. The third, SSE-C, uses a customer-provided key sent with an eligible HTTPS request. S3 uses that key for object encryption but does not retain the customer key. The fourth, client-side encryption, encrypts the data before it reaches Amazon S3; the customer controls the encryption operation and manages the key outside S3. Notice the different key icons and the ownership row along the bottom. The main decision is not simply whether data is encrypted; all four patterns do that. It is who manages the key, where encryption happens, which controls and logs are required, and who can decrypt the object later."
+    },
+    {
+      "slide": 127,
+      "title": "SSE-S3 Default Encryption",
+      "narration": "This slide follows the most common S3 encryption path. On the left, the client uploads an object through HTTPS. The cyan arrow is encrypted in transit using TLS, which protects the network connection. The object reaches an S3 bucket in the middle. On the right, S3 automatically encrypts the new object at rest using S3-managed keys, a mechanism known as SSE-S3. The three cards along the bottom explain why this is the default experience. New objects receive encryption automatically, Amazon S3 manages the keys, and the customer does not create or operate those encryption keys. Notice how the slide separates transport encryption from at-rest encryption. TLS protects the data while moving across the network, while SSE-S3 protects the stored object. You still need bucket permissions, identity policies and appropriate access controls; encryption doesn't determine who can read an object. For many workloads, this default is sufficient, but requirements for customer-controlled key policies or audit logging may lead you to SSE-KMS."
+    },
+    {
+      "slide": 128,
+      "title": "SSE-KMS Controls",
+      "narration": "Now examine the numbered flow for SSE-KMS. A client uploads an object to S3. S3 uses AWS KMS to obtain data-key material under an authorized KMS key, then uses that data key to encrypt the object at rest. The key policy and IAM permissions shown in the purple box define which principals and services may use the KMS key. The result is an encrypted S3 object, not plaintext stored on disk. On a later download, the caller needs both the appropriate S3 object access and the relevant KMS decrypt permissions. Look at the CloudTrail panel on the lower right: KMS API activity such as GenerateDataKey and Decrypt can be audited, which is useful for monitoring sensitive workloads. The important nuance is that S3 and KMS permissions form two related authorization checks. Granting only s3:GetObject may not be sufficient for an SSE-KMS object. The slide highlights stronger customer control and auditability, but those benefits also introduce key-policy and request-quota considerations."
+    },
+    {
+      "slide": 129,
+      "title": "SSE-KMS Request Quota",
+      "narration": "This slide explains why a high-throughput S3 application may run into a KMS bottleneck. Follow the upper request path. A client uploads an object with SSE-KMS, S3 requests GenerateDataKey from AWS KMS, and S3 encrypts the object using the resulting data key. The lower path represents a download: reading an SSE-KMS object may require a Decrypt operation, subject to configuration and caching. Every relevant KMS operation adds to request volume, so a large number of uploads and downloads can approach KMS request quotas. Now read the mitigation panel on the right. Where supported and appropriate, S3 Bucket Keys can reduce KMS traffic and cost. The team should monitor key usage, review the actual quotas, and design capacity for expected request peaks. Don't treat increasing the S3 request rate as independent of encryption-key operations. This is an example of a cross-service constraint: the storage service may scale, while a dependency such as KMS still has its own permissions, quotas and operational characteristics."
+    },
+    {
+      "slide": 130,
+      "title": "SSE-C Customer-Provided Key",
+      "narration": "SSE-C provides server-side encryption while making the client responsible for the encryption key. Look at the three numbered steps above the central bucket. First, the client sends the object and its customer-provided key information over HTTPS using the required request headers. Second, Amazon S3 encrypts the object at rest but does not store the original customer-provided key. Third, when the client retrieves the object, it must supply the same key information over HTTPS so S3 can decrypt the stored content. Follow the upload and retrieve arrows to see that both operations rely on the key supplied by the customer. The note along the bottom stresses key retention. If the client loses that key, S3 cannot recover the plaintext on its behalf. This differs from SSE-KMS, where key use is managed through AWS KMS policies and operations. In practice, the customer must manage key security, rotation strategy, availability and secure transport very carefully."
+    },
+    {
+      "slide": 131,
+      "title": "Client-Side Encryption for S3",
+      "narration": "Now compare client-side encryption with the SSE-C example. In the upper row, the client starts with plaintext and a key it controls. Encryption happens on the client before upload, so the object sent to S3 is ciphertext. The Amazon S3 bucket on the right stores only the encrypted bytes; it does not perform the customer's initial plaintext-to-ciphertext operation. Follow the lower row in the reverse direction. The client downloads the ciphertext from S3 and decrypts it locally with the appropriate key. Notice the purple notes beside both rows: S3 never receives the original plaintext as part of this client-side encryption workflow. That can help satisfy strict data-handling requirements, but the application now owns key distribution, encryption implementation and recovery procedures. The client must still use HTTPS to protect the connection, even if the object payload is independently encrypted. Choose this pattern only when you can operate the cryptography and key lifecycle reliably."
+    },
+    {
+      "slide": 132,
+      "title": "Encryption in Transit with TLS",
+      "narration": "This slide separates two security layers that are sometimes confused. On the left, a client makes either an HTTP or HTTPS request. The red dashed HTTP line lacks transport encryption, so it must not be treated as a secure S3 connection. The cyan HTTPS line uses TLS, protecting the request and response as they move toward the S3 service endpoint. On the right, the S3 bucket also displays an at-rest lock icon. That second icon reminds us that storage encryption and network transport protection are different controls. The top bullets state that HTTPS is recommended for S3 access and required for SSE-C requests. An at-rest encrypted object is still exposed to network risks if a client uses an insecure transport path. For production systems, prefer HTTPS endpoints, secure client libraries and explicit bucket policy enforcement when required. Our next slide shows how to deny requests that do not use secure transport."
+    },
+    {
+      "slide": 133,
+      "title": "Require Secure Transport",
+      "narration": "Here we turn the TLS recommendation into an enforceable S3 bucket policy. The code panel on the left contains an explicit Deny statement. It applies to requests against the relevant bucket and objects when the condition aws:SecureTransport is false. Follow the two paths on the right. An HTTP request does not use TLS, so the condition evaluates false for secure transport and the explicit Deny blocks the request. The HTTPS path does use TLS, so that particular denial condition is not triggered. But notice the text beneath the green branch: the request must still pass all other IAM and bucket permissions. HTTPS alone does not create access. The policy uses a wildcard principal with a condition to deny insecure access universally. In a real deployment, confirm the resource ARN is correctly scoped and verify service-integration behaviour. This pattern is a guardrail that turns encryption-in-transit expectations into a testable access policy."
+    },
+    {
+      "slide": 134,
+      "title": "Default Encryption and Bucket Policy",
+      "narration": "This final encryption slide contrasts an automatic default with an explicit requirement. On the right, Amazon S3 applies SSE-S3 by default for new objects even when a request does not include a specific encryption header. On the left, a bucket policy may require the caller to request a particular encryption algorithm, such as SSE-KMS, by checking a request header. Follow the middle decision diamond. If the required header is present and the caller has necessary permissions, the upload can proceed. If it is missing, the policy can explicitly deny the request before the bucket's default encryption is applied. The key point is subtle: default encryption ensures the object ends up encrypted at rest, whereas a header-requiring policy validates what the client requested. If the policy demands SSE-KMS, simply relying on default SSE-S3 won't meet that particular request policy. Design policy conditions to express the real requirement without unintentionally blocking legitimate uploads. That completes this focused S3 encryption lecture."
+    }
+  ]
+}
