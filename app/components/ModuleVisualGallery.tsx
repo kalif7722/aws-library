@@ -46,9 +46,10 @@ const courseModules = visualMap.modules as ModuleMeta[];
 export default function ModuleVisualGallery({ moduleNumber, imageBase }: { moduleNumber: string; imageBase: string }) {
   const mappedLessons = lessonsByModule[moduleNumber] ?? [];
   const moduleMeta = courseModules.find((module) => module.id === moduleNumber);
-  // The source PDF page range is reference metadata only. Uploaded visuals and lab slides
-  // may extend beyond it, so keep the gallery aligned with the discovery API window.
-  const expectedCount = 300;
+  // Modules 00 and 01 follow their published source-slide inventories.
+  // Exclude archived slides beyond the official lesson count.
+  const expectedCount = (moduleNumber === "00" || moduleNumber === "01")
+    ? mappedLessons.length : 300;
 
   const visuals: Visual[] = useMemo(() => {
     return Array.from({ length: expectedCount }, (_, i) => {
@@ -112,7 +113,7 @@ export default function ModuleVisualGallery({ moduleNumber, imageBase }: { modul
           failures += payload.failedChecks;
           const next = payload.nextStart;
           if (next !== null && (!Number.isInteger(next) || next <= start)) throw new Error("Unable to finish checking lessons.");
-          start = next;
+          start = next !== null && next > expectedCount ? null : next;
           // Show results as they arrive without dropping existing cards during refresh.
           setAvailableSlides(old => [...new Set([...old, ...found])].sort((a,b) => a-b));
           setSlidePaths(old => ({...old, ...paths}));
