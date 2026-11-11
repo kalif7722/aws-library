@@ -1,0 +1,64 @@
+name: Prepare AIP Module 01 video slide review
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/prepare_aip_video_review.py"
+      - ".github/workflows/prepare-aip-m01-video-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-module-01-video-review
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Inspect actual Module 01 slide images before scripting
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build slide inventory and review contact sheets
+        run: |
+          python -m pip install "Pillow>=10,<13" "requests>=2.31,<3"
+          python scripts/prepare_aip_video_review.py \
+            --module 01 --part 01:1-9 --part 02:10-14 \
+            --out docs/video-review/aip/module-01
+
+      - name: Save visual review assets to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/video-review/aip/module-01
+          if git diff --cached --quiet; then
+            echo "No new review assets."
+            exit 0
+          fi
+          git commit -m "Prepare actual AIP M01 slides 1-14 for video narration review"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Fail the review gate when an original slide is unavailable
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("docs/video-review/aip/module-01/inventory.json")
+          report = json.loads(p.read_text())
+          missing = report["missing"]
+          if missing:
+              raise SystemExit(f"Cannot draft video until missing source slides are fixed: {missing}")
+          print("All original slides 1–14 are accounted for.")
+          PY
