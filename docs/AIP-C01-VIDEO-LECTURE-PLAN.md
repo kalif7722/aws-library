@@ -23,6 +23,19 @@
 - The old Part 07 narration and 59-slide workflow were removed from active production. The archived image package 51–59 remains available as source material, but **is not included in the current published module**.
 - The revised Part 06 MP4 is not considered ready until GitHub Actions completes rendering and confirms the uploaded video and its manifest.
 
+## Module 02 pilot and progress tracking — 11 November 2026
+
+- **Module 02 source:** The existing JSON map contains **144 lesson entries**, while the archived site-ready packages extend to **slide 152** (the later files are console walkthroughs). The official live R2 inventory is being audited before changing the module total or promising coverage beyond the verified source images.
+- **Visually reviewed slides 01–28:** The actual 2048×1152 WebP diagrams were inspected, and the first 28 gallery titles were corrected to match the on-screen headings.
+- **Part 01 · slides 01–07:** Structuring data for GenAI, JSON/model requests, unstructured documents and Converse messages. Narration and render workflow committed.
+- **Part 02 · slides 08–15:** Bedrock Data Automation, standard/custom outputs, documents, images, audio/video and extraction blueprints. Narration and render workflow committed.
+- **Part 03 · slides 16–21:** SageMaker Data Wrangler import, preparation, transformation, export and troubleshooting. Narration and render workflow committed.
+- **Part 04 · slides 22–28:** AWS Glue, crawler/catalog, S3 partitions, Glue Studio, data quality rules and remediation. Narration and render workflow committed.
+- **Next sections:** Inspect live original slides 29 onward and group them by the real topics, not stale PDF-map titles. Verify the total before making the later playlist.
+- **Rendering safeguards:** Each video uses the approved Andrew neural voice, validates every original R2 image, checks all chapters and captions, and publishes to Cloudflare R2 only after the MP4 and narration revision pass QA. The scripts/workflows are **not evidence of successful uploaded videos**.
+- **Course progress:** A slide is automatically credited after **40 seconds** of foreground, focused viewing with no visible countdown or manual complete button. Video viewing credits its slide chapters after about **40 seconds** of actual foreground playback (or 75% on a short chapter); a video is marked complete after **85%** of unique playback time, with seek jumps and background time excluded. Video/slide progress uses the existing browser-local study storage and updates the course and module indicators immediately.
+- **Cross-course:** The shared StudyProgress component supplies the hidden 40-second slide behavior to AIF, SAP, SAA, DVA and AIP, retaining prior completion records. The video-chapter tracking pilot applies to AIP videos.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
@@ -77,10 +90,10 @@
 
 ### Module 02 — Managing Data for Generative AI
 
-- **AIP-M02-P01** · Slides 1–9: Data ingestion, segmentation and preparation
-- **AIP-M02-P02** · Slides 10–17: Bedrock Data Automation
-- **AIP-M02-P03** · Slides 18–28: SageMaker Data Wrangler
-- **AIP-M02-P04** · Slides 29–40: Glue, pipelines and observability inputs
+- **AIP-M02-P01** · Slides 1–7: Structured JSON, unstructured text, and Converse messages (visually verified)
+- **AIP-M02-P02** · Slides 8–15: Bedrock Data Automation and multimodal extraction (visually verified)
+- **AIP-M02-P03** · Slides 16–21: SageMaker Data Wrangler (visually verified)
+- **AIP-M02-P04** · Slides 22–28: AWS Glue, Data Catalog and Data Quality (visually verified)
 - **AIP-M02-P05** · Slides 41–45: Amazon Comprehend
 - **AIP-M02-P06** · Slides 46–56: OpenSearch indexing and architecture
 - **AIP-M02-P07** · Slides 57–68: OpenSearch operations, security and vector search
@@ -202,6 +215,8 @@
 - **AIP-M19-P10**: Troubleshooting lab 10 — one guided case per video
 - **AIP-M19-P11**: Troubleshooting lab 11 — one guided case per video
 - **AIP-M19-P12**: Troubleshooting lab 12 — one guided case per video
+
+> **Audit caveat:** The remaining M02 parts listed below were inherited from the PDF mapping and are provisional; their exact boundaries must be re-established from the real slide images. Do not assume the old ranges can be rendered unchanged.
 
 ## Production and QA pipeline
 
