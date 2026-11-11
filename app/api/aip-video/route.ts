@@ -41,6 +41,38 @@ const CONFIG: Record<string, {
     firstTitle: "Retrieval-Augmented Generation",
     title: "RAG, Vector Search and Bedrock Knowledge Bases",
   },
+  "01-04": {
+    prefix: "module-01/part-04/aip-module-01-part-04",
+    revision: "2026-11-11-m01-p04-visual-aligned-v1",
+    firstSlide: 25,
+    count: 10,
+    firstTitle: "Pre-Retrieval: Choose the Right Chunk",
+    title: "Chunking, Embeddings, Metadata and RAG Quality",
+  },
+  "01-05": {
+    prefix: "module-01/part-05/aip-module-01-part-05",
+    revision: "2026-11-11-m01-p05-visual-aligned-v1",
+    firstSlide: 35,
+    count: 9,
+    firstTitle: "RAG Evaluation with Ground Truth",
+    title: "RAG Evaluation, Multimodal AI, Guardrails and Prompt Management",
+  },
+  "01-06": {
+    prefix: "module-01/part-06/aip-module-01-part-06",
+    revision: "2026-11-11-m01-p06-visual-aligned-v1",
+    firstSlide: 44,
+    count: 11,
+    firstTitle: "Amazon Bedrock Flows",
+    title: "Bedrock Flows, Prompt Design and Injection Defense",
+  },
+  "01-07": {
+    prefix: "module-01/part-07/aip-module-01-part-07",
+    revision: "2026-11-11-m01-p07-visual-aligned-v1",
+    firstSlide: 55,
+    count: 5,
+    firstTitle: "Mitigate Bias in Generative AI",
+    title: "Responsible AI, Enterprise Integration and the GenAI Lifecycle",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
