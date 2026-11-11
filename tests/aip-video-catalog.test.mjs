@@ -15,10 +15,10 @@ runInNewContext(js, { exports: exported, module: { exports: exported } });
 const { getAipVideoProgress, aipVideoId, aipVideoStartedId, aipVideoCompletionIds } = exported;
 
 test("the published AIP playlist has consistent module totals", () => {
-  assert.equal(getAipVideoProgress([]).total, 22);
+  assert.equal(getAipVideoProgress([]).total, 26);
   assert.equal(getAipVideoProgress([], "00").total, 1);
   assert.equal(getAipVideoProgress([], "01").total, 6);
-  assert.equal(getAipVideoProgress([], "02").total, 15);
+  assert.equal(getAipVideoProgress([], "02").total, 19);
 });
 
 test("watching a video briefly records seen without falsely completing it", () => {
@@ -74,7 +74,7 @@ test("completion IDs are unique even for repeated chapter metadata", () => {
 test("new module 02 lecture parts count in course completion denominator", () => {
   const completed=aipVideoCompletionIds("02","12",[81,82,83,84,85,86,87,88,89,90]);
   const stats=getAipVideoProgress(completed,"02");
-  assert.equal(stats.total,15);
+  assert.equal(stats.total,19);
   assert.equal(stats.completed,1);
   assert.equal(stats.seen,1);
 });
@@ -89,4 +89,18 @@ test("Module 02 new video sections 13 through 15 align to real source slide rang
     assert.equal(completed.completed,1);
     assert.deepEqual(Array.from(completed.completedIds),[aipVideoId("02",part)]);
   }
+});
+
+test("last four Module 02 parts map every remaining published slide, 121–144",()=>{
+  const sections=[["16",121,125],["17",126,134],["18",135,138],["19",139,144]];
+  const coverage=[];
+  for(const [part,start,end] of sections){
+    const ids=Array.from({length:end-start+1},(_,i)=>`aip-02-${start+i}`);
+    coverage.push(...Array.from({length:end-start+1},(_,i)=>start+i));
+    const progress=getAipVideoProgress(ids,"02");
+    assert.equal(progress.completed,1);
+    assert.deepEqual(Array.from(progress.completedIds),[aipVideoId("02",part)]);
+  }
+  assert.deepEqual(coverage,Array.from({length:24},(_,i)=>i+121));
+  assert.equal(getAipVideoProgress([],"02").total,19);
 });
