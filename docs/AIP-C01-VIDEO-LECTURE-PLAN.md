@@ -96,6 +96,20 @@
 - **Workflow:** `.github/workflows/render-aip-m02-parts-16-19.yml` renders these four parts serially with the approved neural voice, 15-attempt bounded TTS retries, cached completed audio, source R2 verification, subtitles, transcripts and MP4/manifest checks before release publication.
 - **Status gate:** Committed narration and workflow are **not** confirmed finished videos. Parts become available in the website player only after successful media upload, range verification and matching manifest revision. This closes the 144-slide production *mapping and script* coverage, not the final rendered-media QA.
 
+## Module 03 complete lecture-script batch and fullscreen improvements — 12 November 2026
+
+- **Immersive fullscreen:** The whole video stage fills the display. Top heading, bottom playback controls and side Previous/Next arrows auto-fade after approximately 2.6 seconds. Hovering near the top, bottom or side edges reveals only the corresponding overlay. Touch and keyboard focus temporarily reveal all controls. Hover titles remain attached to navigation arrows; idle overlays do not cover the source slide.
+- **Module 03 Part 01 (slides 1–6):** Agentic AI reasoning loop, foundation model, memory and tools, Bedrock Agent action-group selection and deployment aliases, single-agent retrieval/action/guardrail example.
+- **Part 02 (slides 7–14):** Supervisor-worker translation, choose single vs multi-agent, routing, parallelization, chaining, evaluator-optimizer and session/long-term memory.
+- **Part 03 (slides 15–20):** Strands SDK, tools, agent loop and quickstart, Agent Squad intent routing and AgentCore Runtime introduction.
+- **Part 04 (slides 21–27):** AgentCore capabilities, container packaging and deployment, memory, browser/code tools, import/scaffold, Gateway and Identity.
+- **Part 05 (slides 28–33):** Cedar policies, enforcement vs log-only, agent evaluations, CloudWatch traces, evaluation dimensions and custom rubric judges.
+- **Part 06 (slides 34–40):** Strands/AgentCore lab, intent routing, MCP, MCP server hosting, OpenAPI tool contracts, human-in-the-loop and Q Business.
+- **Part 07 (slides 41–45):** Q Business grounded citation responses, enterprise connectors/plugins, IAM Identity Center ACL awareness, topic/source controls and Q Apps.
+- **Part 08 (slides 46–50):** Q Developer AWS console, infrastructure/cost insights, coding assistant, IDE extensions and project rules.
+- **Source audit:** All **50** published Module 03 slide images were inspected from the five 2048×1152 site-ready image archives. Original image order was matched to narration. The 50 slides are mapped consecutively across eight scripts with no duplicate or missing chapters. Gallery headings 1–50 were corrected to match the actual images instead of relying on shifted legacy PDF headings.
+- **Production:** `.github/workflows/render-aip-m03-parts-01-03.yml`, `render-aip-m03-parts-04-06.yml` and `render-aip-m03-parts-07-08.yml` use the same voice, audio chunk cache, bundled FFmpeg, 15-attempt TTS retries, MP4/subtitle verification and Cloudflare R2 publication checks. All eight parts are registered in the course playlist and captions API. **No MP4 is claimed complete until release verification succeeds.**
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
