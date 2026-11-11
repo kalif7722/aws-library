@@ -64,6 +64,17 @@
 - **Browser compatibility:** Some browsers ignore the `controlsList=nofullscreen` hint on the native HTML5 controls. To retain Previous/Next overlays, learners should use the course's **Fullscreen + navigation** button rather than the browser's built-in video fullscreen button.
 - **Validation:** Confirm a failed speech chunk can exceed six attempts while using cached earlier chunks; confirm completed videos are excluded. On Modules 01 and 02, enter fullscreen using the overlay button, click Next and Previous without leaving fullscreen, and verify the selected video starts or displays a browser autoplay prompt.
 
+## Module 02 next video production and 5-second seeking — 11 November 2026
+
+- **Video player:** Added visible **↶ 5s** and **5s ↷** buttons within the video in both inline and course fullscreen modes. Seeking is clamped to the media duration, updates each video's saved resume position, and does **not** credit skipped time toward the hidden watch-progress tracker. The controls coexist with fullscreen Previous/Next video navigation.
+- **M02 Part 09 (slides 57–64):** Shard pressure, OpenSearch Serverless, document/vector retrieval, exact versus approximate search, compression, sharding across indexes, hierarchical routing patterns and neural search pipelines.
+- **M02 Part 10 (slides 65–70):** Amazon S3 Vectors, vector Put request structure, ingestion/query alternatives, Bedrock Knowledge Bases integration, S3 Vectors versus OpenSearch and operational practices.
+- **M02 Part 11 (slides 71–80):** RDS benefits and scaling, RDS/S3 document patterns, Aurora instances/storage/failover/endpoints, operational features, pgvector and relational architecture.
+- **M02 Part 12 (slides 81–90):** NoSQL versus relational access patterns, DynamoDB items and table keys, partition key design, provisioned/on-demand capacity, WCUs, throttling and read consistency.
+- **Visual provenance:** The source images were inspected from real 2048×1152 site-ready redesign archives for slides 57–60, 61–70, 71–80 and 81–90. The old PDF-oriented gallery titles were corrected to the actual image headings for slides 57–90.
+- **Publication:** `.github/workflows/render-aip-m02-parts-09-10.yml` and `.github/workflows/render-aip-m02-parts-11-12.yml` verify the live source images, build 1080p lecturer MP4s with 15-attempt TTS retries and resumable audio, validate captions and chapter order, then upload to R2 and publish release records only on success.
+- **Status caution:** Source scripts and workflow commits do not prove MP4s have finished rendering. The course's video availability endpoint must verify the uploaded manifest revision and MP4 before advertising each part as playable.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
