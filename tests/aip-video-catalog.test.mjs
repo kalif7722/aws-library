@@ -15,10 +15,11 @@ runInNewContext(js, { exports: exported, module: { exports: exported } });
 const { getAipVideoProgress, aipVideoId, aipVideoStartedId, aipVideoCompletionIds } = exported;
 
 test("the published AIP playlist has consistent module totals", () => {
-  assert.equal(getAipVideoProgress([]).total, 26);
+  assert.equal(getAipVideoProgress([]).total, 29);
   assert.equal(getAipVideoProgress([], "00").total, 1);
   assert.equal(getAipVideoProgress([], "01").total, 6);
   assert.equal(getAipVideoProgress([], "02").total, 19);
+  assert.equal(getAipVideoProgress([], "03").total, 3);
 });
 
 test("watching a video briefly records seen without falsely completing it", () => {
@@ -103,4 +104,16 @@ test("last four Module 02 parts map every remaining published slide, 121–144",
   }
   assert.deepEqual(coverage,Array.from({length:24},(_,i)=>i+121));
   assert.equal(getAipVideoProgress([],"02").total,19);
+});
+
+test("Module 03 first three lectures cover exactly slides 1 to 20",()=>{
+  const parts=[["01",1,6],["02",7,14],["03",15,20]];
+  const slides=[];
+  for(const [part,start,end] of parts){
+    const covered=Array.from({length:end-start+1},(_,i)=>start+i);
+    slides.push(...covered);
+    const completed=getAipVideoProgress(covered.map(n=>`aip-03-${n}`),"03");
+    assert.deepEqual(Array.from(completed.completedIds),[aipVideoId("03",part)]);
+  }
+  assert.deepEqual(slides,Array.from({length:20},(_,i)=>i+1));
 });
