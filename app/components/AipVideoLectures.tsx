@@ -21,10 +21,10 @@ const PARTS: LecturePart[] = [
   { id: "01", title: "Foundation Models & Amazon Bedrock", subtitle: "Models, APIs and access", start: 1, end: 9 },
   { id: "02", title: "Fine-Tuning & LoRA", subtitle: "Customization approaches", start: 10, end: 13 },
   { id: "03", title: "RAG & Knowledge Bases", subtitle: "Retrieval, vectors and grounding", start: 14, end: 24 },
-  { id: "04", title: "Chunking & RAG Evaluation", subtitle: "Better evidence and retrieval quality", start: 25, end: 34 },
-  { id: "05", title: "Multimodal AI & Guardrails", subtitle: "Images, safety and prompts", start: 35, end: 43 },
-  { id: "06", title: "Prompt Patterns & Application Flows", subtitle: "Prompting and workflows", start: 44, end: 54 },
-  { id: "07", title: "Responsible AI & the GenAI Lens", subtitle: "Responsible production design", start: 55, end: 59 },
+  { id: "04", title: "Chunking, Embeddings & RAG Quality", subtitle: "Retrieval quality and metadata", start: 25, end: 34 },
+  { id: "05", title: "RAG Evaluation & Guardrails", subtitle: "Multimodal AI and prompt management", start: 35, end: 43 },
+  { id: "06", title: "Bedrock Flows & Prompt Design", subtitle: "Structured outputs and injection defense", start: 44, end: 54 },
+  { id: "07", title: "Responsible AI & GenAI Lifecycle", subtitle: "Enterprise integration and architecture", start: 55, end: 59 },
 ];
 
 function fmt(seconds: number) {
