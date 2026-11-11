@@ -2,27 +2,127 @@
 import {useEffect,useState} from 'react';
 import type {CSSProperties} from 'react';
 
+// A visible, focused slide receives automatic credit after 40 seconds.
+// The dwell counter is intentionally never shown to learners.
+export const SLIDE_STUDY_SECONDS = 40;
 const key=(course:string)=>`study-progress:v1:${course}`;
+
 export function readCompleted(course:string):string[]{
- try{return JSON.parse(localStorage.getItem(key(course))||'[]') as string[]}catch{return []}
+ if(typeof window==='undefined')return [];
+ try {
+  const value=JSON.parse(localStorage.getItem(key(course))||'[]');
+  return Array.isArray(value)?value.filter((x):x is string=>typeof x==='string'):[];
+ } catch{return []}
 }
+
+export function recordStudyCompletions(course:string,ids:string[]):void{
+ if(typeof window==='undefined'||!ids.length)return;
+ const current=readCompleted(course);
+ const next=[...new Set([...current,...ids.filter(Boolean)])];
+ if(next.length===current.length)return;
+ try{localStorage.setItem(key(course),JSON.stringify(next));}catch{return}
+ window.dispatchEvent(new Event('study-progress-change'));
+}
+
+export function recordStudyCompletion(course:string,id:string):void{
+ recordStudyCompletions(course,[id]);
+}
+
 export function useStudyProgress(course:string,lessonId:string|null){
- const [completed,setCompleted]=useState<string[]>([]),[seconds,setSeconds]=useState(0);
- useEffect(()=>{setCompleted(readCompleted(course));const sync=()=>setCompleted(readCompleted(course));window.addEventListener('storage',sync);return()=>window.removeEventListener('storage',sync)},[course]);
- useEffect(()=>{setSeconds(0);if(!lessonId)return;const timer=window.setInterval(()=>{if(document.visibilityState==='visible')setSeconds(s=>s+1)},1000);return()=>window.clearInterval(timer)},[lessonId]);
- useEffect(()=>{if(lessonId&&seconds>=120&&!completed.includes(lessonId))markCompleted(course,lessonId,setCompleted)},[course,lessonId,seconds,completed]);
- return {completed,seconds,acknowledge:()=>lessonId&&markCompleted(course,lessonId,setCompleted)};
+ const [completed,setCompleted]=useState<string[]>([]);
+ const [seconds,setSeconds]=useState(0);
+ useEffect(()=>{
+  const sync=()=>setCompleted(readCompleted(course));
+  sync();
+  window.addEventListener('storage',sync);
+  window.addEventListener('study-progress-change',sync);
+  return ()=>{
+   window.removeEventListener('storage',sync);
+   window.removeEventListener('study-progress-change',sync);
+  };
+ },[course]);
+ useEffect(()=>{
+  setSeconds(0);
+  if(!lessonId)return;
+  if(readCompleted(course).includes(lessonId))return;
+  let seen=0;
+  let last=performance.now();
+  const timer=window.setInterval(()=>{
+   const now=performance.now();
+   // Ignore time spent in background tabs, while unfocused or when the device sleeps.
+   const elapsed=Math.min(1.5,Math.max(0,(now-last)/1000));
+   last=now;
+   if(document.visibilityState!=='visible'||!document.hasFocus())return;
+   seen+=elapsed;
+   setSeconds(Math.floor(seen));
+   if(seen>=SLIDE_STUDY_SECONDS){
+    recordStudyCompletion(course,lessonId);
+    window.clearInterval(timer);
+   }
+  },1000);
+  return()=>window.clearInterval(timer);
+ },[course,lessonId]);
+ return {
+  completed,
+  seconds,
+  acknowledge:()=>lessonId&&recordStudyCompletion(course,lessonId),
+ };
 }
-function markCompleted(course:string,id:string,set:(ids:string[])=>void){const next=[...new Set([...readCompleted(course),id])];localStorage.setItem(key(course),JSON.stringify(next));set(next);window.dispatchEvent(new Event('study-progress-change'))}
-export function StudyStatus({completed,seconds,onAcknowledge}:{completed:boolean;seconds:number;onAcknowledge:()=>void}){
- return <div className="study-status" role="status"><span>{completed?'✓ Complete':`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} / 2:00`}</span>{!completed&&<button type="button" onClick={onAcknowledge}>Mark complete</button>}</div>
+
+// No countdown, stopwatch, or manual "Mark complete" action in the slide viewer.
+export function StudyStatus({completed}:{completed:boolean;seconds?:number;onAcknowledge?:()=>void}){
+ return completed?<span className="study-status" aria-label="Slide viewed">✓ Viewed</span>:null;
 }
-export function CourseProgress({course,lessons}:{course:string;lessons:{id:string;moduleId:string;title:string;href:string}[]}){
+
+type ProgressLesson={id:string;moduleId:string;title:string;href:string};
+export function CourseProgress({course,lessons}:{course:string;lessons:ProgressLesson[]}){
  const [done,setDone]=useState<string[]>([]);
- useEffect(()=>{const update=()=>setDone(readCompleted(course));update();window.addEventListener('storage',update);window.addEventListener('study-progress-change',update);return()=>{window.removeEventListener('storage',update);window.removeEventListener('study-progress-change',update)}},[course]);
+ useEffect(()=>{
+  const update=()=>setDone(readCompleted(course));
+  update();
+  window.addEventListener('storage',update);
+  window.addEventListener('study-progress-change',update);
+  return()=>{
+   window.removeEventListener('storage',update);
+   window.removeEventListener('study-progress-change',update);
+  };
+ },[course]);
  const finished=lessons.filter(l=>done.includes(l.id)).length;
  const percent=lessons.length?Math.round(finished/lessons.length*100):0;
- return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides completed`} title={`${finished} of ${lessons.length} slides completed`}>
-  <span className="course-progress-ring" style={{'--progress':`${percent}%`} as CSSProperties}><strong>{percent}%</strong></span><span className="course-progress-label">My progress</span>
- </div>
+ const watched=done.filter(x=>x.startsWith(course+'-video-')).length;
+ return <div className="course-progress-compact" id="study-progress" role="status" aria-label={`My progress: ${percent}%, ${finished} of ${lessons.length} slides covered, ${watched} videos watched`}
+  title={`${finished} of ${lessons.length} slides covered · ${watched} videos watched`}>
+  <span className="course-progress-ring" style={{'--progress':`${percent}%`} as CSSProperties}><strong>{percent}%</strong></span>
+  <span className="course-progress-label">My progress</span>
+ </div>;
+}
+
+export function ModuleStudyProgress({course,moduleId,totalSlides}:{course:string;moduleId:string;totalSlides:number}){
+ const [done,setDone]=useState<string[]>([]);
+ useEffect(()=>{
+  const sync=()=>setDone(readCompleted(course));
+  sync();
+  window.addEventListener('storage',sync);
+  window.addEventListener('study-progress-change',sync);
+  return()=>{
+   window.removeEventListener('storage',sync);
+   window.removeEventListener('study-progress-change',sync);
+  };
+ },[course]);
+ const slidePrefix=`${course}-${moduleId}-`;
+ const videoPrefix=`${course}-video-${moduleId}`;
+ const count=Array.from({length:totalSlides},(_,i)=>`${slidePrefix}${i+1}`).filter(id=>done.includes(id)).length;
+ const watched=done.filter(id=>id===videoPrefix||id.startsWith(videoPrefix+'-')).length;
+ const percent=totalSlides?Math.round(count*100/totalSlides):0;
+ return <div className="module-study-progress" id="module-study-progress" role="status"
+   aria-label={`Module progress: ${count} of ${totalSlides} slides covered, ${watched} videos watched`}>
+   <div className="module-study-progress-details">
+    <strong>My learning progress</strong>
+    <span>{count}/{totalSlides} slides covered · {watched} {watched===1?'video':'videos'} watched</span>
+   </div>
+   <div className="module-study-progress-meter" role="progressbar" aria-valuemin={0} aria-valuemax={totalSlides} aria-valuenow={count} aria-label="Slides covered">
+    <span style={{width:`${percent}%`}}/>
+   </div>
+   <strong className="module-study-progress-pct">{percent}%</strong>
+ </div>;
 }
