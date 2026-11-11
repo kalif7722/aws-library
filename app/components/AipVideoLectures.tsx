@@ -265,9 +265,13 @@ function VideoPlayer({
       </video>
       {fullscreen && <div className="av-fullscreen-nav" role="group" aria-label="Fullscreen lecture navigation">
         <button type="button" className="av-nav-previous" disabled={!onPrevious} onClick={onPrevious}
-          aria-label={previousTitle?`Previous video: ${previousTitle}`:"No previous video"} title={previousTitle??"No previous video"}>❮ <span>Previous video</span></button>
+          aria-label={previousTitle?`Previous video: ${previousTitle}`:"No previous video"}
+          data-tooltip={previousTitle?`Previous: ${previousTitle}`:"No previous video"}
+          title={previousTitle?`Previous: ${previousTitle}`:"No previous video"}>❮</button>
         <button type="button" className="av-nav-next" disabled={!onNext} onClick={onNext}
-          aria-label={nextTitle?`Next video: ${nextTitle}`:"No next video"} title={nextTitle??"No next video"}><span>Next video</span> ❯</button>
+          aria-label={nextTitle?`Next video: ${nextTitle}`:"No next video"}
+          data-tooltip={nextTitle?`Next: ${nextTitle}`:"No next video"}
+          title={nextTitle?`Next: ${nextTitle}`:"No next video"}>❯</button>
       </div>}
       {autoPlayBlocked && <div className="av-playblocked" role="status">
         Browser autoplay is paused.
@@ -487,19 +491,22 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-fullscreen-nav button{pointer-events:auto;display:flex;align-items:center;gap:9px;justify-content:center;min-height:54px;padding:12px 16px;background:#082b49e8;border:1px solid #c8e7ffb8;border-radius:12px;color:#fff;box-shadow:0 6px 18px #0009;font-size:15px;font-weight:800}
       .av-fullscreen-nav button:hover:not(:disabled),.av-fullscreen-nav button:focus-visible{background:#0e659d;outline:2px solid #8addff}
       .av-fullscreen-nav button:disabled{opacity:.28;cursor:default}
-      .av-fullscreen-nav span{font-size:12px}
+      .av-fullscreen-nav button{position:relative;width:54px;min-width:54px;padding:12px;font-size:23px;line-height:1}
+      .av-fullscreen-nav button::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 10px);left:0;width:max-content;max-width:min(330px,65vw);overflow-wrap:break-word;padding:9px 12px;border:1px solid #b9dffa;border-radius:8px;color:#fff;background:#0a233bed;box-shadow:0 8px 20px #0008;font-size:12px;font-weight:750;line-height:1.4;text-align:left;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .12s}
+      .av-nav-next::after{left:auto!important;right:0}
+      .av-fullscreen-nav button:not(:disabled):is(:hover,:focus-visible)::after{opacity:1;visibility:visible}
       .av-playblocked{position:absolute;left:50%;bottom:118px;transform:translateX(-50%);z-index:9;display:flex;gap:12px;align-items:center;justify-content:center;background:#061d33f2;border:1px solid #a7deff;border-radius:12px;padding:12px 14px;color:white;font-size:12px;box-shadow:0 5px 22px #0009}
       .av-playblocked button{background:#e3f4ff;color:#123c5c;padding:8px 10px;border:0;border-radius:7px;font-weight:800;white-space:nowrap}
       .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;min-height:0;background:#061726;color:#fff;display:flex;flex-direction:column;padding:12px 18px;overflow:hidden}
       .av-main:fullscreen .av-main-top{flex:none;margin:0 0 10px}
       .av-main:fullscreen .av-main-top h3,.av-main:fullscreen .av-main-top small{color:#fff}
-      .av-main:fullscreen .av-pill{background:#204c65;color:#e6faff}
+      .av-main:fullscreen .av-pill{display:none}
       .av-main:fullscreen .av-video-stage{flex:1 1 auto;min-height:0;width:100%;border-radius:0;overflow:hidden}
       .av-main:fullscreen .av-player{flex:1 1 auto;min-height:0;height:0;max-height:none;width:100%;aspect-ratio:auto;object-fit:contain;border-radius:0}
       .av-main:fullscreen .av-custom-controls{flex:none;padding:10px 14px}
       .av-main:fullscreen .av-fullscreen-nav{padding-bottom:83px}
       .av-main:fullscreen .av-tools,.av-main:fullscreen .av-chapters,.av-main:fullscreen .av-slidebar,.av-main:fullscreen .av-actions,.av-main:fullscreen .av-autoplay-notice{display:none}
-      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-fullscreen-nav span{display:none}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
+      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
       .av-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#546b84;font-size:12px;margin:13px 0}
       .av-tools a,.av-actions a{font-weight:700;color:#1466b2;text-decoration:underline;text-underline-offset:3px}
       .av-action{border:1px solid #a7c8ea;background:#edf6ff;color:#104f85;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
