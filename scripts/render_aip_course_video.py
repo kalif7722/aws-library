@@ -129,8 +129,8 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     scenes = manifest["scenes"]
     if [s["slide"] for s in scenes] != list(range(1, len(scenes) + 1)):
         raise ValueError("Scenes must cover consecutive slides starting at 1")
-    if len(scenes) != 13 and manifest["module_id"] == "00":
-        raise ValueError("AIP module 00 must retain all 13 introduction slides")
+    if len(scenes) != 12 and manifest["module_id"] == "00":
+        raise ValueError("AIP module 00 has 12 verified original slides")
     destination.mkdir(parents=True, exist_ok=True)
     scratch = destination / "_work"
     images = scratch / "images"
