@@ -93,12 +93,20 @@ export function useAipVideoWatchProgress({
     awardCredit();
   },[storeKey,durationSeconds,awardCredit]);
 
-  const onEnded=useCallback(()=>{
-    // The ended event alone cannot mark the lecture watched: a seek to the end
-    // is not equivalent to playing 85% of the video.
-    last.current=null;
-    awardCredit();
-  },[awardCredit]);
+  // Finishing the timeline, including skipping to the end, or deliberately
+  // marking the lecture complete is sufficient. Credit its mapped slides too
+  // so module progress and the video playlist stay consistent.
+  const markComplete=useCallback(()=>{
+    recordStudyCompletions('aip',[
+      videoId,
+      ...chapters.map(chapter=>`aip-${moduleId}-${chapter.slide}`),
+    ]);
+  },[videoId,chapters,moduleId]);
 
-  return {onPlay,onSeeked,onTimeUpdate,onEnded,videoId};
+  const onEnded=useCallback(()=>{
+    last.current=null;
+    markComplete();
+  },[markComplete]);
+
+  return {onPlay,onSeeked,onTimeUpdate,onEnded,markComplete,videoId};
 }
