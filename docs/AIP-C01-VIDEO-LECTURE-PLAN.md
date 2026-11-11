@@ -110,6 +110,14 @@
 - **Source audit:** All **50** published Module 03 slide images were inspected from the five 2048×1152 site-ready image archives. Original image order was matched to narration. The 50 slides are mapped consecutively across eight scripts with no duplicate or missing chapters. Gallery headings 1–50 were corrected to match the actual images instead of relying on shifted legacy PDF headings.
 - **Production:** `.github/workflows/render-aip-m03-parts-01-03.yml`, `render-aip-m03-parts-04-06.yml` and `render-aip-m03-parts-07-08.yml` use the same voice, audio chunk cache, bundled FFmpeg, 15-attempt TTS retries, MP4/subtitle verification and Cloudflare R2 publication checks. All eight parts are registered in the course playlist and captions API. **No MP4 is claimed complete until release verification succeeds.**
 
+## GitHub Actions preview-artifact incident — 12 November 2026
+
+- **Confirmed in GitHub Actions job steps:** Module 03 render and MP4 validation succeeded, but the following `actions/upload-artifact@v4` preview step failed after receiving HTML instead of JSON from the GitHub artifact API (`Unexpected token '<', "<!DOCTYPE "... is not valid JSON`). The failure skipped the otherwise-ready Cloudflare R2 publish step.
+- **Permanent workflow protection:** `actions/upload-artifact@v4` is now **opt-in only** using repository variable `AIP_UPLOAD_GITHUB_PREVIEW=true`; it also has `continue-on-error: true`. Preview artifacts are **not** the course publication channel. Completed MP4/VTT/SRT/transcript/manifest files upload directly to Cloudflare R2 and the release record is committed only after successful verification.
+- **Fail safe:** Missing R2 repository secrets now yield an explicit failure instead of a green job that uploaded nowhere. Existing `actions/cache/restore@v4` and `actions/cache/save@v4` remain enabled, preserving speech chunks for retries.
+- **Scope and rerun:** The three Module 03 render workflows retain a workflow-path push trigger, which automatically queues a new run when this hotfix is committed. Previously successful Module 02 video workflows no longer trigger all their heavy rendering jobs from workflow-only edits. They remain manually dispatchable and continue to run when narration manifests change.
+- **Verification:** `tests/aip-video-workflow-delivery.test.mjs` checks delivery gates across the 11 maintained Module 02/03 workflows. An accepted commit and queued jobs do **not** prove that all videos are available; use the GitHub Actions runs and verified release records for delivery status.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
