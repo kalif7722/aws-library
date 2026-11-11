@@ -122,6 +122,18 @@ function VideoPlayer({
     video.scrollIntoView({behavior:"smooth",block:"center"});
   };
 
+  const skipSeconds=(delta:number)=>{
+    const video=player.current;
+    if(!video)return;
+    const duration=Number.isFinite(video.duration) ? video.duration : (item.durationSeconds??0);
+    const end=duration>0 ? Math.max(0,duration-0.05) : Number.MAX_SAFE_INTEGER;
+    const destination=Math.min(end,Math.max(0,video.currentTime+delta));
+    // Explicit navigation: do not count the skipped seconds as watched.
+    video.currentTime=destination;
+    watch.onSeeked(destination);
+    persistPosition(destination);
+  };
+
   const restart=()=>{
     jump(0);
     setResume(0);
@@ -178,6 +190,10 @@ function VideoPlayer({
       <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English" />
       Your browser does not support this video.
     </video>
+    <div className="av-seek-controls" role="group" aria-label="Video skip controls">
+      <button type="button" onClick={()=>skipSeconds(-5)} aria-label="Rewind 5 seconds" title="Back 5 seconds">↶ <span>5s</span></button>
+      <button type="button" onClick={()=>skipSeconds(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds"><span>5s</span> ↷</button>
+    </div>
     {!fullscreen && onToggleFullscreen && <button className="av-video-enter" type="button"
       onClick={onToggleFullscreen} aria-label="Enter fullscreen with Previous and Next video navigation"
       title="Fullscreen with Previous / Next video controls">⛶ Fullscreen + navigation</button>}
@@ -375,6 +391,12 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-pill.pending{background:#eff3f8;color:#60728a}
       .av-player{width:100%;display:block;background:#071a2b;border-radius:12px;aspect-ratio:16/9}
       .av-video-stage{position:relative;min-width:0;min-height:0}
+      .av-seek-controls{position:absolute;left:50%;bottom:62px;transform:translateX(-50%);z-index:4;display:flex;gap:12px;pointer-events:none}
+      .av-seek-controls button{pointer-events:auto;display:flex;align-items:center;gap:7px;padding:9px 15px;color:#fff;background:#071e36e8;border:1px solid #e0f3ffa3;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 3px 14px #0007}
+      .av-seek-controls button span{font-size:12px}
+      .av-seek-controls button:hover,.av-seek-controls button:focus-visible{background:#0d548a;outline:2px solid #8ad4ff}
+      .av-main:fullscreen .av-seek-controls{bottom:70px}
+      @media(max-width:600px){.av-seek-controls{bottom:52px;gap:7px}.av-seek-controls button{padding:7px 10px}}
       .av-video-overlay{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;pointer-events:none}
       .av-video-arrow{pointer-events:auto;background:#08223bd9;border:1px solid #e2f4ff8a;color:white;border-radius:12px;display:flex;align-items:center;gap:10px;padding:13px 14px;min-height:54px;font-weight:750;max-width:220px;box-shadow:0 5px 20px #0008;cursor:pointer}
       .av-video-arrow span{font-size:22px;line-height:1}
