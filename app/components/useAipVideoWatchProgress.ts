@@ -2,14 +2,15 @@
 
 import {useCallback,useEffect,useRef} from 'react';
 import {readCompleted,recordStudyCompletions} from './StudyProgress';
-import {aipVideoId,aipVideoStartedId} from './aipVideoCatalog';
+import {aipVideoId,aipVideoStartedId,aipVideoCompletionIds} from './aipVideoCatalog';
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
 
 /**
  * Persist distinct seconds of actual foreground playback. Seek jumps and
- * background playback do not count. A video is complete after 85% watched
- * or after every corresponding slide chapter has study credit.
+ * background playback do not count toward passive study credit.
+ * A video also completes when a learner reaches its end or explicitly marks
+ * it complete, without a minimum watch-time requirement.
  */
 export function useAipVideoWatchProgress({
   moduleId,partId,chapters,durationSeconds
@@ -97,11 +98,9 @@ export function useAipVideoWatchProgress({
   // marking the lecture complete is sufficient. Credit its mapped slides too
   // so module progress and the video playlist stay consistent.
   const markComplete=useCallback(()=>{
-    recordStudyCompletions('aip',[
-      videoId,
-      ...chapters.map(chapter=>`aip-${moduleId}-${chapter.slide}`),
-    ]);
-  },[videoId,chapters,moduleId]);
+    recordStudyCompletions('aip',
+      aipVideoCompletionIds(moduleId,partId??'00',chapters.map(chapter=>chapter.slide)));
+  },[moduleId,partId,chapters]);
 
   const onEnded=useCallback(()=>{
     last.current=null;
