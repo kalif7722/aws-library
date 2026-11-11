@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original 2048×1152 WebP slides 111–120 inspected from aws-aip-c01-module02-images-111-120-redesign.zip; narrator speaks to the displayed storage class charts, tables and diagrams. Render verifies live R2.",
+  "part_id": "15",
+  "part_title": "Amazon S3 Storage Classes, Intelligent-Tiering and Lifecycle",
+  "script_revision": "2026-11-11-m02-p15-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 111,
+      "title": "Amazon S3 Storage Classes",
+      "narration": "We're moving from DynamoDB to S3, where the first design question is how frequently each object must be accessed. This slide lays the main S3 storage classes across a left-to-right spectrum. Standard is for frequently used data. Standard-Infrequent Access is for less-frequent access while retaining rapid retrieval. One Zone-Infrequent Access costs less in some scenarios but keeps data in one Availability Zone. The Glacier classes address different archival retrieval and cost requirements, from instant retrieval to flexible and deep archive. Finally, Intelligent-Tiering automatically moves eligible objects between access tiers based on observed usage. Follow the arrow from most frequent to least frequent access. It is not simply a ranking from best to worst. The bottom notes remind us to consider access pattern, retrieval time, resilience, and minimum storage duration or retrieval charges. S3 Lifecycle policies can also transition objects according to age. Choose the class that fits actual usage and recovery requirements, not just its advertised storage price."
+    },
+    {
+      "slide": 112,
+      "title": "Durability Versus Availability",
+      "narration": "The two gauges on this slide illustrate concepts that are easy to mix up. On the left, durability means the likelihood an object remains intact over time. Amazon S3 is designed for eleven nines of object durability for the relevant classes, shown as ninety-nine point nine nine nine nine nine nine nine nine nine percent. On the right, availability asks whether the service can respond to a request when the application needs the object. The slide uses ninety-nine point nine percent as an illustrative availability figure, which is not a universal guarantee for every S3 class. Look at the bucket in the middle: storing an object durably does not automatically mean every attempted retrieval succeeds at every instant. At the bottom, S3 One Zone-Infrequent Access is called out because its data resides in one Availability Zone, unlike classes designed for multi-AZ resilience. In architecture design, durability, access availability, and fault-domain resilience are separate requirements; evaluate all three."
+    },
+    {
+      "slide": 113,
+      "title": "S3 Standard",
+      "narration": "S3 Standard is the default general-purpose storage class for frequently accessed objects. In the large text on the left, the slide highlights low latency, high throughput, and multi-Availability-Zone storage. Follow the arrows from the four clients in the upper-right box: web applications, analytics tools, mobile applications, and end users all read or write objects through Amazon S3. The lower diagram shows object data designed to span multiple Availability Zones within a Region. This is why Standard is a natural choice for active content, application assets, and datasets accessed repeatedly. But don't confuse the class's availability and resilience with access policy: bucket and IAM permissions still determine who can retrieve an object. Also consider whether the application needs database transactions or search indexing, which S3 objects do not directly provide. The key idea is that S3 Standard fits active object-storage workloads where frequent access and rapid retrieval matter more than a low archive-only price."
+    },
+    {
+      "slide": 114,
+      "title": "Infrequent Access Classes",
+      "narration": "The comparison here puts Standard-Infrequent Access on the left and One Zone-Infrequent Access on the right. Both are designed for objects accessed less often but still needing rapid retrieval, and both can incur retrieval charges and minimum storage duration costs. The availability-zone diagrams reveal the main resilience difference. Standard-IA stores data across multiple Availability Zones in a Region, while One Zone-IA stores it within a single Availability Zone. That is why One Zone-IA may cost less but is a weaker fit for the sole irreplaceable copy of critical content. Read the orange warning along the bottom before choosing either class. An object that is downloaded frequently can become expensive because retrieval charges add to storage costs. Use Standard-IA for infrequently accessed content that needs multi-AZ resilience, and One Zone-IA where the data can be recreated or an alternate protected copy already exists."
+    },
+    {
+      "slide": 115,
+      "title": "Glacier Archive Choices",
+      "narration": "This slide compares three Glacier-family choices using their retrieval-time and cost trade-offs. Glacier Instant Retrieval is on the upper-left for rarely accessed data that must still be retrieved immediately. In the middle, Glacier Flexible Retrieval is for archive content that can tolerate a restore workflow with different retrieval options, including expedited, standard, and bulk when supported. At the bottom, Glacier Deep Archive targets long-term retention where the lowest storage price matters more than retrieval speed. Follow the mountain diagram on the right: faster retrieval generally corresponds to higher storage costs, while slower archive retrieval can reduce the cost of keeping seldom-accessed content. This is a conceptual comparison, not an exact price quote. Remember that retrieval fees, minimum storage durations, and restoration operations can change the total cost. Choose the tier based on how quickly an emergency restore must finish and how often archived records will be retrieved."
+    },
+    {
+      "slide": 116,
+      "title": "S3 Intelligent-Tiering",
+      "narration": "S3 Intelligent-Tiering is shown as an automatic progression through access tiers. Start with the frequent-access tier on the left. If an eligible object is not accessed for the configured observation period, it can move to the infrequent-access tier, then to the archive-instant-access tier as shown on the slide. The arrows label example intervals of thirty and ninety days. The two optional archive tiers on the right can provide additional cost savings but require restoration behaviour appropriate to the selected tier. The lower callouts are important: Intelligent-Tiering has a monitoring and automation charge for eligible objects, and not every object automatically transitions into optional archive tiers. In practice, this class is useful when access patterns are difficult to predict or vary over time. The service monitors eligible object access and adjusts tiers so you don't have to assign a single permanent class for every object. Always compare total cost, including monitoring, request, retrieval, and archive behaviour."
+    },
+    {
+      "slide": 117,
+      "title": "Compare S3 Classes",
+      "narration": "This is a quick decision table for the storage classes we've just studied. Read across each row: typical access frequency, availability-zone design, and retrieval speed. S3 Standard is the frequent-access baseline. Standard-IA adds a lower-cost option for infrequent reads while retaining multi-AZ storage. One Zone-IA reduces resilience to one Availability Zone. Glacier Instant Retrieval keeps immediate access for rarely opened content, while Glacier Flexible Retrieval and Deep Archive require restoration for archived objects. Intelligent-Tiering addresses varying access patterns by adjusting supported access tiers automatically. The orange and purple arrows at the right reinforce that storage choice depends on the real files the application keeps, from documents to videos and archives. As a study exercise, imagine a customer-support knowledge base that reads documents every day versus a ten-year compliance archive. They should not necessarily use the same storage class. Check class-specific minimum durations and costs before making the final selection."
+    },
+    {
+      "slide": 118,
+      "title": "S3 Cost Trade-Offs",
+      "narration": "This slide shows why the lowest storage price does not always produce the lowest bill. On the left, frequently accessed objects have a relatively high amount of request and retrieval activity. The stacked bar includes storage, request or retrieval charges, minimum storage duration, and monitoring where applicable. On the right, rarely accessed objects have a different mix: lower activity charges and often more savings from an archive-oriented class. Look at the colour legend rather than only comparing the orange storage segments. Infrequent-access and archive classes can introduce retrieval charges, restore delays, or minimum-duration penalties. Intelligent-Tiering may add eligible object monitoring charges. A frequently downloaded file placed into a low-cost archive tier can actually be a poor choice. The operational lesson is to estimate the full object lifecycle: storage duration, object size, reads, restores, transitions and availability requirements. Pricing varies by Region and class, so this graph illustrates principles rather than a universal bill."
+    },
+    {
+      "slide": 119,
+      "title": "Move Objects Between Classes",
+      "narration": "S3 Lifecycle rules automate storage-class changes as objects age, and this slide uses one sample timeline. At day zero, the object enters S3 Standard for frequent access. After thirty days, a rule can transition it to Standard-IA for less frequent access. After ninety days, a further transition places it in a selected Glacier archive class. The alternative box on the right introduces Intelligent-Tiering, which can handle changing access patterns without a manually defined age step for every eligible object. Now study the key points at the bottom. Lifecycle transitions are based on object age and rules you configure, but the permitted transitions and minimum storage-duration charges still matter. Archive retrieval can require a restore workflow. Not every class transition is available in every case. Lifecycle is especially useful for log archives, reports, and media that become less valuable to access immediately over time. Validate rules before applying them to production buckets."
+    },
+    {
+      "slide": 120,
+      "title": "S3 Lifecycle Rules",
+      "narration": "Our final slide shows how to scope a lifecycle policy precisely. At the top left, a rule can apply to an entire bucket, an object-key prefix, or selected object tags. The diagram on the right illustrates a logs prefix and an environment tag as two ways to target specific objects. Below, the example timeline begins with objects in Standard, transitions them to Standard-IA after sixty days, then to a Glacier class after one hundred eighty days, and finally expires them after three hundred sixty-five days. Those times are illustrative policy choices, not AWS defaults. The action list also includes cleaning up old object versions and aborting incomplete multipart uploads. These are separate lifecycle controls, and deletion is permanent if no recoverable version or backup is retained. The key takeaway for architects is to use lifecycle automation to enforce retention and manage cost, while carefully reviewing filtering, versioning, minimum-duration fees and compliance requirements. That completes this S3 storage-class section of Module Two."
+    }
+  ]
+}
