@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "03",
+  "module_title": "Agentic AI and AWS Agent Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original 2048×1152 Module 03 slides 01–06 individually inspected in site-ready ZIP 01–10; narration follows the literal diagrams; verify R2 images at render.",
+  "part_id": "01",
+  "part_title": "Agentic AI Fundamentals and Bedrock Agent Deployment",
+  "script_revision": "2026-11-12-m03-p01-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Agentic AI: Reason, Retrieve and Act",
+      "narration": "Welcome to Module Three. In the first diagram, the user asks the AI to plan a trip and check tomorrow's weather. A traditional chatbot might answer from information already in its prompt. An agent can do more. Follow the blue loop around the central agent: first it reasons about the goal and chooses the next step, then decides whether it needs a tool. The two tool branches on the right are different. One retrieves knowledge, such as travel guides and destination policies. The other takes an action, for example asking a weather service for current conditions or using a flight search. Those tool results become observations the agent can examine. The agent can loop through planning, tool use and observation until it has enough information to create the final grounded itinerary on the far right. The important point in the bottom banner is that an agent decides when to reason, retrieve, and act. It needs clear permissions and stopping conditions; otherwise a seemingly useful task can turn into uncontrolled tool calls."
+    },
+    {
+      "slide": 2,
+      "title": "LLM Agents: The Working Parts",
+      "narration": "This slide breaks the agent down into working components. Start with the user request on the left: what's tomorrow's forecast in Chennai? In the centre, the agent core uses a foundation model to understand the request, plan a response and select a tool if fresh information is required. Above and to the right are planning instructions, which define the rules and objectives the agent should follow. Below the model is memory, which provides conversational context or stored preferences. The yellow tools box is separate: APIs, databases or external services actually provide fresh facts. Follow the request to the weather-service API on the far right and then trace the observation back. Only after receiving the returned forecast does the agent compose the final answer for the user. Notice the takeaway at the bottom: memory supplies context; tools supply fresh facts. Those are not the same thing. A model should not invent a forecast when the service is unavailable, and tool permissions should be limited to what the task requires."
+    },
+    {
+      "slide": 3,
+      "title": "Tools Make an Agent Practical",
+      "narration": "Here we get a concrete example of tool execution. The user asks whether an order is delayed. The agent in step two chooses a function named lookup_order, with order ID A123 as its argument. Look down at the JSON tool schema: it provides a tool name, description and a required order_id parameter. This description helps the model decide when the function is appropriate and what inputs it needs. Follow the orange arrow to AWS Lambda in step three. Lambda executes application code that queries an order service, and the service returns a structured result saying the status is delayed and the estimated date is Friday. The agent receives that result as an observation, then explains it in plain language to the user. The lower comparison is crucial. The model reasons about which tool to invoke; the code outside the model performs the authorized operation and obtains reliable business data. A tool call is not a magical promise that the action succeeded. Check its response and handle errors."
+    },
+    {
+      "slide": 4,
+      "title": "How Does an Agent Choose a Tool?",
+      "narration": "The next slide examines tool selection in detail. Begin with the user's question: what's the weather in Chennai? The agent first compares that request with its available action-group descriptions and identifies the getWeather action as suitable. In step three, it extracts the city parameter and checks that it has the information required by the tool schema. Follow the orange branch beneath that step. If the city is missing, the agent asks a follow-up question rather than calling a tool with an invented value. Once the parameters are valid, the action group invokes a Lambda function, which obtains weather data. The returned observation includes city, temperature, humidity and sky conditions. The agent then creates a readable answer on the far right. At the bottom are alternative tool types: a knowledge-base retrieval, a code interpreter for computation, and an action group for external operations. Clear descriptions and strict parameter validation help the agent distinguish these options. They also reduce accidental calls and incorrect arguments."
+    },
+    {
+      "slide": 5,
+      "title": "Deploy a Bedrock Agent",
+      "narration": "This slide moves from the agent's logic to deployment. On the left, the first three steps show configuring the Amazon Bedrock Agent with instructions, action groups and any knowledge base; preparing and testing its behavior; and creating an alias for the deployed version. The orange callout at the bottom explains that an alias is the stable deployment handle applications invoke. Now follow the request flow on the right. An application supplies an agent ID, alias ID and session ID to the supported InvokeAgent operation. The deployed Bedrock Agent runtime receives that request, follows its configured instructions and tools, and sends a response to the application. The application does not simply call an arbitrary draft and hope it is stable. Versioning and aliases help separate preparation and evaluation from published behavior. In production you also need IAM permissions, careful session management, tool error handling, and an evaluation process before promoting an alias to real users."
+    },
+    {
+      "slide": 6,
+      "title": "One Agent, Three Capabilities",
+      "narration": "The last slide in this lecture combines the three capabilities we've just introduced. A user asks what to pack for a Seattle event tomorrow. In the middle, Amazon Bedrock Agent orchestrates the task. The upper branch retrieves event and book details from a Knowledge Base, giving the agent domain context. The lower branch invokes an action-group tool through Lambda to ask an external weather service for tomorrow's forecast. Those results come back with specific event information and a prediction of rain. Before the final answer, a Guardrails check validates the response against the configured safety and content policy. On the right, the agent recommends bringing signed copies and a rain jacket. The takeaway strip combines a book icon for grounding, a gear for actions and a shield for guardrails. Each contributes something different. Retrieval makes the answer relevant to the business context, an action provides fresh information, and guardrails enforce additional policy. A well-designed agent coordinates all three rather than depending on model intuition alone."
+    }
+  ]
+}
