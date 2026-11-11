@@ -1,25 +1,18 @@
-# AIP-C01 Course Video Lectures — Version 1 Plan
+# AIP-C01 Course Video Lectures — Delivery Plan
 
-**Purpose:** Transform existing AWS course slides into visually grounded, instructor-quality narrated videos, using the approved Module 00 voice and style.
+**Purpose:** Turn existing AWS course visuals into topic-based video lectures, using the approved Andrew neural voice and visual-first teaching.
 
-**Status:** Module 01 Parts 01–02 visually audited. Module 01 Part 02 covers slides 10–13; slide 14 is RAG and starts Part 03. R2 slide 4 was returned as an invalid image during QA. Other splits remain provisional. Slide counts below come from the course lesson map; they are NOT verified R2 asset inventories. Groupings and titles must be confirmed against actual images before recording.
+**Current Module 01 plan:** 7 ordered video parts covering all 59 slides, with a single selected-video player, slide-linked chapter navigation, transcripts, subtitles, and persistent playback progress.
 
-## CI failure investigation — 11 November 2026
+## Delivery update — 11 November 2026
 
-- The uploaded Video 1 debug log is from the slide-review workflow, not the MP4 renderer. It shows a failed `git pull --rebase origin main` after another concurrent workflow committed the same `inventory.json` and JPEG contact sheet.
-- **Fixed:** The review job now uploads a disposable visual-review artifact and prints per-part readiness instead of committing generated files back to `main`. This eliminates the rebase contention.
-- **Source blocker remains:** Module 01 slide 04 in R2 returns HTTP 200 with an empty, zero-byte WebP. The redesigned batch ZIP also contains a zero-byte slide 04. Video Part 01 is not publication-ready until that specific slide is restored to the approved visual standard.
-- **Other video workflows:** Part 03's release-record step also contained an unsafe git rebase and incorrectly labeled the part as 02. The step now uses the revision-verified GitHub Contents API helper.
-- **Recovery workflow:** `.github/workflows/reconcile-aip-video-releases.yml` verifies the R2 MP4 and manifest and can create a missing release record without rendering again. If media is absent, the workflow reports it as absent rather than pretending the video exists.
-- **Confirmed release:** Module 01 Part 02 is uploaded (381.3 seconds); a matching release record exists. Module 01 Part 03 is not confirmed uploaded from the release records at the time of this investigation.
-
-## Delivery progress (2026-11-11)
-
-- **M00 introduction:** corrected 12-slide, visual-aligned 13:31 video uploaded to R2; course Video Overview player is gated by manifest revision.
-- **M01 Part 02 (slides 10–13):** the four original visuals were inspected, narration written against the actual diagrams, and a 6:21 MP4 uploaded to R2.
-- **M01 Part 03 (slides 14–24):** all 11 original slide images passed the R2 inventory; visual-first script is committed and the video workflow is configured.
-- **M01 Part 01 (slides 1–9):** R2 slide 04 is an **empty 0-byte WebP**. The same empty entry exists in the latest redesigned Module 01 slide package. An older backup contains a valid slide 04, but its visual treatment and service examples differ from the redesigned set. Keep Part 01 unreleased until this slide is restored or redesigned and technically reviewed.
-- **Remaining videos:** no MP4 is considered complete merely because a script or workflow exists; publish only after upload and manifest verification.
+- **Module 00:** 12-slide revised introduction was previously uploaded and linked to the course.
+- **Module 01, Parts 01–03:** User confirmed that all three videos are now available on the course website. Slide 04 was restored; the past empty-file issue is **resolved**.
+- **Module 01, Parts 04–07:** Full, slide-by-slide narration scripts created and committed, covering all remaining images (25–59). Parts 04 and 05 cover chunking, RAG evaluation, multimodal inputs, and guardrails; Part 06 covers flows and prompting; Part 07 covers responsible AI, enterprise integration, and the production lifecycle.
+- **Rendering:** `.github/workflows/render-aip-m01-parts-04-07.yml` runs all four videos using the original R2 slides. Videos must pass image, MP4, narration-version, chapter, and caption checks before R2 publication. No MP4 should be considered published merely because a script or workflow was committed.
+- **Visual provenance:** Slides 25–34 were reviewed using R2-derived image contact sheets. Slides 35–59 were visually reviewed from the site's archived slide packages, and their presence is revalidated against R2 at rendering. Final visual/audio review remains important.
+- **Navigation:** The Module 01 course page now has an ordered topic playlist, one player at a time, prev/next navigation across available videos, a chapter-to-exact-slide link, full-screen slide viewing, transcripts, subtitles, and per-video resume.
+- **Historical issues resolved:** The slide-review workflow no longer rebases autogenerated contact-sheet commits onto `main`. The TTS renderer now chunks audio and retries temporary no-audio errors, preserving successful speech chunks.
 
 ## Core standards
 
@@ -70,9 +63,9 @@
 - **AIP-M01-P02** · Slides 10–13: Fine-tuning, continued pre-training and LoRA
 - **AIP-M01-P03** · Slides 14–24: RAG and Bedrock knowledge bases
 - **AIP-M01-P04** · Slides 25–34: Chunking, embeddings, search and RAG evaluation
-- **AIP-M01-P05** · Slides 35–43: Multimodal models, guardrails and prompt management
-- **AIP-M01-P06** · Slides 44–54: Prompt patterns and application flows
-- **AIP-M01-P07** · Slides 55–59: Responsible AI and Generative AI Lens
+- **AIP-M01-P05** · Slides 35–43: RAG evaluation, multimodal models, guardrails and prompt management
+- **AIP-M01-P06** · Slides 44–54: Bedrock Flows, structured output, prompt design and injection defense
+- **AIP-M01-P07** · Slides 55–59: Responsible AI, enterprise integration and GenAI lifecycle
 
 ### Module 02 — Managing Data for Generative AI
 
