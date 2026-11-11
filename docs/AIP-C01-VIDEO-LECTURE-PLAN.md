@@ -56,6 +56,14 @@
 - **Validation cases:** Watch 20 seconds and verify the videos-seen count increments; pause halfway and reload to verify automatic seek; finish at least 85% to check Completed; study every mapped slide to complete the corresponding part; seek directly to the end to confirm no false completion; enable Auto-play next and finish a part to verify next-part selection. Repeat on Modules 01 and 02.
 - **Scope:** Module 00–02 have published video mappings. Newly added modules must extend the shared `aipVideoCatalog.ts` first so that dashboards and playlist count the same parts.
 
+## Video playback navigation and retry recovery — 11 November 2026
+
+- **M02 Parts 06 and 08 only:** Their failed TTS chunks now use the dedicated recovery workflow `.github/workflows/retry-aip-m02-parts-06-08.yml`, configured for up to **15 attempts** per chunk with adaptive waits capped at 30 seconds. Completed audio is restored from the existing per-part GitHub Actions cache, so prior successful chunks are not requested again. The standard renderer's default limit remains six attempts.
+- **Parts 05 and 07:** Excluded from the recovery matrix so already completed lectures are not unnecessarily regenerated. The full original M02 05–08 workflow remains available for future intentional rerenders.
+- **Fullscreen navigation:** The AIP player now has an in-video **Fullscreen + navigation** button. The whole persistent lecture container enters fullscreen rather than the video element alone, so Previous Video and Next Video overlays remain usable when moving between different parts of the same module. The arrows are disabled at playlist boundaries. Exit fullscreen is always available; Escape also works. The ordinary playlist, subtitles, saved playback position and automatic-next preference remain intact.
+- **Browser compatibility:** Some browsers ignore the `controlsList=nofullscreen` hint on the native HTML5 controls. To retain Previous/Next overlays, learners should use the course's **Fullscreen + navigation** button rather than the browser's built-in video fullscreen button.
+- **Validation:** Confirm a failed speech chunk can exceed six attempts while using cached earlier chunks; confirm completed videos are excluded. On Modules 01 and 02, enter fullscreen using the overlay button, click Next and Previous without leaving fullscreen, and verify the selected video starts or displays a browser autoplay prompt.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
