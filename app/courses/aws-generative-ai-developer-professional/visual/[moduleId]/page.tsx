@@ -44,7 +44,7 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
       <p>{desc}</p>
     </section>
     {(id === "00" || id === "01") && <AipVideoLectures moduleId={id} />}
-    <section>
+    <section id="visual-lessons" style={{scrollMarginTop:24}}>
       <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>
       <p style={{color:"#64748b"}}>Click any available visual to open the full-screen viewer. Use the left/right arrows or keyboard arrow keys to move between available visuals; press Esc to close.</p>
       <ModuleVisualGallery moduleNumber={num} imageBase={imageBase} />
