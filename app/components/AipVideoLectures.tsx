@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 import {readCompleted} from "./StudyProgress";
 import {AIP_VIDEO_PARTS,getAipVideoProgress} from "./aipVideoCatalog";
@@ -398,7 +398,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     else{clearHudTimer();setHudZone("none");}
     return()=>clearHudTimer();
   },[fullscreen]);
-  const trackFullscreenPointer=(event:React.PointerEvent<HTMLDivElement>)=>{
+  const trackFullscreenPointer=(event:PointerEvent<HTMLDivElement>)=>{
     if(!fullscreen)return;
     if(event.pointerType==="touch"){revealHud("all",3500);return;}
     const area=event.currentTarget.getBoundingClientRect();
