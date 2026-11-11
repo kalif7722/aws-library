@@ -36,6 +36,17 @@
 - **Course progress:** A slide is automatically credited after **40 seconds** of foreground, focused viewing with no visible countdown or manual complete button. Video viewing credits its slide chapters after about **40 seconds** of actual foreground playback (or 75% on a short chapter); a video is marked complete after **85%** of unique playback time, with seek jumps and background time excluded. Video/slide progress uses the existing browser-local study storage and updates the course and module indicators immediately.
 - **Cross-course:** The shared StudyProgress component supplies the hidden 40-second slide behavior to AIF, SAP, SAA, DVA and AIP, retaining prior completion records. The video-chapter tracking pilot applies to AIP videos.
 
+## Module 02 next lecture batch — visually verified slides 29–56
+
+- **Current production:** Four new lecture scripts and a sequential GitHub Actions renderer (`.github/workflows/render-aip-m02-parts-05-08.yml`) have been committed.
+- **Video 05:** 5 slides, CloudWatch metrics/streams and Transcribe. Narration follows the source metrics charts, Firehose routing, transcription accuracy and content-review examples.
+- **Video 06:** 6 slides, Comprehend language/key-phrase/sentiment analysis, custom classification, named and custom entities, sensitive-data review and medical text.
+- **Video 07:** 7 slides, OpenSearch document ingestion, search dashboards, source use cases, field mappings, shard routing and replica reads.
+- **Video 08:** 10 slides, managed OpenSearch domains, Multi-AZ/capacity choices, Hot/UltraWarm/Cold, ISM, rollups/transforms, cross-cluster replication, stability and layered security.
+- **Consistency checks:** Updated the Module 02 slide gallery titles for slides 29–56, video playlist entries, expected video revisions and chapter counts, subtitle proxy, release publishing allowlist and R2 recovery workflow.
+- **Release distinction:** Committed scripts and render jobs are **not** confirmed MP4 uploads. The website marks each part available only after an uploaded video and matching manifest pass the player validation.
+- **Watch-list caveat:** Module 02 Part 02 previously lacked a confirmed GitHub video release record; the R2 reconciliation workflow covers it without rerendering if the upload already exists.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
@@ -94,16 +105,12 @@
 - **AIP-M02-P02** · Slides 8–15: Bedrock Data Automation and multimodal extraction (visually verified)
 - **AIP-M02-P03** · Slides 16–21: SageMaker Data Wrangler (visually verified)
 - **AIP-M02-P04** · Slides 22–28: AWS Glue, Data Catalog and Data Quality (visually verified)
-- **AIP-M02-P05** · Slides 41–45: Amazon Comprehend
-- **AIP-M02-P06** · Slides 46–56: OpenSearch indexing and architecture
-- **AIP-M02-P07** · Slides 57–68: OpenSearch operations, security and vector search
-- **AIP-M02-P08** · Slides 69–77: Amazon S3 Vectors
-- **AIP-M02-P09** · Slides 78–87: Aurora and relational data patterns
-- **AIP-M02-P10** · Slides 88–99: DynamoDB data modeling and consistency
-- **AIP-M02-P11** · Slides 100–112: DynamoDB operations and GenAI integration
-- **AIP-M02-P12** · Slides 113–117: Reranking and retrieval improvements
-- **AIP-M02-P13** · Slides 118–130: S3 storage, lifecycle and replication
-- **AIP-M02-P14** · Slides 131–144: S3 encryption, logging and access controls
+- **AIP-M02-P05** · Slides 29–33: CloudWatch metrics, Metric Streams, Amazon Transcribe and toxicity review (visually verified)
+- **AIP-M02-P06** · Slides 34–39: Comprehend NLP, custom classification/entities, Lambda PII data-quality checks and Comprehend Medical (visually verified)
+- **AIP-M02-P07** · Slides 40–46: OpenSearch full-text search, Dashboards, applications, mappings, shards and replicas (visually verified)
+- **AIP-M02-P08** · Slides 47–56: Managed OpenSearch domains, storage tiers, index state management, replication, stability and security (visually verified)
+- **NEXT — provisional:** The original images 57–70 cover OpenSearch Serverless, vector retrieval, approximate-nearest-neighbour engines, S3 Vectors and Knowledge Bases integration. Final part boundaries and images 71 onward require a visual-first audit.
+- **Remaining Module 02 slides:** Do not use the older PDF-derived video ranges for slides 57–144; create new part boundaries only after auditing the actual R2 images.
 
 ### Module 03 — Agentic AI
 
