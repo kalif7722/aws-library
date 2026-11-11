@@ -97,6 +97,38 @@ const CONFIG: Record<string, {
     firstTitle: "AWS Glue: Table Definitions and ETL",
     title: "AWS Glue, Catalogs, ETL and Data Quality",
   },
+  "02-05": {
+    prefix: "module-02/part-05/aip-module-02-part-05",
+    revision: "2026-11-11-m02-p05-visual-aligned-v1",
+    firstSlide: 29,
+    count: 5,
+    firstTitle: "CloudWatch Metrics Basics",
+    title: "CloudWatch Metrics, Metric Streams and Amazon Transcribe",
+  },
+  "02-06": {
+    prefix: "module-02/part-06/aip-module-02-part-06",
+    revision: "2026-11-11-m02-p06-visual-aligned-v1",
+    firstSlide: 34,
+    count: 6,
+    firstTitle: "Amazon Comprehend",
+    title: "Amazon Comprehend, Custom Entities and Sensitive-Data Review",
+  },
+  "02-07": {
+    prefix: "module-02/part-07/aip-module-02-part-07",
+    revision: "2026-11-11-m02-p07-visual-aligned-v1",
+    firstSlide: 40,
+    count: 7,
+    firstTitle: "Amazon OpenSearch Service",
+    title: "Amazon OpenSearch Fundamentals, Indexes, Shards and Replicas",
+  },
+  "02-08": {
+    prefix: "module-02/part-08/aip-module-02-part-08",
+    revision: "2026-11-11-m02-p08-visual-aligned-v1",
+    firstSlide: 47,
+    count: 10,
+    firstTitle: "Managed OpenSearch Domains",
+    title: "Managed OpenSearch Domains, Index Lifecycle, Operations and Security",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
