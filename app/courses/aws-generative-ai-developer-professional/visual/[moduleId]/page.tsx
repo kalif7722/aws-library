@@ -46,7 +46,7 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
       <p>{desc}</p>
     </section>
     <ModuleStudyProgress course="aip" moduleId={num} totalSlides={visualMap.lessonsByModule[num as keyof typeof visualMap.lessonsByModule]?.length ?? 0}/>
-    {(id === "00" || id === "01" || id === "02" || id === "02") && <AipVideoLectures moduleId={id} />}
+    {(id === "00" || id === "01" || id === "02") && <AipVideoLectures moduleId={id} />}
     <section id="visual-lessons" style={{scrollMarginTop:24}}>
       {(id === "00" || id === "01" || id === "02") && <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:26}}>
         <h2 style={{color:"#223c60",margin:0}}>Visual lessons</h2>
