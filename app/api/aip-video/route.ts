@@ -81,6 +81,22 @@ const CONFIG: Record<string, {
     firstTitle: "Amazon Bedrock Data Automation",
     title: "Bedrock Data Automation and Multimodal Extraction",
   },
+  "02-03": {
+    prefix: "module-02/part-03/aip-module-02-part-03",
+    revision: "2026-11-11-m02-p03-visual-aligned-v1",
+    firstSlide: 16,
+    count: 6,
+    firstTitle: "SageMaker Data Wrangler",
+    title: "SageMaker Data Wrangler and Practical Data Preparation",
+  },
+  "02-04": {
+    prefix: "module-02/part-04/aip-module-02-part-04",
+    revision: "2026-11-11-m02-p04-visual-aligned-v1",
+    firstSlide: 22,
+    count: 7,
+    firstTitle: "AWS Glue: Table Definitions and ETL",
+    title: "AWS Glue, Catalogs, ETL and Data Quality",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
