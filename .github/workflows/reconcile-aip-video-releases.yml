@@ -1,0 +1,70 @@
+name: Reconcile uploaded AIP lecture releases without rerendering
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/reconcile-aip-video-releases.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-video-release-reconcile
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    name: Verify existing R2 media and repair missing GitHub release records
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify uploaded videos and register only complete releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "R2 repository secrets are missing; cannot verify media." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "## Existing AIP lecture media verification" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Module/Part | R2 MP4 | Manifest | Release record |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
+
+          for entry in "00:none" "01:02" "01:03"; do
+            module="${entry%%:*}"
+            part="${entry##*:}"
+            stem="aip-module-$module"
+            prefix="aws-course-videos/previews/aip/module-$module"
+            if [[ "$part" != "none" ]]; then
+              stem="$stem-part-$part"
+              prefix="$prefix/part-$part"
+            fi
+            label="$module/$part"
+            if ! aws s3api head-object --bucket "$R2_BUCKET" --key "$prefix/$stem.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null 2>&1; then
+              echo "| $label | Missing | Not inspected | Not updated |" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+            local_manifest="/tmp/$stem-manifest.json"
+            if ! aws s3 cp "s3://$R2_BUCKET/$prefix/$stem-manifest.json" "$local_manifest" \
+                    --endpoint-url "$R2_ENDPOINT" --no-progress; then
+              echo "| $label | Present | Missing | Not updated |" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+            if python scripts/publish_aip_video_release.py --manifest "$local_manifest"; then
+              echo "| $label | Present | Revision and slides verified | Updated |" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "| $label | Present | Invalid or GitHub API failure | Not updated |" >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+          done
