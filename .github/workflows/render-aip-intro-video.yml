@@ -1,0 +1,83 @@
+name: Build AIP Module 00 lecturer-video preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/aip-module-00.json"
+      - "scripts/render_aip_course_video.py"
+      - ".github/workflows/render-aip-intro-video.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aip-module-00-lecture-preview
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render 13 original slides with AI voice, captions and chapters
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install renderer dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
+          python -m py_compile scripts/render_aip_course_video.py
+
+      - name: Render video from the exact existing Cloudflare R2 slides
+        run: |
+          python scripts/render_aip_course_video.py \
+            --manifest content/video-narration/aip-module-00.json \
+            --output video-output \
+            --width 1920 --height 1080 --fps 24
+
+      - name: Archive review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: aip-module-00-lecturer-video-preview
+          path: |
+            video-output/aip-module-00.mp4
+            video-output/aip-module-00.srt
+            video-output/aip-module-00-transcript.txt
+            video-output/aip-module-00-manifest.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload review-only preview to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "Skipping R2 preview upload: repository R2 secrets are not configured."
+            exit 0
+          fi
+          PREFIX="aws-course-videos/previews/aip/module-00"
+          aws s3 cp video-output/aip-module-00.mp4 "s3://$R2_BUCKET/$PREFIX/aip-module-00.mp4" \
+            --endpoint-url "$R2_ENDPOINT" \
+            --content-type video/mp4 \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00.srt "s3://$R2_BUCKET/$PREFIX/aip-module-00.srt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "application/x-subrip" \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00-transcript.txt "s3://$R2_BUCKET/$PREFIX/aip-module-00-transcript.txt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "text/plain; charset=utf-8" --no-progress
+          aws s3 cp video-output/aip-module-00-manifest.json "s3://$R2_BUCKET/$PREFIX/aip-module-00-manifest.json" \
+            --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress
+          echo "Uploaded draft media for manual QA; course navigation has not been changed."
