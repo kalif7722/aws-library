@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 import {readCompleted} from "./StudyProgress";
+import {AIP_VIDEO_PARTS,getAipVideoProgress} from "./aipVideoCatalog";
 
 type Chapter = { slide: number; title: string; startSeconds: number; durationSeconds: number };
 type Ready = {
@@ -15,29 +16,10 @@ type Ready = {
   chapters: Chapter[];
 };
 type VideoResult = Ready | { status: "processing" };
-type LecturePart = { id: string; title: string; subtitle: string; start: number; end: number };
 
 const COURSE_URL = "/courses/aws-generative-ai-developer-professional";
 const MODULE_01 = `${COURSE_URL}/visual/module-01`;
-const PARTS_01: LecturePart[] = [
-  { id: "01", title: "Foundation Models & Amazon Bedrock", subtitle: "Models, APIs and access", start: 1, end: 9 },
-  { id: "02", title: "Fine-Tuning & LoRA", subtitle: "Customization approaches", start: 10, end: 13 },
-  { id: "03", title: "RAG & Knowledge Bases", subtitle: "Retrieval, vectors and grounding", start: 14, end: 24 },
-  { id: "04", title: "Chunking, Embeddings & RAG Quality", subtitle: "Retrieval quality and metadata", start: 25, end: 34 },
-  { id: "05", title: "RAG Evaluation & Guardrails", subtitle: "Multimodal AI and prompt management", start: 35, end: 43 },
-  { id: "06", title: "Bedrock Flows & Effective Prompting", subtitle: "Structured responses and prompt anatomy", start: 44, end: 50 },
-];
-const PARTS_02: LecturePart[] = [
-  { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
-  { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
-  { id: "03", title: "SageMaker Data Wrangler", subtitle: "Transformations, preparation and common failures", start: 16, end: 21 },
-  { id: "04", title: "AWS Glue and Data Quality", subtitle: "ETL, crawler, catalog, partitions and checks", start: 22, end: 28 },
-  { id: "05", title: "CloudWatch & Amazon Transcribe", subtitle: "Metrics, speech recognition and content review", start: 29, end: 33 },
-  { id: "06", title: "Amazon Comprehend", subtitle: "NLP, custom entities, PII review and medical text", start: 34, end: 39 },
-  { id: "07", title: "OpenSearch Fundamentals", subtitle: "Search, dashboards, indexes, shards and replicas", start: 40, end: 46 },
-  { id: "08", title: "Operating OpenSearch Domains", subtitle: "Managed domains, lifecycle, stability and security", start: 47, end: 56 },
-];
-// Later parts will be added only after inspecting their real slide images.
+const AUTO_NEXT_KEY = "aip-auto-next:v1";
 
 function fmt(seconds: number) {
   if (!Number.isFinite(seconds)) return "—";
@@ -45,31 +27,94 @@ function fmt(seconds: number) {
   return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
 }
 
-function VideoPlayer({ item, storageKey, slideBase, moduleId, partId }: {
+function VideoPlayer({ item, storageKey, slideBase, moduleId, partId, autoStart = false, onFinished }: {
   item: Ready;
   storageKey: string;
   slideBase: string;
   moduleId: string;
   partId?: string;
+  autoStart?: boolean;
+  onFinished?: () => void;
 }) {
   const player = useRef<HTMLVideoElement>(null);
   const [resume, setResume] = useState(0);
   const [error, setError] = useState(false);
+  const [autoPlayBlocked,setAutoPlayBlocked]=useState(false);
+  const autoPlayAttempted=useRef(false);
   const watch=useAipVideoWatchProgress({moduleId,partId:partId??null,chapters:item.chapters,durationSeconds:item.durationSeconds??item.chapters.reduce((n,c)=>n+c.durationSeconds,0)});
-  useEffect(() => {
-    setError(false);
-    try {
-      const current = Number(localStorage.getItem(storageKey) ?? "0");
-      setResume(Number.isFinite(current) && current > 0 ? current : 0);
-    } catch { setResume(0); }
-  }, [storageKey]);
 
-  const jump = (seconds: number) => {
-    const v = player.current;
-    if (!v) return;
-    v.currentTime = seconds;
+  const persistPosition=(time:number)=>{
+    if(!Number.isFinite(time) || time<0)return;
+    try{localStorage.setItem(storageKey,String(time));}
+    catch{/* Browser storage may be disabled */}
+  };
+
+  useEffect(()=>{
+    setError(false);
+    setAutoPlayBlocked(false);
+    autoPlayAttempted.current=false;
+    try{
+      const current=Number(localStorage.getItem(storageKey)??"0");
+      setResume(Number.isFinite(current)&&current>5?current:0);
+    }catch{setResume(0);}
+    const saveBeforeLeaving=()=>{
+      const v=player.current;
+      if(v && !v.ended && Number.isFinite(v.currentTime) && v.currentTime>0){
+        try{localStorage.setItem(storageKey,String(v.currentTime));}
+        catch{/* Optional storage */}
+      }
+    };
+    window.addEventListener("pagehide",saveBeforeLeaving);
+    return()=>{
+      saveBeforeLeaving();
+      window.removeEventListener("pagehide",saveBeforeLeaving);
+    };
+  },[storageKey]);
+
+  useEffect(()=>{
+    if(!autoStart || autoPlayAttempted.current || !player.current)return;
+    const video=player.current;
+    const tryPlay=()=>{
+      if(autoPlayAttempted.current)return;
+      autoPlayAttempted.current=true;
+      void video.play().catch(()=>setAutoPlayBlocked(true));
+    };
+    if(video.readyState>=2)tryPlay();
+    else{
+      video.addEventListener("canplay",tryPlay,{once:true});
+      return()=>video.removeEventListener("canplay",tryPlay);
+    }
+  },[autoStart,item.videoUrl]);
+
+  const restorePosition=(video:HTMLVideoElement)=>{
+    let saved=0;
+    try{saved=Number(localStorage.getItem(storageKey)??"0");}
+    catch{return;}
+    const duration=Number.isFinite(video.duration)?video.duration:(item.durationSeconds??0);
+    if(!Number.isFinite(saved)||saved<5)return;
+    if(duration>0 && saved>=duration-5){
+      try{localStorage.removeItem(storageKey);}
+      catch{/* Optional storage */}
+      setResume(0);
+      return;
+    }
+    video.currentTime=saved;
+    watch.onSeeked(saved);
+    setResume(saved);
+  };
+
+  const jump=(seconds:number)=>{
+    const video=player.current;
+    if(!video)return;
+    video.currentTime=seconds;
     watch.onSeeked(seconds);
-    v.scrollIntoView({ behavior: "smooth", block: "center" });
+    persistPosition(seconds);
+    video.scrollIntoView({behavior:"smooth",block:"center"});
+  };
+
+  const restart=()=>{
+    jump(0);
+    setResume(0);
   };
 
   if (error) {
@@ -86,20 +131,32 @@ function VideoPlayer({ item, storageKey, slideBase, moduleId, partId }: {
       preload="metadata"
       poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
       onError={() => setError(true)}
-      onPlay={event => watch.onPlay(event.currentTarget.currentTime)}
-      onSeeked={event => watch.onSeeked(event.currentTarget.currentTime)}
+      onLoadedMetadata={event => restorePosition(event.currentTarget)}
+      onPlay={event => {
+        watch.onPlay(event.currentTarget.currentTime);
+        setAutoPlayBlocked(false);
+        setResume(0);
+      }}
+      onSeeked={event => {
+        watch.onSeeked(event.currentTarget.currentTime);
+        persistPosition(event.currentTarget.currentTime);
+      }}
       onTimeUpdate={event => {
         watch.onTimeUpdate(event.currentTarget);
-        const t = event.currentTarget.currentTime;
-        if (Number.isFinite(t)) {
-          try { localStorage.setItem(storageKey, String(Math.round(t))); }
-          catch { /* Storage may be disabled */ }
+        persistPosition(event.currentTarget.currentTime);
+      }}
+      onPause={event => {
+        if(!event.currentTarget.ended){
+          persistPosition(event.currentTarget.currentTime);
+          setResume(event.currentTarget.currentTime);
         }
       }}
       onEnded={() => {
+        watch.onEnded();
         try { localStorage.removeItem(storageKey); }
         catch { /* Storage may be disabled */ }
         setResume(0);
+        onFinished?.();
       }}
     >
       <source src={item.videoUrl} type="video/mp4"/>
@@ -107,12 +164,14 @@ function VideoPlayer({ item, storageKey, slideBase, moduleId, partId }: {
       Your browser does not support this video.
     </video>
     <div className="av-tools">
-      {resume > 15 && resume < (item.durationSeconds ?? Infinity) - 10 &&
-        <button type="button" className="av-action" onClick={() => jump(resume)}>Resume {fmt(resume)}</button>}
+      {resume > 5 && resume < (item.durationSeconds ?? Infinity) - 5 &&
+        <><span>Saved position {fmt(resume)} · resumes automatically</span>
+        <button type="button" className="av-action" onClick={restart}>Restart video</button></>}
       <span>{fmt(item.durationSeconds ?? 0)} · {item.chapters.length} slide chapters</span>
       <a href={item.transcriptUrl} target="_blank" rel="noopener noreferrer">Transcript</a>
       <a href={item.videoUrl} target="_blank" rel="noopener noreferrer">Open MP4</a>
     </div>
+    {autoPlayBlocked && <p className="av-autoplay-notice" role="status">The next lecture is ready. Your browser blocked automatic playback; press Play to continue.</p>}
     <details className="av-chapters">
       <summary>Chapters — jump to any slide explanation</summary>
       <div className="av-chapter-grid">
