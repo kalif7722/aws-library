@@ -18,7 +18,10 @@ import edge_tts
 from aip_media_tools import ffmpeg_exe, media_seconds
 
 MAX_CHARS = 420
-MAX_ATTEMPTS = 6
+# The voice endpoint sometimes returns successive NoAudioReceived errors.
+# Increase only the failed-part recovery jobs via AIP_TTS_MAX_ATTEMPTS.
+MAX_ATTEMPTS = max(1, min(20, int(os.environ.get("AIP_TTS_MAX_ATTEMPTS", "6"))))
+RETRY_SLEEP_CAP_SECONDS = max(3.0, float(os.environ.get("AIP_TTS_RETRY_SLEEP_CAP_SECONDS", "30")))
 
 
 def chunks_for(text: str, max_chars: int = MAX_CHARS) -> list[str]:
@@ -82,7 +85,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
     pieces = chunks_for(text)
     print(
         f"  Speech: {len(text)} characters in {len(pieces)} short chunks "
-        f"(voice={voice}, rate={rate})", flush=True,
+        f"(voice={voice}, rate={rate}, max_attempts={MAX_ATTEMPTS})", flush=True,
     )
     chunk_paths: list[Path] = []
     for index, piece in enumerate(pieces, start=1):
@@ -118,7 +121,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
                     flush=True,
                 )
                 if attempt < MAX_ATTEMPTS:
-                    await asyncio.sleep(min(3 * 2 ** (attempt - 1), 40))
+                    await asyncio.sleep(min(2.5 * (1.65 ** (attempt - 1)), RETRY_SLEEP_CAP_SECONDS))
         if last_error is not None:
             raise RuntimeError(
                 f"Speech service failed after {MAX_ATTEMPTS} attempts "
@@ -126,7 +129,7 @@ async def synthesize_narration(text: str, voice: str, rate: str, target: Path) -
                 "completed chunks remain cached for a retry"
             ) from last_error
         # Space calls to avoid hammering the service; not a change to speech rate.
-        await asyncio.sleep(0.7)
+        await asyncio.sleep(1.5)
 
     if not all(valid_mp3(path, max(0.5, len(piece.split()) / 6.5)) for path, piece in zip(chunk_paths, pieces)):
         raise RuntimeError("Audio assembly blocked: a chunk is missing")
