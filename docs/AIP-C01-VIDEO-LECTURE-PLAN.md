@@ -2,7 +2,7 @@
 
 **Purpose:** Transform existing AWS course slides into visually grounded, instructor-quality narrated videos, using the approved Module 00 voice and style.
 
-**Status:** Provisional topic-based split. Slide counts below come from the course lesson map; they are NOT verified R2 asset inventories. Groupings and titles must be confirmed against actual images before recording.
+**Status:** Module 01 Parts 01–02 visually audited. Module 01 Part 02 covers slides 10–13; slide 14 is RAG and starts Part 03. R2 slide 4 was returned as an invalid image during QA. Other splits remain provisional. Slide counts below come from the course lesson map; they are NOT verified R2 asset inventories. Groupings and titles must be confirmed against actual images before recording.
 
 ## Core standards
 
@@ -50,8 +50,8 @@
 ### Module 01 — Generative AI Fundamentals and Bedrock
 
 - **AIP-M01-P01** · Slides 1–9: GenAI fundamentals and Amazon Bedrock
-- **AIP-M01-P02** · Slides 10–14: Fine-tuning and LoRA
-- **AIP-M01-P03** · Slides 15–24: RAG and Bedrock knowledge bases
+- **AIP-M01-P02** · Slides 10–13: Fine-tuning, continued pre-training and LoRA
+- **AIP-M01-P03** · Slides 14–24: RAG and Bedrock knowledge bases
 - **AIP-M01-P04** · Slides 25–34: Chunking, embeddings, search and RAG evaluation
 - **AIP-M01-P05** · Slides 35–43: Multimodal models, guardrails and prompt management
 - **AIP-M01-P06** · Slides 44–54: Prompt patterns and application flows
