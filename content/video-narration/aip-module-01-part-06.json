@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "01",
+  "part_id": "06",
+  "module_title": "Generative AI Fundamentals and Amazon Bedrock",
+  "part_title": "Bedrock Flows, Prompt Design and Injection Defense",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m01-p06-visual-aligned-v1",
+  "review_basis": "User Library original AIP Module 01 site-ready WebP slides 44–54 visually reviewed; render should verify actual R2 sources",
+  "scenes": [
+    {
+      "slide": 44,
+      "title": "Amazon Bedrock Flows",
+      "narration": "This slide introduces Bedrock Flows as a way to orchestrate model and application steps visually or programmatically. Follow the primary path from the input question to a knowledge-base lookup. The retrieval result then reaches a condition node that decides whether enough relevant evidence exists. When it does, the prompt node assembles the retrieved context with the original question and passes it to the foundation-model node. The model's answer reaches the output on the far right. But don't miss the lower dashed path. If the condition fails, the workflow can send a fallback response instead of manufacturing an unsupported answer. The lower panel compares a visual builder with an API-defined flow: one emphasizes node-by-node editing, while the other lets teams integrate flow definitions with development and deployment practices. In production, think about each node's IAM permissions, input schemas, error handling, and how to diagnose a failure across the flow."
+    },
+    {
+      "slide": 45,
+      "title": "Use Stored Prompts in Flows",
+      "narration": "The customer-support example shows why managed prompts are useful in a multi-step flow. At the left, a customer submits a question. An input-validation node checks the request, and a condition node routes the case by topic. The billing branch selects one prompt version, while the technical-support branch selects another. Both can use shared variables and consistent instructions. The generated answer is then checked and formatted before the application returns it to the customer. Notice the bottom strip showing prompt version reuse. A prompt is not just a string inside a Lambda function; it can be a managed, versioned asset used in multiple workflows. If the support team improves the billing instructions, it can test and deploy a new version without accidentally changing every other topic. For exam scenarios, distinguish prompt management and routing from the actual inference call and from downstream response validation."
+    },
+    {
+      "slide": 46,
+      "title": "Multi-Step Bedrock Flow",
+      "narration": "Let's trace this example from beginning to end. An employee asks how much parental leave is available. The flow first classifies the request's intent. Next, a routing node chooses the relevant knowledge base, rather than searching all business documents indiscriminately. The chosen knowledge base retrieves an appropriate policy passage. The foundation-model step then drafts an answer using that evidence. A grounding or quality check asks whether the answer is supported by the retrieved policy, and the final step delivers the response with a citation. Across the bottom, the colored stages say understand, classify, route, retrieve, generate, evaluate, and deliver. Those are separate responsibilities, even when assembled in a managed flow. Notice the alternative knowledge-base branches under the routing stage. This design improves focus and can support different access boundaries. Always test what happens when no document matches, a model call fails, or a request needs human escalation."
+    },
+    {
+      "slide": 47,
+      "title": "Structured Responses by Prompt",
+      "narration": "Many applications don't want free-form paragraphs. They need fields that downstream software can parse. This slide shows the workflow for generating structured output. Start with an invoice document, then read the prompt that asks the model to return specific JSON fields. The model generates a draft object on the right, but the next step is the most important: the application validates it against a schema. The example checks required fields and types before writing to a database, triggering a follow-up action, or displaying the results. The orange note reminds us that asking for JSON in a prompt alone does not guarantee that a model will follow the schema. Even if the model supports a structured-output feature, your application still needs validation and error handling. When data is malformed, the diagram shows retrying with feedback rather than silently trusting the response. This is standard software engineering applied to AI-generated content."
+    },
+    {
+      "slide": 48,
+      "title": "Structured Responses with Converse Tool Use",
+      "narration": "This slide compares two ways to request structured model output. In the top half, a tool schema defines expected arguments. The application sends the user request through Bedrock Converse with the tool specification. The model can select a tool and return a structured tool-use request. Notice the application validation stage after the tool call: the developer must still check the arguments and decide whether the action is authorized. A model deciding to call a tool is not the same as the backend actually executing it. In the lower half, the alternative is prompt-only structured JSON, where the prompt asks the model for a particular format. That can work for simpler use cases, but it needs parsing and schema validation, with retries or correction on malformed output. The exam distinction is between model-generated arguments, application-controlled tool execution, and schema validation. Clear boundaries make automated workflows more reliable and secure."
+    },
+    {
+      "slide": 49,
+      "title": "Why Effective Prompting Helps",
+      "narration": "Look at the before-and-after comparison. On the left, the customer asks a broad question about making AWS support more efficient. A vague prompt can produce a generic answer with little relevance to the actual architecture. The middle panel adds concrete business constraints, retrieved facts, allowable tools, and the requested output format. On the right, the result becomes more actionable: a response linked to the supplied context and suitable for the application. The bottom row identifies several benefits: greater relevance, stronger grounding, better formatting, and clearer tool use. The safety boundary reminds us that better prompting does not replace access controls or guardrails. A prompt can reduce ambiguity, but it cannot guarantee truthfulness or enforce permissions. When evaluating a prompt, test whether it reliably leads to the required behaviour across multiple representative questions, not merely whether one example sounds impressive."
+    },
+    {
+      "slide": 50,
+      "title": "Anatomy of a Prompt",
+      "narration": "This slide breaks a prompt into four named parts. First are instructions: tell the model what task to perform, such as summarizing an incident. Second is context, in this example AWS operational facts relevant to the incident. Third is the input data: the EC2 API errors, network changes, and timestamps to analyze. Fourth is the output indicator, which specifies the desired structure, such as impact, cause, and next action. Follow the four colored boxes downward into the assembled prompt. The model's concise answer on the right uses that structure to organize an incident summary. Notice how the application facts give the model more to work with than an instruction alone. In practice, separate trusted instructions from untrusted data and keep the prompt within the model's context limits. This technique is useful across summaries, classification, support assistants, and incident-response explanations."
+    },
+    {
+      "slide": 51,
+      "title": "Prompt Best Practices: Clear Directions",
+      "narration": "The left panel says simply, explain my outage. That is difficult to answer well because it gives no system details, timeframe, evidence, or intended audience. On the right, the improved prompt identifies an AWS production outage, supplies a timestamp and service evidence, and requests a structured explanation of root cause, impact, and next steps. The four callouts below explain why it performs better: a concise task, relevant context, the response type, and explicit output instructions. Follow the arrow between the two examples. We are not changing the model; we are changing the quality of the information and requirements in the request. A precise prompt makes success easier to evaluate because the expected answer has a defined scope. Keep sensitive information out unless it is authorized and necessary, and check outputs against the actual operational evidence."
+    },
+    {
+      "slide": 52,
+      "title": "Prompt Best Practices: Examples and Decomposition",
+      "narration": "This slide offers three practical techniques. First, include examples of the desired input-output behaviour, such as how a support ticket should be classified. That can help the model follow a category scheme consistently. Second, decompose a complex task into smaller well-defined steps. The middle diagram shows an incident-analysis workflow broken into evidence collection, interpretation, and response preparation rather than one uncontrolled request. Third, show a realistic support-ticket prompt with the specific message and expected output. The bottom section reminds us to compare results and iterate. If the initial classification or summary is inconsistent, refine the examples, instructions, or task decomposition and retest. These techniques are related but not identical. Few-shot examples teach an output pattern, while decomposition makes a hard workflow easier to execute and validate. Prefer measurable improvements to endlessly adding words to a prompt."
+    },
+    {
+      "slide": 53,
+      "title": "Zero-Shot, Few-Shot, and Stepwise Prompts",
+      "narration": "Now compare the three panels. Zero-shot prompting gives a task instruction without showing labelled examples. In the first example, the model classifies sentiment directly from the text. Few-shot prompting includes example inputs and correct labels before asking for a new classification, which can help establish the desired pattern. The stepwise prompt on the right divides a more complex request into ordered tasks so the application can inspect intermediate outputs or enforce checkpoints. These approaches are tools, not a ranking of prompt quality. Simple tasks may work well with zero-shot instructions. Ambiguous classification rules may benefit from examples. Multi-step operational work may need decomposition plus tool checks. The key is to keep intermediate steps verifiable and avoid assuming that a fluent model response guarantees that its hidden reasoning is correct. Evaluate each pattern against your application's accuracy, latency, and cost needs."
+    },
+    {
+      "slide": 54,
+      "title": "Defend Against Prompt Injection and Leakage",
+      "narration": "This is a security boundary diagram. On the left are two untrusted inputs: a retrieved document and a user request. The malicious text tries to override application instructions or disclose information unrelated to the legitimate task. In the middle, the application validates and labels untrusted content before it reaches the model. Trusted system instructions remain separate from that external material. Bedrock Guardrails, where configured, add content and policy checks, while the application enforces data and tool permissions. On the right, the desired result is a response grounded in authorized evidence rather than obedience to the injected instructions. The orange flow at the bottom illustrates defense in depth: treat external content as data, preserve trust boundaries, validate requests and outputs, and avoid giving the model more permissions than necessary. Prompt injection cannot be solved by one sentence telling the model to ignore attacks; it requires a designed application boundary."
+    }
+  ]
+}
