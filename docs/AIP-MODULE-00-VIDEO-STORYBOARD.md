@@ -1,65 +1,112 @@
-# AIP-C01 · Module 00 — Lecturer Video Storyboard
+# AIP-C01 Module 00 — Visual-Verified Lecturer Narration
 
-**Status:** 12-slide script updated after GitHub Actions confirmed original slide files 1–12 and 404 for slide 13.
+**Status:** Revised to match the actual rendered 12-slide video frames. A new render is required.
 
-**Format:** Original 12 full-screen slides · instructor voice · MP4 · subtitles · chapter markers.
+**Voice preserved:** en-US-AndrewNeural at -3%; same visual video format and subtitle/chapters pipeline.
 
-**Note:** The source PDF/course topic mapping mentions a thirteenth closing topic, but no corresponding visual image is present. Its closing narration is included at the end of slide 12 rather than generating a placeholder.
+## Slide-to-narration alignment
 
-## Lecture script
+| Slide | Actual image heading | Lecturer guidance |
+| --- | --- | --- |
+| 01 | Course Opening | User request → application → orchestrated context → foundation model → safe, useful answer |
+| 02 | Course Roadmap | Ten milestones along the illustrated learning trail |
+| 03 | The Developer’s Role | Seven responsibilities surrounding the application diagram |
+| 04 | Practical Starting Point | AWS fundamentals, application development, and AI basics converge into production GenAI |
+| 05 | The GenAI Application Stack | Five application layers with security, governance, and observability across the stack |
+| 06 | One Request, End to End | Customer-support request path with optional tools, escalation, and logging |
+| 07 | Retrieval or Adaptation? | RAG retrieves private current facts; fine-tuning changes learned task behaviour |
+| 08 | Security Around the Stack — Request Path | Defense-in-depth across entry, application, data, network and telemetry |
+| 09 | Security Around the Stack — Control Responsibilities | User, application and model protected by AWS controls surrounding the core |
+| 10 | Reference Application | API Gateway, Lambda, optional S3/knowledge base, Bedrock, guardrails, human escalation, IAM/KMS and CloudWatch |
+| 11 | Reading Architecture Diagrams | Legend for components, flow arrows, optional controls, trust boundary, storage and step numbers |
+| 12 | Next: Foundations & Bedrock | Four questions about models, invoking them and control, plus prompts, retrieval, guardrails and integration |
 
-### Slide 01 — AWS Certified Generative AI Developer Professional Course (AIP-C01)
+**Important observations from the uploaded video:**
 
-Welcome to the AWS Certified Generative AI Developer Professional course. I'm glad you're here. Over this course, we'll look at what it really takes to build generative AI applications that work in production, not just in a demo. We'll start with the foundations, then connect models to business data, introduce agents and tools, and work through reliability, security, governance, and cost. You'll see AWS architecture decisions through practical examples, so as we move forward, keep asking yourself three questions: What problem are we solving? Why would I choose this AWS service? And what could go wrong in production? That mindset will help with both real projects and scenario-based exam questions.
+- The original manuscript followed an outdated 13-topic course map, not the actual 12 image headings. This is now corrected.
+- The eighth image visually contains the slide number **09 / 12**, even though it is played as the eighth image. This is an image labeling issue, not an audio timing issue.
+- The eighth and ninth images both explain security around the stack. Their new voiceovers approach the concepts from different perspectives: the request path versus the control responsibilities.
+- No image changes have been made in this narration-only revision.
 
-### Slide 02 — What We’ll Cover: GenAI Fundamentals and Bedrock
+## Complete revised script
 
-First, we need a common language. A foundation model is a powerful starting point, but the model alone is not the application. We have to choose a suitable model, send useful prompts, manage outputs, and decide when the model needs external knowledge. Amazon Bedrock gives developers a managed way to work with different foundation models. We'll compare prompting, retrieval-augmented generation, or RAG, and model customization. For example, if a company wants answers from its own frequently changing documents, retrieval may be a better first choice than repeatedly fine-tuning a model. As we study Bedrock, pay attention to the trade-offs: model capability, cost, response time, data handling, and how easily a solution can be operated.
+### Slide 01 — Course Opening
 
-### Slide 03 — Managing Data for Generative AI
+**Visible cues:** User Request · Application · Orchestrated Context · Foundation Model · Safe Useful Answer
 
-Now let's talk about data, because even an excellent model can produce poor answers when the supporting information is weak. Imagine an employee asking a chatbot about a current internal policy. The application needs to find the correct document, use only information that employee is allowed to see, and keep the answer grounded in the source. We'll explore ingestion, document preparation, chunking, embeddings, vector search, and retrieval. We'll also look at choosing storage services and protecting sensitive data throughout the flow. A useful question to remember is this: where does the answer's evidence come from, and how do we know it's the right evidence? That becomes especially important when documents change or different users have different permissions.
+Welcome to the course. Before we talk about individual AWS services, I want you to understand the big picture shown here. Follow the arrows from left to right. A user starts with a question or task. The application receives that request and manages the user experience. Now look at the middle panel, called orchestrated context. This is where we bring together the original question, relevant data or knowledge, instructions and tools, and safety rules. All of that helps the foundation model generate a response that is grounded in what the user actually needs. On the far right, our goal is a safe, useful answer, not just any text produced by a model. Notice the green return arrow leading back to the user: this is one complete application interaction. Throughout this course, we will break down each part of this flow, choose the right AWS services for it, and learn how to make the whole system dependable in production.
 
-### Slide 04 — Agentic AI
+### Slide 02 — Course Roadmap
 
-Next comes agentic AI. A conventional chatbot might answer a question, but an agent can decide to take steps toward a goal, use a tool, inspect a result, and continue. Picture a support assistant that checks an order, looks up a delivery status, and creates a ticket only when it's needed. That requires more than a prompt. We'll examine orchestration, tool permissions, retries, memory, and the boundaries around what an agent should be allowed to do. You'll encounter Amazon Bedrock Agents, multi-agent patterns, Strands Agents, and Amazon Bedrock AgentCore. The key distinction is not just that an agent calls an API. It's how the application plans and controls a sequence of actions, while keeping humans and security controls in the loop when necessary.
+**Visible cues:** Foundations & Bedrock · Data & RAG · Agentic AI · Performance & cost · SageMaker lifecycle · App integration · Governance & evaluation · Security · Supporting AWS · Exam prep
 
-### Slide 05 — Operational Efficiency and Optimization
+Here's the route we'll follow through the course. Think of this winding path as our learning journey, with ten stops. We begin at number one, foundations and Amazon Bedrock, so we understand models and how to invoke them. Stop two is data and RAG: how to give a model relevant, trusted information. Stop three introduces agentic AI, where applications use tools and coordinate actions. At number four, we'll focus on performance and cost, because good output must also be efficient. Number five covers the SageMaker model lifecycle, and six connects our AI features into real applications. At seven, we'll test quality through governance and evaluation. Eight adds security controls throughout the solution. Nine broadens the picture to supporting AWS services, and ten brings everything together for exam preparation. We'll return to this roadmap as the material gets deeper. For now, notice the progression: understand the model, build the application, then make it reliable, secure, and ready for real users.
 
-A generative AI application might work perfectly in a test and still fail as a business service if it's too slow or too expensive. This module looks at that practical side. Tokens affect both cost and the amount of context a model can process. Model selection changes quality, latency, and throughput. We also need to consider caching, concurrency, prompt length, retry behavior, and how the application behaves under load. Think about a customer-service assistant serving thousands of users. We don't necessarily want the largest model for every request. Often the smarter architecture routes simple tasks efficiently and reserves more expensive processing for the cases that need it. We'll learn to measure these trade-offs rather than guess.
+### Slide 03 — The Developer’s Role
 
-### Slide 06 — Managing Models with SageMaker AI
+**Visible cues:** Select a foundation model · Connect trusted data · Design prompts and retrieval · Orchestrate tools or agents · Expose an API/interface · Protect data · Evaluate and monitor outcomes
 
-Amazon Bedrock isn't the only important option in the AWS AI ecosystem. Some teams need deeper control over model development, data processing, training, deployment, or monitoring. That's where Amazon SageMaker AI comes into the picture. We'll discuss when to use managed foundation models and when a more customized machine-learning workflow makes sense. We'll also examine the model lifecycle: preparing data, training or adapting models, deploying endpoints, monitoring behavior, and applying safeguards. You don't need to memorize a single architecture for every problem. The skill is recognizing the amount of control the business actually needs and choosing a platform that matches those requirements.
+This slide explains what a generative AI developer actually does. The application is in the centre, and seven responsibilities surround it. Start with number one at the top: select a foundation model that balances capability, cost, and latency. At number two on the left, connect trusted data so answers can use reliable organisational information. At three on the right, design prompts and retrieval so the model receives the right instructions and evidence. Number four, lower left, is orchestration: allowing tools or agents to perform steps when a single model call is not enough. At five, expose the solution through an API or user interface so other systems or people can use it. Six is protecting data, permissions, and privacy. And seven is evaluating and monitoring the results for accuracy, safety, and operational value. The key idea is that building a production AI application is an engineering discipline. Choosing a model is only the first of these seven jobs.
 
-### Slide 07 — More Tools for Building AI Applications
+### Slide 04 — Practical Starting Point
 
-Of course, a production application has much more than a model at its center. Users need a way to send requests. The system may need to call databases, validate inputs, coordinate several steps, and roll out changes safely. We'll connect AI components with services such as Amazon API Gateway, AWS Lambda, AWS Step Functions, and AWS AppConfig. For example, a request could enter through an API, trigger a Lambda function, retrieve relevant context, invoke a model, and return a checked response. More complex workflows might use Step Functions for clear orchestration and error handling. As you see these diagrams later, trace the request from the user all the way to the final response and back again.
+**Visible cues:** AWS Fundamentals · Application Development · AI Basics · Production GenAI
 
-### Slide 08 — Governance and Quality Assurance
+Before we start the technical modules, let's look at the three foundations in this diagram. On the left is AWS fundamentals: identity and access management, networking, storage, and compute. Those are the building blocks that determine whether our application is secure and reachable. In the middle is application development. Notice the examples along the bottom: APIs, error handling, and deployment. A GenAI feature still needs all the engineering practices of a normal software application. On the right are AI basics, especially large language models, tokens, and prompting. You don't need to be a model researcher, but you should know what the model receives, what it generates, and how prompting affects its behaviour. Follow the three arrows down to the box labelled Production GenAI. That's the point of this slide: we combine cloud knowledge, software engineering, and AI concepts to build and operate real applications. These are preparation topics, not separate exam eligibility requirements.
 
-How do we know that our AI application is behaving well? A response that sounds convincing isn't necessarily accurate, safe, or useful. Governance and quality assurance help us answer that question systematically. We'll explore prompt management, evaluation datasets, tracing, monitoring, and the feedback loops that identify failures. We need to judge relevance, groundedness, correctness, safety, and consistency, depending on the use case. Imagine changing a prompt that improves one question but breaks ten others. Without repeatable evaluations, you might never notice. We'll treat testing as an ongoing engineering discipline, not a final checkbox. We'll also consider when a human review step or additional safeguards are appropriate.
+### Slide 05 — The GenAI Application Stack
 
-### Slide 09 — Security, Identity, and Compliance
+**Visible cues:** Infrastructure & Networking · Context & Data · Foundation Model · Orchestration & Agents · Application Interfaces · Governance · Observability · Security
 
-Security has to be built into the entire application. We're not just protecting a model endpoint. We're protecting user identities, prompts, retrieved documents, tool permissions, stored records, and logs. We'll examine identity and access management with AWS IAM, encryption controls with AWS KMS, and data-discovery capabilities such as Amazon Macie, alongside broader security and compliance decisions. Consider an agent that is allowed to look up account details. It should not automatically gain permission to modify those accounts. We'll look at least-privilege permissions, separation of responsibilities, encryption, auditability, and how to avoid exposing sensitive data in prompts or responses. These principles are critical both for AWS exams and for real production systems.
+Now we're going to read the architecture from the bottom upwards. At the base is infrastructure and networking: compute, storage, and connectivity. Above that sits context and data, which includes enterprise information, preparation, and retrieval. The foundation model layer is next; it is responsible for understanding the prompt and generating output. Above the model are orchestration and agents, which coordinate workflows, tools, and multiple steps. At the top are application interfaces, the screens and integrations people actually interact with. But don't miss the controls drawn around the sides. Governance on the left covers policies, controls, and compliance. Observability on the right covers monitoring, evaluation, and operational insight. Security runs across the top, protecting the whole stack, not just one component. This picture gives you a useful checklist. Whenever you evaluate a GenAI architecture, identify each layer, ask which AWS service owns it, and check that security and monitoring extend across the full request flow.
 
-### Slide 10 — Other AWS Services You Should Know
+### Slide 06 — One Request, End to End
 
-Generative AI doesn't live in isolation. The surrounding architecture often uses familiar AWS building blocks: compute services, containers, databases, storage, analytics, networking, and customer-engagement tools. A team might deploy a web application in containers, store transaction data in a database, stream operational events into analytics, and use a foundation model for natural-language interaction. The exam may test the entire solution, not only the model invocation. We'll therefore connect services by their role in the architecture instead of studying them as disconnected names. Whenever a new service appears, ask what responsibility it owns, what information it receives, and how it helps the system meet its requirements.
+**Visible cues:** User question · API & authentication · Retrieve approved knowledge · Foundation model generates draft · Guardrails and application checks · Answer · Optional tool call · Human escalation · Logs and metrics
 
-### Slide 11 — This All May Seem Familiar…
+Let's make the stack practical with a customer-support assistant. Follow the six numbered boxes from left to right. First, a customer asks a question. Second, the request reaches our API, where the application authenticates the caller and applies access rules. At step three, we retrieve approved knowledge when the question needs company facts. That might be a policy document or a product manual. Step four is the foundation model: it combines the question and useful context to generate a draft response. Step five is essential. Guardrails and application checks evaluate whether that response is safe, relevant, and appropriate to return. Only then do we reach step six, the answer shown to the customer. Notice two paths above the main line. An optional tool call can fetch information or perform an authorised action; complex or sensitive cases can be escalated to a human. And look at the dotted line along the bottom: logs and metrics help us investigate what happened at each stage. This is how a single question becomes a controlled production workflow.
 
-If you've worked with AWS, software development, networking, databases, or security before, some of these concepts will feel familiar. That's a good thing. Generative AI applications still need reliable APIs, good data, identity controls, monitoring, and sensible architecture. What changes is how we incorporate probabilistic model outputs, retrieval, agent decisions, and evaluation into those established patterns. Even if AI is newer to you, you already have a useful starting point whenever you understand how a request moves through an application. We'll keep building on those connections, and we'll avoid treating every new feature as a completely separate world.
+### Slide 07 — Retrieval or Adaptation?
 
-### Slide 12 — Target Candidate
+**Visible cues:** RAG: retrieves current private facts · Fine-tuning: adapts model behavior · Need fresh knowledge? · Need stable task behavior?
 
-Let's also set expectations for who this course is designed to help. The Generative AI Developer Professional track is most useful for learners who want to design, build, integrate, and operate production generative AI solutions on AWS. You may come from an application development, cloud architecture, machine learning, or security background. Those strengths all help, but we'll need to connect them to real implementation choices. As we progress, pay attention to scenario wording, service limits, operational constraints, and the distinction between an attractive demo and a dependable production design. Where hands-on experience would make a topic clearer, we'll connect the concepts to practical architecture walkthroughs and labs.
+This is a decision you'll make frequently, so compare the two panels carefully. On the left is RAG, or retrieval-augmented generation. The user asks a question; the application searches private sources, such as documents, databases, or wikis; and the relevant context is added before the model is invoked. The model can answer using information that was retrieved at request time. Now look at the right-hand panel. Fine-tuning starts with a prepared training dataset and updates the model's behaviour before it is served for tasks. It is not simply a live lookup of today's company documents. The decision rule at the bottom is the important takeaway. Need fresh, frequently changing, or private facts? Start by considering retrieval. Need a more consistent task-specific style or behaviour, with suitable training examples? Fine-tuning may be appropriate. These approaches can also complement each other. But for exam scenarios, learn to recognise whether the real requirement is current knowledge or a change in model behaviour.
 
-And that's our roadmap. We begin with the foundations and Amazon Bedrock, then build outward into data, agents, optimization, model management, application tools, governance, security, and supporting AWS services. As we go, I'll explain not only what each service does, but when to choose it, when not to, and how the different pieces fit together. I'd encourage you to pause at architecture diagrams, predict the next step in the request flow, and revisit topics after trying a lab. The aim is understanding that you can apply, rather than memorizing isolated facts. Thanks for joining me. Let's move into the first technical module and start building a solid foundation in generative AI on AWS.
+### Slide 08 — Security Around the Stack — Request Path
 
-## Review checklist
+**Visible cues:** WAF · Guardrails · IAM · Secrets Manager · KMS · VPC / PrivateLink · CloudTrail · CloudWatch
 
-- Confirm all 12 original slide images appear and their spoken explanations match the visuals.
-- Check pronunciation, narration clarity, pacing, sentence-level subtitles, slide changes, and chapter markers.
-- Verify the MP4 plays completely before adding it to the course page.
+Security here is shown as a set of layers around a request, not a single shield. Start on the left side of the middle row. A user reaches the application through an entry point protected by AWS WAF, which helps filter malicious web requests. Next, guardrails enforce content and usage policies around model interactions. In the centre, compute and the application handle the request, while the data layer must remain protected. Now look at the five service boxes across the top. IAM defines who can access what with least-privilege permissions. Secrets Manager securely stores and rotates credentials. KMS manages the encryption keys used to protect data. These controls complement WAF and guardrails; none replaces another. The dashed turquoise boundary underneath represents VPC and PrivateLink, which can provide controlled private network paths where supported. Finally, the bottom panels distinguish two important jobs: CloudTrail records AWS API activity for auditing, while CloudWatch tracks logs, metrics, and operational health. The lesson is defence in depth across identity, traffic, model behaviour, data, and operations.
+
+### Slide 09 — Security Around the Stack — Control Responsibilities
+
+**Visible cues:** User · Application · Foundation model · IAM · KMS · Secrets Manager · VPC / PrivateLink · WAF · Guardrails · CloudTrail · CloudWatch
+
+This second security view reorganises those controls around the system we're protecting. Look first at the vertical centre: a user interacts with an application, and the application invokes a foundation model. Now scan the boxes on the left. IAM scopes the application's permissions. KMS manages encryption keys. Secrets Manager protects credentials used to reach dependent services. And VPC or PrivateLink can control supported network connections. On the right, WAF protects appropriate web entry points and guardrails check interactions with the model. CloudTrail supplies an audit trail of AWS API activity, while CloudWatch provides operational logs and monitoring. Notice that the protection is arranged around the entire user-to-model path. This matters because a secure model call is not enough if the application leaks secrets, the API allows excessive access, or nobody notices a failure. When you see a security scenario in the exam, ask which risk is being described, and then choose the control that addresses that specific risk.
+
+### Slide 10 — Reference Application
+
+**Visible cues:** User · API Gateway · Lambda orchestration · Bedrock model · Guardrails (input) · Guardrails (output) · S3 documents · Knowledge base / vector search · Human escalation · IAM and KMS · CloudWatch telemetry
+
+Here is our full reference architecture for a customer-support assistant. Read the main path from left to right. The user asks a question, and API Gateway receives and routes the request. Lambda coordinates the application logic: it can add context, apply policies, and invoke the model. Notice the input guardrails above Lambda. The design includes checks for harmful or disallowed requests before the model produces an answer. Now look at the lower-left branch. When a question needs company knowledge, documents in Amazon S3 feed a knowledge base or vector-search system. Relevant information flows back into the orchestration step as optional context. Lambda then calls a model through Amazon Bedrock. The generated content passes through output guardrails before the application returns a helpful response. The downward arrow from Lambda shows a different outcome: an unresolved or sensitive case can be passed to a human agent. Finally, the box on the lower right shows the cross-cutting services. IAM controls access, KMS supports encryption, and CloudWatch gives us logs, metrics, and alarms. This diagram is a useful template for understanding how the earlier concepts become one working AWS application.
+
+### Slide 11 — Reading Architecture Diagrams
+
+**Visible cues:** component · request/data flow · optional/control/telemetry · trust or network scope · persistent store · execution order · Client · Application · Database · Monitoring
+
+Before we move into more complex designs, let's learn how to read the diagrams used throughout this course. Start with the legend on the left. A rounded rectangle represents a component or service. A solid orange arrow shows a request or data flow. A dashed turquoise arrow indicates something different, such as an optional path, a control, or telemetry. The purple dashed outline marks a trust or network boundary, while the cylinder represents persistent storage. The numbered circles tell you the execution order. Now apply that legend to the example on the right. Step one goes from the client to the application. At step two, the application accesses the database. At step three, a separate dashed path sends monitoring information from the application. The dashed purple box encloses the trust or network scope. The direction and style of an arrow matter just as much as the service icons. Whenever we study an AWS architecture, trace the main request first, then inspect the boundaries, optional branches, security controls, and monitoring paths.
+
+### Slide 12 — Next: Foundations & Bedrock
+
+**Visible cues:** What can it do? · Which model fits? · How do we invoke it? · How do we control and evaluate it? · Foundation models · prompts · retrieval · guardrails · application integration
+
+We're ready for Module One: foundations and Amazon Bedrock. Look at the four questions surrounding the model in the middle. First, what can a foundation model actually do, and what are its limitations? Second, which model fits a particular business requirement? Third, how does an application invoke the model in practice? And fourth, how do we control and evaluate the responses so they're useful and safe? The row along the bottom previews the building blocks we'll connect: foundation models, prompts, retrieval, guardrails, and application integration. Remember the end-to-end flow from our opening slide. We'll return to that same flow, but now we'll understand the model at its centre much more deeply. As you continue, focus less on memorising service names and more on why each component exists and how information moves between them. Let's begin with the foundations of generative AI and how Amazon Bedrock helps developers work with foundation models.
+
+## QA checklist
+
+- Confirm the scene numbers, headings, diagram labels and narrated sequence agree.
+- Verify exactly 12 uploaded slide images in the new MP4; do not substitute generic or generated replacement images.
+- Preserve the existing neural voice and rate unless deliberately changed in a later revision.
+- Verify speech stops at slide changes, and captions, chapter timestamps and audio do not overlap.
+- Review the near-duplicate security slides 8 and 9 separately; consider improving the visuals in a later iteration.
+- Do not publish the new overview to the course site until the revised MP4 has passed visual and audio review.
