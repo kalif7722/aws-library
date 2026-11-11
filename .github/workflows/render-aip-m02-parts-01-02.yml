@@ -42,14 +42,20 @@ jobs:
 
       - name: Install narration and video engine
         run: |
-          # GitHub-hosted Ubuntu runners already include FFmpeg.
-          # Avoid apt-get: Ubuntu mirror DNS failures can stall video builds.
-          command -v ffmpeg || { echo "::error::FFmpeg is not on the runner PATH"; exit 1; }
-          command -v ffprobe || { echo "::error::FFprobe is not on the runner PATH"; exit 1; }
-          ffmpeg -version | sed -n '1p'
-          ffprobe -version | sed -n '1p'
-          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
-          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py
+          # Use wheel-bundled FFmpeg rather than apt or runner PATH.
+          # Mutagen reads MP3/MP4 durations; no FFprobe binary is needed.
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python - <<'PY'
+          import subprocess
+          from imageio_ffmpeg import get_ffmpeg_exe
+          from mutagen import File
+          executable = get_ffmpeg_exe()
+          result = subprocess.run([executable, "-version"], capture_output=True, text=True, check=True)
+          print("Bundled FFmpeg available:", executable)
+          print(result.stdout.splitlines()[0])
+          print("Mutagen available:", File)
+          PY
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py scripts/aip_media_tools.py
 
       - name: Confirm the actual original slide range and narration revision
         env:
@@ -101,7 +107,8 @@ jobs:
           REVISION: ${{ matrix.revision }}
         run: |
           python - <<'PY'
-          import json,os,subprocess
+          import json,os
+          from scripts.aip_media_tools import media_seconds
           from pathlib import Path
           p=os.environ["PART"]
           folder=Path(f"video-output/part-{p}")
@@ -111,10 +118,7 @@ jobs:
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==expected
           assert m["duration_seconds"]>len(expected)*30
-          duration=float(subprocess.check_output([
-            "ffprobe","-v","error","-show_entries","format=duration",
-            "-of","default=noprint_wrappers=1:nokey=1",str(folder/f"{stem}.mp4")
-          ],text=True).strip())
+          duration=media_seconds(folder/f"{stem}.mp4")
           assert abs(duration-m["duration_seconds"])<3.5
           assert (folder/f"{stem}.vtt").read_text().startswith("WEBVTT")
           assert (folder/f"{stem}-transcript.txt").is_file()
