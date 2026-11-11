@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
+import {readCompleted} from "./StudyProgress";
 
 type Chapter = { slide: number; title: string; startSeconds: number; durationSeconds: number };
 type Ready = {
@@ -129,6 +130,17 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   const [results, setResults] = useState<Record<string, VideoResult>>({});
   const [selected, setSelected] = useState("01");
   const [checking, setChecking] = useState(true);
+  const [progressDone,setProgressDone]=useState<string[]>([]);
+  useEffect(()=>{
+    const refreshProgress=()=>setProgressDone(readCompleted("aip"));
+    refreshProgress();
+    window.addEventListener("storage",refreshProgress);
+    window.addEventListener("study-progress-change",refreshProgress);
+    return()=>{
+      window.removeEventListener("storage",refreshProgress);
+      window.removeEventListener("study-progress-change",refreshProgress);
+    };
+  },[]);
   const playerAnchor = useRef<HTMLDivElement>(null);
   const parts=moduleId==="02"?PARTS_02:PARTS_01;
   const moduleUrl=`${COURSE_URL}/visual/module-${moduleId}`;
@@ -253,7 +265,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
             <span className="av-copy">
               <b>{p.title}</b>
               <small>{p.subtitle} · Slides {p.start}–{p.end}</small>
-              <span className={ready ? "av-status" : "av-status pending"}>{ready ? `▶ Watch · ${fmt((results[p.id] as Ready).durationSeconds ?? 0)}` : "In preparation"}</span>
+              <span className={ready ? "av-status" : "av-status pending"}>{ready ? (progressDone.includes(`aip-video-${moduleId}-${p.id}`) ? "✓ Watched" : `▶ Watch · ${fmt((results[p.id] as Ready).durationSeconds ?? 0)}`) : "In preparation"}</span>
             </span>
           </button>;
         })}
