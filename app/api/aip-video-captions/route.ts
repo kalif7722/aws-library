@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip";
 const CAPTIONS: Record<string, string> = {
   "00": "module-00/aip-module-00.vtt",
+  "01-01": "module-01/part-01/aip-module-01-part-01.vtt",
   "01-02": "module-01/part-02/aip-module-01-part-02.vtt",
   "01-03": "module-01/part-03/aip-module-01-part-03.vtt",
 };
