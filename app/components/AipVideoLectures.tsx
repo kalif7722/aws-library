@@ -20,6 +20,8 @@ type VideoResult = Ready | { status: "processing" };
 const COURSE_URL = "/courses/aws-generative-ai-developer-professional";
 const MODULE_01 = `${COURSE_URL}/visual/module-01`;
 const AUTO_NEXT_KEY = "aip-auto-next:v1";
+const PLAYBACK_SPEED_KEY = "aip-video-playback-speed:v1";
+const PLAYBACK_SPEEDS = [0.75,1,1.25,1.5,1.75,2] as const;
 
 function fmt(seconds: number) {
   if (!Number.isFinite(seconds)) return "—";
@@ -57,8 +59,29 @@ function VideoPlayer({
   const [muted,setMuted]=useState(false);
   const [volume,setVolume]=useState(1);
   const [captionsOn,setCaptionsOn]=useState(false);
+  const [playbackSpeed,setPlaybackSpeed]=useState(1);
   const autoPlayAttempted=useRef(false);
   const watch=useAipVideoWatchProgress({moduleId,partId:partId??null,chapters:item.chapters,durationSeconds:item.durationSeconds??item.chapters.reduce((n,c)=>n+c.durationSeconds,0)});
+
+  // A single browser-local preference applies across all AIP course videos.
+  useEffect(()=>{
+    try{
+      const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??"1");
+      const rate=PLAYBACK_SPEEDS.some(value=>value===saved)?saved:1;
+      setPlaybackSpeed(rate);
+      if(player.current)player.current.playbackRate=rate;
+    }catch{
+      setPlaybackSpeed(1);
+    }
+  },[]);
+
+  const changePlaybackSpeed=(value:number)=>{
+    if(!PLAYBACK_SPEEDS.some(rate=>rate===value))return;
+    setPlaybackSpeed(value);
+    if(player.current)player.current.playbackRate=value;
+    try{localStorage.setItem(PLAYBACK_SPEED_KEY,String(value));}
+    catch{/* Browser storage may be disabled */}
+  };
 
   const persistPosition=(time:number)=>{
     if(!Number.isFinite(time) || time<0)return;
@@ -218,6 +241,14 @@ function VideoPlayer({
           setDuration(Number.isFinite(video.duration)?video.duration:(item.durationSeconds??0));
           for(let i=0;i<video.textTracks.length;i++)video.textTracks[i].mode="disabled";
           restorePosition(video);
+          // Apply saved rate even when a newly selected video mounts before effects.
+          let rate=playbackSpeed;
+          try{
+            const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??"1");
+            if(PLAYBACK_SPEEDS.some(candidate=>candidate===saved))rate=saved;
+          }catch{/* Keep state rate */}
+          video.playbackRate=rate;
+          setPlaybackSpeed(rate);
         }}
         onDurationChange={event=>{
           if(Number.isFinite(event.currentTarget.duration))
@@ -288,6 +319,13 @@ function VideoPlayer({
           <button type="button" onClick={()=>skipSeconds(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds">5s ↷</button>
           <span className="av-timestamp">{fmt(position)} / {fmt(duration)}</span>
           <span className="av-controls-grow"/>
+          <label className="av-speed-control">
+            <span>Speed</span>
+            <select aria-label="Video playback speed" value={playbackSpeed}
+              onChange={event=>changePlaybackSpeed(Number(event.currentTarget.value))}>
+              {PLAYBACK_SPEEDS.map(rate=><option key={rate} value={rate}>{rate}×</option>)}
+            </select>
+          </label>
           <button type="button" onClick={toggleCaptions} aria-pressed={captionsOn}
             aria-label={captionsOn?"Turn off captions":"Turn on captions"} title="English subtitles">CC{captionsOn?" ✓":""}</button>
           <button type="button" onClick={toggleMute} aria-label={muted?"Unmute":"Mute"} title={muted?"Unmute":"Mute"}>{muted?"🔇":"🔊"}</button>
@@ -482,6 +520,9 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-control-row button{border:1px solid #557b9a;border-radius:8px;padding:8px 10px;color:#effaff;background:#173b5b;font-size:12px;font-weight:750;white-space:nowrap;min-height:36px;cursor:pointer}
       .av-control-row button:hover:not(:disabled),.av-control-row button:focus-visible{background:#17639b;outline:2px solid #8ddcff;outline-offset:1px}
       .av-control-row button:disabled{opacity:.6;cursor:default}
+      .av-speed-control{display:flex;gap:5px;align-items:center;color:#effaff;font-size:12px;font-weight:750}
+      .av-speed-control select{background:#173b5b;color:#fff;border:1px solid #557b9a;border-radius:8px;padding:8px 5px;font-size:12px;min-height:36px;cursor:pointer}
+      .av-speed-control select:focus-visible{outline:2px solid #8ddcff;outline-offset:1px}
       .av-control-row .av-mark-complete{background:#14574f;border-color:#40a895}
       .av-control-row .av-mark-complete:disabled{background:#183d39;color:#b9f5e2;opacity:1}
       .av-timestamp{white-space:nowrap;font-size:12px;color:#dceffa;font-variant-numeric:tabular-nums}
@@ -506,7 +547,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-main:fullscreen .av-custom-controls{flex:none;padding:10px 14px}
       .av-main:fullscreen .av-fullscreen-nav{padding-bottom:83px}
       .av-main:fullscreen .av-tools,.av-main:fullscreen .av-chapters,.av-main:fullscreen .av-slidebar,.av-main:fullscreen .av-actions,.av-main:fullscreen .av-autoplay-notice{display:none}
-      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
+      @media(max-width:600px){.av-control-row{gap:5px}.av-control-row button{padding:7px 8px;font-size:11px;min-height:32px}.av-volume{width:48px}.av-speed-control span{display:none}.av-speed-control select{padding:6px 3px;min-height:32px}.av-timestamp{font-size:10px}.av-custom-controls{padding:8px}.av-fullscreen-nav button{padding:9px 12px;min-height:43px}.av-main:fullscreen{padding:6px}.av-main:fullscreen .av-main-top{margin-bottom:5px}}
       .av-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#546b84;font-size:12px;margin:13px 0}
       .av-tools a,.av-actions a{font-weight:700;color:#1466b2;text-decoration:underline;text-underline-offset:3px}
       .av-action{border:1px solid #a7c8ea;background:#edf6ff;color:#104f85;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
