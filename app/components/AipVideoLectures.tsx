@@ -30,7 +30,7 @@ function fmt(seconds: number) {
 function VideoPlayer({
   item, storageKey, slideBase, moduleId, partId, autoStart = false,
   onFinished, fullscreen = false, onToggleFullscreen,
-  onPrevious, onNext, previousTitle, nextTitle,
+  onPrevious, onNext, previousTitle, nextTitle, completed = false,
 }: {
   item: Ready;
   storageKey: string;
@@ -45,11 +45,18 @@ function VideoPlayer({
   onNext?: () => void;
   previousTitle?: string;
   nextTitle?: string;
+  completed?: boolean;
 }) {
   const player = useRef<HTMLVideoElement>(null);
   const [resume, setResume] = useState(0);
   const [error, setError] = useState(false);
   const [autoPlayBlocked,setAutoPlayBlocked]=useState(false);
+  const [playing,setPlaying]=useState(false);
+  const [position,setPosition]=useState(0);
+  const [duration,setDuration]=useState(item.durationSeconds??0);
+  const [muted,setMuted]=useState(false);
+  const [volume,setVolume]=useState(1);
+  const [captionsOn,setCaptionsOn]=useState(false);
   const autoPlayAttempted=useRef(false);
   const watch=useAipVideoWatchProgress({moduleId,partId:partId??null,chapters:item.chapters,durationSeconds:item.durationSeconds??item.chapters.reduce((n,c)=>n+c.durationSeconds,0)});
 
@@ -62,6 +69,12 @@ function VideoPlayer({
   useEffect(()=>{
     setError(false);
     setAutoPlayBlocked(false);
+    setPlaying(false);
+    setPosition(0);
+    setDuration(item.durationSeconds??0);
+    setMuted(false);
+    setVolume(1);
+    setCaptionsOn(false);
     autoPlayAttempted.current=false;
     try{
       const current=Number(localStorage.getItem(storageKey)??"0");
@@ -109,6 +122,7 @@ function VideoPlayer({
       return;
     }
     video.currentTime=saved;
+    setPosition(saved);
     watch.onSeeked(saved);
     setResume(saved);
   };
@@ -117,6 +131,7 @@ function VideoPlayer({
     const video=player.current;
     if(!video)return;
     video.currentTime=seconds;
+    setPosition(seconds);
     watch.onSeeked(seconds);
     persistPosition(seconds);
     video.scrollIntoView({behavior:"smooth",block:"center"});
@@ -130,8 +145,43 @@ function VideoPlayer({
     const destination=Math.min(end,Math.max(0,video.currentTime+delta));
     // Explicit navigation: do not count the skipped seconds as watched.
     video.currentTime=destination;
+    setPosition(destination);
     watch.onSeeked(destination);
     persistPosition(destination);
+  };
+
+  const togglePlayback=()=>{
+    const video=player.current;
+    if(!video)return;
+    if(video.paused){
+      void video.play().catch(()=>setAutoPlayBlocked(true));
+    }else video.pause();
+  };
+  const toggleMute=()=>{
+    const video=player.current;
+    if(!video)return;
+    video.muted=!video.muted;
+    setMuted(video.muted);
+  };
+  const adjustVolume=(next:number)=>{
+    const video=player.current;
+    if(!video)return;
+    const safe=Math.min(1,Math.max(0,next));
+    video.volume=safe;
+    video.muted=safe===0;
+    setMuted(video.muted);
+    setVolume(safe);
+  };
+  const toggleCaptions=()=>{
+    const video=player.current;
+    if(!video)return;
+    const next=!captionsOn;
+    for(let i=0;i<video.textTracks.length;i++)
+      video.textTracks[i].mode=next?"showing":"disabled";
+    setCaptionsOn(next);
+  };
+  const completeManually=()=>{
+    watch.markComplete();
   };
 
   const restart=()=>{
