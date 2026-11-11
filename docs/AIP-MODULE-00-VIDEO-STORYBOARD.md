@@ -1,12 +1,10 @@
 # AIP-C01 · Module 00 — Lecturer Video Storyboard
 
-**Status:** First narration draft; awaiting render verification and slide-by-slide visual QA.
+**Status:** 12-slide script updated after GitHub Actions confirmed original slide files 1–12 and 404 for slide 13.
 
-**Course:** AWS Certified Generative AI Developer – Professional (AIP-C01)
+**Format:** Original 12 full-screen slides · instructor voice · MP4 · subtitles · chapter markers.
 
-**Format:** Existing full-screen course images · natural English instructor voice · downloadable MP4 · optional captions and chapter navigation.
-
-**Voice preset:** en-US-AndrewNeural at -3% speed. Total script: 1438 words (runtime depends on synthesized voice).
+**Note:** The source PDF/course topic mapping mentions a thirteenth closing topic, but no corresponding visual image is present. Its closing narration is included at the end of slide 12 rather than generating a placeholder.
 
 ## Lecture script
 
@@ -58,15 +56,10 @@ If you've worked with AWS, software development, networking, databases, or secur
 
 Let's also set expectations for who this course is designed to help. The Generative AI Developer Professional track is most useful for learners who want to design, build, integrate, and operate production generative AI solutions on AWS. You may come from an application development, cloud architecture, machine learning, or security background. Those strengths all help, but we'll need to connect them to real implementation choices. As we progress, pay attention to scenario wording, service limits, operational constraints, and the distinction between an attractive demo and a dependable production design. Where hands-on experience would make a topic clearer, we'll connect the concepts to practical architecture walkthroughs and labs.
 
-### Slide 13 — Let’s Go!
-
 And that's our roadmap. We begin with the foundations and Amazon Bedrock, then build outward into data, agents, optimization, model management, application tools, governance, security, and supporting AWS services. As we go, I'll explain not only what each service does, but when to choose it, when not to, and how the different pieces fit together. I'd encourage you to pause at architecture diagrams, predict the next step in the request flow, and revisit topics after trying a lab. The aim is understanding that you can apply, rather than memorizing isolated facts. Thanks for joining me. Let's move into the first technical module and start building a solid foundation in generative AI on AWS.
 
 ## Review checklist
 
-- Compare each scene against its actual image; correct any mismatch rather than inventing missing visual details.
-- Check pronunciation of AWS service and exam terms.
-- Check pacing, pauses, clarity of explanations, and transitions.
-- Check all 13 original slides appear in order, without substitutes.
-- Review caption timing and availability of transcript and chapter markers.
-- Publish a Video Overview link on the course only after approving the rendered preview.
+- Confirm all 12 original slide images appear and their spoken explanations match the visuals.
+- Check pronunciation, narration clarity, pacing, sentence-level subtitles, slide changes, and chapter markers.
+- Verify the MP4 plays completely before adding it to the course page.
