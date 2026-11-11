@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m pip install "Pillow>=10,<13" "requests>=2.31,<3"
           python scripts/prepare_aip_video_review.py \
-            --module 01 --part 01:1-9 --part 02:10-14 \
+            --module 01 --part 01:1-9 --part 02:10-13 --part 03:14-24 \
             --out docs/video-review/aip/module-01
 
       - name: Save visual review assets to GitHub
@@ -60,5 +60,5 @@ jobs:
           missing = report["missing"]
           if missing:
               raise SystemExit(f"Cannot draft video until missing source slides are fixed: {missing}")
-          print("All original slides 1–14 are accounted for.")
+          print("All requested Module 01 slides are accounted for.")
           PY
