@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 
 type Chapter = { slide: number; title: string; startSeconds: number; durationSeconds: number };
 type Ready = {
@@ -17,7 +18,7 @@ type LecturePart = { id: string; title: string; subtitle: string; start: number;
 
 const COURSE_URL = "/courses/aws-generative-ai-developer-professional";
 const MODULE_01 = `${COURSE_URL}/visual/module-01`;
-const PARTS: LecturePart[] = [
+const PARTS_01: LecturePart[] = [
   { id: "01", title: "Foundation Models & Amazon Bedrock", subtitle: "Models, APIs and access", start: 1, end: 9 },
   { id: "02", title: "Fine-Tuning & LoRA", subtitle: "Customization approaches", start: 10, end: 13 },
   { id: "03", title: "RAG & Knowledge Bases", subtitle: "Retrieval, vectors and grounding", start: 14, end: 24 },
@@ -25,6 +26,13 @@ const PARTS: LecturePart[] = [
   { id: "05", title: "RAG Evaluation & Guardrails", subtitle: "Multimodal AI and prompt management", start: 35, end: 43 },
   { id: "06", title: "Bedrock Flows & Effective Prompting", subtitle: "Structured responses and prompt anatomy", start: 44, end: 50 },
 ];
+const PARTS_02: LecturePart[] = [
+  { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
+  { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
+  { id: "03", title: "SageMaker Data Wrangler", subtitle: "Transformations, preparation and common failures", start: 16, end: 21 },
+  { id: "04", title: "AWS Glue and Data Quality", subtitle: "ETL, crawler, catalog, partitions and checks", start: 22, end: 28 },
+];
+// Parts beyond slide 28 are added only after inspecting the actual R2 images.
 
 function fmt(seconds: number) {
   if (!Number.isFinite(seconds)) return "—";
@@ -32,15 +40,17 @@ function fmt(seconds: number) {
   return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
 }
 
-function VideoPlayer({ item, storageKey, slideBase, partId }: {
+function VideoPlayer({ item, storageKey, slideBase, moduleId, partId }: {
   item: Ready;
   storageKey: string;
   slideBase: string;
+  moduleId: string;
   partId?: string;
 }) {
   const player = useRef<HTMLVideoElement>(null);
   const [resume, setResume] = useState(0);
   const [error, setError] = useState(false);
+  const watch=useAipVideoWatchProgress({moduleId,partId:partId??null,chapters:item.chapters,durationSeconds:item.durationSeconds??item.chapters.reduce((n,c)=>n+c.durationSeconds,0)});
   useEffect(() => {
     setError(false);
     try {
@@ -53,6 +63,7 @@ function VideoPlayer({ item, storageKey, slideBase, partId }: {
     const v = player.current;
     if (!v) return;
     v.currentTime = seconds;
+    watch.onSeeked(seconds);
     v.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
@@ -70,7 +81,10 @@ function VideoPlayer({ item, storageKey, slideBase, partId }: {
       preload="metadata"
       poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
       onError={() => setError(true)}
+      onPlay={event => watch.onPlay(event.currentTarget.currentTime)}
+      onSeeked={event => watch.onSeeked(event.currentTarget.currentTime)}
       onTimeUpdate={event => {
+        watch.onTimeUpdate(event.currentTarget);
         const t = event.currentTarget.currentTime;
         if (Number.isFinite(t)) {
           try { localStorage.setItem(storageKey, String(Math.round(t))); }
@@ -102,7 +116,7 @@ function VideoPlayer({ item, storageKey, slideBase, partId }: {
             <button type="button" onClick={() => jump(ch.startSeconds)} aria-label={`Play explanation for slide ${ch.slide}`}>
               <span>{fmt(ch.startSeconds)}</span> {String(ch.slide).padStart(2, "0")} · {ch.title}
             </button>
-            <a href={`${COURSE_URL}/visual/module-${slideBase.includes("module-00") ? "00" : "01"}?slide=${ch.slide}${partId ? `&videoPart=${partId}` : ""}#visual-lessons`}
+            <a href={`${COURSE_URL}/visual/module-${moduleId}?slide=${ch.slide}${partId ? `&videoPart=${partId}` : ""}#visual-lessons`}
               title={`Open full-size slide ${ch.slide}`} aria-label={`Open slide ${ch.slide} in viewer`}>Slide ↗</a>
           </div>
         ))}
@@ -116,14 +130,16 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   const [selected, setSelected] = useState("01");
   const [checking, setChecking] = useState(true);
   const playerAnchor = useRef<HTMLDivElement>(null);
-  const readyParts = PARTS.filter(part => results[part.id]?.status === "ready");
-  const active = PARTS.find(p => p.id === selected) ?? PARTS[0];
+  const parts=moduleId==="02"?PARTS_02:PARTS_01;
+  const moduleUrl=`${COURSE_URL}/visual/module-${moduleId}`;
+  const readyParts = parts.filter(part => results[part.id]?.status === "ready");
+  const active = parts.find(p => p.id === selected) ?? parts[0];
 
   const refresh = useCallback(async (signal?: AbortSignal) => {
     setChecking(true);
-    const ids = moduleId === "00" ? ["00"] : PARTS.map(p => p.id);
+    const ids = moduleId === "00" ? ["00"] : (moduleId==="02"?PARTS_02:PARTS_01).map(p => p.id);
     const responsePairs = await Promise.all(ids.map(async id => {
-      const endpoint = moduleId === "00" ? "/api/aip-video?module=00" : `/api/aip-video?module=01&part=${id}`;
+      const endpoint = moduleId === "00" ? "/api/aip-video?module=00" : `/api/aip-video?module=${moduleId}&part=${id}`;
       try {
         const response = await fetch(endpoint, { cache: "no-store", signal });
         const data = response.ok ? await response.json() as VideoResult : { status: "processing" as const };
@@ -138,9 +154,10 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
 
   useEffect(() => {
     const ctrl = new AbortController();
-    if (moduleId === "01") {
+    if (moduleId === "01" || moduleId === "02") {
       const current = new URLSearchParams(window.location.search).get("videoPart");
-      if (PARTS.some(p => p.id === current)) setSelected(current!);
+      const available=moduleId==="02"?PARTS_02:PARTS_01;
+      if (available.some(p => p.id === current)) setSelected(current!);
     }
     void refresh(ctrl.signal);
     return () => ctrl.abort();
@@ -213,8 +230,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     `}</style>
     <div className="av-head">
       <strong>AIP-C01 · VIDEO LEARNING PATH</strong>
-      <h2>{moduleId === "00" ? "Introduction · Guided Video" : "Module 01 · Video Lectures"}</h2>
-      <p>{moduleId === "00" ? "A continuous lecture following the 12 original course images." : "Choose a part on the left, watch the lecture, or open the exact slides. Parts stay in topic order."}</p>
+      <h2>{moduleId === "00" ? "Introduction · Guided Video" : `Module ${moduleId} · Video Lectures`}</h2>
+      <p>{moduleId === "00" ? "A continuous lecture following the 12 original course images." : "Follow the original AWS diagrams in topic order. Choose a part, watch the lecturer, or study its individual slides."}</p>
       <div className="av-headlinks">
         <a href="#visual-lessons">Open visual slides ↓</a>
         <a href={COURSE_URL}>All course modules</a>
@@ -223,13 +240,13 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     </div>
     {moduleId === "00" ? <div className="av-main">
       {intro?.status === "ready"
-        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp"/>
+        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00"/>
         : <p className="av-empty">{checking ? "Checking the introduction video…" : "The revised video is not currently available. Open the original slides below."}</p>}
       <div className="av-actions"><a href={MODULE_01+"#video-lectures"}>Continue to Module 01 →</a></div>
     </div> : <div className="av-layout">
       <nav className="av-list" aria-label="Choose video part">
-        <div className="av-list-title">COURSE PLAYLIST · {readyParts.length}/{PARTS.length} AVAILABLE</div>
-        {PARTS.map(p => {
+        <div className="av-list-title">COURSE PLAYLIST · {readyParts.length}/{parts.length} AVAILABLE</div>
+        {parts.map(p => {
           const ready = results[p.id]?.status === "ready";
           return <button key={p.id} type="button" className="av-lesson" aria-current={selected === p.id ? "true" : undefined} onClick={() => choose(p.id)}>
             <span className="av-number">{p.id}</span>
@@ -244,7 +261,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       <div className="av-main" ref={playerAnchor}>
         <div className="av-main-top">
           <div>
-            <small>PART {active.id} OF {String(PARTS.length).padStart(2, "0")} · SLIDES {active.start}–{active.end}</small>
+            <small>PART {active.id} OF {String(parts.length).padStart(2, "0")} · SLIDES {active.start}–{active.end}</small>
             <h3>{active.title}</h3>
             <small>{active.subtitle}</small>
           </div>
@@ -253,11 +270,11 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </span>
         </div>
         {results[active.id]?.status === "ready"
-          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-01-${active.id}-progress`} slideBase={`module-01/slide-${String(active.start).padStart(2,"0")}.webp`} partId={active.id}/>
+          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id}/>
           : <div className="av-empty" role="status">{checking ? "Checking lecture availability…" : "This topic's video is in production. Its source slides are still available for study."}</div>}
         <div className="av-slidebar">
           <span>Want to inspect the actual architecture diagrams?</span>
-          <a href={`${MODULE_01}?slide=${active.start}&videoPart=${active.id}#visual-lessons`}>Open slide {active.start} in full screen ↗</a>
+          <a href={`${moduleUrl}?slide=${active.start}&videoPart=${active.id}#visual-lessons`}>Open slide {active.start} in full screen ↗</a>
           <a href="#visual-lessons">All slides ↓</a>
         </div>
         <div className="av-actions">
