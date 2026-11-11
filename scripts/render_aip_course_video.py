@@ -127,8 +127,11 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
                 fps: int, voice_override: str | None) -> None:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     scenes = manifest["scenes"]
-    if [s["slide"] for s in scenes] != list(range(1, len(scenes) + 1)):
-        raise ValueError("Scenes must cover consecutive slides starting at 1")
+    if not scenes:
+        raise ValueError("At least one scene is required")
+    first_slide = scenes[0]["slide"]
+    if [s["slide"] for s in scenes] != list(range(first_slide, first_slide + len(scenes))):
+        raise ValueError("Scenes must cover consecutive slides in a single topic part")
     if len(scenes) != 12 and manifest["module_id"] == "00":
         raise ValueError("AIP module 00 has 12 verified original slides")
     destination.mkdir(parents=True, exist_ok=True)
@@ -156,6 +159,8 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     captions = []
     current_time = 0.0
     output_prefix = f"aip-module-{manifest['module_id']}"
+    if manifest.get("part_id"):
+        output_prefix += "-part-" + str(manifest["part_id"])
     for scene, (picture, origin) in zip(scenes, downloaded):
         number = scene["slide"]
         print(f"Rendering narrated slide {number:02}/{len(scenes)}...", flush=True)
@@ -225,6 +230,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     report = {
         "course": manifest["course"],
         "module": manifest["module_id"],
+        "part": manifest.get("part_id"),
         "status": "rendered_preview_pending_human_qa",
         "script_revision": manifest.get("script_revision", "unversioned"),
         "voice": voice,
