@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "content/video-narration/aip-module-01-part-01.json"
+      - "scripts/render_aip_course_video.py"
+      - "scripts/aip_tts_reliability.py"
       - ".github/workflows/render-aip-m01-part-01.yml"
   workflow_dispatch:
 
@@ -81,12 +83,28 @@ jobs:
           print("Source slide preflight:", "READY" if ready else "BLOCKED")
           PY
 
+      - name: Restore successful neural narration chunks
+        if: steps.preflight.outputs.available == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: video-output/part-01/_work/audio
+          key: aip-m01-p01-tts-${{ hashFiles('content/video-narration/aip-module-01-part-01.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            aip-m01-p01-tts-${{ hashFiles('content/video-narration/aip-module-01-part-01.json') }}-
+
       - name: Render complete nine-slide lecturer video
         if: steps.preflight.outputs.available == 'true'
         run: |
           python scripts/render_aip_course_video.py \
             --manifest content/video-narration/aip-module-01-part-01.json \
             --output video-output/part-01 --width 1920 --height 1080 --fps 24
+
+      - name: Preserve completed speech chunks even if another TTS request fails
+        if: always() && steps.preflight.outputs.available == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: video-output/part-01/_work/audio
+          key: aip-m01-p01-tts-${{ hashFiles('content/video-narration/aip-module-01-part-01.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Validate video chapters and duration
         if: steps.preflight.outputs.available == 'true'
