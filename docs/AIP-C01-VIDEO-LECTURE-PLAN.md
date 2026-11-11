@@ -82,8 +82,19 @@
 - **Part 15 — slides 111–120:** Amazon S3 storage classes, durability versus availability, Standard and IA classes, Glacier archive choices, Intelligent-Tiering, cost trade-offs, lifecycle transitions, and prefix/tag-scoped lifecycle rules. Ten matching source images inspected.
 - **Implementation:** New 30-scene narration manifests, gallery titles, playlist registration, API revision/range guards, subtitle proxy entries, release publisher allowlist, and the serial rendering workflow `.github/workflows/render-aip-m02-parts-13-15.yml` are committed.
 - **Audio reliability:** Uses the approved Andrew neural voice, up to 15 TTS attempts per failed chunk with cached successful audio, original R2 slide verification, and FFmpeg wheel-based rendering.
-- **Remaining:** The mapped published Module 02 contains 144 lessons. Slides 121–144 still require topic-based narration and a source-image audit before their video parts are registered; archives also contain optional console walkthrough images 145–152 not counted as ordinary 144 lessons.
+- **Module 02 coverage update:** All **144 mapped source images** now have consecutive part mappings and lecturer narration scripts across **19 parts**. The last slides 139–144 are practical BDA and Data Wrangler walkthroughs. Optional archived images 145–152 remain outside the published 144-slide gallery and this video series.
 - **Rendering status:** A script/workflow commit does not confirm a playable MP4. The course exposes Parts 13–15 only after completed media, captions, and matching manifests pass R2 publication verification.
+
+## AIP Module 02 final videos and playback speed — 12 November 2026
+
+- **Player speed control:** Added a compact, accessible Speed selector to the custom video bar with **0.75×, 1×, 1.25×, 1.5×, 1.75× and 2×**. It is visible in normal and fullscreen playback. The selected value is saved in browser storage under `aip-video-playback-speed:v1` and applied automatically when the next or a previously viewed lecture loads.
+- **Part 16, slides 121–125:** Two S3 Lifecycle scenario diagrams (photos, deleted object versions), S3 Storage Class Analysis, Same- and Cross-Region Replication and replication edge cases.
+- **Part 17, slides 126–134:** Four S3 encryption patterns (SSE-S3, SSE-KMS, SSE-C and client-side), KMS permissions/request pressure, TLS transport enforcement, and default encryption versus explicit request policies.
+- **Part 18, slides 135–138:** S3 access logging, avoiding self-logging loops, S3 Access Points and VPC-origin policy checks.
+- **Part 19, slides 139–144:** Bedrock Data Automation invoice extraction and blueprint evaluation; SageMaker Data Wrangler import, preview, cleaning, visualization and export walkthroughs.
+- **Provenance:** All twenty-four original 2048×1152 WebPs were inspected in site-ready ZIP archives, and slide 121–144 gallery headings were corrected to match the real image titles (the earlier PDF-derived headings were shifted).
+- **Workflow:** `.github/workflows/render-aip-m02-parts-16-19.yml` renders these four parts serially with the approved neural voice, 15-attempt bounded TTS retries, cached completed audio, source R2 verification, subtitles, transcripts and MP4/manifest checks before release publication.
+- **Status gate:** Committed narration and workflow are **not** confirmed finished videos. Parts become available in the website player only after successful media upload, range verification and matching manifest revision. This closes the 144-slide production *mapping and script* coverage, not the final rendered-media QA.
 
 ## Core standards
 
