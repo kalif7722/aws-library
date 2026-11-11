@@ -27,6 +27,8 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "04", title: "AgentCore Managed Capabilities", subtitle: "Runtime deployment, memory, tools, gateway and identity", start: 21, end: 27 },
     { id: "05", title: "AgentCore Policies and Evaluations", subtitle: "Authorization, goal success, observability and custom evaluators", start: 28, end: 33 },
     { id: "06", title: "MCP, Agent Labs and Q Business", subtitle: "Strands lab, MCP hosting, OpenAPI, human review and enterprise AI", start: 34, end: 40 },
+    { id: "07", title: "Amazon Q Business and Q Apps", subtitle: "Grounded answers, connectors, permissions, admin controls and apps", start: 41, end: 45 },
+    { id: "08", title: "Amazon Q Developer", subtitle: "AWS operations, coding, IDE extensions and project rules", start: 46, end: 50 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
