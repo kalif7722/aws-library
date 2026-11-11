@@ -13,9 +13,11 @@ on:
 permissions:
   contents: write
 
+# Recovery group deliberately differs from the old artifact-backend groups:
+# orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m03-video-01-03
-  cancel-in-progress: true
+  group: aip-m03-recovery-20261112-p01-03
+  cancel-in-progress: false
 
 jobs:
   render:
