@@ -4,6 +4,15 @@
 
 **Status:** Module 01 Parts 01–02 visually audited. Module 01 Part 02 covers slides 10–13; slide 14 is RAG and starts Part 03. R2 slide 4 was returned as an invalid image during QA. Other splits remain provisional. Slide counts below come from the course lesson map; they are NOT verified R2 asset inventories. Groupings and titles must be confirmed against actual images before recording.
 
+## CI failure investigation — 11 November 2026
+
+- The uploaded Video 1 debug log is from the slide-review workflow, not the MP4 renderer. It shows a failed `git pull --rebase origin main` after another concurrent workflow committed the same `inventory.json` and JPEG contact sheet.
+- **Fixed:** The review job now uploads a disposable visual-review artifact and prints per-part readiness instead of committing generated files back to `main`. This eliminates the rebase contention.
+- **Source blocker remains:** Module 01 slide 04 in R2 returns HTTP 200 with an empty, zero-byte WebP. The redesigned batch ZIP also contains a zero-byte slide 04. Video Part 01 is not publication-ready until that specific slide is restored to the approved visual standard.
+- **Other video workflows:** Part 03's release-record step also contained an unsafe git rebase and incorrectly labeled the part as 02. The step now uses the revision-verified GitHub Contents API helper.
+- **Recovery workflow:** `.github/workflows/reconcile-aip-video-releases.yml` verifies the R2 MP4 and manifest and can create a missing release record without rendering again. If media is absent, the workflow reports it as absent rather than pretending the video exists.
+- **Confirmed release:** Module 01 Part 02 is uploaded (381.3 seconds); a matching release record exists. Module 01 Part 03 is not confirmed uploaded from the release records at the time of this investigation.
+
 ## Delivery progress (2026-11-11)
 
 - **M00 introduction:** corrected 12-slide, visual-aligned 13:31 video uploaded to R2; course Video Overview player is gated by manifest revision.
