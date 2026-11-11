@@ -177,7 +177,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
 
     list_path = scratch / "clips.txt"
     list_path.write_text(
-        "".join(f"file '{(clips / f'clip-{s['slide']:02}.mp4').resolve()}'\n" for s in segments),
+        "".join("file '" + str((clips / ("clip-%02d.mp4" % s["slide"])).resolve()) + "'\n" for s in segments),
         encoding="utf-8",
     )
     concatenated = scratch / "combined.mp4"
