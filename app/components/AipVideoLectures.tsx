@@ -191,6 +191,10 @@ function VideoPlayer({
     </div>}
     {fullscreen && <button className="av-video-exit" type="button"
       onClick={onToggleFullscreen} aria-label="Exit fullscreen video">Exit fullscreen ✕</button>}
+    {fullscreen && autoPlayBlocked && <div className="av-fullscreen-playblocked" role="status">
+      Your browser paused automatic playback.
+      <button type="button" onClick={()=>{void player.current?.play().catch(()=>setAutoPlayBlocked(true));}}>Play this video ▶</button>
+    </div>}
     </div>
     <div className="av-tools">
       {onToggleFullscreen && <button type="button" className="av-action av-fullscreen-button"
@@ -372,6 +376,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-video-arrow:not(:disabled):hover,.av-video-arrow:not(:disabled):focus-visible{background:#0c4e84;outline:2px solid #8dd4ff}
       .av-video-arrow:disabled{opacity:.27;cursor:default}
       .av-video-exit{position:absolute;right:18px;top:16px;background:#06182ed9;color:#fff;border:1px solid #cde5ff88;border-radius:9px;padding:9px 12px;font-weight:750;cursor:pointer}
+      .av-fullscreen-playblocked{position:absolute;left:50%;bottom:74px;transform:translateX(-50%);background:#07182eea;border:1px solid #a3ceff;border-radius:12px;padding:12px 15px;color:white;display:flex;align-items:center;gap:14px;font-size:13px;max-width:90%;z-index:6}
+      .av-fullscreen-playblocked button{background:#d7efff;color:#0a3258;font-weight:750;border:0;border-radius:8px;padding:9px 12px;cursor:pointer;white-space:nowrap}
       .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;background:#071827;color:#fff;display:flex;flex-direction:column;padding:14px 22px;overflow:hidden}
       .av-main:fullscreen .av-main-top{flex:0 0 auto;margin:0 0 12px}
       .av-main:fullscreen .av-main-top h3,.av-main:fullscreen .av-main-top small{color:#fff}
