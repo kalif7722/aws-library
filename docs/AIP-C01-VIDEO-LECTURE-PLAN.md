@@ -75,6 +75,16 @@
 - **Publication:** `.github/workflows/render-aip-m02-parts-09-10.yml` and `.github/workflows/render-aip-m02-parts-11-12.yml` verify the live source images, build 1080p lecturer MP4s with 15-attempt TTS retries and resumable audio, validate captions and chapter order, then upload to R2 and publish release records only on success.
 - **Status caution:** Source scripts and workflow commits do not prove MP4s have finished rendering. The course's video availability endpoint must verify the uploaded manifest revision and MP4 before advertising each part as playable.
 
+## AIP Module 02 Parts 13–15 — visually verified November 11, 2026
+
+- **Part 13 — slides 91–100:** DynamoDB RCUs, partition hash/splitting, throttling, on-demand billing, PutItem/UpdateItem/conditions, GetItem/Query/Scan, deletion, and batch APIs. All ten original redesign WebPs were reviewed and matched to narrated scene titles.
+- **Part 14 — slides 101–110:** PartiQL, DynamoDB Accelerator (DAX) and ElastiCache comparison, TTL, DynamoDB chat/session context, DynamoDB-to-OpenSearch updates, event-driven vector freshness, index rebuilding, and Bedrock reranking. Ten matching source images inspected.
+- **Part 15 — slides 111–120:** Amazon S3 storage classes, durability versus availability, Standard and IA classes, Glacier archive choices, Intelligent-Tiering, cost trade-offs, lifecycle transitions, and prefix/tag-scoped lifecycle rules. Ten matching source images inspected.
+- **Implementation:** New 30-scene narration manifests, gallery titles, playlist registration, API revision/range guards, subtitle proxy entries, release publisher allowlist, and the serial rendering workflow `.github/workflows/render-aip-m02-parts-13-15.yml` are committed.
+- **Audio reliability:** Uses the approved Andrew neural voice, up to 15 TTS attempts per failed chunk with cached successful audio, original R2 slide verification, and FFmpeg wheel-based rendering.
+- **Remaining:** The mapped published Module 02 contains 144 lessons. Slides 121–144 still require topic-based narration and a source-image audit before their video parts are registered; archives also contain optional console walkthrough images 145–152 not counted as ordinary 144 lessons.
+- **Rendering status:** A script/workflow commit does not confirm a playable MP4. The course exposes Parts 13–15 only after completed media, captions, and matching manifests pass R2 publication verification.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
