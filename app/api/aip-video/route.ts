@@ -185,6 +185,38 @@ const CONFIG: Record<string, {
     firstTitle: "Amazon S3 Storage Classes",
     title: "Amazon S3 Storage Classes, Intelligent-Tiering and Lifecycle",
   },
+  "02-16": {
+    prefix: "module-02/part-16/aip-module-02-part-16",
+    revision: "2026-11-12-m02-p16-visual-aligned-v1",
+    firstSlide: 121,
+    count: 5,
+    firstTitle: "Lifecycle Scenario: Photos",
+    title: "S3 Lifecycle Scenarios, Storage Class Analytics and Replication",
+  },
+  "02-17": {
+    prefix: "module-02/part-17/aip-module-02-part-17",
+    revision: "2026-11-12-m02-p17-visual-aligned-v1",
+    firstSlide: 126,
+    count: 9,
+    firstTitle: "S3 Encryption Choices",
+    title: "Amazon S3 Encryption: SSE-S3, SSE-KMS, SSE-C and TLS Enforcement",
+  },
+  "02-18": {
+    prefix: "module-02/part-18/aip-module-02-part-18",
+    revision: "2026-11-12-m02-p18-visual-aligned-v1",
+    firstSlide: 135,
+    count: 4,
+    firstTitle: "S3 Server Access Logging",
+    title: "S3 Access Logging, Logging-Loop Protection and VPC Access Points",
+  },
+  "02-19": {
+    prefix: "module-02/part-19/aip-module-02-part-19",
+    revision: "2026-11-12-m02-p19-visual-aligned-v1",
+    firstSlide: 139,
+    count: 6,
+    firstTitle: "BDA Walkthrough: File to Structured Result",
+    title: "Hands-On Bedrock Data Automation and SageMaker Data Wrangler Walkthroughs",
+  },
 };
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
