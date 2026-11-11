@@ -36,6 +36,10 @@ export function aipVideoId(moduleId: string, partId: string): string {
   return moduleId === "00" ? "aip-video-00" : `aip-video-${moduleId}-${partId}`;
 }
 
+export function aipVideoStartedId(moduleId: string, partId: string): string {
+  return moduleId === "00" ? "aip-video-started-00" : `aip-video-started-${moduleId}-${partId}`;
+}
+
 export type AipVideoProgress = {
   total: number;
   seen: number;
@@ -63,7 +67,7 @@ export function getAipVideoProgress(done: readonly string[], moduleId?: string):
         if (ids.has(`aip-${mod}-${slide}`)) viewedSlides++;
       }
       const finished = ids.has(id) || viewedSlides === part.end - part.start + 1;
-      if (finished || viewedSlides > 0) seenIds.push(id);
+      if (finished || viewedSlides > 0 || ids.has(aipVideoStartedId(mod, part.id))) seenIds.push(id);
       if (finished) completedIds.push(id);
     }
   }
