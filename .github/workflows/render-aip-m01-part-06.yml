@@ -1,0 +1,152 @@
+name: Render AIP M01 Part 06 — final seven slides (44–50)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/aip-module-01-part-06.json"
+      - "scripts/render_aip_course_video.py"
+      - "scripts/aip_tts_reliability.py"
+      - ".github/workflows/render-aip-m01-part-06.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-m01-p06-50-slide-curriculum
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Narrate verified slides 44–50 and publish review MP4
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install video renderer and validate Python
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3"
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py
+
+      - name: Verify the seven original slide IDs and revision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("content/video-narration/aip-module-01-part-06.json")
+          m = json.loads(path.read_text(encoding="utf-8"))
+          assert m["module_id"] == "01" and m["part_id"] == "06"
+          assert m["script_revision"] == "2026-11-11-m01-p06-50-slides-v2"
+          assert [s["slide"] for s in m["scenes"]] == list(range(44, 51))
+          assert all(len(s["narration"].split()) >= 90 for s in m["scenes"])
+          print("Verified seven scene scripts for published slides 44–50")
+          PY
+
+      - name: Restore previously synthesized speech chunks
+        uses: actions/cache/restore@v4
+        with:
+          path: video-output/part-06/_work/audio
+          key: aip-m01-p06-50slides-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            aip-m01-p06-50slides-v2-
+
+      - name: Render the actual seven slides with the approved neural lecturer voice
+        run: |
+          python scripts/render_aip_course_video.py \
+            --manifest content/video-narration/aip-module-01-part-06.json \
+            --output video-output/part-06 --width 1920 --height 1080 --fps 24
+
+      - name: Cache successful audio even if a later slide fails
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: video-output/part-06/_work/audio
+          key: aip-m01-p06-50slides-v2-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Verify rendered video, duration, seven chapters and subtitles
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+          folder = Path("video-output/part-06")
+          stem = "aip-module-01-part-06"
+          m = json.loads((folder / (stem+"-manifest.json")).read_text())
+          assert m["script_revision"] == "2026-11-11-m01-p06-50-slides-v2"
+          assert [s["slide"] for s in m["scenes"]] == list(range(44, 51))
+          assert m["duration_seconds"] > 240
+          for extension in (".mp4", ".srt", ".vtt", "-transcript.txt"):
+              assert (folder/(stem+extension)).is_file()
+          duration = float(subprocess.check_output([
+              "ffprobe", "-v", "error", "-show_entries", "format=duration",
+              "-of", "default=noprint_wrappers=1:nokey=1",
+              str(folder/(stem+".mp4"))], text=True).strip())
+          assert abs(duration-m["duration_seconds"]) < 3.5
+          assert (folder/(stem+".vtt")).read_text().startswith("WEBVTT")
+          print(f"Verified Part 06: {len(m['scenes'])} original slides, {duration:.2f}s, valid captions")
+          PY
+
+      - name: Archive the complete video review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: aip-module-01-part-06-50slides-video-preview
+          path: |
+            video-output/part-06/aip-module-01-part-06.mp4
+            video-output/part-06/aip-module-01-part-06.vtt
+            video-output/part-06/aip-module-01-part-06.srt
+            video-output/part-06/aip-module-01-part-06-transcript.txt
+            video-output/part-06/aip-module-01-part-06-manifest.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload video and study aids to Cloudflare R2
+        id: upload
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "R2 credentials unavailable; MP4 is retained in the GitHub artifact."
+            echo "uploaded=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PREFIX="aws-course-videos/previews/aip/module-01/part-06"
+          STEM="aip-module-01-part-06"
+          SRC="video-output/part-06"
+          for ext in mp4 vtt srt txt json; do
+            case "$ext" in
+              mp4) suffix="$STEM.mp4"; mime="video/mp4";;
+              vtt) suffix="$STEM.vtt"; mime="text/vtt";;
+              srt) suffix="$STEM.srt"; mime="application/x-subrip";;
+              txt) suffix="$STEM-transcript.txt"; mime="text/plain";;
+              json) suffix="$STEM-manifest.json"; mime="application/json";;
+            esac
+            aws s3 cp "$SRC/$suffix" "s3://$R2_BUCKET/$PREFIX/$suffix" \
+              --endpoint-url "$R2_ENDPOINT" --content-type "$mime" \
+              --cache-control "public,max-age=3600" --no-progress
+          done
+          aws s3api head-object --bucket "$R2_BUCKET" --key "$PREFIX/$STEM.mp4" \
+            --endpoint-url "$R2_ENDPOINT" >/dev/null
+          aws s3api head-object --bucket "$R2_BUCKET" --key "$PREFIX/$STEM-manifest.json" \
+            --endpoint-url "$R2_ENDPOINT" >/dev/null
+          echo "uploaded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Register playable video only after R2 media verification
+        if: steps.upload.outputs.uploaded == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/publish_aip_video_release.py \
+            --manifest video-output/part-06/aip-module-01-part-06-manifest.json
