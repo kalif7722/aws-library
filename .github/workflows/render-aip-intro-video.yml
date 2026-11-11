@@ -49,6 +49,7 @@ jobs:
           name: aip-module-00-lecturer-video-preview
           path: |
             video-output/aip-module-00.mp4
+            video-output/aip-module-00.vtt
             video-output/aip-module-00.srt
             video-output/aip-module-00-transcript.txt
             video-output/aip-module-00-manifest.json
@@ -72,6 +73,9 @@ jobs:
           aws s3 cp video-output/aip-module-00.mp4 "s3://$R2_BUCKET/$PREFIX/aip-module-00.mp4" \
             --endpoint-url "$R2_ENDPOINT" \
             --content-type video/mp4 \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00.vtt "s3://$R2_BUCKET/$PREFIX/aip-module-00.vtt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "text/vtt; charset=utf-8" \
             --cache-control "public,max-age=3600" --no-progress
           aws s3 cp video-output/aip-module-00.srt "s3://$R2_BUCKET/$PREFIX/aip-module-00.srt" \
             --endpoint-url "$R2_ENDPOINT" --content-type "application/x-subrip" \
