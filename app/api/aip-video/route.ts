@@ -59,19 +59,11 @@ const CONFIG: Record<string, {
   },
   "01-06": {
     prefix: "module-01/part-06/aip-module-01-part-06",
-    revision: "2026-11-11-m01-p06-visual-aligned-v1",
+    revision: "2026-11-11-m01-p06-50-slides-v2",
     firstSlide: 44,
-    count: 11,
+    count: 7,
     firstTitle: "Amazon Bedrock Flows",
-    title: "Bedrock Flows, Prompt Design and Injection Defense",
-  },
-  "01-07": {
-    prefix: "module-01/part-07/aip-module-01-part-07",
-    revision: "2026-11-11-m01-p07-visual-aligned-v1",
-    firstSlide: 55,
-    count: 5,
-    firstTitle: "Mitigate Bias in Generative AI",
-    title: "Responsible AI, Enterprise Integration and the GenAI Lifecycle",
+    title: "Bedrock Flows, Structured Responses and Effective Prompting",
   },
 };
 
