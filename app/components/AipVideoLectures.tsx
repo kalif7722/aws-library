@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import AipPartVideo from "./AipPartVideo";
 
 type Chapter = { slide: number; title: string; startSeconds: number; durationSeconds: number };
 type VideoReady = {
@@ -197,11 +198,17 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
                 ? "The Part 02 video could not be played. The original slides remain available below."
                 : "Part 02's visually verified lecture is being rendered and checked before it becomes playable here."}</p>
             )}
+            <AipPartVideo
+              moduleId="01"
+              partId="03"
+              title="RAG, Vector Search and Bedrock Knowledge Bases"
+              posterSlide={14}
+            />
             {PARTS.map((part) => (
               <div key={part.part} className="aip-video-part">
                 <div>
                   <b>Part {part.part} · {part.title}</b>
-                  <span>Mapped slides {part.range} · {part.part === "02" && video?.status === "ready" && !error ? "Video available above" : "Video preparation"}</span>
+                  <span>Mapped slides {part.range} · {part.part === "02" && video?.status === "ready" && !error ? "Video available above" : part.part === "03" ? "Video section above" : "Video preparation"}</span>
                 </div>
                 <a href={`/courses/aws-generative-ai-developer-professional/visual/module-01?slide=${part.firstSlide}`}>View starting slide</a>
               </div>
