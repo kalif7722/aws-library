@@ -27,7 +27,11 @@ function fmt(seconds: number) {
   return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
 }
 
-function VideoPlayer({ item, storageKey, slideBase, moduleId, partId, autoStart = false, onFinished }: {
+function VideoPlayer({
+  item, storageKey, slideBase, moduleId, partId, autoStart = false,
+  onFinished, fullscreen = false, onToggleFullscreen,
+  onPrevious, onNext, previousTitle, nextTitle,
+}: {
   item: Ready;
   storageKey: string;
   slideBase: string;
@@ -35,6 +39,12 @@ function VideoPlayer({ item, storageKey, slideBase, moduleId, partId, autoStart 
   partId?: string;
   autoStart?: boolean;
   onFinished?: () => void;
+  fullscreen?: boolean;
+  onToggleFullscreen?: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
+  previousTitle?: string;
+  nextTitle?: string;
 }) {
   const player = useRef<HTMLVideoElement>(null);
   const [resume, setResume] = useState(0);
@@ -122,11 +132,13 @@ function VideoPlayer({ item, storageKey, slideBase, moduleId, partId, autoStart 
   }
 
   return <>
+    <div className="av-video-stage">
     <video
       key={storageKey}
       className="av-player"
       ref={player}
       controls
+      controlsList="nofullscreen"
       playsInline
       preload="metadata"
       poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
@@ -163,7 +175,26 @@ function VideoPlayer({ item, storageKey, slideBase, moduleId, partId, autoStart 
       <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English" />
       Your browser does not support this video.
     </video>
+    {fullscreen && <div className="av-video-overlay" role="group" aria-label="Fullscreen lecture navigation">
+      <button className="av-video-arrow" type="button"
+        disabled={!onPrevious} onClick={onPrevious}
+        aria-label={previousTitle ? `Previous video: ${previousTitle}` : "No previous video"}
+        title={previousTitle ? `Previous: ${previousTitle}` : "No previous video"}>
+        <span aria-hidden="true">❮</span><small>Previous video</small>
+      </button>
+      <button className="av-video-arrow av-video-arrow-next" type="button"
+        disabled={!onNext} onClick={onNext}
+        aria-label={nextTitle ? `Next video: ${nextTitle}` : "No next video"}
+        title={nextTitle ? `Next: ${nextTitle}` : "No next video"}>
+        <small>Next video</small><span aria-hidden="true">❯</span>
+      </button>
+    </div>}
+    {fullscreen && <button className="av-video-exit" type="button"
+      onClick={onToggleFullscreen} aria-label="Exit fullscreen video">Exit fullscreen ✕</button>}
+    </div>
     <div className="av-tools">
+      {onToggleFullscreen && <button type="button" className="av-action av-fullscreen-button"
+        onClick={onToggleFullscreen}>{fullscreen ? "Exit fullscreen" : "⛶ Fullscreen with video navigation"}</button>}
       {resume > 5 && resume < (item.durationSeconds ?? Infinity) - 5 &&
         <><span>Saved position {fmt(resume)} · resumes automatically</span>
         <button type="button" className="av-action" onClick={restart}>Restart video</button></>}
@@ -196,6 +227,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   const [autoNext,setAutoNext]=useState(false);
   const [autoStartPart,setAutoStartPart]=useState<string|null>(null);
   const [notice,setNotice]=useState<string|null>(null);
+  const [fullscreen,setFullscreen]=useState(false);
   useEffect(()=>{
     try{setAutoNext(localStorage.getItem(AUTO_NEXT_KEY)==="true");}
     catch{/* Site storage may be disabled */}
@@ -212,6 +244,24 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     };
   },[]);
   const playerAnchor = useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    const sync=()=>setFullscreen(document.fullscreenElement===playerAnchor.current);
+    document.addEventListener("fullscreenchange",sync);
+    return()=>document.removeEventListener("fullscreenchange",sync);
+  },[]);
+  const toggleFullscreen=async()=>{
+    const area=playerAnchor.current;
+    if(!area)return;
+    try{
+      if(document.fullscreenElement===area)await document.exitFullscreen();
+      else if(document.fullscreenElement){
+        setNotice("Exit the current fullscreen view, then choose Fullscreen with video navigation.");
+      }else if(area.requestFullscreen)await area.requestFullscreen();
+      else setNotice("Fullscreen navigation is not supported by this browser.");
+    }catch{
+      setNotice("The browser could not open fullscreen. Use the video controls or normal playlist instead.");
+    }
+  };
   const parts=AIP_VIDEO_PARTS[moduleId]??[];
   const videoStats=getAipVideoProgress(progressDone,moduleId);
   const moduleUrl=`${COURSE_URL}/visual/module-${moduleId}`;
@@ -255,7 +305,8 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     url.searchParams.set("videoPart", part);
     url.hash = "video-lectures";
     window.history.replaceState(null, "", url.toString());
-    playerAnchor.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if(document.fullscreenElement!==playerAnchor.current)
+      playerAnchor.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const onVideoEnded = () => {
@@ -313,6 +364,24 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       .av-pill{padding:5px 10px;border-radius:9px;font-size:11px;font-weight:800;background:#e9f7ef;color:#187347}
       .av-pill.pending{background:#eff3f8;color:#60728a}
       .av-player{width:100%;display:block;background:#071a2b;border-radius:12px;aspect-ratio:16/9}
+      .av-video-stage{position:relative;min-width:0;min-height:0}
+      .av-video-overlay{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;pointer-events:none}
+      .av-video-arrow{pointer-events:auto;background:#08223bd9;border:1px solid #e2f4ff8a;color:white;border-radius:12px;display:flex;align-items:center;gap:10px;padding:13px 14px;min-height:54px;font-weight:750;max-width:220px;box-shadow:0 5px 20px #0008;cursor:pointer}
+      .av-video-arrow span{font-size:22px;line-height:1}
+      .av-video-arrow small{font-size:12px;color:#fff}
+      .av-video-arrow:not(:disabled):hover,.av-video-arrow:not(:disabled):focus-visible{background:#0c4e84;outline:2px solid #8dd4ff}
+      .av-video-arrow:disabled{opacity:.27;cursor:default}
+      .av-video-exit{position:absolute;right:18px;top:16px;background:#06182ed9;color:#fff;border:1px solid #cde5ff88;border-radius:9px;padding:9px 12px;font-weight:750;cursor:pointer}
+      .av-main:fullscreen{box-sizing:border-box;width:100vw;height:100vh;background:#071827;color:#fff;display:flex;flex-direction:column;padding:14px 22px;overflow:hidden}
+      .av-main:fullscreen .av-main-top{flex:0 0 auto;margin:0 0 12px}
+      .av-main:fullscreen .av-main-top h3,.av-main:fullscreen .av-main-top small{color:#fff}
+      .av-main:fullscreen .av-pill{background:#1f4b64;color:#e6faff}
+      .av-main:fullscreen .av-video-stage{flex:1;display:flex;align-items:center;justify-content:center}
+      .av-main:fullscreen .av-video-stage .av-player{height:100%;max-height:calc(100vh - 105px);width:100%;object-fit:contain;aspect-ratio:auto;border-radius:0}
+      .av-main:fullscreen .av-video-overlay{width:100%;box-sizing:border-box}
+      .av-main:fullscreen .av-tools,.av-main:fullscreen .av-chapters,.av-main:fullscreen .av-slidebar,.av-main:fullscreen .av-actions,.av-main:fullscreen .av-autoplay-notice{display:none}
+      .av-main:fullscreen .av-video-exit{z-index:5}
+      @media(max-width:600px){.av-video-arrow{padding:9px;min-height:43px}.av-video-arrow small{display:none}.av-video-overlay{padding:0 7px}.av-main:fullscreen{padding:8px}}
       .av-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:#546b84;font-size:12px;margin:13px 0}
       .av-tools a,.av-actions a{font-weight:700;color:#1466b2;text-decoration:underline;text-underline-offset:3px}
       .av-action{border:1px solid #a7c8ea;background:#edf6ff;color:#104f85;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700}
@@ -346,9 +415,9 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
         {moduleId === "00" && <a href={MODULE_01+"#video-lectures"}>Next module: GenAI Fundamentals</a>}
       </div>
     </div>
-    {moduleId === "00" ? <div className="av-main">
+    {moduleId === "00" ? <div className="av-main" ref={playerAnchor}>
       {intro?.status === "ready"
-        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00"/>
+        ? <VideoPlayer item={intro} storageKey="aip-module-00-video-progress" slideBase="module-00/slide-01.webp" moduleId="00" fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen}/>
         : <p className="av-empty">{checking ? "Checking the introduction video…" : "The revised video is not currently available. Open the original slides below."}</p>}
       <div className="av-actions"><a href={MODULE_01+"#video-lectures"}>Continue to Module 01 →</a></div>
     </div> : <div className="av-layout">
@@ -378,7 +447,11 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </span>
         </div>
         {results[active.id]?.status === "ready"
-          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id} autoStart={autoStartPart===active.id} onFinished={onVideoEnded}/>
+          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id} autoStart={autoStartPart===active.id}
+              onFinished={onVideoEnded} fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen}
+              onPrevious={prev ? () => choose(prev.id,true) : undefined}
+              onNext={next ? () => choose(next.id,true) : undefined}
+              previousTitle={prev?.title} nextTitle={next?.title}/>
           : <div className="av-empty" role="status">{checking ? "Checking lecture availability…" : "This topic's video is in production. Its source slides are still available for study."}</div>}
         <div className="av-slidebar">
           <span>Want to inspect the actual architecture diagrams?</span>
