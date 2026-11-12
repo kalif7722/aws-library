@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 lesson titles and AWS service explanations; original WebP assets validated by GitHub renderer, not visually reviewed in this session.",
+  "part_id": "07",
+  "part_title": "CodeDeploy Strategies for EC2, Lambda and ECS",
+  "script_revision": "2026-11-12-m06-p07-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 42,
+      "title": "AWS CodeDeploy",
+      "narration": "AWS CodeDeploy automates controlled application deployments to supported compute platforms, including EC2 or on-premises servers, Lambda and Amazon ECS. It manages deployment revisions, lifecycle hooks and health or traffic-shifting behavior appropriate to the platform. It is different from CodeBuild, which produces the package, and CodePipeline, which orchestrates the release. Select the deployment configuration based on outage tolerance and rollback needs. A new AI API release can change request validation or model routing, so application health checks should test the relevant behavior rather than only verifying that a process exists. Monitor deployment events and preserve a known-good revision.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 43,
+      "title": "CodeDeploy: EC2 and On-Premises Platform",
+      "narration": "For EC2 and on-premises deployments, CodeDeploy uses application revisions and a deployment group to select the target instances. An AppSpec file defines which files to copy and which lifecycle hook scripts to run. The CodeDeploy agent runs on the participating machines to coordinate the deployment instructions. Instance tags or other supported targeting mechanisms associate the fleet with the deployment group. A failed permission, missing agent or incorrect script path can prevent rollout. Secure the agent's access to artifact storage and test hooks before production. In-place and blue-green strategies have different capacity and traffic impacts; choose based on rollback and availability requirements.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 44,
+      "title": "CodeDeploy In-Place Deployment",
+      "narration": "An in-place deployment updates the application on the existing instances. Depending on the deployment configuration, targets may be taken out of service in batches, the new revision installed and validated, then targets returned to service. This avoids provisioning a complete replacement fleet but can reduce capacity during rollout, and rollback may require deploying the prior revision again. Application stop, install, start and validation hooks need to be reliable and repeatable. If an API calls Bedrock, its health check should verify that the application configuration is valid without issuing expensive model requests for every target. Analyze capacity and error budgets before selecting an in-place strategy.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 45,
+      "title": "CodeDeploy Blue-Green Deployment",
+      "narration": "Blue-green deployment maintains an existing production environment while preparing a replacement environment with the new revision. Once tests pass, traffic is shifted from blue to green according to the deployment strategy. This can simplify rollback and reduce downtime, though it temporarily requires additional capacity. For supported platforms the exact replacement, load-balancer and termination behavior differs. Do not treat blue-green as automatic proof of application quality: health checks and post-deployment monitoring must detect real errors. A model-serving API might compare latency, authorization and response contract on green before switching clients. Preserve observability for both environments until the transition and rollback window have safely completed.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 46,
+      "title": "CodeDeploy Agent",
+      "narration": "The CodeDeploy agent is software running on EC2 and supported on-premises instances that receives deployment instructions and executes the required lifecycle tasks. Its installed state, permissions, connectivity and local logs are essential when diagnosing deployment failures. The agent obtains deployment information and uses instance credentials and configured access to retrieve revisions. An unhealthy or outdated agent can make an otherwise valid pipeline fail. Validate that the service is running and that scripts, paths and permissions are correct. The agent is relevant to instance-based deployments; Lambda and ECS use their respective deployment mechanisms rather than requiring the same agent inside every function or task.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 47,
+      "title": "CodeDeploy Lambda Platform",
+      "narration": "A Lambda deployment commonly uses published function versions and an alias to control live traffic. CodeDeploy can gradually move the alias from the previous version to the new version using a chosen traffic-shifting configuration, with validation hooks and CloudWatch alarms to trigger rollback. The application must be tested for compatibility with event payloads and downstream services. Even a small canary may invoke a different model or prompt, so validate IAM permissions and avoid surprises in cost and latency. Versioning and aliasing let clients use a stable function name while deployments evolve. Understand that a failed hook or alarm is a rollback signal, not merely a logging event.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 48,
+      "title": "CodeDeploy ECS Platform",
+      "narration": "Amazon ECS deployments can use CodeDeploy to manage a blue-green release for a service. An updated task definition launches a replacement task set, a load balancer directs test or production traffic, and CodeDeploy shifts requests when checks pass. Deployment configuration determines how traffic moves and how long the old task set remains available. Check the container image digest, target group health, listener rules and service role permissions when rollout fails. For a containerized GenAI API, package inference clients and request-handling code consistently and validate downstream Bedrock connectivity. A healthy container process is necessary but may not be sufficient to prove correct application behavior.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    }
+  ]
+}
