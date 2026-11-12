@@ -86,9 +86,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-r2-audited-v3-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aip-m06-p${{ matrix.part }}-tts-v2-
+            aip-m06-p${{ matrix.part }}-tts-r2-audited-v3-
 
       - name: Verify live R2 originals and render narration in one consistent voice
         env:
@@ -106,7 +106,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-r2-audited-v3-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
