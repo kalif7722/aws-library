@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "09",
+  "module_title": "Analytics, BI and Streaming Data",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Source R2 Module 09 slides 17-20 confirmed in visual spatial audit; topic-first educational narration with independent audio revision.",
+  "part_id": "05",
+  "part_title": "Kinesis Data Streams: Shards, Replay, Capacity and GenAI Pipelines",
+  "script_revision": "2026-11-13-m09-p05-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 17,
+      "title": "Kinesis Data Streams architecture",
+      "narration": "Follow the producers on the left: applications, services and IoT devices send event records into Kinesis Data Streams. Each record includes a partition key. The service hashes that key to determine which shard receives the record. In the middle, the three example shards show increasing sequence numbers: one shard receives user-one events, another device-nine events and another order-seven events. Within a shard, records have an ordered sequence; you should not claim a single global order across all shards. On the right, independent consumers read those records for real-time analytics, application processing or delivery into a data lake. A consumer tracks its position, and its ability to keep up depends on shard read throughput and processing time. Partition-key selection matters: sending almost every record under the same hot key can overload one shard even if the stream has spare capacity elsewhere. This is the foundation for a GenAI telemetry pipeline, where the system streams permitted request metrics and quality events rather than making a user-facing API wait for analytics."
+    },
+    {
+      "slide": 18,
+      "title": "Kinesis retention and replay",
+      "narration": "This timeline explains why a streaming data service is more than a transient message handoff. The producer continuously writes records into Kinesis, and the service retains them for a configured window. Consumer A reads near the latest record and maintains its checkpoint. Consumer B starts from an earlier timestamp and replays historical events for reprocessing. These consumers do not delete events for one another when they read them. The example uses a 24-hour retention window; Kinesis can be configured for longer retention subject to current service limits and cost. A replay cursor must point inside the actual retention window, otherwise older records are no longer available in the stream. This matters when a GenAI metrics processor develops a bug: after deploying a fix, the team may replay retained events to recompute groundedness or usage aggregates. But replay can duplicate writes to downstream stores, so design idempotent processing or deduplication by record identifier. Track consumer lag and checkpoint health, not just stream write success."
+    },
+    {
+      "slide": 19,
+      "title": "Kinesis capacity modes",
+      "narration": "This slide places provisioned and on-demand Kinesis capacity side by side. In provisioned mode, engineers choose the shard count and adjust it as traffic grows or falls. The example highlights per-shard write and read throughput constraints, which determine how much producer and consumer traffic the stream can support. On-demand capacity avoids manually selecting shard count and adapts within the service's supported scaling characteristics. That is convenient for unpredictable bursts, but does not mean unlimited instantaneous throughput or no quota considerations. Follow the decision checklist at the bottom. Predictable, steady traffic may favour provisioned capacity when careful planning improves control or cost. Highly variable usage can benefit from on-demand simplicity. For either mode, a poor partition-key distribution can still create a hot-key problem. Measure incoming bytes, records, read throughput and throttling over time; account for multiple consumers and enhanced fan-out options as appropriate. Choose capacity based on expected load and actual usage patterns, not simply on the claim that one mode is always cheaper."
+    },
+    {
+      "slide": 20,
+      "title": "GenAI streaming analytics pipeline",
+      "narration": "This diagram combines the earlier streaming concepts into an end-to-end AI operations pipeline. Applications emit user events, invocation metadata, feedback and system logs, which enter Kinesis Data Streams. The real-time processing stage branches to Lambda for relatively simple transformations or a managed Apache Flink application for stateful operations such as session aggregation and anomaly detection. Processed outputs are stored in S3 in analytics-friendly formats, then Athena queries them and QuickSight visualises model latency, error trends, throughput and quality indicators. Notice the replay path. If the transformation logic changes, retained events can be reprocessed or used to backfill corrected aggregates while the retention window permits. Be thoughtful about privacy: don't stream raw prompts and responses indiscriminately into an unrestricted analytics environment. Send approved metadata and redacted signals where possible. Also distinguish ingestion from processing guarantees. Producers, workers and downstream stores need consistent identifiers and idempotent handling to tolerate retries. This architecture enables near-real-time operational decisions without burdening the synchronous model-response path."
+    }
+  ]
+}
