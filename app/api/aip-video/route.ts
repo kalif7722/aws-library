@@ -227,11 +227,11 @@ const CONFIG: Record<string, {
   },
   "06-02": {
     prefix: "module-06/part-02/aip-module-06-part-02",
-    revision: "2026-11-12-m06-p02-guided-lecture-v2",
+    revision: "2026-11-12-m06-p02-visual-audit-v3",
     firstSlide: 6,
     count: 5,
-    firstTitle: "Example: Transaction Rate Alarm",
-    title: "Lambda Monitoring, Use Cases, Runtimes and Event Triggers",
+    firstTitle: "When Lambda fits your workload",
+    title: "Lambda Workload Choices, Five Patterns, Runtimes, Triggers and OpenSearch",
   },
   "06-03": {
     prefix: "module-06/part-03/aip-module-06-part-03",
