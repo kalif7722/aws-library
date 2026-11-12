@@ -70,6 +70,8 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "07", title: "AWS WAF: Request Protection and Rule Evaluation", subtitle: "Managed rules, ACL priority and request allow/block decisions", start: 31, end: 32 },
     { id: "08", title: "VPC Fundamentals: Subnets, Gateways, Network Controls and Peering", subtitle: "Public/private networks, NAT, security groups, ACLs, logs and peering", start: 33, end: 38 },
     { id: "09", title: "Private AWS Access: VPC Endpoints, Hybrid Links and PrivateLink", subtitle: "VPC endpoints, hybrid connectivity, PrivateLink and secure GenAI architecture", start: 39, end: 44 },
+    { id: "10", title: "Security Architecture Decision Guides and Integrated Review", subtitle: "Identity, encryption, privacy, network choices, investigation evidence and secure-design review", start: 45, end: 50 },
+    { id: "11", title: "Hands-On Security Labs: Least Privilege, IAM Policy Simulator and SSE-KMS", subtitle: "Lambda permissions lab, policy editor validation and KMS-encrypted S3 lab", start: 51, end: 53 },
   ],
   "07": [
     { id: "01", title: "Governance, Agent Tracing and Human Model Evaluation", subtitle: "Evaluation criteria, benchmarks and human review", start: 1, end: 5 },
