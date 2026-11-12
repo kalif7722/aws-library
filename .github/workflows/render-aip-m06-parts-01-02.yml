@@ -73,7 +73,7 @@ jobs:
           p=os.environ["PART"]
           m=json.loads(Path(f"content/video-narration/aip-module-06-part-{p}.json").read_text())
           slides=list(range(int(os.environ["START"]),int(os.environ["END"])+1))
-          assert m["module_id"]=="05" and m["part_id"]==p
+          assert m["module_id"]=="06" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
           assert all(len(s["narration"].split())>=100 for s in m["scenes"])
