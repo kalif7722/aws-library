@@ -51,6 +51,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "03", title: "Lambda Integrations with OpenSearch, Streams, Bedrock and APIs", subtitle: "OpenSearch, Kinesis, Redshift, Bedrock and serverless APIs", start: 11, end: 16 },
     { id: "04", title: "API Gateway Integrations, Security and AppConfig", subtitle: "API types, integrations, policies and runtime configuration", start: 17, end: 24 },
     { id: "05", title: "Step Functions, ML Orchestration and Resilience", subtitle: "State machines, SageMaker jobs, retries and payload design", start: 25, end: 32 },
+    { id: "06", title: "CodePipeline, CI/CD and CodeBuild", subtitle: "Pipeline artifacts, troubleshooting, build environments and buildspec", start: 33, end: 41 },
+    { id: "07", title: "CodeDeploy Strategies for EC2, Lambda and ECS", subtitle: "Deployment lifecycle, in-place versus blue-green and rollback", start: 42, end: 48 },
+    { id: "08", title: "MLflow, AppSync and AWS Hybrid Edge Infrastructure", subtitle: "Experiment tracking, GraphQL, Outposts and Wavelength", start: 49, end: 55 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
