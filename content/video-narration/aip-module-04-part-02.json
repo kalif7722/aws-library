@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "04",
+  "module_title": "Operational Efficiency and Optimization",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original AIP Module 04 site-ready WebP slides individually inspected from three source ZIP archives; lecture describes actual diagram steps, metrics and architectural trade-offs. Renderer verifies R2 originals.",
+  "part_id": "02",
+  "part_title": "Capacity Planning, Provisioned Throughput and Three Caching Patterns",
+  "script_revision": "2026-11-12-m04-p02-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Maximize Resource Utilization",
+      "narration": "This slide contrasts offline batch inference with interactive inference. On the left, many prompts stored in Amazon S3 feed a Bedrock batch-inference job; results are written back to S3. Grouping nonurgent requests is often more efficient than making thousands of isolated synchronous calls. However, the answer may arrive asynchronously, so this pattern is not suitable for an interactive chatbot expecting an immediate response. On the right, a live application receives unpredictable traffic and must choose a capacity mode. The diagram compares on-demand throughput with provisioned throughput, while CloudWatch charts reveal utilisation. Look at the planning loop along the bottom: estimate demand, choose the right serving model, monitor throttling and cost, then resize or revise the plan when patterns change. The lesson is to match workload shape with the serving approach. Batch jobs, on-demand requests and reserved model capacity have different latency, throughput and cost characteristics. More provisioned capacity than you use is waste, but too little capacity can cause delays or throttling."
+    },
+    {
+      "slide": 8,
+      "title": "Provisioned Throughput and Utilization",
+      "narration": "We now zoom into the capacity decision. The upper panel shows predictable high-volume requests flowing through Amazon Bedrock Provisioned Throughput, which reserves model capacity for an expected workload. Below it, variable or unpredictable requests use on-demand inference instead. Follow the monitoring boxes on the right: CloudWatch tracks input and output token counts, latency and provisioned-capacity utilisation; Cost Explorer helps review the associated spend. The practical question is whether traffic is high and stable enough to justify a commitment. Provisioned throughput is not automatically cheaper than on-demand, and availability varies by model and region. If traffic is sporadic, reserved capacity could sit idle. If demand is consistently high, it may provide predictable throughput. Review model-specific quotas, commitment terms and invocation patterns, and avoid treating a bursty workload as a flat average. The key takeaway at the bottom is to plan capacity from measured demand, then keep checking utilisation and service limits after launch."
+    },
+    {
+      "slide": 9,
+      "title": "Semantic Caching",
+      "narration": "Semantic caching attempts to reuse an earlier answer for a new question that means approximately the same thing. The top example pairs two differently worded return-policy questions as a possible cache hit, but a question about shipping fees should not match. Follow the steps at the bottom. The application converts the new question to an embedding, searches an approved cache such as a vector-backed store for semantically similar questions, then checks a similarity threshold and whether the cached response remains eligible. On a hit, it can return the validated cached answer without another foundation-model call. On a miss, it invokes the model and may store the result. Read the orange caution box: stale results and cross-tenant leakage are real risks. Include authorization scope, data version, language and other relevant context in cache eligibility. A high vector similarity alone does not prove the answer is safe to reuse. Measure incorrect cache hits as carefully as saved inference cost."
+    },
+    {
+      "slide": 10,
+      "title": "Prompt Caching",
+      "narration": "Prompt caching is different from semantic caching. Here the application repeatedly sends a long shared prefix to an eligible Amazon Bedrock model. Look at the orange first-request panel: static system instructions, a stable example or document section, and the new user question are assembled. When the model supports prompt caching and the required checkpoint or cache configuration is valid, the reusable prefix can be cached. In the blue second-request panel, the shared portion is reused while the dynamic question changes. This can reduce repeated prefix processing, latency or cost under supported pricing. The slide highlights three conditions: model and API support vary; prefix placement, length and checkpoint rules matter; and caches have finite lifetimes and usage charges. It does not guarantee a cache hit whenever two prompts contain a similar phrase. Keep the stable material before the variable content and monitor observed cache-write and cache-read metrics. Never let one user reuse private context that belongs to another tenant."
+    },
+    {
+      "slide": 11,
+      "title": "Edge Caching for Faster Delivery",
+      "narration": "This slide moves one layer closer to the user. The diagram begins with a request arriving at an edge location, such as Amazon CloudFront. An edge cache checks the request key, the allowed response scope and whether a previously generated response is still valid. On a permitted hit, the edge returns that result immediately. On a miss, the request reaches the origin application and potentially Amazon Bedrock, and a new eligible response may be cached. Compare the definition cards at the bottom: edge caching is not the same as prompt caching inside a model invocation. The former reuses complete responses at a distributed delivery layer; the latter reuses model-processing context. A warning is prominently displayed because dynamically generated responses can contain personalized or sensitive information. Cache keys need the right authorization and tenant boundaries, and the application needs TTLs or invalidation when content changes. Only cache responses whose correctness and data permissions remain valid for the next requester."
+    }
+  ]
+}
