@@ -54,6 +54,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "06", title: "CodePipeline, CI/CD and CodeBuild", subtitle: "Pipeline artifacts, troubleshooting, build environments and buildspec", start: 33, end: 41 },
     { id: "07", title: "CodeDeploy Strategies for EC2, Lambda and ECS", subtitle: "Deployment lifecycle, in-place versus blue-green and rollback", start: 42, end: 48 },
     { id: "08", title: "MLflow, AppSync and AWS Hybrid Edge Infrastructure", subtitle: "Experiment tracking, GraphQL, Outposts and Wavelength", start: 49, end: 55 },
+    { id: "09", title: "Amazon SQS Queues, Consumer Scaling and AWS Amplify", subtitle: "SQS delivery, scaling, encryption and Amplify applications", start: 56, end: 64 },
+    { id: "10", title: "Amazon EventBridge Routing, Schemas and Policies", subtitle: "Event buses, rules, event sources and policy boundaries", start: 65, end: 69 },
+    { id: "11", title: "Amazon SNS Fan-Out and Amazon AppFlow Integrations", subtitle: "SNS messaging, subscription security and SaaS data flows", start: 70, end: 76 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
