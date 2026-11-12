@@ -69,6 +69,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "06", title: "X-Ray Tracing, Service Maps and AI Request Diagnostics", subtitle: "Distributed traces, latency bottlenecks, annotations and error investigation", start: 25, end: 29 },
     { id: "07", title: "Bedrock Telemetry, RAG Quality and Release Observability", subtitle: "Safe metadata, RAG evaluation, canary release gates and trace sampling", start: 30, end: 34 },
     { id: "08", title: "X-Ray Bottlenecks, Retries, Correlation and Safe AI Telemetry", subtitle: "Tracing dependencies, throttling retries, log correlation and telemetry privacy", start: 35, end: 39 },
+    { id: "09", title: "RAG Observability, AI Incident Response and Production Readiness", subtitle: "RAG metrics, incident workflows, release checklist and synchronous traces", start: 40, end: 44 },
+    { id: "10", title: "Async AI Tracing, Model Fallback and Quality Scorecards", subtitle: "Cross-service correlation, fallback telemetry, cost, quality and answer troubleshooting", start: 45, end: 49 },
+    { id: "11", title: "Operational AI Runbooks, Privacy, Governance and Bedrock Evaluation Lab", subtitle: "Throttling fixes, telemetry privacy, governance cycle and evaluation dataset lab", start: 50, end: 54 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
