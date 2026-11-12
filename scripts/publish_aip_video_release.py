@@ -36,7 +36,7 @@ EXPECTED = {
     ("05", "05"): (list(range(21, 26)), "2026-11-12-m05-p05-visual-aligned-v1"),
     ("05", "06"): (list(range(26, 32)), "2026-11-12-m05-p06-visual-aligned-v1"),
     ("05", "07"): (list(range(32, 37)), "2026-11-12-m05-p07-visual-aligned-v1"),
-    ("06", "01"): (list(range(1, 6)), "2026-11-12-m06-p01-guided-lecture-v2"),
+    ("06", "01"): (list(range(1, 6)), "2026-11-12-m06-p01-review-pilot-v3"),
     ("06", "02"): (list(range(6, 11)), "2026-11-12-m06-p02-guided-lecture-v2"),
     ("06", "03"): (list(range(11, 17)), "2026-11-12-m06-p03-specific-narration-v2"),
     ("06", "04"): (list(range(17, 25)), "2026-11-12-m06-p04-specific-narration-v2"),
