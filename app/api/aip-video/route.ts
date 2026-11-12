@@ -671,8 +671,9 @@ export async function GET(request: NextRequest) {
   }
 
   const url = `${ROOT}/${config.prefix}`;
+  const cacheVersion = `?v=${encodeURIComponent(config.revision)}`;
   try {
-    const manifestResult = await fetch(`${url}-manifest.json`, {
+    const manifestResult = await fetch(`${url}-manifest.json${cacheVersion}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(6500),
     });
@@ -690,7 +691,7 @@ export async function GET(request: NextRequest) {
         !Number.isFinite(scene.duration_seconds))
     ) return response("processing");
 
-    const mp4Url = `${url}.mp4`;
+    const mp4Url = `${url}.mp4${cacheVersion}`;
     const videoCheck = await fetch(mp4Url, {
       method: "HEAD",
       cache: "no-store",
@@ -714,7 +715,7 @@ export async function GET(request: NextRequest) {
       title: config.title,
       revision: config.revision,
       videoUrl: mp4Url,
-      captionsUrl: `/api/aip-video-captions?module=${module}${part ? `&part=${part}` : ""}`,
+      captionsUrl: `/api/aip-video-captions?module=${module}${part ? `&part=${part}` : ""}&rev=${encodeURIComponent(config.revision)}`,
       transcriptUrl: `${url}-transcript.txt`,
       durationSeconds: manifest.duration_seconds,
       chapters: scenes.map((scene) => ({
