@@ -217,6 +217,22 @@ const CONFIG: Record<string, {
     firstTitle: "Compile for Target Hardware with Neo",
     title: "SageMaker Neo, Unified Studio and ML Pipelines",
   },
+  "06-01": {
+    prefix: "module-06/part-01/aip-module-06-part-01",
+    revision: "2026-11-12-m06-p01-lesson-map-v1",
+    firstSlide: 1,
+    count: 5,
+    firstTitle: "More Tools for Building AI Applications",
+    title: "Lambda Fundamentals and Serverless Application Patterns",
+  },
+  "06-02": {
+    prefix: "module-06/part-02/aip-module-06-part-02",
+    revision: "2026-11-12-m06-p02-lesson-map-v1",
+    firstSlide: 6,
+    count: 5,
+    firstTitle: "Example: Transaction Rate Alarm",
+    title: "Lambda Monitoring, Use Cases, Runtimes and Event Triggers",
+  },
   "02-01": {
     prefix: "module-02/part-01/aip-module-02-part-01",
     revision: "2026-11-11-m02-p01-visual-aligned-v1",
