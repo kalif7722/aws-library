@@ -283,7 +283,7 @@ const CONFIG: Record<string, {
   },
   "06-09": {
     prefix: "module-06/part-09/aip-module-06-part-09",
-    revision: "2026-11-12-m06-p09-recovered-boundary-v2",
+    revision: "2026-11-12-m06-p09-nontemplate-v3",
     firstSlide: 56,
     count: 5,
     firstTitle: "Amazon SQS: What Is a Queue?",
@@ -291,7 +291,7 @@ const CONFIG: Record<string, {
   },
   "06-10": {
     prefix: "module-06/part-10/aip-module-06-part-10",
-    revision: "2026-11-12-m06-p10-recovered-visual-v2",
+    revision: "2026-11-12-m06-p10-nontemplate-v3",
     firstSlide: 61,
     count: 3,
     firstTitle: "REST API or WebSocket API?",
@@ -299,7 +299,7 @@ const CONFIG: Record<string, {
   },
   "06-11": {
     prefix: "module-06/part-11/aip-module-06-part-11",
-    revision: "2026-11-12-m06-p11-recovered-visual-v2",
+    revision: "2026-11-12-m06-p11-nontemplate-v3",
     firstSlide: 64,
     count: 5,
     firstTitle: "Call Bedrock directly from Step Functions",
@@ -307,7 +307,7 @@ const CONFIG: Record<string, {
   },
   "06-12": {
     prefix: "module-06/part-12/aip-module-06-part-12",
-    revision: "2026-11-12-m06-p12-recovered-visual-v2",
+    revision: "2026-11-12-m06-p12-nontemplate-v3",
     firstSlide: 69,
     count: 4,
     firstTitle: "Publish and filter SNS messages",
@@ -315,7 +315,7 @@ const CONFIG: Record<string, {
   },
   "06-13": {
     prefix: "module-06/part-13/aip-module-06-part-13",
-    revision: "2026-11-12-m06-p13-eventbridge-v1",
+    revision: "2026-11-12-m06-p13-nontemplate-v3",
     firstSlide: 73,
     count: 4,
     firstTitle: "Route events with EventBridge rules",
