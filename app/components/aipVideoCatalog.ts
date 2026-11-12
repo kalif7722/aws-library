@@ -60,6 +60,12 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "11": [
+    { id: "01", title: "Purpose-Built GenAI Databases and Amazon DocumentDB", subtitle: "Purpose-built stores, structured retrieval and DocumentDB read replicas", start: 1, end: 3 },
+    { id: "02", title: "GenAI Caching and Durable Agent State with ElastiCache and MemoryDB", subtitle: "Cache-aside response reuse and durable multi-AZ agent state", start: 4, end: 5 },
+    { id: "03", title: "Neptune Knowledge Graphs, Redis Data Structures and GraphRAG", subtitle: "Neptune entity traversal, Redis state structures and grounded GraphRAG", start: 6, end: 8 },
+    { id: "04", title: "Database Selection Guide and Integrated GenAI Data Architecture", subtitle: "Access-pattern selection and multi-store Bedrock architecture", start: 9, end: 10 },
+  ],
   "10": [
     { id: "01", title: "Choosing GenAI Compute and Deploying APIs with AWS App Runner", subtitle: "Compute trade-offs, managed App Runner deployment and APIs", start: 1, end: 2 },
     { id: "02", title: "EC2 for GenAI: Instance Selection, Bootstrap and Linux Launch Walkthrough", subtitle: "EC2 architecture, accelerated inference sizing, user data and console launch", start: 3, end: 6 },
