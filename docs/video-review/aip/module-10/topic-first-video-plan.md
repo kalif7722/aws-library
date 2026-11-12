@@ -2,9 +2,9 @@
 
 Source: original numbered R2 visuals `aws-genai-course-visuals/module-10/slide-NN.webp` (17 expected slides).
 
-**Audit status:** Automated original-image spatial audit is configured in `.github/workflows/audit-aip-m10-visuals-01-17.yml`. Final scene boundaries, titles and technical explanations must be confirmed using its output before any narration or media production.
+**Audit status:** Complete: all 17 original R2 slides verified. All five topic-first narration scripts registered with player API, captions and two fresh-audio render workflows. R2 publication remains unverified.
 
-| Planned lecture | Provisional slides | Cohesive subject |
+| Video | Verified slides | Cohesive subject |
 |---|---|---|
 | 01 | 01–02 | Compute options and AWS App Runner architecture |
 | 02 | 03–06 | EC2 foundations, sizing, user data and Linux instance walkthrough |
@@ -12,7 +12,7 @@ Source: original numbered R2 visuals `aws-genai-course-visuals/module-10/slide-N
 | 04 | 13–16 | Amazon EKS architecture, node management and persistent volumes |
 | 05 | 17 | Amazon Lex with Amazon Connect and customer engagement |
 
-These ranges are hypotheses based on the legacy lesson map, **not approved scene order**. Inspect the actual R2 images and move boundaries if lessons differ. Do not use a fixed 5-slide batching pattern.
+The verified scene groups follow complete topics, including a dedicated single-slide Lex/Connect customer-engagement lesson. No fixed-size batching was used.
 
 Quality gates:
 - Narration explains original numbered flow, arrows, icons and visible configuration rather than reciting headings.
