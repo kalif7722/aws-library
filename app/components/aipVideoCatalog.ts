@@ -64,6 +64,13 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "01", title: "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration", subtitle: "DataSync vs Transfer Family, task lifecycle and NFS/SMB migration", start: 1, end: 3 },
     { id: "02", title: "Agentless Transfer, Task Controls and Data Integrity", subtitle: "AWS storage transfers, overwrite/delete settings, verification and archives", start: 4, end: 6 },
   ],
+  "16": [
+    { id: "01", title: "CloudFront Edge Delivery, Secure Origins and Cache Policies", subtitle: "Cache flow, private origins, OAC, TTL and replication comparison", start: 1, end: 5 },
+    { id: "02", title: "Elastic Load Balancing: ALB, NLB, Gateway and TLS", subtitle: "Health, listeners, Layer 7, Layer 4, inspection and HTTPS", start: 6, end: 10 },
+    { id: "03", title: "Global Accelerator: Anycast Routing and CDN Comparison", subtitle: "Static addresses, regional failover and CloudFront trade-offs", start: 11, end: 12 },
+    { id: "04", title: "Route 53 DNS, Records, Private Zones and Failover", subtitle: "TTL, aliases, internal DNS and health-aware routing", start: 13, end: 16 },
+    { id: "05", title: "Hands-On CloudFront OAC Security and Cache Verification", subtitle: "Private S3 access, cache hits, versioning and invalidation", start: 17, end: 18 },
+  ],
   "14": [
     { id: "01", title: "GenAI Capacity Management: Target Tracking, Predictive Scaling and Guardrails", subtitle: "Scaling responsibilities, target tracking, predictive plans and Bedrock quota guardrails", start: 1, end: 5 },
     { id: "02", title: "AWS Cost Anomaly Detection: Baselines, Alerts and Incident Triage", subtitle: "Anomaly baselines, alert subscriptions and root-cause cost triage", start: 6, end: 7 },
