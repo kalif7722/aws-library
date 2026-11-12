@@ -130,6 +130,14 @@
 - **Release status:** Committing scripts and starting jobs is not equivalent to confirmed playable video files. Availability is published after R2 uploads and matching release metadata pass the existing checks.
 - **Progress:** 22/22 scene mappings are consecutive across four videos; slide-based progress and video completion use the shared course progress catalog.
 
+## Module 05 — SageMaker AI video lectures, November 12, 2026
+
+- **Core slides:** 36/36 original site-ready slide images inspected from four archives (01–10, 11–20, 21–30, 31–36). These are distinct from the separate 37–56 console/lab image package, which should be scripted as dedicated hands-on lessons rather than silently mixed into the 36-slide theory series.
+- **Seven lessons:** Part 01 slides 1–5 covers ML lifecycle, training/inference architecture, notebooks and console; Part 02 slides 6–10 covers data preparation, processing jobs, deployment mode and safe rollout; Part 03 slides 11–15 covers JumpStart, Data Wrangler, Feature Store, model hosting, optimization and Ground Truth; Part 04 slides 16–20 covers human workforces, active learning, Ground Truth Plus and machine-assisted labeling; Part 05 slides 21–25 covers Model Monitor, Clarify, data/bias drift and alerting; Part 06 slides 26–31 covers model registry approval, lineage entities, querying and cross-account provenance; Part 07 slides 32–36 covers Neo, Greengrass deployment, Unified Studio and ML pipelines.
+- **Content quality:** Lecturer narration describes the actual on-slide diagrams and warnings, including the *existing-customer restrictions* shown in Model Monitor and Clarify visuals. All 36 gallery titles corrected to match original images where needed. Narration manifest scenes are contiguous, with no duplicate slide numbers.
+- **Video infrastructure:** Three isolated workflow groups `render-aip-m05-parts-01-02.yml`, `render-aip-m05-parts-03-04.yml`, `render-aip-m05-parts-05-07.yml` use the fixed R2-first publishing approach; optional GitHub artifacts are nonblocking. They restore cached voice chunks, retry failed speech synthesis up to 15 times, verify source R2 slides and media, and publish valid captions and MP4s.
+- **Release status:** Video scripts and workflows are committed; a successful workflow and uploaded release record are required before marking each part playable. The video progress tracker supports completion by reaching the end or selecting Mark Complete, saved position, adjustable playback speed, fullscreen auto-hide and automatic next-video playback.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
