@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Aligned to published Module 07 lesson titles and evaluated against domain knowledge. Original R2 WebPs must be validated on runner; slide-level visual inspection not claimed.",
+  "part_id": "02",
+  "part_title": "LLM-as-a-Judge, Hybrid Evaluation and Text Metrics",
+  "script_revision": "2026-11-12-m07-p02-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Using Another Model as a Judge",
+      "narration": "In an LLM-as-a-judge workflow, a second model evaluates a candidate response against a defined rubric and any supporting evidence. This can scale evaluation of relevance, coherence and factual grounding when exact string matching would be too restrictive. Provide the judge with the task, response, authorized reference material and an explicit scoring format. The judge can be biased by response length, phrasing, model family or prompt order, so calibrate its scores against human assessments. Pairwise comparisons, randomized candidate order and repeat measurements can improve confidence. Do not confuse a judge model's confident explanation with verified truth; it may hallucinate as well. Use a judge as a screening or ranking aid, and escalate sensitive or disputed cases for human review.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 7,
+      "title": "Hybrid Evaluation Approaches",
+      "narration": "A hybrid evaluation strategy combines deterministic checks, automated semantic measures, model-based judging and human assessment. Start with objective validation where possible: schema validity, expected fields, prohibited data leakage and known factual answers. Add semantic or judge-model evaluation for outputs that admit several valid phrasings. Human reviewers inspect high-impact edge cases and periodically calibrate the automatic methods. Combine these approaches in a release gate with minimum thresholds per category, not only a single average score. For retrieval-augmented generation, separately evaluate whether the retrieved passages are relevant and whether the final answer is supported by those passages. Continuous evaluation after deployment detects drift caused by new documents, new prompts or model updates. A strong system makes failure reasons actionable.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 8,
+      "title": "ROUGE Metrics",
+      "narration": "ROUGE is a family of text-overlap metrics commonly used to compare generated summaries against reference summaries. ROUGE one and ROUGE two examine overlap in one-word and two-word sequences, while ROUGE L uses a longest-common-subsequence concept to assess sequence similarity. A high score suggests lexical similarity, not necessarily factual correctness or superior readability. Valid paraphrases may use different words and receive an unfairly low overlap score. Conversely, a generated answer might repeat reference terms while making an incorrect claim. Interpret precision, recall and F-measure according to the metric implementation and evaluation goals. For a generative AI summarizer, ROUGE can provide a consistent automatic signal, but grounding checks and human judgments are important before treating the output as trustworthy.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 9,
+      "title": "BLEU Metrics",
+      "narration": "BLEU compares generated text with one or more reference texts using modified n-gram precision and a brevity penalty. It was developed for machine translation, where matching local word sequences can help measure correspondence with reference translations. The score depends on tokenization, reference choice and calculation settings; scores from different pipelines may not be directly comparable. A fluent translation that uses valid synonyms may score lower than a more literal alternative. BLEU also does not establish that a statement is safe or factually correct. Use it as one structured, reproducible evaluation signal where reference overlap is relevant. For conversational assistants and free-form explanations, add semantic and human checks rather than selecting a model based only on BLEU.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 10,
+      "title": "BERTScore",
+      "narration": "BERTScore compares candidate text with a reference using contextual token embeddings from a pretrained language model. It can recognize similarity between paraphrases that traditional exact word-overlap metrics may miss. The method aligns candidate and reference tokens and computes similarity-based precision, recall and an F-measure. Results depend on the chosen embedding backbone, language and evaluation settings, so preserve the configuration when comparing experiments. Semantic similarity is not identical to factual correctness: two sentences with opposite negation or subtle numeric differences may still appear close in embedding space. Use BERTScore as a complementary measure, particularly when many acceptable responses use different wording. Add evidence-based grounding checks, schema validation and human review for decisions where accuracy or compliance matters.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    }
+  ]
+}
