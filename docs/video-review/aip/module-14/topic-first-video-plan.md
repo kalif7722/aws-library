@@ -1,21 +1,23 @@
-# Module 14 — topic-first video production
+# AIP Module 14 — verified topic-first video plan
 
-Primary source: original R2 `aws-genai-course-visuals/module-14/slide-NN.webp`, 15 expected.
-Audit workflow: `.github/workflows/audit-aip-m14-visuals-01-15.yml`, with independent split audits for 01–08 and 09–15.
+Original R2 visual audit: `docs/video-review/aip/module-14/visual-ocr-01-15.json`. All **15 of 15 source slides** verified.
 
-## Provisional curriculum grouping (must be corrected against R2 before narration)
-| Topic | Approximate original slide range | Focus |
+| Video | Original R2 slides | Complete teaching topic |
 |---|---|---|
-| Autoscaling | 01–03 | EC2/service capacity and scaling plans |
-| Cost optimisation and anomalies | 04–09 | Cost Anomaly Detection, Cost Explorer, Savings Plans and forecasts |
-| Operational dashboards | 10–11 | Managed Grafana, supported sources and identity |
-| Operations and configuration | 12–15 | Systems Manager, Session Manager, Parameter Store |
+| 01 | 01–05 | Scaling architecture, target tracking, predictive plans, model quotas and cost guardrails |
+| 02 | 06–07 | Cost Anomaly Detection, dynamic baselines, subscriptions and investigation |
+| 03 | 08–12 | Cost Explorer reporting, monthly trends, resource drilldown, Savings Plans and forecasts |
+| 04 | 13–14 | Amazon Managed Grafana workspace, observability and explicit alerts |
+| 05 | 15 | AWS Systems Manager managed node identity, agent and HTTPS prerequisites |
 
-This is a **legacy-map hypothesis only**, not an approved title/scene mapping. Previous AIP modules had substantially reordered or omitted original visuals. Do not create or render scripts for these numbers until the actual slide text and architecture are audited.
+## Quality and release status
 
-## Quality and publishing gates
-- Choose complete teaching topics, not fixed five-slide batches.
-- Narrate original diagrams, data flows, console settings and caveats, with enough technical detail.
-- Check exact slide sequence, first title, script revision and R2 asset before declaring video ready.
-- Set new Module 14 audio cache namespace. Register API, catalog, VTT captions and publisher consistently.
-- Review current console feature availability or dates if the visual describes a feature being sunset.
+All fifteen original visuals have corresponding **new source-grounded narration**. All five scripts and revisions are registered with the player API, video catalog, captions and publishing script, without missing or overlapping slide numbers.
+
+Fresh-voice render workflows on GitHub main:
+- `.github/workflows/render-aip-m14-parts-01-03.yml`
+- `.github/workflows/render-aip-m14-parts-04-05.yml`
+
+The legacy course map mentioned Session Manager and Parameter Store as separate final slides; the actual original Module 14 visuals stop with Systems Manager managed-node prerequisites on slide 15. Do not create unsupported scenes from legacy titles.
+
+Rendering completion, Cloudflare R2 MP4 publication and live course playback **are not yet independently verified**. Validate actual MP4s, VTT, slide range, first title and `script_revision` before marking a video ready.
