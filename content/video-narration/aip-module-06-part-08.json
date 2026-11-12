@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 lesson titles and AWS service explanations; original WebP assets validated by GitHub renderer, not visually reviewed in this session.",
+  "part_id": "08",
+  "part_title": "MLflow, AppSync and AWS Hybrid Edge Infrastructure",
+  "script_revision": "2026-11-12-m06-p08-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 49,
+      "title": "MLflow",
+      "narration": "MLflow supports experiment tracking and aspects of machine-learning lifecycle management. A training run can record parameters, metrics and model artifacts so teams can compare experiments and reproduce a selected result. Model versions and registry concepts are useful when promotion requires review. The precise AWS integration depends on the deployed MLflow environment and supported managed services. Do not confuse experiment tracking with the operational deployment engine: recording an artifact does not automatically make it available to users. For generative AI, capture evaluation configurations and relevant model or prompt versions while avoiding sensitive raw data in tracking metadata. Link approved artifacts to deployment and monitoring records.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 50,
+      "title": "AWS AppSync GraphQL and Generative AI",
+      "narration": "AWS AppSync provides managed GraphQL APIs and supported real-time patterns for applications. A GraphQL schema defines types, queries and mutations, while resolvers connect fields to data sources such as DynamoDB or Lambda. This can aggregate application data behind a client-friendly contract. In a GenAI application, a mutation may submit a prompt or start a workflow and real-time updates can deliver status or results through supported subscriptions or events. Authorization is required at the API and data boundaries; a schema field should not disclose another tenant's records. Carefully design response streaming and subscription semantics because long model responses differ from ordinary low-latency database reads.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 51,
+      "title": "AWS Outposts",
+      "narration": "AWS Outposts brings supported AWS infrastructure and services into an on-premises location, using an AWS-managed hardware model integrated with a parent Region. The objective is to support applications with local processing or residency constraints while using familiar AWS APIs and operational patterns. Workloads still depend on supported service availability, capacity and connectivity requirements. Outposts is not simply a free-standing Region placed in your building, and service compatibility must be checked for each architecture. If an AI application handles sensitive local data, separate which components genuinely execute on Outposts from any cloud-hosted inference or management services. Document the data path and its compliance implications.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 52,
+      "title": "AWS Outposts Benefits",
+      "narration": "Outposts can reduce network distance to local systems and enable particular low-latency or data-location patterns while aligning operations with AWS tooling. It can support hybrid applications that share networking, identity and management concepts with the Region. Benefits have trade-offs: hardware capacity is finite, physical space and power matter, and supported services vary by Outposts form factor. Design for failures involving local connectivity, Region dependencies and edge capacity. For a generative AI use case, decide whether data preprocessing, retrieval or application services need to stay local and whether the selected foundation-model inference service is actually available at that location. Never imply all AWS AI services run locally by default.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 53,
+      "title": "AWS Outposts and Generative AI",
+      "narration": "A hybrid generative AI architecture may use Outposts for nearby application compute or local datasets while accessing other AWS services through approved network paths. For example, a local application could preprocess sensitive records and transmit only authorized, minimized context to a regional model endpoint. The key is to draw the boundary between on-premises storage and regional inference explicitly. Evaluate latency, data egress, encryption, identity and service availability. Some workloads may require an entirely local model-serving solution rather than a regional Bedrock API. Outposts does not automatically deliver a local Bedrock foundation model. Treat each candidate design as a placement and connectivity decision.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 54,
+      "title": "AWS Wavelength",
+      "narration": "AWS Wavelength places supported AWS compute and storage capabilities within selected telecommunications networks to reduce latency for mobile and edge applications. A Wavelength Zone is associated with a parent AWS Region but serves workloads close to mobile users through the carrier network. Architecture depends on service availability, routing, carrier integration and how traffic reaches regional resources. It is not interchangeable with a standard Availability Zone or Outposts rack. Use this pattern when latency between mobile devices and application processing is a material requirement. For AI applications, small preprocessing or interactive components may run near the user while larger models remain in the Region.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 55,
+      "title": "AWS Wavelength and Generative AI",
+      "narration": "In a mobile generative AI experience, processing near a carrier edge can improve parts of the request path, but model inference placement still determines total latency. An edge component might validate a request, perform lightweight preprocessing or cache permitted results before reaching a regional inference service. Distinguish the latency saved on the mobile network from the latency consumed by remote foundation-model generation. Consider bandwidth, security, state synchronization and failover when an edge zone is unavailable. Deploy only services supported in the selected Wavelength Zone, and do not assume Bedrock models automatically run within telecom infrastructure. The strongest design is an explicit end-to-end latency budget.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    }
+  ]
+}
