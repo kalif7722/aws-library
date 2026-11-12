@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Narration follows the published Module 06 course slide map; GitHub renderer validates actual original R2 WebP files before speech synthesis. Image-level visual review not claimed.",
+  "part_id": "02",
+  "part_title": "Lambda Monitoring, Use Cases, Runtimes and Event Triggers",
+  "script_revision": "2026-11-12-m06-p02-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Example: Transaction Rate Alarm",
+      "narration": "Monitoring transaction throughput is an example of turning application observations into action. A function or service publishes business metrics such as transaction counts, failed payments or processing latency. Amazon CloudWatch can evaluate an alarm against a threshold over a defined number of periods. When the alarm changes state, a notification or event can initiate investigation or remediation. Be careful to distinguish a brief spike from a persistent failure and use dimensions that identify the affected application component. In AI workflows, monitor request volume and model error rates alongside infrastructure health. Alarms should support decisions; they are not a substitute for tracing the underlying request. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 7,
+      "title": "Why Not Just Run a Server?",
+      "narration": "A continuously running server is appropriate for some predictable, long-lived workloads, but it also requires capacity management, patching and operational maintenance. Lambda removes much of the server administration for short event-driven tasks and scales with incoming demand. The trade-offs are important: cold-start latency can affect interactive APIs, execution duration is limited, concurrency is governed by quotas, and networking or dependency initialization can add delay. For steady high-volume processing, compare total costs instead of assuming any serverless invocation is cheaper. Choose the compute pattern from workload characteristics such as duration, latency target, state management and operational requirements, not from the popularity of a service. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 8,
+      "title": "Main Uses of Lambda",
+      "narration": "Common Lambda uses fall into a few repeatable patterns. Event handlers respond to S3 objects, application events and notifications. API handlers serve small HTTP endpoints. Stream and queue consumers process records in batches with retry and failure-management strategies. Scheduled jobs perform lightweight maintenance or data refresh. In generative AI applications, Lambda can perform prompt pre-processing, retrieval calls, request validation and output post-processing. Keep the function focused on a bounded task. For multi-stage workflows, pass state explicitly to an orchestrator; for high-throughput ingestion, apply back-pressure and idempotency. A retry must not accidentally duplicate a purchase, message or expensive model request. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 9,
+      "title": "Lambda Supported Languages",
+      "narration": "Lambda supports managed runtimes for several widely used languages and also supports custom runtimes and container-image packaging. The right choice depends on library support, team capability, startup time and deployment constraints. A Python handler may be convenient for data transformation, while JavaScript or TypeScript suits API-focused teams. Native dependencies and large machine-learning frameworks can increase package size and initialization time. Package only what the function needs, pin dependencies, test the exact runtime architecture and pay attention to runtime lifecycle and security updates. Regardless of the language, the execution role, event contract, timeout and observability remain part of the deployed function's architecture. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 10,
+      "title": "Lambda Triggers",
+      "narration": "A Lambda trigger defines which event source invokes the function and how delivery behaves. Some services invoke Lambda directly, while services such as SQS or Kinesis use event source mappings that poll and deliver batches. API Gateway commonly invokes Lambda synchronously to return an HTTP response, whereas an asynchronous event may be retried according to its source and invocation configuration. These differences affect failure handling, duplicate delivery and user latency. Use idempotent processing and configure appropriate dead-letter or failure destinations where supported. In a Bedrock application, consider what happens if model invocation is throttled: a durable queue and controlled concurrency can protect the downstream API. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    }
+  ]
+}
