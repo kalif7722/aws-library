@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "11",
+  "module_title": "Purpose-Built Databases for GenAI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 11 R2 slides 4-5 verified against spatial audit; topic-based teaching, fresh audio revision.",
+  "part_id": "02",
+  "part_title": "GenAI Caching and Durable Agent State with ElastiCache and MemoryDB",
+  "script_revision": "2026-11-13-m11-p02-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 4,
+      "title": "ElastiCache for low-latency GenAI",
+      "narration": "This is a cache-aside pattern for a GenAI response. The application first checks ElastiCache for a valid cached entry derived from the request and its relevant context. A cache hit returns an existing response quickly without paying again for retrieval and inference. On a miss, the application retrieves needed knowledge, invokes the model, then stores a suitable response with a time-to-live before returning it. The diagram shows an example hit-rate dashboard and one-hour TTL, but these are illustrative targets, not universal values. The hardest part of caching a model answer is correctness. The cache key must distinguish tenants, authorisation scope, model or prompt revision, relevant retrieved-document version and other inputs that affect the answer. Invalidate or refresh entries when source information changes. Avoid caching secrets or private conversations into broadly shared keys. A high hit rate is useful only if cached results remain accurate and authorised. Monitor hit ratio alongside latency, cost and stale-answer incidents to make sure caching improves the real user experience."
+    },
+    {
+      "slide": 5,
+      "title": "MemoryDB: durable in-memory state",
+      "narration": "The comparison contrasts an ephemeral cache with a durable in-memory database for an AI agent. A simple cache can hold recent session details with excellent access speed, but if its data is evicted or lost during a failure, the agent may need to reconstruct the conversation and its intermediate plan. On the right, Amazon MemoryDB uses a Redis-compatible in-memory data model with durability and multi-Availability Zone replication, designed for application state that must survive failures. The illustration shows an agent writing a session and plan using hash operations and transactions. Following a node failure, a replica can be promoted and the agent can resume from retained state. Be careful with the caption implying zero data loss: real recovery guarantees depend on the service's durability model, write acknowledgement and failure scenario. MemoryDB isn't simply a more expensive ElastiCache for every workload. Use a cache when data is disposable and recoverable; use a durable database when session state or workflow progress has business value. Still implement expiry, access control and safe replay semantics for agent operations."
+    }
+  ]
+}
