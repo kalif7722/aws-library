@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "05",
+  "module_title": "Managing Models with SageMaker AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original AIP Module 05 site-ready WebP slides individually inspected from archived source images 01–36; narration explains actual visual flows and comparisons. Renderer verifies live R2 sources.",
+  "part_id": "03",
+  "part_title": "Model Building, Hosting Options and Ground Truth",
+  "script_revision": "2026-11-12-m05-p03-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 11,
+      "title": "Accelerate Model Building",
+      "narration": "We start this section by comparing three SageMaker capabilities that shorten model development. On the left, JumpStart provides prebuilt model packages and solution examples, helping developers begin without building everything from scratch. In the centre, Data Wrangler visually explores, cleans, joins and transforms data before training. On the right, Feature Store manages reusable feature definitions and values for training and inference, with offline and online access patterns when configured. Notice the small panels along the bottom. JumpStart can provide models and examples, Data Wrangler helps generate prepared training data, and Feature Store reduces repeated feature-engineering effort across teams. These tools solve different problems and are not interchangeable. A prebuilt model may still require evaluation, and a reusable feature still needs appropriate freshness and access controls. Use the tool that matches the bottleneck in the ML lifecycle rather than adding services automatically."
+    },
+    {
+      "slide": 12,
+      "title": "Serve Many Models",
+      "narration": "The slide compares three endpoint architectures. In the left panel, a single-model endpoint hosts one model and receives prediction requests directly. The middle panel shows a multi-model endpoint that can load different model artifacts, often from S3, onto shared serving resources as requests identify the model. The right panel introduces inference components, which let supported model components be allocated and scaled with more granularity on an endpoint. These choices trade deployment flexibility, resource sharing, cold-load behavior and operational complexity. A multi-model endpoint can reduce idle capacity for many low-traffic models, but loading a cold model may increase latency. Dedicated capacity can be better for busy or latency-sensitive models. The security banner underneath reminds us that endpoint access must be restricted with VPC and IAM controls. Choose after measuring model size, concurrency, working-set characteristics and acceptable response time."
+    },
+    {
+      "slide": 13,
+      "title": "Hosting Architecture Choices",
+      "narration": "Here we compare SageMaker-managed hosting with a self-managed compute architecture. On the left, SageMaker endpoints handle much of model-serving infrastructure, endpoint orchestration and supported scaling features. On the right, an application load balancer distributes requests to compute instances or containers running a custom model server. Self-managed hosting provides more control over the runtime, packaging and infrastructure, but also makes the team responsible for patching, scaling, security and operational reliability. Follow the bottom comparison cards. Managed hosting can reduce engineering overhead and offer built-in monitoring, while a custom environment may suit specialized requirements not covered by a managed endpoint. Neither path is automatically cheaper or faster. The right choice depends on model compatibility, latency, control needs, team expertise and the cost of ongoing operations. Be explicit about which party owns updates, health checks, autoscaling and incident response."
+    },
+    {
+      "slide": 14,
+      "title": "Asynchronous Inference and Optimization",
+      "narration": "The slide has two separate panels. On the left, a client submits a large or long-running request to an asynchronous inference endpoint. SageMaker queues the job and later writes the result to Amazon S3, allowing the client to retrieve it separately from the original request. This differs from real-time serving, where the client awaits an immediate result. On the right, three model-compression approaches are compared: quantization reduces numerical precision, pruning removes less useful parameters or connections, and distillation trains a smaller student model to approximate a larger teacher. Each may reduce footprint or improve performance but can also hurt accuracy. The lower metrics—model size, latency and accuracy—form the evaluation framework. Do not assume the smallest model is always best. Benchmark the compressed model with production-like workloads and check quality against the original model before changing deployment."
+    },
+    {
+      "slide": 15,
+      "title": "Ground Truth: Labeling at Scale",
+      "narration": "This slide introduces Ground Truth as a human-in-the-loop approach to creating reliable labeled datasets. Starting on the left, unlabeled images, text, audio or video are collected and organized. A pre-label or sampling stage can suggest labels for simpler items. Human workers review and correct labels using task-specific instructions. A quality-assurance stage checks consistency and errors before the resulting dataset is saved for training. Trace the orange loop along the bottom. Model predictions and reviewer feedback can help select additional data for labeling, improving the dataset iteratively. The key point is not to eliminate humans; it is to use automation where appropriate while preserving a path for uncertain examples to be reviewed. Poor instructions, inconsistent categories or biased sampling can damage label quality regardless of the size of the workforce."
+    }
+  ]
+}
