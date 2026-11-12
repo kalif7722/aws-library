@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 slide titles and AWS service architecture; GitHub renderer validates real original R2 source files before rendering. Detailed image inspection not claimed.",
+  "part_id": "03",
+  "part_title": "Lambda Integrations with OpenSearch, Streams, Bedrock and APIs",
+  "script_revision": "2026-11-12-m06-p03-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 11,
+      "title": "Lambda and Amazon OpenSearch Service",
+      "narration": "Use Lambda as an integration layer when documents or application events need to become searchable records. A function may receive an S3 notification, a DynamoDB stream record, or another event, transform its payload, and submit a document to Amazon OpenSearch Service. Indexing is not the same as querying: a separate application might search the index later and use the retrieved text as grounding for a Bedrock request. Pay attention to bulk requests, document identifiers, mapping changes, IAM access and network connectivity. Stream or queue delivery can be duplicated, so write idempotently. For large-scale ingestion, batch carefully and handle partial failures rather than silently losing documents.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    },
+    {
+      "slide": 12,
+      "title": "Lambda and Data Pipeline",
+      "narration": "A data pipeline consists of separate ingestion, transformation, validation and delivery steps. Lambda fits particularly well as a short event-driven transformation or coordination component, but it is not automatically the best engine for processing very large datasets. A source such as S3 can produce a notification; a function validates metadata, enriches a record or starts a managed job; and the output goes to a destination service. Use Step Functions when the pipeline needs explicit state, retries, branching or long-running job coordination. Use queues and durable storage to absorb bursts. In an AI system, source lineage and failure handling matter because missing documents can produce incomplete retrieval results.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    },
+    {
+      "slide": 13,
+      "title": "Lambda and Amazon Redshift",
+      "narration": "Amazon Redshift is a managed data warehouse used for analytical queries across large datasets. Lambda can connect application events or orchestration logic to a Redshift workflow, for example by invoking an appropriate API, coordinating data ingestion or retrieving aggregate analytical results. It is usually a mistake to treat a warehouse like a low-latency transactional database on every web request. Design around query latency, concurrency, credentials and network access. For larger ingestion, staged S3 files and managed loading patterns can be more efficient than writing rows individually. If an assistant uses warehouse-derived metrics, validate query scope and access control before sharing the results with a foundation model.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    },
+    {
+      "slide": 14,
+      "title": "Lambda and Kinesis",
+      "narration": "Amazon Kinesis streams capture continuously arriving events such as clickstreams, telemetry and application activity. Lambda can consume batches through an event source mapping, with checkpoints managed around the stream's shard ordering. Processing time, batch size, retry behavior and shard throughput determine whether the consumer keeps up. Handle failures without repeatedly blocking an entire shard: understand partial batch responses where supported, and use an appropriate failure destination or retention strategy. In GenAI applications, streaming events might trigger document enrichment or near-real-time indexing, but foundation-model latency and cost can make one invocation per raw event impractical. Aggregate, filter or queue work when necessary.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    },
+    {
+      "slide": 15,
+      "title": "Using Lambda with Bedrock Generative AI",
+      "narration": "Lambda can implement a thin, secure application layer around Amazon Bedrock. The handler authenticates or receives the caller's context, validates request size, prepares model input and invokes the permitted model through an AWS SDK. It can then sanitize, format and return the result. The execution role needs explicit model-invocation permissions, and your design should account for Bedrock quotas, latency, timeouts and cost. Do not place AWS credentials in browser code. Synchronous invocation is suitable only if the expected response fits interactive limits; longer workflows may use asynchronous processing, streams or Step Functions. Record request identifiers and safe diagnostics without logging sensitive prompts unnecessarily.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    },
+    {
+      "slide": 16,
+      "title": "Example: Building a Serverless API",
+      "narration": "A serverless API typically has a client, API Gateway as the HTTP entry point, a Lambda handler for business logic, and one or more data or AI services behind it. The gateway handles routing and selected authorization and throttling controls. The function parses the input, checks the caller's privileges, invokes only the required services and returns a well-defined status and response body. Separate client errors, downstream throttling and internal failures into sensible HTTP responses. For an AI assistant endpoint, enforce model input limits and avoid returning private retrieval content without authorization. Include observability with correlation identifiers, metrics and structured logs so a production incident can be traced end to end.  From an architecture perspective, identify which component owns the request, where state is stored, which service performs the work, and how failures are surfaced. In exam scenarios, compare latency, operational effort, least-privilege access and recovery behavior before picking an integration."
+    }
+  ]
+}
