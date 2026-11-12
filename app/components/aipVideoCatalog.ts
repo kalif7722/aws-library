@@ -50,7 +50,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "02", title: "Lambda Workload Choices, Five Patterns, Runtimes, Triggers and OpenSearch", subtitle: "When to use Lambda, event patterns, runtimes, triggers and vector indexing", start: 6, end: 10 },
     { id: "03", title: "Lambda Data Pipelines, Kinesis Batches, Bedrock and API Integrations", subtitle: "Data transformations, Redshift COPY, stream retries, Bedrock adapters and API integrations", start: 11, end: 16 },
     { id: "04", title: "API Gateway Routing and Security, AppConfig and Step Functions", subtitle: "Direct Kinesis integration, REST endpoint types, AI API security, model flags and orchestration", start: 17, end: 24 },
-    { id: "05", title: "Step Functions, ML Orchestration and Resilience", subtitle: "State machines, SageMaker jobs, retries and payload design", start: 25, end: 32 },
+    { id: "05", title: "Step Functions Model Workflows, Resilience, Agent Controls and CI/CD", subtitle: "Training, tuning, batch recovery, circuit breakers, agent controls and delivery pipelines", start: 25, end: 32 },
     { id: "06", title: "CodePipeline, CI/CD and CodeBuild", subtitle: "Pipeline artifacts, troubleshooting, build environments and buildspec", start: 33, end: 41 },
     { id: "07", title: "CodeDeploy Strategies for EC2, Lambda and ECS", subtitle: "Deployment lifecycle, in-place versus blue-green and rollback", start: 42, end: 48 },
     { id: "08", title: "MLflow, AppSync and AWS Hybrid Edge Infrastructure", subtitle: "Experiment tracking, GraphQL, Outposts and Wavelength", start: 49, end: 55 },
