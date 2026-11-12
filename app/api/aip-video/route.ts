@@ -219,7 +219,7 @@ const CONFIG: Record<string, {
   },
   "06-01": {
     prefix: "module-06/part-01/aip-module-06-part-01",
-    revision: "2026-11-12-m06-p01-guided-lecture-v2",
+    revision: "2026-11-12-m06-p01-review-pilot-v3",
     firstSlide: 1,
     count: 5,
     firstTitle: "More Tools for Building AI Applications",
