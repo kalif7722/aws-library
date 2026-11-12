@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "09",
+  "module_title": "Analytics, BI and Streaming Data",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original numbered Module 09 R2 slides 7–11 audited via spatial visual report. Topic-first grouping, fresh speech and exact slide order.",
+  "part_id": "03",
+  "part_title": "Amazon QuickSight: Data Sources, Query Modes and GenAI Dashboards",
+  "script_revision": "2026-11-13-m09-p03-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Amazon QuickSight architecture",
+      "narration": "This slide follows a QuickSight project from connecting data to sharing insights. First, QuickSight connects to sources such as S3, RDS, Redshift, files and supported SaaS systems. A dataset then defines joins, filters, transformations and calculated fields. The next decision is how the data is retrieved. SPICE imports it into QuickSight's in-memory analytics engine for fast repeated interactions, while direct query leaves data in the underlying source and sends queries when dashboard viewers interact. From there, authors build analyses with charts and filters and publish dashboards to approved users or groups. The distinction between an editable analysis and a shared dashboard is worth noting: consumers can explore a published dashboard without being given permissions to redesign the dataset. This architecture is for BI visualisation and analysis, not for updating transaction records. As a GenAI example, an operations team can show model latency, spending and safety findings from curated application data. Source permissions and row-level access still need careful configuration before publication."
+    },
+    {
+      "slide": 8,
+      "title": "Amazon QuickSight data sources",
+      "narration": "Here the diagram expands on the source side of QuickSight. An S3 dataset may be queried through Athena, Redshift provides warehouse analytics, and RDS or compatible databases can supply transactional data for reporting. Supported external sources extend the picture to on-premises databases and SaaS applications. Follow the middle preparation stage: after connecting, a dataset selects fields, applies transformations and chooses SPICE or direct query. QuickSight doesn't grant itself unlimited access just because a connection was created. The service and data-source identities need appropriate database permissions, S3 or Athena access and any supported network connectivity. The right-hand checklist also covers refresh scheduling, dataset sharing and row-level security. If a dashboard needs fresh information every minute, a once-a-day SPICE refresh may be unsuitable; if it handles heavy interactive exploration, pushing every click to the production RDS database can cause load. Choose the source and access method together, with explicit security and freshness requirements."
+    },
+    {
+      "slide": 9,
+      "title": "Amazon QuickSight Data Access Modes",
+      "narration": "Compare the two columns carefully. SPICE import reads and compresses data into an in-memory, columnar analytics engine, so repeated visual interactions can be fast and less dependent on source-query latency. But imported data only reflects the latest successful refresh, and capacity quotas must be checked. Direct query sends queries to the data source during dashboard use, which offers fresher results according to what that source returns, but its speed and concurrency depend on the underlying database or warehouse. The performance, freshness, capacity and source-load questions on the right are the decision framework. The slide includes an illustrative SPICE capacity value; actual quotas and current service limits must be verified before capacity planning. For a highly used executive dashboard over prepared data, SPICE can be ideal. For an operational investigation where current records matter, direct query may be more suitable if the backend can handle the traffic. It's a trade-off, not a universal ranking."
+    },
+    {
+      "slide": 10,
+      "title": "QuickSight use cases for GenAI operations",
+      "narration": "This slide is an operations dashboard for an AI product. The top KPI strip shows request volume, P-ninety-five latency, cost, safety findings and user satisfaction. Below that, different charts answer different questions: latency broken down by model, spending split across inference and retrieval components, top-K retrieval quality over time, safety finding categories, and ratings or written feedback. Read the information in context. A low average cost doesn't necessarily mean the application is efficient if users frequently receive wrong answers. Similarly, a low toxicity rate doesn't establish groundedness. The data first needs to be collected and prepared from permitted model and application telemetry, then published as a controlled QuickSight dataset. The displayed numbers are illustrative, not universal targets. When a team notices a high latency for one model, it can correlate that trend with request volume and error rates before deciding to change capacity or inference configuration. QuickSight helps different roles see meaningful trends; the underlying collection and quality evaluation remain separate responsibilities."
+    },
+    {
+      "slide": 11,
+      "title": "QuickSight Anti-Patterns",
+      "narration": "The left side of this comparison shows what not to ask QuickSight to do. It is not a transactional database editor, so creating, updating or deleting business records belongs in an application designed for those operations. Stale SPICE imports are another failure: a polished dashboard based on yesterday's data can lead to bad decisions. Next comes weak row-level security. Sharing a dashboard without suitable dataset restrictions may reveal one tenant's information to another. Finally, embedding database credentials in calculated fields, URLs or shared code exposes secrets. Follow the alternatives on the right. Use QuickSight for read-focused business intelligence, choose refresh schedules or direct query to match freshness, enforce the relevant row-level and group-based access rules, and use approved credential management rather than hard-coded secrets. This matters for GenAI monitoring because these dashboards may contain business-sensitive usage and evaluation results. Build reliable read-only analytics over trustworthy datasets and share only the information the viewer is entitled to see."
+    }
+  ]
+}
