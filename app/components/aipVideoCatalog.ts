@@ -64,6 +64,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "01", title: "Secure GenAI Architecture, Least Privilege and Data Masking", subtitle: "Security boundaries, IAM scoping, pseudonymisation and salted hashes", start: 1, end: 5 },
     { id: "02", title: "Password Salts, IAM Users, Policy Evaluation and JSON Policies", subtitle: "Password storage, user groups, explicit denies and policy syntax", start: 6, end: 10 },
     { id: "03", title: "IAM Password Policies, MFA, Service Roles and Identity Center", subtitle: "Authentication controls, temporary roles, federation and multi-account access", start: 11, end: 15 },
+    { id: "04", title: "Identity Center Guardrails, Control Tower and Transport Encryption", subtitle: "Permission sets, landing-zone governance, TLS and client-side encryption", start: 16, end: 20 },
+    { id: "05", title: "KMS Envelope Encryption, Key Ownership, Snapshots and Macie", subtitle: "Data keys, key control, encrypted disaster recovery, sensitive data and secrets", start: 21, end: 25 },
+    { id: "06", title: "Multi-Region Secrets, Cognito User Pools and Tenant Isolation", subtitle: "Regional secrets, user authentication, federated credentials and row security", start: 26, end: 30 },
   ],
   "07": [
     { id: "01", title: "Governance, Agent Tracing and Human Model Evaluation", subtitle: "Evaluation criteria, benchmarks and human review", start: 1, end: 5 },
