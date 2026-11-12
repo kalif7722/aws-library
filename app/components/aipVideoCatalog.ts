@@ -30,6 +30,12 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "07", title: "Amazon Q Business and Q Apps", subtitle: "Grounded answers, connectors, permissions, admin controls and apps", start: 41, end: 45 },
     { id: "08", title: "Amazon Q Developer", subtitle: "AWS operations, coding, IDE extensions and project rules", start: 46, end: 50 },
   ],
+  "04": [
+    { id: "01", title: "Tokens and Model Selection", subtitle: "CloudWatch monitoring, context pruning and cost-to-quality", start: 1, end: 6 },
+    { id: "02", title: "Throughput and Caching", subtitle: "Batch inference, capacity, semantic, prompt and edge caching", start: 7, end: 11 },
+    { id: "03", title: "Responsive AI and Retrieval", subtitle: "Streaming, model routing, RAG relevance and API profiling", start: 12, end: 16 },
+    { id: "04", title: "Resilient and Cross-Region Inference", subtitle: "SageMaker deployment, backoff, pooling and inference profiles", start: 17, end: 22 },
+  ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
     { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
