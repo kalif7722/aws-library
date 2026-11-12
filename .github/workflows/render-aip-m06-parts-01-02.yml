@@ -15,7 +15,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m06-video-01-02-v1
+  group: aip-m06-video-01-02-v2
   cancel-in-progress: false
 
 jobs:
@@ -31,11 +31,11 @@ jobs:
           - part: "01"
             start: 1
             end: 5
-            revision: "2026-11-12-m06-p01-lesson-map-v1"
+            revision: "2026-11-12-m06-p01-guided-lecture-v2"
           - part: "02"
             start: 6
             end: 10
-            revision: "2026-11-12-m06-p02-lesson-map-v1"
+            revision: "2026-11-12-m06-p02-guided-lecture-v2"
     steps:
       - uses: actions/checkout@v4
 
@@ -84,9 +84,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-v2-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aip-m06-p${{ matrix.part }}-tts-v1-
+            aip-m06-p${{ matrix.part }}-tts-v2-
 
       - name: Verify live R2 originals and render narration in one consistent voice
         env:
@@ -104,7 +104,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-v2-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
