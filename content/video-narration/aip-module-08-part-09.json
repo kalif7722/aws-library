@@ -7,11 +7,21 @@
   "voice": "en-US-AndrewNeural",
   "speech_rate": "-3%",
   "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
-  "review_basis": "Original R2 Module 08 slides 41-45 verified in spatial visual audit. New visual-grounded narration with independent fresh audio cache.",
+  "review_basis": "Topic-grouped visual-first narration on verified original R2 slides 39-44; breaks chosen by teaching continuity, not a fixed slide count.",
   "part_id": "09",
-  "part_title": "PrivateLink, Endpoint Service Security and GenAI Network Review",
-  "script_revision": "2026-11-12-m08-p09-r2-visual-v1",
+  "part_title": "Private AWS Access: VPC Endpoints, Hybrid Links and PrivateLink",
+  "script_revision": "2026-11-12-m08-p09-topic-private-v2",
   "scenes": [
+    {
+      "slide": 39,
+      "title": "VPC endpoints",
+      "narration": "The diagram contrasts a gateway endpoint with an interface endpoint. Gateway endpoints support S3 and DynamoDB through entries in the subnet route tables, so private workloads can reach those services without a NAT internet path. Interface endpoints instead create private network interfaces in selected subnets and provide PrivateLink connectivity to supported AWS APIs, including appropriate Bedrock endpoints. The cost panels help with design decisions: gateway endpoints generally have no separate hourly endpoint charge, while interface endpoints commonly incur hourly and data-processing fees. The endpoint's existence alone does not guarantee a successful request. The workload still needs IAM permissions, the correct service and Region, appropriate endpoint policy where supported, security group rules for interface endpoints and working private DNS or explicit endpoint configuration. When troubleshooting a model call, test name resolution, network reachability and authorisation separately. This slide teaches private access to specific managed services, not a blanket permission to reach everything inside AWS."
+    },
+    {
+      "slide": 40,
+      "title": "Site-to-Site VPN and Direct Connect",
+      "narration": "The left path creates an IPsec Site-to-Site VPN between on-premises customer networking equipment and an AWS gateway, using internet-based connectivity with encrypted tunnels. The right path uses AWS Direct Connect to provide a dedicated connection through a Direct Connect location. Compare the rows below. VPN can often be deployed faster, while Direct Connect can provide more predictable bandwidth for sustained enterprise traffic and typically needs more provisioning work. A crucial distinction is that Direct Connect is private connectivity, not automatically end-to-end encryption. If encryption is required, plan the appropriate overlay or tunnel. Both approaches need routing, firewall policy, authentication and redundant connections for high availability. For hybrid AI, the network may carry private source documents, API requests or data feeds, so performance, data residency, cost and encryption requirements matter. Choose based on measured workload characteristics rather than treating either option as universally superior."
+    },
     {
       "slide": 41,
       "title": "What is AWS PrivateLink?",
@@ -31,11 +41,6 @@
       "slide": 44,
       "title": "Secure GenAI application reference architecture",
       "narration": "This architecture brings the security services together. A user's request reaches Route 53 DNS, passes AWS WAF inspection, and enters an Application Load Balancer in public subnets. Application compute runs in private subnets and uses permitted VPC endpoints to call Amazon Bedrock. Secrets Manager protects credentials for downstream tools, KMS-backed encryption protects stored information, and CloudWatch monitors operational behavior. Observe the trust boundaries: untrusted internet traffic at the edge, private application networking, access to managed models, and protected data or secrets. Each boundary has a different control. WAF doesn't replace IAM, a security group doesn't validate a user's JWT, and encryption doesn't prevent an authorised-but-overprivileged service from misusing data. For resilient operation, deploy across appropriate Availability Zones and configure service-specific endpoint access. The key architectural lesson is defence in depth: verify who can call each component and what information may cross each boundary."
-    },
-    {
-      "slide": 45,
-      "title": "Identity decision guide",
-      "narration": "Start with the identity question across the top: is this an AWS workload, a workforce member or an end user of your application? A Lambda function, container or EC2 workload normally needs an IAM role with temporary credentials to call AWS APIs. Employees accessing multiple AWS accounts are better served by IAM Identity Center and centrally assigned permission sets. An IAM user is a separate identity with credentials and may be appropriate in limited circumstances, but shouldn't be the default for federated workforce access. Customer-facing login belongs in an identity system such as a Cognito user pool, which returns authentication tokens. If the application client needs temporary AWS credentials for direct access to resources like S3, a Cognito identity pool can broker an IAM role session. Those two Cognito components solve different problems and may be used together. Match the identity type to the caller and the access required, then enforce least privilege on the resulting session. A successful sign-in never automatically means unrestricted application access."
     }
   ]
 }
