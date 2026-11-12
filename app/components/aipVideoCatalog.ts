@@ -60,6 +60,11 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "08": [
+    { id: "01", title: "Secure GenAI Architecture, Least Privilege and Data Masking", subtitle: "Security boundaries, IAM scoping, pseudonymisation and salted hashes", start: 1, end: 5 },
+    { id: "02", title: "Password Salts, IAM Users, Policy Evaluation and JSON Policies", subtitle: "Password storage, user groups, explicit denies and policy syntax", start: 6, end: 10 },
+    { id: "03", title: "IAM Password Policies, MFA, Service Roles and Identity Center", subtitle: "Authentication controls, temporary roles, federation and multi-account access", start: 11, end: 15 },
+  ],
   "07": [
     { id: "01", title: "Governance, Agent Tracing and Human Model Evaluation", subtitle: "Evaluation criteria, benchmarks and human review", start: 1, end: 5 },
     { id: "02", title: "LLM-as-a-Judge, Hybrid Evaluation and Text Metrics", subtitle: "LLM judges, ROUGE, BLEU and BERTScore", start: 6, end: 10 },
