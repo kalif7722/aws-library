@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 M07 slides 30-34 checked against spatial slide audit; no old narration or TTS cache reused.",
+  "part_id": "07",
+  "part_title": "Bedrock Telemetry, RAG Quality and Release Observability",
+  "script_revision": "2026-11-12-m07-p07-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 30,
+      "title": "Bedrock and application observability boundaries",
+      "narration": "This architecture shows the boundary between a customer's application telemetry and the managed Bedrock model service. Follow the request from the user through the application into Bedrock, then the response back. The application is responsible for the telemetry it chooses to record: request ID, model ID, status, latency and token counts are usually more useful operationally than storing every message body. The right-hand panel explicitly warns against logging raw prompts, model responses, credentials, files or personal information by default. Now look at the privacy controls along the bottom: redact sensitive values, allowlist permitted fields, use least-privilege access, encrypt the data, set retention limits and adjust detail by environment. Even when a managed service provides logging options, the application must decide what should be collected and who may inspect it. The important teaching point is observability without uncontrolled content capture. You can measure reliability, spending and latency while storing only safe operational metadata, and add narrowly scoped diagnostic logging when there is an approved reason."
+    },
+    {
+      "slide": 31,
+      "title": "Monitoring retrieval-augmented generation quality",
+      "narration": "This slide follows the whole RAG path, not just model inference. First, trusted source documents are ingested and prepared. Second, an embedding model turns chunks into vectors. Third, vector search retrieves candidate passages for a user question. Fourth, the generation model uses those passages to produce an answer and citations. The worked example asks about customer-record retention and retrieves policy and compliance documents before composing an answer. Now examine the five quality metrics below. Retrieval hit rate measures whether at least one relevant document appears among the top results. Citation coverage checks whether answers cite retrieved sources. Groundedness asks whether the actual claims are supported by those sources. No-answer rate tracks how often the assistant correctly declines when evidence is missing. Stale-document rate measures freshness problems in indexed content. The numerical targets shown are examples, not universal standards. If groundedness drops, the cause may be outdated ingestion or poor retrieval rather than a worse foundation model. Track each stage separately, then correlate its metrics with user questions and document versions before changing prompts or models."
+    },
+    {
+      "slide": 32,
+      "title": "Observability release gate",
+      "narration": "This slide turns metrics into a release decision. At the left, four evidence sources feed the canary gate: CloudWatch metrics for latency and errors, Logs Insights for abnormal events, X-Ray for downstream calls, and evaluation scores for answer quality and safety. Follow the sample comparisons. A canary latency slightly above baseline may still pass an agreed tolerance, while a sharp error increase or a failed safety threshold should prevent promotion. The right-hand decision panel has three outcomes. Promote when all critical checks pass. Pause when an inconclusive or noncritical signal needs investigation. Roll back when a critical quality, reliability or safety condition fails. Note that individual sample thresholds on the slide illustrate policy choices; teams must set their own before deployment. One subtle point: the canary and baseline need comparable traffic and prompts, or the comparison will be misleading. A deployment should not be approved simply because an HTTP health check is green. Use the measured experience of real requests and model outputs to decide when it is safe to increase traffic."
+    },
+    {
+      "slide": 33,
+      "title": "X-Ray Sampling Strategy",
+      "narration": "Here we decide how many requests should produce detailed traces. The first path is reservoir sampling, which keeps a fixed-size initial sample, even when request volume changes. Rate-based sampling chooses a proportion of subsequent requests. The diagram also shows prioritising high-value requests such as errors or unusually slow interactions. The cost-versus-coverage chart below demonstrates the trade-off: tracing too little hides important failures, but collecting every trace may add unnecessary processing, storage or analysis burden. The right goal is representative visibility with enough detail to diagnose critical incidents. Importantly, ordinary sampling rules cannot guarantee that every failure will be retained if the error is only known after the sampling decision. If complete error coverage is a requirement, design an appropriate additional logging or telemetry mechanism. For a GenAI service, adjust sampling to request volume and risk: routine successful summarisation may need fewer traces than a rare high-impact administrative workflow. Sampling is an observability policy, not a performance fix."
+    },
+    {
+      "slide": 34,
+      "title": "X-Ray trace segments and subsegments",
+      "narration": "This timeline breaks one RAG request into a parent Lambda segment and downstream subsegments. Read the example request length, about eight hundred forty-two milliseconds, then follow the coloured intervals. Retrieval takes roughly one hundred twenty milliseconds, Bedrock invocation around four hundred thirty, DynamoDB about seventy, and S3 storage around one hundred eighty. The trace identifier connects them, while each subsegment has start and end timestamps, service names and operational annotations. The lower panels show useful details: retrieval top K and index name, model identifiers and token counts, S3 object information and DynamoDB operations. This is why a single latency total is insufficient. If the total grows, the trace tells us which dependency changed. Notice that parent and child times overlap: the Lambda segment spans its downstream calls, so don't sum them together as independent work. Restrict any captured query previews and identifiers to safe approved information. The lesson is to use segments for the overall request path and subsegments for specific network or service operations."
+    }
+  ]
+}
