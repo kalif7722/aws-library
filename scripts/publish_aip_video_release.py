@@ -69,6 +69,8 @@ EXPECTED = {
     ("08", "07"): (list(range(31, 33)), "2026-11-12-m08-p07-topic-waf-v2"),
     ("08", "08"): (list(range(33, 39)), "2026-11-12-m08-p08-topic-vpc-v2"),
     ("08", "09"): (list(range(39, 45)), "2026-11-12-m08-p09-topic-private-v2"),
+    ("08", "10"): (list(range(45, 51)), "2026-11-12-m08-p10-topic-v1"),
+    ("08", "11"): (list(range(51, 54)), "2026-11-12-m08-p11-topic-v1"),
     ("02", "01"): (list(range(1, 8)), "2026-11-11-m02-p01-visual-aligned-v1"),
     ("02", "02"): (list(range(8, 16)), "2026-11-11-m02-p02-visual-aligned-v1"),
     ("02", "03"): (list(range(16, 22)), "2026-11-11-m02-p03-visual-aligned-v1"),
