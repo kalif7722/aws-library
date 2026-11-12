@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "09",
+  "module_title": "Analytics, BI and Streaming Data",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Source R2 Module 09 slides 21-24 confirmed in visual spatial audit; topic-first educational narration with independent audio revision.",
+  "part_id": "06",
+  "part_title": "Amazon MSK: Kafka Architecture, Partitioning and Independent Consumers",
+  "script_revision": "2026-11-13-m09-p06-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 21,
+      "title": "Amazon MSK architecture",
+      "narration": "Start with producers publishing events to Kafka topics in an Amazon MSK cluster. The cluster runs brokers in a VPC across multiple Availability Zones. Topic partitions are distributed and replicated across brokers, so an appropriately configured deployment can continue operating when a broker or zone is impaired. The upper panel describes the managed control plane: AWS provisions and monitors the MSK infrastructure and handles supported maintenance operations. But teams still own important workload decisions, including topic definitions, retention, partition counts, client configuration and the application processing logic. Follow the consumer paths on the right, which independently read records for analytics or event-driven applications. Security matters at the network and identity boundaries: configure VPC reachability, TLS, authentication, authorisation and encryption as supported by the selected MSK offering. Replication is not a substitute for application-level recovery or appropriate producer acknowledgements. For a GenAI telemetry architecture, Kafka's mature ecosystem may be valuable when the organisation already uses Kafka clients, connectors and stream processing systems."
+    },
+    {
+      "slide": 22,
+      "title": "Apache Kafka at a High Level",
+      "narration": "The middle of this slide is a Kafka topic called orders, split into several partitions. Producers append ordered records to each partition, and offsets identify positions within that partition starting from zero in the example. A consumer group distributes partitions among its members so that a partition is ordinarily assigned to one active consumer in that group. This allows group members to scale processing in parallel, limited by partition count. Now look at the second consumer group reading the same topic: its offsets are independent, so a fulfillment service and an analytics application can process the same underlying events at different speeds without deleting data for each other. The critical distinction is between sequence within one partition and order across the topic. Kafka does not promise one global ordering across multiple partitions. For event designs that need per-customer or per-order sequence, choose a consistent message key so related records are routed to the same partition. Persisting and committing offsets correctly helps recover after restarts, but application side effects must still handle potential reprocessing."
+    },
+    {
+      "slide": 23,
+      "title": "Kinesis Data Streams versus Amazon MSK",
+      "narration": "This comparison asks which streaming platform fits the environment, not which logo is better. Kinesis Data Streams provides AWS-native record ingestion with managed stream capacity choices and integration into AWS consumer and analytics services. Amazon MSK runs managed Apache Kafka infrastructure, giving teams compatibility with the Kafka protocol, existing clients, connectors and processing frameworks. The left diagram uses Kinesis shards and AWS-oriented consumers; the right uses Kafka brokers, topics, partitions and consumer groups. In both cases, producers and consumers are decoupled, and records can be read independently while retained. The operational differences matter. With MSK, you still design topics, brokers or serverless capacity depending on the offering, client permissions and Kafka operations. With Kinesis, you plan the right capacity mode, partition key distribution and consumer design. Existing Kafka expertise, hybrid integrations and specialised connectors may favour MSK. A simpler AWS-centric event pipeline may favour Kinesis. Compare cost, operational effort, authentication, throughput and ecosystem compatibility for the actual use case."
+    },
+    {
+      "slide": 24,
+      "title": "MSK Consumers: Independent Processing",
+      "narration": "Here one MSK topic powers three different consumers: Lambda for lightweight event enrichment, ECS containers for business application processing, and EMR for distributed analytics or feature preparation. Each application runs as a separate Kafka consumer group with its own offsets, so one group's progress does not force the others to advance. The slide shows the same partitions on each branch, emphasising that consumption is independent. Within a group, partitions are assigned across workers, and adding consumers beyond the available partitions does not automatically increase useful parallelism. After a restart, consumers resume from committed offsets according to their configuration. That can lead to reprocessing, so consumers should make downstream operations idempotent. Be careful with checkpoint semantics and retries when an application writes to a database before committing its offset. For a GenAI system, these independent paths might produce operational alerts, update business services and curate an offline evaluation dataset using the same stream. One Kafka topic can support different needs without duplicating the producer."
+    }
+  ]
+}
