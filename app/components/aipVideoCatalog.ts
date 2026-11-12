@@ -60,6 +60,15 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "09": [
+    { id: "01", title: "GenAI Analytics Architecture and Amazon Athena", subtitle: "S3 analytics data, Athena query execution and grounded SQL answers", start: 1, end: 3 },
+    { id: "02", title: "Amazon EMR: Distributed Processing, Usage Patterns and Frameworks", subtitle: "Distributed Spark processing, EMR deployment patterns and engines", start: 4, end: 6 },
+    { id: "03", title: "Amazon QuickSight: Data Sources, Query Modes and GenAI Dashboards", subtitle: "QuickSight architecture, data sources, SPICE, dashboards and anti-patterns", start: 7, end: 11 },
+    { id: "04", title: "QuickSight Security, Cross-Region Access and User Management", subtitle: "QuickSight account/data permissions, regional and account boundaries, row security", start: 12, end: 16 },
+    { id: "05", title: "Kinesis Data Streams: Shards, Replay, Capacity and GenAI Pipelines", subtitle: "Kinesis partitioning, record replay, scaling modes and real-time GenAI telemetry", start: 17, end: 20 },
+    { id: "06", title: "Amazon MSK: Kafka Architecture, Partitioning and Independent Consumers", subtitle: "MSK brokers, topics, partitions, Kafka groups and Kinesis comparison", start: 21, end: 24 },
+    { id: "07", title: "Choosing Analytics Services and an Integrated GenAI Data Architecture", subtitle: "Decision tree and integrated streaming, data-lake, BI and AI architecture", start: 25, end: 26 },
+  ],
   "08": [
     { id: "01", title: "Secure GenAI Architecture, Least Privilege and Data Masking", subtitle: "Security boundaries, IAM scoping, pseudonymisation and salted hashes", start: 1, end: 5 },
     { id: "02", title: "Password Salts, IAM Users, Policy Evaluation and JSON Policies", subtitle: "Password storage, user groups, explicit denies and policy syntax", start: 6, end: 10 },
