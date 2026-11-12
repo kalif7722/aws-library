@@ -1,0 +1,76 @@
+name: Audit AIP Module 12 original slides 10-11
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/audit-aip-m12-visuals-10-11.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-m12-visual-audit-10-11-v1
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Extract original slide labels 10-11 from R2
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install image analysis dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr
+          python -m pip install --disable-pip-version-check "requests>=2.31,<3" "Pillow>=10,<13" "pytesseract>=0.3.10,<1"
+      - name: Inspect original numbered slides, preserving on-screen spatial structure
+        run: |
+          python scripts/audit_aip_visual_slide_labels.py \
+            --module 12 --start 10 --end 11 \
+            --output docs/video-review/aip/module-12/visual-ocr-10-11.json
+      - name: Commit visual audit through GitHub API
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import base64,json,os,time,urllib.request,urllib.error
+          from pathlib import Path
+          data=Path("docs/video-review/aip/module-12/visual-ocr-10-11.json").read_bytes()
+          repo=os.environ["GITHUB_REPOSITORY"]
+          url=f"https://api.github.com/repos/{repo}/contents/docs/video-review/aip/module-12/visual-ocr-10-11.json"
+          headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","Content-Type":"application/json"}
+          def request(method,payload=None):
+              req=urllib.request.Request(url,data=json.dumps(payload).encode() if payload else None,headers=headers,method=method)
+              try:
+                  with urllib.request.urlopen(req,timeout=35) as r:
+                      return r.status,json.load(r)
+              except urllib.error.HTTPError as e:
+                  if e.code in (404,409,422,429,502,503):
+                      return e.code,{"message":e.read(300).decode(errors="replace")}
+                  raise
+          for attempt in range(6):
+              code,existing=request("GET")
+              payload={"message":"Record original M06 slide OCR audit 10-11 for visual-aligned narration","branch":"main","content":base64.b64encode(data).decode()}
+              if code==200:
+                  payload["sha"]=existing["sha"]
+              elif code!=404:
+                  time.sleep(2**attempt)
+                  continue
+              status,result=request("PUT",payload)
+              if status in (200,201):
+                  print("Committed audit to main",result["content"]["sha"])
+                  break
+              print("Retrying GitHub update:",status,result)
+              time.sleep(2**attempt)
+          else:
+              raise RuntimeError("Could not commit verified visual audit")
+          PY
