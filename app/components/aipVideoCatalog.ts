@@ -63,6 +63,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
   "07": [
     { id: "01", title: "Governance, Agent Tracing and Human Model Evaluation", subtitle: "Evaluation criteria, benchmarks and human review", start: 1, end: 5 },
     { id: "02", title: "LLM-as-a-Judge, Hybrid Evaluation and Text Metrics", subtitle: "LLM judges, ROUGE, BLEU and BERTScore", start: 6, end: 10 },
+    { id: "03", title: "Evaluation Strategy, Responsible AI and CloudWatch Logs", subtitle: "Choosing evaluation approaches, deployment readiness, responsible AI and logging architecture", start: 11, end: 15 },
+    { id: "04", title: "CloudWatch Log Collection, Insights, Exports and Alarms", subtitle: "Collect logs, query failures, export and subscribe to events, configure AI alerts", start: 16, end: 20 },
+    { id: "05", title: "CloudWatch Alarm Actions, Composite Alarms and AI Quality Dashboards", subtitle: "Alarm targets, composite decisions, prompt regression and operational dashboards", start: 21, end: 24 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
