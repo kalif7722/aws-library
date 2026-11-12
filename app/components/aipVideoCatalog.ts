@@ -67,6 +67,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "04", title: "Identity Center Guardrails, Control Tower and Transport Encryption", subtitle: "Permission sets, landing-zone governance, TLS and client-side encryption", start: 16, end: 20 },
     { id: "05", title: "KMS Envelope Encryption, Key Ownership, Snapshots and Macie", subtitle: "Data keys, key control, encrypted disaster recovery, sensitive data and secrets", start: 21, end: 25 },
     { id: "06", title: "Multi-Region Secrets, Cognito User Pools and Tenant Isolation", subtitle: "Regional secrets, user authentication, federated credentials and row security", start: 26, end: 30 },
+    { id: "07", title: "AWS WAF, Web ACLs, VPC Design and Internet Egress", subtitle: "WAF filtering, rule priority, subnets, private AI networking and NAT", start: 31, end: 35 },
+    { id: "08", title: "Network ACLs, Flow Logs, VPC Peering and Private Connectivity", subtitle: "Stateful and stateless security, network logs, peering and hybrid links", start: 36, end: 40 },
+    { id: "09", title: "PrivateLink, Endpoint Service Security and GenAI Network Review", subtitle: "Private service connectivity, endpoint permissions, VPC security and identity selection", start: 41, end: 45 },
   ],
   "07": [
     { id: "01", title: "Governance, Agent Tracing and Human Model Evaluation", subtitle: "Evaluation criteria, benchmarks and human review", start: 1, end: 5 },
