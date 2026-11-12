@@ -625,6 +625,22 @@ const CONFIG: Record<string, {
     firstTitle: "Choosing a database by access pattern",
     title: "Database Selection Guide and Integrated GenAI Data Architecture",
   },
+  "12-01": {
+    prefix: "module-12/part-01/aip-module-12-part-01",
+    revision: "2026-11-13-m12-p01-r2-topic-v1",
+    firstSlide: 1,
+    count: 5,
+    firstTitle: "Developer Tools Working Together",
+    title: "Developer Tools and CDK: Synthesis, SAM Testing and Event-Driven Example",
+  },
+  "12-02": {
+    prefix: "module-12/part-02/aip-module-12-part-02",
+    revision: "2026-11-13-m12-p02-r2-topic-v1",
+    firstSlide: 6,
+    count: 2,
+    firstTitle: "Console, CLI and SDK access",
+    title: "AWS Console, CLI and SDK: Identity, Credentials and API Access",
+  },
   "02-01": {
     prefix: "module-02/part-01/aip-module-02-part-01",
     revision: "2026-11-11-m02-p01-visual-aligned-v1",
