@@ -468,7 +468,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   useEffect(() => {
     const ctrl = new AbortController();
     setSelected("01");
-    if (moduleId === "01" || moduleId === "02" || moduleId === "03" || moduleId === "04") {
+    if (moduleId === "01" || moduleId === "02" || moduleId === "03" || moduleId === "04" || moduleId === "05") {
       const current = new URLSearchParams(window.location.search).get("videoPart");
       const available=AIP_VIDEO_PARTS[moduleId]??[];
       if (available.some(p => p.id === current)) setSelected(current!);
