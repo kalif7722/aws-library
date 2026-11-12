@@ -7,10 +7,10 @@
   "voice": "en-US-AndrewNeural",
   "speech_rate": "-3%",
   "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
-  "review_basis": "Published Module 06 course slide-map titles and technical AWS service explanations; source WebPs verified by GitHub rendering workflow. Image-level visual inspection not claimed.",
+  "review_basis": "Existing source lesson map for slides 56–60; renderer verifies original R2 WebP files. Recovered slides 61 onward are different topics.",
   "part_id": "09",
-  "part_title": "Amazon SQS Queues, Consumer Scaling and AWS Amplify",
-  "script_revision": "2026-11-12-m06-p09-lesson-map-v1",
+  "part_title": "Amazon SQS Fundamentals and Queue Consumers",
+  "script_revision": "2026-11-12-m06-p09-recovered-boundary-v2",
   "scenes": [
     {
       "slide": 56,
@@ -36,26 +36,6 @@
       "slide": 60,
       "title": "SQS with Multiple EC2 Consumers",
       "narration": "Multiple EC2 worker instances can poll the same SQS queue to share a backlog. Each visible message is delivered to an eligible consumer, rather than being broadcast to all workers. Visibility timeouts help prevent concurrent processing in normal operation, but duplicate delivery remains possible. Consumers need the appropriate IAM role, network access and application-level idempotency. Monitor approximate queue depth and age of the oldest message to understand whether processing keeps pace. In an AI batch pipeline, workers can independently process document references, write results to durable storage and delete messages only once the output is committed.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
-    },
-    {
-      "slide": 61,
-      "title": "SQS with an Auto Scaling Group",
-      "narration": "An Auto Scaling group can add or remove worker instances as queue demand changes. A useful scaling signal compares visible backlog to the amount of work each instance can process at the desired latency. CPU utilization alone may not reflect a queue-driven bottleneck. Allow instances to finish or safely return in-flight tasks before termination, and choose visibility timeouts carefully. Scaling workers faster than downstream APIs can handle may cause throttling, so consider Bedrock or database capacity alongside compute capacity. Measure queue age, processing time and error rate, not just the number of launched instances.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
-    },
-    {
-      "slide": 62,
-      "title": "Using SQS to Decouple Application Tiers",
-      "narration": "A front-end tier accepts a request and places durable work on SQS, while a worker tier processes it asynchronously and stores the outcome. The web tier can remain responsive even when downstream demand temporarily exceeds processing capacity. This is especially useful for document extraction, embedding creation and long GenAI summaries that do not fit a synchronous HTTP response. Design a status endpoint or notification mechanism so callers can retrieve results later. Make retries safe through idempotency keys and persistent result tracking. SQS improves isolation but does not guarantee a specific processing deadline or exactly-once side effects.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
-    },
-    {
-      "slide": 63,
-      "title": "Amazon SQS Security",
-      "narration": "SQS security includes IAM identity policies, queue resource policies, encryption and controlled network paths where appropriate. Least-privilege producers need send permissions, while consumers need receive, delete and visibility-change permissions. Server-side encryption protects stored messages, and HTTPS protects transport. If using customer-managed KMS keys, grant the necessary key permissions to the correct actors. Queue policies are especially important for cross-account senders and service principals such as SNS. Never put unprotected secrets or unnecessary personal data in a message body. Audit access and use dead-letter queues carefully because failed payloads may remain retained for analysis.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
-    },
-    {
-      "slide": 64,
-      "title": "AWS Amplify for Web and Mobile Applications",
-      "narration": "AWS Amplify provides tooling and managed capabilities to build and deliver web and mobile applications. It can help developers connect front-end experiences with supported authentication, data, storage and deployment workflows. In a generative AI application, a client may authenticate users, upload documents and call a protected backend API that handles Bedrock access. Keep model credentials and privileged operations on the server side; browser code should not embed powerful AWS permissions. Assess the particular Amplify generation and framework before choosing configuration details, because APIs and deployment workflows evolve. Trace how the client obtains identity and which backend resource is authorized.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
     }
   ]
 }
