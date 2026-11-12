@@ -71,3 +71,14 @@ test("fullscreen titles and controls fade out when idle and reveal at pointer ed
   assert.match(player,/onPointerDown=\{event=>\{if\(fullscreen&&event\.pointerType==="touch"\)revealHud/);
   assert.match(player,/onFocus=\{\(\)=>\{if\(fullscreen\)revealHud/);
 });
+
+const modulePage=readFileSync(new URL("../app/courses/aws-generative-ai-developer-professional/visual/[moduleId]/page.tsx",import.meta.url),"utf8");
+const videoCatalog=readFileSync(new URL("../app/components/aipVideoCatalog.ts",import.meta.url),"utf8");
+
+test("module page renders any registered lecture catalog module, including M08",()=>{
+  assert.match(videoCatalog,/"08":\\s*\\[/);
+  assert.match(modulePage,/import \\{AIP_VIDEO_PARTS\\} from/);
+  assert.match(modulePage,/const hasVideoLectures = \\(AIP_VIDEO_PARTS\\[id\\]\\?\\.length \\?\\? 0\\) > 0;/);
+  assert.match(modulePage,/\\{hasVideoLectures && <AipVideoLectures moduleId=\\{id\\} \\/>\\}/);
+  assert.doesNotMatch(modulePage,/id === "07"\\) && <AipVideoLectures/);
+});
