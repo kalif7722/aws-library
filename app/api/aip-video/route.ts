@@ -745,6 +745,22 @@ const CONFIG: Record<string, {
     firstTitle: "Amazon Managed Grafana Architecture",
     title: "Amazon Managed Grafana: Observability Data Sources, Dashboards and Alerts",
   },
+  "15-01": {
+    prefix: "module-15/part-01/aip-module-15-part-01",
+    revision: "2026-11-13-m15-p01-r2-topic-v1",
+    firstSlide: 1,
+    count: 3,
+    firstTitle: "Choose the transfer service",
+    title: "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration",
+  },
+  "15-02": {
+    prefix: "module-15/part-02/aip-module-15-part-02",
+    revision: "2026-11-13-m15-p02-r2-topic-v1",
+    firstSlide: 4,
+    count: 3,
+    firstTitle: "Agentless AWS Storage Transfer",
+    title: "Agentless Transfer, Task Controls and Data Integrity",
+  },
   "14-05": {
     prefix: "module-14/part-05/aip-module-14-part-05",
     revision: "2026-11-13-m14-p05-r2-topic-v1",
