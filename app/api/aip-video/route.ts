@@ -251,11 +251,11 @@ const CONFIG: Record<string, {
   },
   "06-05": {
     prefix: "module-06/part-05/aip-module-06-part-05",
-    revision: "2026-11-12-m06-p05-specific-narration-v2",
+    revision: "2026-11-12-m06-p05-visual-audit-v3",
     firstSlide: 25,
     count: 8,
-    firstTitle: "AWS Step Functions",
-    title: "Step Functions, ML Orchestration and Resilience",
+    firstTitle: "Train a model with a state machine",
+    title: "Step Functions Model Workflows, Resilience, Agent Controls and CI/CD",
   },
   "06-06": {
     prefix: "module-06/part-06/aip-module-06-part-06",
