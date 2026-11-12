@@ -481,6 +481,22 @@ const CONFIG: Record<string, {
     firstTitle: "VPC endpoints",
     title: "Private AWS Access: VPC Endpoints, Hybrid Links and PrivateLink",
   },
+  "08-10": {
+    prefix: "module-08/part-10/aip-module-08-part-10",
+    revision: "2026-11-12-m08-p10-topic-v1",
+    firstSlide: 45,
+    count: 6,
+    firstTitle: "Identity decision guide",
+    title: "Security Architecture Decision Guides and Integrated Review",
+  },
+  "08-11": {
+    prefix: "module-08/part-11/aip-module-08-part-11",
+    revision: "2026-11-12-m08-p11-topic-v1",
+    firstSlide: 51,
+    count: 3,
+    firstTitle: "IAM Least-Privilege Lab Overview",
+    title: "Hands-On Security Labs: Least Privilege, IAM Policy Simulator and SSE-KMS",
+  },
   "02-01": {
     prefix: "module-02/part-01/aip-module-02-part-01",
     revision: "2026-11-11-m02-p01-visual-aligned-v1",
