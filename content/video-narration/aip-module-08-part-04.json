@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "08",
+  "module_title": "Security, Identity, and Compliance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 08 R2 slides 16–20 verified from GitHub-runner spatial audit; original visuals and completely fresh TTS.",
+  "part_id": "04",
+  "part_title": "Identity Center Guardrails, Control Tower and Transport Encryption",
+  "script_revision": "2026-11-12-m08-p04-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "Fine-grained permissions with IAM Identity Center",
+      "narration": "Follow the Data Platform team from IAM Identity Center into two separate AWS accounts. In Account A, the team receives an S3 read-only permission set for approved data-lake buckets. GetObject and ListBucket are allowed, but writing or deleting the dataset isn't. Account B is a development environment where another permission set permits EC2, ECR and CloudWatch operations needed to build and test software. Notice the important separation: the same employees have different effective access depending on which account and permission set they select. The lower panel adds a permissions boundary, which limits the maximum permissions of a provisioned role even when an identity policy appears more generous. A boundary does not grant permissions by itself; it constrains what can be granted. Also remember that a boundary is not a substitute for organisation-level service control policies or account assignments. When designing this pattern, identify the team's real tasks, define per-account permission sets, apply supported boundaries and test that production access remains unavailable. This is how centrally managed identities coexist with account-level least privilege."
+    },
+    {
+      "slide": 17,
+      "title": "AWS Control Tower landing zone",
+      "narration": "This slide shows a multi-account landing zone rather than one large AWS account. Start at AWS Organizations, which provides the organisation and account hierarchy. The management account coordinates governance. A logging account centralises audit records such as CloudTrail and relevant network logs, while an audit or security account supports security oversight. Below, development, test, production and shared-services accounts remain separate environments with their own resources. IAM Identity Center sits alongside this structure to provide centralised workforce access using assigned permission sets. The guardrails across the bottom apply preventive or detective controls to participating accounts. Why create this foundation before launching GenAI applications? Separating model experimentation from production data reduces unintended access and makes investigations easier. A central logging account preserves evidence even if a workload account becomes compromised. Control Tower helps establish and govern the landing zone, but teams must still configure application roles, data access, network design and service-specific safeguards. It creates a governed starting point, not an automatically secure AI application."
+    },
+    {
+      "slide": 18,
+      "title": "Control Tower guardrails",
+      "narration": "Compare the two kinds of Control Tower guardrails in this diagram. A preventive control blocks a prohibited action before it succeeds. The example tries to make an S3 bucket public, but the governing policy rejects the change. A detective control observes configuration and reports noncompliance after it exists. In the example, development and test have CloudTrail enabled, while the production account has a disabled trail and is flagged for investigation. On the right, that finding produces a security notification or remediation ticket. Preventive and detective controls therefore work at different points: prevent what must never happen, detect what may drift, and assign an owner to correct it. In a multi-account organisation, policies and controls are often attached to organisational units, so new accounts can inherit appropriate governance. But a detective finding is not the same as an automatic repair; remediation requires a separate workflow or operator action. Evaluate the control's scope, Region coverage and exceptions before assuming every account is protected. Use both control types to reduce the risk of insecure AI data and model infrastructure."
+    },
+    {
+      "slide": 19,
+      "title": "Encryption in transit",
+      "narration": "Follow the HTTPS connection from the user's application to an AWS service endpoint. The client contacts the endpoint, validates the server's TLS certificate and negotiates cryptographic session keys through the TLS handshake. After the handshake, application traffic is encrypted and integrity protected as it crosses the network. The lower callouts explain why those steps matter. Confidentiality protects requests from casual interception. Authentication helps the client confirm it reached the intended server. Key agreement produces session secrets, often with ephemeral key exchange, and authenticated encryption helps detect tampering. For a GenAI application, this protects prompts, retrieved context and inference results while moving between components. However, TLS encryption stops at the terminating endpoint, where authorised software can process plaintext. It doesn't automatically protect a stored object or prevent an overprivileged Lambda function from leaking data. Use HTTPS for service communication, validate certificates correctly and combine transport security with identity controls and encryption at rest. Don't disable TLS verification to work around an integration error."
+    },
+    {
+      "slide": 20,
+      "title": "Encryption at Rest: Server-Side vs. Client-Side",
+      "narration": "This slide shows two encryption boundaries. On the left, server-side encryption means the application sends its data to a service such as S3 over HTTPS, and the service encrypts it before storing it. Depending on the option, this may use service-managed keys or KMS-managed keys. The service performs decryption as needed for an authorised read. On the right, client-side encryption moves encryption into the application before upload. The application can request a data key from KMS, encrypt its content locally, and upload ciphertext with the information needed to recover the encrypted key. This gives the application more control over when plaintext exists. The comparison at the bottom asks you to choose based on simplicity, key ownership, compliance and who is authorised to decrypt. Be precise: even with client-side encryption, an application that decrypts before sending content to a model can expose that plaintext at the inference boundary. Encryption at rest also doesn't replace access policies or secret management. Design the whole data path, not just the storage setting."
+    }
+  ]
+}
