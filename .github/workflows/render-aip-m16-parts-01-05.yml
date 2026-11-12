@@ -82,7 +82,7 @@ jobs:
           from pathlib import Path
           audit=json.loads(Path("docs/video-review/aip/module-16/visual-ocr-01-18.json").read_text())
           slides=audit["slides"]
-          assert audit["module"]=="15", "Wrong audit module"
+          assert audit["module"]=="16", "Wrong audit module"
           assert len(slides)==18 and [s["slide"] for s in slides]==list(range(1,19)), "Incomplete source audit"
           assert all(s["status"]=="ok" and s.get("header_candidates") for s in slides), "An original R2 image failed source verification"
           assert all(s.get("image_size")==[2048,1152] for s in slides), "Unexpected original image dimensions"
