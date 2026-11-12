@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "15",
+  "module_title": "Migration and Data Transfer",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 15 slides 01–06 passed spatial audit. Legacy titles for slides 05–06 were incorrect; scripts follow actual visible DataSync slides.",
+  "part_id": "01",
+  "part_title": "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration",
+  "script_revision": "2026-11-13-m15-p01-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Choose the transfer service",
+      "narration": "Start with the two services on the slide. The DataSync panel on the left shows an on-premises file server moving data into AWS storage, such as Amazon S3 or Amazon EFS. Its purpose is bulk movement and repeatable synchronization between supported storage locations. The Transfer Family panel on the right shows clients and business partners using familiar SFTP, FTPS, or FTP protocols against a managed endpoint, with files delivered to supported AWS storage. These are different use cases: a synchronization task versus a client-facing file transfer service. Follow each diagram's arrows and notice who initiates the transfer. DataSync handles configured tasks and schedules, while Transfer Family accepts protocol connections from external users. At the bottom, both branches eventually reach a private staging area and a separate generative AI ingestion pipeline. The note is important: neither DataSync nor Transfer Family automatically parses documents, creates vector embeddings, or indexes a knowledge base. You must design that downstream processing separately. Choose based on protocol requirements, location compatibility, partner access, and whether the workload is a scheduled migration or an interactive transfer endpoint."
+    },
+    {
+      "slide": 2,
+      "title": "AWS DataSync: Objects and Lifecycle",
+      "narration": "Read the slide from left to right: configure, execute, transfer and verify, then inspect task metrics. Define the source location, destination location, and a task that connects them. The task options include paths, filters, schedule, overwrite, and delete behavior. When you execute it, DataSync enumerates eligible files and determines what needs transferring, then performs copying and configured integrity checks. The sample report shows twelve thousand eight hundred forty-two files transferred, two hundred fifty-six gigabytes transferred, and fourteen minutes elapsed. It also shows a substantial count of unchanged files skipped. These values describe an illustration, not a service-level promise. On the first execution, DataSync may copy every eligible file; future runs can focus on changes. The three notes along the bottom emphasize that a task is directional, not a bidirectional conflict resolver, and that deletion and overwrite choices must be reviewed before use. For troubleshooting, read the actual task report, especially files skipped, verified, or failed, rather than relying only on the total number of bytes moved."
+    },
+    {
+      "slide": 3,
+      "title": "On-premises NFS/SMB migration with AWS DataSync",
+      "narration": "Trace the diagram from an NFS or SMB file server in the on-premises environment through a locally deployed DataSync agent to the managed DataSync service in AWS. The agent needs access to the source share and is best positioned close to storage for reliable throughput. The connection across the network is encrypted, and the image calls out TLS one point two or later. The lower panel also highlights DNS resolution and outbound HTTPS access to relevant DataSync endpoints, including port four hundred forty-three for service communication. On the right, choose the correct destination: Amazon S3 for object storage or data lakes, Amazon EFS for shared NFS file access, or a supported Amazon FSx file system for application-specific file workloads. These destinations differ in access semantics and metadata behavior. In particular, S3 is object storage, not a POSIX file system. Before migration, validate source permissions, agent health, endpoint connectivity, the target storage configuration, and metadata requirements. After migration, a GenAI data ingestion pipeline still has to parse and index the newly transferred documents."
+    }
+  ]
+}
