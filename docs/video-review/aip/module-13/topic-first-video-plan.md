@@ -1,18 +1,17 @@
-# AIP Module 13 — Machine Learning Services video production
+# AIP Module 13 — verified topic-first video plan
 
-Original R2 images: `module-13/slide-01.webp` through `slide-12.webp`.
-Source audit: `docs/video-review/aip/module-13/visual-ocr-01-12.json`; workflow `.github/workflows/audit-aip-m13-visuals-01-12.yml`.
+Original source: `aws-genai-course-visuals/module-13/slide-NN.webp`. The complete 12-slide spatial audit was committed to `docs/video-review/aip/module-13/visual-ocr-01-12.json`. All twelve original images passed source verification.
 
-**Status:** Source audit requested. Legacy titles are provisional; verify headings and architecture in each original R2 image before writing/rendering narration.
+| Video | Original R2 slides | Teaching topic |
+|---|---|---|
+| 01 | 01–03 | Service selection and A2I human-review workflow and governance |
+| 02 | 04–05 | Amazon Kendra document indexing and retrieval quality |
+| 03 | 06–07 | Lex V2 conversational design and Lambda/Connect integration |
+| 04 | 08–11 | Rekognition, custom-label model lifecycle and image moderation |
+| 05 | 12 | Textract scanned-invoice extraction and structured validation |
 
-## Topic-first candidate sections
-| Candidate slides | Complete educational topic |
-|---|---|
-| 01–02 | AWS machine learning service landscape and human review with A2I |
-| 03 | Kendra enterprise search and retrieval |
-| 04 | Lex conversational bots and interaction design |
-| 05–08 | Rekognition, custom labels, moderation and API integration |
-| 09 | Textract document extraction |
-| 10–12 | Transcribe speech recognition, accuracy enhancement and toxicity detection |
+**Status:** All 12 narrated, mapped to the player API, catalog, captions and lesson-map titles. Two isolated fresh-audio rendering workflows have been committed: `render-aip-m13-parts-01-03.yml` and `render-aip-m13-parts-04-05.yml`. R2 MP4 upload and live player readiness remain unverified.
 
-Adjust ranges after R2 inspection; no fixed five-slide segments. Narrate actual diagrams, parameters, control flow, caveats, use cases, security and operational tradeoffs. Align script revisions, exact slide order and titles across catalog, API, captions and R2 manifests. Do not render or publish until every targeted source image is verified.
+**Important correction:** The legacy lesson map incorrectly suggested slide 10–12 were Transcribe and toxicity detection. Original slide 10 is Rekognition moderation, slide 11 is moderation of generated images, and slide 12 is Textract. Transcribe is only featured in the slide 1 overview, not a separate lesson in the actual R2 slide range.
+
+Quality gates: Revisions, original slide ranges, first titles and R2 MP4 plus manifest must agree. The source-audited video splits are based on complete teaching topics, never on a five-slide quota. Re-render only if the actual R2 manifest needs repair.
