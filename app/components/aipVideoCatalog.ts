@@ -60,6 +60,10 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "15": [
+    { id: "01", title: "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration", subtitle: "DataSync vs Transfer Family, task lifecycle and NFS/SMB migration", start: 1, end: 3 },
+    { id: "02", title: "Agentless Transfer, Task Controls and Data Integrity", subtitle: "AWS storage transfers, overwrite/delete settings, verification and archives", start: 4, end: 6 },
+  ],
   "14": [
     { id: "01", title: "GenAI Capacity Management: Target Tracking, Predictive Scaling and Guardrails", subtitle: "Scaling responsibilities, target tracking, predictive plans and Bedrock quota guardrails", start: 1, end: 5 },
     { id: "02", title: "AWS Cost Anomaly Detection: Baselines, Alerts and Incident Triage", subtitle: "Anomaly baselines, alert subscriptions and root-cause cost triage", start: 6, end: 7 },
