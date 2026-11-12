@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - "content/video-narration/aip-module-08-part-09.json"
-      - "content/video-narration/aip-module-08-part-10.json"
-      - "content/video-narration/aip-module-08-part-11.json"
+      - "content/video-narration/aip-module-08-part-01.json"
+      - "content/video-narration/aip-module-08-part-02.json"
+      - "content/video-narration/aip-module-08-part-03.json"
       - ".github/workflows/render-aip-m08-parts-01-03.yml"
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   render:
-    name: M07 Part ${{ matrix.part }} — narrated AWS data diagrams
+    name: M08 Part ${{ matrix.part }} — narrated AWS data diagrams
     runs-on: ubuntu-latest
     timeout-minutes: 150
     strategy:
@@ -82,7 +82,7 @@ jobs:
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
           assert all(len(s["narration"].split())>=100 for s in m["scenes"])
-          print(f"Verified M07 Part {p}: {len(slides)} visually grounded lecture scenes")
+          print(f"Verified M08 Part {p}: {len(slides)} visually grounded lecture scenes")
           PY
 
       - name: Restore existing valid audio chunks from a previous interrupted run
