@@ -44,7 +44,7 @@ EXPECTED = {
     ("06", "06"): (list(range(33, 42)), "2026-11-12-m06-p06-r2-audited-v3"),
     ("06", "07"): (list(range(42, 49)), "2026-11-12-m06-p07-r2-audited-v3"),
     ("06", "08"): (list(range(49, 56)), "2026-11-12-m06-p08-r2-audited-v3"),
-    ("06", "09"): (list(range(56, 61)), "2026-11-12-m06-p09-nontemplate-v3"),
+    ("06", "09"): (list(range(56, 61)), "2026-11-12-m06-p09-r2-audited-v4"),
     ("06", "10"): (list(range(61, 64)), "2026-11-12-m06-p10-nontemplate-v3"),
     ("06", "11"): (list(range(64, 69)), "2026-11-12-m06-p11-nontemplate-v3"),
     ("06", "12"): (list(range(69, 73)), "2026-11-12-m06-p12-nontemplate-v3"),
