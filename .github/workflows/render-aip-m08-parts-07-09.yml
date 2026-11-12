@@ -48,7 +48,55 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Check R2 manifest and MP4 before deciding whether to rerender
+        id: existing
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          PART: ${{ matrix.part }}
+          START: ${{ matrix.start }}
+          END: ${{ matrix.end }}
+          REVISION: ${{ matrix.revision }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "::error::R2 credentials are required to verify published lecture objects."
+            exit 1
+          fi
+          PREFIX="aws-course-videos/previews/aip/module-08/part-$PART"
+          STEM="aip-module-08-part-$PART"
+          ready="false"
+          if aws s3api head-object --bucket "$R2_BUCKET" --key "$PREFIX/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null 2>&1 &&
+             aws s3 cp "s3://$R2_BUCKET/$PREFIX/$STEM-manifest.json" "/tmp/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" --no-progress >/dev/null 2>&1; then
+            if python - <<'PY'
+          import json,os,math
+          from pathlib import Path
+          p=os.environ["PART"]; m=json.loads(Path(f"/tmp/aip-module-08-part-{p}-manifest.json").read_text())
+          scenes=m.get("scenes",[])
+          expected=list(range(int(os.environ["START"]),int(os.environ["END"])+1))
+          actual=[scene.get("slide") for scene in scenes]
+          revision_ok=m.get("script_revision")==os.environ["REVISION"]
+          ordered=actual==expected
+          timing=all(isinstance(s.get("start_seconds"),(float,int)) and isinstance(s.get("duration_seconds"),(float,int)) and math.isfinite(s["start_seconds"]) and math.isfinite(s["duration_seconds"]) for s in scenes)
+          print("R2 manifest:", {"part":p,"revision":m.get("script_revision"),"slides":actual,"expected_revision":os.environ["REVISION"],"expected_slides":expected,"timing":timing},flush=True)
+          assert revision_ok and ordered and timing
+          PY
+            then ready="true"; fi
+          else
+            echo "R2 MP4 or manifest is missing for Part $PART."
+          fi
+          echo "ready=$ready" >> "$GITHUB_OUTPUT"
+          if [[ "$ready" == "true" ]]; then
+            echo "M08 Video $PART already has the correct MP4 and topic-based manifest; preserving existing files." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "M08 Video $PART has missing or outdated R2 media; rebuilding from current narration." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Install narration and video engine
+        if: steps.existing.outputs.ready != 'true'
         run: |
           # Use wheel-bundled FFmpeg rather than apt or runner PATH.
           # Mutagen reads MP3/MP4 durations; no FFprobe binary is needed.
@@ -66,6 +114,7 @@ jobs:
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py scripts/aip_media_tools.py
 
       - name: Confirm the actual original slide range and narration revision
+        if: steps.existing.outputs.ready != 'true'
         env:
           PART: ${{ matrix.part }}
           START: ${{ matrix.start }}
@@ -86,6 +135,7 @@ jobs:
           PY
 
       - name: Restore existing valid audio chunks from a previous interrupted run
+        if: steps.existing.outputs.ready != 'true'
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
@@ -94,6 +144,7 @@ jobs:
             aip-m08-p${{ matrix.part }}-tts-m08topic07-09-v2-
 
       - name: Verify live R2 originals and render narration in one consistent voice
+        if: steps.existing.outputs.ready != 'true'
         env:
           # Edge TTS occasionally needs >6 tries for the same chunk.
           AIP_TTS_MAX_ATTEMPTS: "15"
@@ -105,13 +156,14 @@ jobs:
             --width 1920 --height 1080 --fps 24
 
       - name: Save completed audio on success or failure
-        if: always()
+        if: always() && steps.existing.outputs.ready != 'true'
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
           key: aip-m08-p${{ matrix.part }}-tts-m08topic07-09-v2-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
+        if: steps.existing.outputs.ready != 'true'
         env:
           PART: ${{ matrix.part }}
           START: ${{ matrix.start }}
@@ -140,7 +192,7 @@ jobs:
       # GitHub's artifact backend can return HTML instead of JSON.
       # Cloudflare R2 is authoritative; enable previews only by explicit opt-in.
       - name: Save optional GitHub preview artifact
-        if: ${{ vars.AIP_UPLOAD_GITHUB_PREVIEW == 'true' }}
+        if: steps.existing.outputs.ready != 'true' && vars.AIP_UPLOAD_GITHUB_PREVIEW == 'true'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -155,6 +207,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish only verified files to Cloudflare R2
+        if: steps.existing.outputs.ready != 'true'
         id: media
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
