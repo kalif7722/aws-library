@@ -1,7 +1,7 @@
 {
   "examCode": "DVA-C03",
   "sourceEdition": "AWS Certified Developer Slides v46 (DVA-C02)",
-  "coverageStatus": "modules-01-05-page-mapped; module-10-visual-review; others-planned",
+  "coverageStatus": "modules-01-05-page-mapped; module-10-visual-review; module-11-SAP-reuse-mapped; others-planned",
   "targetLessons": 690,
   "modules": [
     {
@@ -3997,9 +3997,79 @@
       "scope": "Queues, events, Step Functions, AppSync and Amplify",
       "sourcePages": "428–469, 782–804",
       "targetLessons": 50,
-      "estimatedReuse": 20,
+      "estimatedReuse": 17,
       "estimatedNew": 30,
       "lessons": [
+        {
+          "id": "dva-11-sap-01",
+          "title": "Step Functions state machine and durable orchestration",
+          "summary": "State transitions, branching, parallel work, wait and failure paths form explicit execution history; application data stays downstream.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-01.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-001",
+          "sourcePages": "448",
+          "terms": "Step Functions state machine and durable orchestration State transitions, branching, parallel work, wait and failure paths form explicit execution history; application data stays downstream."
+        },
+        {
+          "id": "dva-11-sap-02",
+          "title": "Step Functions optimized and AWS SDK integrations",
+          "summary": "Optimized integration patterns have service-specific contracts; AWS SDK integration calls supported operations with task-role IAM permissions.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-02.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-002",
+          "sourcePages": "449",
+          "terms": "Step Functions optimized and AWS SDK integrations Optimized integration patterns have service-specific contracts; AWS SDK integration calls supported operations with task-role IAM permissions."
+        },
+        {
+          "id": "dva-11-sap-03",
+          "title": "Workflow initiation and caller permissions",
+          "summary": "Caller permissions to start, inspect and stop executions differ from the state-machine execution role used for downstream tasks.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-03.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-003",
+          "sourcePages": "450",
+          "terms": "Workflow initiation and caller permissions Caller permissions to start, inspect and stop executions differ from the state-machine execution role used for downstream tasks."
+        },
+        {
+          "id": "dva-11-sap-04",
+          "title": "Task, Wait, Choice, Parallel and Map states",
+          "summary": "Task invokes work; Wait delays; Choice branches; Parallel runs branches; Map iterates with concurrency and failure controls.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-04.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-004",
+          "sourcePages": "451",
+          "terms": "Task, Wait, Choice, Parallel and Map states Task invokes work; Wait delays; Choice branches; Parallel runs branches; Map iterates with concurrency and failure controls."
+        },
+        {
+          "id": "dva-11-sap-05",
+          "title": "Standard versus Express execution contracts",
+          "summary": "Standard runs up to one year with durable execution; Express runs up to five minutes; synchronous and asynchronous Express delivery differ.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-05.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-005",
+          "sourcePages": "452",
+          "terms": "Standard versus Express execution contracts Standard runs up to one year with durable execution; Express runs up to five minutes; synchronous and asynchronous Express delivery differ."
+        },
+        {
+          "id": "dva-11-sap-06",
+          "title": "Retries, Catch and terminal workflow outcomes",
+          "summary": "Retry uses matching error names, interval, backoff and maximum attempts; Catch routes exhausted failure; Fail and Succeed terminate.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-06.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-006",
+          "sourcePages": "453",
+          "terms": "Retries, Catch and terminal workflow outcomes Retry uses matching error names, interval, backoff and maximum attempts; Catch routes exhausted failure; Fail and Succeed terminate."
+        },
+        {
+          "id": "dva-11-sap-07",
+          "title": "Human approval and callback task token",
+          "summary": "Callback task token waits for external approval or job, with SendTaskSuccess/Failure and heartbeat/timeout controls.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-07.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-007",
+          "sourcePages": "454",
+          "terms": "Human approval and callback task token Callback task token waits for external approval or job, with SendTaskSuccess/Failure and heartbeat/timeout controls."
+        },
         {
           "id": "dva-11-001",
           "title": "Choose synchronous calls or asynchronous messaging",
@@ -4299,6 +4369,106 @@
           "sourceLessonId": null,
           "sourcePages": "469",
           "terms": "Choose SQS, SNS, Kinesis or Firehose Compare queue, pub/sub, stream and delivery services by delivery and replay needs."
+        },
+        {
+          "id": "dva-11-sap-26",
+          "title": "EventBridge buses and event pattern routing",
+          "summary": "EventBridge default/custom/partner buses and event patterns route matching events to rules and targets.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-26.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-026",
+          "sourcePages": "547",
+          "terms": "EventBridge buses and event pattern routing EventBridge default/custom/partner buses and event patterns route matching events to rules and targets."
+        },
+        {
+          "id": "dva-11-sap-27",
+          "title": "EventBridge target delivery retries and DLQ",
+          "summary": "Rule target retry and SQS DLQ address failed target delivery; target API acceptance does not prove handler success.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-27.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-027",
+          "sourcePages": "547",
+          "terms": "EventBridge target delivery retries and DLQ Rule target retry and SQS DLQ address failed target delivery; target API acceptance does not prove handler success."
+        },
+        {
+          "id": "dva-11-sap-28",
+          "title": "EventBridge cross-account bus policies",
+          "summary": "Event bus resource policy authorizes cross-account PutEvents; source IAM and target rule role govern later delivery.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-28.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-028",
+          "sourcePages": "548",
+          "terms": "EventBridge cross-account bus policies Event bus resource policy authorizes cross-account PutEvents; source IAM and target rule role govern later delivery."
+        },
+        {
+          "id": "dva-11-sap-29",
+          "title": "EventBridge archive and replay",
+          "summary": "Archive captures matching events for chosen retention; replay re-enters bus and can re-trigger rules.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-29.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-029",
+          "sourcePages": "548",
+          "terms": "EventBridge archive and replay Archive captures matching events for chosen retention; replay re-enters bus and can re-trigger rules."
+        },
+        {
+          "id": "dva-11-sap-30",
+          "title": "EventBridge schema registry and versions",
+          "summary": "Schema discovery and versioned bindings help typed consumers, while producers/consumers own compatibility.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-30.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-030",
+          "sourcePages": "549",
+          "terms": "EventBridge schema registry and versions Schema discovery and versioned bindings help typed consumers, while producers/consumers own compatibility."
+        },
+        {
+          "id": "dva-11-sap-31",
+          "title": "EventBridge Scheduler for cron and one-time schedules",
+          "summary": "Scheduler supports one-time, rate or cron schedules, time zones, flexible windows, execution role, retry and DLQ.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-31.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-031",
+          "sourcePages": "549",
+          "terms": "EventBridge Scheduler for cron and one-time schedules Scheduler supports one-time, rate or cron schedules, time zones, flexible windows, execution role, retry and DLQ."
+        },
+        {
+          "id": "dva-11-sap-32",
+          "title": "EventBridge Pipes source, filter, enrichment, target",
+          "summary": "Pipes polls supported sources through optional filter and enrichment to a target; checkpoint/retry depend on source.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-32.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-032",
+          "sourcePages": "550",
+          "terms": "EventBridge Pipes source, filter, enrichment, target Pipes polls supported sources through optional filter and enrichment to a target; checkpoint/retry depend on source."
+        },
+        {
+          "id": "dva-11-sap-33",
+          "title": "Choreography versus orchestration",
+          "summary": "EventBridge choreography routes independent reactions; Step Functions orchestrates bounded business processes and compensation.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-33.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-033",
+          "sourcePages": "550",
+          "terms": "Choreography versus orchestration EventBridge choreography routes independent reactions; Step Functions orchestrates bounded business processes and compensation."
+        },
+        {
+          "id": "dva-11-sap-37",
+          "title": "Walkthrough: workflow retry and compensation",
+          "summary": "Run Standard workflow with bounded Retry and Catch; inspect execution history, compensation and cleanup.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-37.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-037",
+          "sourcePages": "551",
+          "terms": "Walkthrough: workflow retry and compensation Run Standard workflow with bounded Retry and Catch; inspect execution history, compensation and cleanup."
+        },
+        {
+          "id": "dva-11-sap-38",
+          "title": "Walkthrough: EventBridge pattern and failed target",
+          "summary": "Use matching and nonmatching events; inspect failed API Destination delivery, retry record, DLQ and permissions.",
+          "asset": "/course-visuals/sap-c03/module-14/slide-38.webp",
+          "status": "reviewed",
+          "sourceLessonId": "sap-14-038",
+          "sourcePages": "551",
+          "terms": "Walkthrough: EventBridge pattern and failed target Use matching and nonmatching events; inspect failed API Destination delivery, retry record, DLQ and permissions."
         }
       ],
       "reuseMapping": [
