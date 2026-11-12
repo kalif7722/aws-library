@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 course slide-map titles and technical AWS service explanations; source WebPs verified by GitHub rendering workflow. Image-level visual inspection not claimed.",
+  "part_id": "10",
+  "part_title": "Amazon EventBridge Routing, Schemas and Policies",
+  "script_revision": "2026-11-12-m06-p10-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 65,
+      "title": "Amazon EventBridge",
+      "narration": "Amazon EventBridge is an event-routing service that connects producers to targets using event buses and matching rules. Services and applications publish events describing changes, and rules route matching events to destinations such as Lambda, SQS or Step Functions. Unlike a queue where workers pull tasks, EventBridge routes events to one or more configured targets. A GenAI workflow might react when an application records a new document, trigger ingestion and update a search index. Event routing is asynchronous and delivery can be retried, so targets should handle duplicates. Separate event payloads from bulky source data and avoid disclosing sensitive content in shared buses.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 66,
+      "title": "Amazon EventBridge Rules and Destinations",
+      "narration": "An EventBridge rule matches an event pattern or a schedule, depending on the supported rule type, then forwards matching events to configured targets. Patterns can filter on source, detail-type and nested fields to prevent unrelated events from triggering expensive work. Targets can include Lambda functions, state machines, queues and other supported endpoints. Each target requires correct permissions, and retry or dead-letter settings should make failures observable. For AI document ingestion, send an object reference and metadata rather than a full text corpus. Validate the event contract so changes in producer fields do not silently stop downstream routing.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 67,
+      "title": "Amazon EventBridge Event Sources",
+      "narration": "EventBridge receives events from many AWS services, custom applications and supported partner sources. AWS events often indicate resource or service state changes, while custom events represent business activity defined by the producer. Route each source through an appropriate event bus and apply rules to select the consumers. Not all events carry the full underlying object, so downstream processors may need to retrieve details with an API call. In GenAI systems, events can signal new datasets, completed batch jobs or policy updates. Consider ordering, duplication, authorization and delivery guarantees before treating an event as an authoritative transaction record.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 68,
+      "title": "Amazon EventBridge Schema Registry",
+      "narration": "EventBridge Schema Registry helps discover and manage event schemas, making producer and consumer contracts easier to understand. Schemas describe the expected fields and types in an event, while code bindings may help applications build typed handlers. Schema discovery and registry use should be evaluated against sensitive data-handling requirements, since examples or inferred schemas can expose information. A schema improves compatibility planning but does not automatically validate every event payload at runtime. When building an AI pipeline, consistent metadata fields such as document ID, source version and processing type reduce integration errors and help support safe replay or reprocessing.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 69,
+      "title": "EventBridge Resource-Based Policies",
+      "narration": "An EventBridge event bus can use resource-based policies to control who may publish events, create rules or perform permitted cross-account interactions. IAM identity policies on callers and bus resource policies work together, particularly in multi-account architectures. Avoid broad principals and unrestricted event sources because one account should not be able to inject arbitrary triggering events into a sensitive workflow. Use account, organization and condition constraints as supported, and test the assumed roles. For AI automation, an event might start a costly model workflow or update a knowledge base, so authorization of the event source is a critical security boundary.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    }
+  ]
+}
