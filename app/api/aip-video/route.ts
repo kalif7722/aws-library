@@ -283,11 +283,11 @@ const CONFIG: Record<string, {
   },
   "06-09": {
     prefix: "module-06/part-09/aip-module-06-part-09",
-    revision: "2026-11-12-m06-p09-nontemplate-v3",
+    revision: "2026-11-12-m06-p09-r2-audited-v4",
     firstSlide: 56,
     count: 5,
-    firstTitle: "Amazon SQS: What Is a Queue?",
-    title: "Amazon SQS Fundamentals and Queue Consumers",
+    firstTitle: "Discover events with a schema registry",
+    title: "EventBridge Schema Registry, SNS Messaging Security and AppFlow",
   },
   "06-10": {
     prefix: "module-06/part-10/aip-module-06-part-10",
