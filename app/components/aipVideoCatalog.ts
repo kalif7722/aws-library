@@ -54,7 +54,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "06", title: "CodePipeline Troubleshooting, CodeBuild, CodeDeploy and MLflow", subtitle: "Diagnosing CI/CD, secure builds, safe deployments, model tracking", start: 33, end: 41 },
     { id: "07", title: "AppSync Updates, Outposts, Wavelength and SQS Fundamentals", subtitle: "Realtime GraphQL, edge and hybrid placement, queues, delivery order", start: 42, end: 48 },
     { id: "08", title: "SQS Operations, Amplify and EventBridge Routing", subtitle: "Queue consumers, worker scaling, front-end hosting, event buses and security", start: 49, end: 55 },
-    { id: "09", title: "Amazon SQS Fundamentals and Queue Consumers", subtitle: "Queue types, producers, consumers and multiple EC2 workers", start: 56, end: 60 },
+    { id: "09", title: "EventBridge Schema Registry, SNS Messaging Security and AppFlow", subtitle: "Schema versions and bindings, SNS fan-out, independent deliveries, notification security and SaaS transfers", start: 56, end: 60 },
     { id: "10", title: "API Gateway REST, WebSocket, Stages and Caching", subtitle: "REST versus WebSocket, deployment stages, custom domain and TLS", start: 61, end: 63 },
     { id: "11", title: "Bedrock Workflows, CodeBuild and CodeDeploy", subtitle: "Step Functions integration, payload constraints, caching and deployment", start: 64, end: 68 },
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
