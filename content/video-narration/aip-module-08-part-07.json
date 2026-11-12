@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "08",
+  "module_title": "Security, Identity, and Compliance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 08 slides 31-35 verified in spatial visual audit. New visual-grounded narration with independent fresh audio cache.",
+  "part_id": "07",
+  "part_title": "AWS WAF, Web ACLs, VPC Design and Internet Egress",
+  "script_revision": "2026-11-12-m08-p07-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "AWS WAF request protection",
+      "narration": "Start at the user on the left and follow the HTTP request toward CloudFront, API Gateway, or an Application Load Balancer protected by AWS WAF. Clean requests continue to the application; malicious requests can be blocked before they reach the backend. The bottom panels show three rule families. Managed rule groups detect known web attack patterns such as SQL injection and cross-site scripting. IP and geographic rules can restrict selected sources. Rate-based rules limit abusive request frequencies. Notice that WAF protects the application entry point, not the model itself. You still need authentication, least-privilege IAM permissions and prompt safety controls for a generative AI service. A rate-based rule also isn't a substitute for comprehensive distributed-denial-of-service protection. Deploy new rules with monitoring or count mode first, because an overbroad match can accidentally block legitimate clients. The lesson is to place web request inspection at the edge and verify the rules against real traffic."
+    },
+    {
+      "slide": 32,
+      "title": "WAF web ACL evaluation",
+      "narration": "This is a rule-order walkthrough. The sample request is a GET to a search endpoint. The first rule allows particular health-check paths, but the request does not match. The next rule blocks a suspected SQL injection pattern, and again there is no match. The third evaluates whether the caller's request rate exceeds the configured threshold; this example is below the limit. The request therefore reaches the web ACL's default Allow action. If an earlier rule with a terminating Block action had matched, evaluation would have stopped there. Look at the default action carefully: it is essential for requests that match none of the rules. Count actions and some challenge mechanisms have different evaluation behavior than a simple Allow or Block, so don't assume every match terminates inspection. Examine rule priorities, sampled requests and logs when debugging false positives. An ACL decision answers whether the request may proceed, not whether an authenticated user may access a particular customer record."
+    },
+    {
+      "slide": 33,
+      "title": "VPCs and subnets",
+      "narration": "The large box represents one isolated VPC with address range ten dot zero dot zero dot zero slash sixteen. It contains two Availability Zones, each with a public subnet and a private subnet. The public subnets support resources such as load balancers and NAT gateways, while private subnets host application workers and databases. Follow the example route tables: the local route keeps traffic inside the VPC, the public default route targets the internet gateway, and the private default route can target a NAT gateway for outbound internet access. A public route alone does not make every resource public; a reachable address and security rules also matter. High availability comes from distributing resources across zones, not from placing everything in one large subnet. In a GenAI application, keep sensitive stores and model-orchestration workers private, expose only the intended entry point, and restrict traffic with security groups and network ACLs."
+    },
+    {
+      "slide": 34,
+      "title": "VPC architecture for a GenAI application",
+      "narration": "Follow the architecture from the internet client through HTTPS to the public Application Load Balancer. The load balancer distributes requests to application workers running in private subnets across two Availability Zones. Those workers assemble prompts, orchestrate tools, and access private data stores such as vector databases, relational databases or caches. Now trace the private service links on the right. VPC endpoints can connect workers to supported AWS services such as Bedrock, S3 and Secrets Manager without a broad internet route. Different services require the correct gateway or interface endpoint type, DNS configuration and IAM permissions. A private endpoint is a network path, not an automatic authorisation grant. The picture illustrates layered security: one intentional public entry point, isolated application and data tiers, controlled access to managed services, and resilience across zones. Troubleshooting begins by checking routes, security groups, endpoint policies and workload IAM permissions at the appropriate boundary."
+    },
+    {
+      "slide": 35,
+      "title": "Internet Gateway and NAT Gateway",
+      "narration": "Compare the two traffic paths. On the left, a public EC2 instance with an appropriate public IP uses a route through the internet gateway, so permitted inbound and outbound internet communication is possible. On the right, a private instance without a public address sends outbound connections through a NAT gateway in a public subnet. The NAT gateway translates the source address and permits response traffic, but it does not create a general unsolicited inbound path to that instance. The lower route tables make the difference visible: public default route to the internet gateway, private default route to NAT. NAT gateways incur hourly and data-processing costs, and zone placement affects availability and cross-zone charges. For workers that only need S3 or Bedrock, an appropriate VPC endpoint can reduce dependence on general internet egress. NAT is a routing mechanism, not authentication, encryption, or a substitute for restrictive security groups."
+    }
+  ]
+}
