@@ -66,6 +66,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "03", title: "Evaluation Strategy, Responsible AI and CloudWatch Logs", subtitle: "Choosing evaluation approaches, deployment readiness, responsible AI and logging architecture", start: 11, end: 15 },
     { id: "04", title: "CloudWatch Log Collection, Insights, Exports and Alarms", subtitle: "Collect logs, query failures, export and subscribe to events, configure AI alerts", start: 16, end: 20 },
     { id: "05", title: "CloudWatch Alarm Actions, Composite Alarms and AI Quality Dashboards", subtitle: "Alarm targets, composite decisions, prompt regression and operational dashboards", start: 21, end: 24 },
+    { id: "06", title: "X-Ray Tracing, Service Maps and AI Request Diagnostics", subtitle: "Distributed traces, latency bottlenecks, annotations and error investigation", start: 25, end: 29 },
+    { id: "07", title: "Bedrock Telemetry, RAG Quality and Release Observability", subtitle: "Safe metadata, RAG evaluation, canary release gates and trace sampling", start: 30, end: 34 },
+    { id: "08", title: "X-Ray Bottlenecks, Retries, Correlation and Safe AI Telemetry", subtitle: "Tracing dependencies, throttling retries, log correlation and telemetry privacy", start: 35, end: 39 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
