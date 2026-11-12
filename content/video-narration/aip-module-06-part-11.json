@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 course slide-map titles and technical AWS service explanations; source WebPs verified by GitHub rendering workflow. Image-level visual inspection not claimed.",
+  "part_id": "11",
+  "part_title": "Amazon SNS Fan-Out and Amazon AppFlow Integrations",
+  "script_revision": "2026-11-12-m06-p11-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 70,
+      "title": "Amazon SNS",
+      "narration": "Amazon Simple Notification Service provides publish-subscribe messaging. A publisher sends one message to a topic, and SNS delivers it to multiple subscribed endpoints or services according to the topic's configuration and policies. This differs from an SQS queue where competing consumers share work. SNS can notify users or fan out an application event into separate queues for independent processing. In a generative AI pipeline, one completion event could notify a user, initiate audit recording and trigger downstream indexing. Delivery behaviors vary by protocol, so subscriber design must accommodate retries, endpoint failure and duplicated notifications.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 71,
+      "title": "Amazon SNS Publish-Subscribe Pattern",
+      "narration": "The publish-subscribe pattern separates the event publisher from its subscribers. A publisher emits to an SNS topic without knowing every recipient, and the topic fans out to subscribed queues, functions or external endpoints. Fan-out to distinct SQS queues is useful because each downstream application retains its own durable backlog and retry strategy. SNS topic filtering can reduce unnecessary delivery to subscribers based on message attributes or supported payload filtering. For AI processing, a single document completion event can feed analytics and notification services independently. Keep message formats stable and do not treat publication as proof that every subscriber processed the event.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 72,
+      "title": "AWS Services Integrated with SNS",
+      "narration": "SNS integrates with AWS services for notifications, alarms, event fan-out and workflow messaging. CloudWatch alarms can publish changes to a topic, while Lambda or SQS subscribers can implement different reactions. HTTP or email delivery options exist but have different reliability and security properties. A target service may need resource-policy permissions to accept publication or subscription delivery. In AI operations, an alarm on model error rate can notify an operations channel while a queue-based subscriber opens an incident workflow. Choose the path by urgency, required durability, payload size and access control rather than assuming every subscriber behaves like a durable queue.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 73,
+      "title": "Amazon SNS: Publishing Messages",
+      "narration": "To publish to an SNS topic, the producer selects the topic ARN, provides a message and optionally supplies attributes for filtering. The topic authorizes the publisher and delivers to eligible subscribers according to subscription protocol and policies. Batch publishing is supported for applicable SNS operations and modes, but individual downstream delivery remains subject to each endpoint's behavior. Avoid embedding oversized or sensitive documents; send a secure reference when practical. In an AI application, include a task identifier and result status so subscribers can fetch authorized details. Monitor failed deliveries and configure retries and dead-letter handling where supported.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 74,
+      "title": "Amazon SNS Security",
+      "narration": "SNS security involves publisher permissions, topic resource policies, subscriber access and encryption choices. Use least-privilege IAM and constrain cross-account publishers or subscribers. Encryption at rest can use AWS-managed or customer-managed keys, with appropriate KMS permissions when needed. Enforce encrypted transport and protect notification endpoints from unauthorized use. SNS messages may be copied to many recipients, so data classification and tenant boundaries matter especially in a multi-subscriber architecture. For sensitive AI workloads, publish minimal status metadata and allow each consumer to retrieve authorized records separately rather than broadcasting private prompts or model outputs.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 75,
+      "title": "Amazon AppFlow",
+      "narration": "Amazon AppFlow is a managed integration service for transferring data between supported SaaS applications and AWS services. A flow defines a source, destination, field mapping, transformations and a run trigger or schedule. This reduces the need to write custom connectors for common supported integrations. In GenAI data preparation, an organization might move approved business records into S3 for cleansing and later indexing. Check connector support, API limits, encryption, permissions and data residency rules. AppFlow moves and transforms records but does not automatically produce an accurate retrieval index or handle all source authorization requirements. Preserve provenance, update timestamps and deletion handling.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    },
+    {
+      "slide": 76,
+      "title": "Amazon AppFlow Sources and Destinations",
+      "narration": "AppFlow connects supported source and destination systems through configured connectors and field mappings. Depending on the connector, flows may run on demand, on a schedule or in response to supported events. The direction and available operations depend on each integration, so do not assume every SaaS product can act as both source and destination. When landing records in S3 or another service, confirm schema, format, field masking and handling of incremental changes. For an AI knowledge base, ingestion should respect source access rights and refresh or deletion policies. End the module by connecting the services: AppFlow acquires data, queues and events decouple work, and APIs expose controlled GenAI features.  Follow the arrows on the lesson diagram and identify the producer, service boundary, destination and failure-handling path. Compare the service with nearby alternatives such as SQS versus SNS versus EventBridge, and confirm who can send, receive or replay events. Practical exam choices depend on delivery semantics, operational visibility, cost and least-privilege access."
+    }
+  ]
+}
