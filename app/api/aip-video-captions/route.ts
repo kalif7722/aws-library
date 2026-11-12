@@ -41,6 +41,8 @@ const CAPTIONS: Record<string, string> = {
   "06-11": "module-06/part-11/aip-module-06-part-11.vtt",
   "06-12": "module-06/part-12/aip-module-06-part-12.vtt",
   "06-13": "module-06/part-13/aip-module-06-part-13.vtt",
+  "07-01": "module-07/part-01/aip-module-07-part-01.vtt",
+  "07-02": "module-07/part-02/aip-module-07-part-02.vtt",
   "02-01": "module-02/part-01/aip-module-02-part-01.vtt",
   "02-02": "module-02/part-02/aip-module-02-part-02.vtt",
   "02-03": "module-02/part-03/aip-module-02-part-03.vtt",
