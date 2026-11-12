@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Aligned to published Module 07 lesson titles and evaluated against domain knowledge. Original R2 WebPs must be validated on runner; slide-level visual inspection not claimed.",
+  "part_id": "01",
+  "part_title": "Governance, Agent Tracing and Human Model Evaluation",
+  "script_revision": "2026-11-12-m07-p01-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Governance and Quality Assurance",
+      "narration": "Module Seven introduces the checks required to operate generative AI responsibly. A working model endpoint is only the beginning. Teams must evaluate answer usefulness, factual grounding, safety and reliability, then monitor changes after deployment. Governance identifies who can approve models, access datasets, change prompts and investigate incidents. Quality assurance adds measurable acceptance criteria, human review and automated tests. Treat evaluation as a repeatable lifecycle, not a one-time demonstration. The practical architecture connects input datasets and expected outputs with model execution, evaluation evidence, approval gates and production monitoring. When a user reports a wrong answer, trace whether the problem arose from source documents, retrieval, instructions or model behavior. This module will connect evaluation methods with AWS observability and data governance tools.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 2,
+      "title": "Bedrock Agent Tracing",
+      "narration": "Bedrock agent tracing makes the intermediate orchestration steps easier to inspect. An agent request may invoke a foundation model, decide to call an action group, retrieve knowledge, and produce a final answer. Instead of treating the response as a black box, trace the sequence to determine which step supplied context and which action produced a result. Check retrieved references, tool inputs, tool outputs and model decisions while respecting access controls and avoiding unnecessary sensitive logging. Traces are diagnostic evidence, not automatic proof of correctness. Compare a successful run with a failed run and ask whether the error came from planning, permissions, retrieval or an external service. Combine agent trace inspection with application logs and correlation identifiers to troubleshoot the complete request path.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 3,
+      "title": "Foundation Model Evaluation Criteria",
+      "narration": "Choosing a foundation model requires more than comparing raw benchmark scores. Evaluate task accuracy and relevance, groundedness against supporting context, consistency, safety, latency and cost. Define the application task first: summarization, structured extraction, question answering and code generation require different evidence. Build representative test sets that include easy, ambiguous, adversarial and domain-specific examples. Score outputs against clear criteria and record the exact model version, prompt and inference parameters. A model that performs well on a general benchmark can still fail when given an organization's vocabulary or document formats. Quality, throughput and unit economics must be considered together. In certification scenarios, prefer the evaluation method that matches the application's actual success requirement rather than assuming one universal metric is enough.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 4,
+      "title": "Human Evaluation",
+      "narration": "Human evaluation asks qualified reviewers to judge generated responses against agreed rubrics. Reviewers can compare two candidate answers, rank usefulness, check factual support, evaluate tone or flag unsafe content. Use blinded comparisons where practical to reduce bias from model names or vendor preferences. Provide representative prompts, relevant context and precise scoring instructions so reviewers judge the same aspects. Record disagreements and resolve ambiguous cases; a single subjective score without calibration is weak evidence. Human review can reveal errors automatic metrics miss, especially subtle factual mistakes and domain-specific expectations, but it takes time and introduces variability. Use it strategically for high-risk tasks, model-selection gates and samples of production behavior. Protect private evaluation data and ensure reviewers have appropriate authorization.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    },
+    {
+      "slide": 5,
+      "title": "Evaluation Against Benchmark Datasets",
+      "narration": "A benchmark dataset provides a repeatable set of tasks and expected outcomes for comparing candidate systems. Standard public benchmarks are helpful for broad capability comparisons, while an application-specific golden dataset tests whether the model performs the real business task. Keep development examples separate from holdout evaluation data to reduce overfitting. Record dataset version, prompt template, retrieval configuration and model settings alongside the score. Include diverse conditions such as short and long inputs, missing evidence and confusing distractors. A single aggregate score can hide severe failures in smaller categories, so inspect results by slice and risk level. When using a benchmark to approve a generative AI feature, confirm that the benchmark measures the intended result rather than an unrelated capability.  While studying the slide, identify what is measured, what evidence is required, and which failure modes the method cannot detect. That distinction determines whether the evaluation result can support a model release decision."
+    }
+  ]
+}
