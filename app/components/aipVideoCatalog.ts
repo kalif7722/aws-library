@@ -48,6 +48,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
   "06": [
     { id: "01", title: "Lambda Fundamentals and Serverless Application Patterns", subtitle: "Lambda architecture, websites and order history", start: 1, end: 5 },
     { id: "02", title: "Lambda Monitoring, Use Cases, Runtimes and Event Triggers", subtitle: "Alarms, compute trade-offs, supported runtimes and triggers", start: 6, end: 10 },
+    { id: "03", title: "Lambda Integrations with OpenSearch, Streams, Bedrock and APIs", subtitle: "OpenSearch, Kinesis, Redshift, Bedrock and serverless APIs", start: 11, end: 16 },
+    { id: "04", title: "API Gateway Integrations, Security and AppConfig", subtitle: "API types, integrations, policies and runtime configuration", start: 17, end: 24 },
+    { id: "05", title: "Step Functions, ML Orchestration and Resilience", subtitle: "State machines, SageMaker jobs, retries and payload design", start: 25, end: 32 },
   ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
