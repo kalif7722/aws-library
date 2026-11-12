@@ -46,7 +46,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "07", title: "SageMaker Neo, Unified Studio and ML Pipelines", subtitle: "Edge optimization, shared projects and orchestration", start: 32, end: 36 },
   ],
   "06": [
-    { id: "01", title: "Lambda Fundamentals and Serverless Application Patterns", subtitle: "Lambda architecture, websites and order history", start: 1, end: 5 },
+    { id: "01", title: "Module 06 Visual Walkthrough — Application Architecture, Kinesis, Orders and Lambda", subtitle: "AWS application map, Kinesis alerts, order events, API request flow and Lambda", start: 1, end: 5 },
     { id: "02", title: "Lambda Monitoring, Use Cases, Runtimes and Event Triggers", subtitle: "Alarms, compute trade-offs, supported runtimes and triggers", start: 6, end: 10 },
     { id: "03", title: "Lambda Integrations with OpenSearch, Streams, Bedrock and APIs", subtitle: "OpenSearch, Kinesis, Redshift, Bedrock and serverless APIs", start: 11, end: 16 },
     { id: "04", title: "API Gateway Integrations, Security and AppConfig", subtitle: "API types, integrations, policies and runtime configuration", start: 17, end: 24 },
