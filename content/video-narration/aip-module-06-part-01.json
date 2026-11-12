@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Narration follows the published Module 06 course slide map; GitHub renderer validates actual original R2 WebP files before speech synthesis. Image-level visual review not claimed.",
+  "part_id": "01",
+  "part_title": "Lambda Fundamentals and Serverless Application Patterns",
+  "script_revision": "2026-11-12-m06-p01-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "More Tools for Building AI Applications",
+      "narration": "In this module, we move from foundation models to the application services around them. A generative AI solution needs more than an inference endpoint: it needs an API entry point, business logic, event processing, workflows, deployment automation, and messaging. Start with AWS Lambda for small units of event-driven compute. API Gateway provides an authenticated request boundary, Step Functions coordinates longer processes, and EventBridge or queues connect independent components. As we progress, separate synchronous user-facing requests from asynchronous back-end work. That distinction improves reliability, because an interactive response should not block on every downstream task. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 2,
+      "title": "AWS Lambda: Serverless Data Processing",
+      "narration": "Lambda runs a function in response to events without requiring you to provision or manage the underlying servers. Think of a data object arriving in Amazon S3, a record entering a stream, or an API request being accepted. Each event can invoke a small handler which validates input, transforms information, and calls the appropriate AWS service. For generative AI, a handler might prepare a prompt, call Amazon Bedrock, or save a summary. However, keep input size, execution time, concurrency and downstream quotas in mind. For long inference or large batches, an asynchronous design or orchestration service may be safer than one long-running invocation. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 3,
+      "title": "What Is AWS Lambda?",
+      "narration": "The core Lambda abstraction is a deployed function: code, a runtime, a configured execution role, and an event that invokes it. AWS provisions the execution environment and scales concurrent invocations within service and account limits. The execution role defines what the function is permitted to do, such as reading a bucket or invoking a foundation model. Configuration also includes memory, timeout, environment variables and network access where needed. The event payload enters a handler, which returns a response or records a result depending on invocation mode. Do not assume that serverless means unlimited execution or zero operational responsibility; logs, costs, retries and permissions still matter. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 4,
+      "title": "Example: Serverless Website",
+      "narration": "Consider a website in which static assets are served separately from the backend API. A browser requests a dynamic operation through an HTTP endpoint, API Gateway receives and authorizes it, and Lambda executes the business logic. The function can read or write a database and return a structured JSON response. This pattern keeps a small web application simple because no always-on web server is required for the handler. For an AI-enabled site, the handler could validate a user's prompt before a managed model invocation. Keep credentials on the server side, configure CORS deliberately, and use throttling and access controls to protect both the API and the model budget. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    },
+    {
+      "slide": 5,
+      "title": "Example: Order History Application",
+      "narration": "An order history application illustrates event-driven and request-driven Lambda operations working together. A customer-facing API can query recent orders from a database through a Lambda handler. Separately, order-created events can update a searchable history or notify another service. This decoupling matters when requests spike: the user read path remains focused on responsive retrieval while background updates can retry independently. Choose database keys and indexes around the queries the application actually needs. For a generative AI assistant that explains recent purchases, retrieve only records the caller is authorized to see and send the minimum necessary context to the model. As you study this slide, trace the trigger, the AWS service boundary, the processing step, and the destination of the result. Ask what happens when a request fails, arrives twice, or exceeds a quota. This operational perspective will help you choose the correct integration pattern in the AIP-C01 exam and in real systems."
+    }
+  ]
+}
