@@ -36,6 +36,15 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "03", title: "Responsive AI and Retrieval", subtitle: "Streaming, model routing, RAG relevance and API profiling", start: 12, end: 16 },
     { id: "04", title: "Resilient and Cross-Region Inference", subtitle: "SageMaker deployment, backoff, pooling and inference profiles", start: 17, end: 22 },
   ],
+  "05": [
+    { id: "01", title: "SageMaker ML Lifecycle and Training Architecture", subtitle: "ML lifecycle, training, notebooks and console map", start: 1, end: 5 },
+    { id: "02", title: "Data Preparation, Deployment Modes and Safe Rollouts", subtitle: "Processing jobs, inference modes and endpoint release safety", start: 6, end: 10 },
+    { id: "03", title: "Model Building, Hosting Options and Ground Truth", subtitle: "JumpStart, Feature Store, hosting and labeling", start: 11, end: 15 },
+    { id: "04", title: "Human Labeling, Active Learning and Ground Truth Plus", subtitle: "Workforce selection, active learning and managed labeling", start: 16, end: 20 },
+    { id: "05", title: "Model Monitor, Clarify and Production Drift", subtitle: "Monitoring data, bias, explanation and drift", start: 21, end: 25 },
+    { id: "06", title: "Model Registry, Approvals and ML Lineage", subtitle: "Version promotion, auditing and cross-account lineage", start: 26, end: 31 },
+    { id: "07", title: "SageMaker Neo, Unified Studio and ML Pipelines", subtitle: "Edge optimization, shared projects and orchestration", start: 32, end: 36 },
+  ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
     { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
