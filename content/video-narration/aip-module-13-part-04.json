@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "13",
+  "module_title": "Task-Focused Machine Learning and AI Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original numbered R2 Module 13 slides 8–11 verified by spatial audit; topic-first narration and fresh TTS.",
+  "part_id": "04",
+  "part_title": "Rekognition Analysis, Custom Labels and Responsible Image Moderation",
+  "script_revision": "2026-11-13-m13-p04-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 8,
+      "title": "Amazon Rekognition",
+      "narration": "This slide shows an image or video entering Amazon Rekognition and several distinct analysis APIs. DetectLabels identifies visual objects, scenes or activities with model confidence values. DetectText extracts text that appears in images. CompareFaces reports a similarity score between faces, but the example ninety-six-point-two-percent similarity is not proof of an individual's identity. Different Rekognition operations have different supported inputs, outputs and image versus video workflows. Choose the operation that answers your actual application question instead of treating all visual analysis as one generic endpoint. In a GenAI pipeline, labels can become searchable metadata, but a detected label should not be presented as verified reality without suitable evaluation. Use confidence thresholds appropriate to the consequences of error and test them on representative data. Face-related workflows deserve particular scrutiny, including informed consent where appropriate, applicable policy, access restrictions and human review for high-impact decisions. The service is an analysis component, not a substitute for application safety and responsible use."
+    },
+    {
+      "slide": 9,
+      "title": "Rekognition Custom Labels",
+      "narration": "This lifecycle diagram begins by defining the custom product categories the business needs, such as shoes or shirts. Gather and label representative images, then split the dataset into training and test portions without sharing duplicate or near-duplicate images between the sets. Train a custom model and evaluate the results against the business objectives. The example presents precision and recall scores, which measure different errors: precision asks how often predicted positives are correct, while recall asks how many actual positives the model finds. An application that must catch most unsafe objects may prioritise recall, while one that automatically rejects valuable submissions also cares about false positives. After selecting a suitable model, start the running inference capacity when needed and stop it when idle to manage cost where the service requires this. Evaluate generalisation on realistic lighting, camera angles and object diversity; a high metric on a narrow test sample is not evidence of reliable production performance. Use a controlled model lifecycle, not just a one-off training run."
+    },
+    {
+      "slide": 10,
+      "title": "Image content moderation with Amazon Rekognition",
+      "narration": "Follow the input image into DetectModerationLabels. The service returns categories and confidence scores such as violence, weapons or blood. The application then applies its own moderation policy to decide whether to block, allow or send the item for review. In the diagram, high-risk labels tend toward blocking and ambiguous predictions toward review. That branching is a product decision, not a universal threshold built into Rekognition. An empty moderation-label response does not certify that an image is harmless. Where supported, a human-review process such as A2I can handle uncertain cases, or an appropriate custom moderation model can help with domain-specific classifications. The important steps are to interpret the label taxonomy correctly, choose tested thresholds, assess false positives and false negatives, and document which categories require escalation. If a model's output will be shown publicly, moderation must consider both generated and uploaded content, including application context beyond the image alone."
+    },
+    {
+      "slide": 11,
+      "title": "Moderate Generated Images Before Release",
+      "narration": "This diagram adds a defence-in-depth policy to generated-image delivery. A user requests an image, such as a mountain at sunset. The application invokes an image-generation model with the approved safety settings. Instead of releasing the output immediately, it stores it privately in an S3 staging location and runs an independent moderation check using Rekognition. A policy gate evaluates detected categories and application rules. Approved images move to delivery, while suspicious or ambiguous outputs are rejected or routed to a human reviewer. The safety benefit comes from using controls at different boundaries: generation-time guardrails reduce the chance of producing harmful material, and post-generation checks assess the actual output artifact. Neither control is perfect, so record decisions, restrict access to staged images and include procedures for appeals or false positives when relevant. Make sure temporary objects are cleaned up under a lifecycle policy and that the public endpoint never exposes a rejected image before review."
+    }
+  ]
+}
