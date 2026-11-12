@@ -38,3 +38,12 @@ not a replacement for a human check of diagrams.
 - A standalone lab can have its own video if that makes the learning path clearer. Do not combine unrelated topics just to fill a target count.
 - Narration length follows the complexity of the actual slides, not a preset runtime. Verify all source slide titles, manifest slide ranges, part IDs and R2 player mappings after regrouping.
 - This applies to **all modules and future AWS, Azure, GCP and other visual-learning course videos**, across chat sessions.
+
+## Automatic audit-to-render execution (approved 2026-11-13)
+- Do not request a new user confirmation between consecutive AIP course modules; follow the established mandate to prepare the next module in sequence.
+- The GitHub Actions source-audit workflow commits a spatial audit of the original numbered R2 slides; **never** infer original slide titles from the old lesson map.
+- After examining the audit, write topic-first narration scripts using original slide structure. If the source images and old lesson map differ, the original images win. Never auto-generate unsupported narration from OCR alone.
+- The rendering workflow must trigger on committed narration/workflow changes, verify the complete audit, validate slide order and narration revision, render with en-US-AndrewNeural at -3%, generate chapters and VTT/transcript/manifest, and publish only checked media to Cloudflare R2.
+- GitHub upload-artifact is optional; an uploaded R2 MP4 and matching R2 manifest are the authoritative publication status. Do not claim videos are ready until both have been verified, and do not repeat successful chunks unnecessarily.
+- Where one module finishes, use the same preflight for the next module automatically. Do not silently override an unverified audit or fabricate missing media; report the specific blocked step.
+- Implemented first for Module 15: `.github/workflows/audit-aip-m15-visuals-01-06.yml` and `.github/workflows/render-aip-m15-parts-01-02.yml`, with scripts under `content/video-narration/` and player mappings under `app/api/` and `app/components/`.
