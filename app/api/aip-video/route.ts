@@ -219,11 +219,11 @@ const CONFIG: Record<string, {
   },
   "06-01": {
     prefix: "module-06/part-01/aip-module-06-part-01",
-    revision: "2026-11-12-m06-p01-review-pilot-v3",
+    revision: "2026-11-12-m06-p01-visual-walkthrough-v4",
     firstSlide: 1,
     count: 5,
-    firstTitle: "More Tools for Building AI Applications",
-    title: "Lambda Fundamentals and Serverless Application Patterns",
+    firstTitle: "Module 06 — Build AI applications on AWS",
+    title: "Module 06 Visual Walkthrough — Application Architecture, Kinesis, Orders and Lambda",
   },
   "06-02": {
     prefix: "module-06/part-02/aip-module-06-part-02",
