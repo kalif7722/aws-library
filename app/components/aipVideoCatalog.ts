@@ -37,8 +37,8 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "04", title: "Resilient and Cross-Region Inference", subtitle: "SageMaker deployment, backoff, pooling and inference profiles", start: 17, end: 22 },
   ],
   "05": [
-    { id: "01", title: "SageMaker ML Lifecycle and Training Architecture", subtitle: "ML lifecycle, training, notebooks and console map", start: 1, end: 5 },
-    { id: "02", title: "Data Preparation, Deployment Modes and Safe Rollouts", subtitle: "Processing jobs, inference modes and endpoint release safety", start: 6, end: 10 },
+    { id: "01", title: "Bedrock Agent Tracing and Evidence-Based Model Evaluation", subtitle: "Agent traces, evaluation dimensions, human review, benchmark scoring and model judging", start: 1, end: 5 },
+    { id: "02", title: "Hybrid Evaluation, ROUGE, BLEU, BERTScore and Bedrock Jobs", subtitle: "Combining judges and humans, text evaluation metrics, and Bedrock evaluation jobs", start: 6, end: 10 },
     { id: "03", title: "Model Building, Hosting Options and Ground Truth", subtitle: "JumpStart, Feature Store, hosting and labeling", start: 11, end: 15 },
     { id: "04", title: "Human Labeling, Active Learning and Ground Truth Plus", subtitle: "Workforce selection, active learning and managed labeling", start: 16, end: 20 },
     { id: "05", title: "Model Monitor, Clarify and Production Drift", subtitle: "Monitoring data, bias, explanation and drift", start: 21, end: 25 },
