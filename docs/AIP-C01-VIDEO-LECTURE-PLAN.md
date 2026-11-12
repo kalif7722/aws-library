@@ -118,6 +118,18 @@
 - **Scope and rerun:** The three Module 03 render workflows retain a workflow-path push trigger, which automatically queues a new run when this hotfix is committed. Previously successful Module 02 video workflows no longer trigger all their heavy rendering jobs from workflow-only edits. They remain manually dispatchable and continue to run when narration manifests change.
 - **Verification:** `tests/aip-video-workflow-delivery.test.mjs` checks delivery gates across the 11 maintained Module 02/03 workflows. An accepted commit and queued jobs do **not** prove that all videos are available; use the GitHub Actions runs and verified release records for delivery status.
 
+## Module 04 narrated lectures — 12 November 2026
+
+- **Source audit:** All 22 published Module 04 original WebP slide images were inspected from the site-ready archives `01–10`, `11–20`, and `21–22`. Several image headings differ from the previous gallery map; the mapped titles were corrected to match the actual source slides. Additional archived console-lab images `23–32` are outside this published 22-slide lecture scope.
+- **Part 01, slides 1–6:** Operational efficiency cycle; token estimation with CountTokens; CloudWatch Bedrock monitoring; pruning context; routing between model capabilities; evaluation and price-to-performance calculations.
+- **Part 02, slides 7–11:** Batch and on-demand inference, provisioned throughput and utilisation, semantic response caching, Bedrock prompt caching, and edge/CloudFront response caching.
+- **Part 03, slides 12–16:** Parallel retrieval, streaming, latency-optimized inference, routing/trim/prioritization, retrieval quality, model sampling settings and end-to-end latency profiling.
+- **Part 04, slides 17–22:** SageMaker model instance sizing, accelerator scaling and endpoint readiness, retry backoff with jitter, connection pooling, Bedrock cross-Region inference and inference-profile geography/governance decisions.
+- **Production configuration:** All four image-specific narration manifests use the established single lecturer voice (`en-US-AndrewNeural`), slow natural pace, original R2 slide checks, up to 15 attempts on intermittent voice failures, cached audio, bundled FFmpeg, MP4/caption/manifest verification and publication straight to R2.
+- **Workflow isolation:** `.github/workflows/render-aip-m04-parts-01-02.yml` and `render-aip-m04-parts-03-04.yml` each use a distinct concurrency group. GitHub preview artifacts are opt-in and never block the required R2 upload.
+- **Release status:** Committing scripts and starting jobs is not equivalent to confirmed playable video files. Availability is published after R2 uploads and matching release metadata pass the existing checks.
+- **Progress:** 22/22 scene mappings are consecutive across four videos; slide-based progress and video completion use the shared course progress catalog.
+
 ## Core standards
 
 - Keep original 16:9 WebP course slides full-screen, not new block diagrams; preserve existing neural voice (`en-US-AndrewNeural`, rate `-3%`) for continuity.
