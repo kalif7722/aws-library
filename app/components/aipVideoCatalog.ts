@@ -45,6 +45,10 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "06", title: "Model Registry, Approvals and ML Lineage", subtitle: "Version promotion, auditing and cross-account lineage", start: 26, end: 31 },
     { id: "07", title: "SageMaker Neo, Unified Studio and ML Pipelines", subtitle: "Edge optimization, shared projects and orchestration", start: 32, end: 36 },
   ],
+  "06": [
+    { id: "01", title: "Lambda Fundamentals and Serverless Application Patterns", subtitle: "Lambda architecture, websites and order history", start: 1, end: 5 },
+    { id: "02", title: "Lambda Monitoring, Use Cases, Runtimes and Event Triggers", subtitle: "Alarms, compute trade-offs, supported runtimes and triggers", start: 6, end: 10 },
+  ],
   "02": [
     { id: "01", title: "Structuring Data for GenAI", subtitle: "JSON, conversations and chunking", start: 1, end: 7 },
     { id: "02", title: "Bedrock Data Automation", subtitle: "Documents, images, video, audio and blueprints", start: 8, end: 15 },
