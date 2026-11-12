@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Published Module 06 lesson titles and AWS service explanations; original WebP assets validated by GitHub renderer, not visually reviewed in this session.",
+  "part_id": "06",
+  "part_title": "CodePipeline, CI/CD and CodeBuild",
+  "script_revision": "2026-11-12-m06-p06-lesson-map-v1",
+  "scenes": [
+    {
+      "slide": 33,
+      "title": "AWS CodePipeline",
+      "narration": "AWS CodePipeline orchestrates a delivery pipeline as a sequence of stages and actions. A source change can trigger the pipeline, which passes an immutable source revision to a build or test action and then to a deployment action. The value is traceability: each execution identifies which source revision and artifacts were tested and released. Stages can include manual approval before production. The pipeline coordinates services rather than compiling applications by itself. For an AI application, keep prompts, infrastructure definitions and application code under controlled versioning, while model artifact changes may need their own evaluation and release gates.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 34,
+      "title": "Technology Stack for CI/CD",
+      "narration": "A practical CI/CD stack combines repository version control, build automation, tests, artifact storage and deployment. A commit starts a pipeline, CodeBuild can compile and run checks, and CodeDeploy or another deploy action moves verified output into an environment. Infrastructure as code ensures dependencies are repeatable. Security scanning and policy checks should happen before release, not after deployment. For applications invoking Bedrock, test request contracts and permissions without exposing production credentials in build logs. Separate development, staging and production configuration, and promote an identified tested artifact rather than rebuilding with different dependencies at each stage.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 35,
+      "title": "CodePipeline Artifacts",
+      "narration": "Pipeline artifacts are the files passed between stages, such as source archives, packaged executables, deployment specifications or build outputs. They are stored in an artifact bucket managed for the pipeline and referenced by input and output artifact names. A build action consumes a source artifact and emits a new package; a deployment action consumes the correct output package. Understand that artifacts are not the same as runtime application data or a model's monitoring records. Protect artifact storage with appropriate IAM and encryption settings. When troubleshooting, check whether the expected artifact name and contents were produced and whether downstream actions reference that exact version.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 36,
+      "title": "CodePipeline Troubleshooting",
+      "narration": "When a pipeline fails, identify the first failing stage before changing unrelated services. A source action may lack repository authorization, a build action may fail a command, and a deploy action may lack permissions or have an invalid configuration. Examine the execution ID, stage status, action logs and the artifacts passed to the failed action. A pipeline that appears to complete may still ship defective software if its tests or deployment health checks are weak. Retry an action only after understanding whether it is safe to repeat. In AI deployment, separately check IAM for model invocation, configuration values and endpoint availability; build success does not prove the live inference path works.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 37,
+      "title": "AWS CodeBuild",
+      "narration": "AWS CodeBuild is a managed build service that starts an isolated build environment, downloads source, runs configured commands and emits logs or artifacts. It can compile code, run unit tests, package Lambda functions or build container images. You select an environment image, compute resources, service role and build specification. Unlike CodePipeline, which connects stages, CodeBuild performs the build step. For AI systems, dependencies and SDK versions should be reproducible; pin versions and avoid downloading untrusted scripts during every build. Environment variables and secrets need secure handling, and logs should never print access keys or sensitive model inputs.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 38,
+      "title": "AWS CodeBuild: Source and Build Instructions",
+      "narration": "A CodeBuild project connects a source repository or source artifact with a build definition. The build instructions can live in a buildspec file or be provided through supported configuration. CodeBuild retrieves the designated source revision, creates the build environment, executes phases and uploads outputs. Source authorization, webhook triggers and pipeline-driven builds are related but distinct choices. Use least privilege for the service role and explicitly permit only required artifact, log and secret resources. A Bedrock-backed API build may run tests against mocks, generate deployment packages and publish a versioned artifact; production model calls should not be a prerequisite for every ordinary unit test.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 39,
+      "title": "CodeBuild Supported Environments",
+      "narration": "CodeBuild offers managed build images for supported operating systems and runtimes, as well as options for custom container environments. Choose based on compiler dependencies, CPU architecture, required tooling and security policy. A managed image can simplify maintenance, but its tool versions must still be checked. A custom image gives more control while shifting responsibility for patching and integrity. Some builds need privileged mode for Docker operations, which increases the trust requirements on the project. For an AI application, native Python packages or machine-learning dependencies can affect image size, startup and caching. Make the environment reproducible, and validate it on the same architecture used for deployment.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 40,
+      "title": "How CodeBuild Works",
+      "narration": "The build lifecycle begins when CodeBuild receives the source location and build settings, provisions its environment and downloads the revision. It processes the installation, pre-build, build and post-build phases as configured, collects logs and publishes artifacts. Successful execution depends on correct source permissions, dependency access, command exit codes and artifact declarations. A command returning nonzero status generally marks a phase as failed, subject to explicitly configured behavior. Build caches can accelerate dependencies but should not be the only location where essential output lives. For reliable AI delivery, promote versioned packages and maintain evidence that the exact artifact passed tests and security checks.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    },
+    {
+      "slide": 41,
+      "title": "CodeBuild buildspec.yml",
+      "narration": "The buildspec YAML file defines how CodeBuild executes the build. Its main elements include a version, optional environment settings, phase commands, artifact paths and cache definitions. A typical install phase prepares dependencies, pre-build authenticates or validates prerequisites, build runs tests and packaging, and post-build records or publishes results. Be precise with paths, indentation, environment variables and the working directory: a valid YAML file can still produce the wrong artifact. Do not hardcode secrets in the file. For a serverless GenAI API, the buildspec can install dependencies, lint code, run tests and package deployment resources without containing user prompts or production credentials.  Study the architecture as a sequence: identify the producer, the AWS service accepting the request, the compute or control-plane operation, and where the output lands. For failures, reason about retries, least-privilege IAM, latency, observability and versioning. The exam often tests these distinctions rather than service names alone."
+    }
+  ]
+}
