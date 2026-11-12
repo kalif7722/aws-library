@@ -219,11 +219,11 @@ const CONFIG: Record<string, {
   },
   "06-01": {
     prefix: "module-06/part-01/aip-module-06-part-01",
-    revision: "2026-11-12-m06-p01-visual-walkthrough-v4",
+    revision: "2026-11-12-m06-p01-visual-order-v5",
     firstSlide: 1,
     count: 5,
     firstTitle: "Module 06 — Build AI applications on AWS",
-    title: "Module 06 Visual Walkthrough — Application Architecture, Kinesis, Orders and Lambda",
+    title: "AWS Application Architecture, Lambda, API Requests and Kinesis Events",
   },
   "06-02": {
     prefix: "module-06/part-02/aip-module-06-part-02",
