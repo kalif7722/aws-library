@@ -1,4 +1,4 @@
-name: Render AIP Module 07 lectures — Parts 01 to 02
+name: Render AIP Module 07 — fresh visual narration, Videos 01 and 02
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m07-video-01-02-v1
+  group: aip-m07-video-01-02-r2-v2
   cancel-in-progress: false
 
 jobs:
@@ -31,11 +31,11 @@ jobs:
           - part: "01"
             start: 1
             end: 5
-            revision: "2026-11-12-m07-p01-lesson-map-v1"
+            revision: "2026-11-12-m07-p01-r2-visual-v2"
           - part: "02"
             start: 6
             end: 10
-            revision: "2026-11-12-m07-p02-lesson-map-v1"
+            revision: "2026-11-12-m07-p02-r2-visual-v2"
     steps:
       - uses: actions/checkout@v4
 
@@ -84,9 +84,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m07-p${{ matrix.part }}-tts-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m07-p${{ matrix.part }}-tts-r2fresh-v2-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aip-m07-p${{ matrix.part }}-tts-v1-
+            aip-m07-p${{ matrix.part }}-tts-r2fresh-v2-
 
       - name: Verify live R2 originals and render narration in one consistent voice
         env:
@@ -104,7 +104,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m07-p${{ matrix.part }}-tts-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m07-p${{ matrix.part }}-tts-r2fresh-v2-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
@@ -185,10 +185,4 @@ jobs:
             --endpoint-url "$R2_ENDPOINT" >/dev/null
           echo "uploaded=true" >> "$GITHUB_OUTPUT"
 
-      - name: Register uploaded video without a Git rebase
-        if: steps.media.outputs.uploaded == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python scripts/publish_aip_video_release.py \
-            --manifest video-output/part-${{ matrix.part }}/aip-module-07-part-${{ matrix.part }}-manifest.json
+      # R2 media and verified manifest are authoritative. Skip GitHub release-record registration.
