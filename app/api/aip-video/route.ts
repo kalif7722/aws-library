@@ -321,6 +321,22 @@ const CONFIG: Record<string, {
     firstTitle: "Route events with EventBridge rules",
     title: "EventBridge Routing, Reliability, Scheduler and Pipes",
   },
+  "07-01": {
+    prefix: "module-07/part-01/aip-module-07-part-01",
+    revision: "2026-11-12-m07-p01-lesson-map-v1",
+    firstSlide: 1,
+    count: 5,
+    firstTitle: "Governance and Quality Assurance",
+    title: "Governance, Agent Tracing and Human Model Evaluation",
+  },
+  "07-02": {
+    prefix: "module-07/part-02/aip-module-07-part-02",
+    revision: "2026-11-12-m07-p02-lesson-map-v1",
+    firstSlide: 6,
+    count: 5,
+    firstTitle: "Using Another Model as a Judge",
+    title: "LLM-as-a-Judge, Hybrid Evaluation and Text Metrics",
+  },
   "02-01": {
     prefix: "module-02/part-01/aip-module-02-part-01",
     revision: "2026-11-11-m02-p01-visual-aligned-v1",
