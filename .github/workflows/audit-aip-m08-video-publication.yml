@@ -1,4 +1,4 @@
-name: Audit AIP Module 08 video publication and player mapping
+name: Audit and diagnose missing Module 08 Videos 07-09
 on:
   push:
     branches: [main]
@@ -27,9 +27,10 @@ jobs:
           root="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip"
           site="https://aws-library.kalifs.workers.dev"
           results=[]
-          for i in range(1,7):
-              p=f"{i:02d}"; revision=f"2026-11-12-m08-p{p}-r2-visual-v1"
-              start=(i-1)*5+1; end=start+4
+          for i in (7,8,9):
+              p=f"{i:02d}"
+              expected={"07":(31,32,"2026-11-12-m08-p07-topic-waf-v2"),"08":(33,38,"2026-11-12-m08-p08-topic-vpc-v2"),"09":(39,44,"2026-11-12-m08-p09-topic-private-v2")}
+              start,end,revision=expected[p]
               prefix=f"{root}/module-08/part-{p}/aip-module-08-part-{p}"
               row={"part":p,"slides":[start,end],"expected_revision":revision}
               for kind,uri in (("manifest",prefix+"-manifest.json"),("mp4",prefix+".mp4")):
@@ -47,6 +48,8 @@ jobs:
                                   row["actual_slides"]=[s.get("slide") for s in scenes]
                                   row["actual_first_title"]=scenes[0].get("title") if scenes else None
                                   row["manifest_valid"]=row["actual_revision"]==revision and row["actual_slides"]==list(range(start,end+1))
+                                  row["first_title"]=j.get("scenes",[{}])[0].get("title") if j.get("scenes") else None
+                                  row["manifest_scene_count"]=len(scenes)
                               except Exception as e: row["manifest_parse_error"]=str(e)[:180]
                           else: row["mp4_first_byte_len"]=len(res.read(1))
                   except Exception as e: row[kind+"_error"]=str(e)[:180]
