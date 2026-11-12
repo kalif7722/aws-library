@@ -1,19 +1,23 @@
-# AIP Module 12 — topic-first narrated video plan
+# AIP Module 12 — original R2 video plan and current status
 
-Primary evidence: original R2 images `aws-genai-course-visuals/module-12/slide-NN.webp` (18 slides). Visual audit: `docs/video-review/aip/module-12/visual-ocr-01-18.json`.
+## Source of truth
+Original numbered R2 visuals: `aws-genai-course-visuals/module-12/slide-NN.webp` (18 entries in the older course map).
+Confirmed spatial audit results: slides **01–09**, **12–13**, and **14–18**. Slides **10–11** have not produced an accessible audit report; a diagnostic workflow `.github/workflows/audit-aip-m12-visuals-10-11.yml` now commits status even when the R2 images are unavailable.
 
-**Preliminary grouping until source audit completes:**
-| Part | Candidate slides | Coherent topic |
-|---|---|---|
-| 01 | 01–06 | Infrastructure as code: AWS CDK, architecture, comparison with SAM and hands-on deployment |
-| 02 | 07–10 | AWS account access, credentials, CLI and SDK integration |
-| 03 | 11–14 | CloudFormation IaC, productivity and Infrastructure Composer |
-| 04 | 15–18 | CodeArtifact repository architecture, package events and resource policies |
+## Topic-based videos
+| Part | Slides | Topic | Status |
+|---|---|---|---|
+| 01 | 01–05 | CDK/SAM, local Lambda testing, scientific image-analysis application | Narrated, registered, render configured |
+| 02 | 06–07 | Human/workload identity, AWS CLI and SDK access | Narrated, registered, render configured |
+| 03 | 08 | CloudFormation lifecycle and stack safety | Narrated, registered, render configured |
+| 04 | 09 | CodeArtifact dependency flow | Narrated, registered, render configured |
+| 05 | 10–13 | **Pending original-image verification for slides 10–11**; slides 12–13 cover temporary credentials, CLI profiles and SDK resolution | Hold: do not generate or publish inaccurate lesson |
+| 06 | 14–16 | CloudFormation dependencies, change sets, retention, drift and visual IaC | Narrated, registered, render configured |
+| 07 | 17–18 | CodeArtifact cross-account authorization and safe package validation | Narrated, registered, render configured |
 
-Do not render or finalise narration against legacy titles. Check the numbered R2 slide headings, diagrams and code fragments, and adjust section boundaries when appropriate. Do not force a fixed scene count per video.
+All scripts are based on verified R2 slide content, not the legacy lesson-map titles. Preserve correct slide sequence even if part 05 needs to be split after source verification.
 
-Quality controls:
-- Narrate what students can see, including policy conditions, flow order and commands; clarify technical nuances.
-- Use exact original slide sequence and revision identifiers consistently across scripts, player, API, captions and R2 manifests.
-- Use fresh Module 12 audio cache and cloud upload verification.
-- After publishing, verify MP4 existence and manifest revision plus scene count, particularly preventing Module 08's stale-manifest issue.
+## Publication safeguards
+- All current render workflows have Module 12 ID checks, fresh TTS caches, expected chapter order, R2 uploads and MP4/manifest HEAD checks.
+- An R2 MP4 is not enough to make the player ready: the manuscript revision, first title, slide order and asset presence must match the API config.
+- Do not claim end-to-end completion until source slides 10–11 are verified, narrated, mapped and rendered.
