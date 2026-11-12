@@ -60,6 +60,10 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "12": [
+    { id: "01", title: "Developer Tools and CDK: Synthesis, SAM Testing and Event-Driven Example", subtitle: "CDK synthesis, SAM comparison and local Lambda validation plus image-event architecture", start: 1, end: 5 },
+    { id: "02", title: "AWS Console, CLI and SDK: Identity, Credentials and API Access", subtitle: "Console, CLI, SDK credentials, temporary roles and caller verification", start: 6, end: 7 },
+  ],
   "11": [
     { id: "01", title: "Purpose-Built GenAI Databases and Amazon DocumentDB", subtitle: "Purpose-built stores, structured retrieval and DocumentDB read replicas", start: 1, end: 3 },
     { id: "02", title: "GenAI Caching and Durable Agent State with ElastiCache and MemoryDB", subtitle: "Cache-aside response reuse and durable multi-AZ agent state", start: 4, end: 5 },
