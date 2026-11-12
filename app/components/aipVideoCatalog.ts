@@ -63,6 +63,10 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
   "12": [
     { id: "01", title: "Developer Tools and CDK: Synthesis, SAM Testing and Event-Driven Example", subtitle: "CDK synthesis, SAM comparison and local Lambda validation plus image-event architecture", start: 1, end: 5 },
     { id: "02", title: "AWS Console, CLI and SDK: Identity, Credentials and API Access", subtitle: "Console, CLI, SDK credentials, temporary roles and caller verification", start: 6, end: 7 },
+    { id: "03", title: "CloudFormation Template Lifecycle, Change Sets and Stack Safety", subtitle: "CloudFormation lifecycle and safe infrastructure changes", start: 8, end: 8 },
+    { id: "04", title: "CodeArtifact Dependency Flow and Approved Package Consumption", subtitle: "CodeArtifact domains, repositories, versions and approved builds", start: 9, end: 9 },
+    { id: "06", title: "CloudFormation Advanced: Dependencies, Change Sets, Drift and Infrastructure Composer", subtitle: "CloudFormation dependencies, drift, retention and visual IaC authoring", start: 14, end: 16 },
+    { id: "07", title: "CodeArtifact Security and Event-Driven Package Validation", subtitle: "Cross-account package permissions and safe EventBridge validation", start: 17, end: 18 },
   ],
   "11": [
     { id: "01", title: "Purpose-Built GenAI Databases and Amazon DocumentDB", subtitle: "Purpose-built stores, structured retrieval and DocumentDB read replicas", start: 1, end: 3 },
