@@ -60,6 +60,13 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "14": [
+    { id: "01", title: "GenAI Capacity Management: Target Tracking, Predictive Scaling and Guardrails", subtitle: "Scaling responsibilities, target tracking, predictive plans and Bedrock quota guardrails", start: 1, end: 5 },
+    { id: "02", title: "AWS Cost Anomaly Detection: Baselines, Alerts and Incident Triage", subtitle: "Anomaly baselines, alert subscriptions and root-cause cost triage", start: 6, end: 7 },
+    { id: "03", title: "Cost Explorer: Spend Analysis, Resource Investigation, Savings Plans and Forecasts", subtitle: "Cost Explorer filters, service trends, resource investigation, Savings Plans and forecasts", start: 8, end: 12 },
+    { id: "04", title: "Amazon Managed Grafana: Observability Data Sources, Dashboards and Alerts", subtitle: "Grafana authentication, telemetry, GenAI dashboards and explicit alert routing", start: 13, end: 14 },
+    { id: "05", title: "AWS Systems Manager: Managed Node Identity, Agent and Network Prerequisites", subtitle: "SSM managed nodes, IAM/Agent/HTTPS prerequisites and troubleshooting", start: 15, end: 15 },
+  ],
   "13": [
     { id: "01", title: "Task-Focused ML Services and Human-in-the-Loop Review with A2I", subtitle: "ML service selection, A2I review decisions and human oversight", start: 1, end: 3 },
     { id: "02", title: "Amazon Kendra Enterprise Search and Retrieval Quality", subtitle: "Kendra enterprise indexing, source permissions and retrieval tuning", start: 4, end: 5 },
