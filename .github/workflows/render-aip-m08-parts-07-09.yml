@@ -16,7 +16,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m08-video-07-09-r2-v1
+  group: aip-m08-video-topic-07-09-v2
   cancel-in-progress: false
 
 jobs:
@@ -31,16 +31,16 @@ jobs:
         include:
           - part: "07"
             start: 31
-            end: 35
-            revision: "2026-11-12-m08-p07-r2-visual-v1"
+            end: 32
+            revision: "2026-11-12-m08-p07-topic-waf-v2"
           - part: "08"
-            start: 36
-            end: 40
-            revision: "2026-11-12-m08-p08-r2-visual-v1"
+            start: 33
+            end: 38
+            revision: "2026-11-12-m08-p08-topic-vpc-v2"
           - part: "09"
-            start: 41
-            end: 45
-            revision: "2026-11-12-m08-p09-r2-visual-v1"
+            start: 39
+            end: 44
+            revision: "2026-11-12-m08-p09-topic-private-v2"
     steps:
       - uses: actions/checkout@v4
 
@@ -89,9 +89,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m08-p${{ matrix.part }}-tts-m08fresh07-09-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m08-p${{ matrix.part }}-tts-m08topic07-09-v2-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aip-m08-p${{ matrix.part }}-tts-m08fresh07-09-v1-
+            aip-m08-p${{ matrix.part }}-tts-m08topic07-09-v2-
 
       - name: Verify live R2 originals and render narration in one consistent voice
         env:
@@ -109,7 +109,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m08-p${{ matrix.part }}-tts-m08fresh07-09-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m08-p${{ matrix.part }}-tts-m08topic07-09-v2-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
