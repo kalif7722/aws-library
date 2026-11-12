@@ -219,7 +219,7 @@ const CONFIG: Record<string, {
   },
   "06-01": {
     prefix: "module-06/part-01/aip-module-06-part-01",
-    revision: "2026-11-12-m06-p01-lesson-map-v1",
+    revision: "2026-11-12-m06-p01-guided-lecture-v2",
     firstSlide: 1,
     count: 5,
     firstTitle: "More Tools for Building AI Applications",
@@ -227,7 +227,7 @@ const CONFIG: Record<string, {
   },
   "06-02": {
     prefix: "module-06/part-02/aip-module-06-part-02",
-    revision: "2026-11-12-m06-p02-lesson-map-v1",
+    revision: "2026-11-12-m06-p02-guided-lecture-v2",
     firstSlide: 6,
     count: 5,
     firstTitle: "Example: Transaction Rate Alarm",
@@ -235,7 +235,7 @@ const CONFIG: Record<string, {
   },
   "06-03": {
     prefix: "module-06/part-03/aip-module-06-part-03",
-    revision: "2026-11-12-m06-p03-lesson-map-v1",
+    revision: "2026-11-12-m06-p03-specific-narration-v2",
     firstSlide: 11,
     count: 6,
     firstTitle: "Lambda and Amazon OpenSearch Service",
@@ -243,7 +243,7 @@ const CONFIG: Record<string, {
   },
   "06-04": {
     prefix: "module-06/part-04/aip-module-06-part-04",
-    revision: "2026-11-12-m06-p04-lesson-map-v1",
+    revision: "2026-11-12-m06-p04-specific-narration-v2",
     firstSlide: 17,
     count: 8,
     firstTitle: "AWS API Gateway",
@@ -251,7 +251,7 @@ const CONFIG: Record<string, {
   },
   "06-05": {
     prefix: "module-06/part-05/aip-module-06-part-05",
-    revision: "2026-11-12-m06-p05-lesson-map-v1",
+    revision: "2026-11-12-m06-p05-specific-narration-v2",
     firstSlide: 25,
     count: 8,
     firstTitle: "AWS Step Functions",
@@ -259,7 +259,7 @@ const CONFIG: Record<string, {
   },
   "06-06": {
     prefix: "module-06/part-06/aip-module-06-part-06",
-    revision: "2026-11-12-m06-p06-lesson-map-v1",
+    revision: "2026-11-12-m06-p06-specific-narration-v2",
     firstSlide: 33,
     count: 9,
     firstTitle: "AWS CodePipeline",
@@ -267,7 +267,7 @@ const CONFIG: Record<string, {
   },
   "06-07": {
     prefix: "module-06/part-07/aip-module-06-part-07",
-    revision: "2026-11-12-m06-p07-lesson-map-v1",
+    revision: "2026-11-12-m06-p07-specific-narration-v2",
     firstSlide: 42,
     count: 7,
     firstTitle: "AWS CodeDeploy",
@@ -275,7 +275,7 @@ const CONFIG: Record<string, {
   },
   "06-08": {
     prefix: "module-06/part-08/aip-module-06-part-08",
-    revision: "2026-11-12-m06-p08-lesson-map-v1",
+    revision: "2026-11-12-m06-p08-specific-narration-v2",
     firstSlide: 49,
     count: 7,
     firstTitle: "MLflow",
