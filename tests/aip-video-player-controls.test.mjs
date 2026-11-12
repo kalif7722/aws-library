@@ -76,9 +76,9 @@ const modulePage=readFileSync(new URL("../app/courses/aws-generative-ai-develope
 const videoCatalog=readFileSync(new URL("../app/components/aipVideoCatalog.ts",import.meta.url),"utf8");
 
 test("module page renders any registered lecture catalog module, including M08",()=>{
-  assert.match(videoCatalog,/"08":\\s*\\[/);
-  assert.match(modulePage,/import \\{AIP_VIDEO_PARTS\\} from/);
-  assert.match(modulePage,/const hasVideoLectures = \\(AIP_VIDEO_PARTS\\[id\\]\\?\\.length \\?\\? 0\\) > 0;/);
-  assert.match(modulePage,/\\{hasVideoLectures && <AipVideoLectures moduleId=\\{id\\} \\/>\\}/);
-  assert.doesNotMatch(modulePage,/id === "07"\\) && <AipVideoLectures/);
+  assert.match(videoCatalog,/"08":\s*\[/);
+  assert.match(modulePage,/import \{AIP_VIDEO_PARTS\} from/);
+  assert.match(modulePage,/const hasVideoLectures = \(AIP_VIDEO_PARTS\[id\]\?\.length \?\? 0\) > 0;/);
+  assert.match(modulePage,/\{hasVideoLectures && <AipVideoLectures moduleId=\{id\} \/>}/);
+  assert.doesNotMatch(modulePage,/id === "07"\) && <AipVideoLectures/);
 });
