@@ -60,6 +60,13 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "13": [
+    { id: "01", title: "Task-Focused ML Services and Human-in-the-Loop Review with A2I", subtitle: "ML service selection, A2I review decisions and human oversight", start: 1, end: 3 },
+    { id: "02", title: "Amazon Kendra Enterprise Search and Retrieval Quality", subtitle: "Kendra enterprise indexing, source permissions and retrieval tuning", start: 4, end: 5 },
+    { id: "03", title: "Amazon Lex V2 Conversations, Fulfilment and Contact Centre Handoff", subtitle: "Lex V2 intents, slots, Lambda fulfilment and optional Connect handoff", start: 6, end: 7 },
+    { id: "04", title: "Rekognition Analysis, Custom Labels and Responsible Image Moderation", subtitle: "Image analysis, custom labels, moderation policies and generated-image gating", start: 8, end: 11 },
+    { id: "05", title: "Amazon Textract: OCR, Forms, Tables and Structured Document Extraction", subtitle: "Invoice OCR, form/table extraction and verified structured output", start: 12, end: 12 },
+  ],
   "12": [
     { id: "01", title: "Developer Tools and CDK: Synthesis, SAM Testing and Event-Driven Example", subtitle: "CDK synthesis, SAM comparison and local Lambda validation plus image-event architecture", start: 1, end: 5 },
     { id: "02", title: "AWS Console, CLI and SDK: Identity, Credentials and API Access", subtitle: "Console, CLI, SDK credentials, temporary roles and caller verification", start: 6, end: 7 },
