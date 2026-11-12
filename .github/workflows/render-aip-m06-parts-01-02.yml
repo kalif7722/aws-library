@@ -14,7 +14,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m06-video-visual-01-v4
+  group: aip-m06-video-visual-01-v5
   cancel-in-progress: false
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
           - part: "01"
             start: 1
             end: 5
-            revision: "2026-11-12-m06-p01-visual-walkthrough-v4"
+            revision: "2026-11-12-m06-p01-visual-order-v5"
     steps:
       - uses: actions/checkout@v4
 
@@ -79,9 +79,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-visual-v4-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-visual-v5-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aip-m06-p${{ matrix.part }}-tts-visual-v4-
+            aip-m06-p${{ matrix.part }}-tts-visual-v5-
 
       - name: Verify live R2 originals and render narration in one consistent voice
         env:
@@ -99,7 +99,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aip-m06-p${{ matrix.part }}-tts-visual-v4-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aip-m06-p${{ matrix.part }}-tts-visual-v5-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
