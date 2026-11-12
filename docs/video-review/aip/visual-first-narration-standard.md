@@ -30,3 +30,11 @@ Slides 6–60 require image-based verification; lesson-map labels alone are insu
 The R2-original OCR audit for slides 6–32 is in
 `.github/workflows/audit-aip-m06-visuals.yml`; it is evidence supporting visual QA,
 not a replacement for a human check of diagrams.
+
+## Topic-first lecture segmentation (approved global standard)
+- Choose video boundaries by **complete teaching concept**, not a fixed number of slides. A lecture may include 2, 6, 9 or more slides when the subject needs it.
+- Study the original R2 images and trace the instructional sequence before assigning videos. Keep one topic, its diagrams, examples, trade-offs and relevant walkthroughs together.
+- Break only at a natural concept transition; do not split an architecture explanation or procedure merely to reach five slides.
+- A standalone lab can have its own video if that makes the learning path clearer. Do not combine unrelated topics just to fill a target count.
+- Narration length follows the complexity of the actual slides, not a preset runtime. Verify all source slide titles, manifest slide ranges, part IDs and R2 player mappings after regrouping.
+- This applies to **all modules and future AWS, Azure, GCP and other visual-learning course videos**, across chat sessions.
