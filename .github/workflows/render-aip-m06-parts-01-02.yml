@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   render:
-    name: M06 Part ${{ matrix.part }} — narrated AWS data diagrams
+    name: M06 Part ${{ matrix.part }} — visual-aligned lecture pilot
     runs-on: ubuntu-latest
     timeout-minutes: 150
     strategy:
@@ -179,6 +179,30 @@ jobs:
           aws s3api head-object --bucket "$R2_BUCKET" --key "$PREFIX/$STEM-manifest.json" \
             --endpoint-url "$R2_ENDPOINT" >/dev/null
           echo "uploaded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release registration contract
+        if: steps.media.outputs.uploaded == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.publish_aip_video_release import EXPECTED
+          p="01"
+          stem="aip-module-06-part-"+p
+          rendered=json.loads(Path("video-output/part-"+p+"/"+stem+"-manifest.json").read_text())
+          source=json.loads(Path("content/video-narration/"+stem+".json").read_text())
+          expected_slides, expected_revision=EXPECTED[("06",p)]
+          actual_slides=[x["slide"] for x in rendered["scenes"]]
+          actual_titles=[x["title"] for x in rendered["scenes"]]
+          source_titles=[x["title"] for x in source["scenes"]]
+          print("Renderer revision:",rendered["script_revision"])
+          print("Source revision:",source["script_revision"])
+          print("Release expected revision:",expected_revision)
+          print("Slide numbers:",actual_slides)
+          assert actual_slides==expected_slides==[1,2,3,4,5]
+          assert actual_titles==source_titles, "Rendered chapters do not match visual slide titles"
+          assert rendered["script_revision"]==source["script_revision"]==expected_revision, "Revision mismatch: workflow must use updated publisher"
+          PY
 
       - name: Register uploaded video without a Git rebase
         if: steps.media.outputs.uploaded == 'true'
