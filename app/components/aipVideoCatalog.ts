@@ -48,8 +48,8 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
   "06": [
     { id: "01", title: "AWS Application Architecture, Lambda, API Requests and Kinesis Events", subtitle: "Overview, Lambda basics, API request, order-event processing and stream alerts", start: 1, end: 5 },
     { id: "02", title: "Lambda Workload Choices, Five Patterns, Runtimes, Triggers and OpenSearch", subtitle: "When to use Lambda, event patterns, runtimes, triggers and vector indexing", start: 6, end: 10 },
-    { id: "03", title: "Lambda Integrations with OpenSearch, Streams, Bedrock and APIs", subtitle: "OpenSearch, Kinesis, Redshift, Bedrock and serverless APIs", start: 11, end: 16 },
-    { id: "04", title: "API Gateway Integrations, Security and AppConfig", subtitle: "API types, integrations, policies and runtime configuration", start: 17, end: 24 },
+    { id: "03", title: "Lambda Data Pipelines, Kinesis Batches, Bedrock and API Integrations", subtitle: "Data transformations, Redshift COPY, stream retries, Bedrock adapters and API integrations", start: 11, end: 16 },
+    { id: "04", title: "API Gateway Routing and Security, AppConfig and Step Functions", subtitle: "Direct Kinesis integration, REST endpoint types, AI API security, model flags and orchestration", start: 17, end: 24 },
     { id: "05", title: "Step Functions, ML Orchestration and Resilience", subtitle: "State machines, SageMaker jobs, retries and payload design", start: 25, end: 32 },
     { id: "06", title: "CodePipeline, CI/CD and CodeBuild", subtitle: "Pipeline artifacts, troubleshooting, build environments and buildspec", start: 33, end: 41 },
     { id: "07", title: "CodeDeploy Strategies for EC2, Lambda and ECS", subtitle: "Deployment lifecycle, in-place versus blue-green and rollback", start: 42, end: 48 },
