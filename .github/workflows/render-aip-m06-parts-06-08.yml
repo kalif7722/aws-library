@@ -1,7 +1,10 @@
-name: Render AIP Module 06 lectures — Parts 06 to 08
+name: Render original-slide-aligned AIP M06 Videos 06–08
 
 on:
-  # Paused until Video 01 educational narration receives human approval.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/render-aip-m06-parts-06-08.yml"
   workflow_dispatch:
 
 permissions:
@@ -10,7 +13,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aip-m06-video-06-08-v2
+  group: aip-m06-video-06-08-r2-audited-v3
   cancel-in-progress: false
 
 jobs:
@@ -26,15 +29,15 @@ jobs:
           - part: "06"
             start: 33
             end: 41
-            revision: "2026-11-12-m06-p06-specific-narration-v2"
+            revision: "2026-11-12-m06-p06-r2-audited-v3"
           - part: "07"
             start: 42
             end: 48
-            revision: "2026-11-12-m06-p07-specific-narration-v2"
+            revision: "2026-11-12-m06-p07-r2-audited-v3"
           - part: "08"
             start: 49
             end: 55
-            revision: "2026-11-12-m06-p08-specific-narration-v2"
+            revision: "2026-11-12-m06-p08-r2-audited-v3"
     steps:
       - uses: actions/checkout@v4
 
@@ -184,10 +187,4 @@ jobs:
             --endpoint-url "$R2_ENDPOINT" >/dev/null
           echo "uploaded=true" >> "$GITHUB_OUTPUT"
 
-      - name: Register uploaded video without a Git rebase
-        if: steps.media.outputs.uploaded == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python scripts/publish_aip_video_release.py \
-            --manifest video-output/part-${{ matrix.part }}/aip-module-06-part-${{ matrix.part }}-manifest.json
+      # R2 MP4 and manifest are authoritative; skip the nonessential GitHub release-record update.
