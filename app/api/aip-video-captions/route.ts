@@ -81,7 +81,9 @@ export async function GET(request: NextRequest) {
   const key = part ? `${module}-${part}` : module;
   if (!CAPTIONS[key]) return new Response("Not found", { status: 404 });
   try {
-    const result = await fetch(`${ROOT}/${CAPTIONS[key]}`, {
+    const revision = request.nextUrl.searchParams.get("rev");
+    const versionSuffix = revision ? `?v=${encodeURIComponent(revision)}` : "";
+    const result = await fetch(`${ROOT}/${CAPTIONS[key]}${versionSuffix}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(6500),
     });
@@ -91,7 +93,7 @@ export async function GET(request: NextRequest) {
     return new Response(body, {
       headers: {
         "Content-Type": "text/vtt; charset=utf-8",
-        "Cache-Control": "public, max-age=300",
+        "Cache-Control": "no-store, max-age=0",
       },
     });
   } catch {
