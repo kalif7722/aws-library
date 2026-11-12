@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "08",
+  "module_title": "Security, Identity, and Compliance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 08 R2 slides 26–30 verified from GitHub-runner spatial audit; original visuals and completely fresh TTS.",
+  "part_id": "06",
+  "part_title": "Multi-Region Secrets, Cognito User Pools and Tenant Isolation",
+  "script_revision": "2026-11-12-m08-p06-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 26,
+      "title": "Multi-region secrets",
+      "narration": "This slide shows a primary secret in Region A replicated to Region B. Follow the top arrow: Secrets Manager manages propagation of supported secret updates so an application in the second Region can read a local replica. That can reduce cross-Region dependencies and support recovery when the primary Region becomes unavailable. The rotation arrow starts at the primary, whose updates are propagated to replicas; it is not an instruction for independent rotation schedules in every Region. The failover section describes using a replica during a regional outage and, when necessary, promoting a replica according to the supported procedure. Now read the caution about deletion. Deleting or changing the primary can affect replicas, so the change-management process must account for replication and disaster recovery. Replication doesn't guarantee the external system using a credential is itself multi-Region or that the application will work without network access to that system. Test both secret availability and the actual downstream authentication path. Use distinct regional IAM and KMS permissions where needed, and audit which workloads can retrieve the replicated value."
+    },
+    {
+      "slide": 27,
+      "title": "Cognito user pools",
+      "narration": "This architecture starts with a web or mobile user signing up or signing in. A Cognito user pool authenticates the person and returns tokens the application can use for its session and authorised API calls. The middle panels distinguish token types. An ID token describes authenticated identity claims. An access token is intended for authorisation, including scopes where configured. A refresh token lets the client obtain fresh tokens without another full login while its session remains valid. On the right, API Gateway validates the appropriate access token before forwarding the request to a backend such as Lambda. The API still needs application-level checks for ownership and tenant permissions; a valid token doesn't mean the user may see every record. User pools handle identities and user authentication, but they do not automatically provide temporary AWS credentials for direct S3 or DynamoDB access. That is a separate identity-pool pattern covered later. Keep token audience, issuer, expiry and signature checks consistent with the API authoriser. The central idea is to separate user authentication from business-resource authorisation."
+    },
+    {
+      "slide": 28,
+      "title": "Amazon Cognito User Pool Features",
+      "narration": "The diagram places Cognito user pools in the centre, surrounded by features needed for a production sign-in experience. Verification can confirm email or phone ownership. Password policies apply account security requirements. Multi-factor authentication adds another factor, such as an authenticator code or supported passkey flow depending on configuration. Groups provide claims or a classification the application can use when making authorisation decisions. Federation allows users to authenticate through social or enterprise identity providers instead of creating another password. Lambda triggers can run approved custom logic during particular sign-up and sign-in events. Walk through how these features cooperate. For example, an enterprise user may authenticate with an external identity provider, receive tokens from Cognito, and then use a group claim that a backend validates for an authorised action. A user-pool group is not an AWS IAM role that automatically permits S3 writes. Also, avoid assuming every MFA mechanism appears in every flow or Region. Choose the supported authentication methods deliberately and keep server-side authorisation independent of user-interface visibility."
+    },
+    {
+      "slide": 29,
+      "title": "Cognito Identity Pools and Federated Identities",
+      "narration": "Now compare Cognito identity pools with the user pool on the previous slide. Here a user authenticates with a trusted provider, perhaps a user pool, enterprise provider or supported social login. The resulting token goes to an identity pool, which maps the identity to an authorised IAM role and obtains short-lived AWS credentials. The diagram lists an access key ID, secret key and session token with an expiration. The client can then call supported AWS services directly, for example reading a specific S3 location, under the role's permissions. This is different from using a user-pool JWT as an AWS access key. Identity pools broker AWS credentials, while IAM determines the allowed AWS actions. The diagram also includes unauthenticated guest identities, which should only be enabled for a genuine use case and restricted to very limited operations. Avoid granting broad bucket access to everyone holding a federated identity. For a GenAI app, direct client access is appropriate only when role policies, resource policies and tenant isolation are designed and tested."
+    },
+    {
+      "slide": 30,
+      "title": "Cognito row-level access pattern",
+      "narration": "This final slide shows how to prevent a signed-in user from reading another tenant's records. A user authenticates through Cognito and sends a JWT to the application API. The backend verifies that token, extracts the trusted tenant and user identity claims, and applies a database query filter. The illustrated SQL selects rows whose tenant ID matches the authorised context; the response therefore contains only records belonging to that tenant. Now look at the blocked attempt below. A caller from Tenant B tries to request Tenant A's records by changing a URL query parameter. The API must reject or override that requested tenant because the verified identity does not permit it. There is a subtle extra requirement here: a tenant filter alone may still return another user’s records inside the same tenant. If the intended rule is 'Alice sees only Alice's records,' include an owner-ID check or equivalent row-level security rule as well. Claims must be validated and their trust source understood, not copied blindly from an unverified client string. Enforce access at the server or database boundary, and test direct API requests that bypass the UI."
+    }
+  ]
+}
