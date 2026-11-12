@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "13",
+  "module_title": "Task-Focused Machine Learning and AI Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original numbered R2 Module 13 slides 6–7 verified by spatial audit; topic-first narration and fresh TTS.",
+  "part_id": "03",
+  "part_title": "Amazon Lex V2 Conversations, Fulfilment and Contact Centre Handoff",
+  "script_revision": "2026-11-13-m13-p03-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Amazon Lex V2: Conversation Anatomy",
+      "narration": "Walk through the booking dialogue shown on the slide. The user says they want to book a room. Lex recognises the booking intent, extracts the date slot and notices that the city and number of nights are still missing. It asks a clarifying question, then validates the supplied answer of Seattle for two nights. Before committing a reservation, the bot confirms the collected details with the caller. Once the user approves, a Lambda fulfilment function can check availability, create the booking and return a reference. Lex then responds in natural language using the fulfilment result. The key distinction is that Lex manages conversational interpretation, prompts and slots, while backend business systems perform the actual reservation. Slot validation and confirmation reduce accidental or ambiguous actions, but they do not replace caller authentication or transaction authorisation. A production bot should handle errors, corrections, cancellations and requests outside the supported intents. This is a controlled conversational workflow, not a free-form assistant with permission to book anything."
+    },
+    {
+      "slide": 7,
+      "title": "Amazon Lex Integration Architecture",
+      "narration": "This architecture broadens the same interaction into an application. A text or voice client sends requests to a specific Lex V2 bot alias and locale. The bot recognises the flight-booking intent, manages the dialog, collects the required slot values and asks for confirmation. A Lambda function validates inputs and calls a booking service to check availability and create the actual transaction. The results return through Lex to the client. On the lower branch, Amazon Connect can route a caller to a live agent when the bot cannot resolve the request or the issue requires human handling. Keep two security responsibilities separate: Lambda's IAM role should permit only the AWS operations it needs, and the application or booking API must enforce the customer’s business permissions. Lex confirmation is a user-experience safeguard, not a guarantee against fraud. For a GenAI-enhanced service, optional model responses need policy and grounding controls, while deterministic booking actions remain governed by validated backend logic."
+    }
+  ]
+}
