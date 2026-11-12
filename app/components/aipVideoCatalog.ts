@@ -60,6 +60,13 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "12", title: "SNS Filtering, Mobile Push, AppFlow and SQS Operations", subtitle: "Subscription filters, APNs and FCM, AppFlow transfer and dead-letter queues", start: 69, end: 72 },
     { id: "13", title: "EventBridge Routing, Reliability, Scheduler and Pipes", subtitle: "Rules, cross-account policies, Scheduler and Pipes", start: 73, end: 76 },
   ],
+  "10": [
+    { id: "01", title: "Choosing GenAI Compute and Deploying APIs with AWS App Runner", subtitle: "Compute trade-offs, managed App Runner deployment and APIs", start: 1, end: 2 },
+    { id: "02", title: "EC2 for GenAI: Instance Selection, Bootstrap and Linux Launch Walkthrough", subtitle: "EC2 architecture, accelerated inference sizing, user data and console launch", start: 3, end: 6 },
+    { id: "03", title: "Docker to Amazon ECS: EC2, Fargate, IAM, Load Balancing and EFS", subtitle: "Docker, ECR, ECS EC2/Fargate, task/execution roles, ALB and EFS", start: 7, end: 12 },
+    { id: "04", title: "Amazon EKS: Kubernetes Control Plane, GenAI Architecture, Nodes and Storage", subtitle: "EKS control plane, secure GenAI Pods, node options and block/file storage", start: 13, end: 16 },
+    { id: "05", title: "Customer Engagement: Amazon Lex, Amazon Connect and Human Handoff", subtitle: "Contact flows, Lex dialog, Bedrock/Lambda backend and human escalation", start: 17, end: 17 },
+  ],
   "09": [
     { id: "01", title: "GenAI Analytics Architecture and Amazon Athena", subtitle: "S3 analytics data, Athena query execution and grounded SQL answers", start: 1, end: 3 },
     { id: "02", title: "Amazon EMR: Distributed Processing, Usage Patterns and Frameworks", subtitle: "Distributed Spark processing, EMR deployment patterns and engines", start: 4, end: 6 },
