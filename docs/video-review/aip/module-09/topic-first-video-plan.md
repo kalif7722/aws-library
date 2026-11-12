@@ -1,16 +1,17 @@
 # AIP Module 09 — topic-first narrated video plan
 
 Source of truth: original R2 `aws-genai-course-visuals/module-09/slide-NN.webp` (26 slides).
-**Status:** provisional section boundaries based on inventory only. Do not render until source-image audit verifies all titles, content and slide order.
+**Status:** source audits completed (26/26 slides). All seven topic-based narration scripts are written, registered and queued by two video render workflows. R2 publication is not yet confirmed.
 
-| Part | Source slides | Coherent instructional section |
+| Video | Original slides | Verified complete teaching topic |
 |---|---|---|
-| 01 | 01–03 | Athena: serverless SQL on S3, query architecture and use cases |
-| 02 | 04–07 | Amazon EMR: clusters, sizing/use patterns and supported processing frameworks |
-| 03 | 08–12 | Amazon QuickSight: BI architecture, sources, SPICE, use cases and anti-patterns |
-| 04 | 13–19 | QuickSight access and connectivity: security boundaries, cross-account and cross-Region data access, user management |
-| 05 | 20–22 | Kinesis Data Streams: shards, retention, replay and capacity modes |
-| 06 | 23–26 | Amazon MSK: Kafka fundamentals, comparison with Kinesis and consumer patterns |
+| 01 | 01–03 | GenAI analytics overview and Athena query/RAG use cases |
+| 02 | 04–06 | Amazon EMR cluster architecture, usage models and distributed frameworks |
+| 03 | 07–11 | QuickSight architecture, data access modes, GenAI dashboards and anti-patterns |
+| 04 | 12–16 | QuickSight identity, resource policies, cross-Region, cross-account and row-level access |
+| 05 | 17–20 | Kinesis stream architecture, retention and replay, capacity modes, real-time GenAI pipeline |
+| 06 | 21–24 | Amazon MSK brokers, Kafka topics and groups, comparison with Kinesis, consumer patterns |
+| 07 | 25–26 | Service selection guide and integrated analytics architecture |
 
 ## Required QA gates
 
