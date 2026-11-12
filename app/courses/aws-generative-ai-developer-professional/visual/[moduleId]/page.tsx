@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ModuleVisualGallery from "../../../../components/ModuleVisualGallery";
 import AipVideoLectures from "../../../../components/AipVideoLectures";
+import {AIP_VIDEO_PARTS} from "../../../../components/aipVideoCatalog";
 import {ModuleStudyProgress} from "../../../../components/StudyProgress";
 import "../../../../components/CourseStudyTools.css";
 import GenAITroubleshootingModule from "../../../../components/GenAITroubleshootingModule";
@@ -27,6 +28,7 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
   const { moduleId } = await params;
   const id = moduleId.replace("module-", "");
   const selected = modules.find((item) => item.id === id);
+  const hasVideoLectures = (AIP_VIDEO_PARTS[id]?.length ?? 0) > 0;
   if (!selected) return <main style={{padding:32}}><h1>Module not found</h1><Link href="/courses/aws-generative-ai-developer-professional">Back to course overview</Link></main>;
   if (id === "18") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}><style>{heroCss}</style><section className="genai-deep-hero"><Link href="/courses/aws-generative-ai-developer-professional">← All course modules</Link><p>MODULE 18 · EXAM PREPARATION</p><h1>Review. Practice. Build confidence.</h1><p>Visual revision followed by original scenario-based practice and a timed exam.</p></section><ExamPreparation /></main>;
   if (id === "19") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}>
@@ -46,13 +48,13 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
       <p>{desc}</p>
     </section>
     <ModuleStudyProgress course="aip" moduleId={num} totalSlides={visualMap.lessonsByModule[num as keyof typeof visualMap.lessonsByModule]?.length ?? 0}/>
-    {(id === "00" || id === "01" || id === "02" || id === "03" || id === "04" || id === "05" || id === "06" || id === "07") && <AipVideoLectures moduleId={id} />}
+    {hasVideoLectures && <AipVideoLectures moduleId={id} />}
     <section id="visual-lessons" style={{scrollMarginTop:24}}>
-      {(id === "00" || id === "01" || id === "02" || id === "03" || id === "04" || id === "05" || id === "06" || id === "07") && <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:26}}>
+      {hasVideoLectures && <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginTop:26}}>
         <h2 style={{color:"#223c60",margin:0}}>Visual lessons</h2>
         <a href="#video-lectures" style={{color:"#1766ac",fontWeight:750,fontSize:13}}>↑ Back to video lectures</a>
       </div>}
-      {!(id === "00" || id === "01" || id === "02" || id === "03" || id === "04" || id === "05" || id === "06" || id === "07") && <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>}
+      {!hasVideoLectures && <h2 style={{marginTop:28,color:"var(--text, #94a3b8)"}}>Visual lessons</h2>}
       <p style={{color:"#64748b"}}>Click any available visual to open the full-screen viewer. Use the left/right arrows or keyboard arrow keys to move between available visuals; press Esc to close.</p>
       <ModuleVisualGallery moduleNumber={num} imageBase={imageBase} />
     </section>
