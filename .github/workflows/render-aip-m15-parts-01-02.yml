@@ -60,6 +60,20 @@ jobs:
           PY
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/publish_aip_video_release.py scripts/aip_media_tools.py
 
+      - name: Require completed source-image audit before synthesis
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          audit=json.loads(Path("docs/video-review/aip/module-15/visual-ocr-01-06.json").read_text())
+          slides=audit["slides"]
+          assert audit["module"]=="15", "Wrong audit module"
+          assert len(slides)==6 and [s["slide"] for s in slides]==list(range(1,7)), "Incomplete source audit"
+          assert all(s["status"]=="ok" and s.get("header_candidates") for s in slides), "An original R2 image failed source verification"
+          assert all(s.get("image_size")==[2048,1152] for s in slides), "Unexpected original image dimensions"
+          print("All six original R2 images passed pre-render audit")
+          PY
+
       - name: Confirm the actual original slide range and narration revision
         env:
           PART: ${{ matrix.part }}
