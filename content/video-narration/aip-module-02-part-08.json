@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "part_id": "08",
+  "module_title": "Managing Data for Generative AI",
+  "part_title": "Managed OpenSearch Domains, Index Lifecycle, Operations and Security",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m02-p08-visual-aligned-v1",
+  "review_basis": "Original AIP-C01 Module 02 2048×1152 WebP images inspected individually in archived redesign contact sheets; renderer checks current R2 images",
+  "scenes": [
+    {
+      "slide": 47,
+      "title": "Managed OpenSearch Domains",
+      "narration": "Now we move from search concepts to a managed OpenSearch deployment. The application on the far left connects using HTTPS to a domain endpoint. Behind that endpoint, the diagram shows data nodes distributed across availability zones, helping the deployment tolerate some node failures. The optional dedicated cluster-manager nodes coordinate cluster state and elections. Follow the lower connections to the snapshot and network controls. Snapshots support recovery, while VPC placement, encryption and security policies restrict who can reach or use the domain. The orange band at the bottom highlights a central responsibility: even with a managed domain, you select instance types, counts, storage and some scaling choices. Amazon manages much of the underlying infrastructure, but it does not guarantee that every workload is sized correctly. Plan capacity, security and recovery before indexing production data."
+    },
+    {
+      "slide": 48,
+      "title": "Domain Configuration Choices",
+      "narration": "This diagram brings several domain configuration decisions around the OpenSearch cluster. The upper-left box is data-node capacity: instance count and sizing affect indexing throughput, search latency and storage headroom. The upper-right box covers dedicated cluster-manager nodes, which help coordinate a stable cluster state for larger or demanding deployments. On the left, the Multi-AZ placement box reminds us that distributing nodes across fault domains improves availability. Below the cluster, snapshots support backup and restore, but they are a separate mechanism from replicas. The lower access-policy and VPC placement box controls the network and authorization path. These settings work together. Adding large data nodes alone won't fix an overloaded manager, poorly balanced shards or an overly permissive access policy. For an AWS scenario, identify which part of the deployment causes the problem before choosing a configuration change."
+    },
+    {
+      "slide": 49,
+      "title": "Hot, UltraWarm and Cold",
+      "narration": "This slide compares storage tiers for aging OpenSearch indexes. On the left, hot storage handles active writes and frequently queried data with the highest performance expectations. In the middle, UltraWarm offers a lower-cost way to retain older searchable data where supported. On the right, cold storage further reduces the cost of long-term data, but may require activation or restoration before queries. Follow the aging arrows from hot to UltraWarm to cold. Notice the dashed arrow returning data for querying: moving to a cheaper tier may trade immediate access and flexibility for cost. Not every OpenSearch deployment mode or version offers identical lifecycle capabilities, so verify the supported storage options before designing around them. Match retention and query frequency to the chosen tier rather than storing months of rarely accessed logs on the most expensive hot nodes."
+    },
+    {
+      "slide": 50,
+      "title": "Index State Management",
+      "narration": "OpenSearch Index State Management automates changes as indexes age or meet defined conditions. Trace the example policy across the top. An index begins in the hot state with read and write access. When its age or size reaches a threshold, the policy can move it to a read-only or lower-cost state. The next transition sends data to cold retention where supported, and a final policy step deletes the index after the retention period. The row underneath lists possible policy actions, including snapshots, notifications and updating index settings. Notice that a policy is not merely a label on the data. It executes state transitions and actions according to specified conditions, so mistakes can delete records early. Test the policy against the organization's actual retention requirements and make sure recovery snapshots exist before using automated deletion."
+    },
+    {
+      "slide": 51,
+      "title": "Rollups and Index Transforms",
+      "narration": "These two features reduce how much detailed event data an application needs to search for common reporting questions. On the left, a rollup aggregates older time-series events into larger time buckets, such as daily metrics, reducing the volume of detailed records needed for trend analysis. Follow the raw event index into the rollup index at the bottom. On the right, an index transform creates a derived view grouped or aggregated by selected fields. Its result can have a different schema, such as counts by product, region or user activity. These are related but not identical operations. Rollups emphasize time-based summarization, whereas transforms build derived aggregates for a particular analytical view. Look at the before-and-after index drawings. They show why summarization can improve some queries and lower storage costs, but also why discarded fine-grained detail may no longer be available from the summary index alone."
+    },
+    {
+      "slide": 52,
+      "title": "Cross-Cluster Replication",
+      "narration": "The diagram connects a primary OpenSearch domain in one Region with a follower in a different Region or domain. Start with the leader index on the left. As changes arrive, the follower continuously pulls them, so users near the second domain can run searches without contacting the primary for every query. The right side calls out regional access and a disaster-recovery use case. Now compare the two patterns at the bottom. Cross-cluster replication keeps a follower synchronized continuously and is generally appropriate for near-real-time read copies. Remote reindex is a separate operation for copying data between clusters, often as a migration or catch-up task rather than a continuously synchronized follower. The red warning is crucial: replication is not a backup. Deletions and unwanted changes may propagate. Continue taking snapshots, and test what happens when a Region or leader domain is unavailable."
+    },
+    {
+      "slide": 53,
+      "title": "OpenSearch Cluster Stability",
+      "narration": "This slide names three constraints that work together to keep an OpenSearch cluster healthy. First, balanced shards: look at the node diagrams and note that too many shards or an uneven distribution can overload individual nodes. Second, free disk: indexing and recovery need available storage, not just capacity already consumed by data. Third, a healthy cluster-manager quorum: appropriate manager nodes must be available to coordinate cluster changes. The monitoring panel below shows cluster health, shards per node and disk usage. The action panel offers several possible responses, such as resizing nodes, rebalancing or reducing excess shards, and adjusting capacity. These are not interchangeable fixes. A disk issue requires storage headroom; a quorum problem needs manager stability. The final warning states there is no universal fixed node-count or sizing formula. Evaluate actual data volume, query patterns, growth and failure tolerance."
+    },
+    {
+      "slide": 54,
+      "title": "Layered OpenSearch Security",
+      "narration": "Let's follow an application request across the top security path. An application client first needs approved network reachability to an OpenSearch domain endpoint inside the intended VPC. Next, the signed request and resource authorization layer determine whether the request is allowed, including IAM or resource policies as applicable. Inside the domain, fine-grained access control can further limit roles, indexes, fields or documents. Only then should the search results return to the caller. The lower path is an analyst opening OpenSearch Dashboards. The analyst needs an approved network route, authentication, and roles that permit the relevant dashboards and index data. At the bottom, encryption protects data at rest and in transit, while audit logging can record security-relevant activity. Notice that network access alone is not authorization. Use all these layers together and test permissions using real application and analyst roles."
+    },
+    {
+      "slide": 55,
+      "title": "Secure Dashboards Access",
+      "narration": "This slide zooms in on a common private-dashboard deployment. The analyst on the far left connects through an approved private access method, such as VPN or Direct Connect, into the VPC hosting OpenSearch Dashboards and the associated cluster. The first numbered stage is network reachability. The second is connecting to the correct domain endpoint. The third is authentication and authorization. The purple role panel shows that an approved analyst may have read-only privileges, while other roles could have broader administrative or custom access. A successful network connection does not automatically permit every dashboard, index or document. Also notice the warning that Dashboards authentication and role assignment are separate from merely placing an endpoint in a private subnet. Configure least privilege, secure sessions and appropriate logging. When diagnosing access failures, test the network path, identity and role permissions as distinct layers."
+    },
+    {
+      "slide": 56,
+      "title": "When Not to Use OpenSearch",
+      "narration": "The final slide provides an important service-selection comparison. On the left, an online transaction processing workload frequently inserts and updates customer or order records. A transactional database such as Amazon RDS, or a suitable key-value store such as DynamoDB, is generally a better primary system of record. The middle panel shows large files in an S3 data lake that need occasional SQL analysis. Amazon Athena can query those files without importing every record into a search index. The right-hand panel is where OpenSearch fits: full-text search, log analytics, search-driven dashboards and vector retrieval. Follow the three blue pathways to their different services. The lesson is not that one service replaces the others. A real architecture might store transactions in RDS, retain raw files in S3, and index selected content in OpenSearch for search. Match the persistence and query requirements to each service instead of using OpenSearch for everything."
+    }
+  ]
+}

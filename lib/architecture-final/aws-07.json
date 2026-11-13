@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Amazon Connect Customer",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "resolve a contact-center interaction using customer context",
+    "input": "The contact-center flow authenticates or identifies the caller and the permitted customer profile.",
+    "action": "Amazon Connect's configured customer capabilities associate available profile or case information with the interaction. The contact flow and agent workspace determine what the agent can see and which supported action is available.",
+    "output": "The agent reviews the matched customer context before updating the support case under the approved access policy.",
+    "check": "Test ambiguous identities, cross-customer data isolation and audit evidence for profile or case updates.",
+    "reference": "https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Corretto",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "run a Java order API on a maintained JDK",
+    "input": "The release team builds the approved Java application and selects the supported Corretto version.",
+    "action": "Corretto supplies the Java runtime distribution executing the application's JVM bytecode. The application and hosting platform provide HTTP routing, order validation and persistence; the JDK does not supply those managed services.",
+    "output": "The Java backend handles authorized order requests and uses its configured database connection.",
+    "check": "Test Java compatibility, container memory settings and application behavior when upgrading the JDK version.",
+    "reference": "https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/what-is-corretto-21.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Data Lifecycle Manager",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "automate recovery points for tagged application volumes",
+    "input": "The backup owner selects tagged volumes, snapshot schedules and retention rules.",
+    "action": "Data Lifecycle Manager applies the configured lifecycle policy to supported EBS snapshots or AMIs. Tags and schedules select protected resources; application consistency requires the workload's own coordinated procedure.",
+    "output": "The recovery owner restores an accepted snapshot to an isolated instance and verifies the application data.",
+    "check": "Check policy targeting, retention, restore permissions and a known application-consistent recovery point.",
+    "reference": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon DevOps Guru",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "investigate anomalous application operations",
+    "input": "The operations team enables supported resource analysis and prepares the application ownership map.",
+    "action": "DevOps Guru analyzes supported operational data and presents insights with related anomalies and recommendations. The operator correlates those insights with workload changes instead of treating an anomaly as a proven root cause.",
+    "output": "The application owner validates the relevant resource issue and applies an approved operational repair.",
+    "check": "Confirm the affected request path recovers and check whether the proposed cause explains the incident timing.",
+    "reference": "https://docs.aws.amazon.com/devops-guru/latest/userguide/welcome.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon ECS Anywhere",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "run centrally managed containers on external servers",
+    "input": "The platform owner prepares eligible external servers, registration and required network connectivity.",
+    "action": "ECS Anywhere registers supported external instances into ECS and schedules eligible container workloads on them. The external host supplies compute and local networking; workload and service-feature limitations are designed explicitly.",
+    "output": "The local application serves its permitted enterprise clients and accesses restricted dependencies.",
+    "check": "Test registration loss, container restart, local ingress and compatibility with the supported external-instance task features.",
+    "reference": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-anywhere.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon EKS Anywhere",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "operate a Kubernetes application on local infrastructure",
+    "input": "The Kubernetes team prepares a supported infrastructure provider and workload deployment manifests.",
+    "action": "EKS Anywhere supplies tooling and components to create and manage supported Kubernetes clusters on customer infrastructure. Cluster workers run the pods; the owner manages hardware capacity, networking and application release controls.",
+    "output": "The local ingress routes authorized requests to healthy application pods and their protected data services.",
+    "check": "Test cluster upgrade, node failure, persistent-volume recovery and the application's ingress and DNS dependencies.",
+    "reference": "https://anywhere.eks.amazonaws.com/docs/overview/",
+    "legacy": false
+  },
+  {
+    "service": "Amazon EKS Distro",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "assemble a supported Kubernetes distribution for local clusters",
+    "input": "The platform maintainer selects compatible Kubernetes components and the intended host environment.",
+    "action": "EKS Distro packages the Kubernetes components and associated versions used to build a compatible distribution. It is not a managed cluster endpoint; provisioning and operating the local control plane remain explicit platform tasks.",
+    "output": "The platform team deploys the distribution into its cluster infrastructure and runs the application manifests.",
+    "check": "Verify component compatibility, control-plane recovery and node replacement before accepting a new distribution version.",
+    "reference": "https://distro.eks.amazonaws.com/",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Elastic Transcoder",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical file-transcoding pipeline",
+    "input": "The media owner inventories input formats, historical presets and expected output renditions.",
+    "action": "Elastic Transcoder historically converted stored media through configured jobs and presets. Translate the required codec, resolution and output settings to the chosen supported transcoding service before moving production jobs.",
+    "output": "The replacement MediaConvert job reads the source asset and produces accepted playback files.",
+    "check": "Compare duration, audio, captions and visual quality across sample assets before retiring the historical pipeline.",
+    "reference": "https://docs.aws.amazon.com/elastictranscoder/latest/developerguide/introduction.html",
+    "legacy": true
+  },
+  {
+    "service": "Amazon FSx for Lustre",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "process a scientific dataset through a shared parallel filesystem",
+    "input": "The scientist identifies the approved dataset and a compatible compute-to-filesystem network path.",
+    "action": "FSx for Lustre supplies a parallel filesystem mounted by the compute workers. Supported data-repository integration can associate S3 data; the solver reads filesystem paths and writes outputs under the configured permissions.",
+    "output": "The simulation workers complete the parallel job and publish accepted results through the chosen export procedure.",
+    "check": "Check mount access, throughput, data-repository synchronization and recovery of required output files.",
+    "reference": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon FSx for NetApp ONTAP",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "serve departmental files with snapshots and controlled recovery",
+    "input": "The storage owner defines volumes, protocols, directory integration and departmental access permissions.",
+    "action": "FSx for ONTAP exposes the configured file or block storage capabilities through its storage virtual machines and volumes. Clients authenticate through the selected protocol and directory configuration; snapshots preserve volume recovery points.",
+    "output": "The application reads and writes its assigned paths and the owner restores a test file from the chosen recovery point.",
+    "check": "Test protocol permissions, capacity, snapshot retention and recovery without overwriting unrelated departmental files.",
+    "reference": "https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html",
+    "legacy": false
+  }
+]

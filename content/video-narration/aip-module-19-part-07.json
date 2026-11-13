@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "07",
+  "part_title": "Lab 07 — Diagnose Irrelevant Retrieved Context Without Weakening Security",
+  "script_revision": "2026-11-13-m19-p07-troubleshoot-local-v1",
+  "review_basis": "Original checked-in slides 36–41 visually reviewed; exact top-K, metadata and retrieval evaluation examples grounded in images and student guide.",
+  "scenes": [
+    {
+      "slide": 36,
+      "title": "Scenario and retrieval pipeline",
+      "narration": "The customer asks how to get a refund for an order, but the highest-ranked passage discusses shipping even though a refund passage exists. This is a retrieval-quality incident, so investigate before the language model generates any answer. Trace the query through its embedding step, vector or hybrid search, optional reranker, top-K passage selection, and only then the LLM. The illustrated request includes tenant acme, US English locale and help-document type filters. In the raw results, shipping chunk eight thousand four hundred twenty-one ranks first with an illustrative score of point seven eight, while the refund chunk five thousand one hundred eighty-seven ranks second at point seven two. Those scores are engine-specific relevance hints, not universal quality guarantees. Open the simulated vector query console and inspect complete text, chunk boundaries, source paths, metadata, embedding model and applied filters. Verify that the refund chunk is actually present and allowed before concluding it needs new ingestion. Our goal is to repair the query or ranking process without broadening cross-tenant access or changing the foundation model simply because a generated answer was poor."
+    },
+    {
+      "slide": 37,
+      "title": "Inspect raw top-K chunks and provenance",
+      "narration": "Start in Retrieve raw results, enter the refund question, set top K to five and retain the authorized tenant and locale filters. The top result table shows shipping-policy material ranked above refund-policy results, including an actual refund policy passage describing the refund window lower in the list. Open the JSON result and read chunk ID, source URI, rank, text, section metadata, and any start and end offsets. The illustrated configuration names an embedding model, its vector dimension count, filtering fields and an optional reranker. Confirm the configured query embedding is compatible with the index rather than copying the model names or dimensions from unrelated sample screenshots. If the source text is irrelevant despite a high similarity score, focus on ranking, chunking and metadata. If no refund chunk appears anywhere, inspect ingestion and source filtering first. Capture these raw passages as baseline evidence and keep the security filter that restricts results to the authenticated tenant. The next test should measure whether a targeted change moves genuinely relevant content higher, not merely whether a score increases."
+    },
+    {
+      "slide": 38,
+      "title": "Diagnose chunk embedding and filter mismatch",
+      "narration": "Now isolate the retriever from model generation and compare the exact refund question with its top returned passages. The diagnostic panel shows shipping chunks in positions one and two, while a refund-eligibility chunk appears at position three. Inspect both the visualized chunk text and its metadata category, tenant, embedding model and dimensions. The sample debug JSON illustrates a compatible embedding configuration for a separate fixture, so do not assume the numeric dimensions on every slide refer to the same deployed index. Investigate whether broad help-document filters allow shipping pages to compete with refund policy, whether the question wording causes ambiguity between refund and missed delivery, whether chunk boundaries separate the relevant refund conditions, and whether reranking actually improves the order. A hard-coded high similarity threshold is not the solution. Confirm the tenant constraint remains in effect regardless of category changes. If changes to embedding model or chunking are needed, plan reindexing; otherwise use a focused query or metadata filter and compare against labelled retrieval examples."
+    },
+    {
+      "slide": 39,
+      "title": "Tune retrieval with security preserved",
+      "narration": "This slide shows the controlled improvement loop: retrieve raw passages, inspect chunk IDs and boundaries, tune one relevant setting, then validate. The example settings expose hybrid vector-and-keyword retrieval, top-K size, query normalization and tenant plus document-type filters. Begin with an explicitly authorized category filter for refund-related content while keeping tenant acme locked. You can also normalize common refund and return terminology, adjust chunking to preserve policy sections, or enable reranking if the target engine supports it. Do not broaden the tenant filter to raise recall; that would create a data isolation vulnerability. The example raw result shows shipping before a thirty-day refund passage, and its JSON records applied filters and whether reranking ran. After adjusting indexing metadata or chunk boundaries, run the appropriate ingestion or index rebuild—new settings do not automatically rewrite existing embeddings. Compare the same questions and source permissions before and after. If the top result now describes the correct refund process but a negative query returns unrelated text, refine relevance further before accepting the release."
+    },
+    {
+      "slide": 40,
+      "title": "Reindex and compare labelled queries",
+      "narration": "The workflow begins with a new section-aligned chunking strategy and metadata fields, followed by full reindexing. The console example uses semantic chunks of about four hundred tokens and fifty tokens of overlap with tenant, document type and section metadata. These are illustrative tuning values, not fixed production recommendations. Preserve a compatible embedding model and dimensions during the controlled comparison. Run the same labelled evaluation set with top K five and the same tenant filter. The results table shows illustrative refund-policy recall at five rising from point two to one point zero, while shipping queries remain at one point zero. More importantly, the before-and-after passage lists show that the refund policy moves from third place to the first position. Evaluate Recall at K and passage relevance, not raw similarity numbers across different engines. If relevance improves for refunds but declines for another document class, reject or revise the change and inspect the affected chunk boundaries. This is a retrieval release gate, not just a visual preference for a new ranking."
+    },
+    {
+      "slide": 41,
+      "title": "Verify grounded answers and remaining misses",
+      "narration": "End by rerunning the refund question against the isolated retriever, inspecting source passages, and then validating the grounded answer against the authorized refund section. The slide includes a raw top-five table, a JSON inspection and an evaluation panel comparing expected, negative and regression query categories. Notice that some negative or regression misses can remain even after the chunking and reranking improvements. Do not declare the entire retrieval pipeline fixed simply because one refund question now works. Review the chunk IDs, embedding configuration, applied tenant and locale filters, and reranker results for each failed fixture. A relevance improvement must not bypass authorization or allow an unrelated tenant's document to enter the answer. Expand the labelled set to include refund, shipping, no-answer and cross-tenant cases, then capture Recall at K, ranking relevance and evidence coverage. Clean up temporary experiments while retaining the approved index build and rollback record. Only after these retrieval checks should you evaluate the generation model's final prose and citations."
+    }
+  ]
+}

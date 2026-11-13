@@ -1,0 +1,1576 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Databases",
+  "services": [
+    {
+      "slug": "alloydb",
+      "summary": "A PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools.",
+      "concepts": [
+        "cluster, primary instance, read pool, database and backup define the AlloyDB resource and data model.",
+        "The production path is application > private endpoint > primary/read pool > distributed storage > backup/replica.",
+        "AlloyDB manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose AlloyDB when a PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools.",
+        "The strongest fit is a workload whose flow follows application > private endpoint > primary/read pool > distributed storage > backup/replica.",
+        "Choose Cloud SQL for broader engines/smaller conventional managed databases instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "AlloyDB production flow",
+          "note": "A PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools.",
+          "reference": "AlloyDB architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. private endpoint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. primary/read pool",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. distributed storage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup/replica",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed AlloyDB",
+          "note": "Identity, boundary, resilience and operations around cluster, primary instance, read pool, database and backup.",
+          "reference": "AlloyDB governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "database IAM/auth, private services access, CMEK and least-privilege PostgreSQL roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, cluster network, primary/read pool sizing, flags, backup and cross-region DR",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "PostgreSQL compatibility is high but extensions/features and failover behavior must be validated",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "transactions, connections, CPU, storage latency, read-pool lag and backup health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open AlloyDB",
+          "detail": "Google Cloud Console → AlloyDB; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, cluster network, primary/read pool sizing, flags, backup and cross-region DR."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply database IAM/auth, private services access, CMEK and least-privilege PostgreSQL roles."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > private endpoint > primary/read pool > distributed storage > backup/replica and inspect transactions, connections, CPU, storage latency, read-pool lag and backup health."
+        }
+      ],
+      "security": [
+        "For AlloyDB, implement database IAM/auth, private services access, CMEK and least-privilege PostgreSQL roles.",
+        "Separate administrators, automation and runtime principals for cluster, primary instance, read pool, database and backup.",
+        "Audit AlloyDB configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor transactions, connections, CPU, storage latency, read-pool lag and backup health for AlloyDB.",
+        "Version region, cluster network, primary/read pool sizing, flags, backup and cross-region DR, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit AlloyDB ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "PostgreSQL compatibility is high but extensions/features and failover behavior must be validated",
+        "Verify AlloyDB regional availability, quotas, limits and compatibility before standardizing.",
+        "AlloyDB's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "instance vCPU/memory, storage, backups, networking and cross-region replicas.",
+        "Add dependent storage, network, logging and consuming/producing services to the AlloyDB estimate.",
+        "Measure AlloyDB cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "AlloyDB — A PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools.",
+        "Cloud SQL for broader engines/smaller conventional managed databases — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "AlloyDB",
+          "fit": "A PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools."
+        },
+        {
+          "name": "Cloud SQL",
+          "fit": "Cloud SQL for broader engines/smaller conventional managed databases"
+        }
+      ],
+      "memoryHooks": [
+        "application > private endpoint > primary/read pool > distributed storage > backup/replica.",
+        "PostgreSQL compatibility is high but extensions/features and failover behavior must be validated",
+        "Certification clue: A PostgreSQL-compatible managed relational database optimized for demanding transactional and analytical workloads with disaggregated storage and read pools."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "AlloyDB documentation",
+          "url": "https://docs.cloud.google.com/alloydb/docs"
+        }
+      ]
+    },
+    {
+      "slug": "alloydb-omni",
+      "summary": "A downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service.",
+      "concepts": [
+        "database container/operator deployment, instance and persistent storage define the AlloyDB Omni resource and data model.",
+        "The production path is application > local AlloyDB Omni endpoint > customer storage > backup/export > recovery.",
+        "AlloyDB Omni manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose AlloyDB Omni when a downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service.",
+        "The strongest fit is a workload whose flow follows application > local AlloyDB Omni endpoint > customer storage > backup/export > recovery.",
+        "Choose managed AlloyDB when Google-operated HA, backups and scaling are preferred instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "AlloyDB Omni production flow",
+          "note": "A downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service.",
+          "reference": "AlloyDB Omni architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. local AlloyDB Omni endpoint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. customer storage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. backup/export",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. recovery",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed AlloyDB Omni",
+          "note": "Identity, boundary, resilience and operations around database container/operator deployment, instance and persistent storage.",
+          "reference": "AlloyDB Omni governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "customer-managed host/Kubernetes security, secrets, TLS and database roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "platform, image/operator version, storage class, resources, TLS, backup and HA",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "the customer owns infrastructure, patching, HA and backups; Omni is not the managed AlloyDB control plane",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "database/host metrics, storage latency, backup success and operator health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open AlloyDB Omni",
+          "detail": "Google Cloud Console → AlloyDB Omni; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set platform, image/operator version, storage class, resources, TLS, backup and HA."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply customer-managed host/Kubernetes security, secrets, TLS and database roles."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > local AlloyDB Omni endpoint > customer storage > backup/export > recovery and inspect database/host metrics, storage latency, backup success and operator health."
+        }
+      ],
+      "security": [
+        "For AlloyDB Omni, implement customer-managed host/Kubernetes security, secrets, TLS and database roles.",
+        "Separate administrators, automation and runtime principals for database container/operator deployment, instance and persistent storage.",
+        "Audit AlloyDB Omni configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor database/host metrics, storage latency, backup success and operator health for AlloyDB Omni.",
+        "Version platform, image/operator version, storage class, resources, TLS, backup and HA, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit AlloyDB Omni ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "the customer owns infrastructure, patching, HA and backups; Omni is not the managed AlloyDB control plane",
+        "Verify AlloyDB Omni regional availability, quotas, limits and compatibility before standardizing.",
+        "AlloyDB Omni's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "license/subscription terms plus customer compute, storage and operations.",
+        "Add dependent storage, network, logging and consuming/producing services to the AlloyDB Omni estimate.",
+        "Measure AlloyDB Omni cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "AlloyDB Omni — A downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service.",
+        "managed AlloyDB when Google-operated HA, backups and scaling are preferred — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "AlloyDB Omni",
+          "fit": "A downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service."
+        },
+        {
+          "name": "managed AlloyDB when Google-operated HA, backups and scaling are preferred",
+          "fit": "managed AlloyDB when Google-operated HA, backups and scaling are preferred"
+        }
+      ],
+      "memoryHooks": [
+        "application > local AlloyDB Omni endpoint > customer storage > backup/export > recovery.",
+        "the customer owns infrastructure, patching, HA and backups; Omni is not the managed AlloyDB control plane",
+        "Certification clue: A downloadable PostgreSQL-compatible AlloyDB edition for running on customer-managed Kubernetes or Linux environments outside the managed AlloyDB service."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "AlloyDB Omni documentation",
+          "url": "https://docs.cloud.google.com/alloydb/omni/docs"
+        }
+      ]
+    },
+    {
+      "slug": "bigtable",
+      "summary": "A wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry.",
+      "concepts": [
+        "instance, cluster, table, row key, column family and tablet define the Bigtable resource and data model.",
+        "The production path is client mutation/read > row-key routing > tablet > replicated clusters > backup.",
+        "Bigtable manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Bigtable when a wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry.",
+        "The strongest fit is a workload whose flow follows client mutation/read > row-key routing > tablet > replicated clusters > backup.",
+        "Choose Spanner for relational transactions/SQL or Firestore for document access instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Bigtable production flow",
+          "note": "A wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry.",
+          "reference": "Bigtable architecture",
+          "steps": [
+            {
+              "title": "1. client mutation/read",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. row-key routing",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. tablet",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. replicated clusters",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Bigtable",
+          "note": "Identity, boundary, resilience and operations around instance, cluster, table, row key, column family and tablet.",
+          "reference": "Bigtable governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM, authorized views, app profiles, private connectivity and CMEK",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "instance/cluster, storage type, row-key schema, column families, app profile and replication",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "lexicographic row-key design controls locality; monotonically increasing or low-cardinality prefixes create hot spots",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "read/write latency, CPU/storage utilization, hot tablets and replication lag",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Bigtable",
+          "detail": "Google Cloud Console → Bigtable; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set instance/cluster, storage type, row-key schema, column families, app profile and replication."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM, authorized views, app profiles, private connectivity and CMEK."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise client mutation/read > row-key routing > tablet > replicated clusters > backup and inspect read/write latency, CPU/storage utilization, hot tablets and replication lag."
+        }
+      ],
+      "security": [
+        "For Bigtable, implement IAM, authorized views, app profiles, private connectivity and CMEK.",
+        "Separate administrators, automation and runtime principals for instance, cluster, table, row key, column family and tablet.",
+        "Audit Bigtable configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor read/write latency, CPU/storage utilization, hot tablets and replication lag for Bigtable.",
+        "Version instance/cluster, storage type, row-key schema, column families, app profile and replication, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Bigtable ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "lexicographic row-key design controls locality; monotonically increasing or low-cardinality prefixes create hot spots",
+        "Verify Bigtable regional availability, quotas, limits and compatibility before standardizing.",
+        "Bigtable's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "node/compute capacity or serverless usage, storage, backups and replication.",
+        "Add dependent storage, network, logging and consuming/producing services to the Bigtable estimate.",
+        "Measure Bigtable cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Bigtable — A wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry.",
+        "Spanner for relational transactions/SQL or Firestore for document access — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Bigtable",
+          "fit": "A wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry."
+        },
+        {
+          "name": "Spanner",
+          "fit": "Spanner for relational transactions/SQL or Firestore for document access"
+        }
+      ],
+      "memoryHooks": [
+        "client mutation/read > row-key routing > tablet > replicated clusters > backup.",
+        "lexicographic row-key design controls locality; monotonically increasing or low-cardinality prefixes create hot spots",
+        "Certification clue: A wide-column NoSQL database for massive low-latency key-based workloads such as time series, personalization and telemetry."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Bigtable documentation",
+          "url": "https://docs.cloud.google.com/bigtable/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-sql",
+      "summary": "Managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options.",
+      "concepts": [
+        "instance, database, user, primary/standby, replica and backup define the Cloud SQL resource and data model.",
+        "The production path is application > connector/private IP > primary > regional standby/read replica > backup/PITR.",
+        "Cloud SQL manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud SQL when managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options.",
+        "The strongest fit is a workload whose flow follows application > connector/private IP > primary > regional standby/read replica > backup/PITR.",
+        "Choose AlloyDB for high-performance PostgreSQL or Spanner for horizontal global scale instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud SQL production flow",
+          "note": "Managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options.",
+          "reference": "Cloud SQL architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. connector/private IP",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. primary",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. regional standby/read replica",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup/PITR",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud SQL",
+          "note": "Identity, boundary, resilience and operations around instance, database, user, primary/standby, replica and backup.",
+          "reference": "Cloud SQL governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM database authentication where supported, private IP, SSL/TLS, Secret Manager and DB roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "engine/version, region/HA, machine/storage, network, flags, backups/PITR and replicas",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "HA protects instance failure but not application/schema errors; connection limits and maintenance still need design",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "connections, CPU/memory, disk/IO, replication lag, transactions and backup health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud SQL",
+          "detail": "Google Cloud Console → Cloud SQL; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set engine/version, region/HA, machine/storage, network, flags, backups/PITR and replicas."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM database authentication where supported, private IP, SSL/TLS, Secret Manager and DB roles."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > connector/private IP > primary > regional standby/read replica > backup/PITR and inspect connections, CPU/memory, disk/IO, replication lag, transactions and backup health."
+        }
+      ],
+      "security": [
+        "For Cloud SQL, implement IAM database authentication where supported, private IP, SSL/TLS, Secret Manager and DB roles.",
+        "Separate administrators, automation and runtime principals for instance, database, user, primary/standby, replica and backup.",
+        "Audit Cloud SQL configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor connections, CPU/memory, disk/IO, replication lag, transactions and backup health for Cloud SQL.",
+        "Version engine/version, region/HA, machine/storage, network, flags, backups/PITR and replicas, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Cloud SQL ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "HA protects instance failure but not application/schema errors; connection limits and maintenance still need design",
+        "Verify Cloud SQL regional availability, quotas, limits and compatibility before standardizing.",
+        "Cloud SQL's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "instance vCPU/memory, storage/IO, backups, replicas, licenses and egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Cloud SQL estimate.",
+        "Measure Cloud SQL cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Cloud SQL — Managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options.",
+        "AlloyDB for high-performance PostgreSQL or Spanner for horizontal global scale — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud SQL",
+          "fit": "Managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options."
+        },
+        {
+          "name": "AlloyDB",
+          "fit": "AlloyDB for high-performance PostgreSQL or Spanner for horizontal global scale"
+        }
+      ],
+      "memoryHooks": [
+        "application > connector/private IP > primary > regional standby/read replica > backup/PITR.",
+        "HA protects instance failure but not application/schema errors; connection limits and maintenance still need design",
+        "Certification clue: Managed MySQL, PostgreSQL and SQL Server instances with automated backups, patching, replicas and high availability options."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud SQL documentation",
+          "url": "https://docs.cloud.google.com/sql/docs"
+        }
+      ]
+    },
+    {
+      "slug": "database-migration-service",
+      "summary": "A managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows.",
+      "concepts": [
+        "migration job, source/destination connection profile and connectivity method define the Database Migration Service resource and data model.",
+        "The production path is source database/logs > secure connectivity > initial dump > CDC replication > validation/cutover.",
+        "Database Migration Service manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Database Migration Service when a managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows.",
+        "The strongest fit is a workload whose flow follows source database/logs > secure connectivity > initial dump > CDC replication > validation/cutover.",
+        "Choose Datastream for ongoing analytical CDC without migration cutover orchestration instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Database Migration Service production flow",
+          "note": "A managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows.",
+          "reference": "Database Migration Service architecture",
+          "steps": [
+            {
+              "title": "1. source database/logs",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. secure connectivity",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. initial dump",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. CDC replication",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. validation/cutover",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Database Migration Service",
+          "note": "Identity, boundary, resilience and operations around migration job, source/destination connection profile and connectivity method.",
+          "reference": "Database Migration Service governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "least-privilege replication user, private connectivity, secrets and destination IAM",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "job type, source/destination profiles, connectivity, objects, continuous mode and cutover plan",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "supported engines/versions and object compatibility must be assessed; DMS moves data but does not fix application incompatibility",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "dump progress, replication delay, errors, source log retention and cutover readiness",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Database Migration Service",
+          "detail": "Google Cloud Console → Database Migration Service; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set job type, source/destination profiles, connectivity, objects, continuous mode and cutover plan."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply least-privilege replication user, private connectivity, secrets and destination IAM."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise source database/logs > secure connectivity > initial dump > CDC replication > validation/cutover and inspect dump progress, replication delay, errors, source log retention and cutover readiness."
+        }
+      ],
+      "security": [
+        "For Database Migration Service, implement least-privilege replication user, private connectivity, secrets and destination IAM.",
+        "Separate administrators, automation and runtime principals for migration job, source/destination connection profile and connectivity method.",
+        "Audit Database Migration Service configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor dump progress, replication delay, errors, source log retention and cutover readiness for Database Migration Service.",
+        "Version job type, source/destination profiles, connectivity, objects, continuous mode and cutover plan, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Database Migration Service ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "supported engines/versions and object compatibility must be assessed; DMS moves data but does not fix application incompatibility",
+        "Verify Database Migration Service regional availability, quotas, limits and compatibility before standardizing.",
+        "Database Migration Service's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "migration job usage under terms plus source/destination/database/network resources.",
+        "Add dependent storage, network, logging and consuming/producing services to the Database Migration Service estimate.",
+        "Measure Database Migration Service cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Database Migration Service — A managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows.",
+        "Datastream for ongoing analytical CDC without migration cutover orchestration — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Database Migration Service",
+          "fit": "A managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows."
+        },
+        {
+          "name": "Datastream",
+          "fit": "Datastream for ongoing analytical CDC without migration cutover orchestration"
+        }
+      ],
+      "memoryHooks": [
+        "source database/logs > secure connectivity > initial dump > CDC replication > validation/cutover.",
+        "supported engines/versions and object compatibility must be assessed; DMS moves data but does not fix application incompatibility",
+        "Certification clue: A managed service for homogeneous and supported heterogeneous database migrations using connection profiles, continuous replication and cutover workflows."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Database Migration Service documentation",
+          "url": "https://docs.cloud.google.com/database-migration/docs"
+        }
+      ]
+    },
+    {
+      "slug": "firestore-in-datastore-mode",
+      "summary": "A managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications.",
+      "concepts": [
+        "entity, kind, key, property, index and namespace define the Firestore in Datastore mode resource and data model.",
+        "The production path is application > Datastore API > indexed entity write/read > query > export/backup.",
+        "Firestore in Datastore mode manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Firestore in Datastore mode when a managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications.",
+        "The strongest fit is a workload whose flow follows application > Datastore API > indexed entity write/read > query > export/backup.",
+        "Choose Firestore Native mode for modern realtime/mobile features instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Firestore in Datastore mode production flow",
+          "note": "A managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications.",
+          "reference": "Firestore in Datastore mode architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Datastore API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. indexed entity write/read",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. query",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. export/backup",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Firestore in Datastore mode",
+          "note": "Identity, boundary, resilience and operations around entity, kind, key, property, index and namespace.",
+          "reference": "Firestore in Datastore mode governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM, service-account access, organization controls and data-model authorization in the app",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "database location/mode, key design, indexes, namespaces, TTL and export",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Datastore-mode query/index semantics differ from Firestore Native and the mode choice is durable for the database",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "request latency/errors, index build, storage, entity operations and contention",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Firestore in Datastore mode",
+          "detail": "Google Cloud Console → Firestore in Datastore mode; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set database location/mode, key design, indexes, namespaces, TTL and export."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM, service-account access, organization controls and data-model authorization in the app."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > Datastore API > indexed entity write/read > query > export/backup and inspect request latency/errors, index build, storage, entity operations and contention."
+        }
+      ],
+      "security": [
+        "For Firestore in Datastore mode, implement IAM, service-account access, organization controls and data-model authorization in the app.",
+        "Separate administrators, automation and runtime principals for entity, kind, key, property, index and namespace.",
+        "Audit Firestore in Datastore mode configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor request latency/errors, index build, storage, entity operations and contention for Firestore in Datastore mode.",
+        "Version database location/mode, key design, indexes, namespaces, TTL and export, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Firestore in Datastore mode ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Datastore-mode query/index semantics differ from Firestore Native and the mode choice is durable for the database",
+        "Verify Firestore in Datastore mode regional availability, quotas, limits and compatibility before standardizing.",
+        "Firestore in Datastore mode's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "document/entity operations, index storage, backup/export and egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Firestore in Datastore mode estimate.",
+        "Measure Firestore in Datastore mode cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Firestore in Datastore mode — A managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications.",
+        "Firestore Native mode for modern realtime/mobile features — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Firestore in Datastore mode",
+          "fit": "A managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications."
+        },
+        {
+          "name": "Firestore Native mode",
+          "fit": "Firestore Native mode for modern realtime/mobile features"
+        }
+      ],
+      "memoryHooks": [
+        "application > Datastore API > indexed entity write/read > query > export/backup.",
+        "Datastore-mode query/index semantics differ from Firestore Native and the mode choice is durable for the database",
+        "Certification clue: A managed NoSQL document/entity database preserving Datastore APIs, query behavior and compatibility for existing applications."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Firestore in Datastore mode documentation",
+          "url": "https://docs.cloud.google.com/datastore/docs"
+        }
+      ]
+    },
+    {
+      "slug": "firestore-with-mongodb-compatibility",
+      "summary": "A Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture.",
+      "concepts": [
+        "database, collection, document, index and MongoDB-compatible connection define the Firestore with MongoDB compatibility resource and data model.",
+        "The production path is MongoDB driver > compatible endpoint > document/index operations > managed replication > backup.",
+        "Firestore with MongoDB compatibility manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Firestore with MongoDB compatibility when a Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture.",
+        "The strongest fit is a workload whose flow follows MongoDB driver > compatible endpoint > document/index operations > managed replication > backup.",
+        "Choose MongoDB Atlas for broader native MongoDB feature parity or Firestore Native for Firebase integration instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Firestore with MongoDB compatibility production flow",
+          "note": "A Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture.",
+          "reference": "Firestore with MongoDB compatibility architecture",
+          "steps": [
+            {
+              "title": "1. MongoDB driver",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. compatible endpoint",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. document/index operations",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. managed replication",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Firestore with MongoDB compatibility",
+          "note": "Identity, boundary, resilience and operations around database, collection, document, index and MongoDB-compatible connection.",
+          "reference": "Firestore with MongoDB compatibility governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM/project controls plus database users/credentials, TLS and private connectivity where supported",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "location, compatibility mode, users/connectivity, collections, indexes and migration tests",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "MongoDB API compatibility is not identity with every MongoDB feature; validate commands, drivers and operational behavior",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "operation latency, errors, connections, index usage and storage growth",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Firestore with MongoDB compatibility",
+          "detail": "Google Cloud Console → Firestore with MongoDB compatibility; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set location, compatibility mode, users/connectivity, collections, indexes and migration tests."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM/project controls plus database users/credentials, TLS and private connectivity where supported."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise MongoDB driver > compatible endpoint > document/index operations > managed replication > backup and inspect operation latency, errors, connections, index usage and storage growth."
+        }
+      ],
+      "security": [
+        "For Firestore with MongoDB compatibility, implement IAM/project controls plus database users/credentials, TLS and private connectivity where supported.",
+        "Separate administrators, automation and runtime principals for database, collection, document, index and MongoDB-compatible connection.",
+        "Audit Firestore with MongoDB compatibility configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor operation latency, errors, connections, index usage and storage growth for Firestore with MongoDB compatibility.",
+        "Version location, compatibility mode, users/connectivity, collections, indexes and migration tests, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Firestore with MongoDB compatibility ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "MongoDB API compatibility is not identity with every MongoDB feature; validate commands, drivers and operational behavior",
+        "Verify Firestore with MongoDB compatibility regional availability, quotas, limits and compatibility before standardizing.",
+        "Firestore with MongoDB compatibility's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "operations, storage, indexes, backups and network under mode pricing.",
+        "Add dependent storage, network, logging and consuming/producing services to the Firestore with MongoDB compatibility estimate.",
+        "Measure Firestore with MongoDB compatibility cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Firestore with MongoDB compatibility — A Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture.",
+        "MongoDB Atlas for broader native MongoDB feature parity or Firestore Native for Firebase integration — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Firestore with MongoDB compatibility",
+          "fit": "A Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture."
+        },
+        {
+          "name": "MongoDB Atlas",
+          "fit": "MongoDB Atlas for broader native MongoDB feature parity or Firestore Native for Firebase integration"
+        }
+      ],
+      "memoryHooks": [
+        "MongoDB driver > compatible endpoint > document/index operations > managed replication > backup.",
+        "MongoDB API compatibility is not identity with every MongoDB feature; validate commands, drivers and operational behavior",
+        "Certification clue: A Firestore database mode exposing MongoDB-compatible APIs for document workloads on Google Cloud's managed storage architecture."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Firestore with MongoDB compatibility documentation",
+          "url": "https://docs.cloud.google.com/firestore/mongodb-compatibility/docs"
+        }
+      ]
+    },
+    {
+      "slug": "memorystore-for-redis-cluster",
+      "summary": "A managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching.",
+      "concepts": [
+        "cluster, shard, replica, node and endpoint define the Memorystore for Redis Cluster resource and data model.",
+        "The production path is client > cluster-aware routing > hash slot/shard > replica > backing operations.",
+        "Memorystore for Redis Cluster manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Memorystore for Redis Cluster when a managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching.",
+        "The strongest fit is a workload whose flow follows client > cluster-aware routing > hash slot/shard > replica > backing operations.",
+        "Choose Memorystore for Valkey for open-source Valkey compatibility or standard cache tiers for smaller workloads instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Memorystore for Redis Cluster production flow",
+          "note": "A managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching.",
+          "reference": "Memorystore for Redis Cluster architecture",
+          "steps": [
+            {
+              "title": "1. client",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. cluster-aware routing",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. hash slot/shard",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. replica",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backing operations",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Memorystore for Redis Cluster",
+          "note": "Identity, boundary, resilience and operations around cluster, shard, replica, node and endpoint.",
+          "reference": "Memorystore for Redis Cluster governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private VPC connectivity, AUTH/TLS where supported and secret rotation",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, network, shard/replica count, node type, maintenance, auth/TLS and eviction",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "clients must support Redis Cluster redirection and multi-key operations are constrained by hash slots",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "memory/CPU, ops/sec, latency, evictions, hot shards and replication health",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Memorystore for Redis Cluster",
+          "detail": "Google Cloud Console → Memorystore for Redis Cluster; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, network, shard/replica count, node type, maintenance, auth/TLS and eviction."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private VPC connectivity, AUTH/TLS where supported and secret rotation."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise client > cluster-aware routing > hash slot/shard > replica > backing operations and inspect memory/CPU, ops/sec, latency, evictions, hot shards and replication health."
+        }
+      ],
+      "security": [
+        "For Memorystore for Redis Cluster, implement private VPC connectivity, AUTH/TLS where supported and secret rotation.",
+        "Separate administrators, automation and runtime principals for cluster, shard, replica, node and endpoint.",
+        "Audit Memorystore for Redis Cluster configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor memory/CPU, ops/sec, latency, evictions, hot shards and replication health for Memorystore for Redis Cluster.",
+        "Version region, network, shard/replica count, node type, maintenance, auth/TLS and eviction, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Memorystore for Redis Cluster ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "clients must support Redis Cluster redirection and multi-key operations are constrained by hash slots",
+        "Verify Memorystore for Redis Cluster regional availability, quotas, limits and compatibility before standardizing.",
+        "Memorystore for Redis Cluster's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "provisioned shards/replicas, memory capacity and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Memorystore for Redis Cluster estimate.",
+        "Measure Memorystore for Redis Cluster cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Memorystore for Redis Cluster — A managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching.",
+        "Memorystore for Valkey for open-source Valkey compatibility or standard cache tiers for smaller workloads — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Memorystore for Redis Cluster",
+          "fit": "A managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching."
+        },
+        {
+          "name": "Memorystore",
+          "fit": "Memorystore for Valkey for open-source Valkey compatibility or standard cache tiers for smaller workloads"
+        }
+      ],
+      "memoryHooks": [
+        "client > cluster-aware routing > hash slot/shard > replica > backing operations.",
+        "clients must support Redis Cluster redirection and multi-key operations are constrained by hash slots",
+        "Certification clue: A managed Redis Cluster-compatible in-memory datastore with sharding, replicas and horizontal scale for high-throughput caching."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Memorystore for Redis Cluster documentation",
+          "url": "https://docs.cloud.google.com/memorystore/docs/cluster"
+        }
+      ]
+    },
+    {
+      "slug": "memorystore-for-valkey",
+      "summary": "A managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem.",
+      "concepts": [
+        "instance/cluster, node, keyspace and endpoint define the Memorystore for Valkey resource and data model.",
+        "The production path is application > Valkey protocol > in-memory keyspace > replica/failover > backing database on miss.",
+        "Memorystore for Valkey manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Memorystore for Valkey when a managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem.",
+        "The strongest fit is a workload whose flow follows application > Valkey protocol > in-memory keyspace > replica/failover > backing database on miss.",
+        "Choose Memorystore for Redis Cluster where Redis Cluster compatibility is the established requirement instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Memorystore for Valkey production flow",
+          "note": "A managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem.",
+          "reference": "Memorystore for Valkey architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Valkey protocol",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. in-memory keyspace",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. replica/failover",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backing database on miss",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Memorystore for Valkey",
+          "note": "Identity, boundary, resilience and operations around instance/cluster, node, keyspace and endpoint.",
+          "reference": "Memorystore for Valkey governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private networking, AUTH/TLS where supported, secret rotation and key-prefix tenancy",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, network, capacity/topology, maintenance, auth/TLS, maxmemory and eviction",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "cache data can be evicted or lost depending on tier; the durable system of record must remain authoritative",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "latency, throughput, memory, evictions, hit rate, connections and failover",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Memorystore for Valkey",
+          "detail": "Google Cloud Console → Memorystore for Valkey; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, network, capacity/topology, maintenance, auth/TLS, maxmemory and eviction."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private networking, AUTH/TLS where supported, secret rotation and key-prefix tenancy."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > Valkey protocol > in-memory keyspace > replica/failover > backing database on miss and inspect latency, throughput, memory, evictions, hit rate, connections and failover."
+        }
+      ],
+      "security": [
+        "For Memorystore for Valkey, implement private networking, AUTH/TLS where supported, secret rotation and key-prefix tenancy.",
+        "Separate administrators, automation and runtime principals for instance/cluster, node, keyspace and endpoint.",
+        "Audit Memorystore for Valkey configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor latency, throughput, memory, evictions, hit rate, connections and failover for Memorystore for Valkey.",
+        "Version region, network, capacity/topology, maintenance, auth/TLS, maxmemory and eviction, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Memorystore for Valkey ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "cache data can be evicted or lost depending on tier; the durable system of record must remain authoritative",
+        "Verify Memorystore for Valkey regional availability, quotas, limits and compatibility before standardizing.",
+        "Memorystore for Valkey's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "provisioned capacity/nodes, replicas and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Memorystore for Valkey estimate.",
+        "Measure Memorystore for Valkey cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Memorystore for Valkey — A managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem.",
+        "Memorystore for Redis Cluster where Redis Cluster compatibility is the established requirement — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Memorystore for Valkey",
+          "fit": "A managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem."
+        },
+        {
+          "name": "Memorystore",
+          "fit": "Memorystore for Redis Cluster where Redis Cluster compatibility is the established requirement"
+        }
+      ],
+      "memoryHooks": [
+        "application > Valkey protocol > in-memory keyspace > replica/failover > backing database on miss.",
+        "cache data can be evicted or lost depending on tier; the durable system of record must remain authoritative",
+        "Certification clue: A managed in-memory Valkey service for low-latency caching and data structures using the open-source Redis-compatible ecosystem."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Memorystore for Valkey documentation",
+          "url": "https://docs.cloud.google.com/memorystore/docs/valkey"
+        }
+      ]
+    },
+    {
+      "slug": "spanner",
+      "summary": "A horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations.",
+      "concepts": [
+        "instance, instance configuration, database, table, key and processing unit define the Spanner resource and data model.",
+        "The production path is client transaction > Spanner API > split/key-range routing > replicated Paxos group > commit.",
+        "Spanner manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Spanner when a horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations.",
+        "The strongest fit is a workload whose flow follows client transaction > Spanner API > split/key-range routing > replicated Paxos group > commit.",
+        "Choose Cloud SQL/AlloyDB when single-region PostgreSQL/MySQL compatibility matters more than horizontal global scale instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Spanner production flow",
+          "note": "A horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations.",
+          "reference": "Spanner architecture",
+          "steps": [
+            {
+              "title": "1. client transaction",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Spanner API",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. split/key-range routing",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. replicated Paxos group",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. commit",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Spanner",
+          "note": "Identity, boundary, resilience and operations around instance, instance configuration, database, table, key and processing unit.",
+          "reference": "Spanner governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM/database roles, private endpoints, CMEK and application-level tenant controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "regional/multi-region config, capacity, schema/key design, indexes, backups and change streams",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "primary-key order drives locality and hotspots; mutations and transactions must stay within documented limits",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "CPU by priority, latency, lock/contention, storage, splits and query statistics",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Spanner",
+          "detail": "Google Cloud Console → Spanner; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set regional/multi-region config, capacity, schema/key design, indexes, backups and change streams."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM/database roles, private endpoints, CMEK and application-level tenant controls."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise client transaction > Spanner API > split/key-range routing > replicated Paxos group > commit and inspect CPU by priority, latency, lock/contention, storage, splits and query statistics."
+        }
+      ],
+      "security": [
+        "For Spanner, implement IAM/database roles, private endpoints, CMEK and application-level tenant controls.",
+        "Separate administrators, automation and runtime principals for instance, instance configuration, database, table, key and processing unit.",
+        "Audit Spanner configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor CPU by priority, latency, lock/contention, storage, splits and query statistics for Spanner.",
+        "Version regional/multi-region config, capacity, schema/key design, indexes, backups and change streams, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Spanner ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "primary-key order drives locality and hotspots; mutations and transactions must stay within documented limits",
+        "Verify Spanner regional availability, quotas, limits and compatibility before standardizing.",
+        "Spanner's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "provisioned processing units/nodes or granular capacity, storage, backup and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Spanner estimate.",
+        "Measure Spanner cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Spanner — A horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations.",
+        "Cloud SQL/AlloyDB when single-region PostgreSQL/MySQL compatibility matters more than horizontal global scale — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Spanner",
+          "fit": "A horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations."
+        },
+        {
+          "name": "Cloud SQL/AlloyDB when single-region PostgreSQL/MySQL compatibility matters more than horizontal global scale",
+          "fit": "Cloud SQL/AlloyDB when single-region PostgreSQL/MySQL compatibility matters more than horizontal global scale"
+        }
+      ],
+      "memoryHooks": [
+        "client transaction > Spanner API > split/key-range routing > replicated Paxos group > commit.",
+        "primary-key order drives locality and hotspots; mutations and transactions must stay within documented limits",
+        "Certification clue: A horizontally scalable relational database with strong consistency, SQL, synchronous replication and multi-region configurations."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Spanner documentation",
+          "url": "https://docs.cloud.google.com/spanner/docs"
+        }
+      ]
+    }
+  ]
+}

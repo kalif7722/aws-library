@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "05",
+  "module_title": "Managing Models with SageMaker AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original AIP Module 05 site-ready WebP slides individually inspected from archived source images 01–36; narration explains actual visual flows and comparisons. Renderer verifies live R2 sources.",
+  "part_id": "01",
+  "part_title": "SageMaker ML Lifecycle and Training Architecture",
+  "script_revision": "2026-11-12-m05-p01-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Managing Models with SageMaker AI",
+      "narration": "Welcome to Module Five. This opening architecture summarizes the end-to-end Amazon SageMaker AI lifecycle. Look at the five main columns. First, data preparation collects, cleans and transforms source datasets. Second, training runs an algorithm or custom container and writes trained artifacts. Third, deployment makes those artifacts available for real-time or batch inference. Fourth, monitoring observes data quality, model behavior and drift. Fifth, governance adds approvals, access controls and an audit history. The orange arrow returning to the start shows that machine learning is iterative: observations from production inform data updates and retraining. The service examples beneath the columns include Amazon S3, Data Wrangler, training jobs, model registry, endpoints and Model Monitor. Each component solves a distinct responsibility. The main point is not to remember every product name in isolation. It's to see how reliable machine learning requires the entire lifecycle, from inputs to operational decisions."
+    },
+    {
+      "slide": 2,
+      "title": "The ML Lifecycle",
+      "narration": "This slide simplifies the previous architecture into five steps: prepare data, train, evaluate, deploy and monitor. Follow the orange arrows from left to right. Preparation produces usable datasets, training learns model parameters from them, and evaluation checks performance against held-out evidence. Only a suitable model is deployed to a production or batch endpoint. Monitoring then tracks accuracy proxies, drift and infrastructure performance after real requests arrive. Notice the return arrow below the flow: monitoring may reveal data or behavior changes, sending the team back to preparation and training. The example describes building a classifier, but the same life-cycle reasoning applies broadly to AI workloads. A successful training job does not prove that the model is useful or safe to release. The evaluation gate and production feedback loop are what turn one experiment into an operated system."
+    },
+    {
+      "slide": 3,
+      "title": "Training to Inference Architecture",
+      "narration": "Here the diagram is divided into model training on the left and model inference on the right. During training, data is read from Amazon S3, and SageMaker launches a managed training job using the supplied training image. The job learns the model and writes output model artifacts back to S3. Follow the arrow across the centre. For inference, SageMaker combines a compatible inference image with the stored model artifact to create a model configuration and deploy a SageMaker endpoint. The client then sends input data and receives predictions. Notice that the training image and serving image can be different. One contains the training framework and code, while the other must expose the supported inference interface. Also notice the S3 buckets in both halves: model artifacts connect the two stages. The important boundary is that training computes weights; the endpoint serves predictions without retraining on every user request."
+    },
+    {
+      "slide": 4,
+      "title": "Notebook-Led Model Development",
+      "narration": "The notebook is the interactive workspace shown in the centre. On the left, a SageMaker notebook accesses datasets in S3: training, validation and test data. The notebook reads and transforms data, chooses an algorithm or container and starts a SageMaker training job. Follow the upper-right arrow to the managed training service, which produces a saved model artifact. That artifact is stored in S3, then associated with a SageMaker endpoint for inference. The purple arrow returning to the notebook represents iteration: a developer can inspect evaluation results, revise code and start another experiment. The value of a notebook is exploration and integration with managed jobs, not that notebook code automatically becomes a robust production pipeline. For repeatability, save datasets, versions, parameters and dependencies, and move stable workflows into controlled processing or pipeline steps."
+    },
+    {
+      "slide": 5,
+      "title": "SageMaker AI Console Map",
+      "narration": "This slide is a map of the SageMaker console workflow, organized into six stages. The first column covers data sources, data preparation and feature stores. The second covers building models in notebooks, with tools and repositories to support development. Third, training runs managed jobs and performs hyperparameter tuning. Fourth, deployment manages model versions and inference endpoints. Fifth, monitoring tracks predictions, quality and drift. Sixth, governance manages model approvals, permissions and audit information. Follow the orange arrow along the bottom marked continuous improvement, because model operations are not a one-way sequence. You will not necessarily use every feature on every project. A simple proof of concept may begin with a notebook and one training job, while a regulated production deployment needs version tracking, evaluation and access controls. Use this map to place the detailed tools in the right phase."
+    }
+  ]
+}

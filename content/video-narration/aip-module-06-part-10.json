@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Narration focused on actual recovered slides 61–72 for parts 10–12 and specified technical topics for parts 09/13; repeated templated endings removed, distinct operational conclusions added. Asset-by-asset QA required before final approval.",
+  "part_id": "10",
+  "part_title": "API Gateway REST, WebSocket, Stages and Caching",
+  "script_revision": "2026-11-12-m06-p10-nontemplate-v3",
+  "scenes": [
+    {
+      "slide": 61,
+      "title": "REST API or WebSocket API?",
+      "narration": "The recovered slide compares two API Gateway interaction styles. On the left, a REST API processes independent HTTP requests and returns responses, making it suitable for submitting an inference job or querying an existing result. On the right, WebSocket API maintains a bidirectional connection and uses connection and disconnection routes, plus application routes for sending messages. The lower architecture combines both models: a client submits a long-running generative AI job over REST, gets an accepted response and job ID, then receives progress through an established WebSocket. Store a mapping from job and user to connection identifiers, and have a backend component send updates through the API Gateway Management API. Authentication and authorization remain necessary for both request paths. A WebSocket connection does not automatically attach itself to the user's job; the application must establish and protect that association. Explain why polling is simpler for some jobs and WebSocket updates are valuable when live progress matters. In the application example, REST submits the job while WebSocket pushes live progress; the connection ID must be mapped securely to that job."
+    },
+    {
+      "slide": 62,
+      "title": "API stages, versions, and OpenAPI",
+      "narration": "Begin on the left with an OpenAPI description of paths, methods and response schemas. Importing or updating that definition creates or adjusts an API Gateway REST API, but a deployed snapshot is the artifact that a stage points to. Follow the middle panel: a deployment snapshot captures a particular API configuration. Dev and production stages can point to the same deployment or different tested deployments and each stage has independent settings, including logging, access controls and stage variables. The example makes an important exam distinction: an API version such as v1 or v2 is a path or API design choice; a stage such as dev or prod is a deployment environment. Version and stage should never be used as synonyms. Trace the safe rollout: update the specification, deploy to development, test request behavior and integrations, then promote a vetted deployment to production. Protect production with separate authorizers and appropriate throttling settings. When production still points to an old deployment, updating the API definition alone will not change its behaviour."
+    },
+    {
+      "slide": 63,
+      "title": "Custom domain, TLS, and REST caching",
+      "narration": "This diagram starts with a client requesting an HTTPS custom domain such as api.example.com. DNS, for example Amazon Route 53, resolves that name to the API Gateway custom-domain endpoint. AWS Certificate Manager provides the TLS certificate; API mappings then route requests to the intended REST API stage. A separate optional path shows the REST stage cache serving repeatable GET responses without contacting the backend every time. Emphasize that caching is associated with supported API Gateway REST APIs and is not a general feature of HTTP APIs. Cache only responses that are safe to share under the configured cache key and authorization model. Generative AI answers may be personalized, sensitive or quickly stale, so an indiscriminate shared response cache could leak user data. Discuss cache size, time to live, query and header keys, invalidation and monitoring. DNS and a certificate secure endpoint access, but backend authorization is still necessary. Caching a private, personalised model answer without the correct key can disclose information between users, even over a properly secured TLS connection."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "04",
+  "module_title": "Operational Efficiency and Optimization",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original AIP Module 04 site-ready WebP slides individually inspected from three source ZIP archives; lecture describes actual diagram steps, metrics and architectural trade-offs. Renderer verifies R2 originals.",
+  "part_id": "01",
+  "part_title": "Token Efficiency, CloudWatch and Cost-Effective Model Choice",
+  "script_revision": "2026-11-12-m04-p01-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Operational Efficiency and Optimization",
+      "narration": "Welcome to Module Four, where we'll make generative AI applications more efficient without sacrificing answer quality. The circular diagram has four connected activities. At the top, measure token usage, cost and latency rather than optimizing by intuition. Next, choose a model and capacity arrangement appropriate to the complexity of each request. At the bottom, cache reusable work, including eligible prompts or responses, instead of paying to generate the same result repeatedly. On the left, improve resilience and retrieval, because a fast model cannot compensate for bad context or repeated failures. Trace the arrows around the cycle: measuring produces evidence; design decisions change the system; and new measurements tell us whether the changes really helped. We'll study the same four ideas with Amazon Bedrock, CloudWatch, caching, SageMaker and networking examples. The objective is a reliable price-to-performance balance, not simply the cheapest or fastest response at any cost."
+    },
+    {
+      "slide": 2,
+      "title": "Token Efficiency",
+      "narration": "This slide lays out a five-stage token-efficiency workflow. First, the application assembles a prompt. Second, the Bedrock CountTokens operation estimates the input-token count for a supported model and request before inference. Third, the developer can trim unnecessary context or set a sensible output limit. Fourth, the application invokes the chosen model. Finally, CloudWatch or other usage telemetry shows what actually happened. Look at the shorter-versus-longer prompt example along the bottom. The shorter version uses fewer estimated input tokens, but that saving helps only if it still contains the instructions and facts the model needs. The two result boxes also distinguish an estimate from actual usage. CountTokens does not generate an answer, and its output-token consumption is not a predicted final value. The lesson is to control both the context you send and the output you request, then validate savings against real usage and response quality."
+    },
+    {
+      "slide": 3,
+      "title": "CloudWatch Metrics for Bedrock",
+      "narration": "Monitoring is how we discover whether a cost optimization has caused a reliability problem. On the upper row, users call Amazon Bedrock, which publishes relevant metrics to Amazon CloudWatch. The dashboard illustrates invocation count, model latency, time to first token, input-token count, output-token count, throttles and client errors. Now examine the lower example: p95 latency rises even though the application may still return responses. That is a warning that some users experience slow requests. The investigation panel suggests checking larger input or output token counts, increased throttling, or extra inference work. The optimization panel proposes controlled remedies: shorten unnecessary prompts, reduce an oversized output limit, adjust request rate or capacity, and improve retry behavior. The distinction between average latency and p95 latency matters because a single average can conceal tail performance. Build your alerts around the user experience and the actual metrics published for your inference method, rather than assuming one model has an unlimited fixed response speed."
+    },
+    {
+      "slide": 4,
+      "title": "Prune Context, Control Output",
+      "narration": "The picture begins with twelve retrieved chunks entering a model prompt. Not all of them help answer the user. In step two, metadata filters and relevance ranking remove documents that don't match the question. Step three summarizes old conversation turns while preserving critical facts. Step four sets a sensible maximum output-token count so the model can answer concisely. Finally, the model receives a smaller, better structured prompt. Compare the arrows: the large input becomes a few relevant chunks, rather than blindly discarding everything. The blue banner gives the rule: preserve essential facts and evidence while reducing tokens. The side note identifies an important failure mode—removing too much context can make the answer incorrect or unsupported. Trimming should therefore be evaluated with representative questions and expected answers. Remember that token savings and response accuracy must be measured together. A cheap request that repeatedly misses the user's actual question is not an optimization."
+    },
+    {
+      "slide": 5,
+      "title": "Cost-Effective Model Selection",
+      "narration": "This slide shows a routing architecture rather than a recommendation to use one model for everything. A user request reaches a query router on the left. Simple tasks, such as classification or straightforward extraction, can go to a smaller cost-efficient model. More complex synthesis can go to a capable larger model. Both paths may use retrieval-augmented generation or authorized tools when the task needs external facts. Follow the lower feedback loop: evaluate response quality, latency and cost, then improve the routing policy with real results. The final box explains that routing decisions can use task characteristics and confidence, but a wrong decision can degrade accuracy. The three outcomes across the bottom are right quality, lower latency and lower cost. These are objectives to balance, not promises that every small model will produce the same answer as a larger one. Start by defining which tasks truly need more capability, then test each candidate against the same representative workload."
+    },
+    {
+      "slide": 6,
+      "title": "Measure Price and Performance",
+      "narration": "To compare two models fairly, use the same prompts, the same grading criteria and actual usage data. The left panel sends one evaluation dataset to Model A and Model B. In the centre, Bedrock Evaluations produces quality scores. The example quality threshold is zero point eight five: Model A scores zero point eight eight and passes, while Model B scores zero point eight two and does not. Next, the slide shows input and output tokens recorded for actual inference. Those usage numbers are combined with the published rates for the respective models to estimate cost. Notice the orange conclusion: the model with better observed quality may cost more, but it could be the correct choice if only it meets the required threshold. Also read the footnote on CountTokens. It estimates input tokens before a request; it does not provide actual output-token counts. Use measured responses, current pricing and a clearly defined quality bar to choose price-to-performance for your particular application."
+    }
+  ]
+}

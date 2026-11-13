@@ -1,0 +1,428 @@
+[
+  {
+    "sequence": 1,
+    "title": "CI/CD separates build from release",
+    "referencePages": [
+      751,
+      752,
+      753
+    ],
+    "points": [
+      "Continuous integration builds and tests each commit.",
+      "Continuous delivery holds an immutable releasable artifact; approval can gate production.",
+      "CodePipeline orchestrates actions, while production health needs separate verification."
+    ],
+    "remember": "CodePipeline orchestrates actions, while production health needs separate verification."
+  },
+  {
+    "sequence": 2,
+    "title": "Choose the right CI/CD service",
+    "referencePages": [
+      751,
+      752,
+      753
+    ],
+    "points": [
+      "CodeCommit or a connected Git provider supplies source; CodeBuild tests/packages.",
+      "CodePipeline orchestrates stages; CodeDeploy manages eligible rollouts.",
+      "ECR stores container images; CloudFormation provisions infrastructure."
+    ],
+    "remember": "ECR stores container images; CloudFormation provisions infrastructure."
+  },
+  {
+    "sequence": 3,
+    "title": "CodePipeline stages and action boundaries",
+    "referencePages": [
+      751,
+      752,
+      753
+    ],
+    "points": [
+      "Source, build, test and deploy actions exchange versioned artifacts.",
+      "A failed stage stops downstream promotion; manual approvals gate later stages.",
+      "Action roles and artifact stores define account and Region boundaries."
+    ],
+    "remember": "Action roles and artifact stores define account and Region boundaries."
+  },
+  {
+    "sequence": 4,
+    "title": "CodeBuild turns source into evidence",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "A buildspec defines install, pre_build, build and post_build phases.",
+      "The CodeBuild service role accesses source, secrets and artifact destinations.",
+      "Test reports and immutable output are evidence; build success is not runtime health."
+    ],
+    "remember": "Test reports and immutable output are evidence; build success is not runtime health."
+  },
+  {
+    "sequence": 5,
+    "title": "Connect Git without hidden credentials",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "CodeCommit is available to new customers; connected providers use AWS CodeConnections.",
+      "Scope repository access and the pipeline source action; verify event triggers.",
+      "Avoid embedding long-lived source credentials in the pipeline."
+    ],
+    "remember": "Avoid embedding long-lived source credentials in the pipeline."
+  },
+  {
+    "sequence": 6,
+    "title": "Separate DEV and PROD release paths",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "DEV tests and deploys a candidate; PROD promotes the same reviewed artifact.",
+      "Separate accounts and roles contain blast radius; approval checks evidence.",
+      "Canary alarms and rollback verify the production release."
+    ],
+    "remember": "Canary alarms and rollback verify the production release."
+  },
+  {
+    "sequence": 7,
+    "title": "Manual approval is a deliberate release gate",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "A manual approval action pauses the pipeline before the next stage.",
+      "Review build/test, scan, artifact identity and rollback readiness.",
+      "Approval is a decision gate, not a production health test."
+    ],
+    "remember": "Approval is a decision gate, not a production health test."
+  },
+  {
+    "sequence": 8,
+    "title": "Scan and sign the deployable image",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "Build and scan an immutable container digest before promotion.",
+      "Sign and attest provenance; keep signing permissions distinct from deployment.",
+      "Signing does not prove the image has no vulnerabilities."
+    ],
+    "remember": "Signing does not prove the image has no vulnerabilities."
+  },
+  {
+    "sequence": 9,
+    "title": "Promote across accounts with scoped roles",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "Tooling account stores artifacts and assumes a scoped production deployment role.",
+      "Trust policy determines who assumes the role; permissions define allowed actions.",
+      "Cross-account artifact and KMS grants are required for access."
+    ],
+    "remember": "Cross-account artifact and KMS grants are required for access."
+  },
+  {
+    "sequence": 10,
+    "title": "Cross-Region pipelines need regional stores",
+    "referencePages": [
+      754,
+      755,
+      756,
+      757
+    ],
+    "points": [
+      "A pipeline has a home Region and needs an artifact store in each action Region.",
+      "Cross-Region action roles, encryption keys and artifact replication must align.",
+      "A cross-Region action is deployed in its target Region, not magically global."
+    ],
+    "remember": "A cross-Region action is deployed in its target Region, not magically global."
+  },
+  {
+    "sequence": 11,
+    "title": "CodeDeploy targets and deployment types",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "CodeDeploy supports EC2/on-premises, Lambda and ECS deployment targets.",
+      "In-place and blue/green apply according to target platform; choose traffic shifting carefully.",
+      "Rollback support depends on deployment configuration and alarms."
+    ],
+    "remember": "Rollback support depends on deployment configuration and alarms."
+  },
+  {
+    "sequence": 12,
+    "title": "EC2 in-place deploy in batches",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "EC2 in-place updates existing instances in batches via AppSpec hooks.",
+      "Validate lifecycle hooks and target health before the next batch.",
+      "Rollback redeploys a revision and does not undo external side effects."
+    ],
+    "remember": "Rollback redeploys a revision and does not undo external side effects."
+  },
+  {
+    "sequence": 13,
+    "title": "ASG blue/green preserves an old fleet",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "Blue/green creates a replacement Auto Scaling group or fleet while preserving old capacity.",
+      "Test the green environment before shifting production traffic.",
+      "Keep the old fleet for a defined rollback window, accounting for double capacity cost."
+    ],
+    "remember": "Keep the old fleet for a defined rollback window, accounting for double capacity cost."
+  },
+  {
+    "sequence": 14,
+    "title": "Lambda alias canary and linear shifts",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "Lambda aliases weight traffic between published versions.",
+      "Canary and linear CodeDeploy configurations shift gradually with hooks and alarms.",
+      "An alarm can restore the prior version, but side effects remain."
+    ],
+    "remember": "An alarm can restore the prior version, but side effects remain."
+  },
+  {
+    "sequence": 15,
+    "title": "ECS blue/green uses two task sets",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "ECS blue/green creates a replacement task set behind a second target group.",
+      "A listener shifts traffic after tests; alarms can stop and roll back.",
+      "Task definition, health checks and data compatibility all affect success."
+    ],
+    "remember": "Task definition, health checks and data compatibility all affect success."
+  },
+  {
+    "sequence": 16,
+    "title": "Compare rollout curves and rollback",
+    "referencePages": [
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ],
+    "points": [
+      "All-at-once is fast but exposes all traffic immediately; canary limits initial exposure.",
+      "Linear shifts in increments; rolling replaces fleet members in batches.",
+      "Choose a strategy using blast radius, capacity, observability and state migration."
+    ],
+    "remember": "Choose a strategy using blast radius, capacity, observability and state migration."
+  },
+  {
+    "sequence": 17,
+    "title": "Credential leak response begins at commit",
+    "referencePages": [],
+    "points": [
+      "Commit and pipeline events can trigger secret scanning.",
+      "Redact findings and revoke or rotate exposed credentials with scoped automation.",
+      "Notify the owner, retain audit evidence and prevent recurrence with short-lived roles."
+    ],
+    "remember": "Notify the owner, retain audit evidence and prevent recurrence with short-lived roles."
+  },
+  {
+    "sequence": 18,
+    "title": "CodeGuru Reviewer is legacy context",
+    "referencePages": [
+      758,
+      759,
+      760
+    ],
+    "points": [
+      "CodeGuru Reviewer existing associations remain usable; new associations stopped November 7, 2025.",
+      "Amazon Q Developer supplies current code review and security analysis.",
+      "CodeGuru Profiler addresses runtime performance, not source review."
+    ],
+    "remember": "CodeGuru Profiler addresses runtime performance, not source review."
+  },
+  {
+    "sequence": 19,
+    "title": "EC2 Image Builder promotes tested AMIs",
+    "referencePages": [
+      775,
+      776
+    ],
+    "points": [
+      "EC2 Image Builder composes, hardens and tests an AMI.",
+      "Promote a tested AMI version across accounts and Regions, then update launch templates.",
+      "Roll the fleet in waves with health gates and a prior-image rollback path."
+    ],
+    "remember": "Roll the fleet in waves with health gates and a prior-image rollback path."
+  },
+  {
+    "sequence": 20,
+    "title": "SAM release uses the same pipeline gates",
+    "referencePages": [],
+    "points": [
+      "CodeBuild tests/packages a SAM application; CloudFormation expands the SAM transform.",
+      "CodeDeploy shifts Lambda alias traffic using hooks and alarms.",
+      "Integration tests must exercise deployed API Gateway, Lambda and DynamoDB behavior."
+    ],
+    "remember": "Integration tests must exercise deployed API Gateway, Lambda and DynamoDB behavior."
+  },
+  {
+    "sequence": 21,
+    "title": "Bedrock evaluation is a release gate",
+    "referencePages": [],
+    "points": [
+      "Pin prompt, model, configuration and representative dataset versions.",
+      "Compare automatic metrics with human judgments for quality, safety, cost and latency.",
+      "Block promotion when thresholds fail and monitor drift after release."
+    ],
+    "remember": "Block promotion when thresholds fail and monitor drift after release."
+  },
+  {
+    "sequence": 22,
+    "title": "Evaluate RAG answers and failure cases",
+    "referencePages": [],
+    "points": [
+      "Test representative and adversarial queries with reference answers.",
+      "Separate retrieval relevance, answer quality and grounding; review ambiguous cases.",
+      "Version the dataset, model and knowledge base index with results."
+    ],
+    "remember": "Version the dataset, model and knowledge base index with results."
+  },
+  {
+    "sequence": 23,
+    "title": "Walkthrough: cross-account image release",
+    "referencePages": [],
+    "points": [
+      "Build and test a pinned source revision in tooling.",
+      "Scan, sign and attest the immutable ECR image digest.",
+      "Assume a scoped production role, approve promotion, canary and check alarms."
+    ],
+    "remember": "Assume a scoped production role, approve promotion, canary and check alarms."
+  },
+  {
+    "sequence": 24,
+    "title": "Walkthrough: failed canary rollback",
+    "referencePages": [],
+    "points": [
+      "A 10% canary exposes elevated errors and triggers a CloudWatch alarm.",
+      "CodeDeploy restores routing to the healthy version and verifies recovery.",
+      "Traffic rollback does not reverse writes, messages or schema changes."
+    ],
+    "remember": "Traffic rollback does not reverse writes, messages or schema changes."
+  },
+  {
+    "sequence": 25,
+    "title": "Choose the release service by job",
+    "points": [
+      "CodePipeline | Orchestrate stages and approvals | Source \u2192 build \u2192 test \u2192 deploy | Coordinate the release",
+      "CodeBuild | Build and test in managed compute | Source + buildspec \u2192 artifacts | Compile, test, package",
+      "CodeDeploy | Deploy application revisions | Artifact \u2192 EC2, Lambda or ECS | Traffic shift and rollback",
+      "CodeArtifact | Store packages and dependencies | Package version \u2192 repository | Govern reusable packages"
+    ],
+    "layout": "decision table",
+    "remember": "Pipeline orchestrates; build creates artifacts; deploy changes running workloads."
+  },
+  {
+    "sequence": 26,
+    "title": "Choose a rollout by risk and rollback",
+    "points": [
+      "All at once | Replace all capacity together | Small or tolerant workloads | Fast rollout, largest blast radius",
+      "Rolling | Replace batches in place | Capacity can shrink temporarily | Track health between batches",
+      "Blue/green | New environment beside old | Fast switch and rollback | Verify green, shift traffic",
+      "Canary | Small traffic slice first | High-risk releases | Watch errors and latency before expand"
+    ],
+    "layout": "decision table",
+    "remember": "Match release pattern to blast radius, capacity headroom, health signals and recovery time."
+  },
+  {
+    "sequence": 27,
+    "title": "Place release gates at the right boundary",
+    "points": [
+      "Source | Secret scan, reviewed change | Reject compromised commit | Revoke leaked credential",
+      "Build | Tests, image scan, SBOM | Promote immutable artifact | Fix and rebuild",
+      "Pre-deploy | Policy, template, approval | Permit scoped rollout | Block unsafe change",
+      "Post-deploy | Canary health, SLOs, alarms | Expand or stop traffic shift | Roll back and investigate"
+    ],
+    "layout": "decision table",
+    "remember": "A passing build does not prove a healthy production release."
+  }
+]

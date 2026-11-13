@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Azure DevTest Labs",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "provision a constrained VM lab for integration testing",
+    "input": "The lab owner selects permitted images, VM policies and test-data access.",
+    "action": "DevTest Labs coordinates lab VMs and supported reusable environment artifacts under configured quotas and schedules. Test application processes execute on those VMs; lab policies limit resource creation and operation.",
+    "output": "The tester runs the approved integration suite against the isolated lab application.",
+    "check": "Check image version, quota enforcement, shutdown policy and removal of sensitive test data after use.",
+    "reference": "https://learn.microsoft.com/en-us/azure/devtest-labs/devtest-lab-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Digital Twins",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "maintain a building graph from authorized sensor events",
+    "input": "The building owner defines twin models, relationships and the sensor-to-twin mapping.",
+    "action": "Digital Twins stores the modeled twin graph and accepts authorized twin updates. An ingestion function translates sensor messages into the relevant properties; queries retrieve modeled state rather than controlling equipment automatically.",
+    "output": "The facilities application queries room and equipment relationships to identify the affected building zone.",
+    "check": "Check model consistency, event ordering, update authorization and the separate approval path for physical control.",
+    "reference": "https://learn.microsoft.com/en-us/azure/digital-twins/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Document Intelligence in Foundry Tools",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "extract invoice fields with source evidence for review",
+    "input": "The invoice application submits a permitted document and selects a supported model.",
+    "action": "Document Intelligence analyzes the document and returns supported text, layout or structured fields with available confidence and location evidence. The application validates supplier identity and arithmetic before posting any payable.",
+    "output": "The reviewer corrects uncertain fields and approves the accepted invoice record.",
+    "check": "Test document formats, totals, duplicate invoices and access to extracted personal or financial information.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Elastic SAN",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "serve shared block volumes to an approved compute workload",
+    "input": "The storage owner provisions supported volumes and the client's permitted connectivity settings.",
+    "action": "Elastic SAN exposes configured managed block volumes through its supported network attachment protocol. Compute clients mount and manage filesystems or database storage; the SAN supplies blocks rather than executing SQL.",
+    "output": "The workload reads and writes its assigned volume and coordinates application-consistent protection.",
+    "check": "Test attachment permissions, performance, concurrent-mount safety and recovery of the workload's filesystem.",
+    "reference": "https://learn.microsoft.com/en-us/azure/storage/elastic-san/elastic-san-introduction",
+    "legacy": false
+  },
+  {
+    "service": "Azure Enclave",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "validate a confidential workload's protected execution boundary",
+    "input": "The security owner selects the actual confidential-computing platform and its attestation requirements.",
+    "action": "The selected enclave technology isolates supported code and data within its trusted execution boundary. Azure attestation and key-release integrations must match that platform; an enclave is not an independent generic data-processing service.",
+    "output": "The authorized confidential application handles sensitive data only after the required trust checks succeed.",
+    "check": "Verify platform-specific measurements, permitted key release and rejection of an untrusted execution environment.",
+    "reference": "https://learn.microsoft.com/en-us/azure/confidential-computing/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Firewall Manager",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "publish a reviewed firewall policy across network hubs",
+    "input": "The network owner defines the allowed application destinations and assigned protected hubs.",
+    "action": "Firewall Manager coordinates supported central firewall-policy and hub management. The associated Azure Firewall instances enforce traffic rules; the manager itself does not inspect each application packet.",
+    "output": "The network team associates the approved policy and tests the actual routed traffic through the intended firewall.",
+    "check": "Verify effective policy, route selection, denied destinations and rollback of the changed rule collection.",
+    "reference": "https://learn.microsoft.com/en-us/azure/firewall-manager/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Health Data Services",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "serve authorized clinical and imaging data through healthcare APIs",
+    "input": "The clinical integration prepares permitted FHIR resources or DICOM studies with source identifiers.",
+    "action": "Health Data Services supplies the selected supported healthcare data service, such as FHIR or DICOM. The chosen API stores and retrieves its corresponding clinical resources under configured identity and access permissions.",
+    "output": "The clinical application reads the permitted patient resource or image study and retains its business access checks.",
+    "check": "Validate standard conformance, patient authorization, ingestion completeness and clinical data retention.",
+    "reference": "https://learn.microsoft.com/en-us/azure/healthcare-apis/healthcare-apis-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Information Protection",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "protect a confidential document with an approved label",
+    "input": "The information owner selects the document classification and intended recipients.",
+    "action": "Information Protection's supported labeling and protection integrations apply the selected sensitivity policy to content. Encryption or usage restrictions depend on the configured label and client; classification alone is not recipient authorization.",
+    "output": "The recipient opens the document only through an allowed identity and supported protected-content client.",
+    "check": "Test excluded recipients, offline behavior and current Purview migration requirements before sharing the file.",
+    "reference": "https://learn.microsoft.com/en-us/azure/information-protection/what-is-information-protection",
+    "legacy": false
+  },
+  {
+    "service": "Azure IoT Central",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "preserve a historical managed device application during replacement",
+    "input": "The device team exports templates, rules, dashboards and device connection requirements.",
+    "action": "IoT Central historically supplied a managed device application built around templates and telemetry integrations. Replacement design retains device identity, schema and actual downstream actions in supported IoT services.",
+    "output": "The new IoT application displays accepted telemetry and invokes only authorized device commands.",
+    "check": "Compare device reconnect, telemetry mapping, rules and operator permissions before moving field devices.",
+    "reference": "https://learn.microsoft.com/en-us/azure/iot-central/core/overview-iot-central",
+    "legacy": true
+  },
+  {
+    "service": "Azure IoT Edge",
+    "cloud": "Azure",
+    "mode": "edge",
+    "title": "process camera telemetry locally before cloud upload",
+    "input": "The edge owner deploys approved modules and configures device identity and local routing.",
+    "action": "IoT Edge runs the selected container modules on the edge device and routes messages according to its module configuration. The processing module filters or analyzes local inputs before uploading approved output to IoT Hub.",
+    "output": "The cloud ingestion application consumes the filtered events while the local process follows its offline policy.",
+    "check": "Test module restart, offline buffering, route configuration and rejection of unauthorized module updates.",
+    "reference": "https://learn.microsoft.com/en-us/azure/iot-edge/about-iot-edge",
+    "legacy": false
+  }
+]

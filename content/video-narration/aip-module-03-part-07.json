@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "03",
+  "module_title": "Agentic AI and AWS Agent Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Reviewed original AIP Module 03 source WebPs 41–45, including identity-aware retrieval, data connector/plugin separation, admin topic controls and Q Apps.",
+  "part_id": "07",
+  "part_title": "Amazon Q Business, Secure Enterprise Answers and Q Apps",
+  "script_revision": "2026-11-12-m03-p07-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 41,
+      "title": "Amazon Q Business: A Grounded Answer",
+      "narration": "This slide shows how a workplace AI assistant should answer questions from enterprise documents. Start with the employee on the left asking what changed in the remote-work policy. Amazon Q Business does not simply guess from its pre-training. The middle column illustrates identity-aware retrieval: it searches the current company content that this employee is permitted to see, including the remote-work policy, frequently asked questions and HR announcements. Notice the green checks beside authorized sources. The answer panel on the right summarizes relevant changes and includes numbered citations to the source documents. The employee can open those citations to verify details rather than treating the generated wording as final policy authority. The bottom theme is grounded, authorized content. If access permissions are misconfigured or the indexed policy is outdated, the answer may still be wrong. Administrators must maintain both the source content and the appropriate identity and access mappings."
+    },
+    {
+      "slide": 42,
+      "title": "Q Business Data Connectors and Plugins",
+      "narration": "This diagram separates retrieving enterprise information from taking an authorized business action. On the left are data connectors for sources such as Amazon S3, SharePoint and Slack. These connectors crawl and index approved content so Amazon Q Business can answer a question like, what is our travel policy? Follow the cyan arrow from indexed content to the assistant in the centre and down to the answer with a source reference. On the right, the orange path is different. A user requests a Jira ticket, and a configured plugin can invoke an authorized operation in an application such as Jira or ServiceNow. The action returns a ticket link when successful. A data connector does not itself grant permission to create a ticket, and a plugin doesn't imply the model can run every action in an enterprise system. The organization must configure user authentication, permitted operations and application credentials. The right question is whether the use case needs retrieval of information, execution of a workflow, or both."
+    },
+    {
+      "slide": 43,
+      "title": "Q Business and IAM Identity Center",
+      "narration": "Look at the identity path along the top of this slide. An external identity provider can federate users into AWS IAM Identity Center, which provides a sign-in and identity integration point for Amazon Q Business. The example shows Alice and Bob asking the same question: summarize the Project A plan. The document-access panel on the right evaluates the access-control lists associated with each retrieved source. Alice has Project A permissions, so her answer can include information from that plan. Bob does not have the same access, so his response must exclude that document. The lower examples demonstrate that the same prompt should not produce the same evidence for users with different permissions. This illustrates identity-aware retrieval, not unrestricted search across company data. Access enforcement depends on correct connector mapping, source permissions and identity configuration. Review group membership and document ACL synchronization, particularly when employees change roles or sensitive documents are reclassified."
+    },
+    {
+      "slide": 44,
+      "title": "Amazon Q Business Admin Controls",
+      "narration": "A workplace assistant may need limits on both the sources it uses and the topics it discusses. This slide illustrates two administrative controls. The left panel restricts the assistant to approved enterprise content, helping ensure answers are grounded in the intended company sources. The second control blocks a defined subject, illustrated here by gaming-console troubleshooting. Follow the two requests on the right. When the user asks how to repair a gaming console, the assistant declines to help on that restricted topic. When the user asks about the company's remote-work policy, the assistant can summarize authorized policy documents and cite its sources. The important distinction is that topic restrictions and document authorization are separate controls. Topic filtering decides what categories of questions the assistant may address; identity-aware retrieval determines which documents each user may access. Test boundary cases because natural-language restrictions can be overbroad or miss alternate phrasings."
+    },
+    {
+      "slide": 45,
+      "title": "Amazon Q Apps",
+      "narration": "Amazon Q Apps turns a natural-language workflow into a reusable, shareable generative AI application. Follow the five numbered steps across the slide. First, a user describes an app idea in natural language, such as a product-launch post generator. Second, Q Apps creates a structured no-code app with inputs, including a product name. Third, the app can use approved enterprise content, such as messaging guidelines, and may perform optional authorized actions when configured. Fourth, it generates output, illustrated by a branded product-launch post. Finally, the creator shares the application with coworkers who have the required permissions. Notice the three teams on the bottom right: marketing, product and communications can use the same reusable workflow. Q Apps helps make a repeatable business task accessible without building a custom frontend from scratch. But shared apps still need appropriate data access, input review and controls on actions that create records in external systems."
+    }
+  ]
+}

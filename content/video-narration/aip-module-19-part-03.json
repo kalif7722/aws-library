@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "03",
+  "part_title": "Lab 03 — Diagnose Bedrock Throttling and Retry Storms",
+  "script_revision": "2026-11-13-m19-p03-troubleshoot-local-v1",
+  "review_basis": "Original checked-in local Module 19 slides 12–17 visually reviewed with corresponding simulator diagnostic instructions.",
+  "scenes": [
+    {
+      "slide": 12,
+      "title": "Scenario and retry-storm architecture",
+      "narration": "A burst of synthetic chat users sends parallel requests through an application that invokes Bedrock. Start with the orange application box: both application code and an SDK can retry failed calls. When requests exceed the applicable model, Region, inference-profile or capacity quota, Bedrock responds with a 429 ThrottlingException. The dashed arrow shows the error returning to the client. If the application retries without limits, each original user request becomes several model requests and creates more pressure. The simulated console shows twelve thousand four hundred thirty-six invocations, eight point nine million input tokens and three thousand four hundred eighty-two throttled requests, with rising charts; these are lab figures, not live service quotas. The sample log shows repeated 429s and a final retries-exhausted result, including queue wait. First reproduce with a safe synthetic burst, identify the selected model and Region and capture request IDs, concurrency, attempts and token usage. Our goal is not simply to eliminate an exception by waiting indefinitely, but to restore successful responses while controlling latency and cost."
+    },
+    {
+      "slide": 13,
+      "title": "Measure request and token quota pressure",
+      "narration": "Open CloudWatch Metrics and inspect the AWS Bedrock namespace using dimensions for the model, Region and operation relevant to the failing calls. Look at invocation counts, invocation errors, input tokens and output tokens over the same time window. The illustrated graphs spike near fourteen hundred hours, and the app logs show successive 429s, jittered retries, queue wait and a later success with input and output token counts. Use the sample CLI get-metric-statistics example as a pattern for collecting a specified metric with dimensions, period and statistic; confirm actual available metric names before running commands. Match the observed request and token rates against the active quota scope instead of assuming one global limit covers all Bedrock models and profiles. A high invocation count with repeated retries can be amplification rather than genuine new user demand. Save the baseline throttling rate, p95 latency, per-request attempts and token cost; these measurements will determine whether a bounded retry strategy and admission queue actually improve behavior."
+    },
+    {
+      "slide": 14,
+      "title": "Inspect retry amplification with request IDs",
+      "narration": "This diagram starts with one user request becoming multiple attempts at the model endpoint. Follow the arrows into Bedrock and then into CloudWatch logs, X-Ray traces and the application's own retry records. A correlation request ID is used in this synthetic example to group attempt status and latency. One attempt is shown succeeding and later attempts being throttled; the point is to inspect duplicate or unnecessary execution rather than assume this is a normal one-to-one request path. In the CloudWatch Log Events pane, filter by the request identifier, then count how many retries were triggered and whether any duplicate SDK retries added still more calls. Compare attempt numbers, timestamps, 429 status, model ID, token usage and queue wait. A 429 should be retried only under an appropriate transient-error policy, with a maximum total deadline. Distinguish application-generated correlation IDs from Bedrock service request IDs in a real deployment so the evidence chain is valid. When many 429 attempts belong to one user request, fix retry amplification before requesting greater quota."
+    },
+    {
+      "slide": 15,
+      "title": "Implement bounded jitter and retry budget",
+      "narration": "The healthy architecture replaces unbounded retries with bounded exponential backoff, randomized full jitter and a total retry budget. After a 429, the application waits before another attempt instead of immediately adding load. The orange dashed return path is conditional: success returns the answer, while throttling schedules another attempt only if time and attempts remain. The sample log shows four attempts, with delays of zero, four hundred twelve, eight hundred ninety-three and seventeen hundred sixty-five milliseconds before an illustrative HTTP 200 result. These are examples, not a recommended fixed delay sequence. In the application workbench, configure a maximum attempt count, exponential growth with a cap, full jitter and a deadline; respect Retry-After when supplied. Avoid retrying non-retryable validation errors. Most importantly, coordinate SDK-native retries and application retries so they do not multiply together. The chart and success metrics illustrate improved behavior after the policy, but verify your own request success, p95 latency, retry count and token cost rather than copying the sample percentages."
+    },
+    {
+      "slide": 16,
+      "title": "Control concurrency and capacity deliberately",
+      "narration": "The left panel shows uncontrolled parallel clients and retries overwhelming Bedrock. The center adds an admission queue and a fixed worker pool; its example uses five concurrent workers, not a universal safe limit. Start in the simulator's application workbench by setting bounded concurrency, then route extra requests into a queue with a clear expiration or overload policy. Monitor invocation and token rates alongside throttling and end-to-end queue wait. The CloudWatch example shows the uncontrolled traffic spike falling to a steadier level after the change. The sample CLI output contrasts a synthetic test at concurrency fifty with a controlled test at five, showing a better success rate, lower p95 latency, fewer 429s and lower estimated hourly cost. Those results describe the fixture only. Choose a concurrency limit from actual model and Region quotas and representative token sizes. If throttling remains after eliminating excess retries, then gather evidence for an appropriate quota increase or capacity arrangement. More capacity is not the first fix for a self-inflicted retry storm."
+    },
+    {
+      "slide": 17,
+      "title": "Load-test recovery and verify costs",
+      "narration": "Complete the lab with a bounded test against the simulator or a designated non-production endpoint, never a surprise load test against a live service. The four panels show the procedure: send controlled bursts for a defined duration, observe throttling and bounded retries, compare CloudWatch invocation and token metrics, then verify the outcome. The synthetic results show success increasing from sixty-two to ninety-eight percent, p95 latency dropping from eight point five to two point one seconds, 429 errors dropping from thirty-eight to one percent, and total tokens and estimated cost halving. Note that the median latency may move differently from p95, so check both where available. Record retry budget, Retry-After handling, queue wait, success and rejection rates, token usage and estimated cost under matched test conditions. The correct result is a controlled system with acceptable latency and no retry amplification, not a promise of zero throttling during any possible burst. Keep monitoring and an alert for rising 429 or queue depth, then stop synthetic load and clean up temporary sandbox resources."
+    }
+  ]
+}

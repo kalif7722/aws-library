@@ -1,0 +1,2675 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Data analytics and pipelines",
+  "services": [
+    {
+      "slug": "bigquery",
+      "summary": "A serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets.",
+      "concepts": [
+        "project, dataset, table/view, reservation and job define the BigQuery resource and data model.",
+        "The production path is sources > load/stream > partitioned tables > SQL job > result/export.",
+        "BigQuery manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose BigQuery when a serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets.",
+        "The strongest fit is a workload whose flow follows sources > load/stream > partitioned tables > SQL job > result/export.",
+        "Choose Cloud SQL for OLTP transactions rather than large analytical scans instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "BigQuery production flow",
+          "note": "A serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets.",
+          "reference": "BigQuery architecture",
+          "steps": [
+            {
+              "title": "1. sources",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. load/stream",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. partitioned tables",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. SQL job",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. result/export",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed BigQuery",
+          "note": "Identity, boundary, resilience and operations around project, dataset, table/view, reservation and job.",
+          "reference": "BigQuery governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "dataset/table IAM, policy tags, row access policies, authorized views and CMEK",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "location, dataset, schema, partition/clustering, capacity model and governance",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "partitioning/clustering only reduce work when queries filter on those keys; SELECT * defeats cost controls",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "slot utilization, bytes processed, job latency, shuffle and storage freshness",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open BigQuery",
+          "detail": "Google Cloud Console → BigQuery; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set location, dataset, schema, partition/clustering, capacity model and governance."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply dataset/table IAM, policy tags, row access policies, authorized views and CMEK."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise sources > load/stream > partitioned tables > SQL job > result/export and inspect slot utilization, bytes processed, job latency, shuffle and storage freshness."
+        }
+      ],
+      "security": [
+        "For BigQuery, implement dataset/table IAM, policy tags, row access policies, authorized views and CMEK.",
+        "Separate administrators, automation and runtime principals for project, dataset, table/view, reservation and job.",
+        "Audit BigQuery configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor slot utilization, bytes processed, job latency, shuffle and storage freshness for BigQuery.",
+        "Version location, dataset, schema, partition/clustering, capacity model and governance, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit BigQuery ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "partitioning/clustering only reduce work when queries filter on those keys; SELECT * defeats cost controls",
+        "Verify BigQuery regional availability, quotas, limits and compatibility before standardizing.",
+        "BigQuery's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "bytes processed or slot reservations, storage, streaming and BI Engine.",
+        "Add dependent storage, network, logging and consuming/producing services to the BigQuery estimate.",
+        "Measure BigQuery cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "BigQuery — A serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets.",
+        "Cloud SQL for OLTP transactions rather than large analytical scans — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "BigQuery",
+          "fit": "A serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets."
+        },
+        {
+          "name": "Cloud SQL",
+          "fit": "Cloud SQL for OLTP transactions rather than large analytical scans"
+        }
+      ],
+      "memoryHooks": [
+        "sources > load/stream > partitioned tables > SQL job > result/export.",
+        "partitioning/clustering only reduce work when queries filter on those keys; SELECT * defeats cost controls",
+        "Certification clue: A serverless analytical data warehouse for SQL, streaming/batch ingestion, governance and machine learning over large datasets."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "BigQuery documentation",
+          "url": "https://docs.cloud.google.com/bigquery/docs"
+        }
+      ]
+    },
+    {
+      "slug": "blockchain-analytics",
+      "summary": "Curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services.",
+      "concepts": [
+        "chain dataset, block/transaction schema and analytical view define the Blockchain Analytics resource and data model.",
+        "The production path is blockchain ledger > ingestion/indexing > BigQuery tables > SQL/model > dashboard/API.",
+        "Blockchain Analytics manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Blockchain Analytics when curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services.",
+        "The strongest fit is a workload whose flow follows blockchain ledger > ingestion/indexing > BigQuery tables > SQL/model > dashboard/API.",
+        "Choose Blockchain Node Engine for direct RPC access and transaction submission instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Blockchain Analytics production flow",
+          "note": "Curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services.",
+          "reference": "Blockchain Analytics architecture",
+          "steps": [
+            {
+              "title": "1. blockchain ledger",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. ingestion/indexing",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. BigQuery tables",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. SQL/model",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. dashboard/API",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Blockchain Analytics",
+          "note": "Identity, boundary, resilience and operations around chain dataset, block/transaction schema and analytical view.",
+          "reference": "Blockchain Analytics governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "dataset IAM, query controls and careful treatment of derived address/entity labels",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "chain/network, dataset location, freshness SLA, reorg policy and query model",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "on-chain addresses are pseudonymous and chain reorganizations can invalidate recently observed state",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "chain freshness, reorg handling, missing blocks, query bytes and transformation quality",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Blockchain Analytics",
+          "detail": "Google Cloud Console → Blockchain Analytics; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set chain/network, dataset location, freshness SLA, reorg policy and query model."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply dataset IAM, query controls and careful treatment of derived address/entity labels."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise blockchain ledger > ingestion/indexing > BigQuery tables > SQL/model > dashboard/API and inspect chain freshness, reorg handling, missing blocks, query bytes and transformation quality."
+        }
+      ],
+      "security": [
+        "For Blockchain Analytics, implement dataset IAM, query controls and careful treatment of derived address/entity labels.",
+        "Separate administrators, automation and runtime principals for chain dataset, block/transaction schema and analytical view.",
+        "Audit Blockchain Analytics configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor chain freshness, reorg handling, missing blocks, query bytes and transformation quality for Blockchain Analytics.",
+        "Version chain/network, dataset location, freshness SLA, reorg policy and query model, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Blockchain Analytics ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "on-chain addresses are pseudonymous and chain reorganizations can invalidate recently observed state",
+        "Verify Blockchain Analytics regional availability, quotas, limits and compatibility before standardizing.",
+        "Blockchain Analytics's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "BigQuery storage/query, pipelines, dashboards and egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Blockchain Analytics estimate.",
+        "Measure Blockchain Analytics cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Blockchain Analytics — Curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services.",
+        "Blockchain Node Engine for direct RPC access and transaction submission — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Blockchain Analytics",
+          "fit": "Curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services."
+        },
+        {
+          "name": "Blockchain Node Engine",
+          "fit": "Blockchain Node Engine for direct RPC access and transaction submission"
+        }
+      ],
+      "memoryHooks": [
+        "blockchain ledger > ingestion/indexing > BigQuery tables > SQL/model > dashboard/API.",
+        "on-chain addresses are pseudonymous and chain reorganizations can invalidate recently observed state",
+        "Certification clue: Curated blockchain datasets and analytics patterns that make on-chain transactions queryable through Google Cloud analytical services."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Blockchain Analytics documentation",
+          "url": "https://docs.cloud.google.com/blockchain-analytics/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-data-fusion",
+      "summary": "A managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins.",
+      "concepts": [
+        "instance, namespace, pipeline, plugin and runtime profile define the Cloud Data Fusion resource and data model.",
+        "The production path is source plugin > transforms > sink plugin > Dataproc/Dataflow runtime > lineage/metrics.",
+        "Cloud Data Fusion manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cloud Data Fusion when a managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins.",
+        "The strongest fit is a workload whose flow follows source plugin > transforms > sink plugin > Dataproc/Dataflow runtime > lineage/metrics.",
+        "Choose Dataflow for code-first Beam pipelines or Application Integration for SaaS workflows instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Data Fusion production flow",
+          "note": "A managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins.",
+          "reference": "Cloud Data Fusion architecture",
+          "steps": [
+            {
+              "title": "1. source plugin",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. transforms",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. sink plugin",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. Dataproc/Dataflow runtime",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. lineage/metrics",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Data Fusion",
+          "note": "Identity, boundary, resilience and operations around instance, namespace, pipeline, plugin and runtime profile.",
+          "reference": "Cloud Data Fusion governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private instance/network, service accounts, Secret Manager and plugin governance",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "edition/region, private IP, namespace, plugins, runtime profile and schedule",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "the design surface is managed but pipelines execute on billable compute and plugins can introduce compatibility/security risk",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "pipeline runs, stage records/errors, runtime provisioning and data-quality checks",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Data Fusion",
+          "detail": "Google Cloud Console → Cloud Data Fusion; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set edition/region, private IP, namespace, plugins, runtime profile and schedule."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private instance/network, service accounts, Secret Manager and plugin governance."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise source plugin > transforms > sink plugin > Dataproc/Dataflow runtime > lineage/metrics and inspect pipeline runs, stage records/errors, runtime provisioning and data-quality checks."
+        }
+      ],
+      "security": [
+        "For Cloud Data Fusion, implement private instance/network, service accounts, Secret Manager and plugin governance.",
+        "Separate administrators, automation and runtime principals for instance, namespace, pipeline, plugin and runtime profile.",
+        "Audit Cloud Data Fusion configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor pipeline runs, stage records/errors, runtime provisioning and data-quality checks for Cloud Data Fusion.",
+        "Version edition/region, private IP, namespace, plugins, runtime profile and schedule, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Cloud Data Fusion ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "the design surface is managed but pipelines execute on billable compute and plugins can introduce compatibility/security risk",
+        "Verify Cloud Data Fusion regional availability, quotas, limits and compatibility before standardizing.",
+        "Cloud Data Fusion's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "instance edition, Dataproc/Dataflow compute, storage and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Cloud Data Fusion estimate.",
+        "Measure Cloud Data Fusion cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Cloud Data Fusion — A managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins.",
+        "Dataflow for code-first Beam pipelines or Application Integration for SaaS workflows — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Data Fusion",
+          "fit": "A managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins."
+        },
+        {
+          "name": "Dataflow",
+          "fit": "Dataflow for code-first Beam pipelines or Application Integration for SaaS workflows"
+        }
+      ],
+      "memoryHooks": [
+        "source plugin > transforms > sink plugin > Dataproc/Dataflow runtime > lineage/metrics.",
+        "the design surface is managed but pipelines execute on billable compute and plugins can introduce compatibility/security risk",
+        "Certification clue: A managed graphical data-integration service based on CDAP for building batch and real-time pipelines with plugins."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Data Fusion documentation",
+          "url": "https://docs.cloud.google.com/data-fusion/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cortex-framework",
+      "summary": "A reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery.",
+      "concepts": [
+        "data foundation, source connector, transformation and Looker content define the Cortex Framework resource and data model.",
+        "The production path is ERP/CRM source > ingestion > BigQuery raw/curated layers > models > dashboards.",
+        "Cortex Framework manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cortex Framework when a reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery.",
+        "The strongest fit is a workload whose flow follows ERP/CRM source > ingestion > BigQuery raw/curated layers > models > dashboards.",
+        "Choose custom lakehouse when supported source templates do not match the enterprise model instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cortex Framework production flow",
+          "note": "A reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery.",
+          "reference": "Cortex Framework architecture",
+          "steps": [
+            {
+              "title": "1. ERP/CRM source",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. BigQuery raw/curated layers",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. models",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. dashboards",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cortex Framework",
+          "note": "Identity, boundary, resilience and operations around data foundation, source connector, transformation and Looker content.",
+          "reference": "Cortex Framework governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "source credentials, dataset separation, policy tags and deployment service accounts",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "source system, deployment config, datasets, transformations, schedules and Looker content",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Cortex is deployable content and patterns, not a managed source system or automatic data-quality guarantee",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "load freshness, transformation tests, reconciliation and dashboard availability",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cortex Framework",
+          "detail": "Google Cloud Console → Cortex Framework; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set source system, deployment config, datasets, transformations, schedules and Looker content."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply source credentials, dataset separation, policy tags and deployment service accounts."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise ERP/CRM source > ingestion > BigQuery raw/curated layers > models > dashboards and inspect load freshness, transformation tests, reconciliation and dashboard availability."
+        }
+      ],
+      "security": [
+        "For Cortex Framework, implement source credentials, dataset separation, policy tags and deployment service accounts.",
+        "Separate administrators, automation and runtime principals for data foundation, source connector, transformation and Looker content.",
+        "Audit Cortex Framework configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor load freshness, transformation tests, reconciliation and dashboard availability for Cortex Framework.",
+        "Version source system, deployment config, datasets, transformations, schedules and Looker content, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Cortex Framework ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Cortex is deployable content and patterns, not a managed source system or automatic data-quality guarantee",
+        "Verify Cortex Framework regional availability, quotas, limits and compatibility before standardizing.",
+        "Cortex Framework's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "ingestion, BigQuery, Dataform/Dataproc and Looker resources.",
+        "Add dependent storage, network, logging and consuming/producing services to the Cortex Framework estimate.",
+        "Measure Cortex Framework cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Cortex Framework — A reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery.",
+        "custom lakehouse when supported source templates do not match the enterprise model — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cortex Framework",
+          "fit": "A reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery."
+        },
+        {
+          "name": "custom lakehouse when supported source templates do not match the enterprise model",
+          "fit": "custom lakehouse when supported source templates do not match the enterprise model"
+        }
+      ],
+      "memoryHooks": [
+        "ERP/CRM source > ingestion > BigQuery raw/curated layers > models > dashboards.",
+        "Cortex is deployable content and patterns, not a managed source system or automatic data-quality guarantee",
+        "Certification clue: A reference data foundation and analytics content for integrating enterprise sources such as SAP into BigQuery."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cortex Framework documentation",
+          "url": "https://docs.cloud.google.com/cortex/docs"
+        }
+      ]
+    },
+    {
+      "slug": "data-studio",
+      "summary": "A self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources.",
+      "concepts": [
+        "report, data source, chart, field and viewer credential mode define the Data Studio resource and data model.",
+        "The production path is BigQuery/connector > data source > calculated fields > chart/report > viewer.",
+        "Data Studio manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Data Studio when a self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources.",
+        "The strongest fit is a workload whose flow follows BigQuery/connector > data source > calculated fields > chart/report > viewer.",
+        "Choose Looker for governed semantic modeling and enterprise BI lifecycle instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Data Studio production flow",
+          "note": "A self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources.",
+          "reference": "Data Studio architecture",
+          "steps": [
+            {
+              "title": "1. BigQuery/connector",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. data source",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. calculated fields",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. chart/report",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. viewer",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Data Studio",
+          "note": "Identity, boundary, resilience and operations around report, data source, chart, field and viewer credential mode.",
+          "reference": "Data Studio governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "owner versus viewer credentials, sharing controls and governed source access",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "data source, credentials mode, extract/freshness, calculated fields and sharing",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "viewer/owner credential mode can change what data users see and who pays for queries",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "query latency, connector errors, freshness and report usage",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Data Studio",
+          "detail": "Google Cloud Console → Data Studio; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set data source, credentials mode, extract/freshness, calculated fields and sharing."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply owner versus viewer credentials, sharing controls and governed source access."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise BigQuery/connector > data source > calculated fields > chart/report > viewer and inspect query latency, connector errors, freshness and report usage."
+        }
+      ],
+      "security": [
+        "For Data Studio, implement owner versus viewer credentials, sharing controls and governed source access.",
+        "Separate administrators, automation and runtime principals for report, data source, chart, field and viewer credential mode.",
+        "Audit Data Studio configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor query latency, connector errors, freshness and report usage for Data Studio.",
+        "Version data source, credentials mode, extract/freshness, calculated fields and sharing, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Data Studio ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "viewer/owner credential mode can change what data users see and who pays for queries",
+        "Verify Data Studio regional availability, quotas, limits and compatibility before standardizing.",
+        "Data Studio's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "Looker Studio Pro terms, connector/query and source-system charges.",
+        "Add dependent storage, network, logging and consuming/producing services to the Data Studio estimate.",
+        "Measure Data Studio cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Data Studio — A self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources.",
+        "Looker for governed semantic modeling and enterprise BI lifecycle — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Data Studio",
+          "fit": "A self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources."
+        },
+        {
+          "name": "Looker",
+          "fit": "Looker for governed semantic modeling and enterprise BI lifecycle"
+        }
+      ],
+      "memoryHooks": [
+        "BigQuery/connector > data source > calculated fields > chart/report > viewer.",
+        "viewer/owner credential mode can change what data users see and who pays for queries",
+        "Certification clue: A self-service reporting and dashboard service, now branded Looker Studio, for visualizing connected data sources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Data Studio documentation",
+          "url": "https://docs.cloud.google.com/data-studio"
+        }
+      ]
+    },
+    {
+      "slug": "dataflow",
+      "summary": "A managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns.",
+      "concepts": [
+        "Beam pipeline, job, worker, stage, window and state define the Dataflow resource and data model.",
+        "The production path is source > parallel transforms > shuffle/window/state > sink > dead-letter path.",
+        "Dataflow manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Dataflow when a managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns.",
+        "The strongest fit is a workload whose flow follows source > parallel transforms > shuffle/window/state > sink > dead-letter path.",
+        "Choose Dataproc/Spark for existing Spark ecosystems or BigQuery SQL for warehouse transformations instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Dataflow production flow",
+          "note": "A managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns.",
+          "reference": "Dataflow architecture",
+          "steps": [
+            {
+              "title": "1. source",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. parallel transforms",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. shuffle/window/state",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. sink",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. dead-letter path",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Dataflow",
+          "note": "Identity, boundary, resilience and operations around Beam pipeline, job, worker, stage, window and state.",
+          "reference": "Dataflow governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "worker service account, private workers, CMEK, VPC Service Controls and dependency control",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, runner options, worker type, network, autoscaling, streaming engine and sinks",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "streaming correctness depends on event time, watermarks, triggers, state and idempotent sinks—not autoscaling alone",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "system lag, watermark, throughput, worker utilization, autoscaling and failed bundles",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Dataflow",
+          "detail": "Google Cloud Console → Dataflow; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, runner options, worker type, network, autoscaling, streaming engine and sinks."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply worker service account, private workers, CMEK, VPC Service Controls and dependency control."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise source > parallel transforms > shuffle/window/state > sink > dead-letter path and inspect system lag, watermark, throughput, worker utilization, autoscaling and failed bundles."
+        }
+      ],
+      "security": [
+        "For Dataflow, implement worker service account, private workers, CMEK, VPC Service Controls and dependency control.",
+        "Separate administrators, automation and runtime principals for Beam pipeline, job, worker, stage, window and state.",
+        "Audit Dataflow configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor system lag, watermark, throughput, worker utilization, autoscaling and failed bundles for Dataflow.",
+        "Version region, runner options, worker type, network, autoscaling, streaming engine and sinks, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Dataflow ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "streaming correctness depends on event time, watermarks, triggers, state and idempotent sinks—not autoscaling alone",
+        "Verify Dataflow regional availability, quotas, limits and compatibility before standardizing.",
+        "Dataflow's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "worker vCPU/memory, Streaming Engine, shuffle, storage and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Dataflow estimate.",
+        "Measure Dataflow cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Dataflow — A managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns.",
+        "Dataproc/Spark for existing Spark ecosystems or BigQuery SQL for warehouse transformations — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Dataflow",
+          "fit": "A managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns."
+        },
+        {
+          "name": "Dataproc/Spark",
+          "fit": "Dataproc/Spark for existing Spark ecosystems or BigQuery SQL for warehouse transformations"
+        }
+      ],
+      "memoryHooks": [
+        "source > parallel transforms > shuffle/window/state > sink > dead-letter path.",
+        "streaming correctness depends on event time, watermarks, triggers, state and idempotent sinks—not autoscaling alone",
+        "Certification clue: A managed Apache Beam service for unified batch and streaming pipelines with autoscaling and exactly-once-capable processing patterns."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Dataflow documentation",
+          "url": "https://docs.cloud.google.com/dataflow/docs"
+        }
+      ]
+    },
+    {
+      "slug": "dataform",
+      "summary": "A SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery.",
+      "concepts": [
+        "repository, workspace, compilation result, release configuration and workflow invocation define the Dataform resource and data model.",
+        "The production path is versioned SQLX > compile dependency graph > assertions > BigQuery actions > documentation.",
+        "Dataform manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Dataform when a SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery.",
+        "The strongest fit is a workload whose flow follows versioned SQLX > compile dependency graph > assertions > BigQuery actions > documentation.",
+        "Choose dbt for cross-warehouse transformation workflows or Workflows for general APIs instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Dataform production flow",
+          "note": "A SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery.",
+          "reference": "Dataform architecture",
+          "steps": [
+            {
+              "title": "1. versioned SQLX",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. compile dependency graph",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. assertions",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. BigQuery actions",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. documentation",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Dataform",
+          "note": "Identity, boundary, resilience and operations around repository, workspace, compilation result, release configuration and workflow invocation.",
+          "reference": "Dataform governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "repository/workflow identities, BigQuery dataset IAM and protected release branches",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "repository, workspace, compilation variables, release config, workflow schedule and service account",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Dataform orchestrates SQL transformations; it does not ingest source data or replace BigQuery governance",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "invocation status, action duration, assertion failures and BigQuery job cost",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Dataform",
+          "detail": "Google Cloud Console → Dataform; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set repository, workspace, compilation variables, release config, workflow schedule and service account."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply repository/workflow identities, BigQuery dataset IAM and protected release branches."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise versioned SQLX > compile dependency graph > assertions > BigQuery actions > documentation and inspect invocation status, action duration, assertion failures and BigQuery job cost."
+        }
+      ],
+      "security": [
+        "For Dataform, implement repository/workflow identities, BigQuery dataset IAM and protected release branches.",
+        "Separate administrators, automation and runtime principals for repository, workspace, compilation result, release configuration and workflow invocation.",
+        "Audit Dataform configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor invocation status, action duration, assertion failures and BigQuery job cost for Dataform.",
+        "Version repository, workspace, compilation variables, release config, workflow schedule and service account, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Dataform ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Dataform orchestrates SQL transformations; it does not ingest source data or replace BigQuery governance",
+        "Verify Dataform regional availability, quotas, limits and compatibility before standardizing.",
+        "Dataform's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "Dataform operations plus BigQuery compute/storage and repository integration.",
+        "Add dependent storage, network, logging and consuming/producing services to the Dataform estimate.",
+        "Measure Dataform cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Dataform — A SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery.",
+        "dbt for cross-warehouse transformation workflows or Workflows for general APIs — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Dataform",
+          "fit": "A SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery."
+        },
+        {
+          "name": "dbt",
+          "fit": "dbt for cross-warehouse transformation workflows or Workflows for general APIs"
+        }
+      ],
+      "memoryHooks": [
+        "versioned SQLX > compile dependency graph > assertions > BigQuery actions > documentation.",
+        "Dataform orchestrates SQL transformations; it does not ingest source data or replace BigQuery governance",
+        "Certification clue: A SQL workflow service for developing, testing, documenting and scheduling transformations in BigQuery."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Dataform documentation",
+          "url": "https://docs.cloud.google.com/dataform/docs"
+        }
+      ]
+    },
+    {
+      "slug": "dataproc-metastore",
+      "summary": "A managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines.",
+      "concepts": [
+        "service, database, table metadata, version and endpoint define the Dataproc Metastore resource and data model.",
+        "The production path is data lake files > schema/catalog metadata > Spark/Hive query > updated partitions > backup.",
+        "Dataproc Metastore manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Dataproc Metastore when a managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines.",
+        "The strongest fit is a workload whose flow follows data lake files > schema/catalog metadata > Spark/Hive query > updated partitions > backup.",
+        "Choose BigLake/Dataplex catalog capabilities for broader governed lake metadata instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Dataproc Metastore production flow",
+          "note": "A managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines.",
+          "reference": "Dataproc Metastore architecture",
+          "steps": [
+            {
+              "title": "1. data lake files",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. schema/catalog metadata",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Spark/Hive query",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. updated partitions",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Dataproc Metastore",
+          "note": "Identity, boundary, resilience and operations around service, database, table metadata, version and endpoint.",
+          "reference": "Dataproc Metastore governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private endpoint/network, Kerberos/IAM integration and metadata administration",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, version, tier, network, endpoint protocol, backup and federation",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "metastore metadata does not contain or govern the underlying files; storage IAM must be designed separately",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "RPC latency, service health, metadata growth, backup and client compatibility",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Dataproc Metastore",
+          "detail": "Google Cloud Console → Dataproc Metastore; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, version, tier, network, endpoint protocol, backup and federation."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private endpoint/network, Kerberos/IAM integration and metadata administration."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise data lake files > schema/catalog metadata > Spark/Hive query > updated partitions > backup and inspect RPC latency, service health, metadata growth, backup and client compatibility."
+        }
+      ],
+      "security": [
+        "For Dataproc Metastore, implement private endpoint/network, Kerberos/IAM integration and metadata administration.",
+        "Separate administrators, automation and runtime principals for service, database, table metadata, version and endpoint.",
+        "Audit Dataproc Metastore configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor RPC latency, service health, metadata growth, backup and client compatibility for Dataproc Metastore.",
+        "Version region, version, tier, network, endpoint protocol, backup and federation, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Dataproc Metastore ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "metastore metadata does not contain or govern the underlying files; storage IAM must be designed separately",
+        "Verify Dataproc Metastore regional availability, quotas, limits and compatibility before standardizing.",
+        "Dataproc Metastore's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "service tier/capacity, backups, networking and client compute.",
+        "Add dependent storage, network, logging and consuming/producing services to the Dataproc Metastore estimate.",
+        "Measure Dataproc Metastore cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Dataproc Metastore — A managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines.",
+        "BigLake/Dataplex catalog capabilities for broader governed lake metadata — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Dataproc Metastore",
+          "fit": "A managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines."
+        },
+        {
+          "name": "BigLake/Dataplex catalog capabilities",
+          "fit": "BigLake/Dataplex catalog capabilities for broader governed lake metadata"
+        }
+      ],
+      "memoryHooks": [
+        "data lake files > schema/catalog metadata > Spark/Hive query > updated partitions > backup.",
+        "metastore metadata does not contain or govern the underlying files; storage IAM must be designed separately",
+        "Certification clue: A managed Hive Metastore service providing centralized table metadata for Spark, Hive and other open-source data engines."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Dataproc Metastore documentation",
+          "url": "https://docs.cloud.google.com/dataproc-metastore/docs"
+        }
+      ]
+    },
+    {
+      "slug": "datastream",
+      "summary": "A serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery.",
+      "concepts": [
+        "connection profile, stream, source object and destination define the Datastream resource and data model.",
+        "The production path is database logs > Datastream reader > encrypted stream > BigQuery/Cloud Storage > consumer.",
+        "Datastream manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Datastream when a serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery.",
+        "The strongest fit is a workload whose flow follows database logs > Datastream reader > encrypted stream > BigQuery/Cloud Storage > consumer.",
+        "Choose Database Migration Service for migration cutover rather than continuous analytical CDC instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Datastream production flow",
+          "note": "A serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery.",
+          "reference": "Datastream architecture",
+          "steps": [
+            {
+              "title": "1. database logs",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Datastream reader",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. encrypted stream",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. BigQuery/Cloud Storage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. consumer",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Datastream",
+          "note": "Identity, boundary, resilience and operations around connection profile, stream, source object and destination.",
+          "reference": "Datastream governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "source least-privilege replication user, private connectivity, secrets and destination IAM",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, source/destination profiles, private connectivity, objects, backfill and encryption",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "schema changes, unsupported types and source log retention can break continuity; test recovery/bookmarks",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "stream lag, bytes/events, backfill progress, errors and source log retention",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Datastream",
+          "detail": "Google Cloud Console → Datastream; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, source/destination profiles, private connectivity, objects, backfill and encryption."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply source least-privilege replication user, private connectivity, secrets and destination IAM."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise database logs > Datastream reader > encrypted stream > BigQuery/Cloud Storage > consumer and inspect stream lag, bytes/events, backfill progress, errors and source log retention."
+        }
+      ],
+      "security": [
+        "For Datastream, implement source least-privilege replication user, private connectivity, secrets and destination IAM.",
+        "Separate administrators, automation and runtime principals for connection profile, stream, source object and destination.",
+        "Audit Datastream configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor stream lag, bytes/events, backfill progress, errors and source log retention for Datastream.",
+        "Version region, source/destination profiles, private connectivity, objects, backfill and encryption, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Datastream ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "schema changes, unsupported types and source log retention can break continuity; test recovery/bookmarks",
+        "Verify Datastream regional availability, quotas, limits and compatibility before standardizing.",
+        "Datastream's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "processed data volume plus destination storage/query and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Datastream estimate.",
+        "Measure Datastream cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Datastream — A serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery.",
+        "Database Migration Service for migration cutover rather than continuous analytical CDC — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Datastream",
+          "fit": "A serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery."
+        },
+        {
+          "name": "Database Migration Service",
+          "fit": "Database Migration Service for migration cutover rather than continuous analytical CDC"
+        }
+      ],
+      "memoryHooks": [
+        "database logs > Datastream reader > encrypted stream > BigQuery/Cloud Storage > consumer.",
+        "schema changes, unsupported types and source log retention can break continuity; test recovery/bookmarks",
+        "Certification clue: A serverless change data capture and replication service for streaming database changes to Cloud Storage and BigQuery."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Datastream documentation",
+          "url": "https://docs.cloud.google.com/datastream/docs"
+        }
+      ]
+    },
+    {
+      "slug": "knowledge-catalog",
+      "summary": "A metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge.",
+      "concepts": [
+        "catalog entry, metadata aspect/tag, glossary term and search index define the Knowledge Catalog resource and data model.",
+        "The production path is asset discovery > metadata enrichment > search > policy-aware access > stewardship update.",
+        "Knowledge Catalog manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Knowledge Catalog when a metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge.",
+        "The strongest fit is a workload whose flow follows asset discovery > metadata enrichment > search > policy-aware access > stewardship update.",
+        "Choose Dataplex Universal Catalog when unified lake/warehouse governance is the broader requirement instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Knowledge Catalog production flow",
+          "note": "A metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge.",
+          "reference": "Knowledge Catalog architecture",
+          "steps": [
+            {
+              "title": "1. asset discovery",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. metadata enrichment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. search",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. policy-aware access",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. stewardship update",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Knowledge Catalog",
+          "note": "Identity, boundary, resilience and operations around catalog entry, metadata aspect/tag, glossary term and search index.",
+          "reference": "Knowledge Catalog governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "metadata-editor/steward roles and preservation of underlying asset permissions",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "entry sources, metadata model, glossary, search scope, stewards and synchronization",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "catalog visibility does not grant access to the underlying data and metadata can itself be sensitive",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "catalog coverage, stale metadata, search success and stewardship backlog",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Knowledge Catalog",
+          "detail": "Google Cloud Console → Knowledge Catalog; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set entry sources, metadata model, glossary, search scope, stewards and synchronization."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply metadata-editor/steward roles and preservation of underlying asset permissions."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise asset discovery > metadata enrichment > search > policy-aware access > stewardship update and inspect catalog coverage, stale metadata, search success and stewardship backlog."
+        }
+      ],
+      "security": [
+        "For Knowledge Catalog, implement metadata-editor/steward roles and preservation of underlying asset permissions.",
+        "Separate administrators, automation and runtime principals for catalog entry, metadata aspect/tag, glossary term and search index.",
+        "Audit Knowledge Catalog configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor catalog coverage, stale metadata, search success and stewardship backlog for Knowledge Catalog.",
+        "Version entry sources, metadata model, glossary, search scope, stewards and synchronization, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Knowledge Catalog ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "catalog visibility does not grant access to the underlying data and metadata can itself be sensitive",
+        "Verify Knowledge Catalog regional availability, quotas, limits and compatibility before standardizing.",
+        "Knowledge Catalog's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "catalog/metadata operations plus scanning and source services.",
+        "Add dependent storage, network, logging and consuming/producing services to the Knowledge Catalog estimate.",
+        "Measure Knowledge Catalog cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Knowledge Catalog — A metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge.",
+        "Dataplex Universal Catalog when unified lake/warehouse governance is the broader requirement — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Knowledge Catalog",
+          "fit": "A metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge."
+        },
+        {
+          "name": "Dataplex Universal Catalog when unified lake/warehouse governance is the broader requirement",
+          "fit": "Dataplex Universal Catalog when unified lake/warehouse governance is the broader requirement"
+        }
+      ],
+      "memoryHooks": [
+        "asset discovery > metadata enrichment > search > policy-aware access > stewardship update.",
+        "catalog visibility does not grant access to the underlying data and metadata can itself be sensitive",
+        "Certification clue: A metadata and discovery capability for organizing enterprise data assets, business context and governance knowledge."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Knowledge Catalog documentation",
+          "url": "https://docs.cloud.google.com/dataplex/docs"
+        }
+      ]
+    },
+    {
+      "slug": "lakehouse",
+      "summary": "A unified analytical architecture combining governed lake storage with warehouse performance and open data formats.",
+      "concepts": [
+        "object storage, open table format, catalog, compute engine and governed dataset define the Lakehouse resource and data model.",
+        "The production path is operational sources > lake ingestion > open tables/catalog > BigQuery/Spark engines > BI/ML.",
+        "Lakehouse manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Lakehouse when a unified analytical architecture combining governed lake storage with warehouse performance and open data formats.",
+        "The strongest fit is a workload whose flow follows operational sources > lake ingestion > open tables/catalog > BigQuery/Spark engines > BI/ML.",
+        "Choose warehouse-only BigQuery design when open lake interoperability is unnecessary instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Lakehouse production flow",
+          "note": "A unified analytical architecture combining governed lake storage with warehouse performance and open data formats.",
+          "reference": "Lakehouse architecture",
+          "steps": [
+            {
+              "title": "1. operational sources",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. lake ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. open tables/catalog",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. BigQuery/Spark engines",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. BI/ML",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Lakehouse",
+          "note": "Identity, boundary, resilience and operations around object storage, open table format, catalog, compute engine and governed dataset.",
+          "reference": "Lakehouse governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "central catalog, row/column policy, storage IAM and domain ownership",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "storage/table format, catalog, ingestion, compute engines, governance and lifecycle",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a lakehouse is an architecture assembled from services, not a single product that automatically fixes data quality",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "freshness, file/table health, query performance, compaction and governance coverage",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Lakehouse",
+          "detail": "Google Cloud Console → Lakehouse; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set storage/table format, catalog, ingestion, compute engines, governance and lifecycle."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply central catalog, row/column policy, storage IAM and domain ownership."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise operational sources > lake ingestion > open tables/catalog > BigQuery/Spark engines > BI/ML and inspect freshness, file/table health, query performance, compaction and governance coverage."
+        }
+      ],
+      "security": [
+        "For Lakehouse, implement central catalog, row/column policy, storage IAM and domain ownership.",
+        "Separate administrators, automation and runtime principals for object storage, open table format, catalog, compute engine and governed dataset.",
+        "Audit Lakehouse configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor freshness, file/table health, query performance, compaction and governance coverage for Lakehouse.",
+        "Version storage/table format, catalog, ingestion, compute engines, governance and lifecycle, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Lakehouse ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "a lakehouse is an architecture assembled from services, not a single product that automatically fixes data quality",
+        "Verify Lakehouse regional availability, quotas, limits and compatibility before standardizing.",
+        "Lakehouse's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "storage, catalog/scans, BigQuery/Spark compute, pipelines and egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Lakehouse estimate.",
+        "Measure Lakehouse cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Lakehouse — A unified analytical architecture combining governed lake storage with warehouse performance and open data formats.",
+        "warehouse-only BigQuery design when open lake interoperability is unnecessary — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Lakehouse",
+          "fit": "A unified analytical architecture combining governed lake storage with warehouse performance and open data formats."
+        },
+        {
+          "name": "warehouse-only BigQuery design when open lake interoperability is unnecessary",
+          "fit": "warehouse-only BigQuery design when open lake interoperability is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "operational sources > lake ingestion > open tables/catalog > BigQuery/Spark engines > BI/ML.",
+        "a lakehouse is an architecture assembled from services, not a single product that automatically fixes data quality",
+        "Certification clue: A unified analytical architecture combining governed lake storage with warehouse performance and open data formats."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Lakehouse documentation",
+          "url": "https://docs.cloud.google.com/lakehouse/docs"
+        }
+      ]
+    },
+    {
+      "slug": "looker",
+      "summary": "An enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics.",
+      "concepts": [
+        "Looker instance, model, Explore, view, dashboard and connection define the Looker resource and data model.",
+        "The production path is warehouse > SQL connection > LookML semantic layer > query > dashboard/API.",
+        "Looker manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Looker when an enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics.",
+        "The strongest fit is a workload whose flow follows warehouse > SQL connection > LookML semantic layer > query > dashboard/API.",
+        "Choose Looker Studio for lighter self-service reporting without a governed LookML layer instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Looker production flow",
+          "note": "An enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics.",
+          "reference": "Looker architecture",
+          "steps": [
+            {
+              "title": "1. warehouse",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. SQL connection",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. LookML semantic layer",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. query",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. dashboard/API",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Looker",
+          "note": "Identity, boundary, resilience and operations around Looker instance, model, Explore, view, dashboard and connection.",
+          "reference": "Looker governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "instance roles, model access grants, user attributes and database credentials",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "instance/region, database connection, Git project, LookML model, roles and content folders",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "LookML governance improves metric consistency but poor warehouse modeling still causes slow or expensive queries",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "query/runtime latency, cache hit, PDT builds, connection errors and content usage",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Looker",
+          "detail": "Google Cloud Console → Looker; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set instance/region, database connection, Git project, LookML model, roles and content folders."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply instance roles, model access grants, user attributes and database credentials."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise warehouse > SQL connection > LookML semantic layer > query > dashboard/API and inspect query/runtime latency, cache hit, PDT builds, connection errors and content usage."
+        }
+      ],
+      "security": [
+        "For Looker, implement instance roles, model access grants, user attributes and database credentials.",
+        "Separate administrators, automation and runtime principals for Looker instance, model, Explore, view, dashboard and connection.",
+        "Audit Looker configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor query/runtime latency, cache hit, PDT builds, connection errors and content usage for Looker.",
+        "Version instance/region, database connection, Git project, LookML model, roles and content folders, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Looker ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "LookML governance improves metric consistency but poor warehouse modeling still causes slow or expensive queries",
+        "Verify Looker regional availability, quotas, limits and compatibility before standardizing.",
+        "Looker's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "platform edition/users plus database queries, PDT storage and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Looker estimate.",
+        "Measure Looker cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Looker — An enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics.",
+        "Looker Studio for lighter self-service reporting without a governed LookML layer — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Looker",
+          "fit": "An enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics."
+        },
+        {
+          "name": "Looker Studio",
+          "fit": "Looker Studio for lighter self-service reporting without a governed LookML layer"
+        }
+      ],
+      "memoryHooks": [
+        "warehouse > SQL connection > LookML semantic layer > query > dashboard/API.",
+        "LookML governance improves metric consistency but poor warehouse modeling still causes slow or expensive queries",
+        "Certification clue: An enterprise BI platform with LookML semantic modeling, governed metrics, dashboards, alerts and embedded analytics."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Looker documentation",
+          "url": "https://docs.cloud.google.com/looker/docs"
+        }
+      ]
+    },
+    {
+      "slug": "managed-service-for-apache-airflow",
+      "summary": "Cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows.",
+      "concepts": [
+        "environment, DAG, task, scheduler, worker and metadata database define the Managed Service for Apache Airflow resource and data model.",
+        "The production path is DAG schedule/event > scheduler > task workers > external systems > task state.",
+        "Managed Service for Apache Airflow manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Managed Service for Apache Airflow when cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows.",
+        "The strongest fit is a workload whose flow follows DAG schedule/event > scheduler > task workers > external systems > task state.",
+        "Choose Workflows for serverless API orchestration with less environment administration instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Managed Service for Apache Airflow production flow",
+          "note": "Cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows.",
+          "reference": "Managed Service for Apache Airflow architecture",
+          "steps": [
+            {
+              "title": "1. DAG schedule/event",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. scheduler",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. task workers",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. external systems",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. task state",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Managed Service for Apache Airflow",
+          "note": "Identity, boundary, resilience and operations around environment, DAG, task, scheduler, worker and metadata database.",
+          "reference": "Managed Service for Apache Airflow governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private environment, environment/service accounts, Secret Manager and DAG code review",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "Composer version, region, network, environment size, service account, PyPI packages and DAG bucket",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Airflow orchestrates work and stores metadata; large data processing should run in external services, not scheduler workers",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "DAG duration, scheduler health, queued tasks, worker scale and task failures",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Managed Service for Apache Airflow",
+          "detail": "Google Cloud Console → Managed Service for Apache Airflow; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set Composer version, region, network, environment size, service account, PyPI packages and DAG bucket."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private environment, environment/service accounts, Secret Manager and DAG code review."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise DAG schedule/event > scheduler > task workers > external systems > task state and inspect DAG duration, scheduler health, queued tasks, worker scale and task failures."
+        }
+      ],
+      "security": [
+        "For Managed Service for Apache Airflow, implement private environment, environment/service accounts, Secret Manager and DAG code review.",
+        "Separate administrators, automation and runtime principals for environment, DAG, task, scheduler, worker and metadata database.",
+        "Audit Managed Service for Apache Airflow configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor DAG duration, scheduler health, queued tasks, worker scale and task failures for Managed Service for Apache Airflow.",
+        "Version Composer version, region, network, environment size, service account, PyPI packages and DAG bucket, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Managed Service for Apache Airflow ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Airflow orchestrates work and stores metadata; large data processing should run in external services, not scheduler workers",
+        "Verify Managed Service for Apache Airflow regional availability, quotas, limits and compatibility before standardizing.",
+        "Managed Service for Apache Airflow's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "environment/GKE resources, database, storage, logs and executed services.",
+        "Add dependent storage, network, logging and consuming/producing services to the Managed Service for Apache Airflow estimate.",
+        "Measure Managed Service for Apache Airflow cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Managed Service for Apache Airflow — Cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows.",
+        "Workflows for serverless API orchestration with less environment administration — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Managed Service for Apache Airflow",
+          "fit": "Cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows."
+        },
+        {
+          "name": "Workflows",
+          "fit": "Workflows for serverless API orchestration with less environment administration"
+        }
+      ],
+      "memoryHooks": [
+        "DAG schedule/event > scheduler > task workers > external systems > task state.",
+        "Airflow orchestrates work and stores metadata; large data processing should run in external services, not scheduler workers",
+        "Certification clue: Cloud Composer: managed Apache Airflow for authoring, scheduling and monitoring Python DAG workflows."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Managed Service for Apache Airflow documentation",
+          "url": "https://docs.cloud.google.com/composer/docs"
+        }
+      ]
+    },
+    {
+      "slug": "managed-service-for-apache-kafka",
+      "summary": "A managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems.",
+      "concepts": [
+        "cluster, broker capacity, topic, partition, producer and consumer group define the Managed Service for Apache Kafka resource and data model.",
+        "The production path is producer > topic partitions > replicated brokers > consumer group > downstream sink.",
+        "Managed Service for Apache Kafka manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Managed Service for Apache Kafka when a managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems.",
+        "The strongest fit is a workload whose flow follows producer > topic partitions > replicated brokers > consumer group > downstream sink.",
+        "Choose Pub/Sub for serverless global messaging without Kafka protocol/operations instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Managed Service for Apache Kafka production flow",
+          "note": "A managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems.",
+          "reference": "Managed Service for Apache Kafka architecture",
+          "steps": [
+            {
+              "title": "1. producer",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. topic partitions",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. replicated brokers",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. consumer group",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. downstream sink",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Managed Service for Apache Kafka",
+          "note": "Identity, boundary, resilience and operations around cluster, broker capacity, topic, partition, producer and consumer group.",
+          "reference": "Managed Service for Apache Kafka governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "SASL/IAM credentials, private networking, topic ACLs and encryption",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/zone layout, capacity, network, topic partitions/retention and client authentication",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "partition count and key choice determine order, parallelism and hot spots; consumers still own offset/idempotency behavior",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "produce/fetch latency, throughput, under-replicated partitions, lag and disk/capacity",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Managed Service for Apache Kafka",
+          "detail": "Google Cloud Console → Managed Service for Apache Kafka; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/zone layout, capacity, network, topic partitions/retention and client authentication."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply SASL/IAM credentials, private networking, topic ACLs and encryption."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise producer > topic partitions > replicated brokers > consumer group > downstream sink and inspect produce/fetch latency, throughput, under-replicated partitions, lag and disk/capacity."
+        }
+      ],
+      "security": [
+        "For Managed Service for Apache Kafka, implement SASL/IAM credentials, private networking, topic ACLs and encryption.",
+        "Separate administrators, automation and runtime principals for cluster, broker capacity, topic, partition, producer and consumer group.",
+        "Audit Managed Service for Apache Kafka configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor produce/fetch latency, throughput, under-replicated partitions, lag and disk/capacity for Managed Service for Apache Kafka.",
+        "Version region/zone layout, capacity, network, topic partitions/retention and client authentication, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Managed Service for Apache Kafka ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "partition count and key choice determine order, parallelism and hot spots; consumers still own offset/idempotency behavior",
+        "Verify Managed Service for Apache Kafka regional availability, quotas, limits and compatibility before standardizing.",
+        "Managed Service for Apache Kafka's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "broker/capacity, storage, networking and connector/consumer services.",
+        "Add dependent storage, network, logging and consuming/producing services to the Managed Service for Apache Kafka estimate.",
+        "Measure Managed Service for Apache Kafka cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Managed Service for Apache Kafka — A managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems.",
+        "Pub/Sub for serverless global messaging without Kafka protocol/operations — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Managed Service for Apache Kafka",
+          "fit": "A managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems."
+        },
+        {
+          "name": "Pub/Sub",
+          "fit": "Pub/Sub for serverless global messaging without Kafka protocol/operations"
+        }
+      ],
+      "memoryHooks": [
+        "producer > topic partitions > replicated brokers > consumer group > downstream sink.",
+        "partition count and key choice determine order, parallelism and hot spots; consumers still own offset/idempotency behavior",
+        "Certification clue: A managed Apache Kafka service for durable partitioned event streams compatible with Kafka clients and ecosystems."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Managed Service for Apache Kafka documentation",
+          "url": "https://docs.cloud.google.com/managed-service-for-apache-kafka/docs"
+        }
+      ]
+    },
+    {
+      "slug": "managed-service-for-apache-spark",
+      "summary": "Serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters.",
+      "concepts": [
+        "batch/session, runtime version, driver, executors and properties define the Managed Service for Apache Spark resource and data model.",
+        "The production path is code/notebook > serverless Spark runtime > lake/warehouse data > shuffle > output.",
+        "Managed Service for Apache Spark manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Managed Service for Apache Spark when serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters.",
+        "The strongest fit is a workload whose flow follows code/notebook > serverless Spark runtime > lake/warehouse data > shuffle > output.",
+        "Choose Dataproc clusters for long-lived/customized Hadoop/Spark environments instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Managed Service for Apache Spark production flow",
+          "note": "Serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters.",
+          "reference": "Managed Service for Apache Spark architecture",
+          "steps": [
+            {
+              "title": "1. code/notebook",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. serverless Spark runtime",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. lake/warehouse data",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. shuffle",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. output",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Managed Service for Apache Spark",
+          "note": "Identity, boundary, resilience and operations around batch/session, runtime version, driver, executors and properties.",
+          "reference": "Managed Service for Apache Spark governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "service account, subnet/private access, staging bucket and dependency governance",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, runtime version, subnet, service account, container/dependencies and Spark properties",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "serverless removes cluster management but Spark partitioning, skew and dependency/version issues remain",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "driver/executor logs, stage duration, shuffle, skew and resource utilization",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Managed Service for Apache Spark",
+          "detail": "Google Cloud Console → Managed Service for Apache Spark; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, runtime version, subnet, service account, container/dependencies and Spark properties."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply service account, subnet/private access, staging bucket and dependency governance."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise code/notebook > serverless Spark runtime > lake/warehouse data > shuffle > output and inspect driver/executor logs, stage duration, shuffle, skew and resource utilization."
+        }
+      ],
+      "security": [
+        "For Managed Service for Apache Spark, implement service account, subnet/private access, staging bucket and dependency governance.",
+        "Separate administrators, automation and runtime principals for batch/session, runtime version, driver, executors and properties.",
+        "Audit Managed Service for Apache Spark configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor driver/executor logs, stage duration, shuffle, skew and resource utilization for Managed Service for Apache Spark.",
+        "Version region, runtime version, subnet, service account, container/dependencies and Spark properties, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Managed Service for Apache Spark ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "serverless removes cluster management but Spark partitioning, skew and dependency/version issues remain",
+        "Verify Managed Service for Apache Spark regional availability, quotas, limits and compatibility before standardizing.",
+        "Managed Service for Apache Spark's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "vCPU/memory/accelerator duration, storage, metastore and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the Managed Service for Apache Spark estimate.",
+        "Measure Managed Service for Apache Spark cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Managed Service for Apache Spark — Serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters.",
+        "Dataproc clusters for long-lived/customized Hadoop/Spark environments — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Managed Service for Apache Spark",
+          "fit": "Serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters."
+        },
+        {
+          "name": "Dataproc clusters",
+          "fit": "Dataproc clusters for long-lived/customized Hadoop/Spark environments"
+        }
+      ],
+      "memoryHooks": [
+        "code/notebook > serverless Spark runtime > lake/warehouse data > shuffle > output.",
+        "serverless removes cluster management but Spark partitioning, skew and dependency/version issues remain",
+        "Certification clue: Serverless Spark execution for batch, interactive and notebook workloads without maintaining persistent clusters."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Managed Service for Apache Spark documentation",
+          "url": "https://docs.cloud.google.com/managed-spark/docs"
+        }
+      ]
+    },
+    {
+      "slug": "manufacturing-data-engine",
+      "summary": "A manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI.",
+      "concepts": [
+        "asset hierarchy, telemetry stream, operational event and contextual model define the Manufacturing Data Engine resource and data model.",
+        "The production path is factory/edge sources > secure ingestion > contextualization > analytical store > operations/AI application.",
+        "Manufacturing Data Engine manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Manufacturing Data Engine when a manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI.",
+        "The strongest fit is a workload whose flow follows factory/edge sources > secure ingestion > contextualization > analytical store > operations/AI application.",
+        "Choose custom Pub/Sub/Dataflow/BigQuery platform when full bespoke control is required instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Manufacturing Data Engine production flow",
+          "note": "A manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI.",
+          "reference": "Manufacturing Data Engine architecture",
+          "steps": [
+            {
+              "title": "1. factory/edge sources",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. secure ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. contextualization",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. analytical store",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. operations/AI application",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Manufacturing Data Engine",
+          "note": "Identity, boundary, resilience and operations around asset hierarchy, telemetry stream, operational event and contextual model.",
+          "reference": "Manufacturing Data Engine governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "site connectivity, device/workload identity, tenant separation and sensitive operational-data controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "sites/sources, asset model, ingestion endpoints, mappings, retention and analytics integration",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "OT connectivity and semantic mapping are customer responsibilities; raw signals without context do not create usable insights",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "ingestion freshness, asset mapping quality, missing telemetry and pipeline availability",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Manufacturing Data Engine",
+          "detail": "Google Cloud Console → Manufacturing Data Engine; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set sites/sources, asset model, ingestion endpoints, mappings, retention and analytics integration."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply site connectivity, device/workload identity, tenant separation and sensitive operational-data controls."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise factory/edge sources > secure ingestion > contextualization > analytical store > operations/AI application and inspect ingestion freshness, asset mapping quality, missing telemetry and pipeline availability."
+        }
+      ],
+      "security": [
+        "For Manufacturing Data Engine, implement site connectivity, device/workload identity, tenant separation and sensitive operational-data controls.",
+        "Separate administrators, automation and runtime principals for asset hierarchy, telemetry stream, operational event and contextual model.",
+        "Audit Manufacturing Data Engine configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor ingestion freshness, asset mapping quality, missing telemetry and pipeline availability for Manufacturing Data Engine.",
+        "Version sites/sources, asset model, ingestion endpoints, mappings, retention and analytics integration, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Manufacturing Data Engine ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "OT connectivity and semantic mapping are customer responsibilities; raw signals without context do not create usable insights",
+        "Verify Manufacturing Data Engine regional availability, quotas, limits and compatibility before standardizing.",
+        "Manufacturing Data Engine's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "connectivity, ingestion, storage, analytics and solution components.",
+        "Add dependent storage, network, logging and consuming/producing services to the Manufacturing Data Engine estimate.",
+        "Measure Manufacturing Data Engine cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Manufacturing Data Engine — A manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI.",
+        "custom Pub/Sub/Dataflow/BigQuery platform when full bespoke control is required — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Manufacturing Data Engine",
+          "fit": "A manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI."
+        },
+        {
+          "name": "custom Pub/Sub/Dataflow/BigQuery platform when full bespoke control is required",
+          "fit": "custom Pub/Sub/Dataflow/BigQuery platform when full bespoke control is required"
+        }
+      ],
+      "memoryHooks": [
+        "factory/edge sources > secure ingestion > contextualization > analytical store > operations/AI application.",
+        "OT connectivity and semantic mapping are customer responsibilities; raw signals without context do not create usable insights",
+        "Certification clue: A manufacturing data foundation for contextualizing plant telemetry, assets and operational events for analytics and AI."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Manufacturing Data Engine documentation",
+          "url": "https://docs.cloud.google.com/manufacturing-data-engine/docs"
+        }
+      ]
+    },
+    {
+      "slug": "pub-sub",
+      "summary": "A global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion.",
+      "concepts": [
+        "topic, subscription, message, schema, snapshot and dead-letter topic define the Pub/Sub resource and data model.",
+        "The production path is publisher > topic > retained message > subscription > subscriber acknowledgment.",
+        "Pub/Sub manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Pub/Sub when a global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion.",
+        "The strongest fit is a workload whose flow follows publisher > topic > retained message > subscription > subscriber acknowledgment.",
+        "Choose Cloud Tasks for per-item HTTP dispatch, scheduling and rate control instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Pub/Sub production flow",
+          "note": "A global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion.",
+          "reference": "Pub/Sub architecture",
+          "steps": [
+            {
+              "title": "1. publisher",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. topic",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. retained message",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. subscription",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. subscriber acknowledgment",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Pub/Sub",
+          "note": "Identity, boundary, resilience and operations around topic, subscription, message, schema, snapshot and dead-letter topic.",
+          "reference": "Pub/Sub governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "publisher/subscriber IAM, service-agent permissions, CMEK and VPC Service Controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "topic/subscription region policy, schema, retention, ordering, retry/dead-letter and subscriber mode",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "delivery is at least once by default; ordering requires ordering keys and subscribers must handle redelivery",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "publish/consume throughput, oldest unacked age, ack latency, backlog and dead lettering",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Pub/Sub",
+          "detail": "Google Cloud Console → Pub/Sub; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set topic/subscription region policy, schema, retention, ordering, retry/dead-letter and subscriber mode."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply publisher/subscriber IAM, service-agent permissions, CMEK and VPC Service Controls."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise publisher > topic > retained message > subscription > subscriber acknowledgment and inspect publish/consume throughput, oldest unacked age, ack latency, backlog and dead lettering."
+        }
+      ],
+      "security": [
+        "For Pub/Sub, implement publisher/subscriber IAM, service-agent permissions, CMEK and VPC Service Controls.",
+        "Separate administrators, automation and runtime principals for topic, subscription, message, schema, snapshot and dead-letter topic.",
+        "Audit Pub/Sub configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor publish/consume throughput, oldest unacked age, ack latency, backlog and dead lettering for Pub/Sub.",
+        "Version topic/subscription region policy, schema, retention, ordering, retry/dead-letter and subscriber mode, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Pub/Sub ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "delivery is at least once by default; ordering requires ordering keys and subscribers must handle redelivery",
+        "Verify Pub/Sub regional availability, quotas, limits and compatibility before standardizing.",
+        "Pub/Sub's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "message throughput/storage, retained backlog, filtering and network egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Pub/Sub estimate.",
+        "Measure Pub/Sub cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Pub/Sub — A global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion.",
+        "Cloud Tasks for per-item HTTP dispatch, scheduling and rate control — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Pub/Sub",
+          "fit": "A global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion."
+        },
+        {
+          "name": "Cloud Tasks",
+          "fit": "Cloud Tasks for per-item HTTP dispatch, scheduling and rate control"
+        }
+      ],
+      "memoryHooks": [
+        "publisher > topic > retained message > subscription > subscriber acknowledgment.",
+        "delivery is at least once by default; ordering requires ordering keys and subscribers must handle redelivery",
+        "Certification clue: A global asynchronous messaging service for topics, subscriptions, push/pull delivery, schemas and streaming ingestion."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Pub/Sub documentation",
+          "url": "https://docs.cloud.google.com/pubsub/docs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,825 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "App hosting",
+  "services": [
+    {
+      "slug": "app-engine",
+      "summary": "A managed platform for deploying web applications as services, versions and instances in Standard or Flexible environments.",
+      "concepts": [
+        "application, service, version, instance and traffic split form the core resource model for App Engine.",
+        "application source/configuration and inbound HTTP request enter the service; runtime sandbox/container, autoscaling and version routing govern processing.",
+        "managed web response and service-to-service call is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose App Engine when the requirement centers on a managed platform for deploying web applications as services, versions and instances in Standard or Flexible environments.",
+        "It fits architectures where single application region, service/version boundary and VPC connector must be explicit and operationally owned.",
+        "Prefer Cloud Run for container-first serverless applications when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production App Engine flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "App Engine architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "application source/configuration and inbound HTTP request",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "App Engine",
+              "items": [
+                "application, service, version, instance and traffic split",
+                "runtime sandbox/container, autoscaling and version routing"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "managed web response and service-to-service call",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "request latency, instance count, errors and pending latency",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed App Engine delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "App Engine governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "application region, environment, service, version, scaling, handlers and traffic split",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "App Engine service account, deployer and caller identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "single application region, service/version boundary and VPC connector",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "request latency, instance count, errors and pending latency"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open App Engine",
+          "detail": "Google Cloud Console → App Engine; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set application region, environment, service, version, scaling, handlers and traffic split."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure App Engine service account, deployer and caller identity; validate single application region, service/version boundary and VPC connector."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify request latency, instance count, errors and pending latency before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for App Engine service account, deployer and caller identity; keep administrative and runtime identities separate.",
+        "Protect single application region, service/version boundary and VPC connector with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to application, service, version, instance and traffic split."
+      ],
+      "operations": [
+        "Monitor request latency, instance count, errors and pending latency and alert on user-impacting deviation rather than raw activity alone.",
+        "Version application region, environment, service, version, scaling, handlers and traffic split; promote changes through test and rollback checkpoints.",
+        "For App Engine, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "application region cannot be changed and Standard/Flexible have different runtime, scaling and networking behavior",
+        "Confirm regional availability, quotas and lifecycle limits for application, service, version, instance and traffic split before standardizing the design.",
+        "The App Engine managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "instance class/runtime hours, outbound traffic, storage and dependent services.",
+        "For App Engine, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag App Engine projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "App Engine — A managed platform for deploying web applications as services, versions and instances in Standard or Flexible environments.",
+        "Cloud Run for container-first serverless applications — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "App Engine",
+          "fit": "A managed platform for deploying web applications as services, versions and instances in Standard or Flexible environments."
+        },
+        {
+          "name": "Cloud Run",
+          "fit": "Cloud Run for container-first serverless applications"
+        }
+      ],
+      "memoryHooks": [
+        "application, service, version, instance and traffic split → runtime sandbox/container, autoscaling and version routing → managed web response and service-to-service call.",
+        "application region cannot be changed and Standard/Flexible have different runtime, scaling and networking behavior",
+        "Certification clue: A managed platform for deploying web applications as services, versions and instances in Standard or Flexible environments."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "App Engine documentation",
+          "url": "https://docs.cloud.google.com/appengine/docs"
+        }
+      ]
+    },
+    {
+      "slug": "blockchain-node-engine",
+      "summary": "A fully managed blockchain node service that provisions and operates supported protocol nodes with secure RPC access.",
+      "concepts": [
+        "blockchain node, network, region and RPC endpoint form the core resource model for Blockchain Node Engine.",
+        "JSON-RPC/WebSocket request and selected blockchain network enter the service; managed synchronization, upgrades and node operations govern processing.",
+        "chain data and transaction submission through the endpoint is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Blockchain Node Engine when the requirement centers on a fully managed blockchain node service that provisions and operates supported protocol nodes with secure RPC access.",
+        "It fits architectures where application VPC/Internet client to managed blockchain RPC boundary must be explicit and operationally owned.",
+        "Prefer self-managed nodes on GKE/Compute Engine for unsupported chains or custom clients when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Blockchain Node Engine flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Blockchain Node Engine architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "JSON-RPC/WebSocket request and selected blockchain network",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Blockchain Node Engine",
+              "items": [
+                "blockchain node, network, region and RPC endpoint",
+                "managed synchronization, upgrades and node operations"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "chain data and transaction submission through the endpoint",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "node health, sync state, RPC latency/errors and request volume",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Blockchain Node Engine delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Blockchain Node Engine governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "protocol/network, node type, region, endpoint access and monitoring",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "node users, project IAM and application credentials",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "application VPC/Internet client to managed blockchain RPC boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "node health, sync state, RPC latency/errors and request volume"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Blockchain Node Engine",
+          "detail": "Google Cloud Console → Blockchain Node Engine; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set protocol/network, node type, region, endpoint access and monitoring."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure node users, project IAM and application credentials; validate application VPC/Internet client to managed blockchain RPC boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify node health, sync state, RPC latency/errors and request volume before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for node users, project IAM and application credentials; keep administrative and runtime identities separate.",
+        "Protect application VPC/Internet client to managed blockchain RPC boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to blockchain node, network, region and RPC endpoint."
+      ],
+      "operations": [
+        "Monitor node health, sync state, RPC latency/errors and request volume and alert on user-impacting deviation rather than raw activity alone.",
+        "Version protocol/network, node type, region, endpoint access and monitoring; promote changes through test and rollback checkpoints.",
+        "For Blockchain Node Engine, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "managed nodes do not remove smart-contract, key-custody, reorg or chain-finality risk",
+        "Confirm regional availability, quotas and lifecycle limits for blockchain node, network, region and RPC endpoint before standardizing the design.",
+        "The Blockchain Node Engine managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "node configuration/usage, network transfer and application services.",
+        "For Blockchain Node Engine, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Blockchain Node Engine projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Blockchain Node Engine — A fully managed blockchain node service that provisions and operates supported protocol nodes with secure RPC access.",
+        "self-managed nodes on GKE/Compute Engine for unsupported chains or custom clients — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Blockchain Node Engine",
+          "fit": "A fully managed blockchain node service that provisions and operates supported protocol nodes with secure RPC access."
+        },
+        {
+          "name": "self-managed nodes on GKE/Compute Engine",
+          "fit": "self-managed nodes on GKE/Compute Engine for unsupported chains or custom clients"
+        }
+      ],
+      "memoryHooks": [
+        "blockchain node, network, region and RPC endpoint → managed synchronization, upgrades and node operations → chain data and transaction submission through the endpoint.",
+        "managed nodes do not remove smart-contract, key-custody, reorg or chain-finality risk",
+        "Certification clue: A fully managed blockchain node service that provisions and operates supported protocol nodes with secure RPC access."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Blockchain Node Engine documentation",
+          "url": "https://docs.cloud.google.com/blockchain-node-engine/docs"
+        }
+      ]
+    },
+    {
+      "slug": "buildpacks",
+      "summary": "Cloud Native Buildpacks that transform application source into OCI container images without requiring a hand-written Dockerfile.",
+      "concepts": [
+        "builder, buildpack, lifecycle phase and run image form the core resource model for Buildpacks.",
+        "supported language source and dependency manifests enter the service; detect, analyze, restore, build, export and rebase lifecycle govern processing.",
+        "reproducible OCI image with application and dependency layers is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Buildpacks when the requirement centers on cloud Native Buildpacks that transform application source into OCI container images without requiring a hand-written Dockerfile.",
+        "It fits architectures where untrusted source/dependency boundary inside the build environment must be explicit and operationally owned.",
+        "Prefer Dockerfile/custom builder for exact low-level image construction when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Buildpacks flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Buildpacks architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "supported language source and dependency manifests",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Buildpacks",
+              "items": [
+                "builder, buildpack, lifecycle phase and run image",
+                "detect, analyze, restore, build, export and rebase lifecycle"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "reproducible OCI image with application and dependency layers",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "detection output, build duration, cache hit and vulnerability result",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Buildpacks delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Buildpacks governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "builder, source, environment variables, cache, output repository and image digest",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "build service account and artifact writer",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "untrusted source/dependency boundary inside the build environment",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "detection output, build duration, cache hit and vulnerability result"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Build / Buildpacks",
+          "detail": "Google Cloud Console → Cloud Build / Buildpacks; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set builder, source, environment variables, cache, output repository and image digest."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure build service account and artifact writer; validate untrusted source/dependency boundary inside the build environment."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify detection output, build duration, cache hit and vulnerability result before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for build service account and artifact writer; keep administrative and runtime identities separate.",
+        "Protect untrusted source/dependency boundary inside the build environment with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to builder, buildpack, lifecycle phase and run image."
+      ],
+      "operations": [
+        "Monitor detection output, build duration, cache hit and vulnerability result and alert on user-impacting deviation rather than raw activity alone.",
+        "Version builder, source, environment variables, cache, output repository and image digest; promote changes through test and rollback checkpoints.",
+        "For Buildpacks, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "automatic detection is convenient but custom OS packages or unusual build steps may require a Dockerfile/custom builder",
+        "Confirm regional availability, quotas and lifecycle limits for builder, buildpack, lifecycle phase and run image before standardizing the design.",
+        "The Buildpacks managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "build compute, cache, registry storage/scanning and deployment runtime.",
+        "For Buildpacks, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Buildpacks projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Buildpacks — Cloud Native Buildpacks that transform application source into OCI container images without requiring a hand-written Dockerfile.",
+        "Dockerfile/custom builder for exact low-level image construction — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Buildpacks",
+          "fit": "Cloud Native Buildpacks that transform application source into OCI container images without requiring a hand-written Dockerfile."
+        },
+        {
+          "name": "Dockerfile/custom builder",
+          "fit": "Dockerfile/custom builder for exact low-level image construction"
+        }
+      ],
+      "memoryHooks": [
+        "builder, buildpack, lifecycle phase and run image → detect, analyze, restore, build, export and rebase lifecycle → reproducible OCI image with application and dependency layers.",
+        "automatic detection is convenient but custom OS packages or unusual build steps may require a Dockerfile/custom builder",
+        "Certification clue: Cloud Native Buildpacks that transform application source into OCI container images without requiring a hand-written Dockerfile."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Buildpacks documentation",
+          "url": "https://docs.cloud.google.com/docs/buildpacks"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-run",
+      "summary": "A fully managed application platform for deploying stateless containers as request-driven services, event handlers, scheduled jobs, and finite batch workloads without operating servers or Kubernetes clusters.",
+      "concepts": [
+        "A Cloud Run service exposes a stable HTTPS endpoint while every deployment creates an immutable revision containing the image and configuration.",
+        "Instances autoscale per revision from incoming requests, events or CPU utilization; minimum instances reduce startup latency and maximum instances protect cost and downstream systems.",
+        "Services handle requests, jobs run finite tasks to completion, and worker pools support continuous non-HTTP workloads; choose the resource type before tuning runtime settings."
+      ],
+      "applicationFit": [
+        "Use Cloud Run for stateless APIs, web applications, webhooks, event consumers and containerized functions that fit the managed runtime contract.",
+        "Use Cloud Run jobs for migrations, scheduled processing and parallel batch work that must finish rather than listen on an HTTP endpoint.",
+        "Choose GKE when Kubernetes APIs, operators, custom scheduling or deep cluster control are requirements; choose Compute Engine when the workload needs VM or operating-system control."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Public API with managed data",
+          "note": "A regional Cloud Run service terminates managed HTTPS, runs stateless application code and keeps durable state in managed services.",
+          "reference": "Cloud Run service architecture",
+          "steps": [
+            {
+              "title": "Clients",
+              "items": [
+                "Web",
+                "Mobile",
+                "Partner API"
+              ]
+            },
+            {
+              "title": "Edge",
+              "items": [
+                "External Application Load Balancer",
+                "Cloud Armor"
+              ]
+            },
+            {
+              "title": "Runtime",
+              "items": [
+                "Cloud Run service",
+                "Revision traffic split"
+              ]
+            },
+            {
+              "title": "Data",
+              "items": [
+                "Cloud SQL",
+                "Cloud Storage"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "Cloud Logging",
+                "Cloud Monitoring"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Event-driven processing",
+          "note": "Events are buffered outside the container so delivery, retries and back-pressure are independent of instance lifetime.",
+          "reference": "Cloud Run event-driven architecture",
+          "steps": [
+            {
+              "title": "Producers",
+              "items": [
+                "Application events",
+                "Cloud Storage events"
+              ]
+            },
+            {
+              "title": "Event layer",
+              "items": [
+                "Pub/Sub",
+                "Eventarc"
+              ]
+            },
+            {
+              "title": "Consumer",
+              "items": [
+                "Private Cloud Run service",
+                "Idempotent handler"
+              ]
+            },
+            {
+              "title": "Results",
+              "items": [
+                "BigQuery",
+                "Firestore"
+              ]
+            },
+            {
+              "title": "Failure path",
+              "items": [
+                "Retry policy",
+                "Dead-letter topic"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Private service-to-service API",
+          "note": "Each service uses a dedicated identity; the caller presents a Google-signed ID token and the receiver authorizes the invoker role.",
+          "reference": "Cloud Run service-to-service authentication",
+          "steps": [
+            {
+              "title": "Frontend",
+              "items": [
+                "Cloud Run caller",
+                "User-managed service account"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "OIDC ID token",
+                "IAM policy"
+              ]
+            },
+            {
+              "title": "Backend",
+              "items": [
+                "Private Cloud Run service",
+                "roles/run.invoker"
+              ]
+            },
+            {
+              "title": "Private data",
+              "items": [
+                "Direct VPC egress",
+                "Cloud SQL private IP"
+              ]
+            },
+            {
+              "title": "Telemetry",
+              "items": [
+                "Trace correlation",
+                "Audit logs"
+              ]
+            }
+          ]
+        }
+      ],
+      "security": [
+        "Separate deployer identity from runtime service identity. Grant the deployer Service Account User only where needed and give each runtime service account the minimum downstream permissions.",
+        "Control inbound reachability with ingress settings and IAM. Public reachability and unauthenticated invocation are separate decisions; private service calls should use ID tokens and Cloud Run Invoker.",
+        "Store secrets in Secret Manager, restrict Artifact Registry access, use Binary Authorization where provenance is required, and route private egress through Direct VPC egress or an appropriate connector."
+      ],
+      "operations": [
+        "Deploy immutable image digests, test tagged revisions without production traffic, then use percentage traffic splitting for canaries and rapid rollback.",
+        "Tune concurrency, CPU, memory, request timeout, minimum instances and maximum instances together; also protect Cloud SQL connection pools and other downstream quotas.",
+        "Monitor request latency, error rate, container startup latency, instance count, billable instance time, logs and traces by revision so regressions can be tied to a deployment."
+      ],
+      "watchPoints": [
+        "A maximum-instance setting applies per revision; during a traffic split, total service instances can exceed the limit configured on one revision.",
+        "The writable container filesystem is disposable. Durable state must be externalized, and startup code must tolerate instance replacement and scale-to-zero.",
+        "Request-based and instance-based billing have different CPU-allocation behavior; minimum instances, VPC connectors and dependent services can generate cost even when request volume is low."
+      ],
+      "cost": [
+        "Primary Cloud Run charges follow allocated vCPU and memory time, requests, and the selected request-based or instance-based billing mode; usage is rounded to 100-millisecond increments.",
+        "Minimum instances reduce cold starts but establish baseline compute spend. Higher concurrency can improve resource sharing when the application is concurrency-safe.",
+        "Include outbound data transfer, Serverless VPC Access or VPC networking, Artifact Registry, Cloud Build, logging volume, Cloud SQL and other dependent-service charges."
+      ],
+      "alternatives": [
+        "Cloud Run — managed stateless containers, HTTPS services, events and jobs with revision-based deployment.",
+        "Google Kubernetes Engine — Kubernetes control, operators, complex scheduling, sidecars and portable cluster APIs.",
+        "Compute Engine — VM, operating-system, custom networking or specialized host control.",
+        "App Engine — opinionated application platform with versions and language/runtime conventions."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Run",
+          "fit": "Best fit for stateless containers, APIs, event handlers and jobs with minimal infrastructure ownership."
+        },
+        {
+          "name": "Google Kubernetes Engine",
+          "fit": "Choose when Kubernetes primitives and cluster-level customization are part of the requirement."
+        },
+        {
+          "name": "Compute Engine",
+          "fit": "Choose when the application requires VM lifecycle, OS access or specialized machine control."
+        }
+      ],
+      "memoryHooks": [
+        "Service = stable endpoint; revision = immutable deployment snapshot. Traffic moves between revisions, not between mutable containers.",
+        "Invoker IAM controls who can call the service; the runtime service account controls what the running container can access.",
+        "Exam clue: fastest managed path for a stateless container with scale-to-zero and HTTPS usually points to Cloud Run."
+      ],
+      "relatedServices": [
+        "artifact-registry",
+        "cloud-build",
+        "cloud-sql",
+        "pub-sub",
+        "eventarc",
+        "secret-manager",
+        "monitoring"
+      ],
+      "sources": [
+        {
+          "title": "What is Cloud Run",
+          "url": "https://cloud.google.com/run/docs/overview/what-is-cloud-run"
+        },
+        {
+          "title": "Cloud Run resource model",
+          "url": "https://cloud.google.com/run/docs/resource-model"
+        },
+        {
+          "title": "Cloud Run autoscaling",
+          "url": "https://cloud.google.com/run/docs/about-instance-autoscaling"
+        },
+        {
+          "title": "Cloud Run service identity",
+          "url": "https://cloud.google.com/run/docs/securing/service-identity"
+        },
+        {
+          "title": "Cloud Run pricing",
+          "url": "https://cloud.google.com/run/pricing"
+        }
+      ]
+    },
+    {
+      "slug": "google-kubernetes-engine",
+      "summary": "Managed Kubernetes for orchestrating containerized workloads using Autopilot or Standard clusters.",
+      "concepts": [
+        "fleet, cluster, node pool, namespace, workload, service and ingress/gateway form the core resource model for Google Kubernetes Engine (GKE).",
+        "container images, Kubernetes manifests and client traffic enter the service; Kubernetes control plane, scheduler, controllers, autoscaling and policy govern processing.",
+        "pods exposed through Services/Gateway with persistent or external state is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Google Kubernetes Engine (GKE) when the requirement centers on managed Kubernetes for orchestrating containerized workloads using Autopilot or Standard clusters.",
+        "It fits architectures where control plane, nodes/pods, VPC and service perimeter must be explicit and operationally owned.",
+        "Prefer Cloud Run when Kubernetes-level control is unnecessary when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Google Kubernetes Engine (GKE) flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Google Kubernetes Engine (GKE) architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "container images, Kubernetes manifests and client traffic",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Google Kubernetes Engine (GKE)",
+              "items": [
+                "fleet, cluster, node pool, namespace, workload, service and ingress/gateway",
+                "Kubernetes control plane, scheduler, controllers, autoscaling and policy"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "pods exposed through Services/Gateway with persistent or external state",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "control-plane/node/pod health, resource saturation, scheduling and application SLOs",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Google Kubernetes Engine (GKE) delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Google Kubernetes Engine (GKE) governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "mode, region/zones, release channel, network, Workload Identity, node pools and policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Google Cloud IAM, Kubernetes RBAC and Workload Identity Federation",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "control plane, nodes/pods, VPC and service perimeter",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "control-plane/node/pod health, resource saturation, scheduling and application SLOs"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Kubernetes Engine",
+          "detail": "Google Cloud Console → Kubernetes Engine; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set mode, region/zones, release channel, network, Workload Identity, node pools and policy."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure Google Cloud IAM, Kubernetes RBAC and Workload Identity Federation; validate control plane, nodes/pods, VPC and service perimeter."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify control-plane/node/pod health, resource saturation, scheduling and application SLOs before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for Google Cloud IAM, Kubernetes RBAC and Workload Identity Federation; keep administrative and runtime identities separate.",
+        "Protect control plane, nodes/pods, VPC and service perimeter with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to fleet, cluster, node pool, namespace, workload, service and ingress/gateway."
+      ],
+      "operations": [
+        "Monitor control-plane/node/pod health, resource saturation, scheduling and application SLOs and alert on user-impacting deviation rather than raw activity alone.",
+        "Version mode, region/zones, release channel, network, Workload Identity, node pools and policy; promote changes through test and rollback checkpoints.",
+        "For Google Kubernetes Engine (GKE), document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "Autopilot and Standard split operational responsibility differently; requests/limits and disruption design remain essential",
+        "Confirm regional availability, quotas and lifecycle limits for fleet, cluster, node pool, namespace, workload, service and ingress/gateway before standardizing the design.",
+        "The Google Kubernetes Engine (GKE) managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "cluster management, pod/node compute, disks, load balancing, logging and egress.",
+        "For Google Kubernetes Engine (GKE), include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Google Kubernetes Engine (GKE) projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Google Kubernetes Engine (GKE) — Managed Kubernetes for orchestrating containerized workloads using Autopilot or Standard clusters.",
+        "Cloud Run when Kubernetes-level control is unnecessary — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Google Kubernetes Engine (GKE)",
+          "fit": "Managed Kubernetes for orchestrating containerized workloads using Autopilot or Standard clusters."
+        },
+        {
+          "name": "Cloud Run when Kubernetes-level control is unnecessary",
+          "fit": "Cloud Run when Kubernetes-level control is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "fleet, cluster, node pool, namespace, workload, service and ingress/gateway → Kubernetes control plane, scheduler, controllers, autoscaling and policy → pods exposed through Services/Gateway with persistent or external state.",
+        "Autopilot and Standard split operational responsibility differently; requests/limits and disruption design remain essential",
+        "Certification clue: Managed Kubernetes for orchestrating containerized workloads using Autopilot or Standard clusters."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Google Kubernetes Engine (GKE) documentation",
+          "url": "https://docs.cloud.google.com/kubernetes-engine/docs"
+        }
+      ]
+    }
+  ]
+}

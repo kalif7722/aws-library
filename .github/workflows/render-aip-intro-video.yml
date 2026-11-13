@@ -1,0 +1,132 @@
+name: Build AIP Module 00 lecturer-video preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/aip-module-00.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-module-00-lecture-preview
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render 12 original slides with AI voice, captions and chapters
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install renderer dependencies
+        run: |
+          # Use wheel-bundled FFmpeg rather than apt or runner PATH.
+          # Mutagen reads MP3/MP4 durations; no FFprobe binary is needed.
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python - <<'PY'
+          import subprocess
+          from imageio_ffmpeg import get_ffmpeg_exe
+          from mutagen import File
+          executable = get_ffmpeg_exe()
+          result = subprocess.run([executable, "-version"], capture_output=True, text=True, check=True)
+          print("Bundled FFmpeg available:", executable)
+          print(result.stdout.splitlines()[0])
+          print("Mutagen available:", File)
+          PY
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_media_tools.py
+
+      - name: Render video from the exact existing Cloudflare R2 slides
+        run: |
+          python scripts/render_aip_course_video.py \
+            --manifest content/video-narration/aip-module-00.json \
+            --output video-output \
+            --width 1920 --height 1080 --fps 24
+
+      - name: Archive review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: aip-module-00-lecturer-video-preview
+          path: |
+            video-output/aip-module-00.mp4
+            video-output/aip-module-00.vtt
+            video-output/aip-module-00.srt
+            video-output/aip-module-00-transcript.txt
+            video-output/aip-module-00-manifest.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload review-only preview to Cloudflare R2
+        id: media
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "Skipping R2 preview upload: repository R2 secrets are not configured."
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PREFIX="aws-course-videos/previews/aip/module-00"
+          aws s3 cp video-output/aip-module-00.mp4 "s3://$R2_BUCKET/$PREFIX/aip-module-00.mp4" \
+            --endpoint-url "$R2_ENDPOINT" \
+            --content-type video/mp4 \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00.vtt "s3://$R2_BUCKET/$PREFIX/aip-module-00.vtt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "text/vtt; charset=utf-8" \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00.srt "s3://$R2_BUCKET/$PREFIX/aip-module-00.srt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "application/x-subrip" \
+            --cache-control "public,max-age=3600" --no-progress
+          aws s3 cp video-output/aip-module-00-transcript.txt "s3://$R2_BUCKET/$PREFIX/aip-module-00-transcript.txt" \
+            --endpoint-url "$R2_ENDPOINT" --content-type "text/plain; charset=utf-8" --no-progress
+          aws s3 cp video-output/aip-module-00-manifest.json "s3://$R2_BUCKET/$PREFIX/aip-module-00-manifest.json" \
+            --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress
+          echo "published=true" >> "$GITHUB_OUTPUT"
+          echo "Uploaded revised media; website player uses the embedded script revision gate."
+
+      - name: Record successful video upload for verification
+        if: steps.media.outputs.published == 'true'
+        run: |
+          mkdir -p content/video-releases
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          source = json.loads(Path("video-output/aip-module-00-manifest.json").read_text())
+          if source.get("script_revision") != "2026-11-11-visual-aligned-v2":
+              raise SystemExit("Refusing to publish an outdated narration revision.")
+          if len(source.get("scenes", [])) != 12:
+              raise SystemExit("Refusing to publish an incomplete course introduction.")
+          published = {
+              "status": "uploaded_pending_human_review",
+              "script_revision": source["script_revision"],
+              "created_utc": source["created_utc"],
+              "duration_seconds": source["duration_seconds"],
+              "slides": 12,
+              "video_url": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip/module-00/aip-module-00.mp4",
+              "course_page": "https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional/visual/module-00#video-lectures"
+          }
+          Path("content/video-releases/aip-module-00.json").write_text(
+              json.dumps(published, indent=2) + "\n", encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/video-releases/aip-module-00.json
+          if git diff --cached --quiet; then
+            echo "Video release record unchanged."
+          else
+            git commit -m "Record uploaded AIP intro lecture revision"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

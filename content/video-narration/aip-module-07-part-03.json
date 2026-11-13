@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 07 slides 11-15 audited with spatial OCR, fresh visual-first explanatory narration, no prior audio reuse.",
+  "part_id": "03",
+  "part_title": "Evaluation Strategy, Responsible AI and CloudWatch Logs",
+  "script_revision": "2026-11-12-m07-p03-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 11,
+      "title": "Evaluation Strategy Selection",
+      "narration": "This slide is a decision tree for choosing evaluation methods, not a ranking of which method is best. Begin with the first question: is the application safety-critical or regulated? If yes, the diagram points toward expert human review combined with benchmark evidence, because an automated score alone may miss consequential mistakes. If the task is stable and structured, follow the next branch to repeatable benchmark metrics such as accuracy or F one. An exploratory or open-ended experience is different: human evaluation can assess creativity, tone and whether the answer actually helps someone. For a very large regression suite, the rightmost branch uses an automated model judge with periodic human spot checks. Notice that these branches can be combined. For example, a healthcare support assistant may need automated regression tests on every release, plus specialist review of sensitive scenarios. The useful rule is to match evaluator strengths to the risk, task and scale. Before approving any model change, define the release threshold and record the evidence from each evaluation method."
+    },
+    {
+      "slide": 12,
+      "title": "Deployment Validation for Generative AI",
+      "narration": "Follow the top pipeline from user input through retrieval, model generation and post-processing to the final response. The example asks what matters when migrating from a relational database to a vector database. A usable answer must address schema mapping, embeddings, indexing, data quality and cost; it should also be supported by the retrieved documents. Now read the validation columns below. Latency checks whether ordinary and tail response times meet service objectives. Grounding verifies that citations actually support claims. Safety checks harmful content and leakage of sensitive data. Formatting checks required sections or JSON structure. Failure recovery asks what happens if retrieval or the model fails. The bottom sequence introduces release discipline: run synthetic end-to-end workflows, deploy to a small canary group, observe production metrics, then expand or roll back. An API returning success does not mean its generated answer is trustworthy. Test the entire user journey under ordinary, peak and failure conditions before treating the deployment as ready."
+    },
+    {
+      "slide": 13,
+      "title": "Responsible AI: Core Dimensions",
+      "narration": "This slide arranges responsible AI as a set of related dimensions. Start with fairness: are outcomes equitable across the people and groups the system serves? Explainability asks whether the system's outputs and relevant decisions can be described in useful terms. Transparency means users and operators understand important facts about the model, data and limitations. Privacy and security protect both sensitive information and model infrastructure. Move to governance: who approves changes, owns risks and responds to incidents? Safety asks whether the system avoids unacceptable harms. Veracity and robustness address factual reliability and resistance to failures or manipulation. Finally, controllability means operators can monitor, steer, suspend or shut down an unsafe feature. These are not alternative labels for the same thing. A response might be factually correct but leak private data; a protected system might still have biased outcomes. When assessing a GenAI design, work through the dimensions separately and collect evidence for each. Responsible AI is a lifecycle responsibility, not a single content filter added at the end."
+    },
+    {
+      "slide": 14,
+      "title": "AWS tools for responsible AI",
+      "narration": "Here the diagram maps responsible AI work across the model lifecycle. Read each AWS service column by the problem it solves. Amazon Bedrock model evaluations compare foundation-model outputs for relevance, quality and safety before release. SageMaker Clarify helps examine bias and explainability in applicable machine-learning workflows. SageMaker Model Monitor observes changes in model and data quality over time. CloudWatch gathers operational telemetry, dashboards and alarms for running applications. IAM and KMS provide access control and encryption foundations. Look at the practical guidance at the bottom: first identify the need, then choose the corresponding capability, and finally combine tools across the lifecycle. For example, Bedrock evaluation might show a model is helpful on a test set, while CloudWatch exposes slow production responses and IAM prevents an unauthorised integration from reading customer data. No one service guarantees that the whole system is safe. Also distinguish model evaluation from monitoring: a pre-deployment score isn't a substitute for watching behavior and drift after real users arrive."
+    },
+    {
+      "slide": 15,
+      "title": "CloudWatch Logs architecture",
+      "narration": "This slide shows where application logs go and how they are organised. On the left, an application, Lambda function and ECS container each produce events. They send logs into CloudWatch Logs, where a log group collects related streams. The example group is an AI production environment, with separate streams for API requests, function output or container logs. Next, look at the two controls on the right. Retention determines how long log events remain before expiry. Metric filters extract patterns, such as error events or high-latency markers, into CloudWatch metrics that can drive alarms. The sample structured JSON log along the bottom makes this operational: it includes a request identifier, model identifier, latency in milliseconds, status and a groundedness score. The request ID helps correlate an AI response with an application error, while model and latency fields support performance analysis. Avoid logging entire customer prompts or sensitive generated answers by default. Useful observability comes from intentional structured fields, sensible retention and least-privilege log access."
+    }
+  ]
+}

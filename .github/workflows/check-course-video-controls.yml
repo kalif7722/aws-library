@@ -1,0 +1,33 @@
+name: Verify shared AIF and AIP video player controls
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/components/CourseVideoControls.tsx"
+      - "app/components/CourseVideoCaptions.tsx"
+      - "app/api/course-video-captions/route.ts"
+      - "app/components/AifVideoLectures.tsx"
+      - "app/components/AipVideoLectures.tsx"
+      - "app/api/aif-video/route.ts"
+      - "app/courses/aws-ai-practitioner/visual/[moduleId]/page.tsx"
+      - "tests/course-video-controls-parity.test.mjs"
+      - "tests/aif-video-lesson-mapping.test.mjs"
+      - ".github/workflows/check-course-video-controls.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check shared playback controls and original visual mapping
+        run: |
+          node --test tests/course-video-controls-parity.test.mjs tests/aif-video-lesson-mapping.test.mjs

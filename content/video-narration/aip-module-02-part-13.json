@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original 2048×1152 WebP slides 91–100 visually inspected from aws-aip-c01-module02-images-91-100-redesign.zip; narration follows each actual diagram. Live R2 image validation required at render.",
+  "part_id": "13",
+  "part_title": "DynamoDB Read Capacity, CRUD, Query and Batch Operations",
+  "script_revision": "2026-11-11-m02-p13-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 91,
+      "title": "Read Capacity Units",
+      "narration": "Let's start with a DynamoDB read-capacity calculation. At the top of the slide, one read capacity unit supports a single strongly consistent read per second for an item up to four kilobytes, or two eventually consistent reads of that size. Now follow example one on the left. Ten strongly consistent reads each second, each reading four kilobytes, requires ten RCUs. The second example on the right is different: sixteen eventually consistent reads per second of twelve-kilobyte items. Divide twelve by four to get three four-kilobyte units per read, multiply by sixteen requests, and then multiply by one half for eventual consistency. The answer is twenty-four RCUs. Notice how both item size and read consistency affect capacity consumption. The calculation is for standard nontransactional reads; transactional reads use different capacity rules. In a design scenario, identify read frequency, item size, and required consistency before selecting provisioned capacity."
+    },
+    {
+      "slide": 92,
+      "title": "How DynamoDB Partitions Data",
+      "narration": "This slide explains how DynamoDB distributes items behind the scenes. Follow the item keys on the left: user number 101, order 555, product 42, and other examples. DynamoDB applies a hash function to the partition-key value and uses that to place an item on a physical partition, illustrated by partitions A, B, and C in the centre. Keys with different values can spread traffic across partitions, although the exact placement is managed by the service. Now look at the right-hand before-and-after diagram. As data volume or throughput increases, DynamoDB may split partitions, spreading items and requests across additional physical storage capacity. That is why partition-key choice matters even in a fully managed service. A single extremely popular key can still concentrate traffic. The goal isn't to manually choose partition A or B; the goal is to design keys and access patterns that let DynamoDB distribute the workload effectively."
+    },
+    {
+      "slide": 93,
+      "title": "Why Throttling Happens",
+      "narration": "Here we see three independent causes of DynamoDB throttling. The first orange box shows a request rate exceeding available provisioned read or write capacity. The blue chart crosses the capacity limit, so some operations are throttled. In the second box, a hot partition key receives too much traffic even when other keys and partitions are relatively quiet. Notice the busy user ID in red, with several requests converging on it. The third box shows large items consuming more capacity units per request; item size affects throughput as much as the number of API calls. Now examine the remedies along the bottom. Distribute load over appropriate access keys, retry throttle responses using exponential backoff with jitter, adjust capacity, and cache suitable read-heavy workloads with DAX. These are different responses for different bottlenecks. Increasing table capacity cannot always solve a hot-key design, and retries without backoff can make a spike worse. Use metrics to identify the actual cause first."
+    },
+    {
+      "slide": 94,
+      "title": "On-Demand Capacity",
+      "narration": "The graph on this slide compares incoming request traffic, shown by the purple line, with automatically adjusted capacity, shown by the stepped cyan line. This is DynamoDB on-demand mode. Unlike provisioned mode, the application does not specify fixed read and write capacity units for everyday operation; billing follows the read and write requests processed. Look at the three cards underneath: traffic varies, capacity scales automatically, and you pay according to usage. But notice the circled sudden spike on the right. An abrupt increase beyond recent peak traffic may still encounter throttling under service scaling rules or other limits. On-demand mode is well suited to unknown or changing workloads, but it is not an unlimited request-rate guarantee. When designing a production system, also evaluate request size, table and partition limits, regional quotas, and budget. The key choice is operational simplicity and workload variability versus the cost control of appropriately tuned provisioned capacity."
+    },
+    {
+      "slide": 95,
+      "title": "Writing Items Safely",
+      "narration": "This slide shows three distinct ways an application writes to DynamoDB. In the first section, PutItem creates an item using its primary key, but it can also replace an existing item with the same key. The example order A100 begins without a matching record and ends with a new OPEN order. In the second section, UpdateItem changes selected attributes. Notice the atomic counter expression that adds one to total, changing fifty to fifty-one, without replacing the entire item. The third section introduces a condition expression. The request creates an order only when the order ID does not already exist. When the condition is met, the write succeeds; when it fails, DynamoDB returns a conditional-check failure rather than overwriting the original item. This is especially important for retryable API requests and workflow idempotency. Choose the operation based on whether you want to replace an item, update particular fields, or prevent an unexpected overwrite."
+    },
+    {
+      "slide": 96,
+      "title": "GetItem by Primary Key",
+      "narration": "GetItem is DynamoDB's direct key lookup. Start with the Books table on the left. Its composite primary key contains a partition key and sort key, and the example identifies a book by its exact combination. Follow the orange arrow to the GetItem request in the middle, where TableName and Key specify that combination. The response on the right contains the requested item's attributes, such as title and price, when it exists. The lower three cards give useful options and limits. By default, reads are eventually consistent; a strongly consistent read can be requested where supported. ProjectionExpression lets you return only selected attributes. But reducing returned fields does not necessarily reduce the read-capacity units charged for the item. GetItem retrieves one item by primary key, not every book that matches a word in its title. For range lookups or multiple items under one partition key, the next slide's Query operation is a better fit."
+    },
+    {
+      "slide": 97,
+      "title": "Query with Key Conditions",
+      "narration": "The Query diagram starts with two conditions. A partition-key equality test is required, while an optional sort-key condition narrows the results, such as an order date beginning with a chosen month. In the purple code example, the request looks for one user's orders and restricts the sort key by a prefix. Follow the orange path below: DynamoDB reads items matching the key condition, then a FilterExpression may remove unwanted results before returning them. The critical point is that filtering occurs after the read and does not reduce the read capacity already consumed. The output box also illustrates pagination. A Query can return a page of results, and LastEvaluatedKey is used to request the next page when needed. This is why a key-aware data model is important. Design the partition and sort keys to efficiently select the records you actually need, rather than reading broad results and filtering most of them away."
+    },
+    {
+      "slide": 98,
+      "title": "Scan Versus Query",
+      "narration": "This side-by-side comparison is worth remembering for the exam. The left column shows Query. It targets a specified partition key, optionally with a sort-key range, and returns matching items. The middle orange column shows Scan, which examines data across the table or index and consumes read capacity even for records the application later filters out. The third column adds Parallel Scan, dividing work into segments processed by multiple workers. Parallel Scan may shorten wall-clock time for a large data-processing task, but it increases concurrent resource use and can put pressure on the table. Look at the bold recommendation at the bottom: choose Query for targeted access. A Scan may still be appropriate for an offline export or full-table operation, but it is usually inefficient for a customer-facing request that needs a few known items. The architecture decision begins with access patterns and key design, not the convenience of writing one generic Scan call."
+    },
+    {
+      "slide": 99,
+      "title": "Delete Operations",
+      "narration": "This slide compares DeleteItem with DeleteTable, and the difference is substantial. On the left, DeleteItem targets a single item by its primary key. The example uses order ID 1002 and adds a condition requiring the order status to be PENDING. If that condition is true, only that order is removed; otherwise, the conditional delete fails. This is a way to protect against deleting an item after its state changes. On the right, DeleteTable removes the entire Orders table and its contents, including its indexes and table-level configuration. The large red warning marks it as a destructive administrative action, not an everyday record deletion. Always use the smallest operation appropriate to the task, review IAM permissions, and have recovery plans for critical data. The final bottom callout reinforces that conditions can protect a single-item deletion, while deleting a whole table requires a very different level of authorization and caution."
+    },
+    {
+      "slide": 100,
+      "title": "Batch Operations",
+      "narration": "DynamoDB batch operations can improve throughput for collections of known keys or writes, but each API has defined limits. On the left, BatchWriteItem accepts up to twenty-five put or delete requests, with a total request size limit of sixteen megabytes. It does not perform UpdateItem operations. On the right, BatchGetItem can request up to one hundred item keys, also subject to a total response-size limit. Now look at the retry flow across the bottom. A batch can succeed partially, returning UnprocessedItems or UnprocessedKeys. The application must not assume that one API response means every requested item was processed. The diagram shows checking the unprocessed results and retrying those items with exponential backoff until they complete or the application's retry policy stops. Batch APIs are not all-or-nothing transactions. Use DynamoDB transaction APIs when you need supported atomicity across multiple items. Here the lesson is efficient request grouping together with careful partial-failure handling."
+    }
+  ]
+}

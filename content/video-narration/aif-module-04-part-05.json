@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "04",
+  "module_title": "Generative AI and Amazon Bedrock",
+  "slide_local_dir": "public/course-visuals/aif-course/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "05",
+  "part_title": "Choosing Bedrock Models for Real Business Workloads",
+  "output_prefix": "aif-module-04-part-05",
+  "script_revision": "2026-11-13-aif-m04-p05-beginner-visual-v1",
+  "review_basis": "Original Module 04 local WebP slides 15–16 inspected visually; narration follows actual arrows, diagrams, labels, decisions and worked examples.",
+  "scenes": [
+    {
+      "slide": 15,
+      "title": "Choosing a base foundation model in Bedrock",
+      "narration": "The business requirement on the upper left is specific: customer support questions must be answered using company sources with citations, and some customers submit images of their products. Follow the arrow from the text-or-image query through Amazon Bedrock to a response that needs to be helpful, sourced, and able to interpret a supplied picture when present. The center lower R A G architecture uses Amazon S3 for company manuals, policies, and F A Q documents, and Amazon OpenSearch Service for vector search of relevant information. R A G supplies grounding context; it does not automatically make a text-only model understand images. The right side lists Amazon Titan and other provider-model options. This is a model catalog, not a guarantee that every listed family supports every input format. Now read the lower comparison table from top to bottom. Required modality comes first: if customer photographs are necessary, a text-only model fails. Then compare response quality and citations, context window length for documents, latency for an interactive experience, Region and API support, governance and licensing, and overall cost. The exam decision cue says pick the model satisfying the complete set of requirements, not the biggest or most famous model. Decision question: could an excellent text-only model meet the image-upload requirement without another image-processing component? Not by itself."
+    },
+    {
+      "slide": 16,
+      "title": "Choose a foundation model by workload",
+      "narration": "This slide simplifies model selection to three business questions. Start from the central heading: what do you want the model to do? The arrow to A leads to support question answering grounded in company policy. Choose a suitable text-generation model together with retrieval augmented generation, so answers can use current policy documents and cite relevant passages. The considerations beneath A are response quality, citation checks, the target AWS Region and API, speed, and cost. The arrow to B asks for a product hero image. This requires a model with image-generation capabilities; a text-only language model cannot be assumed to generate a picture. The arrow to C asks the model to understand an existing customer photo. This requires a multimodal model that accepts image input and can answer questions about it. Notice the note that image understanding and image generation need not be provided by the same model. The bottom reminder says to verify exact catalog features, model IDs, Regions and prices rather than treating the diagram as an exhaustive current service list. Imagine a customer uploads a photo of a damaged router and asks what is wrong. A model supporting image input is needed for that particular path, alongside reliable product information for the advice. Check: can we choose a model from its brand alone? No. Match capabilities and operational needs to the actual workload."
+    }
+  ]
+}

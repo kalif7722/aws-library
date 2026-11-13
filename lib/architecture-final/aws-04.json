@@ -1,0 +1,122 @@
+[
+  {
+    "service": "AWS Parallel Computing Service",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "schedule a simulation on a Slurm cluster",
+    "input": "The scientist submits the solver, input dataset and requested CPU or accelerator resources.",
+    "action": "Parallel Computing Service supplies managed Slurm cluster infrastructure and integrates configured compute node groups and queues. Slurm schedules the job; compute nodes execute the solver against the selected shared data path.",
+    "output": "The research workflow retrieves completed simulation outputs and job-exit evidence.",
+    "check": "Validate job resource limits, node provisioning, shared-storage access and recovery from a failed worker.",
+    "reference": "https://docs.aws.amazon.com/pcs/latest/userguide/what-is-service.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Partner Device Catalog",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "select hardware for an industrial edge integration",
+    "input": "The engineer identifies required connectivity, runtime compatibility and environmental constraints.",
+    "action": "The Partner Device Catalog lists partner hardware and associated AWS qualifications or integration information. It supports product selection; the catalog itself does not provision devices or carry sensor traffic.",
+    "output": "The engineer obtains the chosen device and validates its supported runtime and cloud integration.",
+    "check": "Check the current vendor specification and qualification scope, then run an actual sensor-to-cloud acceptance test.",
+    "reference": "https://devices.amazonaws.com/",
+    "legacy": false
+  },
+  {
+    "service": "AWS Payment Cryptography",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "verify a card PIN using protected payment keys",
+    "input": "The authorized payment backend submits the supported encrypted PIN-verification request and key identifiers.",
+    "action": "Payment Cryptography performs supported payment cryptographic operations inside its managed key boundary. The selected verification or transformation API operates on protected payment keys; the acquiring application determines the transaction decision.",
+    "output": "The payment backend uses the cryptographic result with its other authorization checks and records the permitted transaction outcome.",
+    "check": "Test supported key formats and known verification vectors; ensure logs exclude sensitive payment material.",
+    "reference": "https://docs.aws.amazon.com/payment-cryptography/latest/userguide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Private 5G",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "plan replacement of a historical private cellular deployment",
+    "input": "The network owner inventories radio coverage, SIM assignments, subscriber devices and private network dependencies.",
+    "action": "Private 5G historically supplied a managed private cellular network deployment. Replacement planning must preserve radio access, subscriber authorization and the supported connection from devices to enterprise applications.",
+    "output": "The replacement cellular network connects permitted plant devices to their application endpoints.",
+    "check": "Validate coverage, roaming, subscriber isolation and application connectivity before moving operational devices.",
+    "reference": "https://docs.aws.amazon.com/private-networks/latest/userguide/what-is-private-networks.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS Private Certificate Authority",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "issue a private certificate for an internal service",
+    "input": "The service owner supplies a CSR, internal DNS identity and approved certificate lifetime.",
+    "action": "Private CA signs permitted private certificate requests using the configured CA hierarchy and issuance permissions. The application uses the returned certificate and protected private key for TLS; clients must trust the intended CA chain.",
+    "output": "The internal service installs the certificate and completes TLS with a client trusting the corporate CA.",
+    "check": "Test hostname validation, expiry, renewal and revocation behavior without exposing the service's private key.",
+    "reference": "https://docs.aws.amazon.com/privateca/latest/userguide/PcaWelcome.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Proton",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "publish an approved container service environment",
+    "input": "The platform team defines an infrastructure template, deployment inputs and service environment requirements.",
+    "action": "Proton uses configured environment and service templates to coordinate supported infrastructure provisioning. The selected provisioning mechanism applies the template; the application runtime executes the deployed container.",
+    "output": "The developer deploys the container through the approved service template and uses its configured endpoint.",
+    "check": "Inspect the generated infrastructure, required inputs, deployment rollback and separation of platform and developer permissions.",
+    "reference": "https://docs.aws.amazon.com/proton/latest/userguide/Welcome.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Security Agent",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "review application security before a release",
+    "input": "The application team supplies approved repository context and the permitted security assessment scope.",
+    "action": "Security Agent evaluates supported application context and security assessment inputs to identify issues. Its findings require owner validation and bounded testing; agent output does not automatically authorize production remediation.",
+    "output": "The developer triages relevant findings, repairs the code or configuration and submits the change for review.",
+    "check": "Reproduce the reported issue within the approved scope and rerun acceptance tests before release.",
+    "reference": "https://aws.amazon.com/security-agent/",
+    "legacy": false
+  },
+  {
+    "service": "AWS Snow Family",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "move an offline site dataset into AWS storage",
+    "input": "The site owner selects a suitable supported offline transfer option and inventories the source files.",
+    "action": "Snow-family transfer workflows use supported physical edge or transfer devices for authorized local copies and subsequent import. Device availability and service lifecycle must be checked before ordering or planning new transfers.",
+    "output": "The AWS ingest team accepts the imported objects and redirects downstream processing to the cloud dataset.",
+    "check": "Reconcile file counts and checksums, verify encryption custody and retain the source until the import is accepted.",
+    "reference": "https://docs.aws.amazon.com/snowball/latest/developer-guide/what-is-snowball.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Snowball Edge",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "import a protected field dataset from a transfer device",
+    "input": "The field team prepares the device manifest, authorized unlock credentials and selected source directories.",
+    "action": "Snowball Edge receives the local dataset through supported device interfaces under its encryption and access controls. The approved shipping and import procedure moves the dataset to the designated AWS storage destination.",
+    "output": "The cloud ingestion application processes the imported S3 objects only after the import and integrity checks finish.",
+    "check": "Compare checksums and missing files, document chain of custody and confirm current device availability before planning deployment.",
+    "reference": "https://docs.aws.amazon.com/snowball/latest/developer-guide/what-is-snowball.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Supply Chain",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "identify inventory risk from connected supply-chain data",
+    "input": "The retailer supplies approved inventory, demand and lead-time data from its enterprise systems.",
+    "action": "Supply Chain ingests mapped enterprise data into the configured data model and supports inventory insights or planning capabilities. Correct field mappings and refresh timing determine the usefulness of the recommendations.",
+    "output": "The planner reviews shortage risk and makes an approved replenishment decision in the business system.",
+    "check": "Reconcile inventory units, lead times and source freshness before acting on a suggested replenishment.",
+    "reference": "https://docs.aws.amazon.com/aws-supply-chain/latest/userguide/what-is.html",
+    "legacy": false
+  }
+]

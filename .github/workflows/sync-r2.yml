@@ -1,0 +1,77 @@
+name: Sync EL10 assets and AWS icons to Cloudflare R2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assets/**"
+      - "scripts/sync-aws-architecture-icons.mjs"
+      - ".github/workflows/sync-r2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-r2:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      AWS_EC2_METADATA_DISABLED: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify R2 configuration
+        run: |
+          test -n "$AWS_ACCESS_KEY_ID"
+          test -n "$AWS_SECRET_ACCESS_KEY"
+          test -n "${{ secrets.R2_ENDPOINT }}"
+          test -n "${{ secrets.R2_BUCKET }}"
+
+      - name: Sync EL10 image assets to R2
+        if: hashFiles('assets/**') != ''
+        run: |
+          aws s3 sync assets/ "s3://${{ secrets.R2_BUCKET }}" \
+            --endpoint-url "${{ secrets.R2_ENDPOINT }}" \
+            --no-progress \
+            --only-show-errors \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Prepare AWS architecture icons
+        env:
+          FORCE_AWS_ICON_SYNC: "1"
+        run: node scripts/sync-aws-architecture-icons.mjs main
+
+      - name: Sync AWS architecture icons to R2
+        run: |
+          test -f public/aws-icons/Analytics/QuickSight.png
+          aws s3 sync public/aws-icons/ "s3://${{ secrets.R2_BUCKET }}/aws-icons/" \
+            --endpoint-url "${{ secrets.R2_ENDPOINT }}" \
+            --no-progress \
+            --only-show-errors \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Remove synced EL10 files from repository
+        if: success()
+        run: |
+          if [ -d assets/el10 ]; then
+            find assets/el10 -type f -delete
+            find assets/el10 -depth -type d -empty -delete
+          fi
+
+          if git diff --quiet -- assets/el10; then
+            echo "No tracked EL10 files to remove."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -u assets/el10
+          git commit -m "Remove EL10 files after successful R2 sync"
+          git push origin HEAD:main

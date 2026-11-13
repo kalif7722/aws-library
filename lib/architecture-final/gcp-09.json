@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Policy Intelligence",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "review an IAM change using supported policy analysis",
+    "input": "The security owner selects the relevant principal, resource and proposed IAM binding.",
+    "action": "Policy Intelligence's supported tools analyze or recommend policy changes using available policy and usage evidence. Recommendations require owner review; unsupported evidence or unused permissions must be interpreted carefully.",
+    "output": "The administrator applies the approved least-privilege change through the actual IAM policy interface.",
+    "check": "Test permitted workflows and denied operations after the change and retain a rollback policy.",
+    "reference": "https://docs.cloud.google.com/policy-intelligence/docs",
+    "legacy": false
+  },
+  {
+    "service": "Secure Access Connect",
+    "cloud": "GCP",
+    "mode": "edge",
+    "title": "route approved enterprise egress through a security service edge provider",
+    "input": "The network owner selects supported SSE integration and the NCC Gateway connectivity design.",
+    "action": "Secure Access Connect connects supported security service edge products to NCC Gateway for security processing and internet egress. The configured SSE provider applies its inspection policy; the connector establishes the eligible path.",
+    "output": "The enterprise application reaches the allowed internet destination through the selected gateway and security-provider path.",
+    "check": "Test denied destinations, routing, return traffic and provider failure behavior before enabling the egress design.",
+    "reference": "https://docs.cloud.google.com/secure-access-connect/docs",
+    "legacy": false
+  },
+  {
+    "service": "Secure Source Manager",
+    "cloud": "GCP",
+    "mode": "build",
+    "title": "host a controlled source repository for a release pipeline",
+    "input": "The maintainer defines repository access, branch controls and the approved build integration.",
+    "action": "Secure Source Manager provides supported managed source-repository capabilities under its configured access boundary. Developers push reviewed changes; the connected runner performs build and deployment operations separately.",
+    "output": "The pipeline checks out the accepted commit and creates the versioned release artifact.",
+    "check": "Verify repository visibility, branch policy, build credentials and history preservation before enabling production releases.",
+    "reference": "https://docs.cloud.google.com/secure-source-manager/docs",
+    "legacy": false
+  },
+  {
+    "service": "Secure Web Proxy",
+    "cloud": "GCP",
+    "mode": "edge",
+    "title": "permit only approved outbound web destinations for a workload",
+    "input": "The network owner configures the workload's proxy path and approved URL or identity conditions.",
+    "action": "Secure Web Proxy evaluates supported outbound HTTP or HTTPS requests against its configured policy and permitted inspection settings. It allows or denies the proxy request; the destination application processes allowed business traffic.",
+    "output": "The workload reaches an approved external API while prohibited web destinations are denied.",
+    "check": "Test proxy usage, bypass prevention, TLS behavior and denied destinations before accepting the egress policy.",
+    "reference": "https://docs.cloud.google.com/secure-web-proxy/docs",
+    "legacy": false
+  },
+  {
+    "service": "Service Catalog",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "publish an approved deployment solution for project users",
+    "input": "The platform owner selects a supported solution, deployment parameters and permitted catalog audience.",
+    "action": "Service Catalog exposes the approved solutions to authorized users under its configured catalog scope. The selected deployment workflow provisions resources; the catalog is the discovery and governance entry point.",
+    "output": "The developer chooses the permitted solution and deploys it through the actual authorized provisioning path.",
+    "check": "Verify audience access, template version, generated resources and denied unapproved solutions before publication.",
+    "reference": "https://docs.cloud.google.com/service-catalog/docs",
+    "legacy": false
+  },
+  {
+    "service": "Service Extensions",
+    "cloud": "GCP",
+    "mode": "edge",
+    "title": "apply custom request logic at a supported load-balancing extension point",
+    "input": "The application owner selects the supported extension type and its allowed request modifications.",
+    "action": "Service Extensions invokes configured supported extension logic at the chosen traffic-processing point. The extension can inspect or modify supported request or response fields; the backend still performs the business operation.",
+    "output": "The load-balanced backend receives the permitted resulting request and returns its response through the configured path.",
+    "check": "Test extension timeouts, failure policy, field changes and backend authorization before enabling the extension.",
+    "reference": "https://docs.cloud.google.com/service-extensions/docs",
+    "legacy": false
+  },
+  {
+    "service": "Service Health",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "respond to an account-relevant cloud service incident",
+    "input": "The operator selects the project, affected resources and the incident window.",
+    "action": "Service Health presents supported service-impact information relevant to the configured scope. The notification or status identifies a cloud incident; operators must correlate it with the application's actual affected requests.",
+    "output": "The workload owner activates its approved recovery or communication procedure when the incident affects the application.",
+    "check": "Verify resource impact and real application recovery rather than equating provider incident closure with business recovery.",
+    "reference": "https://docs.cloud.google.com/service-health/docs",
+    "legacy": false
+  },
+  {
+    "service": "Service Infrastructure",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "publish a managed API service configuration for permitted consumers",
+    "input": "The API producer defines the service configuration, supported checks and consumer onboarding requirements.",
+    "action": "Service Infrastructure supplies foundational management and control capabilities for supported service producers. The API runtime integrates applicable service control checks and reporting; the producer backend executes the actual customer operation.",
+    "output": "The producer enables the approved consumer project and serves requests under its configured authentication and quota policy.",
+    "check": "Test consumer activation, denied requests, quota checks and runtime reporting with the actual API implementation.",
+    "reference": "https://docs.cloud.google.com/service-infrastructure/docs",
+    "legacy": false
+  },
+  {
+    "service": "Service Usage",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "enable a required API in an approved project",
+    "input": "The project owner identifies the required service, permissions and deployment prerequisites.",
+    "action": "Service Usage manages supported API enablement and service-use configuration for the project. Enabling an API makes its supported resource operations available under IAM; it does not create the application resource itself.",
+    "output": "The deployment role creates the approved resource after the API is enabled and effective permissions are confirmed.",
+    "check": "Check project selection, API dependencies and actual resource creation before marking the setup complete.",
+    "reference": "https://docs.cloud.google.com/service-usage/docs",
+    "legacy": false
+  },
+  {
+    "service": "Shielded VMs",
+    "cloud": "GCP",
+    "mode": "runtime",
+    "title": "boot a protected application host with verified integrity settings",
+    "input": "The platform owner selects a supported Shielded VM image and the required boot-security settings.",
+    "action": "Shielded VMs supplies supported protections such as secure boot, virtual TPM and integrity monitoring. The guest application executes normally on the VM; configured protections provide platform integrity evidence rather than application-level authorization.",
+    "output": "The service owner deploys the approved application and inspects integrity events during host changes.",
+    "check": "Test image compatibility, boot settings, baseline changes and application recovery before accepting the host configuration.",
+    "reference": "https://docs.cloud.google.com/compute/shielded-vm/docs",
+    "legacy": false
+  }
+]

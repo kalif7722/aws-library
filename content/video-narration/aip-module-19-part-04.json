@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "04",
+  "part_title": "Lab 04 — Diagnose Incomplete Streaming Responses and Timeouts",
+  "script_revision": "2026-11-13-m19-p04-troubleshoot-local-v1",
+  "review_basis": "Original repository WebP slides 18–23 visually reviewed, including timeline, streaming event types, application parser and three verification fixtures.",
+  "scenes": [
+    {
+      "slide": 18,
+      "title": "Scenario and end-to-end streaming path",
+      "narration": "Our incident is a chat response that begins normally, then the client disconnects, yet the application labels the partial text complete. Follow the full path from the browser or mobile client, through CloudFront or API Gateway, to the backend SDK and Bedrock ConverseStream. Each hop carries a stream and may have its own connection and timeout behavior. On the right, expected events include messageStart, repeated contentBlockDelta pieces, messageStop, and metadata. The key distinction is that receiving a few deltas is not proof of a complete answer. In the sample timeline the client connects at twelve o'clock, the application invokes the model, model chunks begin, and the client closes the connection before a terminal messageStop event arrives. The application then incorrectly marks partial text complete. Reproduce with the supplied synthetic stream, retain one correlation ID and capture client, edge, app and model timestamps. The successful path must reach a valid terminal signal; our goal is to locate exactly which layer ended the stream early and fix the completion decision, not merely extend every timeout without evidence."
+    },
+    {
+      "slide": 19,
+      "title": "Locate timeout boundary with timestamps",
+      "narration": "Open CloudWatch Logs Insights for the application log group shown and search the same correlated request through client, edge, app and Bedrock events. The timeline provides an example: the client starts at 12:00:00.000, the edge receives traffic at .021, the app invokes the model at .045, and the model begins at .098. Several contentBlockDelta events follow. The client closes the connection at 12:00:08.431; the app reports a ReadTimeoutException one millisecond later and incorrectly records completion. That sequence strongly suggests the observed boundary is the client or streaming connection path, rather than a model max-tokens termination. Inspect the last successful delta and the first error side by side. Distinguish normal idle gaps from a hard gateway timeout, SDK read timeout, user cancellation or provider limit. Identify the earliest failing layer first, then compare its configured limits with the supported service path. Record clock synchronization assumptions when correlating distributed logs. Extend only settings that genuinely caused a premature cutoff, and keep client cancellation behavior correct even if a backend call continues briefly."
+    },
+    {
+      "slide": 20,
+      "title": "Inspect stream events and stop reasons",
+      "narration": "The expected event sequence is messageStart, one or more contentBlockDelta events, messageStop with a stop reason, and possibly metadata. On the left the client, gateway, application, SDK and model all participate in the path. In the lower sample log the application receives a start event and several short text deltas, then a streamError saying the client disconnected. No valid messageStop appears. A later metadata-like record does not retroactively prove successful completion. Open the application's CloudWatch log events and inspect the ordered event types, timestamps and any stop reason for the affected request. A model that stops because of max_tokens is a different outcome from an abrupt connection reset. In the former case, the model supplies an actual stop reason and output limit may need attention; in the latter, the parser must mark incomplete and retain the error. The correct diagnostic question is not whether any text reached the UI, but whether the complete event protocol finished successfully. Carry that distinction into parser code and regression tests."
+    },
+    {
+      "slide": 21,
+      "title": "Fix parser completion and error handling",
+      "narration": "The repair focuses on how the application turns streamed chunks into a final response. The diagram shows messageStart and several contentBlockDelta events arriving before the client connection drops. Both messageStop and expected final metadata are missing, so the parser must not mark the text complete. Change the stream state machine so a valid terminal event, not the closing of an iterator or socket, establishes completion. Catch SDK streaming exceptions and explicit disconnects; preserve partial text as partial with a reason code such as network_disconnect. The sample log shows the improved result as INCOMPLETE, retryable true, and a stored partial token count rather than a false success. When retrying, use an idempotency or request correlation mechanism and avoid concatenating a fresh full answer blindly onto already displayed partial text. Propagate cancellation cleanly and distinguish a max_tokens model stop from a transport error. Open the application workbench and apply this logic to the stream parser, then replay the interrupted fixture to confirm the final state is not COMPLETE."
+    },
+    {
+      "slide": 22,
+      "title": "Align timeouts cancellation and async fallback",
+      "narration": "Now decide whether any timeout configuration needs changing. The slide spans a browser client, edge gateway, backend SDK and Bedrock streaming call. The illustrated gateway idle timeout and SDK read timeout are examples, not universal AWS limits. Compare those settings with the actual deployment type and supported service constraints. In the console walkthrough, inspect API Gateway stage integration settings and the application's botocore Config read_timeout, connect_timeout and retry policy. Ensure a client disconnect results in useful cancellation handling rather than orphaned generation or a false completed answer. For work that cannot reliably finish within the real ingress timeout, switch to a job workflow using SQS or Step Functions and return a job identifier, then retrieve results separately. The sample logs show a client disconnect, application cancel action, SDK timeout and fallback queue submission. Configure deadlines deliberately and confirm that asynchronous jobs have secure state handling, expiry and retry policies. Longer timeouts alone are not a robust fix for arbitrary long-running generation."
+    },
+    {
+      "slide": 23,
+      "title": "Verify slow interrupted and normal streams",
+      "narration": "Finish with three test fixtures. A normal stream should show messageStart, repeated contentBlockDelta events, messageStop with end_turn and metadata; the UI should display a complete answer. A deliberately slow stream may emit deltas over a longer interval but should still complete when a valid terminal event arrives and all configured limits permit it. An interrupted stream produces a network or client disconnect and no messageStop, so the application must return an explicit INCOMPLETE status instead of green success. Compare the three sample traces in the slide: the normal and slow examples have proper completion, while the interrupted example stops after two deltas with a connection reset. Retry or restart the interrupted case without duplicating previously streamed text. Monitor timeout errors, cancellation, stream completion rate and end-to-end latency, and test an output-limited case separately. The fix is verified only when the application distinguishes these outcomes reliably and preserves the correct audit trail for each."
+    }
+  ]
+}

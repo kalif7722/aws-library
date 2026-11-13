@@ -1,0 +1,122 @@
+[
+  {
+    "service": "AWS App Mesh",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace historical Envoy service routing with ECS Service Connect",
+    "input": "The platform team inventories virtual services, retry policies and TLS dependencies before moving an existing mesh.",
+    "action": "App Mesh historically distributed routing configuration to Envoy proxies. Proxies intercepted service calls and selected upstream targets; application containers executed the order logic.",
+    "output": "Deploy equivalent service discovery and routing in ECS Service Connect, then move one caller at a time.",
+    "check": "Compare allowed upstreams, timeouts, retries and error rates before removing the old proxies.",
+    "reference": "https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS App Studio",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "build an internal purchase approval application",
+    "input": "A procurement owner defines purchase fields, approval roles and the approved business data connection.",
+    "action": "App Studio helps build an internal application with pages, data entities and automation. Configure its connector to the approved purchasing system and restrict application access to the assigned employees.",
+    "output": "Purchasing staff submit requests; the approval automation records an authorized manager's decision through the configured connector.",
+    "check": "Test that requesters cannot approve their own purchases and connector credentials cannot access unrelated records.",
+    "reference": "https://docs.aws.amazon.com/appstudio/latest/userguide/what-is-appstudio.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS AppFabric",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "normalize historical SaaS audit evidence for investigation",
+    "input": "The security team selects supported SaaS tenants and their audit-log authorization scopes.",
+    "action": "AppFabric for security collected supported SaaS audit logs and normalized them for downstream security analysis. Connector authorization and delivery destinations determined which tenant events were collected.",
+    "output": "The investigator correlates normalized user activity with the incident timeline and exports only permitted evidence.",
+    "check": "Compare source tenant events with delivered records and document connector or collection gaps.",
+    "reference": "https://docs.aws.amazon.com/appfabric/latest/adminguide/what-is-appfabric.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS Auto Scaling",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "adjust application resources under a scaling plan",
+    "input": "The application owner selects supported scalable resources, utilization targets and minimum capacity.",
+    "action": "AWS Auto Scaling scaling plans coordinate supported resource scaling policies using configured targets. Scaling changes capacity; it does not evaluate shopping-cart rules or route individual HTTP requests.",
+    "output": "The application continues serving requests while supported compute capacity is adjusted under the selected policies.",
+    "check": "Load-test scale-out, cooldown and scale-in while confirming required minimum capacity remains available.",
+    "reference": "https://docs.aws.amazon.com/autoscaling/plans/userguide/what-is-aws-auto-scaling.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS B2B Data Interchange",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "translate a partner purchase order into application JSON",
+    "input": "A supplier delivers an agreed EDI purchase-order document to the restricted input location.",
+    "action": "B2B Data Interchange uses the configured partnership, trading-capability and transformer to convert supported EDI transactions to the selected structured format. Mapping rules determine business field correspondence.",
+    "output": "The purchasing integration validates the translated JSON before creating an idempotent order in the ERP system.",
+    "check": "Reconcile partner identifiers, line-item quantities and rejected transactions using representative EDI samples.",
+    "reference": "https://docs.aws.amazon.com/b2bi/latest/userguide/what-is-b2bi.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Clean Rooms",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "measure campaign overlap without exchanging raw customer tables",
+    "input": "Two partners prepare permitted customer datasets and agree on the allowed overlap analysis.",
+    "action": "Clean Rooms applies configured-table analysis rules to collaboration queries. Participants control permitted columns and query constraints; the collaboration does not freely disclose each partner's raw customer table.",
+    "output": "The authorized result recipient receives the permitted aggregate overlap result for campaign planning.",
+    "check": "Try an allowed aggregate and a disallowed identifying query; inspect output-size restrictions before sharing results.",
+    "reference": "https://docs.aws.amazon.com/clean-rooms/latest/userguide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS CodeStar (Legacy)",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical CodeStar project with explicit delivery resources",
+    "input": "The maintainer inventories a historical project's repository, build, deployment and team permissions.",
+    "action": "CodeStar historically assembled a project toolchain and project dashboard. Existing underlying repository, build and deployment resources must be managed individually when replacing that project coordination layer.",
+    "output": "The release owner reconstructs the pipeline with explicit CodeBuild and deployment configuration and reviewed access roles.",
+    "check": "Build and deploy the retained revision without relying on the retired project dashboard or project membership shortcuts.",
+    "reference": "https://docs.aws.amazon.com/codestar/latest/userguide/welcome.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS Console Mobile Application",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "inspect an incident from a managed mobile device",
+    "input": "The on-call engineer signs in to the intended account with the permitted mobile console identity.",
+    "action": "The mobile application displays supported AWS resources and operational information and permits supported actions under the signed-in identity. It provides a mobile management interface, not an application runtime.",
+    "output": "The engineer checks the affected resource and performs only the supported, approved incident action.",
+    "check": "Confirm the account and Region, verify the action in the service and preserve the incident record.",
+    "reference": "https://docs.aws.amazon.com/consolemobileapp/latest/userguide/what-is-consolemobileapp.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Data Transfer Terminal",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "upload a large prepared dataset through a transfer terminal",
+    "input": "The dataset owner prepares encrypted media, upload credentials and the reserved terminal visit.",
+    "action": "Data Transfer Terminal provides a physical location and high-bandwidth connectivity for customer equipment to transfer data to AWS. Customer software performs the authorized upload to the chosen storage destination.",
+    "output": "The ingest team uses the transferred S3 objects after access and integrity checks.",
+    "check": "Reconcile object sizes and checksums, then revoke transfer credentials and retain the original until acceptance.",
+    "reference": "https://aws.amazon.com/data-transfer-terminal/",
+    "legacy": false
+  },
+  {
+    "service": "AWS Deadline Cloud",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "render a film sequence on a managed worker fleet",
+    "input": "The artist submits scene assets, frame ranges and renderer dependencies to the studio queue.",
+    "action": "Deadline Cloud schedules submitted render jobs onto compatible workers in the configured farm and queue. Workers run the selected renderer with the approved job attachments and software licensing configuration.",
+    "output": "The studio retrieves completed frames from the configured output storage and assembles the reviewed sequence.",
+    "check": "Check frame coverage, failed-task retries, attachment access and rendering output before final delivery.",
+    "reference": "https://docs.aws.amazon.com/deadline-cloud/latest/userguide/what-is-deadline-cloud.html",
+    "legacy": false
+  }
+]

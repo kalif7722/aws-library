@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "01",
+  "part_id": "05",
+  "module_title": "Generative AI Fundamentals and Amazon Bedrock",
+  "part_title": "RAG Evaluation, Multimodal AI, Guardrails and Prompt Management",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "script_revision": "2026-11-11-m01-p05-visual-aligned-v1",
+  "review_basis": "User Library source package AWS AIP Module 01 site-ready WebP slides 35–43; validate against actual R2 images before publication",
+  "scenes": [
+    {
+      "slide": 35,
+      "title": "RAG Evaluation with Ground Truth",
+      "narration": "Let's begin by making evaluation repeatable. The first stage on the left is a prompt dataset with known ground-truth answers and, where useful, the reference context. Next the RAG application generates an answer using retrieval. In the third panel, a Bedrock-based evaluator applies a rubric, examining context relevance, correctness, faithfulness, and citation quality. The fourth panel adds a numerical score and human review. Notice the example score: it is evidence of one evaluation result, not a guarantee for every question. The lower section discusses using a model as a judge. This can accelerate checking many answers, but scores can vary between evaluations, model versions, and prompt wording. Human review remains important for difficult, sensitive, or ambiguous cases. The right lesson for developers is to keep representative datasets, explicit scoring criteria, and a continuous feedback process. A successful API response is not proof that your RAG assistant actually answered well."
+    },
+    {
+      "slide": 36,
+      "title": "Context Relevance: A Worked Example",
+      "narration": "This slide is intentionally different from answer correctness. The user asks how many days employees can work remotely. Passage A on the left mentions a policy allowing up to three days per week, subject to approval. That directly answers the information need, so it is marked relevant. Passage B discusses expense reimbursement and is not about remote-work allowances. A reviewer might consider some overlap because both are employee policies, but it does not actually provide the requested number. That is why the middle rating is uncertain at best. The orange scorecard also asks us whether the retrieved passage matches the question, not whether the model has already produced a correct answer. The red panel is unrelated and should not contribute context. When evaluating retrieval, separate this retrieval-level metric from groundedness and final answer correctness. Otherwise a convincing answer can hide a poor search step."
+    },
+    {
+      "slide": 37,
+      "title": "Multimodal Models and Pipelines",
+      "narration": "Until now, most RAG examples used text. This architecture expands the input formats. Look at the left column: text, documents, images, and audio or video can enter the application. The next column shows modality-appropriate processing, such as extracting text from a PDF, preparing an image, or transcribing speech. When the selected model and indexing system support it, compatible embeddings can represent these modalities in a shared or aligned vector space. The cluster illustration in the middle shows related content placed near each other for similarity search. The vector database retrieves likely matches when a user asks for a similar item. On the right, the example query describes a red running shoe, and the system retrieves a visually related product. The important caveat is that cross-modal retrieval needs a model trained for that relationship; arbitrary text and image embeddings cannot always be compared. Also remember to handle permissions and source provenance for media assets, just as for text documents."
+    },
+    {
+      "slide": 38,
+      "title": "Prepare Multimodal Inputs",
+      "narration": "This is a step-by-step image-and-text pipeline for a product search. On the left, the application receives a running-shoe image and an optional text description. The decode-and-validate stage checks file type, size, and basic input integrity before sending it to a compatible multimodal embedding model. In the third panel the image bytes are encoded in the request format expected by the selected API. The slide uses Base64 as an example, but the actual request schema depends on the model. Amazon Titan Multimodal Embeddings, shown next, produces a vector representation suitable for the supported indexing use case. That vector is stored in a search index, and later compared with compatible query embeddings. The resulting search can find related products even when the user has only a picture. Notice the conceptual payload example along the bottom. It illustrates how application code packages image and text inputs; it should not be treated as the exact schema for every Bedrock model. Always verify modality support, size limits, and authentication."
+    },
+    {
+      "slide": 39,
+      "title": "Amazon Bedrock Guardrails",
+      "narration": "A production model needs more than a good prompt. This diagram shows a guardrail around the foundation-model invocation. Follow the flow from the user prompt, through configurable checks, into the Bedrock text model, and then through response checks before the generated answer is returned. The top row identifies content filters, denied topics, and word filters. The lower controls add sensitive-information detection or masking, contextual grounding or relevance checks where supported, and a configured blocked response. Guardrails can help enforce application-specific safety policy, but they do not replace IAM permissions or secure tool design. Notice also that the checks depend on which features you configure and invoke. A developer needs to test harmful inputs, permissible exceptions, and false positives. The goal is a helpful model that stays inside agreed usage boundaries while preserving appropriate answers for legitimate requests."
+    },
+    {
+      "slide": 40,
+      "title": "Automated Reasoning Checks",
+      "narration": "Now look at a more structured kind of checking. The source on the left is an employee-leave policy, which is translated into formal rules such as eligibility and entitlement conditions. A model then generates a claim, for example that an employee with three years of service should qualify for a specified number of weeks of leave. In the middle, an automated-reasoning check compares the claim with those rules. On the right are three possible outcomes: supported, contradicted, or insufficient information. The contradicted case is particularly useful because it explains which rule conflicts with the claim. An uncertain case may require a reviewer or additional facts. This technique is different from ordinary content filtering: it evaluates consistency with a ruleset rather than whether the text is unsafe. The quality of the ruleset and the completeness of the inputs still matter. Developers should maintain and test the policies that drive these checks."
+    },
+    {
+      "slide": 41,
+      "title": "Create a Bedrock Guardrail",
+      "narration": "This walkthrough turns the previous safety concept into configuration steps. Starting on the left, choose a policy name and create a guardrail. Step two configures content filters. Step three sets denied topics. Step four defines sensitive-information handling. Step five customizes blocked or fallback messages so the application responds appropriately when an input or output violates a rule. The test panel shows how sample prompts should be evaluated before production use, including both legitimate and disallowed cases. Finally, create or select an appropriate guardrail version and apply it to the application. The small workflow at the bottom connects the guardrail configuration to the Bedrock invocation. The exam distinction is that a guardrail is a safety-control resource, not the application authorization layer. Combine it with IAM, least-privilege tool permissions, encryption, and application-level validation for defence in depth."
+    },
+    {
+      "slide": 42,
+      "title": "Token-Level Redaction Around Inference",
+      "narration": "Here is a security pattern at the application boundary. The user asks a question containing a name and an identifier. Before sending that request to the model, the input filter detects sensitive tokens through rules or entity recognition and replaces the confidential values with placeholders. The model then processes the sanitized request. A separate output filter examines the returned text and removes or masks any sensitive details that should not be exposed to the user. The central line illustrates this two-way flow. Look at the orange callouts: application-level redaction is performed in the application, and it must not be confused with a model's own internal mechanisms. Sensitive source documents may also need sanitization before ingestion. Redaction should be designed for the business data types actually at risk and tested for missed entities and excessive masking. It complements guardrails, privacy policy, access control, and logging hygiene."
+    },
+    {
+      "slide": 43,
+      "title": "Prompt Management in Amazon Bedrock",
+      "narration": "We finish this part by making successful prompts reusable. The first box creates a prompt template with variables. Rather than embedding every example and model setting in application code, you can define a managed prompt asset. The second box shows variants that may have different model configurations or wording. Third, you test the prompt in a builder and inspect whether the response meets the intended requirements. At step four, versions allow the team to pin an application to a known prompt and improve it in a controlled way. On the far right, the same prompt asset can support an application or compatible flow. The lower example uses a small generator template with configurable variables. Notice the shared prompt asset: this is a way to standardize prompt instructions across teams and reduce accidental drift. In the next video we'll connect reusable prompts to Bedrock Flows, structured outputs, tool use, and safer prompt design."
+    }
+  ]
+}

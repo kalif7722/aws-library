@@ -1,0 +1,143 @@
+name: Render AIP Module 01 Part 02 video
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/aip-module-01-part-02.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aip-module-01-part-02-video
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render visual-verified fine-tuning lecture
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install video tools
+        run: |
+          # Use wheel-bundled FFmpeg rather than apt or runner PATH.
+          # Mutagen reads MP3/MP4 durations; no FFprobe binary is needed.
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python - <<'PY'
+          import subprocess
+          from imageio_ffmpeg import get_ffmpeg_exe
+          from mutagen import File
+          executable = get_ffmpeg_exe()
+          result = subprocess.run([executable, "-version"], capture_output=True, text=True, check=True)
+          print("Bundled FFmpeg available:", executable)
+          print(result.stdout.splitlines()[0])
+          print("Mutagen available:", File)
+          PY
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_media_tools.py
+
+      - name: Render Module 01 Part 02 using original slides 10–13
+        run: |
+          python scripts/render_aip_course_video.py \
+            --manifest content/video-narration/aip-module-01-part-02.json \
+            --output video-output/part-02 --width 1920 --height 1080 --fps 24
+
+      - name: Validate manifest and video
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("video-output/part-02/aip-module-01-part-02-manifest.json")
+          m = json.loads(p.read_text())
+          assert m["script_revision"] == "2026-11-11-m01-p02-visual-aligned-v1"
+          assert [x["slide"] for x in m["scenes"]] == [10, 11, 12, 13]
+          assert m["duration_seconds"] > 240
+          print(f"Validated {m['duration_seconds']} seconds and all 4 original slides")
+          PY
+          python -c 'from scripts.aip_media_tools import media_seconds; print("Verified MP4 duration:", media_seconds("video-output/part-02/aip-module-01-part-02.mp4"))'
+
+      - name: Archive video, WebVTT subtitles and transcript
+        uses: actions/upload-artifact@v4
+        with:
+          name: aip-module-01-part-02-review-video
+          path: |
+            video-output/part-02/aip-module-01-part-02.mp4
+            video-output/part-02/aip-module-01-part-02.vtt
+            video-output/part-02/aip-module-01-part-02.srt
+            video-output/part-02/aip-module-01-part-02-transcript.txt
+            video-output/part-02/aip-module-01-part-02-manifest.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload verified preview to R2
+        id: media
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" || -z "$R2_ENDPOINT" || -z "$R2_BUCKET" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "R2 credentials unavailable: review artifact still saved."
+            exit 0
+          fi
+          PREFIX="aws-course-videos/previews/aip/module-01/part-02"
+          FILE="aip-module-01-part-02"
+          for ext in mp4 vtt srt txt json; do
+            case "$ext" in
+              mp4) src="video-output/part-02/$FILE.mp4"; mime="video/mp4"; suffix="$FILE.mp4";;
+              vtt) src="video-output/part-02/$FILE.vtt"; mime="text/vtt"; suffix="$FILE.vtt";;
+              srt) src="video-output/part-02/$FILE.srt"; mime="application/x-subrip"; suffix="$FILE.srt";;
+              txt) src="video-output/part-02/$FILE-transcript.txt"; mime="text/plain"; suffix="$FILE-transcript.txt";;
+              json) src="video-output/part-02/$FILE-manifest.json"; mime="application/json"; suffix="$FILE-manifest.json";;
+            esac
+            aws s3 cp "$src" "s3://$R2_BUCKET/$PREFIX/$suffix" \
+              --endpoint-url "$R2_ENDPOINT" --content-type "$mime" \
+              --cache-control "public,max-age=3600" --no-progress
+          done
+          echo "published=true" >> "$GITHUB_OUTPUT"
+
+      - name: Record successful R2 upload
+        if: steps.media.outputs.published == 'true'
+        run: |
+          mkdir -p content/video-releases
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path("video-output/part-02/aip-module-01-part-02-manifest.json").read_text())
+          info = {
+              "status": "uploaded_pending_human_review",
+              "module": "01",
+              "part": "02",
+              "script_revision": manifest["script_revision"],
+              "slides": [10, 11, 12, 13],
+              "duration_seconds": manifest["duration_seconds"],
+              "created_utc": manifest["created_utc"],
+              "video_url": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip/module-01/part-02/aip-module-01-part-02.mp4",
+              "course_page": "https://aws-library.kalifs.workers.dev/courses/aws-generative-ai-developer-professional/visual/module-01#video-lectures"
+          }
+          Path("content/video-releases/aip-module-01-part-02.json").write_text(
+              json.dumps(info, indent=2) + "\n", encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/video-releases/aip-module-01-part-02.json
+          if git diff --cached --quiet; then
+            echo "Release record unchanged."
+          else
+            git commit -m "Record uploaded AIP M01 P02 lecture preview"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

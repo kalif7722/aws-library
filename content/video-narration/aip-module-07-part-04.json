@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 07 slides 16-20 audited with spatial OCR, fresh visual-first explanatory narration, no prior audio reuse.",
+  "part_id": "04",
+  "part_title": "CloudWatch Log Collection, Insights, Exports and Alarms",
+  "script_revision": "2026-11-12-m07-p04-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "CloudWatch Logs sources and collection",
+      "narration": "This slide compares the sources that can feed CloudWatch Logs. Read the upper row from left to right. Custom applications can call the CloudWatch Logs API or SDK. The CloudWatch Agent collects files and operating-system logs on EC2 or supported on-premises systems. Lambda makes its function logs available through the service integration. ECS can ship container output through its awslogs logging driver, while Elastic Beanstalk environments can forward application and platform logs. All these paths meet at a common destination: log groups containing one or more log streams. Below, the slide highlights permissions, naming and retention. A workload needs the required CloudWatch Logs IAM actions, but should only be permitted to write to its intended groups. Consistent names make debugging much faster; imagine searching for the same application under three unrelated names. Choose retention based on compliance, operating needs and cost rather than keeping everything forever. Finally, clarify the difference between collection and analysis. Delivering logs makes data available; queries, metric filters and alarms turn that data into actionable evidence."
+    },
+    {
+      "slide": 17,
+      "title": "CloudWatch Logs Insights Query Workflow",
+      "narration": "This slide walks through investigating failed model requests with CloudWatch Logs Insights. Start by selecting the application's log group and a relevant time range, such as the last hour. Next, inspect the query example: display timestamps and messages, filter for ERROR records, parse model IDs and latency fields, and aggregate counts and average latency by model. The sort step puts the slowest error groups near the top. Now look at the query results table below. Different models have different average error latencies; the sample Claude Sonnet group shows around two thousand three hundred fifty-eight milliseconds. The detailed rows expose errors such as throttling, timeout and service unavailability. These categories suggest different investigations. A throttling error may require quota or concurrency review; a timeout could indicate slow dependencies; an unavailable service may need bounded retries. If logs are already structured JSON, native field discovery can be easier than fragile text parsing. The goal is not merely to find the word ERROR, but to connect failure type, affected model and observed latency to a specific corrective action."
+    },
+    {
+      "slide": 18,
+      "title": "Export CloudWatch Logs to S3",
+      "narration": "This slide shows a historical export rather than a real-time stream. Follow the steps: select the CloudWatch log group, specify the beginning and ending timestamps, create an export task, and write the selected log events into an S3 bucket prefix. The example command uses CreateExportTask for a Lambda log group over a one-day interval, and the destination shows compressed files ready for later analysis. On the right, the downstream tools include Athena for SQL queries, Glue or EMR for data processing, and S3 storage for longer-term records. Notice the warning at the bottom. An export task can take time and is not designed for continuous low-latency delivery. If your AI application needs a near-real-time error stream, a CloudWatch Logs subscription is the appropriate mechanism. Exports and subscriptions solve different requirements. Also verify that the S3 bucket permissions, encryption and destination prefix permit the export. For compliance archives, retention in S3 and access policies still need independent configuration."
+    },
+    {
+      "slide": 19,
+      "title": "CloudWatch Logs subscriptions",
+      "narration": "Now compare historical exporting with subscription-based delivery. Begin at the log group on the left. A subscription filter selects matching events, in this example ERROR records from an order-service function. The matching log data can be sent to a Lambda processor, Kinesis Data Streams or Amazon Data Firehose depending on the downstream need. Follow the branches. Lambda can parse an error and trigger custom processing. Kinesis supports streaming consumers that handle events in real time. Firehose can deliver events to a configured analytics or storage destination. The sample event contains a timestamp, level, service name, request ID and the message 'Failed to process order.' Those structured fields are valuable for correlation and routing. A subscription is not the same as a metric filter: subscriptions forward log events, while metric filters turn matching patterns into numeric metrics. Be careful not to create a log loop in which the subscriber writes a new matching log event back into its own source stream. Design permissions, retry handling and sensitive-data filtering before enabling continuous delivery."
+    },
+    {
+      "slide": 20,
+      "title": "CloudWatch alarms for generative AI systems",
+      "narration": "This architecture connects GenAI monitoring signals to an operational response. Start with metrics and logs on the left: latency percentiles, server errors, throttling and safety-policy violations. CloudWatch evaluates those values against alarm conditions. The diagram distinguishes the normal, alarm and insufficient-data states, so missing telemetry must not be mistaken for a healthy system. Next, follow the response paths. SNS can notify on-call staff, Lambda or another approved automation can perform remediation, and a deployment workflow may roll back a bad application version. The example conditions at the bottom are illustrative: P ninety-five latency exceeding five seconds, five-X-X errors exceeding one percent, excessive throttles and any detected safety violation for their specified evaluation periods. Each workload needs its own thresholds and noise controls. An important detail: CloudWatch does not infer groundedness or harmfulness automatically. The application or evaluation system must publish meaningful custom metrics or log-derived values first. Good alarms identify a concrete failure, reach the right responder and trigger safe, tested actions rather than starting an unreviewed automation."
+    }
+  ]
+}

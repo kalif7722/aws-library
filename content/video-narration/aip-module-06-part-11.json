@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Narration focused on actual recovered slides 61–72 for parts 10–12 and specified technical topics for parts 09/13; repeated templated endings removed, distinct operational conclusions added. Asset-by-asset QA required before final approval.",
+  "part_id": "11",
+  "part_title": "Bedrock Workflows, CodeBuild and CodeDeploy",
+  "script_revision": "2026-11-12-m06-p11-nontemplate-v3",
+  "scenes": [
+    {
+      "slide": 64,
+      "title": "Call Bedrock directly from Step Functions",
+      "narration": "Read the upper workflow left to right. A Step Functions Task state invokes an Amazon Bedrock model using a supported AWS SDK integration. The workflow receives the model response and uses a Choice state to route valid output to success or send incomplete or unacceptable output to review. This demonstrates that an additional Lambda function is not always needed just to forward a supported API request. The execution role must permit the Bedrock action and resource; passing a model identifier does not grant access by itself. The lower diagram shows a longer-running model customization job coordinated by an appropriate integration pattern, with completion output passed downstream. Check the supported operation and integration pattern for the exact workflow you deploy; a synchronous-looking diagram does not imply every Bedrock operation supports every Step Functions integration mode. Design output checks and explicit error handlers before using the model response in a business process. The execution role must explicitly allow the supported Bedrock API operation; a successful workflow transition alone does not prove the model response passed quality checks."
+    },
+    {
+      "slide": 65,
+      "title": "Keep workflow payloads small",
+      "narration": "Step Functions passes structured state between tasks, but each state input and output must respect the 256 KiB payload limit shown on the visual. This is not the same as a foundation model's token context window or allowed document input. For a large PDF or prompt, save the content in Amazon S3 and put a small S3 reference and only necessary metadata in the state. The next task accesses the object where its integration supports that input form; the reference must not be mistaken for automatic permission to read the object. On the right, filter verbose task results with the supported result and output transformations so downstream states receive only the required fields. Avoid retaining sensitive prompts and personal data in execution history and logs. The core design principle is to keep workflow state small, limit side effects and choose durable storage for large artifacts. For a two-megabyte document, store the contents in S3 and pass its object reference, not the document, in the state machine payload."
+    },
+    {
+      "slide": 66,
+      "title": "Speed CodeBuild with a cache",
+      "narration": "The visual shows a buildspec defining commands and cache paths that CodeBuild can use to speed subsequent builds. The first build downloads dependencies and creates a cache; a later build restores those files, runs its normal build commands, and may save updated cache contents. On the right compare S3 cache, which offers reuse across suitable builds and hosts, against local cache, whose persistence can depend on build-host reuse. Crucially, a cache is not the deliverable build artifact. The build artifact is the tested application package uploaded separately for a deployment stage. Cached dependencies can become stale or invalid after a runtime upgrade, so use stable dependency locks and sensible cache keys. The example's timing bars are illustrative, not a performance guarantee. Diagnose build failures from commands and logs, and do not assume restoring a cache establishes that the application passed its tests. A cached dependency is an acceleration technique, not an approved build artifact. Tests must run for the current source revision."
+    },
+    {
+      "slide": 67,
+      "title": "Prepare EC2 for CodeDeploy",
+      "narration": "Follow the three numbered transfers across the top. A CodeDeploy application and deployment group identify EC2 or on-premises deployment targets. A deployment revision, often stored in Amazon S3, is made available to the target machines. The CodeDeploy agent running on each instance obtains the revision and executes lifecycle hooks defined in the AppSpec file. The lower-left checklist identifies four prerequisites: an installed and healthy agent, the correct instance permissions, network access to CodeDeploy and revision storage, and a valid appspec.yml. The sample log shows download, install, application start and validation stages so the engineer can see exactly where a deployment failed. The lifecycle details and hook order depend on the deployment platform; do not blindly copy instance hooks for Lambda or ECS. Also ensure the deployment service role and instance role have their distinct required permissions. If the sample deployment log stops at DownloadBundle, first investigate the agent, network path and S3 permissions rather than modifying the application code."
+    },
+    {
+      "slide": 68,
+      "title": "Choose CodeDeploy deployment configurations",
+      "narration": "The top half compares three EC2 in-place deployment strategies. AllAtOnce updates every selected instance together, giving the smallest rollout time but the largest simultaneous reduction in available old-version capacity. HalfAtATime updates batches while some instances remain on the previous version. OneAtATime updates the most conservatively of these three examples. All three operate on the existing instances, rather than provisioning a fresh fleet. The lower left changes strategy to blue-green: create or select a replacement environment, deploy and validate the new version, then route traffic to green while keeping blue temporarily available for rollback. The lower-right panel highlights rollback on deployment failure or configured CloudWatch alarms. Choose the strategy from availability objectives, traffic-management support, instance count and rollback behavior. A successful deployment command is not proof of application health without meaningful validation. Choose AllAtOnce only when temporary loss of old-version capacity is acceptable. Blue-green is a different rollout model involving a separate environment."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+"use client";
+import {reviewedWorkloadArchitectures} from "../../lib/reviewed-workload-architectures";
+import ReviewedArchitectureSections from "./ReviewedArchitectureSections";
+
+import "./AthenaLearningDetails.css";
+import "./AthenaAwsIcons.css";
+import { awsArchitectureIcons, awsIconSrc, awsIconFallbackSrc, type AwsArchitectureIcon } from "../../lib/aws-architecture-icons";
+import { AnalyticsArchitectureEnhancement, AnalyticsCostEnhancement } from "./AnalyticsMiddleEnhancements";
+import SharedServiceWalkthrough from "./SharedServiceWalkthrough";
+import {architectureNodeDetail} from "../../lib/architecture-node-detail";
+
+export function ServicePracticalDemo({ serviceName }: { serviceName: string }) {
+  return <SharedServiceWalkthrough serviceName={serviceName} />;
+}
+
+const Box = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => <section className="knowledge-card"><div className="knowledge-card-title"><span>{icon}</span><h3>{title}</h3></div><div className="knowledge-card-body">{children}</div></section>;
+const athenaNodeDetail=(name:string,sub?:string)=>{
+ const key=name.toLowerCase();
+ if(key.includes("analyst")||key.includes("bi"))return "The analyst or BI client submits SQL through the console, JDBC, or ODBC and receives the completed query result.";
+ if(key.includes("federated"))return "Athena invokes the appropriate connector, pushes supported filters toward the source, combines the returned rows, and presents them through one SQL query.";
+ if(key.includes("athena"))return "Athena parses the SQL, reads table metadata from the Glue Data Catalog, scans only the required source objects, and writes query results back to Amazon S3.";
+ if(key.includes("glue"))return "The Glue Data Catalog supplies table schemas, column definitions, partitions, and S3 locations so Athena can interpret files without loading them first.";
+ if(key.includes("s3"))return "Amazon S3 stores the source files or query results. Athena reads relevant objects directly and benefits from partitioned, columnar formats such as Parquet.";
+ if(key.includes("rds"))return "The Athena connector queries the relational database, applies supported predicate pushdown, and returns matching rows without copying the whole database into S3.";
+ if(key.includes("dynamodb"))return "The Athena connector translates the SQL request into supported DynamoDB reads and returns the matching items for the federated result.";
+ if(key.includes("unified sql"))return "This output combines rows returned by the selected sources so they can be analyzed, reported, or persisted as a new dataset.";
+ return architectureNodeDetail({label:name,sub:sub||"its assigned capability",architecture:"Athena data path",position:"middle"});
+};
+const Node = ({ label, sub, tone = "blue" }: { label: string; sub?: string; tone?: string }) => {const detail=athenaNodeDetail(label,sub);return <div className={`arch-node ${tone}`} tabIndex={0} data-architecture-detail={detail} aria-label={`${label}. ${detail}`}><strong>{label}</strong>{sub && <small>{sub}</small>}</div>};
+const AwsNode = ({ icon, label, sub }: { icon: AwsArchitectureIcon; label?: string; sub?: string }) => {const name=label||icon.name;const detail=athenaNodeDetail(name,sub);return <div className="aws-arch-node" tabIndex={0} data-architecture-detail={detail} aria-label={`${name}. ${detail}`}><div className="aws-icon-disc"><img src={awsIconSrc(icon)} data-fallback={awsIconFallbackSrc(icon)} onError={(event) => { const image = event.currentTarget; const fallback = image.dataset.fallback; if (fallback && image.src !== fallback) image.src = fallback; else image.onerror = null; }} alt={`${name} AWS architecture icon`} loading="lazy" /></div><strong>{name}</strong>{sub && <small>{sub}</small>}</div>};
+const Arrow = ({ label }: { label?: string }) => <div className="arch-arrow"><span>→</span>{label && <small>{label}</small>}</div>;
+
+export default function AthenaLearningDetails() {
+  const icons = awsArchitectureIcons;
+  return <div className="service-knowledge" id="athena-learning-details">
+    <div className="knowledge-intro"><div><p className="knowledge-kicker">VISUAL DEEP DIVE • AMAZON ATHENA</p><h2>Query data where it lives.</h2><p>Athena is a serverless interactive analytics service. For its classic SQL use case, your data stays in Amazon S3, metadata describes it in the AWS Glue Data Catalog, and Athena reads only the data needed by your SQL query.</p></div><div className="knowledge-facts"><span><b>01</b>Serverless</span><span><b>02</b>Standard SQL</span><span><b>03</b>S3 data lake</span><span><b>04</b>Pay per query</span></div></div>
+    <nav className="knowledge-jumps" aria-label="Athena learning sections"><a href="#athena-flow">Architecture</a><a href="#athena-concepts">Core concepts</a><a href="#athena-examples">Examples</a><a href="#athena-security">Security</a><a href="#athena-cost">Cost</a><a href="#athena-compare">Compare</a></nav>
+    <div className="knowledge-grid" id="athena-concepts">
+      <Box icon="⌁" title="The mental model"><div className="mini-flow"><span>DATA</span><i>→</i><span>SCHEMA</span><i>→</i><span>SQL</span><i>→</i><span>RESULT</span></div><p><b>S3</b> holds the files. <b>Glue Data Catalog</b> holds table/schema metadata. <b>Athena</b> executes SQL. Results can be written to a customer S3 location or managed by Athena.</p></Box>
+      <Box icon="▦" title="Formats that matter"><div className="pill-row"><span>CSV</span><span>JSON</span><span>Parquet ★</span><span>ORC ★</span><span>Iceberg</span></div><p>Columnar formats such as Parquet and ORC are especially useful because queries can read fewer bytes. Partitioning and compression further reduce scan volume.</p></Box>
+      <Box icon="⚡" title="When Athena shines"><ul className="visual-list"><li><b>Ad-hoc analysis</b><span>Explore data without provisioning a cluster.</span></li><li><b>Log analytics</b><span>Query application, access and operational logs in S3.</span></li><li><b>Data lake SQL</b><span>Analyze structured and semi-structured datasets.</span></li><li><b>Federated analytics</b><span>Use connectors to query supported sources beyond S3.</span></li></ul></Box>
+      <Box icon="◎" title="Workgroups = control plane"><div className="workgroup-visual"><div><b>TEAM A</b><span>Encrypted results</span></div><div><b>TEAM B</b><span>Usage controls</span></div><div><b>BI</b><span>Dedicated settings</span></div></div><p>Use workgroups to isolate users/queries, enforce settings, configure result locations and encryption, publish metrics, and apply query data-usage controls.</p></Box>
+    </div>
+    <div id="athena-examples" className="aip-v8"><ReviewedArchitectureSections architectures={reviewedWorkloadArchitectures["Amazon Athena"]} anchor="athena-flow"/></div>
+    <ServicePracticalDemo serviceName="Amazon Athena" />
+    <div className="knowledge-grid three"><Box icon="1" title="Example: investigate web logs"><div className="scenario"><span>ALB / CloudFront logs</span><b>↓</b><span>S3</span><b>↓</b><span>Athena SQL</span><b>↓</b><span>Top errors / IPs / latency</span></div><pre>{`SELECT status, count(*) AS hits
+FROM access_logs
+WHERE day = DATE '2026-09-10'
+GROUP BY status
+ORDER BY hits DESC;`}</pre></Box><Box icon="2" title="Example: optimize a data lake"><div className="before-after"><div><b>BEFORE</b><span>CSV</span><span>Many files</span><span>Broad scans</span></div><i>→</i><div><b>BETTER</b><span>Parquet</span><span>Compressed</span><span>Partitioned</span></div></div><p>Design storage for the queries you run. Selecting only required columns and pruning partitions can substantially reduce scanned data.</p></Box><Box icon="3" title="Example: BI reporting"><div className="scenario horizontal"><span>S3 lake</span><b>→</b><span>Athena</span><b>→</b><span>BI / SQL client</span></div><p>Use Athena as the SQL query layer for reporting and exploration. JDBC and ODBC connectivity let compatible analytics clients query Athena.</p></Box></div>
+    <div className="knowledge-grid" id="athena-security"><Box icon="◆" title="Security layers"><div className="security-rings"><div>IAM<br/><small>Who can call Athena?</small></div><div>S3<br/><small>Can they read the source/results?</small></div><div>KMS<br/><small>Can they use encryption keys?</small></div><div>Catalog / governance<br/><small>What metadata/data is exposed?</small></div></div><p>Authorization is layered. Athena permission alone does not automatically grant access to the underlying S3 objects or encryption keys.</p></Box><Box icon="$" title="Cost & performance"><div className="cost-equation"><span>LESS DATA SCANNED</span><b>=</b><span>LOWER COST + FASTER QUERIES</span></div><ol className="rank-list"><li><b>Partition</b> on useful filter dimensions.</li><li><b>Prefer columnar</b> Parquet/ORC for analytics.</li><li><b>Compress</b> source data where appropriate.</li><li><b>Select columns</b> instead of unnecessary SELECT *.</li><li><b>Use workgroups</b> for governance and usage controls.</li></ol></Box></div>
+    <AnalyticsCostEnhancement serviceName="Amazon Athena"/>
+    <section className="compare-board" id="athena-compare"><div className="section-cap"><div><p>CHOOSE THE RIGHT TOOL</p><h3>Athena vs Redshift vs EMR</h3></div></div><div className="compare-columns"><div className="recommended"><b>ATHENA</b><strong>Interactive serverless SQL</strong><span>Ad-hoc S3 analysis</span><span>Data lake exploration</span><span>No cluster to manage</span></div><div><b>REDSHIFT</b><strong>Data warehouse</strong><span>Warehouse workloads</span><span>Repeated BI / analytics</span><span>Managed warehouse capabilities</span></div><div><b>EMR</b><strong>Big-data frameworks</strong><span>Spark / Hadoop ecosystem</span><span>Complex processing</span><span>Fine-grained framework control</span></div></div></section>
+    <section className="exam-strip"><div><p>MEMORY HOOK</p><h3>S3 = data • Glue = schema • Athena = query</h3></div><div className="exam-tips"><span><b>01</b>No infrastructure to provision for Athena SQL.</span><span><b>02</b>Partition + columnar format = common optimization pattern.</span><span><b>03</b>Workgroups help separate teams, settings and usage controls.</span><span><b>04</b>Federated Query reaches supported sources outside S3 through connectors.</span></div></section>
+    <p className="knowledge-reviewed">Prototype structured learning content • Reviewed against AWS Athena documentation • September 2026</p>
+  </div>;
+}

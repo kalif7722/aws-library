@@ -1,0 +1,64 @@
+name: Package AWS Icons v23.1
+
+on:
+  push:
+    paths:
+      - '.github/workflows/package-aws-icons-v23.1.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Download AWS Labs icon release
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 4 --retry-delay 2 \
+            https://github.com/awslabs/aws-icons-for-plantuml/archive/refs/tags/v23.1.zip \
+            -o /tmp/aws-icons-v23.1.zip
+          unzip -q /tmp/aws-icons-v23.1.zip -d /tmp/aws-icons-src
+
+      - name: Arrange R2-ready folder
+        run: |
+          set -euo pipefail
+          SRC="$(find /tmp/aws-icons-src -maxdepth 1 -type d -name 'aws-icons-for-plantuml-*' | head -1)/dist"
+          test -d "$SRC"
+          mkdir -p package/aws-icons
+          cp -a "$SRC"/. package/aws-icons/
+          find package/aws-icons -type f ! -name '*.png' ! -name '*.svg' ! -name '*.puml' -delete
+          cat > package/README-R2.txt <<'EOF'
+          AWS Architecture Icons package for the aws-library site
+          Source: awslabs/aws-icons-for-plantuml
+          Release: v23.1
+
+          Upload the `aws-icons` folder directly to the root of the R2 bucket.
+          Expected object prefix: aws-icons/
+          Keep the existing category folder names and filenames unchanged.
+          EOF
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('package/aws-icons')
+          pngs=sorted(str(p.relative_to(root)).replace('\\','/') for p in root.rglob('*.png'))
+          cats={}
+          for p in pngs:
+              cat=p.split('/',1)[0] if '/' in p else '_root'
+              cats[cat]=cats.get(cat,0)+1
+          Path('package/icon-manifest.json').write_text(json.dumps({'release':'v23.1','png_count':len(pngs),'categories':cats,'png_files':pngs},indent=2))
+          print(f'Packaged {len(pngs)} PNG icons across {len(cats)} folders')
+          PY
+
+      - name: Create ZIP
+        run: |
+          cd package
+          zip -qr ../aws-icons-v23.1-r2-ready.zip aws-icons README-R2.txt icon-manifest.json
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aws-icons-v23.1-r2-ready
+          path: aws-icons-v23.1-r2-ready.zip
+          if-no-files-found: error
+          retention-days: 7

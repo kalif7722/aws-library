@@ -1,0 +1,156 @@
+/* Keep every service-learning grid aligned to the width of its parent viewer.
+   This file intentionally overrides older max-width and centered-grid rules so
+   the layout scales cleanly from wide desktop screens down to phones. */
+
+:is(.course-page,.azure-workspace) .course-viewer.has-knowledge > .service-knowledge,
+:is(.course-page,.azure-workspace) .service-knowledge,
+:is(.course-page,.azure-workspace) .aip-shared-learning,
+:is(.course-page,.azure-workspace) .aip-v8{
+  width:100%;
+  max-width:none;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+:is(.course-page,.azure-workspace) .service-knowledge > *,
+:is(.course-page,.azure-workspace) .aip-shared-learning > *,
+:is(.course-page,.azure-workspace) .aip-v8 > *{
+  min-width:0;
+  max-width:none;
+  box-sizing:border-box;
+}
+
+:is(.course-page,.azure-workspace) .knowledge-intro,
+:is(.course-page,.azure-workspace) .knowledge-jumps,
+:is(.course-page,.azure-workspace) .knowledge-grid,
+:is(.course-page,.azure-workspace) .architecture-stage,
+:is(.course-page,.azure-workspace) .v8-architecture,
+:is(.course-page,.azure-workspace) .compare-board,
+:is(.course-page,.azure-workspace) .exam-strip,
+:is(.course-page,.azure-workspace) .service-showcase,
+:is(.course-page,.azure-workspace) .service-walkthrough-section,
+:is(.course-page,.azure-workspace) .service-insight-grid,
+:is(.course-page,.azure-workspace) .service-cost-board{
+  width:100%;
+  max-width:none !important;
+  min-width:0;
+  margin-left:0;
+  margin-right:0;
+  box-sizing:border-box;
+}
+
+/* The showcase is rendered inside the terminal two-column knowledge grid.
+   It is a full learning block and must span both columns rather than being
+   constrained to the first grid track. */
+.aip-v8 > .knowledge-grid:last-of-type > .service-showcase{
+  grid-column:1 / -1;
+  width:100%;
+  min-width:0;
+}
+
+/* Make paired cards fill their tracks consistently without introducing
+   artificial blank space or different widths. */
+:is(.course-page,.azure-workspace) .knowledge-grid{
+  align-items:stretch;
+}
+:is(.course-page,.azure-workspace) .knowledge-grid > .knowledge-card,
+:is(.course-page,.azure-workspace) .knowledge-grid > .aip-decision-card,
+:is(.course-page,.azure-workspace) .service-insight-grid > .service-insight-panel,
+:is(.course-page,.azure-workspace) .service-walk-grid > .service-walk-card,
+:is(.course-page,.azure-workspace) .service-cost-grid > article{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+/* Intro sections keep equal parent alignment while allowing the content-heavy
+   column to take slightly more room. */
+:is(.course-page,.azure-workspace) .aip-intro-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+
+/* Architecture walkthroughs use all available width. On large screens three
+   examples fit naturally; two-example services split the parent evenly. */
+:is(.course-page,.azure-workspace) .service-walk-grid{
+  width:100%;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+:is(.course-page,.azure-workspace) .service-walk-grid.count-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+:is(.course-page,.azure-workspace) .service-walk-grid.count-1{
+  grid-template-columns:minmax(0,1fr);
+}
+
+:is(.course-page,.azure-workspace) .service-insight-grid,
+:is(.course-page,.azure-workspace) .service-cost-grid{
+  width:100%;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+/* Prevent long labels/architecture steps from forcing a grid wider than its parent. */
+:is(.course-page,.azure-workspace) .service-walk-card,
+:is(.course-page,.azure-workspace) .service-walk-step,
+:is(.course-page,.azure-workspace) .service-insight-panel,
+:is(.course-page,.azure-workspace) .service-insight-list > div,
+:is(.course-page,.azure-workspace) .service-cost-grid article,
+:is(.course-page,.azure-workspace) .knowledge-card,
+:is(.course-page,.azure-workspace) .concept-stack p{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+
+@media (max-width:1400px){
+  :is(.course-page,.azure-workspace) .service-walk-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  :is(.course-page,.azure-workspace) .service-walk-grid > article:last-child:nth-child(odd){
+    grid-column:1 / -1;
+  }
+  :is(.course-page,.azure-workspace) .service-insight-grid,
+  :is(.course-page,.azure-workspace) .service-cost-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  :is(.course-page,.azure-workspace) .service-insight-grid > .service-insight-panel:last-child:nth-child(odd),
+  :is(.course-page,.azure-workspace) .service-cost-grid > article:last-child:nth-child(odd){
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:1000px){
+  :is(.course-page,.azure-workspace) .knowledge-grid,
+  :is(.course-page,.azure-workspace) .aip-intro-grid,
+  :is(.course-page,.azure-workspace) .service-walk-grid,
+  :is(.course-page,.azure-workspace) .service-walk-grid.count-2,
+  :is(.course-page,.azure-workspace) .service-insight-grid,
+  :is(.course-page,.azure-workspace) .service-cost-grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  :is(.course-page,.azure-workspace) .service-walk-grid > article:last-child:nth-child(odd),
+  :is(.course-page,.azure-workspace) .service-insight-grid > .service-insight-panel:last-child:nth-child(odd),
+  :is(.course-page,.azure-workspace) .service-cost-grid > article:last-child:nth-child(odd){
+    grid-column:auto;
+  }
+  .aip-v8 > .knowledge-grid:last-of-type > .service-showcase{
+    grid-column:1;
+  }
+}
+
+@media (max-width:600px){
+  :is(.course-page,.azure-workspace) .knowledge-intro,
+  :is(.course-page,.azure-workspace) .knowledge-card,
+  :is(.course-page,.azure-workspace) .architecture-stage,
+  :is(.course-page,.azure-workspace) .v8-architecture,
+  :is(.course-page,.azure-workspace) .compare-board,
+  :is(.course-page,.azure-workspace) .exam-strip,
+  :is(.course-page,.azure-workspace) .service-walkthrough-section,
+  :is(.course-page,.azure-workspace) .service-insight-panel,
+  :is(.course-page,.azure-workspace) .service-cost-board{
+    border-radius:16px;
+  }
+}
+
+/* Library content uses the same full-width alignment as the shared course viewer. */
+.azure-workspace .service-knowledge .knowledge-jumps{flex-wrap:wrap;gap:16px}
+.azure-workspace .service-knowledge .section-cap>div{min-width:0}
+.azure-workspace .service-knowledge .v8-reference,.azure-workspace .service-walk-reference{overflow-wrap:anywhere}

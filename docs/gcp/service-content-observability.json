@@ -1,0 +1,791 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Observability and monitoring",
+  "services": [
+    {
+      "slug": "error-reporting",
+      "summary": "An error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups.",
+      "concepts": [
+        "error event, error group, stack trace and notification define the Error Reporting resource model.",
+        "The production flow is application exception > Cloud Logging > parser/grouping > error group > alert/triage.",
+        "Error Reporting manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Error Reporting when an error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups.",
+        "It best fits a design that needs application exception > Cloud Logging > parser/grouping > error group > alert/triage.",
+        "Choose Cloud Monitoring alerts for metric/SLO conditions instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Error Reporting production flow",
+          "note": "An error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups.",
+          "reference": "Error Reporting architecture",
+          "steps": [
+            {
+              "title": "1. application exception",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Cloud Logging",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. parser/grouping",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. error group",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. alert/triage",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Error Reporting",
+          "note": "Identity, boundary, resilience and operations for error event, error group, stack trace and notification.",
+          "reference": "Error Reporting governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "restrict error-detail access because stack traces can contain source paths and sensitive values",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "project, supported log format, service/version context, notifications and resolution workflow",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "grouping is heuristic and depends on correctly structured stack traces; it does not replace logs or tracing",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "error-group count, occurrences, affected versions/users and regression state",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Error Reporting",
+          "detail": "Google Cloud Console → Error Reporting; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set project, supported log format, service/version context, notifications and resolution workflow."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement restrict error-detail access because stack traces can contain source paths and sensitive values."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise application exception > Cloud Logging > parser/grouping > error group > alert/triage; inspect error-group count, occurrences, affected versions/users and regression state."
+        }
+      ],
+      "security": [
+        "For Error Reporting, implement restrict error-detail access because stack traces can contain source paths and sensitive values.",
+        "Separate Error Reporting policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with error event, error group, stack trace and notification."
+      ],
+      "operations": [
+        "Monitor error-group count, occurrences, affected versions/users and regression state for Error Reporting.",
+        "Version project, supported log format, service/version context, notifications and resolution workflow; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Error Reporting ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "grouping is heuristic and depends on correctly structured stack traces; it does not replace logs or tracing",
+        "Confirm Error Reporting scope, regional/global behavior, quotas and supported integrations.",
+        "Error Reporting's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "underlying Cloud Logging ingestion/retention and notification tooling.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Error Reporting estimate.",
+        "Track Error Reporting cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Error Reporting — An error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups.",
+        "Cloud Monitoring alerts for metric/SLO conditions — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Error Reporting",
+          "fit": "An error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups."
+        },
+        {
+          "name": "Cloud Monitoring alerts",
+          "fit": "Cloud Monitoring alerts for metric/SLO conditions"
+        }
+      ],
+      "memoryHooks": [
+        "application exception > Cloud Logging > parser/grouping > error group > alert/triage.",
+        "grouping is heuristic and depends on correctly structured stack traces; it does not replace logs or tracing",
+        "Certification clue: An error aggregation service that groups application exceptions from supported logs and notifies teams about new or regressed error groups."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Error Reporting documentation",
+          "url": "https://docs.cloud.google.com/error-reporting/docs"
+        }
+      ]
+    },
+    {
+      "slug": "logging",
+      "summary": "A centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs.",
+      "concepts": [
+        "log entry, monitored resource, log bucket/view, sink and exclusion define the Logging resource model.",
+        "The production flow is resource/app > Logging API/agent > log router > bucket or sink > query/alert/SIEM.",
+        "Logging manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Logging when a centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs.",
+        "It best fits a design that needs resource/app > Logging API/agent > log router > bucket or sink > query/alert/SIEM.",
+        "Choose third-party SIEM for broader cross-platform correlation and response instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Logging production flow",
+          "note": "A centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs.",
+          "reference": "Logging architecture",
+          "steps": [
+            {
+              "title": "1. resource/app",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Logging API/agent",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. log router",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. bucket or sink",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. query/alert/SIEM",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Logging",
+          "note": "Identity, boundary, resilience and operations for log entry, monitored resource, log bucket/view, sink and exclusion.",
+          "reference": "Logging governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "least-privilege log views, CMEK where needed, regional buckets, redaction and sink-writer identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "log scopes, regional bucket/retention, views, sinks, exclusions, analytics and access",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "exclusions reduce storage but discard matching entries after routing evaluation; logs can leak secrets if applications emit them",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "ingested bytes, dropped entries, router/sink errors, query latency and retention",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Logging",
+          "detail": "Google Cloud Console → Logging; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set log scopes, regional bucket/retention, views, sinks, exclusions, analytics and access."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement least-privilege log views, CMEK where needed, regional buckets, redaction and sink-writer identity."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise resource/app > Logging API/agent > log router > bucket or sink > query/alert/SIEM; inspect ingested bytes, dropped entries, router/sink errors, query latency and retention."
+        }
+      ],
+      "security": [
+        "For Logging, implement least-privilege log views, CMEK where needed, regional buckets, redaction and sink-writer identity.",
+        "Separate Logging policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with log entry, monitored resource, log bucket/view, sink and exclusion."
+      ],
+      "operations": [
+        "Monitor ingested bytes, dropped entries, router/sink errors, query latency and retention for Logging.",
+        "Version log scopes, regional bucket/retention, views, sinks, exclusions, analytics and access; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Logging ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "exclusions reduce storage but discard matching entries after routing evaluation; logs can leak secrets if applications emit them",
+        "Confirm Logging scope, regional/global behavior, quotas and supported integrations.",
+        "Logging's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "ingestion above free allotment, retention, analytics, network and destination services.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Logging estimate.",
+        "Track Logging cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Logging — A centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs.",
+        "third-party SIEM for broader cross-platform correlation and response — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Logging",
+          "fit": "A centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs."
+        },
+        {
+          "name": "third-party SIEM",
+          "fit": "third-party SIEM for broader cross-platform correlation and response"
+        }
+      ],
+      "memoryHooks": [
+        "resource/app > Logging API/agent > log router > bucket or sink > query/alert/SIEM.",
+        "exclusions reduce storage but discard matching entries after routing evaluation; logs can leak secrets if applications emit them",
+        "Certification clue: A centralized log management service for ingesting, routing, storing, querying and analyzing Google Cloud and application logs."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Logging documentation",
+          "url": "https://docs.cloud.google.com/logging/docs"
+        }
+      ]
+    },
+    {
+      "slug": "monitoring",
+      "summary": "A metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources.",
+      "concepts": [
+        "time series, metric descriptor, monitored resource, dashboard, alert policy and SLO define the Monitoring resource model.",
+        "The production flow is resource/agent > metric ingestion > alignment/reduction > alert condition > notification/incident.",
+        "Monitoring manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Monitoring when a metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources.",
+        "It best fits a design that needs resource/agent > metric ingestion > alignment/reduction > alert condition > notification/incident.",
+        "Choose Prometheus/Grafana stack when portable self-managed monitoring is required instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Monitoring production flow",
+          "note": "A metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources.",
+          "reference": "Monitoring architecture",
+          "steps": [
+            {
+              "title": "1. resource/agent",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. metric ingestion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. alignment/reduction",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. alert condition",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. notification/incident",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Monitoring",
+          "note": "Identity, boundary, resilience and operations for time series, metric descriptor, monitored resource, dashboard, alert policy and SLO.",
+          "reference": "Monitoring governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "restrict metric/dashboard/policy administration, protect notification channels and use scoped metrics views",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "metrics scope, collection/agent, labels, dashboard, SLO, alert condition, missing data and channels",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "alignment period, reducer and missing-data behavior can change alert meaning; avoid noisy symptom-free thresholds",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "golden signals, SLO burn rate, missing data, alert latency and notification delivery",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Monitoring",
+          "detail": "Google Cloud Console → Monitoring; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set metrics scope, collection/agent, labels, dashboard, SLO, alert condition, missing data and channels."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement restrict metric/dashboard/policy administration, protect notification channels and use scoped metrics views."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise resource/agent > metric ingestion > alignment/reduction > alert condition > notification/incident; inspect golden signals, SLO burn rate, missing data, alert latency and notification delivery."
+        }
+      ],
+      "security": [
+        "For Monitoring, implement restrict metric/dashboard/policy administration, protect notification channels and use scoped metrics views.",
+        "Separate Monitoring policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with time series, metric descriptor, monitored resource, dashboard, alert policy and SLO."
+      ],
+      "operations": [
+        "Monitor golden signals, SLO burn rate, missing data, alert latency and notification delivery for Monitoring.",
+        "Version metrics scope, collection/agent, labels, dashboard, SLO, alert condition, missing data and channels; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Monitoring ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "alignment period, reducer and missing-data behavior can change alert meaning; avoid noisy symptom-free thresholds",
+        "Confirm Monitoring scope, regional/global behavior, quotas and supported integrations.",
+        "Monitoring's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "chargeable metric samples/bytes, API reads, uptime checks and notification integrations.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Monitoring estimate.",
+        "Track Monitoring cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Monitoring — A metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources.",
+        "Prometheus/Grafana stack when portable self-managed monitoring is required — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Monitoring",
+          "fit": "A metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources."
+        },
+        {
+          "name": "Prometheus/Grafana stack when portable self-managed monitoring is required",
+          "fit": "Prometheus/Grafana stack when portable self-managed monitoring is required"
+        }
+      ],
+      "memoryHooks": [
+        "resource/agent > metric ingestion > alignment/reduction > alert condition > notification/incident.",
+        "alignment period, reducer and missing-data behavior can change alert meaning; avoid noisy symptom-free thresholds",
+        "Certification clue: A metrics, dashboards, alerting, uptime, SLO and observability service for Google Cloud and hybrid resources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Monitoring documentation",
+          "url": "https://docs.cloud.google.com/monitoring/docs"
+        }
+      ]
+    },
+    {
+      "slug": "profiler",
+      "summary": "A continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead.",
+      "concepts": [
+        "profile type, deployment label, service/version and sampled stack define the Profiler resource model.",
+        "The production flow is instrumented process > periodic profile > Profiler backend > flame graph > code optimization.",
+        "Profiler manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Profiler when a continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead.",
+        "It best fits a design that needs instrumented process > periodic profile > Profiler backend > flame graph > code optimization.",
+        "Choose Cloud Trace for request latency paths rather than aggregate code hot spots instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Profiler production flow",
+          "note": "A continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead.",
+          "reference": "Profiler architecture",
+          "steps": [
+            {
+              "title": "1. instrumented process",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. periodic profile",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Profiler backend",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. flame graph",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. code optimization",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Profiler",
+          "note": "Identity, boundary, resilience and operations for profile type, deployment label, service/version and sampled stack.",
+          "reference": "Profiler governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "limit profile access because symbols and code paths reveal application internals; use scoped agent identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "language agent, service/version labels, profile types, environment and comparison window",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "sampling shows aggregate hot paths, not individual request causality; unsupported runtimes/profile types require other tools",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "profile collection success, hot functions, allocation pressure and change by version",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Profiler",
+          "detail": "Google Cloud Console → Profiler; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set language agent, service/version labels, profile types, environment and comparison window."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement limit profile access because symbols and code paths reveal application internals; use scoped agent identity."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise instrumented process > periodic profile > Profiler backend > flame graph > code optimization; inspect profile collection success, hot functions, allocation pressure and change by version."
+        }
+      ],
+      "security": [
+        "For Profiler, implement limit profile access because symbols and code paths reveal application internals; use scoped agent identity.",
+        "Separate Profiler policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with profile type, deployment label, service/version and sampled stack."
+      ],
+      "operations": [
+        "Monitor profile collection success, hot functions, allocation pressure and change by version for Profiler.",
+        "Version language agent, service/version labels, profile types, environment and comparison window; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Profiler ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "sampling shows aggregate hot paths, not individual request causality; unsupported runtimes/profile types require other tools",
+        "Confirm Profiler scope, regional/global behavior, quotas and supported integrations.",
+        "Profiler's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "Profiler usage under product terms plus application overhead and retained telemetry.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Profiler estimate.",
+        "Track Profiler cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Profiler — A continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead.",
+        "Cloud Trace for request latency paths rather than aggregate code hot spots — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Profiler",
+          "fit": "A continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead."
+        },
+        {
+          "name": "Cloud Trace",
+          "fit": "Cloud Trace for request latency paths rather than aggregate code hot spots"
+        }
+      ],
+      "memoryHooks": [
+        "instrumented process > periodic profile > Profiler backend > flame graph > code optimization.",
+        "sampling shows aggregate hot paths, not individual request causality; unsupported runtimes/profile types require other tools",
+        "Certification clue: A continuous production profiling service that samples CPU time, heap, wall time and contention with low overhead."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Profiler documentation",
+          "url": "https://docs.cloud.google.com/profiler/docs"
+        }
+      ]
+    },
+    {
+      "slug": "trace",
+      "summary": "A distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services.",
+      "concepts": [
+        "trace, span, trace context, sampling policy and analysis report define the Trace resource model.",
+        "The production flow is incoming request > propagated trace context > service spans > exporter > trace waterfall/analysis.",
+        "Trace manages the service control plane while routing, application correctness and data classification remain shared responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Trace when a distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services.",
+        "It best fits a design that needs incoming request > propagated trace context > service spans > exporter > trace waterfall/analysis.",
+        "Choose Cloud Logging for event records and Monitoring for aggregate metrics/SLOs instead when that alternative's behavior is the dominant requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Trace production flow",
+          "note": "A distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services.",
+          "reference": "Trace architecture",
+          "steps": [
+            {
+              "title": "1. incoming request",
+              "items": [
+                "Authenticated/authorized input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. propagated trace context",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. service spans",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. exporter",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. trace waterfall/analysis",
+              "items": [
+                "Managed transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Trace",
+          "note": "Identity, boundary, resilience and operations for trace, span, trace context, sampling policy and analysis report.",
+          "reference": "Trace governance",
+          "steps": [
+            {
+              "title": "Security boundary",
+              "items": [
+                "restrict trace access, avoid sensitive attributes and authenticate exporters",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "instrumentation/OpenTelemetry, propagation, sampling, service labels, span attributes and retention",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "broken context propagation creates fragmented traces; sampling means traces are evidence, not a complete transaction ledger",
+                "Failure test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "span ingestion, sampling rate, end-to-end latency, error spans and missing context",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Trace",
+          "detail": "Google Cloud Console → Trace; select the intended project, network and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set instrumentation/OpenTelemetry, propagation, sampling, service labels, span attributes and retention."
+        },
+        {
+          "title": "Apply security",
+          "detail": "Implement restrict trace access, avoid sensitive attributes and authenticate exporters."
+        },
+        {
+          "title": "Validate and monitor",
+          "detail": "Exercise incoming request > propagated trace context > service spans > exporter > trace waterfall/analysis; inspect span ingestion, sampling rate, end-to-end latency, error spans and missing context."
+        }
+      ],
+      "security": [
+        "For Trace, implement restrict trace access, avoid sensitive attributes and authenticate exporters.",
+        "Separate Trace policy/configuration administrators from runtime and incident-response principals.",
+        "Audit changes and protect keys, certificates, logs and network paths associated with trace, span, trace context, sampling policy and analysis report."
+      ],
+      "operations": [
+        "Monitor span ingestion, sampling rate, end-to-end latency, error spans and missing context for Trace.",
+        "Version instrumentation/OpenTelemetry, propagation, sampling, service labels, span attributes and retention; canary changes and retain tested rollback or bypass procedures.",
+        "Assign Trace ownership for quotas, dependencies, regional failure and incident response."
+      ],
+      "watchPoints": [
+        "broken context propagation creates fragmented traces; sampling means traces are evidence, not a complete transaction ledger",
+        "Confirm Trace scope, regional/global behavior, quotas and supported integrations.",
+        "Trace's managed control plane does not replace end-to-end application health, authorization or resilience testing."
+      ],
+      "cost": [
+        "span ingestion/retention under telemetry pricing plus agents and network.",
+        "Include dependent load balancing, compute, logging, storage and network transfer in the Trace estimate.",
+        "Track Trace cost against protected traffic, delivered bytes, useful telemetry or achieved SLO."
+      ],
+      "alternatives": [
+        "Trace — A distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services.",
+        "Cloud Logging for event records and Monitoring for aggregate metrics/SLOs — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Trace",
+          "fit": "A distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services."
+        },
+        {
+          "name": "Cloud Logging",
+          "fit": "Cloud Logging for event records and Monitoring for aggregate metrics/SLOs"
+        }
+      ],
+      "memoryHooks": [
+        "incoming request > propagated trace context > service spans > exporter > trace waterfall/analysis.",
+        "broken context propagation creates fragmented traces; sampling means traces are evidence, not a complete transaction ledger",
+        "Certification clue: A distributed tracing service for collecting spans, visualizing request paths and analyzing latency across services."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Trace documentation",
+          "url": "https://docs.cloud.google.com/trace/docs"
+        }
+      ]
+    }
+  ]
+}

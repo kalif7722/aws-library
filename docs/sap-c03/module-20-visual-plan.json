@@ -1,0 +1,440 @@
+[
+  {
+    "sequence": 1,
+    "title": "IaC makes architecture repeatable",
+    "layout": "control plane landscape",
+    "points": [
+      "Template describes intended resources and dependencies",
+      "CloudFormation creates and updates stacks in one account/Region",
+      "Reuse across accounts/Regions needs deployment strategy and parameter differences",
+      "Elastic Beanstalk, Service Catalog and SAM can use CloudFormation underneath"
+    ],
+    "diagram": "Source template\u2192validation\u2192change set\u2192regional stack; separate integration cards for Beanstalk, Service Catalog, SAM.",
+    "remember": "A template is desired state; deployment is a controlled operation.",
+    "referencePages": [
+      568
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 2,
+    "title": "Read the stack before updating it",
+    "layout": "change-set decision",
+    "points": [
+      "Review proposed Add, Modify, Remove and possible replacement",
+      "Change set preview does not guarantee success or complete property-level effects",
+      "Check resources with data, IAM changes and service quotas",
+      "Execute after approval and monitor stack events/rollback"
+    ],
+    "diagram": "Current template+proposed template\u2192change set preview\u2192approval\u2192execute\u2192events and verification.",
+    "remember": "Preview replacements before they can destroy state.",
+    "referencePages": [
+      568
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 3,
+    "title": "DeletionPolicy protects the old resource",
+    "layout": "lifecycle matrix",
+    "points": [
+      "Delete default applies unless exception or explicit policy",
+      "Retain leaves resource and charges; Snapshot only for supported types",
+      "RDS DBCluster and standalone DBInstance default Snapshot",
+      "S3 bucket delete requires empty bucket"
+    ],
+    "diagram": "Resource removal branches Delete, Retain, Snapshot; separate replace path governed by UpdateReplacePolicy.",
+    "remember": "DeletionPolicy does not protect a replaced physical resource.",
+    "referencePages": [
+      569
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 4,
+    "title": "Replacement requires a second policy",
+    "layout": "before-after lifecycle",
+    "points": [
+      "UpdateReplacePolicy controls the old physical resource on replacement",
+      "DeletionPolicy handles stack deletion/removal, not replacement",
+      "Choose Retain or Snapshot where supported for data-bearing resources",
+      "Test endpoint changes and restore before changing identity"
+    ],
+    "diagram": "Old DB v1\u2192replacement v2; UpdateReplacePolicy controls old v1; stack deletion policy controls v2 later.",
+    "remember": "Replacement and deletion are different events.",
+    "referencePages": [
+      569
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 5,
+    "title": "Custom resources extend a stack",
+    "layout": "callback architecture",
+    "points": [
+      "Custom resource receives Create, Update and Delete requests",
+      "Lambda or another provider executes unsupported or external operations",
+      "Provider reports success/failure and stable physical ID",
+      "Handle timeout, retries, rollback and idempotent delete"
+    ],
+    "diagram": "CloudFormation\u2192custom resource provider\u2192external API or S3 cleanup\u2192response to stack; failure/rollback branch.",
+    "remember": "A custom resource can block a stack if it never responds.",
+    "referencePages": [
+      570
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 6,
+    "title": "StackSets deploy across accounts and Regions",
+    "layout": "organization topology",
+    "points": [
+      "Administrator defines StackSet and target instances",
+      "Self-managed needs administrator/execution roles; service-managed uses Organizations integration",
+      "Choose Regions, account/OU targets and operation preferences",
+      "A StackSet is regional even when it deploys to many Regions"
+    ],
+    "diagram": "Administration account StackSet\u2192two account boxes each with Region instances; permission mode gate.",
+    "remember": "A StackSet is not a globally self-healing stack.",
+    "referencePages": [
+      571
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 7,
+    "title": "Automatic OU enrollment has a boundary",
+    "layout": "OU lifecycle",
+    "points": [
+      "Service-managed permissions can auto-deploy to new target OU accounts",
+      "Removal/move can trigger delete or retain behavior per configuration",
+      "New accounts use StackSet defaults, not prior overrides",
+      "Monitor failed instances, concurrency and failure tolerance"
+    ],
+    "diagram": "OU membership changes\u2192StackSet automatic operation\u2192new/removed stack instance; failure status route.",
+    "remember": "Enrollment must be configured and monitored.",
+    "referencePages": [
+      571
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 8,
+    "title": "Drift compares template and actual state",
+    "layout": "state comparison",
+    "points": [
+      "Manual change can diverge from a template without automatic prevention",
+      "Detect stack or resource drift for supported types/properties",
+      "Review expected versus actual configuration and remediation safety",
+      "A successful stack status does not prove in-sync resources"
+    ],
+    "diagram": "Template expected SG source /32 versus live 0.0.0.0/0\u2192drift report\u2192controlled remediation.",
+    "remember": "Drift detection observes; it does not itself block a manual change.",
+    "referencePages": [
+      572
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 9,
+    "title": "Secrets Manager references at deploy time",
+    "layout": "secret boundary",
+    "points": [
+      "CloudFormation can reference a secret value without embedding it in template",
+      "Secrets Manager owns secret and rotation lifecycle",
+      "Runtime application/database integration must consume rotated value appropriately",
+      "Protect resolution permissions, logs and replacement-sensitive properties"
+    ],
+    "diagram": "Secret in Secrets Manager\u2192dynamic reference resolution\u2192RDS property; rotation path distinct from stack update.",
+    "remember": "A rotated secret is not automatically a new CloudFormation deployment.",
+    "referencePages": [
+      573
+    ],
+    "service": "AWS-Secrets-Manager"
+  },
+  {
+    "sequence": 10,
+    "title": "Import an existing resource safely",
+    "layout": "import transaction",
+    "points": [
+      "Manual import template describes whole stack and target resource",
+      "Provide resource identifier and DeletionPolicy for imported item",
+      "Import must not create/delete/change other resources in same operation",
+      "After import run drift detection; one resource cannot belong to two stacks in same Region"
+    ],
+    "diagram": "Existing S3 bucket+whole-stack template+identifier\u2192IMPORT change set\u2192managed stack\u2192drift check.",
+    "remember": "Import changes management ownership, not the resource identity.",
+    "referencePages": [
+      574
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 11,
+    "title": "Automatic import has narrower rules",
+    "layout": "alternative import paths",
+    "points": [
+      "Auto-import needs supported type with static custom name and identifier",
+      "DeletionPolicy must be Retain or RetainExceptOnCreate",
+      "Manual import accepts any valid DeletionPolicy for imported resource",
+      "Neither path should assume arbitrary resource types are supported"
+    ],
+    "diagram": "Two alternative import lanes with distinct prerequisites; converge on managed stack and drift check.",
+    "remember": "Check import method prerequisites before writing the template.",
+    "referencePages": [
+      574
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 12,
+    "title": "Service Catalog separates admin and user",
+    "layout": "portfolio topology",
+    "points": [
+      "Admin authors versioned approved product and portfolio",
+      "IAM grants end users portfolio/product access",
+      "Launch constraint can use scoped provisioning role",
+      "User launches provisioned product with approved configuration"
+    ],
+    "diagram": "Admin\u2192product version\u2192portfolio+constraints\u2192authorized user\u2192provisioned product.",
+    "remember": "Portal access and provisioning authority are distinct.",
+    "referencePages": [
+      575,
+      576,
+      577
+    ],
+    "service": "AWS-Service-Catalog"
+  },
+  {
+    "sequence": 13,
+    "title": "Constrain a self-service product",
+    "layout": "governance decision board",
+    "points": [
+      "Product template or supported Terraform artifact is not the entire policy",
+      "Portfolio association, access and constraints shape allowed launches",
+      "Provisioning role scopes actual resource creation",
+      "Review tags, parameters, updates and termination behavior"
+    ],
+    "diagram": "Portfolio permissions and launch role both feed product launch; blocked branch for disallowed parameters.",
+    "remember": "A catalog product can still be unsafe if its launch role is broad.",
+    "referencePages": [
+      575,
+      576,
+      577
+    ],
+    "service": "AWS-Service-Catalog"
+  },
+  {
+    "sequence": 14,
+    "title": "SAM is a CloudFormation transform",
+    "layout": "transformation diagram",
+    "points": [
+      "AWS::Serverless::Function, API and StateMachine simplify declarations",
+      "SAM CLI builds, packages, locally tests and deploys",
+      "CloudFormation operates transformed resources in the target stack",
+      "Local testing cannot prove cloud IAM/network/integration behavior"
+    ],
+    "diagram": "SAM template\u2192transform/synthesized CloudFormation resources\u2192stack; local test loop separate.",
+    "remember": "SAM reduces boilerplate; CloudFormation remains the deployment engine.",
+    "referencePages": [
+      578
+    ],
+    "service": "AWS-SAM"
+  },
+  {
+    "sequence": 15,
+    "title": "SAM traffic shifting uses aliases",
+    "layout": "deployment sequence",
+    "points": [
+      "Publish Lambda version and route via alias",
+      "DeploymentPreference configures CodeDeploy gradual shift",
+      "Pre/post traffic hooks and alarms can support rollback",
+      "Verify end-to-end API and data compatibility during shift"
+    ],
+    "diagram": "CodePipeline\u2192build/test\u2192SAM/CloudFormation\u2192CodeDeploy shifts alias v1\u2192v2\u2192API; alarm rollback path.",
+    "remember": "A traffic shift needs measurable rollback conditions.",
+    "referencePages": [
+      579
+    ],
+    "service": "AWS-SAM"
+  },
+  {
+    "sequence": 16,
+    "title": "CDK synthesizes before deployment",
+    "layout": "code-to-template",
+    "points": [
+      "TypeScript, Python, Java, C# and other supported languages define constructs",
+      "cdk synth outputs CloudFormation template and assets",
+      "Bootstrap resources/permissions can be needed for deployment",
+      "Review synthesized IAM and replacement effects, not only source code"
+    ],
+    "diagram": "CDK app\u2192construct tree\u2192synth template/assets\u2192CloudFormation\u2192AWS resources.",
+    "remember": "CDK code is not directly executed by CloudFormation.",
+    "referencePages": [
+      580
+    ],
+    "service": "AWS-Cloud-Development-Kit"
+  },
+  {
+    "sequence": 17,
+    "title": "Choose CloudFormation, SAM or CDK",
+    "layout": "comparison cards",
+    "points": [
+      "CloudFormation templates directly express resources",
+      "SAM adds serverless syntax and local developer tooling",
+      "CDK uses programming constructs and synthesizes templates",
+      "All need review, guardrails and deployment roles"
+    ],
+    "diagram": "Three alternative authoring cards converge on CloudFormation stack; Service Catalog is separate self-service distribution.",
+    "remember": "Pick authoring experience independently from governance.",
+    "referencePages": [
+      568,
+      578,
+      580
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 18,
+    "title": "Validate policy before execution",
+    "layout": "control pipeline",
+    "points": [
+      "Schema/lint and tests catch template mistakes",
+      "CloudFormation Guard checks JSON/YAML against policy rules",
+      "Hooks can warn or fail stack operations when configured",
+      "Config drift/evaluation runs after deployment and serves another question"
+    ],
+    "diagram": "Source\u2192lint/Guard\u2192change set\u2192Hook policy gate\u2192stack\u2192Config drift/evaluation; distinguish stages.",
+    "remember": "A local Guard check is not an enforced deployment gate unless wired in.",
+    "referencePages": [],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 19,
+    "title": "Guard rules express desired properties",
+    "layout": "policy example",
+    "points": [
+      "Require S3 encryption and disallow open SSH in templates",
+      "Test rules on both compliant and noncompliant fixtures",
+      "Run validation in build and preserve output with deployment revision",
+      "Rule coverage depends on paths/properties and exceptions modeled"
+    ],
+    "diagram": "Two small YAML-like resource examples\u2192Guard PASS/FAIL\u2192build decision.",
+    "remember": "An untested policy can reject good stacks or miss bad ones.",
+    "referencePages": [],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 20,
+    "title": "Hooks enforce at the stack boundary",
+    "layout": "hook decision",
+    "points": [
+      "Hook target/action/filter controls where validation runs",
+      "Warn mode records issue; fail mode blocks operation",
+      "Guard, Lambda, custom and Control Tower controls can back hooks",
+      "Account/Region activation and service permissions affect coverage"
+    ],
+    "diagram": "Change set execution\u2192configured Hook evaluates\u2192warn or fail\u2192resource operation only if permitted.",
+    "remember": "A Hook must be activated and scoped to the intended target.",
+    "referencePages": [],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 21,
+    "title": "Separate design, deployment and runtime roles",
+    "layout": "permission map",
+    "points": [
+      "Author can edit code without production deployment authority",
+      "Deployment role needs scoped CloudFormation and passed service role",
+      "Service role creates supported resources; custom Lambda has its own role",
+      "Protect IAM/PassRole, KMS, S3 assets and termination actions"
+    ],
+    "diagram": "Author\u2192pipeline\u2192CloudFormation execution role\u2192resource APIs; custom provider separate.",
+    "remember": "Least privilege has multiple roles, not one administrator.",
+    "referencePages": [],
+    "service": "AWS-Identity-and-Access-Management"
+  },
+  {
+    "sequence": 22,
+    "title": "Walkthrough: safe RDS template update",
+    "layout": "five-stage case",
+    "points": [
+      "Inspect change set for replacement and data impact",
+      "Apply UpdateReplacePolicy/Snapshot as appropriate",
+      "Approve during maintenance with backup/restore plan",
+      "Deploy and validate endpoint, data and stack events"
+    ],
+    "diagram": "DB v1 template\u2192change-set replacement gate\u2192snapshot/retention\u2192DB v2\u2192health/data validation; failure rollback.",
+    "remember": "Do not treat a successful template validation as a safe database replacement.",
+    "referencePages": [
+      569
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 23,
+    "title": "Walkthrough: import a live S3 bucket",
+    "layout": "import case",
+    "points": [
+      "Capture bucket name and current configuration",
+      "Build full stack template with target bucket and DeletionPolicy",
+      "Create IMPORT change set without unrelated create/update",
+      "Execute then detect drift and reconcile differences"
+    ],
+    "diagram": "Existing bucket\u2192template identifier+policy\u2192import change set\u2192stack ownership\u2192drift report.",
+    "remember": "Import first; alter configuration in a later reviewed update.",
+    "referencePages": [
+      574
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 24,
+    "title": "Walkthrough: block an unsafe security group",
+    "layout": "policy lab",
+    "points": [
+      "Proposed template opens SSH to 0.0.0.0/0",
+      "Guard rule fails validation before change set",
+      "Hook in fail mode can enforce in deployment",
+      "Correct source CIDR, rerun policy and inspect stack events"
+    ],
+    "diagram": "Unsafe template\u2192Guard FAIL; corrected template\u2192Guard PASS\u2192change set\u2192Hook\u2192stack.",
+    "remember": "A passing check has meaning only for rules actually configured.",
+    "referencePages": [
+      572
+    ],
+    "service": "AWS-CloudFormation"
+  },
+  {
+    "sequence": 25,
+    "title": "Policy controls act at different boundaries",
+    "layout": "four-layer control comparison",
+    "points": [
+      "CDK Aspects inspect or alter the construct tree during synthesis",
+      "Guard evaluates templates or change sets where configured",
+      "CloudFormation Hooks can warn or block stack operations",
+      "SCPs bound principal permissions across an organization; Config detects deployed state"
+    ],
+    "diagram": "Four parallel layers: CDK synth, Guard/Hook deployment validation, Organizations SCP permission boundary, Config postdeployment evaluation. Do not draw as a single mandatory chain.",
+    "remember": "Choose a control by the boundary it actually enforces.",
+    "referencePages": [],
+    "service": "AWS-Organizations"
+  },
+  {
+    "sequence": 26,
+    "title": "Secrets in IaC: reference, rotate, consume",
+    "layout": "credential lifecycle split",
+    "points": [
+      "Secrets Manager dynamic references and Systems Manager secure parameters avoid plaintext template values",
+      "CloudFormation resolves supported references during stack operations",
+      "A rotation event does not automatically update a stack or every consumer",
+      "KMS and IAM permissions, logging and consumer refresh require separate design"
+    ],
+    "diagram": "Two alternative secret stores feed CloudFormation resolution at deploy; distinct runtime consumer and rotation paths; no automatic stack update arrow from rotation.",
+    "remember": "Avoid plaintext and verify how the application receives a rotated value.",
+    "referencePages": [
+      573
+    ],
+    "service": "AWS-Secrets-Manager"
+  }
+]

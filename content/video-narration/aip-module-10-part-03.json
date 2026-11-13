@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "10",
+  "module_title": "Compute, Containers and Customer Engagement",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "R2 original Module 10 slides 7-12 confirmed via visual audit, instructional topic-first narration and independent voice cache.",
+  "part_id": "03",
+  "part_title": "Docker to Amazon ECS: EC2, Fargate, IAM, Load Balancing and EFS",
+  "script_revision": "2026-11-13-m10-p03-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "From Dockerfile to Running Containers on AWS",
+      "narration": "The top of this slide is a deployment sequence: Dockerfile, image, registry, then running workload. The Dockerfile defines a supported base image, adds dependencies and application code, and specifies the startup command. The build creates an immutable image artifact that can be tagged and stored in Amazon ECR. From there, an ECS task definition or EKS deployment selects the image to run. Look at the runtime configuration panels: container ports must match the application listener, and the load balancer must target the correct port. Environment variables let different stages use the same image with different settings, but credentials belong in Secrets Manager or another approved secret source rather than hard-coded in image layers. One sample contains a database URL, which should be treated as configuration only if it carries no secret. For GenAI services, pin dependency versions, scan images, avoid root where feasible, and ensure the application container has health checks and least-privilege permissions. Docker packages the runtime; ECS and EKS provide different orchestration models."
+    },
+    {
+      "slide": 8,
+      "title": "ECS with EC2 launch type",
+      "narration": "This ECS architecture shows containers scheduled onto EC2 container instances that your organisation operates. The task definition supplies the image, CPU and memory requirements, port mappings and other runtime settings. An ECS service keeps the desired number of tasks running and replaces unhealthy tasks, while an Application Load Balancer routes requests to healthy registered targets. Look at the two EC2 hosts in the cluster. AWS ECS handles scheduling, but your team still provisions suitable EC2 capacity, patches operating systems, manages host-level security and scales the fleet. If there is no available CPU, memory or networking capacity, a desired task may remain pending even though the ECS service requests it. Capacity providers and Auto Scaling can help coordinate host capacity with task demand, but do not remove all operational responsibility. For a GenAI API, this approach can make sense when you need instance-level customisation or supported accelerator configurations. Verify task placement, image access, IAM roles and target health separately when diagnosing a failed deployment."
+    },
+    {
+      "slide": 9,
+      "title": "Amazon ECS with Fargate",
+      "narration": "Now compare the same ECS application running as Fargate tasks in private subnets. You still define the container image, task CPU and memory, environment variables, secrets, ports and logging configuration. But you no longer maintain the underlying EC2 container hosts. The Application Load Balancer accepts the client connection and routes it to task network interfaces, while ECS maintains the desired number of tasks. Follow the comparison panel on the right: Fargate simplifies host patching and capacity management, whereas ECS on EC2 gives more host control and different workload compatibility. Fargate tasks still need subnet routing, security groups, ECR image pull access, suitable task execution and task roles, and connectivity to downstream services. Serverless containers are not the same as zero operational work. You remain responsible for application vulnerabilities, secrets, service scaling policy, monitoring and budget controls. Choose Fargate when the workload fits its resource capabilities and reduced infrastructure management is valuable."
+    },
+    {
+      "slide": 10,
+      "title": "ECS IAM roles: two different purposes",
+      "narration": "This slide is a useful security distinction. The ECS task execution role is used by the ECS agent or Fargate infrastructure on the task's behalf for platform functions such as retrieving the image from ECR and sending logs to CloudWatch Logs. The task role is exposed to the application code inside the running container and grants only the AWS API actions that code needs. For example, a document-answering service may read an approved S3 prefix and invoke an authorised Bedrock model using its task role. Those Bedrock permissions do not belong in the execution role simply because the image runs under ECS. Conversely, permissions to fetch a private ECR image typically belong in the execution role. The diagram shows separate arrows from those identities to their destinations; preserve that separation. If image pulling fails, inspect the execution role and network path. If the application receives Bedrock AccessDenied, inspect the task role and its resource policies. This separation limits the permissions available to compromised application code."
+    },
+    {
+      "slide": 11,
+      "title": "ECS load balancer integration",
+      "narration": "Trace the request from the user's DNS lookup to Route 53, then HTTPS into the public Application Load Balancer. The ALB terminates TLS and forwards requests to the ECS target group, which checks an application health endpoint before sending traffic to tasks. The ECS service maintains the desired task count and registers or deregisters tasks as deployments change. The diagram illustrates dynamic host ports for an EC2 launch type, allowing multiple tasks to share a host without fighting over one fixed host port. In Fargate or awsvpc network mode, tasks typically register their own network-interface IPs with an IP target group instead; the host-port arrangement differs. If a deployment reports unhealthy targets, check the container listener, health-check path, target group port, security groups, and startup readiness before blaming DNS. For a GenAI service, consider long-running requests and timeout settings, but don't simply raise every timeout without diagnosing inference latency. External HTTPS, task routing and application health are distinct checkpoints."
+    },
+    {
+      "slide": 12,
+      "title": "ECS persistent data with EFS",
+      "narration": "This slide shows several ECS tasks across Availability Zones mounting the same regional Amazon EFS file system. Each task uses an EFS access point to select an application path and enforce supported POSIX identity and directory permissions. The shared file system preserves data when a task is restarted or replaced, and can serve multiple tasks that need the same content. Security groups are an important network gate: the task must reach the relevant EFS mount target using NFS over TCP port twenty forty-nine. You also need the appropriate EFS access-point settings, file permissions and IAM authorisation where configured. A common use case is shared application content or files needed by multiple workers, but don't assume EFS is the best storage for every database or heavy random-I/O workload. For containerised GenAI, a shared artifact repository may help selected workloads, while S3 remains a better fit for many durable object datasets. Test multi-task access, permission isolation and throughput before relying on the shared mount in production."
+    }
+  ]
+}

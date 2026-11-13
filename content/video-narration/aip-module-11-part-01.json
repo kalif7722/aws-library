@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "11",
+  "module_title": "Purpose-Built Databases for GenAI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 11 R2 slides 1-3 verified against spatial audit; topic-based teaching, fresh audio revision.",
+  "part_id": "01",
+  "part_title": "Purpose-Built GenAI Databases and Amazon DocumentDB",
+  "script_revision": "2026-11-13-m11-p01-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Purpose-built databases for GenAI",
+      "narration": "The opening slide presents the data-storage choices that sit behind a generative AI application. A relational database handles strongly structured operational records and transactions. A document database works with nested or evolving JSON-style documents. A cache provides low-latency access to frequently requested values, while a graph database represents connected entities and their relationships. A vector store or search index retrieves semantically similar content for a model prompt. These systems are not interchangeable merely because all of them hold data. A customer-support assistant may use a document database for article metadata, a vector index for passage retrieval, a cache for repeated queries, and a relational system for customer accounts. Look at the central GenAI application as the coordinator that chooses the appropriate data store for each request. Before selecting a service, identify the access pattern, expected latency, consistency and durability requirements, query types and data governance rules. One specialised store rarely solves every part of an AI architecture well."
+    },
+    {
+      "slide": 2,
+      "title": "Amazon DocumentDB for customer-support retrieval",
+      "narration": "This slide traces a customer-support article as it becomes structured information for retrieval. The example contains an Aurora billing troubleshooting document with a title, nested summary, ordered steps and links to related articles. Its metadata includes product, category, language, audience and tags. Version history records how its content changed. These are natural fields for a flexible document representation, and the slide shows them being stored in Amazon DocumentDB. A separate ingestion path generates an embedding reference and uses vector and metadata search to identify relevant support material. When a user asks a question, the application collects the selected passages and their metadata, then provides the verified context to a foundation model for a cited answer. Important: storing an embedding reference in a JSON document doesn't itself create a complete vector-retrieval system. The retrieval implementation needs compatible indexing, permissions and query semantics. The schema evolution example demonstrates why flexible nested documents help when articles gain tags, structured steps or revision records. But a flexible schema still benefits from validation and an explicit versioning strategy."
+    },
+    {
+      "slide": 3,
+      "title": "Amazon DocumentDB architecture and read scaling",
+      "narration": "Follow the client application as it inserts and queries nested JSON-like documents in Amazon DocumentDB. The slide includes different document shapes: an article, a dataset and a report, each with its own attributes. Indexes support queries over relevant fields; plan them around the predicates the workload actually uses rather than indexing every attribute indiscriminately. The read-scaling path shows several read replicas that can offload analytics and retrieval lookups from the primary writer. This helps workloads with many readers, such as GenAI assistants searching structured article metadata, but replica reads may have replication lag, so consistency requirements matter. On the right, the retrieval application gets relevant records, combines them with other approved context, and asks an LLM to generate a grounded answer. A document database is well suited to evolving structured content; it isn't automatically a replacement for a dedicated semantic vector search or a graph traversal engine. For production, also design encryption, VPC access, failover and index maintenance."
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "service": "AI Anomaly Detector",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "replace a historical time-series anomaly endpoint",
+    "input": "The analyst retains timestamped measurements, sampling intervals and known anomaly labels.",
+    "action": "Anomaly Detector historically evaluated submitted time-series values for abnormal points or trends. The replacement must preserve input frequency, missing-value policy and accepted alert thresholds.",
+    "output": "The operations application reviews replacement anomalies against real equipment or business events.",
+    "check": "Replay seasonal and abnormal series and compare false alarms before replacing the historical API.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/anomaly-detector/overview",
+    "legacy": true
+  },
+  {
+    "service": "App Configuration",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "release a checkout feature flag with scoped configuration access",
+    "input": "The release owner defines the checkout flag, targeting rules and a rollback value.",
+    "action": "App Configuration stores the selected keys and feature flags. The application's configuration provider retrieves accepted values; application code evaluates the flag and executes the chosen checkout behavior.",
+    "output": "The release owner enables the feature for the approved cohort and watches its business acceptance results.",
+    "check": "Verify refresh timing, cohort targeting, missing-key behavior and rollback without exposing configuration credentials.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-app-configuration/overview",
+    "legacy": false
+  },
+  {
+    "service": "Artifact Signing",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "sign a reviewed desktop installer before distribution",
+    "input": "The build owner supplies the reviewed installer and its approved signing identity.",
+    "action": "Artifact Signing signs supported artifacts using the configured certificate profile and access policy. Signing proves the approved publisher association; it does not establish that the installer is free of vulnerabilities.",
+    "output": "The distribution pipeline publishes the signed installer and clients verify its signature before installation.",
+    "check": "Verify publisher identity, timestamp and tamper detection on the actual delivered artifact.",
+    "reference": "https://learn.microsoft.com/en-us/azure/trusted-signing/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure AI Bot Service",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "connect a customer-support bot to a supported channel",
+    "input": "The customer sends a support message through the configured and permitted bot channel.",
+    "action": "Bot Service supplies supported bot registration and channel connectivity, forwarding activities to the configured bot endpoint. Bot application code handles the dialogue and calls authorized order-status tools.",
+    "output": "The bot backend returns its reply through the channel after validating customer access to the retrieved order.",
+    "check": "Test channel authentication, conversation state, tool denial and escalation to a human support agent.",
+    "reference": "https://learn.microsoft.com/en-us/azure/bot-service/bot-service-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure AI Custom Vision",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "train and deploy a reviewed visual defect classifier",
+    "input": "The quality engineer supplies labeled normal and defective product images with representative capture conditions.",
+    "action": "Custom Vision's supported training workflow learns the configured image classification or detection task. The accepted model iteration is published or exported through its supported path for application inference.",
+    "output": "The inspection application uses the selected model and routes uncertain or defective items to a quality reviewer.",
+    "check": "Measure defect recall, false rejects and behavior under changed lighting before accepting the iteration.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/custom-vision-service/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure AI Immersive Reader",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "present a reading aid for an approved lesson",
+    "input": "The learning application submits authorized lesson text and the selected reader configuration.",
+    "action": "Immersive Reader displays text using supported reading-assistance capabilities such as narration, highlighting and language aids. The application controls lesson selection and issues the permitted launch token.",
+    "output": "The learner uses the configured reader experience while the learning application retains course ownership and access control.",
+    "check": "Test supported language, token scope, content access and accessibility using the actual lesson.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/immersive-reader/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure AI Search",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "retrieve product documents for an authorized search query",
+    "input": "The search backend receives a validated query and the user's permitted product scope.",
+    "action": "AI Search indexes configured documents and executes supported keyword, vector or hybrid queries. The application configures filters and retrieves results under restricted credentials; index content and access rules govern the available evidence.",
+    "output": "The application presents permitted product matches and source fields rather than unrestricted index contents.",
+    "check": "Test index freshness, field exposure, permission filters and relevance with representative customer searches.",
+    "reference": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search",
+    "legacy": false
+  },
+  {
+    "service": "Azure AI Video Indexer",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "index training videos for searchable speech and scenes",
+    "input": "The media owner uploads authorized training videos with language and access requirements.",
+    "action": "Video Indexer extracts supported video and audio insights such as transcripts and detected scene information. The chosen indexing settings produce searchable metadata; the owner verifies generated insight accuracy.",
+    "output": "The learning application searches the indexed transcript and links the learner to the relevant video timestamp.",
+    "check": "Check transcript quality, sensitive-person data, timestamp alignment and access to the original video.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-video-indexer/video-indexer-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Analysis Services",
+    "cloud": "Azure",
+    "mode": "data",
+    "title": "serve a governed semantic model for financial reporting",
+    "input": "The analyst prepares approved warehouse tables and the financial semantic model.",
+    "action": "Analysis Services hosts the configured tabular semantic model, relationships and calculations. Model processing refreshes its data, and permitted clients query the model under its role-based access settings.",
+    "output": "The reporting client requests accepted measures and presents the authorized financial view.",
+    "check": "Reconcile measures, refresh completeness and role filters against known financial reporting cases.",
+    "reference": "https://learn.microsoft.com/en-us/azure/analysis-services/analysis-services-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure App Testing",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "validate an application release under browser and load tests",
+    "input": "The release team supplies the staging endpoint, user journeys and performance acceptance targets.",
+    "action": "Azure App Testing's selected testing capabilities execute configured browser or load checks against the application. Test clients generate activity; the application backend performs the business operations.",
+    "output": "The release pipeline uses test results and failures to decide whether the staging build can be promoted.",
+    "check": "Check functional assertions, peak-load behavior, test data cleanup and safe failure thresholds.",
+    "reference": "https://learn.microsoft.com/en-us/azure/app-testing/",
+    "legacy": false
+  }
+]

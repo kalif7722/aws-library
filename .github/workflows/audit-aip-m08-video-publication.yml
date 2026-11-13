@@ -1,0 +1,81 @@
+name: Audit and diagnose missing Module 08 Videos 07-09
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/audit-aip-m08-video-publication.yml"
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Render AIP Module 08 — original-slide Videos 07 to 09"
+    types: [completed]
+permissions:
+  contents: write
+concurrency:
+  group: aip-m08-video-publication-audit
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit R2 objects and course-player API for Module 08
+        run: |
+          python - <<'PY'
+          import json, urllib.request, urllib.error
+          from pathlib import Path
+          root="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aip"
+          site="https://aws-library.kalifs.workers.dev"
+          results=[]
+          for i in (7,8,9):
+              p=f"{i:02d}"
+              expected={"07":(31,32,"2026-11-12-m08-p07-topic-waf-v2"),"08":(33,38,"2026-11-12-m08-p08-topic-vpc-v2"),"09":(39,44,"2026-11-12-m08-p09-topic-private-v2")}
+              start,end,revision=expected[p]
+              prefix=f"{root}/module-08/part-{p}/aip-module-08-part-{p}"
+              row={"part":p,"slides":[start,end],"expected_revision":revision}
+              for kind,uri in (("manifest",prefix+"-manifest.json"),("mp4",prefix+".mp4")):
+                  req=urllib.request.Request(uri,headers={"User-Agent":"aip-m08-video-audit/1.0","Range":"bytes=0-8191"} if kind=="manifest" else {"User-Agent":"aip-m08-video-audit/1.0","Range":"bytes=0-0"})
+                  try:
+                      with urllib.request.urlopen(req,timeout=20) as res:
+                          row[kind+"_status"]=res.status
+                          row[kind+"_content_type"]=res.headers.get("Content-Type")
+                          if kind=="manifest":
+                              raw=res.read()
+                              try:
+                                  j=json.loads(raw)
+                                  scenes=j.get("scenes",[])
+                                  row["actual_revision"]=j.get("script_revision")
+                                  row["actual_slides"]=[s.get("slide") for s in scenes]
+                                  row["actual_first_title"]=scenes[0].get("title") if scenes else None
+                                  row["manifest_valid"]=row["actual_revision"]==revision and row["actual_slides"]==list(range(start,end+1))
+                                  row["first_title"]=j.get("scenes",[{}])[0].get("title") if j.get("scenes") else None
+                                  row["manifest_scene_count"]=len(scenes)
+                              except Exception as e: row["manifest_parse_error"]=str(e)[:180]
+                          else: row["mp4_first_byte_len"]=len(res.read(1))
+                  except Exception as e: row[kind+"_error"]=str(e)[:180]
+              req=urllib.request.Request(f"{site}/api/aip-video?module=08&part={p}",headers={"User-Agent":"aip-m08-video-audit/1.0"})
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as res:
+                      row["api_http"]=res.status
+                      row["api"]=json.loads(res.read(10000)).get("status")
+              except Exception as e: row["api_error"]=str(e)[:180]
+              row["ready_in_R2"]=bool(row.get("manifest_valid") and row.get("mp4_status") in (200,206))
+              results.append(row)
+              print(json.dumps(row),flush=True)
+          out=Path("docs/video-review/aip/module-08/r2-publication-audit.json")
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps({"module":"08","videos":results},indent=2)+"\n")
+          PY
+      - name: Commit publication audit results
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs/video-review/aip/module-08/r2-publication-audit.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Audit Module 08 R2 MP4 and player publication state"
+            git push origin HEAD:main
+          fi

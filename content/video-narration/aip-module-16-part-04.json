@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "16",
+  "module_title": "Networking and Content Delivery",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All original Module 16 numbered R2 slides 01–18 passed spatial source audit; source content overrides legacy PDF lesson titles.",
+  "part_id": "04",
+  "part_title": "Route 53 DNS, Records, Private Zones and Failover",
+  "script_revision": "2026-11-13-m16-p04-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 13,
+      "title": "Route 53 Domain Registration, Recursive Resolution and TTL Caches",
+      "narration": "Follow a DNS query through the four stages. A client asks for a domain name, its recursive resolver looks in the cache, and, if needed, follows the DNS hierarchy through root and top-level-domain name servers to the authoritative Route 53 hosted zone. The authoritative answer returns a record and TTL value, which the recursive resolver can cache. The illustration uses a sample IPv4 address and a TTL of three hundred seconds. These are teaching examples, not addresses you should configure. The lower lab shows registering or using a domain, creating a public hosted zone, entering an A record, and inspecting dig output. Do not confuse registration with hosting authoritative DNS; a domain registration and delegation to the correct name servers are separate requirements. TTL balances reuse and responsiveness: a lower value allows cached answers to expire sooner but creates more DNS queries. Changing a record does not instantly alter every client's previously cached answer."
+    },
+    {
+      "slide": 14,
+      "title": "Route 53 Record Types and Aliases",
+      "narration": "Read the comparison of record types from left to right. An A record maps a name to an IPv4 address, and AAAA maps to IPv6. A CNAME points one DNS name to another name. NS records specify authoritative name servers and are important in delegation. A Route 53 alias is a provider-specific record capability that can point supported record types to eligible AWS targets, including CloudFront distributions and Application Load Balancers, without copying a fixed service address. The example cautions that a CNAME cannot be placed at the zone apex, such as example dot com, because of DNS rules. An alias record can serve supported targets at the apex instead. In the console walkthrough, choose the hosted zone, create an A or AAAA record or supported alias, and inspect the resulting record list. Ensure the alias target type matches the resource; do not assume any arbitrary hostname can be used as an alias target. DNS is name resolution, not an automatic application health check unless you explicitly configure health-aware routing."
+    },
+    {
+      "slide": 15,
+      "title": "Public vs Private Hosted Zones",
+      "narration": "This image divides DNS visibility into public and private zones. A public hosted zone answers internet-facing authoritative DNS queries after the domain is properly delegated to its name servers. A private hosted zone resolves inside associated VPCs through Route 53 Resolver rather than being published for general internet resolution. Follow the sample EC2 instances in a VPC using the Amazon-provided resolver address, illustrated as the VPC base plus two. A VPC that is not associated with the private zone will not automatically receive those private-zone answers. The lower lab creates a private hosted zone, associates a VPC, adds an internal record, and runs nslookup from an EC2 instance inside the associated network. The example internal name is not public simply because a similar public domain exists. Be careful about overlapping public and private names, resolver forwarding, VPC DNS settings and network connectivity when building hybrid applications. For private AI services, this separation can keep service discovery internal while public entry points use a separate namespace or zone."
+    },
+    {
+      "slide": 16,
+      "title": "DNS routing: health checks, failover, and TTL tradeoffs",
+      "narration": "The architecture shows a primary load balancer in one Region and a secondary in another, with Route 53 failover records choosing which DNS answer to return. When the primary health check is healthy, the resolver can receive the primary record. When it becomes unhealthy, the failover routing policy can return the secondary endpoint if the configuration permits it. This is DNS-based steering, not the instantaneous rerouting of an existing TCP connection. Clients and recursive resolvers can continue using cached answers until the TTL expires. The lower section compares shorter TTL values, such as thirty to sixty seconds, with their effect on lookup frequency and responsiveness. Do not treat a low TTL as a guarantee that every client switches exactly at that time. The lab creates health checks and failover records and inspects their association. For reliable multi-Region AI applications, also plan consistent application state, downstream model availability, authentication, and traffic recovery; DNS failover cannot repair an unavailable regional backend by itself."
+    }
+  ]
+}

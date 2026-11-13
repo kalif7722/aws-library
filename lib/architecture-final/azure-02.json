@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Azure Automanage",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "replace historical automated VM management configuration",
+    "input": "The operator inventories assigned VM management profiles and the services they enabled.",
+    "action": "Automanage historically coordinated supported VM management settings and integrations. The replacement must preserve patching, backup or monitoring responsibilities through supported resource policies and automation.",
+    "output": "The operations team applies the accepted configuration using its new management workflow.",
+    "check": "Compare actual VM settings and recovery procedures before removing historical profile management.",
+    "reference": "https://learn.microsoft.com/en-us/azure/automanage/overview-about",
+    "legacy": true
+  },
+  {
+    "service": "Azure Blueprints",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "move a historical landing-zone blueprint to deployment stacks",
+    "input": "The platform owner exports blueprint definitions, assignments and governed resource dependencies.",
+    "action": "Blueprints historically assembled governance and deployment artifacts into assignments. Migrate supported resource ownership to deployment stacks and retain policy assignments through their explicit governance mechanisms.",
+    "output": "The platform deployment applies the reviewed templates and policies without relying on the historical blueprint assignment.",
+    "check": "Compare resource ownership, locks, policy effects and delete behavior before accepting the replacement.",
+    "reference": "https://learn.microsoft.com/en-us/azure/governance/blueprints/blueprint-retirement",
+    "legacy": true
+  },
+  {
+    "service": "Azure Boards",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "coordinate a release through linked work items",
+    "input": "The product owner defines a feature, acceptance requirements and assigned engineering tasks.",
+    "action": "Boards stores and organizes the team's work items, backlog and workflow state. Linked pull requests and builds provide evidence; changing a work-item state does not itself build or deploy the feature.",
+    "output": "The release owner checks implemented tasks and acceptance evidence before approving the release item.",
+    "check": "Verify work-item links, permissions and acceptance results rather than closing unfinished work by status alone.",
+    "reference": "https://learn.microsoft.com/en-us/azure/devops/boards/get-started/what-is-azure-boards",
+    "legacy": false
+  },
+  {
+    "service": "Azure Cache for Redis",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "move application caching to an accepted Redis-compatible target",
+    "input": "The application owner inventories cache keys, expiry policy and supported Redis commands.",
+    "action": "Azure Cache for Redis serves the application's configured cache operations on existing deployments. Migration to a supported target preserves command compatibility and treats authoritative business data separately from disposable cache entries.",
+    "output": "The backend queries the replacement cache, falls back to its database on a miss and refreshes permitted entries.",
+    "check": "Test expiry, reconnect behavior, cold-cache load and safe cutover before removing the original endpoint.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-cache-for-redis/cache-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Chaos Studio",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "test application recovery from an approved failure",
+    "input": "The resilience owner selects a bounded fault, target resources and stop conditions.",
+    "action": "Chaos Studio injects supported configured faults during the experiment under its authorized identities. The experiment disrupts selected dependencies; it does not automatically prove business resilience or repair application code.",
+    "output": "The application owner observes recovery and corrects the verified weakness through the normal change process.",
+    "check": "Confirm blast radius, emergency stop and application recovery using the agreed service-level acceptance criteria.",
+    "reference": "https://learn.microsoft.com/en-us/azure/chaos-studio/chaos-studio-overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Cloud HSM",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "perform a protected cryptographic operation for an application",
+    "input": "The authorized application supplies a supported cryptographic request and permitted key identifier.",
+    "action": "Cloud HSM provides the configured hardware-protected key and cryptographic execution boundary. The client uses the supported interface and authorization model; key custody and backup follow the selected deployment requirements.",
+    "output": "The application consumes the signature or cryptographic result without exporting protected key material.",
+    "check": "Check key-access denial, supported algorithms, client failover and recovery of required key backups.",
+    "reference": "https://learn.microsoft.com/en-us/azure/cloud-hsm/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Communication Services",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "start an authorized telehealth communication session",
+    "input": "The healthcare application validates the participant and requests the permitted communication identity or session.",
+    "action": "Communication Services provides supported calling, chat or messaging capabilities through its selected SDKs and APIs. The application controls participant identity, session authorization and clinical data access.",
+    "output": "The authorized participants communicate while the healthcare backend retains clinical record ownership.",
+    "check": "Test token expiry, participant isolation, reconnect behavior and explicit recording consent where recording is enabled.",
+    "reference": "https://learn.microsoft.com/en-us/azure/communication-services/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Compute Fleet",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "provision flexible compute capacity for a batch workload",
+    "input": "The batch owner defines acceptable VM sizes, capacity target and spot-versus-regular policy.",
+    "action": "Compute Fleet acquires and manages the configured pool of supported VM capacity across selected sizes and zones. The batch scheduler assigns actual tasks to available workers and handles interruptions.",
+    "output": "Workers execute the accepted batch tasks and persist outputs outside disposable compute.",
+    "check": "Test capacity shortfall, spot eviction, task checkpointing and cleanup of completed worker capacity.",
+    "reference": "https://learn.microsoft.com/en-us/azure/azure-compute-fleet/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Confidential Ledger",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "record a tamper-evident business acceptance entry",
+    "input": "The application submits the accepted transaction digest and authorized audit context.",
+    "action": "Confidential Ledger appends the permitted entry to its protected ledger and supplies supported integrity evidence. The application determines what the digest represents; ledger integrity does not validate the original business transaction.",
+    "output": "The auditor retrieves the ledger entry and validates its receipt using the supported verification procedure.",
+    "check": "Test writer permissions, digest reconciliation and independent receipt verification for a known record.",
+    "reference": "https://learn.microsoft.com/en-us/azure/confidential-ledger/overview",
+    "legacy": false
+  },
+  {
+    "service": "Azure Container Storage",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "attach managed storage to a stateful Kubernetes workload",
+    "input": "The platform owner defines supported storage pools, capacity and the workload's volume requirements.",
+    "action": "Container Storage supplies supported storage orchestration for Kubernetes persistent volumes. The configured storage class and claims determine the pod's volume; the database process inside the pod performs actual reads and writes.",
+    "output": "The stateful workload writes its accepted application state to the mounted persistent volume.",
+    "check": "Test pod rescheduling, storage capacity, snapshot or backup support and application-consistent restore.",
+    "reference": "https://learn.microsoft.com/en-us/azure/storage/container-storage/container-storage-introduction",
+    "legacy": false
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "16",
+  "module_title": "Networking and Content Delivery",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All original Module 16 numbered R2 slides 01–18 passed spatial source audit; source content overrides legacy PDF lesson titles.",
+  "part_id": "02",
+  "part_title": "Elastic Load Balancing: ALB, NLB, Gateway and TLS",
+  "script_revision": "2026-11-13-m16-p02-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Listeners, targets, health checks, and multi-AZ design",
+      "narration": "Begin with the single load balancer DNS name that clients use. Its listeners receive traffic on configured ports, such as HTTP eighty and HTTPS four hundred forty-three, and forward matching requests to target groups. Registered EC2 instances are spread across at least two Availability Zones in the diagram. Health checks determine which targets are eligible to receive new requests; an unhealthy instance should be investigated rather than assumed available simply because its EC2 status is running. In the walkthrough, create an Application Load Balancer, select subnets and a target group, configure listeners, and inspect registered targets in the console. The healthy status in the example is the outcome to verify, not a guarantee. A multi-AZ setup reduces dependence on one zone, but applications also need appropriate deployment capacity, data access, and failure recovery. For an AI API, distinguish frontend request balancing from the capacity and quotas of its downstream model endpoints."
+    },
+    {
+      "slide": 7,
+      "title": "ALB Layer 7 Routing",
+      "narration": "The browser, mobile client, and gRPC client all connect to the same Application Load Balancer, but listener rules send them to different target groups. Follow the host-header example for app dot example dot com to the web application, the slash api path to an API service, and the gRPC path and HTTP two traffic to a gRPC target. ALB operates at the application layer and understands HTTP routing conditions; this is why host-based and path-based routing are possible. The lower console screenshot shows rule priorities and forwarding actions, with sample curl and grpcurl responses used as illustrations. Configure more specific rules before the default action and confirm that target group protocols, ports, health checks, and application listeners agree. TLS termination at the front end does not necessarily mean backend traffic is encrypted. For GenAI applications, different paths might serve static pages, API orchestration, and streaming or RPC services without exposing each implementation behind a separate public entry point."
+    },
+    {
+      "slide": 8,
+      "title": "Network Load Balancer (NLB)",
+      "narration": "This slide shifts from application routing to Layer four transport handling. The Network Load Balancer routes supported TCP, UDP, and TLS traffic to targets, and its per-zone static address behavior can support fixed network entry points. Follow clients through the NLB to EC2 or IP targets. Unlike an ALB, an NLB does not use URL paths or host headers to choose an HTTP application target. The lower lab creates an internet-facing NLB, chooses Availability Zone subnets, registers an appropriate target group, and adds a TCP listener. The console illustration lists IP addresses for the mapped zones; treat them as examples rather than addresses to deploy. Static addresses and low-latency transport make NLB useful for network protocols or applications where clients need stable IP allowlists. It does not replace a web-aware load balancer when routing decisions require HTTP methods, headers, or paths. Consider health checks, TLS choices, and cross-zone behavior according to the actual configuration."
+    },
+    {
+      "slide": 9,
+      "title": "Gateway Load Balancer",
+      "narration": "Now focus on the inspection architecture. A spoke VPC contains workloads, while an inspection VPC hosts a target group of security appliances, such as third-party firewalls. The Gateway Load Balancer transparently distributes selected IP flows to those appliances using GENEVE encapsulation on UDP port six thousand eighty-one. The packet is inspected, then traffic continues toward its destination according to VPC routing. This is not an HTTP load balancer and it does not make URL routing decisions. The lab walks through creating a security appliance target group, creating the Gateway Load Balancer, and updating route tables so the intended traffic passes through inspection. Route table design matters: incorrect asymmetric paths or missing return routing can break application connectivity. The slide also notes that Classic Load Balancer is a legacy option, not the preferred default for new applications. For a regulated AI environment, centralized appliance inspection may be useful, but verify which flows need inspection and how encryption affects visibility."
+    },
+    {
+      "slide": 10,
+      "title": "TLS termination and health checks",
+      "narration": "Trace HTTPS traffic from the client to the load balancer. Its HTTPS listener terminates the client TLS connection using an appropriate certificate, often managed with AWS Certificate Manager. From the load balancer, the backend connection can be HTTP or HTTPS depending on target group configuration. The slide deliberately contrasts an unencrypted HTTP target connection with an encrypted HTTPS target connection; a padlock on the public listener alone does not establish end-to-end encryption. The health check is separately configured on the target group using the supported protocol and path, such as slash health. In the illustrated console steps, create a target group, choose protocol and health settings, add an HTTPS listener on port four hundred forty-three, and inspect healthy or unhealthy targets. When a service fails checks, validate the path, backend port, security groups, status codes and application readiness. Choose backend TLS according to workload requirements and network trust boundaries, especially for sensitive AI requests."
+    }
+  ]
+}

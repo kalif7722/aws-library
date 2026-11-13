@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "08",
+  "module_title": "Security, Identity, and Compliance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Topic-grouped visual-first narration on verified original R2 slides 31-32; breaks chosen by teaching continuity, not a fixed slide count.",
+  "part_id": "07",
+  "part_title": "AWS WAF: Request Protection and Rule Evaluation",
+  "script_revision": "2026-11-12-m08-p07-topic-waf-v2",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "AWS WAF request protection",
+      "narration": "Start at the user on the left and follow the HTTP request toward CloudFront, API Gateway, or an Application Load Balancer protected by AWS WAF. Clean requests continue to the application; malicious requests can be blocked before they reach the backend. The bottom panels show three rule families. Managed rule groups detect known web attack patterns such as SQL injection and cross-site scripting. IP and geographic rules can restrict selected sources. Rate-based rules limit abusive request frequencies. Notice that WAF protects the application entry point, not the model itself. You still need authentication, least-privilege IAM permissions and prompt safety controls for a generative AI service. A rate-based rule also isn't a substitute for comprehensive distributed-denial-of-service protection. Deploy new rules with monitoring or count mode first, because an overbroad match can accidentally block legitimate clients. The lesson is to place web request inspection at the edge and verify the rules against real traffic."
+    },
+    {
+      "slide": 32,
+      "title": "WAF web ACL evaluation",
+      "narration": "This is a rule-order walkthrough. The sample request is a GET to a search endpoint. The first rule allows particular health-check paths, but the request does not match. The next rule blocks a suspected SQL injection pattern, and again there is no match. The third evaluates whether the caller's request rate exceeds the configured threshold; this example is below the limit. The request therefore reaches the web ACL's default Allow action. If an earlier rule with a terminating Block action had matched, evaluation would have stopped there. Look at the default action carefully: it is essential for requests that match none of the rules. Count actions and some challenge mechanisms have different evaluation behavior than a simple Allow or Block, so don't assume every match terminates inspection. Examine rule priorities, sampled requests and logs when debugging false positives. An ACL decision answers whether the request may proceed, not whether an authenticated user may access a particular customer record."
+    }
+  ]
+}

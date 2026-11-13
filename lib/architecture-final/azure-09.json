@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Azure Vision in Foundry Tools",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "extract image information for a reviewed catalog entry",
+    "input": "The catalog backend submits an authorized product image and selects the required vision feature.",
+    "action": "The selected Vision API analyzes the supported image and returns requested metadata such as text or visual tags. The catalog application validates relevance and avoids treating generated descriptions as authoritative product facts.",
+    "output": "The editor reviews extracted information and publishes accepted fields in the product catalog.",
+    "check": "Check unsupported image content, OCR accuracy, privacy policy and source-image ownership before publication.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+    "legacy": false
+  },
+  {
+    "service": "Batch",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "execute parallel image-conversion tasks on worker nodes",
+    "input": "The job owner supplies input object references, task commands and approved worker images.",
+    "action": "Azure Batch schedules tasks onto the configured compute pool. Each worker executes the conversion command and persists its output; job retry and pool configuration determine handling of failed or unavailable workers.",
+    "output": "The coordinator reconciles completed outputs and exposes only accepted converted files.",
+    "check": "Test node failure, duplicate tasks, input permissions and completion counts before releasing the batch result.",
+    "reference": "https://learn.microsoft.com/en-us/azure/batch/batch-technical-overview",
+    "legacy": false
+  },
+  {
+    "service": "Cloud Services",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "maintain a supported role-based application deployment",
+    "input": "The application owner supplies the supported web or worker role package and configuration.",
+    "action": "Cloud Services' selected supported deployment model hosts configured roles on its managed VM infrastructure. Web roles handle requests and worker roles execute background code; the owner maintains application and dependency compatibility.",
+    "output": "The customer uses the web endpoint while background jobs persist accepted results through restricted data connections.",
+    "check": "Test role health, configuration updates, upgrade behavior and the exact deployment model's support requirements.",
+    "reference": "https://learn.microsoft.com/en-us/azure/cloud-services-extended-support/overview",
+    "legacy": false
+  },
+  {
+    "service": "Cloud Shell",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "apply a reviewed resource command from an authenticated shell",
+    "input": "The operator chooses the correct tenant, subscription and approved infrastructure command.",
+    "action": "Cloud Shell provides a browser-accessible authenticated command environment with supported tools. CLI commands invoke resource APIs under the user's permissions; the shell is not the application's production compute runtime.",
+    "output": "The operator examines the command result and validates the intended resource configuration.",
+    "check": "Check subscription context, permissions and the actual resource state before recording the change as complete.",
+    "reference": "https://learn.microsoft.com/en-us/azure/cloud-shell/overview",
+    "legacy": false
+  },
+  {
+    "service": "Content Safety in Foundry Control Plane",
+    "cloud": "Azure",
+    "mode": "request",
+    "title": "screen submitted forum text before a publishing decision",
+    "input": "The forum backend supplies the permitted user text and configured moderation thresholds.",
+    "action": "Content Safety evaluates supported input for configured harmful-content categories and returns analysis. The application combines that result with its publishing policy; the analyzer itself does not grant or deny user account access.",
+    "output": "The moderation handler allows, rejects or queues the post for human review under the approved policy.",
+    "check": "Test false positives, evasive content, threshold changes and analysis failure before enabling automated decisions.",
+    "reference": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview",
+    "legacy": false
+  },
+  {
+    "service": "Data Catalog",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "preserve historical dataset discovery metadata in a supported catalog",
+    "input": "The data owner exports descriptions, ownership and source-system references from the historical catalog.",
+    "action": "The historical Data Catalog indexed descriptive metadata for data discovery; source databases retained their actual records and access enforcement. Migration preserves metadata meaning and validates the supported replacement's source integration.",
+    "output": "The analyst locates the dataset in the replacement catalog and requests actual source access separately.",
+    "check": "Check ownership, schema links, searchable terms and denied-source access before decommissioning the old catalog.",
+    "reference": "https://learn.microsoft.com/en-us/azure/data-catalog/overview",
+    "legacy": true
+  },
+  {
+    "service": "Data Lake Analytics",
+    "cloud": "Azure",
+    "mode": "migration",
+    "title": "replace historical U-SQL transformation jobs",
+    "input": "The engineer retains U-SQL code, source schemas, custom assemblies and expected output partitions.",
+    "action": "Data Lake Analytics historically executed submitted U-SQL analytical jobs over configured datasets. Translate the computation into a supported engine and preserve its joins, aggregation and output semantics.",
+    "output": "The replacement job writes the accepted analytical partitions for the existing report pipeline.",
+    "check": "Compare row counts, aggregates, null handling and job restart behavior before replacing the historical schedule.",
+    "reference": "https://learn.microsoft.com/en-us/azure/data-lake-analytics/data-lake-analytics-overview",
+    "legacy": true
+  },
+  {
+    "service": "Data Science Virtual Machines",
+    "cloud": "Azure",
+    "mode": "runtime",
+    "title": "develop a reproducible ML experiment on a prepared VM",
+    "input": "The scientist selects a supported data-science image and authorized training dataset.",
+    "action": "The Data Science VM image provides preinstalled supported analytical tools on a VM. Notebook or script code executes the experiment; the owner maintains the VM, dependency versions and protected dataset access.",
+    "output": "The scientist stores the experiment code and accepted model artifact in the designated project repository.",
+    "check": "Test dependency versions, reproducibility, secrets and recovery of work before replacing or stopping the VM.",
+    "reference": "https://learn.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/overview",
+    "legacy": false
+  },
+  {
+    "service": "Defender External Attack Surface Management",
+    "cloud": "Azure",
+    "mode": "control",
+    "title": "validate an externally exposed asset discovered for an organization",
+    "input": "The security owner supplies approved discovery seeds and defines the organization's ownership boundaries.",
+    "action": "External Attack Surface Management discovers and inventories supported internet-facing assets and exposure information. Discovery evidence suggests relationships; the owner validates asset ownership before requesting remediation.",
+    "output": "The verified asset owner closes an unintended exposure or records an approved exception.",
+    "check": "Check ownership, current reachability and post-change external exposure before accepting the remediation.",
+    "reference": "https://learn.microsoft.com/en-us/azure/external-attack-surface-management/overview",
+    "legacy": false
+  },
+  {
+    "service": "DevOps tool integrations",
+    "cloud": "Azure",
+    "mode": "build",
+    "title": "connect repository changes to an approved deployment workflow",
+    "input": "The maintainer selects supported repository, issue and pipeline integrations with bounded access.",
+    "action": "The configured integrations exchange supported events and status between development tools. A repository event starts the selected pipeline; build and deployment runners execute the actual release actions.",
+    "output": "The release owner follows linked commit, build and deployment evidence before accepting a change.",
+    "check": "Test webhook authentication, replay handling, least-privilege connector access and missing-status behavior.",
+    "reference": "https://learn.microsoft.com/en-us/azure/devops/service-hooks/overview",
+    "legacy": false
+  }
+]

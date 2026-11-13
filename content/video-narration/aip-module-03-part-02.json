@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "03",
+  "module_title": "Agentic AI and AWS Agent Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Visually reviewed original Module 03 slide images 07–14 across source ZIPs 01–10 and 11–20, including each agent pattern diagram.",
+  "part_id": "02",
+  "part_title": "Multi-Agent Patterns, Routing, Parallelization and Memory",
+  "script_revision": "2026-11-12-m03-p02-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Multi-Agent Translation Request",
+      "narration": "Imagine a product team that needs launch notes translated into French, Japanese and Spanish. Look at the supervisor agent in the orange box on the left. It doesn't translate everything itself. Instead, it decomposes the request by language, dispatches three independent jobs and waits for their results. Across the middle of the diagram, three specialist agents run in parallel, each producing a translated document with terminology notes. The French agent handles French terms, the Japanese agent handles Japanese phrasing, and the Spanish agent handles Spanish localization. Follow the arrows back to the supervisor on the right. It reviews terminology consistency, checks that no deliverable is missing, and assembles the final package. This demonstrates an orchestrator-workers design: workers specialize, and a coordinating agent combines and validates results. Parallelism is useful here because the translation tasks are mostly independent. But if one translation must use terminology defined by another, the coordinator needs an explicit dependency or shared glossary rather than blindly running everything simultaneously."
+    },
+    {
+      "slide": 8,
+      "title": "When to Use Multiple Agents",
+      "narration": "This slide asks a useful architecture question: should every AI workflow use multiple agents? Start with the decision tree on the left. A customer says they were charged twice and have an error in the application. If the request only requires straightforward fixed steps, the orange deterministic workflow—validate, look up, act, and respond—may be sufficient. But if the problem requires several specialized tools and complex decisions, the purple multi-agent path becomes relevant. Notice the billing specialist and technical specialist working under a coordination agent. The example on the far right shows a customer-support conversation where the request is routed to the appropriate expert, or multiple experts collaborate when needed. Now read the two warnings at the bottom: an overloaded single agent can become hard to maintain, but specialization adds coordination cost. More agents aren't automatically more accurate. Evaluate the complexity of tool selection, required expertise, latency, cost, and how results will be combined before choosing this pattern."
+    },
+    {
+      "slide": 9,
+      "title": "Supervisor and Workers",
+      "narration": "The diagram begins with a request to prepare a launch brief. A supervisor agent plans the work and delegates three subtasks: market research, pricing and risk assessment. Follow each orange arrow to a specialist worker. The research worker produces facts, the pricing worker produces cost estimates and the risk worker produces a summary of potential problems. Those three deliverables return to the supervisor, which checks for conflicting information and synthesizes a single launch brief on the right. There are four steps across the top: request, delegate, collect and synthesize. This is different from routing the user to just one specialist. Here all three workers contribute to one output. A good implementation also defines input/output schemas, deadlines, retry behavior and validation so a failed or hallucinated worker result doesn't silently enter the final document. The supervisor should have a clear policy for handling inconsistent estimates rather than merely concatenating every worker message."
+    },
+    {
+      "slide": 10,
+      "title": "Routing: Choose One Specialist",
+      "narration": "Now compare supervisor-workers with routing. The user asks why they were charged twice. The router in the centre classifies the intent and chooses the billing specialist rather than the technical support or account-access specialist. The highlighted orange branch moves to the billing system, where authorized data reveals two charges. The billing agent then explains the findings and offers to help with a review. The bottom line says it clearly: routing sends one task to one specialist. We are not launching three parallel workers, and we are not combining three separate deliverables. The architecture depends on good intent classification and reliable fallback when a question doesn't fit one route. It also needs authorization checks before the billing specialist accesses private account information. Routing can simplify prompts and tool permissions because each agent handles a smaller, coherent set of tasks. But it is not the best fit for a problem that genuinely requires several specialists to collaborate."
+    },
+    {
+      "slide": 11,
+      "title": "Agent Parallelization",
+      "narration": "The slide illustrates two forms of parallel agent work. In the upper workflow, one user asks for a climate-change article summary. Three independent workers examine the same article from different perspectives: safety, factual accuracy and style. An aggregator receives their results and produces a final response that aims to be safe, factual and on brand. Follow the three coloured paths into the aggregation box: the workers run at the same time, so the final result depends on collecting and reconciling their outputs. In the lower voting variant, several model instances independently propose an answer, and a majority vote selects the preferred result. Notice the result on the right: A wins two votes out of three. Voting does not guarantee correctness; all models may share the same mistake. Choose parallelization when subtasks or evaluations are independent and the additional computation is justified. Define how the system handles disagreement, timeouts and inconsistent recommendations rather than assuming a majority or aggregate is always reliable."
+    },
+    {
+      "slide": 12,
+      "title": "Prompt Chaining",
+      "narration": "Prompt chaining is a known sequence of model steps, and the slide depicts it as a fixed pipeline. The input asks for a training guide. The first model drafts an outline; its output becomes the input for the second model, which writes the guide. Follow the flow to the orange decision diamond: does the draft include all required sections? If the answer is no, the workflow sends feedback to revise the guide. If the answer is yes, the result continues to a translation step and becomes a translated guide on the right. Unlike a highly autonomous agent, the orchestration here is deliberately predictable. Each model step has a defined purpose, expected input and output, and an explicit quality gate. This design is useful for document generation, translation and multi-stage transformations where dependencies are known. The key risk is that errors from one stage can propagate downstream, so validate each intermediate result before passing it to the next model."
+    },
+    {
+      "slide": 13,
+      "title": "Evaluator–Optimizer Loop",
+      "narration": "This diagram demonstrates iterative improvement rather than one-pass generation. The orange generator model on the left writes a first draft of a Python function. That candidate code goes to an evaluator model in the middle, which reviews the function against stated criteria and available tests. Follow the decision diamond. If the draft satisfies the criteria, the final approved code appears on the right. If it fails, actionable feedback—such as handling empty input—is sent back to the generator. The cycle repeats until the result meets the acceptance criteria or the workflow reaches a defined stopping limit. Notice the three numbered steps along the bottom: generate, evaluate, and revise until accepted. This can improve quality, but it also costs additional model calls and may get stuck if the evaluator is unreliable. The slide explicitly cautions that passing an LLM evaluator doesn't prove correctness. For software, independent execution tests and human review may still be needed."
+    },
+    {
+      "slide": 14,
+      "title": "Adding Memory to Agents",
+      "narration": "An agent's memory is not one undifferentiated database. The upper blue panel illustrates short-term memory: the current conversation, recent tool events and retrieved results are kept in a session context, perhaps in an in-memory cache or DynamoDB. That lets the agent answer a follow-up without repeating the user's latest request. The lower orange panel illustrates long-term memory: stable preferences and useful session summaries are extracted and stored durably. In the example, a user prefers concise Python examples. A future session can retrieve that preference and adjust the response style appropriately. The diagram lists possible durable systems such as DynamoDB, relational databases and AgentCore Memory, depending on the architecture. Notice the warning at the bottom. A Bedrock Knowledge Base is useful for retrieving domain documents, but it is not automatically a personal conversation-memory system. Memory design requires explicit privacy, consent, retention, and correction controls, especially when a preference may become stale or sensitive."
+    }
+  ]
+}

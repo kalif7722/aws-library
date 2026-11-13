@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Actual 2048×1152 site-ready console-walkthrough WebPs 139–144 visually inspected from aws-aip-c01-module02-images-139-144-walkthroughs.zip; follows each numbered flow and example. R2 validation at render.",
+  "part_id": "19",
+  "part_title": "Hands-On Bedrock Data Automation and SageMaker Data Wrangler Walkthroughs",
+  "script_revision": "2026-11-12-m02-p19-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 139,
+      "title": "BDA Walkthrough: File to Structured Result",
+      "narration": "This is our first hands-on-style walkthrough in the module, showing the complete path from an invoice PDF to usable structured data. Start with the left-most Amazon S3 bucket. An invoice PDF, such as invoice-123 dot pdf, is already stored in an input location. In step two, a Bedrock Data Automation project is configured for document understanding and extracting text, tables and structured results. Step three starts an asynchronous BDA job using the input S3 URI and an output S3 URI. This distinction matters: starting a job returns control to the caller while processing continues. Step four shows BDA analysing the PDF. Step five checks job status and reads the output manifest or result files from the destination bucket. Now follow the lower half. The application identifies an invoice number, amount and source references, then can use the evidence for question answering, analytics or an approved business workflow. The key teaching point is not to assume that extracted data is already validated. Check result fields and source evidence before putting the values into a financial system or grounding an automated answer."
+    },
+    {
+      "slide": 140,
+      "title": "BDA Walkthrough: Choose Output and Blueprint",
+      "narration": "This slide takes the invoice example deeper. At step one, identify precisely what the application needs, such as invoice number, vendor and total. Step two compares standard output with custom output. Standard output is useful for general text, tables and key-value extraction; custom output follows a defined blueprint for the fields you specify. Follow the third panel, where the blueprint declares fields and types, including an invoice number as a string, vendor as a string, and total as a numeric value. Step four advises testing against several representative invoices rather than validating only one convenient sample. The lower section shows what to inspect in the JSON result: extracted values, confidence scores, and source references such as a page or region. Finally, follow the decision diamond at step six. If a field is missing or confidence is too low, use business validation, alternative extraction or a human review path. Only reliable values should reach downstream RAG or automation. This is the practical difference between merely extracting text and delivering a dependable structured output."
+    },
+    {
+      "slide": 141,
+      "title": "Data Wrangler Walkthrough: Import",
+      "narration": "Next, we begin a SageMaker Data Wrangler walkthrough using a customer-support CSV dataset. Follow the six numbered panels across the top. First, open Data Wrangler in the appropriate SageMaker environment and create a new flow. Second, choose a supported source such as Amazon S3. Third, browse to the customer-support CSV object. Fourth, configure parsing options: file format, delimiter, whether the first row contains headers, and schema inference. Fifth, review a preview of the imported data to confirm columns and types are sensible. Sixth, add the imported dataset to a flow for analysis and transformation. The sample table along the bottom contains ticket identifiers, categories, descriptions and resolution states. The two safety panels remind us to verify permissions to the source and avoid including secrets or unnecessary personally identifiable information in the dataset. Importing succeeds only when the schema and authorization are correct. A good data-preparation workflow checks both before moving to feature engineering or model training."
+    },
+    {
+      "slide": 142,
+      "title": "Data Wrangler Walkthrough: Preview and Assess",
+      "narration": "With the data imported, our next task is to assess its quality before running transformations. The first step previews sample ticket records. Step two examines inferred schema and nulls: fields such as timestamp or category may have incorrect types or missing values. Step three reviews distributions and outliers; a timestamp value far outside the expected time range is a reason to investigate. Step four searches text fields for sensitive data, including example email addresses or phone numbers in support descriptions. The fifth step applies preparation changes such as converting timestamps, filling missing categories, and removing or masking PII. The sixth step saves the validated transformation so the same cleaning process can be repeated. Look at the table across the bottom: it includes missing categories, an unusual timestamp and an email embedded in text. These are concrete reasons to clean the data, not cosmetic problems. The result should be a reproducible, privacy-safe dataset that downstream training and indexing systems can consume consistently."
+    },
+    {
+      "slide": 143,
+      "title": "Data Wrangler Walkthrough: Visualize",
+      "narration": "This slide shows the value of exploring data visually instead of guessing what the source contains. In step one, select a chart or data-quality visualization. In step two, group support tickets by category. The bar chart shows forty login-issue tickets, twenty-five payment tickets, and fifteen feature-request tickets, revealing a class imbalance. Step three plots the number of tickets over time to find spikes, seasonal patterns or a possible upward trend. Step four compares missing values across fields. The example shows missing descriptions at about twenty-eight percent, compared with five percent for category and two percent for the created date. Step five asks whether the data distribution is drifting or classes are imbalanced enough to influence a model. Finally, step six chooses concrete follow-up transformations and documents what was found. For this example, filling missing values, combining sparse categories, and reconsidering class balance could be reasonable candidates. A visualization identifies the problem; it does not automatically make the correct business decision or guarantee model quality."
+    },
+    {
+      "slide": 144,
+      "title": "Data Wrangler Walkthrough: Transform, Test and Export",
+      "narration": "We finish Module Two with a complete Data Wrangler preparation flow. Start with the left-most transformation panel. Select the operations needed for the customer-support dataset. The second stage normalizes timestamps and category values, turning inconsistent representations into a more predictable schema. The third masks or removes personally identifiable information such as email addresses. The fourth handles nulls and text issues, including unusual characters or extra whitespace. Now look at the fifth step, which previews the transformed dataset. The before-and-after table along the bottom illustrates the result: a timestamp becomes a standardized value, a category gets a consistent label, an email is masked, and a missing age is handled according to the chosen rule. Step six offers a Quick Model as an optional diagnostic check, not a production evaluation. Step seven exports the transformation flow or processing job for repeatable use in later training or indexing. The lesson that ties this module together is clear: useful AI systems depend on structured, validated, governed data and transformations that can be repeated, not just a single successful model invocation."
+    }
+  ]
+}

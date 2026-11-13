@@ -1,0 +1,122 @@
+[
+  {
+    "service": "AWS IoT 1-Click",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical button-triggered facilities request",
+    "input": "The facilities team inventories button placements, event payloads and their assigned maintenance functions.",
+    "action": "IoT 1-Click historically associated supported simple devices with Lambda actions through projects and placements. A button event invoked the assigned function rather than running maintenance logic on the device.",
+    "output": "A replacement IoT Core device event invokes the approved ticket-creation handler with the device's location.",
+    "check": "Test duplicate presses, device authorization and ticket identity before retiring the old integration.",
+    "reference": "https://docs.aws.amazon.com/iot-1-click/latest/developerguide/what-is-iot-1click.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS IoT Events",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical equipment alarm detector",
+    "input": "The plant owner exports detector models, thresholds, input definitions and notification actions.",
+    "action": "IoT Events historically evaluated device inputs using detector models and state transitions to trigger configured actions. Reproduce the state and timing semantics in a supported replacement before moving alarms.",
+    "output": "The replacement alarm handler creates an operator notification for the validated equipment condition.",
+    "check": "Replay normal, alarm and reset sequences; compare emitted actions before removing the original detector.",
+    "reference": "https://docs.aws.amazon.com/iotevents/latest/developerguide/what-is-iotevents.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS IoT ExpressLink",
+    "cloud": "AWS",
+    "mode": "edge",
+    "title": "connect an embedded sensor through a managed connectivity module",
+    "input": "An embedded controller supplies signed telemetry from its approved sensor interface.",
+    "action": "The ExpressLink module handles its supported secure connectivity and messaging commands, allowing the host controller to exchange messages with AWS IoT Core. Host firmware still interprets the sensor and controls the device.",
+    "output": "An IoT Core rule routes accepted telemetry to the plant ingestion application.",
+    "check": "Test module identity, reconnect behavior, payload framing and rejected unauthorized control messages.",
+    "reference": "https://docs.aws.amazon.com/iot-expresslink/latest/programmersguide/what-is-iot-expresslink.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS IoT FleetWise",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "collect selected vehicle signals under a campaign",
+    "input": "The vehicle team defines a decoder manifest, signal selection and collection conditions.",
+    "action": "FleetWise collection campaigns instruct the edge agent which vehicle signals to collect and when. Selected data is uploaded to configured supported destinations; the service is not a vehicle driving controller.",
+    "output": "The fleet analyst queries the collected measurements to investigate battery or component behavior.",
+    "check": "Compare requested signals, decoder units and collection conditions against actual delivered records.",
+    "reference": "https://docs.aws.amazon.com/iot-fleetwise/latest/developerguide/what-is-fleetwise.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS IoT Things Graph",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "rebuild a historical model-based device workflow",
+    "input": "The engineer inventories device models, service models and existing workflow bindings.",
+    "action": "Things Graph historically modeled interactions between devices and services and deployed configured flows to supported runtimes. The migration must replace the model bindings and each actual device action explicitly.",
+    "output": "A supported orchestration runtime invokes the authorized device and service adapters in the required order.",
+    "check": "Replay device events and verify physical actions, failure handling and adapter permissions before cutover.",
+    "reference": "https://docs.aws.amazon.com/thingsgraph/latest/ug/what-is.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS Local Zones",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "host a latency-sensitive render client near its users",
+    "input": "The application team chooses supported Local Zone compute and validates its parent-Region dependencies.",
+    "action": "Local Zones extend selected AWS infrastructure closer to users. Provision supported instances and subnets in the enabled zone; the application itself executes the interactive rendering work.",
+    "output": "The client connects to the local rendering endpoint while protected assets remain in approved regional storage.",
+    "check": "Measure end-to-end latency and test failure of the local endpoint and parent-Region dependencies.",
+    "reference": "https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Managed Services",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "operate a managed workload through an approved change",
+    "input": "The workload owner submits the intended infrastructure change and operating requirements.",
+    "action": "Managed Services operates covered AWS infrastructure using the chosen service scope and approved operational processes. Its operational team applies authorized changes under the agreed responsibilities; application business logic remains with its owner.",
+    "output": "The owner accepts the implemented infrastructure change and updates the workload runbook.",
+    "check": "Check the actual changed resources, service scope and application acceptance criteria before closing the request.",
+    "reference": "https://docs.aws.amazon.com/managedservices/latest/userguide/what-is-ams.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Marketplace",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "procure and deploy a licensed security appliance",
+    "input": "The buyer evaluates a vendor offer, licensing terms and deployment requirements.",
+    "action": "Marketplace supports discovery, subscription and procurement of the selected third-party product. Entitlement authorizes its use; the vendor appliance must still be deployed and configured in the customer's architecture.",
+    "output": "The platform owner deploys the licensed appliance with restricted network placement and approved policy.",
+    "check": "Verify entitlement, vendor support scope, actual traffic inspection and the product's separate infrastructure costs.",
+    "reference": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS OpsWorks (Legacy)",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace historical configuration-managed application hosts",
+    "input": "The operator captures recipes, lifecycle hooks, instance state and application dependencies.",
+    "action": "OpsWorks historically coordinated Chef or Puppet-based host configuration. Rebuild the required configuration and lifecycle behavior with supported deployment tooling rather than assuming the historical control plane remains available.",
+    "output": "The replacement fleet installs the approved application and runs its startup and maintenance actions.",
+    "check": "Compare host packages, permissions, service startup and application behavior before migrating traffic.",
+    "reference": "https://docs.aws.amazon.com/opsworks/latest/userguide/welcome.html",
+    "legacy": true
+  },
+  {
+    "service": "AWS Outposts",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "run a local data-processing application with AWS-managed infrastructure",
+    "input": "The factory owner selects supported local compute and storage with regional connectivity requirements.",
+    "action": "Outposts provides supported AWS infrastructure at the customer location. The local instances execute plant processing while the service link supports required AWS control-plane connectivity; local application dependencies are designed explicitly.",
+    "output": "The plant application processes local sensor data and writes results to the selected local or regional storage path.",
+    "check": "Test local latency, storage durability, capacity limits and the documented behavior during service-link disruption.",
+    "reference": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html",
+    "legacy": false
+  }
+]

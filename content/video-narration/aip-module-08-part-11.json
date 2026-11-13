@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "08",
+  "module_title": "Security, Identity, and Compliance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 slide audit, topic-first lecture grouping on slides 51-53; fresh narration/audio, no five-slide limit.",
+  "part_id": "11",
+  "part_title": "Hands-On Security Labs: Least Privilege, IAM Policy Simulator and SSE-KMS",
+  "script_revision": "2026-11-12-m08-p11-topic-v1",
+  "scenes": [
+    {
+      "slide": 51,
+      "title": "IAM Least-Privilege Lab Overview",
+      "narration": "This lab starts with an intentionally unsafe Lambda execution role. The left-hand policy allows all actions on all resources; that may appear convenient during development, but it gives a document-summarisation function permissions it doesn't need. Follow the target-state diagram. The function should invoke only the approved Bedrock model and read objects only under the lab documents bucket's inputs prefix. In the IAM role editor, replace the wildcard permissions with the relevant bedrock InvokeModel and S3 GetObject actions, using specific resource ARNs. For the S3 action, use an object ARN ending in the intended prefix and star. For Bedrock, choose a resource compatible with the model or inference profile actually called by the function. Then run the sample summarise-document event. CloudWatch logs should show successful S3 retrieval, model invocation and a response. Crucially, perform a negative test too: an unrelated S3 object or an unnecessary action should be denied. That proves the restriction works rather than merely confirming the application still runs. Use the simulator and the real service behavior to validate the final policy."
+    },
+    {
+      "slide": 52,
+      "title": "IAM Policy Editor Walkthrough",
+      "narration": "Now open the IAM policy editor and compare the before-and-after JSON. The initial policy has unnecessary actions or a wildcard resource. Replace it with the smallest valid combination of actions and ARNs for the task. The example allows listing one bucket where necessary and reading objects under a specific labs slash user-one prefix. Remember that ListBucket is evaluated against the bucket ARN, whereas GetObject uses object ARNs. If you restrict object access to a prefix, that does not automatically limit what a permitted ListBucket request can enumerate; apply an appropriate s3 prefix condition if listing must be constrained. The right-hand policy simulator runs several test requests: approved GetObject should be allowed, reading another user's prefix should be denied, and PutObject should be allowed only if the final policy intentionally retains it. The screenshot's table is illustrative, so examine the actual final JSON and test expectations rather than trusting a green label. An IAM simulation helps examine the stated policy, but real permissions may also depend on resource policies, boundaries, service control policies, session restrictions and encryption keys. The lab succeeds when both permitted and forbidden paths behave exactly as designed."
+    },
+    {
+      "slide": 53,
+      "title": "KMS Encryption Lab",
+      "narration": "The final lab walks through S3 server-side encryption with a customer-managed KMS key. First open AWS KMS and either create a suitable symmetric key or select an existing approved key in the same Region as the target S3 bucket. Review its key policy and grant the lab role only the permissions required for the workload, including relevant Encrypt, Decrypt, GenerateDataKey and DescribeKey actions where applicable. A key policy granting administration is not equivalent to granting an application unrestricted use. Next open the S3 bucket, upload a test file and select SSE-KMS with the chosen customer-managed key. After upload, inspect the object's Properties and confirm that server-side encryption is AWS KMS and that the expected key identifier appears. Then try an authorised GetObject to ensure decryption works, and test with a principal that should not have access. A successful upload alone doesn't prove the read path works, and an S3 Allow may still be blocked by missing KMS permissions. The outcome is a verified object encryption configuration, working authorised access and a documented denial for unauthorised principals."
+    }
+  ]
+}

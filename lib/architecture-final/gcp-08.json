@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Migrate to Containers",
+    "cloud": "GCP",
+    "mode": "migration",
+    "title": "convert a supported server application into a tested container workload",
+    "input": "The application owner inventories supported source VMs, runtime dependencies and persistent state.",
+    "action": "Migrate to Containers analyzes supported sources and generates containerization artifacts for the selected migration workflow. Generated images and manifests need engineering review, especially for persistent state and startup dependencies.",
+    "output": "The team deploys the reviewed artifacts to the accepted container platform and tests the application.",
+    "check": "Compare configuration, state access, request behavior and rollback before replacing the source server.",
+    "reference": "https://docs.cloud.google.com/migrate/containers/docs",
+    "legacy": false
+  },
+  {
+    "service": "Migrate to VMs",
+    "cloud": "GCP",
+    "mode": "migration",
+    "title": "rehost a supported server with a controlled target cutover",
+    "input": "The migration owner inventories source disks, operating system and application network dependencies.",
+    "action": "Migrate to Virtual Machines replicates supported source workloads and creates configured test or cutover VMs. Replication and target settings establish the host copy; application owners validate runtime and data behavior.",
+    "output": "The target VM serves the application after accepted replication and dependency tests.",
+    "check": "Check boot, permissions, data consistency and final-write coordination before switching clients and retiring the source.",
+    "reference": "https://docs.cloud.google.com/migrate/virtual-machines/docs",
+    "legacy": false
+  },
+  {
+    "service": "Migration Center",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "assess an application estate before cloud migration",
+    "input": "The estate owner supplies permitted asset inventory, utilization and dependency evidence.",
+    "action": "Migration Center organizes supported discovery and assessment information for migration planning. Its recommendations help grouping and target selection; actual transfer and business validation occur through the chosen migration workflow.",
+    "output": "The migration team prepares a phased plan and assigns dependency groups and acceptance owners.",
+    "check": "Validate inventory completeness, sizing assumptions and unsupported dependencies before committing a target architecture.",
+    "reference": "https://docs.cloud.google.com/migration-center/docs",
+    "legacy": false
+  },
+  {
+    "service": "Model Armor",
+    "cloud": "GCP",
+    "mode": "request",
+    "title": "screen a prompt before invoking the selected model",
+    "input": "The AI backend submits the permitted prompt to its configured Model Armor inspection policy.",
+    "action": "Model Armor inspects supported prompts or responses for configured risks and returns assessment or enforcement results. The application integrates the selected action and invokes its model only through the approved path.",
+    "output": "The backend rejects, sanitizes or reviews the input according to policy and handles allowed model output separately.",
+    "check": "Test prompt injection, sensitive data, false positives and inspection failure before enabling automated decisions.",
+    "reference": "https://docs.cloud.google.com/model-armor/docs",
+    "legacy": false
+  },
+  {
+    "service": "NetApp Volumes",
+    "cloud": "GCP",
+    "mode": "data",
+    "title": "serve a departmental file share with controlled snapshots",
+    "input": "The storage owner configures supported volumes, protocol access and directory integration.",
+    "action": "NetApp Volumes exposes the configured managed file-storage volumes to permitted clients. Applications read and write mounted paths; protocol permissions and volume policies determine access and protection.",
+    "output": "The department stores accepted files and the owner restores a selected test file through the supported recovery path.",
+    "check": "Validate mount permissions, snapshot retention, throughput and isolated file restoration before moving the department.",
+    "reference": "https://docs.cloud.google.com/netapp/volumes/docs",
+    "legacy": false
+  },
+  {
+    "service": "Network Intelligence Center",
+    "cloud": "GCP",
+    "mode": "control",
+    "title": "investigate a private connection failure using supported network evidence",
+    "input": "The operator identifies source, destination and time of the failed connection.",
+    "action": "Network Intelligence Center groups supported network-observation and diagnostic capabilities. The selected tool examines topology, metrics or modeled connectivity; the operator distinguishes configuration analysis from an actual packet or application test.",
+    "output": "The network owner uses the relevant evidence to apply an approved route or access-rule repair.",
+    "check": "Rerun the chosen analysis and perform an authorized live connection test before declaring the application path repaired.",
+    "reference": "https://docs.cloud.google.com/network-intelligence-center/docs",
+    "legacy": false
+  },
+  {
+    "service": "Network Security Integration",
+    "cloud": "GCP",
+    "mode": "edge",
+    "title": "send selected network traffic to an authorized security integration",
+    "input": "The network owner selects in-band or out-of-band integration, endpoints and intended traffic scope.",
+    "action": "Network Security Integration connects supported appliances or security deployments with selected cloud workloads. In-band inspection and out-of-band observation have different enforcement effects; the configured appliance performs its actual security analysis.",
+    "output": "The authorized appliance inspects or observes the selected traffic and the application receives only the path permitted by the configured mode.",
+    "check": "Test integration mode, scope, failure behavior and effective policy before claiming that the selected traffic is blocked or allowed.",
+    "reference": "https://docs.cloud.google.com/network-security-integration/docs",
+    "legacy": false
+  },
+  {
+    "service": "Network Service Tiers",
+    "cloud": "GCP",
+    "mode": "edge",
+    "title": "choose the supported internet delivery tier for an application endpoint",
+    "input": "The architect identifies the endpoint type, supported tier and latency or cost requirements.",
+    "action": "Network Service Tiers selects the supported Premium or Standard network path for applicable resources. The tier affects routing and delivery characteristics; the application backend still processes requests and enforces user permissions.",
+    "output": "The customer connects to the configured endpoint using the chosen eligible internet path.",
+    "check": "Measure end-to-end performance, verify resource compatibility and check actual egress charging before choosing the tier.",
+    "reference": "https://docs.cloud.google.com/network-tiers/docs",
+    "legacy": false
+  },
+  {
+    "service": "Oracle on Google Cloud Compute",
+    "cloud": "GCP",
+    "mode": "runtime",
+    "title": "run a supported licensed Oracle application on cloud compute",
+    "input": "The database owner verifies the supported deployment pattern, licensing and storage or network requirements.",
+    "action": "The selected Oracle-on-compute architecture runs Oracle software on the approved host infrastructure. Oracle executes database operations; the owner must validate supported licensing, host suitability and backup or availability responsibilities.",
+    "output": "The application commits accepted transactions through its restricted Oracle connection.",
+    "check": "Test supported architecture, licensing evidence, transaction behavior and database-consistent recovery before production deployment.",
+    "reference": "https://docs.cloud.google.com/oracle/docs",
+    "legacy": false
+  },
+  {
+    "service": "Policy Controller",
+    "cloud": "GCP",
+    "mode": "build",
+    "title": "reject a Kubernetes deployment violating an approved constraint",
+    "input": "The platform owner defines supported admission constraints and the namespace policy scope.",
+    "action": "Policy Controller evaluates supported Kubernetes objects against configured constraints using its admission and audit capabilities. Enforcement blocks a violating deployment request when configured; it does not inspect the application's HTTP payloads.",
+    "output": "The developer corrects the manifest and redeploys it after the selected constraint passes.",
+    "check": "Test allowed and denied objects, exemptions, existing-object audit and failure policy before broad enforcement.",
+    "reference": "https://docs.cloud.google.com/kubernetes-engine/enterprise/policy-controller/docs",
+    "legacy": false
+  }
+]

@@ -1,0 +1,13 @@
+export type Attempt={schema:number;mode:'practice'|'exam';questionIds:string[];startedAt:number;deadline:number|null;answers:Record<string,number[]>;checked:string[];flagged:string[];submittedAt:number|null;submissionReason:string|null};
+type Q={id:string;options:string[];correct:number[];explanation:string;image:string;domain?:string};
+export const EXAM_DURATION_MS:number;
+export function startAttempt(bank:Q[],mode:'practice'|'exam',now?:number):Attempt;
+export function remainingMs(a:Attempt,now?:number):number|null;
+export function elapsedMs(a:Attempt,now?:number):number;
+export function advanceTime(a:Attempt,now?:number):Attempt;
+export function answer(a:Attempt,id:string,indices:number[],bank:Q[],now?:number):Attempt;
+export function checkAnswer(a:Attempt,id:string,bank:Q[],now?:number):Attempt;
+export function canReview(a:Attempt,id:string):boolean;
+export function flag(a:Attempt,id:string,now?:number):Attempt;
+export function submit(a:Attempt,now?:number):Attempt;
+export function score(a:Attempt,bank:Q[]):{correct:number;total:number;unanswered:number;percentage:number;domains:Record<string,{correct:number;total:number}>;results:{id:string;correct:boolean;answered:boolean}[]};

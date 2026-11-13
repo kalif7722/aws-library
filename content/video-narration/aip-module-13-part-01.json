@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "13",
+  "module_title": "Task-Focused Machine Learning and AI Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original numbered R2 Module 13 slides 1–3 verified by spatial audit; topic-first narration and fresh TTS.",
+  "part_id": "01",
+  "part_title": "Task-Focused ML Services and Human-in-the-Loop Review with A2I",
+  "script_revision": "2026-11-13-m13-p01-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Match the task to the right ML service",
+      "narration": "This overview is a service-selection map, with the type of input on the left and the expected output on the right. A scanned PDF or image belongs in a document-extraction workflow using Textract, which returns detected text and supported structured fields. For audio, Transcribe produces a speech transcript with timing and optional speaker information. Images and video can be analysed by Rekognition for objects, text, scenes and other supported visual features. User speech or text that needs a structured conversation maps to Lex, which identifies intents and collects slot values. Kendra searches enterprise documents and returns ranked passages with links, rather than producing unconstrained new content. At the bottom, Amazon Augmented AI, or A2I, adds human review when automated predictions are sensitive or uncertain. Follow the distinction between input, processing service and output. A task-focused ML API is not automatically a generative model. Choose by the exact operation, and then layer application permissions, content safety and human judgement where needed. This diagram is a routing guide, not an instruction to deploy every service in one pipeline."
+    },
+    {
+      "slide": 2,
+      "title": "Amazon A2I Human Review Lifecycle",
+      "narration": "Follow the prediction entering the decision stage. The application or integrated service evaluates the result against an activation condition, such as a confidence score below the approved threshold. High-confidence cases can continue without review when policy permits. Low-confidence cases or a random audit sample create a human review task. The example shows an invoice label with confidence zero point four two, beneath an illustrative zero point eight threshold, being sent to reviewers. A workforce examines the evidence, corrects labels and adds notes. The approved output is then written to S3 for the application to consume. Notice that human review is part of a defined workflow, not a guarantee that a person corrects every prediction. Random sampling helps measure quality even when the model appears confident, and sensitive data may require a private workforce with restricted access. Also, a completed review does not automatically retrain the original model. Reviewed examples can inform evaluation and a separately governed training process. The central design question is which predictions require a human decision before a business action proceeds."
+    },
+    {
+      "slide": 3,
+      "title": "Amazon A2I design and governance",
+      "narration": "This diagram decomposes a human review flow into configuration and responsibilities. The flow definition sets activation conditions, a human-task user interface, a designated work team, an output S3 location and an execution role with scoped permissions. When a model prediction or business rule triggers review, the workforce receives only the data needed to make its decision. Reviewers provide labels and rationale; the system stores the approved result with relevant metadata for audit. The lower callouts explain the governance concerns: minimise sensitive data, encrypt and restrict S3 and KMS access, record reviewer decisions, and evaluate disagreements between reviewers. A2I can participate in workflows around supported AWS services or custom human review integrations, but don't assume every model has identical confidence outputs or automatic consensus scoring. Define how contradictory labels are resolved, who approves the result and when new training data is allowed into a model-improvement pipeline. Human-in-the-loop design is useful precisely because automated confidence is not the same as verified correctness."
+    }
+  ]
+}

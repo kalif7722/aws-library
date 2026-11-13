@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "07",
+  "module_title": "Governance and Quality Assurance",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 07 slides 21-24 audited with spatial OCR, fresh visual-first explanatory narration, no prior audio reuse.",
+  "part_id": "05",
+  "part_title": "CloudWatch Alarm Actions, Composite Alarms and AI Quality Dashboards",
+  "script_revision": "2026-11-12-m07-p05-r2-visual-v1",
+  "scenes": [
+    {
+      "slide": 21,
+      "title": "CloudWatch alarm targets",
+      "narration": "This slide shows what can happen after a CloudWatch alarm changes state. In the centre, a metric breaches a threshold, and several branches lead to possible targets. For EC2, applicable alarm actions can perform an instance operation such as recovery, reboot or another configured response. For Auto Scaling, a policy can adjust capacity when demand changes. An SNS notification can send information to operators or incident-management tools. Some architectures use a Lambda function or other orchestration for custom remediation. Now read the lower safeguards. Give actions the minimum IAM permissions, scope them to intended resources and avoid unnecessary wildcard access. Configure evaluation periods to avoid repeated state changes from noisy measurements. Test a recovery action outside production and provide a manual override. Not every alarm action is directly supported for every metric or service; custom automation may need EventBridge or another integration. The important distinction is that an alarm detects a condition, while its target determines the operational response. Safe, reversible behavior matters more than an impressive amount of automation."
+    },
+    {
+      "slide": 22,
+      "title": "Composite alarms",
+      "narration": "The central diagram shows how a composite alarm reduces alert noise by combining individual alarm states. On the left, one alarm watches P ninety-five model latency and another watches application error rate. A third tracks the proportion of answers flagged as ungrounded. Each signal has its own threshold and evaluation period. The composite rule in the middle requires a meaningful combination of signals before it pages the team. For example, high latency together with a high error rate may indicate an incident serious enough to wake an on-call engineer, while a temporary isolated spike may only need monitoring. The right-hand notification branch creates the incident and attaches context or a runbook. Look at the benefits along the bottom: fewer low-signal pages, better prioritisation and faster response to genuinely impactful failures. A composite alarm combines the states of underlying alarms; it doesn't independently calculate the original metrics. Be careful with Boolean AND and OR logic, and decide how missing data should affect notification. The best rule reflects what an actual user-impacting incident looks like."
+    },
+    {
+      "slide": 23,
+      "title": "Generative AI Prompt Regression Testing with CloudWatch",
+      "narration": "This slide tracks what happens when a travel-assistant prompt changes between versions. On the left, three versioned prompts ask for a three-day Tokyo itinerary focused on food and culture. Their instructions become progressively more detailed, and the model produces a different itinerary for each version. In the middle, evaluation metrics record response quality, safety and P ninety-five latency. Now compare the illustrated scores. The baseline prompt has quality near zero point nine two and a stronger safety result. Later versions may improve wording or helpfulness, but one variation shows worse quality, safety or response time. The CloudWatch charts on the right make those regressions visible over time, and the lower alarm section illustrates thresholds for each category. This is important because a prompt is production application behavior, even when no code was changed. A nice-looking new answer can still violate an established safety threshold or become slower for real users. Publish the evaluation scores as custom metrics, compare versions on the same representative inputs, and use clear rollback criteria when a candidate performs worse."
+    },
+    {
+      "slide": 24,
+      "title": "CloudWatch dashboard for an AI application",
+      "narration": "This slide brings operational and AI-quality signals onto one CloudWatch dashboard. Across the top are request count, latency and model errors. Read the latency card carefully: P fifty represents typical response time, while P ninety-five highlights a slower tail of requests that a simple average may hide. The next row shows throttled requests, token usage and estimated cost; those values reveal both capacity pressure and spending trends. Below, groundedness and safety-violation panels measure qualities that application-specific evaluation code must publish. On the right is a dimensions table. Dimensions such as model ID, environment, Region and application ID let you compare like with like, for example production versus testing or two model variants. The dashboard contains illustrative numbers, so don't treat them as universal acceptable thresholds. Decide what to alert on by service objectives and risk. Also minimise personal identifiers in metric dimensions to control cardinality and protect privacy. The overall lesson is to monitor reliability, user experience, cost and answer quality together, because a technically healthy endpoint can still return poor answers."
+    }
+  ]
+}

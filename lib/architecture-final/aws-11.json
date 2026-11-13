@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Amazon S3 Tables",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "query a maintained Iceberg table in object storage",
+    "input": "The data engineer supplies approved records and an integrated Iceberg-capable ingestion or query engine.",
+    "action": "S3 Tables stores Apache Iceberg tables in table buckets and supplies supported managed table maintenance. The connected engine performs the writes and SQL query; catalog integration and permissions govern table access.",
+    "output": "The analytics engine queries the accepted table snapshot and exposes approved aggregates to the analyst.",
+    "check": "Validate snapshot visibility, schema evolution, concurrent writers and table-versus-object access permissions.",
+    "reference": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon SageMaker Neo",
+    "cloud": "AWS",
+    "mode": "build",
+    "title": "compile a trained model for a supported edge target",
+    "input": "The ML engineer selects a trained model, framework version and supported deployment target.",
+    "action": "SageMaker Neo compiles supported trained models for the selected target platform. Compilation produces a target-compatible artifact; the edge or hosting runtime loads that artifact and performs inference.",
+    "output": "The deployment team installs the compiled artifact on the actual target and invokes representative inputs.",
+    "check": "Compare accuracy, supported operators, latency and memory against the uncompiled model before deployment.",
+    "reference": "https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon SageMaker Unified Studio",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "develop a governed analytics and ML project",
+    "input": "The project owner assigns participants, permitted data assets and required execution environments.",
+    "action": "Unified Studio supplies the project's integrated data and development workspace. Authorized users discover permitted assets and run supported workflows through their configured compute services; workspace access does not bypass source-data permissions.",
+    "output": "The engineer publishes the reviewed notebook, dataset or model artifact through the project's governance process.",
+    "check": "Test participant roles, data grants, runtime identities and reproducible execution before accepting the project artifact.",
+    "reference": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Simple Workflow Service",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "coordinate a long-running document review with durable task state",
+    "input": "The application starts a workflow with a document identifier and review requirements.",
+    "action": "SWF records workflow execution history and delivers decision and activity tasks to application workers. The decider selects the next action; activity workers perform extraction or human-review integration and report completion.",
+    "output": "The application marks the review complete after required activities succeed and records the final document disposition.",
+    "check": "Test worker failure, task timeout, duplicate activity effects and replay of the workflow decision logic.",
+    "reference": "https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-welcome.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Timestream",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "query timestamped equipment measurements",
+    "input": "The plant ingestion application supplies timestamped sensor values, dimensions and measurement units.",
+    "action": "The selected Timestream offering stores and queries time-series data under its supported API and retention architecture. Query syntax, ingestion and storage behavior depend on the chosen LiveAnalytics or InfluxDB offering.",
+    "output": "The operations dashboard queries a defined time window and presents accepted equipment trends.",
+    "check": "Validate timestamp precision, units, late arrivals and retention using the exact Timestream offering.",
+    "reference": "https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Titan",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "embed approved documents for similarity retrieval",
+    "input": "The ingestion application submits authorized text chunks to a supported Titan embedding model.",
+    "action": "The selected Titan embedding model produces numerical vectors from the text input through Bedrock. The application stores those vectors with document identifiers and uses the same compatible model for query embeddings.",
+    "output": "The search application compares query vectors with indexed vectors and retrieves permitted source documents.",
+    "check": "Test chunking, vector dimensions, model compatibility and retrieval quality before accepting the index.",
+    "reference": "https://docs.aws.amazon.com/bedrock/latest/userguide/titan-models.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon VPC IPAM",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "allocate a nonoverlapping subnet range for a new account",
+    "input": "The network owner defines regional address pools and the new application's required subnet size.",
+    "action": "VPC IPAM tracks supported address usage and allocates CIDR ranges from configured pools. Allocation policy and pool hierarchy constrain address selection; IPAM does not route packets or create every subnet automatically.",
+    "output": "The provisioning role uses the allocated range to create the approved VPC and subnet layout.",
+    "check": "Check overlapping ranges, pool boundaries and release behavior when the workload is retired.",
+    "reference": "https://docs.aws.amazon.com/vpc/latest/ipam/what-is-ipam.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon WorkMail",
+    "cloud": "AWS",
+    "mode": "desktop",
+    "title": "provide enterprise email through a managed mailbox",
+    "input": "The employee signs in to the assigned organization mailbox with the permitted client.",
+    "action": "WorkMail provides managed business email and calendaring with its configured directory and domain integration. Mail flow and mailbox policies determine accepted messages and user access.",
+    "output": "The employee reads approved mail and schedules meetings through the supported client while sensitive messages follow enterprise policy.",
+    "check": "Verify domain records, mailbox permissions, message delivery and access revocation for a departed employee.",
+    "reference": "https://docs.aws.amazon.com/workmail/latest/adminguide/what_is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon WorkSpaces",
+    "cloud": "AWS",
+    "mode": "desktop",
+    "title": "provide a managed employee desktop with protected project files",
+    "input": "The employee requests the assigned desktop using the configured identity and connection client.",
+    "action": "WorkSpaces supplies the selected managed desktop environment and streaming session. Applications run in that desktop; profile, storage and network settings determine persistence and access to corporate services.",
+    "output": "The employee works with approved project applications and stores files in the designated protected location.",
+    "check": "Test user assignment, session reconnection, corporate dependency access and profile recovery.",
+    "reference": "https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon WorkSpaces Applications",
+    "cloud": "AWS",
+    "mode": "desktop",
+    "title": "stream an assigned business application without a local installation",
+    "input": "The user authenticates through the enterprise application-streaming assignment.",
+    "action": "WorkSpaces Applications supplies the supported application-streaming environment under its fleet, image and session configuration. The hosted application executes remotely while the client receives the interactive session.",
+    "output": "The user accesses only assigned application data and exports work through approved session integrations.",
+    "check": "Test application licensing, assigned-user access, fleet startup and session data retention before rollout.",
+    "reference": "https://aws.amazon.com/workspaces/applications/",
+    "legacy": false
+  }
+]

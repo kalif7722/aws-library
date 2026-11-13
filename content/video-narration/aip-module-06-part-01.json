@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Source visuals explicitly verified from user-provided Module 06 slide-01 through slide-05 WebPs. Narration follows original slide-number order and each visible flow, example and chart. Target approximately six-minute review pilot.",
+  "part_id": "01",
+  "part_title": "AWS Application Architecture, Lambda, API Requests and Kinesis Events",
+  "script_revision": "2026-11-12-m06-p01-visual-order-v5",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Module 06 — Build AI applications on AWS",
+      "narration": "Welcome to Module Six. This slide is our map for building a complete AI application on AWS. Look at the six groups surrounding the central AI cloud. At the upper left, Lambda runs application code, while API Gateway receives requests. In the middle, Step Functions coordinates multi-step workflows, and AppConfig manages settings. The delivery group has CodePipeline, CodeBuild and CodeDeploy for releasing applications. Below, SQS queues work, SNS publishes notifications, EventBridge routes events, and AppSync connects application data with clients. Amplify helps build the front end; Outposts and Wavelength support selected hybrid and edge workloads. Now follow the example path along the bottom: a client sends a prompt through API Gateway; Lambda can handle the request; Step Functions coordinates the work; the model generates a result; and the application returns its response. The important idea is that the model is one part of the solution. These surrounding services let the application receive requests, orchestrate work, communicate, and deploy reliably."
+    },
+    {
+      "slide": 2,
+      "title": "AWS Lambda — serverless compute",
+      "narration": "Let's begin with Lambda, shown here as a three-step flow. On the left, an event arrives from a service or an application. The icons suggest sources such as S3, API Gateway or a database. In the centre, Lambda runs your code in response; you don't manage the underlying server. On the right, the function produces a result for another service or application. Now look at the lower GenAI example, which explains what happens inside the function. First, validate the request: check the input, apply business rules, and prepare the prompt. Second, invoke a model API with that prepared prompt. Third, parse and transform the model response into the format the application expects. A model may generate free-form text while the client needs structured JSON, so that last step matters. Finally, the right-hand configuration panel highlights execution duration, memory and concurrency. Lambda scales execution, but a slow model call can hit the function timeout, or high concurrency can overwhelm the model API. Remember the visual: an event starts the function, code does bounded work, and the result moves downstream."
+    },
+    {
+      "slide": 3,
+      "title": "Serverless web app request path",
+      "narration": "This slide follows a single request, then traces the answer back to the browser. Start at step one, on the left. The browser sends GET slash orders slash forty-two to API Gateway. In step two, API Gateway invokes the Lambda backend. In step three, Lambda asks DynamoDB for the order with ID forty-two. Now notice the dashed orange arrows pointing left. DynamoDB returns the order record in step four; Lambda builds an HTTP response in step five; and API Gateway returns it to the browser in step six. So the blue arrows represent the request path, and the orange arrows show the response path. The example at the bottom makes this concrete. The request expects JSON, and the response contains order ID forty-two with status shipped. API Gateway manages the HTTP entry point, Lambda runs the business logic, and DynamoDB stores the facts. An AI feature could later explain this status, but retrieving the correct order remains the application's responsibility. The two-way arrows are the part to remember."
+    },
+    {
+      "slide": 4,
+      "title": "Process order history events",
+      "narration": "Now we move from reading one order to continuously building order history. Follow the top row from left to right. The shopping application publishes an order event into Kinesis Data Streams. Lambda reads events in batches and transforms them into order records. Those records are stored in DynamoDB, where the mobile app can query them. The three example panels show exactly what changes. On the left, the incoming event has event ID E V T one thousand one, order ID forty-two, event type ORDER_PLACED, amount twenty-nine and a timestamp. In the middle, Lambda converts it into an application record with status PLACED and created-at and updated-at fields. On the right, DynamoDB stores those fields under order ID forty-two as the partition key. The lower panels explain why the design needs care. Lambda may process several records per batch, and a failed batch can cause records to be retried. Use idempotent writes, such as a conditional operation based on the order identifier, so replaying an event does not create duplicate orders. Kinesis carries the events; Lambda transforms them; DynamoDB serves the history."
+    },
+    {
+      "slide": 5,
+      "title": "Detect a transaction-rate spike",
+      "narration": "Our last slide shows how the same streaming idea can detect unusual activity. Across the top are five steps. Transaction events arrive continuously and enter Kinesis Data Streams. A stream analysis component calculates the transaction rate. When that rate exceeds the configured threshold, Lambda performs the alert action, and SNS sends a notification. Look at the graph below. The orange dashed threshold is two hundred transactions per minute. Most of the blue line stays beneath it, until the highlighted spike reaches two hundred and forty per minute. That crossing explains why the alert fires. Now compare the panels on the lower right. Continuous aggregation keeps measuring the rate as data arrives; Lambda does not perform that ongoing aggregation in this diagram. Lambda responds to the detected condition and can publish an alert through SNS. In other words, the streaming analysis is the detector, Lambda is the responder, and SNS is the messenger. This separation prevents a notification for every individual transaction and makes the threshold meaningful. That completes our introduction to Lambda and event-driven application patterns."
+    }
+  ]
+}

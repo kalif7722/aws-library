@@ -1,0 +1,122 @@
+[
+  {
+    "service": "AWS DevOps Agent",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "investigate a deployment-related availability incident",
+    "input": "The incident owner supplies the affected application, incident window and approved telemetry connections.",
+    "action": "DevOps Agent investigates available operational evidence and connected system context to identify likely causes and remediation guidance. Evidence access and permitted integrations bound the investigation.",
+    "output": "The on-call engineer reviews the diagnosis against deployment history and applies an independently approved repair.",
+    "check": "Compare the diagnosis with actual request failures and verify recovery before closing the incident.",
+    "reference": "https://aws.amazon.com/devops-agent/",
+    "legacy": false
+  },
+  {
+    "service": "AWS Elemental MediaConnect",
+    "cloud": "AWS",
+    "mode": "edge",
+    "title": "carry a live contribution feed to the broadcast pipeline",
+    "input": "A broadcaster supplies a licensed live contribution stream using the agreed transport and redundancy design.",
+    "action": "MediaConnect receives and distributes configured live video flows to permitted outputs or entitled subscribers. It transports the contribution feed; downstream encoders create delivery renditions.",
+    "output": "MediaLive consumes the delivered contribution stream and encodes the channel's streaming outputs.",
+    "check": "Test source failover, receiving endpoint permissions and continuity under transport loss.",
+    "reference": "https://docs.aws.amazon.com/mediaconnect/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Elemental MediaLive",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "encode a live sports channel into adaptive renditions",
+    "input": "The broadcaster supplies primary and backup live inputs and channel encoding settings.",
+    "action": "MediaLive encodes the input into configured video, audio and caption outputs. Channel pipelines and input switching preserve the selected live workflow; output settings match the downstream packager.",
+    "output": "MediaPackage receives the encoded streams and packages them for adaptive playback through the delivery CDN.",
+    "check": "Check rendition playback, captions, input-switch continuity and aligned audio before the live event.",
+    "reference": "https://docs.aws.amazon.com/medialive/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Elemental MediaPackage",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "package encoded live video for adaptive players",
+    "input": "The player requests a channel manifest while the broadcaster supplies encoded live segments.",
+    "action": "MediaPackage ingests supported encoded streams and exposes configured playback endpoints and manifests. Packaging and content-protection settings determine the delivered formats; the encoder supplies the source renditions.",
+    "output": "The CDN caches permitted manifests and segments and the player selects a rendition for its connection.",
+    "check": "Verify manifest availability, segment timing, playback authorization and the intended live window.",
+    "reference": "https://docs.aws.amazon.com/mediapackage/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Elemental MediaTailor",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "personalize advertising in a streaming session",
+    "input": "The video player starts a playback session with the permitted viewer and ad-request context.",
+    "action": "MediaTailor obtains ad decisions from the configured ad decision server and stitches appropriate ad media into the session's manifest. The underlying content origin supplies the program stream.",
+    "output": "The player follows the personalized manifest and reports playback events under the selected reporting mode.",
+    "check": "Test ad-decision timeout, unfilled breaks, manifest continuity and tracking without exposing personal data.",
+    "reference": "https://docs.aws.amazon.com/mediatailor/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Entity Resolution",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "match customer records across two permitted datasets",
+    "input": "The data owner selects customer datasets, matching fields and the authorized result destination.",
+    "action": "Entity Resolution applies the configured rule-based or supported matching workflow to the input records and assigns match groups. Matching confidence and chosen fields govern deduplication, not an automatic assertion of identity.",
+    "output": "The analyst reviews matched groups before updating the master customer dataset.",
+    "check": "Test known matches, near duplicates and false positives; retain source identifiers for reconciliation.",
+    "reference": "https://docs.aws.amazon.com/entityresolution/latest/userguide/what-is-service.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Ground Station",
+    "cloud": "AWS",
+    "mode": "edge",
+    "title": "receive a satellite downlink during a scheduled contact",
+    "input": "The mission operator prepares satellite registration, antenna requirements and the authorized contact window.",
+    "action": "Ground Station coordinates the configured antenna contact and delivers received satellite data through the selected dataflow endpoint. Mission software performs payload decoding and application interpretation.",
+    "output": "The ground processing application decodes the received payload and stores validated observation products.",
+    "check": "Reconcile contact timing, delivered bytes and payload integrity; schedule recovery for missed observations.",
+    "reference": "https://docs.aws.amazon.com/ground-station/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS Health Dashboard",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "respond to an account-specific scheduled service event",
+    "input": "The operations team selects account events and the resources named by an upcoming AWS maintenance notice.",
+    "action": "Health Dashboard shows relevant AWS service events and affected resources. Operators use the event's status, time and prescribed action to plan their response; dashboard viewing does not repair the workload.",
+    "output": "The resource owner schedules the required update or evacuation and records affected workload ownership.",
+    "check": "Verify the actual resource action and application health; an event marked closed does not establish business recovery.",
+    "reference": "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS HealthLake",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "query normalized clinical records in a FHIR datastore",
+    "input": "A healthcare integration supplies authorized FHIR records and validates required patient and encounter identifiers.",
+    "action": "HealthLake stores healthcare data in its configured FHIR datastore and serves permitted FHIR operations. Supported import and analytics integrations prepare clinical datasets under the configured authorization boundary.",
+    "output": "The clinical application retrieves permitted patient resources or the analyst uses an approved analytical export.",
+    "check": "Validate FHIR conformance, patient access restrictions and reconciliation with the source clinical system.",
+    "reference": "https://docs.aws.amazon.com/healthlake/latest/devguide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "AWS HealthScribe",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "draft a clinician-reviewed note from a consultation recording",
+    "input": "An authorized clinical workflow submits an approved consultation audio recording.",
+    "action": "HealthScribe generates a transcript and preliminary clinical documentation with evidence references from the conversation. Generated documentation is a draft requiring professional review before entering the medical record.",
+    "output": "The clinician checks each relevant statement against transcript evidence, edits the note and approves the final record.",
+    "check": "Test speaker attribution and unsupported statements; verify consent, recording access and deletion policy.",
+    "reference": "https://docs.aws.amazon.com/transcribe/latest/dg/health-scribe.html",
+    "legacy": false
+  }
+]

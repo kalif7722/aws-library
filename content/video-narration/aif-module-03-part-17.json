@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "03",
+  "module_title": "AI and Machine Learning",
+  "slide_local_dir": "public/course-visuals/aif-course/module-03",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "17",
+  "part_title": "Hyperparameter Tuning and How to Prevent Overfitting",
+  "output_prefix": "aif-module-03-part-17",
+  "script_revision": "2026-11-13-aif-m03-p17-beginner-visual-v1",
+  "review_basis": "Original AIF Module 03 WebP slides 59–61 individually viewed and narrated in their actual diagram order, including numeric examples and bottom decision cues.",
+  "scenes": [
+    {
+      "slide": 59,
+      "title": "Hyperparameter tuning: concepts and purpose",
+      "narration": "The title introduces hyperparameters: settings that influence how a model is trained, rather than values learned automatically from the data. Read the left panel. Learning rate controls how far weights change on each learning step. Batch size controls how many examples contribute to a training update. Epochs count complete passes through the training dataset. Regularization is a technique to discourage unnecessary complexity. The middle diagram shows those settings selected around the model before training, while the model learns its own internal weights as training proceeds. That distinction is central: a weight is a model parameter; a learning rate is a hyperparameter. On the right, tuning is the search for settings that perform better on appropriate validation data. The plotted valley represents improved performance, not a guaranteed unique answer. The lower left displays grid search, which checks predefined combinations, random search, which samples combinations, and Amazon SageMaker Automatic Model Tuning, which helps automate the search. At the bottom right, the cake analogy shows how several recipe settings can affect results. We compare outcomes and revise them rather than assuming the first attempt is ideal. Question: should we choose hyperparameters based on final test data? No. Use training and validation processes, keeping a truly held-out test set for final assessment."
+    },
+    {
+      "slide": 60,
+      "title": "Four important training hyperparameters",
+      "narration": "This slide gives four concrete training settings. First is the learning rate. Read the chart: the horizontal axis is training steps and the vertical axis is loss, a measure of prediction error. The orange curve oscillates when the learning rate is too high; the purple curve decreases slowly when the rate is too low; the cyan curve falls more effectively for the illustrated good rate. Second is batch size, or examples per training update. The small batch illustration is labelled thirty-two, the large batch five hundred twelve. Smaller batches can use less memory and have noisier gradient estimates; larger ones need more memory and sometimes offer higher hardware throughput. Third, epochs are complete passes through the training examples. The graph's blue training loss can keep decreasing while purple validation loss begins increasing. That is a warning of overfitting: improvement on familiar examples but deterioration on unseen examples. Fourth, regularization limits unnecessary model complexity. Too little can overfit; too much can underfit. In the lower worked example, one thousand training examples divided into batches of one hundred gives ten updates per epoch, assuming each example is used once. Three epochs therefore give thirty updates. The lower right contrasts selected hyperparameters with learned neural-network weights. Check: if validation loss rises after many epochs, should you automatically keep training because training loss falls? No. Consider early stopping and tuning."
+    },
+    {
+      "slide": 61,
+      "title": "What to do if overfitting?",
+      "narration": "This picture explains overfitting through photos of dogs. On the far left, a limited training dataset contains repeated or similar examples. A large model in the next box may learn those pictures and their incidental details too closely. The green result box says it performs well on training images; the red box says predictions on genuinely new images are poor. That is the key difference between memorizing examples and generalizing patterns. Follow the plot on the right. Its vertical axis is prediction error and the horizontal axis is training time. The orange training-error curve keeps declining. The blue validation-error curve falls at first but later turns upward. The marked best balance is around the lowest validation error, before additional training worsens generalization. Now read the lower remedies: collect more diverse representative training data, increase data variety with suitable augmentation, stop training when validation performance stops improving, and tune model complexity with settings such as regularization or tree depth. None of these guarantees a fix, and augmentation must preserve correct labels and meaningful variation. If the task is to recognize dogs in new photos, seeing only the same few dog pictures repeatedly is insufficient. Comprehension check: which result tells us more about real-world usefulness, excellent training accuracy or reliable performance on unseen representative examples? The unseen evaluation is more meaningful."
+    }
+  ]
+}

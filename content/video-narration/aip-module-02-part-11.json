@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 02 site-ready 2048×1152 WebP images 71–90 inspected as individual labeled slide previews from archived source ZIPs. Renderer independently validates live R2 image at each slide.",
+  "part_id": "11",
+  "part_title": "Amazon RDS, Aurora and PostgreSQL Vector Retrieval",
+  "script_revision": "2026-11-11-m02-p11-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 71,
+      "title": "Amazon RDS Overview",
+      "narration": "Welcome to the relational data section. The diagram begins with an application sending SQL queries to Amazon RDS. Notice the managed database service in the centre and the choice of engines on the right, including PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Db2 and Aurora, subject to current service support. The bottom banner identifies why teams use RDS: AWS handles much of provisioning, patching and maintenance, while you remain responsible for your schema, queries, application access and business data. Now distinguish RDS from a database installed on an EC2 instance. In an EC2-hosted database, your team also owns operating-system-level database administration. With RDS, many of those infrastructure tasks are managed for you. When designing generative AI applications, RDS is appropriate for structured transactional records and relationships, not automatically for unstructured documents or semantic vector retrieval. We can combine it with other stores as requirements become clearer."
+    },
+    {
+      "slide": 72,
+      "title": "Why Choose Managed RDS?",
+      "narration": "This slide compares two operational models side by side. On the left, a team running database software on Amazon EC2 must manage the instance, operating system, database installation, patches, backup routines, monitoring and scaling. On the right, Amazon RDS takes on much of this infrastructure responsibility. Read the capability cards down the far-right column: provisioning, patching, backups with point-in-time restore, monitoring, Multi-AZ failover, read replicas and restrictions on direct access to the managed operating system. The diagram underneath the managed database shows a primary instance, a Multi-AZ standby deployment for availability, and read replicas that can help scale reads. These features solve different problems. A standby is mainly about failover; a read replica is typically about additional read capacity. As you evaluate architecture questions, ask whether the business needs fewer administrative tasks, disaster recovery, high availability, query scale or all of them. Managed does not mean that you no longer plan security, backup retention or database performance."
+    },
+    {
+      "slide": 73,
+      "title": "RDS Storage Autoscaling",
+      "narration": "The chart illustrates how RDS storage autoscaling works when a database runs low on free space. Start with a hundred-gigabyte allocated volume on the left. As application data grows, the percentage used rises and available space shrinks. When the free-storage threshold and the relevant monitoring conditions are met, RDS can increase allocated storage, within the maximum limit you configured. Follow the allocation steps across the chart: two hundred, four hundred, eight hundred and a larger size, with more free space after each change. The orange callout at the top includes the example condition of low free space over several minutes and a minimum interval between modifications. These are service details that should be checked for the current engine and configuration. The crucial point is that storage growth can be automated, but storage doesn't automatically shrink afterward. Select a sensible maximum and monitor cost, capacity and database performance as the application grows."
+    },
+    {
+      "slide": 74,
+      "title": "RDS with S3 Document Repositories",
+      "narration": "Here is a data architecture particularly relevant to retrieval-augmented generation. The user asks a question about an order or a document. The application on the left consults Amazon RDS for structured records such as document IDs, references, metadata and, where applicable, vector references. Follow the next arrow to Amazon S3, which stores the actual document bytes: PDFs, images and longer unstructured files. The application uses the document URI or key to retrieve the correct object, extracts the relevant content and supplies grounded context to a generative model. Notice the bottom distinction panels. RDS is suitable for relational metadata, constraints, references and structured queries; S3 is the object store for full documents. The slide's arrows deliberately separate the two responsibilities. An RDS row does not need to contain a complete multi-megabyte PDF. Design secure object access, consistent references, and relevant lifecycle and retention rules so the application can reliably connect metadata to the right source file."
+    },
+    {
+      "slide": 75,
+      "title": "Amazon Aurora",
+      "narration": "This slide introduces Amazon Aurora, an AWS-managed relational database engine compatible with selected PostgreSQL and MySQL features. Look at the three Availability Zones across the top. There is a writer instance in one zone and reader instances in other zones. Beneath those compute instances is a shared, distributed storage layer spanning multiple Availability Zones, so the storage architecture is not tied to one isolated VM disk. On the right, the benefits list highlights managed operation, database compatibility, read replicas, high availability and automatic storage growth. Follow the arrows from the writer and readers down to shared storage. The architecture is designed to separate compute from a resilient storage system. It is important not to confuse an Aurora reader with a separately provisioned full copy of data on its own independent traditional disk. When planning a production workload, determine the required engine features, write throughput, read scaling and failover expectations before choosing the size and number of DB instances."
+    },
+    {
+      "slide": 76,
+      "title": "Aurora High Availability",
+      "narration": "Let's inspect the distributed storage detail. Aurora maintains multiple copies of data across three Availability Zones, represented by six storage copies at the bottom. Read the two quorum labels: writes and reads use a distributed quorum mechanism rather than requiring one single disk to be healthy. Across the top are one writer and two reader instances, which access that shared storage layer. The right column shows what happens if the writer fails: an eligible reader can be promoted, after which application traffic can return to the writer endpoint. The other panel shows that additional readers can spread read traffic for analytical or read-heavy use cases. High availability is not the same as unlimited scale. A single Aurora cluster still has a writer role for ordinary writes, and client connections must handle failover appropriately. For the exam, identify whether the requirement concerns availability, read throughput or data durability, since each has a different mechanism."
+    },
+    {
+      "slide": 77,
+      "title": "Aurora DB Cluster Endpoints",
+      "narration": "This slide makes connection routing explicit. On the left, an application with write operations connects to the writer endpoint. That endpoint routes traffic to the current primary instance in the Aurora DB cluster. On the right, read-only application requests connect to the reader endpoint, which distributes connections across eligible reader instances. The large storage volume across the bottom is shared by the writer and readers. Notice the endpoint boxes: the application does not need to hard-code one particular instance as the permanent writer, because the writer endpoint follows the current writer after a failover. However, this does not guarantee every query or connection will automatically retry perfectly during a failover. The application must still handle connection interruption, transactions and retries. Choose a writer connection for changes and the reader endpoint for suitable read-only workloads. When strong consistency is critical, consider which instance or endpoint is used and how replication visibility affects the result."
+    },
+    {
+      "slide": 78,
+      "title": "Aurora Operational Features",
+      "narration": "We have now seen Aurora's database architecture; this slide groups its operating features. In the center is the managed Aurora service. The callouts describe automatic failover, automated backups and point-in-time recovery, monitoring through AWS observability tools, scaling reader capacity, security and isolation, and patching or maintenance. Notice that backups can support recovery to a desired point in time, while failover helps restore availability after a writer failure. These are different requirements. The security card lists encryption at rest and in transit, VPC isolation and IAM-related integration; all must be configured according to the workload's access model. The scaling card describes adding or removing readers and growing storage, rather than treating scaling as one universal operation. A reliable production design uses these features together: monitor before capacity becomes a problem, configure backups for recovery objectives, test failover behaviour, and restrict identities and network reachability."
+    },
+    {
+      "slide": 79,
+      "title": "Aurora PostgreSQL as a Vector Store",
+      "narration": "Now connect Aurora to retrieval-augmented generation. The database on this slide is Aurora PostgreSQL, with the pgvector extension storing embeddings alongside relational fields. Look at the documents table in the centre: each row keeps a category, a document URI and a vector embedding. Follow the three numbered steps from the user's question. First, structured SQL filters narrow the candidate set, for example selecting only support documents the user may access. Second, a vector similarity operation ranks the remaining content using compatible embeddings. Third, the application retrieves the matching records and metadata, then supplies their relevant content to the generative model. This design is useful when the application already benefits from PostgreSQL transactions, joins and relational filtering and wants semantic retrieval in the same database. The trade-off is that performance, index choice, scale and query planning need evaluation. pgvector is not identical to a dedicated vector search service; test retrieval quality and latency before choosing it."
+    },
+    {
+      "slide": 80,
+      "title": "Traditional Relational Architecture",
+      "narration": "This slide closes the relational section with a conventional application stack. A client reaches a load balancer, then multiple application instances, and finally a relational database. The main writer database in the centre is the primary destination for updates and transactions. Read-only replicas on the right can serve appropriate read requests, reducing some load on the primary. The lower-left diagram illustrates why relational databases work well when the data has a defined schema: customers, orders and order items can be joined through related keys, aggregated and queried with SQL. Notice the row at the bottom that distinguishes write operations from read operations. Adding application instances may improve front-end capacity, but it does not remove database bottlenecks automatically. The database still needs indexing, transaction design and capacity planning. In our next video we compare this relational approach with NoSQL data modelling and Amazon DynamoDB."
+    }
+  ]
+}

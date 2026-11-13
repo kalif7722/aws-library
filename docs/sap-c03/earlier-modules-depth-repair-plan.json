@@ -1,0 +1,772 @@
+{
+  "status": "in-production",
+  "styleBaseline": "Module09",
+  "repairs": [
+    {
+      "moduleId": "01",
+      "sequence": 45,
+      "title": "Directory identity: AD DS and AD FS do different jobs",
+      "sections": [
+        {
+          "heading": "Directory objects",
+          "text": "Active Directory Domain Services stores users, computers, groups and other domain objects. Domain controllers serve the domain; trees and forests define directory structure and trust boundaries."
+        },
+        {
+          "heading": "Federation across applications",
+          "text": "AD FS is a federation service that can authenticate a corporate user and issue a SAML assertion for application sign-in. An assertion is not an AWS access key."
+        },
+        {
+          "heading": "AWS access follows trust",
+          "text": "For AWS federation, configure the identity-provider and role trust, then obtain the intended AWS session. Directory trust, SAML federation and AWS permission policies are separate controls."
+        }
+      ],
+      "remember": "A directory stores identities; federation carries an authentication claim across a trust boundary.",
+      "referencePages": [
+        39,
+        40
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 46,
+      "title": "Choose Managed Microsoft AD, AD Connector or Simple AD",
+      "sections": [
+        {
+          "heading": "Managed Microsoft AD",
+          "text": "A managed Microsoft directory in AWS supports traditional AD-aware workloads and supported trusts/integrations. AWS operates domain controllers; you still manage users, groups and application permissions."
+        },
+        {
+          "heading": "AD Connector",
+          "text": "A gateway forwards supported directory requests to an existing AD. Users remain in that directory; connectivity and directory availability matter. It is not a replica or an offline credential cache."
+        },
+        {
+          "heading": "Simple AD",
+          "text": "A standalone Samba-based directory supports basic compatible domain/LDAP workflows. It lacks forest trusts, MFA and full Microsoft AD feature compatibility; verify application support before selection."
+        }
+      ],
+      "remember": "Choose by required directory features and failure dependencies, not by a generic SSO label.",
+      "referencePages": [
+        41,
+        46,
+        47
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 47,
+      "title": "Managed Microsoft AD: availability, sharing and integrations",
+      "sections": [
+        {
+          "heading": "Operate across AZs",
+          "text": "Managed domain controllers are deployed across two AZs; supported scaling and backups protect directory operations. Directory resilience does not automatically make each dependent application resilient."
+        },
+        {
+          "heading": "Connect compatible workloads",
+          "text": "Windows domain join, supported RDS SQL Server, virtual desktops and traditional AD applications require the right directory, DNS and network paths. Share supported directories across eligible accounts/VPCs."
+        },
+        {
+          "heading": "Extend across Regions",
+          "text": "Supported Multi-Region replication extends managed directory availability. Its behavior differs from a forest trust or a self-managed replica; verify supported integrations and regional MFA constraints."
+        }
+      ],
+      "remember": "Directory availability, workload compatibility and access permissions must be designed together.",
+      "referencePages": [
+        42,
+        43
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 48,
+      "title": "Trust and replication preserve different directory boundaries",
+      "sections": [
+        {
+          "heading": "Trust is not synchronization",
+          "text": "One-way or two-way supported external/forest trusts allow authentication across directory boundaries. Trust direction defines which domain's users can access the other domain's resources; it does not copy every user."
+        },
+        {
+          "heading": "Prepare the hybrid path",
+          "text": "DX/VPN routing, DNS forwarding, required ports and compatible directory configuration must work before a trust can be used. Verify both authentication and application authorization."
+        },
+        {
+          "heading": "Replicate where required",
+          "text": "A self-managed domain-controller replica on EC2 can keep that existing domain closer to workloads. Operate its replication and recovery yourself; an AD Connector alone cannot remove a WAN authentication dependency."
+        }
+      ],
+      "remember": "A trust links domains; replication copies directory state within its supported model.",
+      "referencePages": [
+        44,
+        45,
+        46
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 49,
+      "title": "STS APIs create different kinds of temporary sessions",
+      "sections": [
+        {
+          "heading": "Assume a role",
+          "text": "AssumeRole creates a role session within an account or across accounts. The role trust policy, caller authorization and session restrictions must support the request."
+        },
+        {
+          "heading": "Federate with an identity token",
+          "text": "AssumeRoleWithSAML accepts an eligible SAML assertion; AssumeRoleWithWebIdentity accepts a supported OIDC/web identity token. Validate issuer, audience and subject instead of trusting a token solely because it is signed."
+        },
+        {
+          "heading": "User and broker sessions",
+          "text": "GetSessionToken supplies an eligible IAM user's temporary credentials, including supported MFA context. GetFederationToken supports a broker-created federated-user session with its own scoped authorization behavior."
+        }
+      ],
+      "remember": "Temporary credentials are not interchangeable: identify which API and principal created the session.",
+      "referencePages": [
+        22,
+        23,
+        29,
+        30,
+        31,
+        35,
+        36
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 50,
+      "title": "Policy conditions: choose the operator and context key",
+      "sections": [
+        {
+          "heading": "Match the value's type",
+          "text": "StringEquals/StringLike, numeric, date, Bool, IP-address and ARN operators solve different comparisons. Conditions inspect request context; keys are not present for every caller or network path."
+        },
+        {
+          "heading": "Use variables deliberately",
+          "text": "Supported variables can scope a resource or condition to context such as a principal tag or username. A variable that fits an IAM user may not exist for an assumed-role session."
+        },
+        {
+          "heading": "Test missing context",
+          "text": "Null checks key presence; IfExists and negated operators alter missing-key behavior. Test both an expected request and a request without the key before using the condition as a security boundary."
+        }
+      ],
+      "remember": "An operator, a context key and missing-key behavior together define the condition.",
+      "referencePages": [
+        14,
+        15,
+        166,
+        167,
+        168,
+        169
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 51,
+      "title": "Tag set operators do not automatically require every tag",
+      "sections": [
+        {
+          "heading": "Compare request values",
+          "text": "ForAllValues tests every supplied request value against allowed policy values; ForAnyValue tests whether at least one matches. Use set operators only with supported multivalued context keys such as aws:TagKeys."
+        },
+        {
+          "heading": "Require the keys separately",
+          "text": "ForAllValues can match when the key is missing. Combine an appropriate presence check with explicit requirements for each required aws:RequestTag key; an allowed-key list alone does not prove every required tag was submitted."
+        },
+        {
+          "heading": "Protect the tag lifecycle",
+          "text": "Control tag creation, updates and deletion as well as resource creation. Restrict which principals can change security-relevant principal/resource tags used by ABAC."
+        }
+      ],
+      "remember": "Allowed tag names, required tag presence and permission to change tags are separate controls.",
+      "referencePages": [
+        28,
+        59,
+        61,
+        62
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 52,
+      "title": "Managed policies: broad access is not an explicit deny",
+      "sections": [
+        {
+          "heading": "AdministratorAccess",
+          "text": "A broad identity-policy allow still operates inside applicable organization guardrails, resource controls and explicit denies. AdministratorAccess does not bypass every authorization boundary."
+        },
+        {
+          "heading": "PowerUserAccess",
+          "text": "This AWS-managed policy allows broad service use while excluding broad identity/account administration, with specific exceptions defined by its current version. Inspect the live policy rather than memorizing a frozen exception list."
+        },
+        {
+          "heading": "NotAction is a selection",
+          "text": "NotAction selects actions outside the named set for that statement; it is not itself an explicit Deny. Other policies and the statement's Effect still determine the effective result."
+        }
+      ],
+      "remember": "Read Effect, action selection and all applicable boundaries together.",
+      "referencePages": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "01",
+      "sequence": 29,
+      "title": "VPC endpoint policy: an additional authorization filter",
+      "sections": [
+        {
+          "heading": "Constrain the endpoint path",
+          "text": "A supported endpoint policy limits eligible principals, actions or resources for requests through that endpoint. It does not supply a network route, replace service authorization or govern requests that use another path."
+        },
+        {
+          "heading": "Evaluate applicable policies",
+          "text": "The caller and resource must satisfy the relevant authorization rules. A same-account resource policy can sometimes supply the allow directly; do not assume every allowed request requires an identity-policy allow."
+        },
+        {
+          "heading": "Enforce the intended boundary",
+          "text": "Use supported resource-policy conditions and network design when access must use a particular endpoint. Explicit denies and applicable SCPs/RCPs, boundaries and session policies still matter."
+        }
+      ],
+      "remember": "Endpoint reachability, endpoint filtering and service authorization are different checks.",
+      "referencePages": [
+        133,
+        136,
+        691,
+        692,
+        693,
+        694,
+        695,
+        696
+      ],
+      "revision": "replace-authorization-overgeneralization",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "02",
+      "sequence": 23,
+      "title": "Created, invited and moved accounts have different setup steps",
+      "sections": [
+        {
+          "heading": "Created member account",
+          "text": "Organizations normally creates OrganizationAccountAccessRole for a newly created member account. Authorized management-account principals can assume it; the trust and IAM permissions still matter."
+        },
+        {
+          "heading": "Invited existing account",
+          "text": "The same administrator role is not automatically created for an invited account. Review existing access, logs, controls and costs before onboarding; establish a deliberate administration model."
+        },
+        {
+          "heading": "Move between organizations",
+          "text": "Meet account-removal prerequisites, leave/remove the old organization, then invite and accept into the new one. Recheck effective policies, service integrations and billing; changing an OU is a different operation."
+        }
+      ],
+      "remember": "Account membership does not automatically create every administrative or service integration.",
+      "referencePages": [
+        49,
+        54
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "02",
+      "sequence": 24,
+      "title": "Organizations: billing benefits and governance features",
+      "sections": [
+        {
+          "heading": "Understand the feature set",
+          "text": "Consolidated billing aggregates eligible account usage and payment. All features adds supported organization governance capabilities; enabling it can require invited-account approval and is not a reversible downgrade to billing-only."
+        },
+        {
+          "heading": "Share discounts deliberately",
+          "text": "Management-account settings control eligible Reserved Instance and Savings Plans discount sharing. Check current billing rules and sharing settings for participating accounts."
+        },
+        {
+          "heading": "Keep boundaries separate",
+          "text": "A shared billing discount does not grant IAM access to another account's resources or transfer ownership. Capacity-reservation behavior and resource quotas require their own design."
+        }
+      ],
+      "remember": "Consolidated billing is a financial relationship; governance and authorization add separate controls.",
+      "referencePages": [
+        50,
+        51,
+        52,
+        53
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "02",
+      "sequence": 25,
+      "title": "Tag policies standardize; creation controls require presence",
+      "sections": [
+        {
+          "heading": "Standardize the taxonomy",
+          "text": "Organizations tag policies define supported tag keys, capitalization and allowed values, and can enforce supported tagging operations or report compliance."
+        },
+        {
+          "heading": "Require important tags",
+          "text": "A tag policy alone does not force every resource to have every required tag. Use appropriate service/IAM/SCP request-tag conditions and supported provisioning controls for mandatory tagging."
+        },
+        {
+          "heading": "Use the result responsibly",
+          "text": "Cost-allocation reporting and ABAC depend on meaningful tags and controlled tag mutation. Test untagged resources, unsupported services and permitted exceptions."
+        }
+      ],
+      "remember": "Tag compliance, mandatory presence and tag-based authorization are related but different jobs.",
+      "referencePages": [
+        59,
+        60,
+        61,
+        62
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "02",
+      "sequence": 26,
+      "title": "Organization policies: data-use preferences and backup plans",
+      "sections": [
+        {
+          "heading": "Scope AI data-use preferences",
+          "text": "AI services opt-out policies govern supported services and the organization scope to which they apply. Verify each service's current data-use terms; do not treat one policy as a universal rule for all AI products."
+        },
+        {
+          "heading": "Define centralized backup intent",
+          "text": "Organizations backup policies define supported backup-plan behavior such as schedules, windows, selections and copy requirements through inherited effective policies."
+        },
+        {
+          "heading": "Prove execution",
+          "text": "A policy is not evidence that resources were selected, a role had permissions or a backup succeeded. Check effective plans, resource eligibility, job results and restore tests; retain local operational ownership."
+        }
+      ],
+      "remember": "An inherited policy expresses intent; service evidence proves that intent was executed.",
+      "referencePages": [
+        63,
+        64
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "03",
+      "sequence": 27,
+      "title": "Parameter hierarchy is also an authorization boundary",
+      "sections": [
+        {
+          "heading": "Organize configuration",
+          "text": "Use meaningful paths such as /prod/payments/endpoint and versioned parameter values. Supported public parameters and Secrets Manager references have different ownership and access behavior."
+        },
+        {
+          "heading": "Control recursive reads",
+          "text": "GetParametersByPath can expose descendants of an authorized path. Review recursive access carefully; a broad parent-path permission can undermine a design that assumes child-path isolation."
+        },
+        {
+          "heading": "Authorize decrypted values",
+          "text": "SecureString uses KMS and appropriate decrypt authorization. IAM access, KMS permissions, version selection and application caching all affect which configuration the application actually sees."
+        }
+      ],
+      "remember": "A convenient parent path must not become an accidental cross-environment read permission.",
+      "referencePages": [
+        102,
+        103
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "03",
+      "sequence": 28,
+      "title": "Parameter Store tiers and policies solve separate problems",
+      "sections": [
+        {
+          "heading": "Choose storage attributes",
+          "text": "Standard supports smaller values and a lower parameter count; Advanced supports larger values, more parameters, parameter policies and supported sharing at additional cost. Tier and API throughput are different controls."
+        },
+        {
+          "heading": "Name the policy behavior",
+          "text": "Expiration deletes at the configured time; ExpirationNotification and NoChangeNotification publish supported notifications. A notification does not rotate the external credential by itself."
+        },
+        {
+          "heading": "Plan the lifecycle",
+          "text": "Standard can be upgraded; Advanced cannot be downgraded in place. Inspect the current tier limits and costs, retain needed values and build any rotation/update workflow explicitly."
+        }
+      ],
+      "remember": "Parameter expiration, change notification and secret rotation are different mechanisms.",
+      "referencePages": [
+        104,
+        105,
+        109,
+        110
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "03",
+      "sequence": 29,
+      "title": "CloudFormation secret references are not a rotation engine",
+      "sections": [
+        {
+          "heading": "Generate or reference a secret",
+          "text": "A template can create a Secrets Manager secret and reference its value without embedding plaintext credentials in the template. Grant the deployment and consuming services only the required access."
+        },
+        {
+          "heading": "Separate deployment from rotation",
+          "text": "Updating only the secret value does not automatically refresh a resource property containing a dynamic reference. CloudFormation resolves it during the relevant create/update operation."
+        },
+        {
+          "heading": "Keep consumers current",
+          "text": "Configure an appropriate rotation workflow and consumer refresh strategy. Existing environment variables, connections and application caches may retain older values until refreshed or restarted."
+        }
+      ],
+      "remember": "A dynamic reference avoids plaintext templates; rotation and consumer refresh still need design.",
+      "referencePages": [
+        106,
+        107,
+        109,
+        110
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "03",
+      "sequence": 30,
+      "title": "Cross-account secret reads must pass three authorization gates",
+      "sections": [
+        {
+          "heading": "Caller identity permission",
+          "text": "The consuming account's principal needs appropriate secretsmanager:GetSecretValue permission for the intended secret ARN and context."
+        },
+        {
+          "heading": "Secret resource policy",
+          "text": "The secret owner must grant the intended external principal access through a supported resource-based policy. Scope principals and conditions; avoid unintended external sharing."
+        },
+        {
+          "heading": "Customer-managed KMS key",
+          "text": "For a secret encrypted with the owner's customer-managed key, permit the consumer's required decrypt use in applicable key/IAM policies. A secret permission alone does not authorize its encryption key."
+        }
+      ],
+      "remember": "Cross-account access needs permission to the secret and permission to use its key.",
+      "referencePages": [
+        108
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "03",
+      "sequence": 31,
+      "title": "KMS key material origin is different from key ownership",
+      "sections": [
+        {
+          "heading": "AWS-generated or imported",
+          "text": "A customer-managed key can use AWS-generated material or supported imported material. Imported-material expiry, deletion and reimport behavior require an explicit availability and recovery plan."
+        },
+        {
+          "heading": "CloudHSM custom key store",
+          "text": "A supported custom key store backs KMS operations with a connected CloudHSM cluster. KMS integration remains, while cluster availability, capacity and operations become dependencies."
+        },
+        {
+          "heading": "External key store",
+          "text": "An external key store delegates supported cryptographic operations to an external key manager through its proxy. This is different from importing material into KMS; latency and external outages affect AWS workloads."
+        }
+      ],
+      "remember": "Ownership, material origin and the location performing cryptographic operations are separate decisions.",
+      "referencePages": [
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        119,
+        120,
+        121,
+        122,
+        123
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "04",
+      "sequence": 41,
+      "title": "NAT instances: operate the forwarding host deliberately",
+      "sections": [
+        {
+          "heading": "Configure the complete path",
+          "text": "A NAT instance is an EC2 forwarding host in a suitable public subnet. Configure its public/EIP path, forwarding software and private-subnet route, and disable source/destination checking as required."
+        },
+        {
+          "heading": "Own the failure handling",
+          "text": "Instance bandwidth, security configuration, patching, scaling and failover are your responsibility. A single forwarding host is a single failure domain."
+        },
+        {
+          "heading": "Compare managed egress",
+          "text": "Use an appropriate managed NAT design when it meets the workload requirements. Do not infer that a legacy NAT-instance example supplies managed availability or automatic scaling."
+        }
+      ],
+      "remember": "A route to a forwarding instance works only when the host and the return path work too.",
+      "referencePages": [
+        671,
+        672
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "04",
+      "sequence": 42,
+      "title": "Flow Logs: inspect the fields and the observation point",
+      "sections": [
+        {
+          "heading": "Read the flow record",
+          "text": "Interface, source/destination addresses, ports, protocol, packets, bytes, timestamps, action and log status describe an aggregated observed flow, not the application payload."
+        },
+        {
+          "heading": "Interpret NAT correctly",
+          "text": "At middlebox or NAT interfaces, srcaddr/dstaddr can reflect the observation point. Supported packet-level fields such as pkt-srcaddr/pkt-dstaddr help distinguish original packet addresses."
+        },
+        {
+          "heading": "Avoid false conclusions",
+          "text": "ACCEPT or REJECT is evidence, not a complete root cause. Correlate both directions, security controls, routes and application logs; some traffic is excluded and records can be delayed or skipped."
+        }
+      ],
+      "remember": "The ENI, field definition and collection scope determine what a flow-log record proves.",
+      "referencePages": [
+        674,
+        725,
+        726,
+        727,
+        728
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "05",
+      "sequence": 23,
+      "title": "IP-based routing and geoproximity answer different questions",
+      "sections": [
+        {
+          "heading": "Route by client CIDR",
+          "text": "IP-based records use CIDR collections and location mappings for known client network ranges. Configure the supported unmatched-location behavior and consider DNS resolver/client-subnet visibility."
+        },
+        {
+          "heading": "Shift geographic catchments",
+          "text": "Geoproximity uses resource/user location and a bias to expand or shrink the area served by an endpoint. It is different from country-based geolocation and measured-latency routing."
+        },
+        {
+          "heading": "Choose the control surface",
+          "text": "Current geoproximity records can be configured directly where supported; Traffic Flow is useful for complex reusable policies. Do not repeat the older claim that every geoproximity configuration requires Traffic Flow."
+        }
+      ],
+      "remember": "Client networks, user geography and measured latency are different routing inputs.",
+      "referencePages": [
+        281,
+        282,
+        283,
+        284,
+        285,
+        287
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "05",
+      "sequence": 24,
+      "title": "Health checks: endpoint probes, aggregation and private signals",
+      "sections": [
+        {
+          "heading": "Check a public endpoint",
+          "text": "HTTP/HTTPS checks evaluate configured response criteria; TCP checks test connection behavior. Allow checker traffic, use the intended hostname/path, and validate optional response-string matching."
+        },
+        {
+          "heading": "Combine health evidence",
+          "text": "Calculated checks combine child results using configured thresholds or logical rules. Checker aggregation and calculated-child limits are separate controls; consult current API/console limits."
+        },
+        {
+          "heading": "Monitor private readiness",
+          "text": "Public health checkers cannot directly reach private endpoints. Use supported CloudWatch metric/alarm health signals and a prepared failover target; changing an alarm's display state is not a substitute for its metric data."
+        }
+      ],
+      "remember": "A health check must measure the failure your routing policy is intended to handle.",
+      "referencePages": [
+        291,
+        292,
+        293,
+        294,
+        295
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "05",
+      "sequence": 25,
+      "title": "Traffic Flow and DNS caching make controlled changes repeatable",
+      "sections": [
+        {
+          "heading": "Build reusable routing logic",
+          "text": "Traffic Flow represents complex decision trees as versioned traffic policies and policy instances. A policy definition and the DNS records created from it are different resources."
+        },
+        {
+          "heading": "Test geographic and weighted decisions",
+          "text": "Bias changes catchment size, while weights influence DNS-answer selection. Neither guarantees an exact share of individual HTTP requests because resolvers and clients cache answers."
+        },
+        {
+          "heading": "Plan rollout and rollback",
+          "text": "Review TTL, record scope, health behavior, cost and the fallback for all-unhealthy or unmatched locations. Validate authoritative answers and client behavior before broad rollout."
+        }
+      ],
+      "remember": "Version the routing decision and test the cached client path, not just the policy editor.",
+      "referencePages": [
+        276,
+        278,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "09",
+      "sequence": 34,
+      "title": "Multi-Region Access Points: global entry and regional data",
+      "sections": [
+        {
+          "heading": "Use a global access path",
+          "text": "An S3 Multi-Region Access Point presents a global endpoint over configured regional buckets and routes supported requests using its service behavior. It does not make every object's data appear in every bucket."
+        },
+        {
+          "heading": "Replicate and authorize separately",
+          "text": "Configure supported replication, bucket/MRAP policies, ownership and encryption-key access for the intended requests. Version and replication state still determine which regional data exists."
+        },
+        {
+          "heading": "Control regional failover",
+          "text": "Failover controls adjust eligible regional request routing. Prepare destination data and permissions before shifting traffic; a routing change alone is not a complete disaster-recovery plan."
+        }
+      ],
+      "remember": "Global request routing and regional object replication are separate mechanisms.",
+      "referencePages": [
+        137,
+        138,
+        139
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "09",
+      "sequence": 35,
+      "title": "Legacy S3 transforms and Glacier vault retention need context",
+      "sections": [
+        {
+          "heading": "Understand Object Lambda",
+          "text": "The historical Object Lambda pattern transformed supported object responses through Lambda. Availability is now restricted to existing customers and selected partner use; verify eligibility before designing a new workload."
+        },
+        {
+          "heading": "Choose a current transform path",
+          "text": "For new designs, evaluate an appropriate application/Lambda/API or CloudFront processing path. Transform authorization, caching and latency still need explicit design."
+        },
+        {
+          "heading": "Separate Glacier Vault Lock",
+          "text": "Glacier vault-service retention policies belong to the historical vault API model. They are different from S3 Object Lock on versioned bucket objects and from selecting an S3 Glacier storage class."
+        }
+      ],
+      "remember": "Preserve the old exam concept while selecting a supported current service model.",
+      "referencePages": [
+        134,
+        140
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "09",
+      "sequence": 36,
+      "title": "Presigned URLs delegate a bounded request",
+      "sections": [
+        {
+          "heading": "Authorize the signer",
+          "text": "A presigned URL represents a particular signed request using the signer's permissions. Scope the operation, bucket/key and required request headers; possession of the URL can grant the intended bearer access."
+        },
+        {
+          "heading": "Bound the lifetime",
+          "text": "The URL's expiry cannot outlive the usable signing credentials and may be constrained further by policy. Temporary role credentials can expire before a requested URL lifetime."
+        },
+        {
+          "heading": "Protect the workflow",
+          "text": "Use HTTPS, controlled distribution and appropriate object/size/checksum conditions for the chosen upload mechanism. Test failures and avoid exposing long-lived credentials to the client."
+        }
+      ],
+      "remember": "A presigned URL is delegated request authority, not a new public bucket policy.",
+      "referencePages": [
+        132,
+        357
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    },
+    {
+      "moduleId": "09",
+      "sequence": 37,
+      "title": "S3 evidence: access logs, data events and metrics",
+      "sections": [
+        {
+          "heading": "Server access logs",
+          "text": "Access logging records supported request details to a configured destination. Treat delivery and coverage characteristics as part of the evidence model; it is not a real-time application tracing guarantee."
+        },
+        {
+          "heading": "CloudTrail data events",
+          "text": "Configure relevant S3 object-level data-event selectors when object API audit is required. Management-event history alone does not automatically record every object read or write."
+        },
+        {
+          "heading": "Operational metrics",
+          "text": "Request metrics and Storage Lens show aggregate signals at their supported scope and cadence. A metric, an access log and an API audit event answer different questions."
+        }
+      ],
+      "remember": "Choose evidence by the question: which API, which request, or what aggregate trend?",
+      "referencePages": [
+        81,
+        83,
+        85,
+        88,
+        89,
+        90,
+        91,
+        92,
+        129,
+        162
+      ],
+      "revision": "add-missing-reference-depth",
+      "layout": "Module09 style; named teaching sections with clean functional service illustrations"
+    }
+  ]
+}

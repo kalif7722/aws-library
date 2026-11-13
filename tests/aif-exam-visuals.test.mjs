@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {validate} from '../scripts/validate-aif-exam-assets.mjs';
+test('approved exam questions remain bound to all 65 verified explanation assets',()=>assert.deepEqual(validate(),{questions:65,verifiedVisuals:65}));
+test('an answer change invalidates its previously reviewed visual',()=>{const bank=JSON.parse(fs.readFileSync(new URL('../app/components/aif-exam/questions.json',import.meta.url)));bank[0].correct=[(bank[0].correct[0]+1)%bank[0].options.length];assert.throws(()=>validate(bank),/question changed since visual review/);});

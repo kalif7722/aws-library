@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Narration follows original R2 Module 06 numbered slides 25–32 confirmed by GitHub runner spatial OCR audit. Includes all chart numbers, diagrams, flow paths, failure examples and CI/CD artifacts where visible.",
+  "part_id": "05",
+  "part_title": "Step Functions Model Workflows, Resilience, Agent Controls and CI/CD",
+  "script_revision": "2026-11-12-m06-p05-visual-audit-v3",
+  "scenes": [
+    {
+      "slide": 25,
+      "title": "Train a model with a state machine",
+      "narration": "This slide turns model training into a recoverable workflow rather than one long script. Follow the main path from left to right. Preprocess data prepares the training dataset. Train model starts the training work. Evaluate model checks the resulting metrics. Then a Choice state decides whether the model passes the required quality threshold. If it passes, register the model. If it doesn't, follow the failure branch to notify the team and end appropriately. Notice the retry loop around a failed operation. A temporary service error doesn't necessarily mean the whole workflow must start again; Step Functions can retry that task with a backoff policy. Now look at the execution history along the bottom. Each completed state is recorded separately: preprocessing succeeded, training succeeded, evaluation succeeded, the condition was evaluated, and registration succeeded. That history helps you find exactly where a run failed. Training itself happens in the compute or ML service the state invokes, not inside Step Functions. The state machine manages sequence, decisions and error handling. The key lesson is that we should evaluate before promotion and design predictable recovery for individual steps."
+    },
+    {
+      "slide": 26,
+      "title": "Tune a model with parallel trials",
+      "narration": "Now we use Step Functions to tune a model through parallel trials. Start with the training dataset and hyperparameter search space on the left. Step Functions launches multiple training jobs, with the training service performing the actual computation. Follow the three branches: trial A uses one combination of learning rate, batch size and layers, trial B uses another, and trial C tests a third. Each job reports a metric, including its accuracy and loss. In the example, trial A achieves accuracy zero point seven eight, trial B reaches zero point eight two, and trial C scores zero point eight zero. The selection stage chooses trial B as the best result according to the specified accuracy objective, then registers its model for later deployment. The important point is that parallel trials can reduce elapsed experimentation time, but they also consume multiple workers and therefore more resources concurrently. Metrics must be measured on comparable validation data; otherwise the winning trial may only look better because of a different evaluation. Step Functions coordinates the fan-out and result collection while the training service handles the model jobs. That's the difference between orchestration and computation."
+    },
+    {
+      "slide": 27,
+      "title": "Manage a resilient batch job",
+      "narration": "This slide walks through a long-running batch processing task. Imagine an input of five hundred documents. On the success path, the workflow submits the batch job, waits and polls its status until it finishes, then retrieves the result manifest from S3. That manifest describes the outputs for the documents; it is more useful than forcing the whole output into the state machine. Now look at the lower paths. A transient API error during submission or a status check should not always terminate the entire process. The retry branch detects the temporary condition, waits with exponential backoff, and tries again within a configured limit. But a terminal failure is different. In that branch, the workflow catches the error, stops retrying, records useful failure details and takes an appropriate action such as notification or cleanup. This distinction prevents endless retries of jobs that can never succeed, while giving short outages a chance to recover. One more practical detail: choose a polling interval appropriate for job duration so you don't create excessive status-check requests. Step Functions coordinates submission, waiting, retries and output retrieval; the batch service executes the heavy processing."
+    },
+    {
+      "slide": 28,
+      "title": "Circuit breaker for a failing model dependency",
+      "narration": "Here the diagram explains a circuit breaker for an unreliable model dependency. Begin in the Closed state. That sounds restrictive, but it actually means the circuit permits normal calls to the model. When repeated errors or timeouts cross the configured threshold, the circuit moves to Open. In the open state, the application stops sending normal model calls and can return a fallback answer instead. After a cooldown, it enters Half-open and allows a small number of test calls. If a probe succeeds and the recovery rule is satisfied, return to Closed. If the dependency is still failing, go back to Open. Look at the repeated-failure path along the bottom: it keeps the circuit open rather than flooding the unhealthy service. The note on the right makes an important architectural distinction. Step Functions can coordinate waits, probes, failure branches and fallbacks, but the circuit's state, thresholds and shared counters require application logic and durable storage or a cache. The pattern is especially relevant when a Bedrock model endpoint or external tool is slow or unavailable. A circuit breaker protects both user experience and the struggling dependency by failing gracefully."
+    },
+    {
+      "slide": 29,
+      "title": "GenAI reasoning with workflow controls",
+      "narration": "This slide shows an agent-like reasoning workflow with explicit controls. Start on the left: the application inspects the user's request and breaks the goal into smaller tasks. The planning step selects the most appropriate tool, provides its parameters, invokes it and examines the returned observation. Now follow the decision diamond asking whether the goal is achieved. If yes, the workflow provides the final answer. If not, it can update context and go around the loop again. But an agent must not loop forever. The lower section specifies an iteration or step limit, after which the application stops with an explanation rather than burning through repeated model and tool calls. Notice two other exits. An unrecoverable error follows the failure path. An uncertain or sensitive result can be sent for human review, including the intermediate evidence. Those controls are important for reliable AI automation: a model may suggest the next tool, but the workflow enforces boundaries, handles errors and decides when to stop. Students should distinguish tool selection, tool execution and observation review instead of thinking that reasoning alone performs an action."
+    },
+    {
+      "slide": 30,
+      "title": "Carry data safely between workflow states",
+      "narration": "This slide contrasts small state payloads with large documents. Follow the upper workflow: validate an order, process its document and complete the order. The state machine carries only compact information such as order ID, processing status and an idempotency key. A larger PDF is stored in S3, and the task receives an object URI instead of the full file body. That's a much safer and more scalable design than stuffing document text into every state's input and output. The lower panels explain why. Execution history can record inputs, outputs and transitions, making troubleshooting easier, but that also means sensitive values need careful handling. The example redacts a customer email and keeps file contents outside the state. The idempotency key helps the workflow safely retry a task without accidentally performing the same business operation twice. Notice that storing a URI is not itself an access control: the task role still needs the correct permissions to read the S3 object, and sensitive data should be protected in storage. Keep state data small, carry identifiers between steps, and use durable storage for large artifacts."
+    },
+    {
+      "slide": 31,
+      "title": "CI/CD path for an AI application",
+      "narration": "Now we move from running AI workflows to delivering the application itself. Follow the release pipeline across the slide. A developer commits source code, prompts or configuration. CodePipeline coordinates the stages and obtains those source artifacts. CodeBuild validates the package: it can check prompt templates, run unit tests, test the application's model integration and perform security scans. An approval step can require a reviewer before production. CodeDeploy then deploys the validated artifacts, making the updated AI application available to users. Notice the repeated artifact labels above the pipeline. Each stage needs a known, versioned input and should pass its output to the next stage rather than rebuilding different files without traceability. The lower sections add the checks unique to AI applications: test response behavior and guardrails as well as conventional application code. After deployment, monitor latency, error rates, usage and model quality or safety indicators. A passing build doesn't guarantee useful or safe generated answers. This slide's main lesson is that model-powered features still need the discipline of ordinary software delivery, with extra tests for probabilistic behavior."
+    },
+    {
+      "slide": 32,
+      "title": "CodePipeline stages and artifacts",
+      "narration": "This final slide zooms in on the mechanics of CodePipeline. Across the top are four stages: Source, Build, Test and Deploy. The source stage retrieves the application files. The build stage compiles or packages what is needed. The test stage runs automated checks, and the deploy stage promotes the validated build to an environment. Watch the artifact names underneath: source ZIP becomes build ZIP, the test stage produces a report, and the deployment stage uses the approved deployment artifact. These artifacts are stored in an artifact bucket so each stage can use a predictable, versioned output. The right side compares two outcomes. When a stage succeeds, the pipeline continues. When a stage fails, the pipeline stops instead of automatically deploying an unverified change. This is exactly why we separate build, test and deploy instead of putting everything in one command. For a generative AI application, tests might include API contract checks, prompt-format validation, approved model identifiers and safety regression cases. CodePipeline controls the progression; CodeBuild and deployment services perform their own work. Remember the sequence and the gating behavior: source, build, test, deploy only after success."
+    }
+  ]
+}

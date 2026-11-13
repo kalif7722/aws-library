@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "08",
+  "part_title": "Lab 08 — Troubleshoot Slow Vector Search and OpenSearch Serverless",
+  "script_revision": "2026-11-13-m19-p08-troubleshoot-local-v1",
+  "review_basis": "Visually reviewed original source slides 42–48; traces, index dimensions, access policies, search OCU graphs and p95 cost comparisons grounded in their actual illustrations.",
+  "scenes": [
+    {
+      "slide": 42,
+      "title": "Scenario and latency budget",
+      "narration": "The incident is a retrieval timeout in a RAG application, not a slow language model. Follow the request from the user through embedding, OpenSearch Serverless vector retrieval, optional reranking, model generation and final answer. The diagram isolates the retrieval pathway with an orange boundary to show where to investigate first. The synthetic trace records seventy-eight milliseconds embedding, four thousand eight hundred twenty milliseconds retrieval, one hundred twenty milliseconds reranking and two hundred ten milliseconds generation. With a total of five thousand two hundred twenty-eight milliseconds and a retrieval_timeout status, the search stage dominates. The slide proposes an illustrative end-to-end p95 target of nine hundred milliseconds and separate allocations, not universal AWS limits. Open the CloudWatch search latency view and OpenSearch Serverless collection monitoring; correlate the latency spike with OCU utilization and application trace timings. Check model generation separately to avoid paying for a larger model or increasing token limits when generation is normal. Before modifying anything, record p50, p95, failure rate, collection capacity, query shape and actual result relevance."
+    },
+    {
+      "slide": 43,
+      "title": "Isolate slow retrieval from model generation",
+      "narration": "This trace splits one RAG request into embedding, retrieval, reranking and generation spans. In the lab fixture, embedding takes forty-five milliseconds, retrieval takes twelve hundred, reranking takes one hundred ten and generation takes three hundred twenty. The total timeline is about one thousand six hundred seventy-five milliseconds; the search span is the bottleneck. Open the simulator's tracing view and read each span duration rather than relying only on the final answer delay. Keep the model identifier, prompt and generation settings unchanged while you reproduce a representative query set. The goal is to prove that search p95 remains elevated independently of model time. Compare the synthetic traces with any matching CloudWatch collection metrics; a normal generation span does not rule out client timeouts or search failures. If different queries have different retrieval latencies, capture their top-K values, filters and vector index settings. These facts will guide the next diagnosis of security gates, index health, collection capacity and expensive query patterns rather than a generic model optimization."
+    },
+    {
+      "slide": 44,
+      "title": "Diagnose network IAM and data-access gates",
+      "narration": "Before tuning a search index, separate performance failures from access denials. The slide lists four independent gates for an OpenSearch Serverless collection: network policy, IAM identity policy, collection or index data access policy, and encryption or customer-managed KMS key permissions. In the first console panel, a VPC-scoped network rule must authorize the intended approved VPC endpoint or access path. The second illustrates get-caller-identity and a narrowly scoped policy simulation for aoss APIAccessAll; do not attach unrestricted permissions just to clear a 403. The third shows data access permissions such as ReadDocument and WriteDocument on the intended index. The last shows an encryption policy and key authorization. Inspect the actual error response first: network access denied, IAM API access denied, index security_exception or KMS access denied indicate different causes. The examples use distinct status codes and messages, so follow the matching branch and test after each scoped change. A permissions error is not slow search, and indiscriminate policy broadening may expose the RAG corpus."
+    },
+    {
+      "slide": 45,
+      "title": "Validate index dimensions and ingestion state",
+      "narration": "Open OpenSearch Serverless Collections, select the affected index and inspect its vector field mapping. The slide's example has a knn_vector field named embedding with one thousand five hundred thirty-six dimensions and a supported HNSW configuration. The index must accept vectors from the actual embedding model used during ingestion and query; a different dimensionality or field name can break searches or give invalid results. In the Index overview, check document count, indexing rate, last update and ingestion health. The example reports over one million documents and a healthy recent indexing state, but those figures are not general targets. Query a sample document and confirm the vector field exists with the correct number of values and the expected content metadata. If the index mapping is wrong, plan a correctly dimensioned replacement and controlled reindexing; do not delete a production index without a migration and rollback plan. If documents are missing or indexing is lagging, repair ingestion first. A green index state is useful but does not prove every source document or filter is correct."
+    },
+    {
+      "slide": 46,
+      "title": "Inspect capacity and expensive query shape",
+      "narration": "Now compare capacity pressure and query complexity in the same time window. In OpenSearch Serverless Monitoring, inspect search OCUs used versus available, latency and error metrics. The example table shows usage approaching eleven point three out of twelve available OCUs during a spike, compared with three point one later. That is a capacity signal to investigate, not an automatic justification to increase everything. Open Top queries and inspect expensive query shapes. The illustrated thousand-result vector search without a filter takes about two point four seconds, while a smaller top-K search with a category filter can be much faster. Examine top K, candidate count, selective metadata filters, index design and the distribution of query complexity. Make one scoped test change at a time and keep concurrency bounded so the experiment does not overload the cluster. A low-latency query with too few candidates can miss relevant results, so track relevance alongside p95. If capacity pressure remains after controlling expensive patterns, evaluate an appropriate collection capacity change with observed metrics."
+    },
+    {
+      "slide": 47,
+      "title": "Apply targeted tuning with bounded load",
+      "narration": "The repair focuses specifically on vector retrieval. The slide shows an OpenSearch Serverless query configuration with an HNSW index, cosine distance, a vector dimension of one thousand five hundred thirty-six, a smaller top-K value, candidate count and selective filter settings. The JSON example scopes results by tenant and last-updated date and requests a limited number of neighbors; actual syntax must match the deployed engine and mapping. Keep reranking and model generation unchanged while testing the retrieval change. Configure a bounded request rate, shown here as ten requests per second, so the performance experiment is reproducible. The synthetic before-and-after results show p95 dropping from nine hundred to one hundred eighty milliseconds and timeouts from six point two percent to point one percent. Those are illustrative outcomes, not guaranteed optimization gains. Verify that filtering is applied securely, the correct tenant records remain available and answer relevance has not declined. If relevance falls, adjust candidate counts or filters rather than blindly accepting faster search."
+    },
+    {
+      "slide": 48,
+      "title": "Verify p95 quality and cost together",
+      "narration": "Finish with a balanced release gate. The left CloudWatch chart shows example search p95 falling from roughly nine hundred milliseconds before tuning to about one hundred eighty afterward, while a top-results panel checks relevance. On the right, OpenSearch Serverless cost and usage show search OCU consumption and estimated cost during validation. A faster query can still be a regression if it retrieves unrelated documents, exposes unauthorized records or requires disproportionate collection capacity. Compare three sample outcomes: expected success with p95 one hundred eighty milliseconds, no timeouts and strong top-one relevance; a negative test that remains slow with thirty-seven timeouts; and a regression case with improved latency but worse relevance or cost. Check p50 and p95, error rate, Recall at K or relevance, search OCU usage and total cost under matched load conditions. Keep appropriate alerts and least-privilege access controls, and clean up temporary indexes or policies only after preserving needed rollback evidence. Mark this lab resolved when the response is timely, grounded, authorized and cost-controlled, not just when a graph turns green."
+    }
+  ]
+}

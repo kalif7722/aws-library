@@ -1,0 +1,634 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Storage",
+  "services": [
+    {
+      "slug": "backup-and-dr-service",
+      "summary": "A managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads.",
+      "concepts": [
+        "backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point define the Backup and DR Service resource and control model.",
+        "The service flow is protected workload > scheduled capture > immutable/controlled vault > restore mount/copy > recovery validation.",
+        "Backup and DR Service provides managed controls, while workload owners retain data classification, business authorization and recovery accountability."
+      ],
+      "applicationFit": [
+        "Choose Backup and DR Service when a managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads.",
+        "It best fits architectures that need protected workload > scheduled capture > immutable/controlled vault > restore mount/copy > recovery validation.",
+        "Choose a successful backup is not proven recovery; test application-consistent restores and regional failure procedures instead when that alternative's responsibility model dominates."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Backup and DR Service production flow",
+          "note": "A managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads.",
+          "reference": "Backup and DR Service architecture",
+          "steps": [
+            {
+              "title": "1. protected workload",
+              "items": [
+                "Authenticated input",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "2. scheduled capture",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "3. immutable/controlled vault",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "4. restore mount/copy",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "5. recovery validation",
+              "items": [
+                "Controlled transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Backup and DR Service",
+          "note": "Identity, data boundary and operations for backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point.",
+          "reference": "Backup and DR Service governance",
+          "steps": [
+            {
+              "title": "Scope",
+              "items": [
+                "backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point",
+                "Resource hierarchy"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Least privilege",
+                "Separation of duties"
+              ]
+            },
+            {
+              "title": "Control",
+              "items": [
+                "separate backup admins, protected vault access, CMEK and isolated recovery credentials",
+                "Versioned policy"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Audit logs",
+                "Test and review"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Backup and DR Service",
+          "detail": "Google Cloud Console → Backup and DR Service; choose the intended organization/project and supported location."
+        },
+        {
+          "title": "Set scope and configuration",
+          "detail": "Configure backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point."
+        },
+        {
+          "title": "Apply security controls",
+          "detail": "Assign least-privilege roles, network/data boundaries, encryption and audit settings appropriate to the service."
+        },
+        {
+          "title": "Validate and operate",
+          "detail": "Exercise protected workload > scheduled capture > immutable/controlled vault > restore mount/copy > recovery validation; confirm findings, logs, alerts or recovery evidence."
+        }
+      ],
+      "security": [
+        "Limit Backup and DR Service administration and runtime access to the roles required for backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point.",
+        "Separate policy/key/evidence administrators where Backup and DR Service can affect access, cryptography, findings or recovery.",
+        "Protect logs, findings, secrets, certificates and exported evidence according to their sensitivity."
+      ],
+      "operations": [
+        "Monitor Backup and DR Service policy status, failures, quota and evidence freshness.",
+        "Version and peer-review backup/recovery appliance or agent, backup vault, plan/profile, snapshot and recovery point; test representative allow, deny, failure and recovery paths.",
+        "Assign owners for exceptions, findings, key/secret rotation, regional events and incident response."
+      ],
+      "watchPoints": [
+        "separate backup admins, protected vault access, CMEK and isolated recovery credentials",
+        "Confirm Backup and DR Service supported services, locations, limits and required service agents before enforcement.",
+        "Backup and DR Service is one layer of defense and does not replace application authorization, secure design or human governance."
+      ],
+      "cost": [
+        "Account for Backup and DR Service service tier or protected/processed usage where applicable.",
+        "Include logging, storage, scanning, key operations, network and downstream response/recovery services.",
+        "Track cost against protected assets, evaluated requests, retained evidence or recoverable data."
+      ],
+      "alternatives": [
+        "Backup and DR Service — A managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads.",
+        "a successful backup is not proven recovery; test application-consistent restores and regional failure procedures — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Backup and DR Service",
+          "fit": "A managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads."
+        },
+        {
+          "name": "a successful backup is not proven recovery; test application-consistent restores and regional failure procedures",
+          "fit": "a successful backup is not proven recovery; test application-consistent restores and regional failure procedures"
+        }
+      ],
+      "memoryHooks": [
+        "protected workload > scheduled capture > immutable/controlled vault > restore mount/copy > recovery validation.",
+        "separate backup admins, protected vault access, CMEK and isolated recovery credentials",
+        "Certification clue: A managed backup and disaster-recovery control plane for application-consistent protection, vaulting and recovery of supported workloads."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Backup and DR Service documentation",
+          "url": "https://docs.cloud.google.com/backup-disaster-recovery/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-storage",
+      "summary": "Durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement.",
+      "concepts": [
+        "bucket, object/generation, storage class, retention/lifecycle policy and IAM define the Cloud Storage resource and control model.",
+        "The service flow is producer > object upload > durable replicated storage > read/lifecycle transition > delete/retention.",
+        "Cloud Storage provides managed controls, while workload owners retain data classification, business authorization and recovery accountability."
+      ],
+      "applicationFit": [
+        "Choose Cloud Storage when durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement.",
+        "It best fits architectures that need producer > object upload > durable replicated storage > read/lifecycle transition > delete/retention.",
+        "Choose object names are not directories; overwrites create generations only when versioning/soft delete protects them instead when that alternative's responsibility model dominates."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cloud Storage production flow",
+          "note": "Durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement.",
+          "reference": "Cloud Storage architecture",
+          "steps": [
+            {
+              "title": "1. producer",
+              "items": [
+                "Authenticated input",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "2. object upload",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "3. durable replicated storage",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "4. read/lifecycle transition",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "5. delete/retention",
+              "items": [
+                "Controlled transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Storage",
+          "note": "Identity, data boundary and operations for bucket, object/generation, storage class, retention/lifecycle policy and IAM.",
+          "reference": "Cloud Storage governance",
+          "steps": [
+            {
+              "title": "Scope",
+              "items": [
+                "bucket, object/generation, storage class, retention/lifecycle policy and IAM",
+                "Resource hierarchy"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Least privilege",
+                "Separation of duties"
+              ]
+            },
+            {
+              "title": "Control",
+              "items": [
+                "uniform bucket-level access, public-access prevention, signed URLs, CMEK and retention controls",
+                "Versioned policy"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Audit logs",
+                "Test and review"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Storage",
+          "detail": "Google Cloud Console → Cloud Storage; choose the intended organization/project and supported location."
+        },
+        {
+          "title": "Set scope and configuration",
+          "detail": "Configure bucket, object/generation, storage class, retention/lifecycle policy and IAM."
+        },
+        {
+          "title": "Apply security controls",
+          "detail": "Assign least-privilege roles, network/data boundaries, encryption and audit settings appropriate to the service."
+        },
+        {
+          "title": "Validate and operate",
+          "detail": "Exercise producer > object upload > durable replicated storage > read/lifecycle transition > delete/retention; confirm findings, logs, alerts or recovery evidence."
+        }
+      ],
+      "security": [
+        "Limit Cloud Storage administration and runtime access to the roles required for bucket, object/generation, storage class, retention/lifecycle policy and IAM.",
+        "Separate policy/key/evidence administrators where Cloud Storage can affect access, cryptography, findings or recovery.",
+        "Protect logs, findings, secrets, certificates and exported evidence according to their sensitivity."
+      ],
+      "operations": [
+        "Monitor Cloud Storage policy status, failures, quota and evidence freshness.",
+        "Version and peer-review bucket, object/generation, storage class, retention/lifecycle policy and IAM; test representative allow, deny, failure and recovery paths.",
+        "Assign owners for exceptions, findings, key/secret rotation, regional events and incident response."
+      ],
+      "watchPoints": [
+        "uniform bucket-level access, public-access prevention, signed URLs, CMEK and retention controls",
+        "Confirm Cloud Storage supported services, locations, limits and required service agents before enforcement.",
+        "Cloud Storage is one layer of defense and does not replace application authorization, secure design or human governance."
+      ],
+      "cost": [
+        "Account for Cloud Storage service tier or protected/processed usage where applicable.",
+        "Include logging, storage, scanning, key operations, network and downstream response/recovery services.",
+        "Track cost against protected assets, evaluated requests, retained evidence or recoverable data."
+      ],
+      "alternatives": [
+        "Cloud Storage — Durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement.",
+        "object names are not directories; overwrites create generations only when versioning/soft delete protects them — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Storage",
+          "fit": "Durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement."
+        },
+        {
+          "name": "object names are not directories; overwrites create generations only when versioning/soft delete protects them",
+          "fit": "object names are not directories; overwrites create generations only when versioning/soft delete protects them"
+        }
+      ],
+      "memoryHooks": [
+        "producer > object upload > durable replicated storage > read/lifecycle transition > delete/retention.",
+        "uniform bucket-level access, public-access prevention, signed URLs, CMEK and retention controls",
+        "Certification clue: Durable object storage with buckets, objects, storage classes, lifecycle rules, versioning and global or regional placement."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Storage documentation",
+          "url": "https://docs.cloud.google.com/storage/docs"
+        }
+      ]
+    },
+    {
+      "slug": "filestore",
+      "summary": "Managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics.",
+      "concepts": [
+        "instance, file share, capacity/tier, IP endpoint and backup define the Filestore resource and control model.",
+        "The service flow is VM/pod > VPC NFS mount > shared file operations > managed storage > backup/restore.",
+        "Filestore provides managed controls, while workload owners retain data classification, business authorization and recovery accountability."
+      ],
+      "applicationFit": [
+        "Choose Filestore when managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics.",
+        "It best fits architectures that need VM/pod > VPC NFS mount > shared file operations > managed storage > backup/restore.",
+        "Choose zonal/regional tier, throughput scaling and client mount behavior determine resilience and performance instead when that alternative's responsibility model dominates."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Filestore production flow",
+          "note": "Managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics.",
+          "reference": "Filestore architecture",
+          "steps": [
+            {
+              "title": "1. VM/pod",
+              "items": [
+                "Authenticated input",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "2. VPC NFS mount",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "3. shared file operations",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "4. managed storage",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "5. backup/restore",
+              "items": [
+                "Controlled transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Filestore",
+          "note": "Identity, data boundary and operations for instance, file share, capacity/tier, IP endpoint and backup.",
+          "reference": "Filestore governance",
+          "steps": [
+            {
+              "title": "Scope",
+              "items": [
+                "instance, file share, capacity/tier, IP endpoint and backup",
+                "Resource hierarchy"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Least privilege",
+                "Separation of duties"
+              ]
+            },
+            {
+              "title": "Control",
+              "items": [
+                "private VPC access, NFS export controls, client OS permissions and protected backups",
+                "Versioned policy"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Audit logs",
+                "Test and review"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Filestore",
+          "detail": "Google Cloud Console → Filestore; choose the intended organization/project and supported location."
+        },
+        {
+          "title": "Set scope and configuration",
+          "detail": "Configure instance, file share, capacity/tier, IP endpoint and backup."
+        },
+        {
+          "title": "Apply security controls",
+          "detail": "Assign least-privilege roles, network/data boundaries, encryption and audit settings appropriate to the service."
+        },
+        {
+          "title": "Validate and operate",
+          "detail": "Exercise VM/pod > VPC NFS mount > shared file operations > managed storage > backup/restore; confirm findings, logs, alerts or recovery evidence."
+        }
+      ],
+      "security": [
+        "Limit Filestore administration and runtime access to the roles required for instance, file share, capacity/tier, IP endpoint and backup.",
+        "Separate policy/key/evidence administrators where Filestore can affect access, cryptography, findings or recovery.",
+        "Protect logs, findings, secrets, certificates and exported evidence according to their sensitivity."
+      ],
+      "operations": [
+        "Monitor Filestore policy status, failures, quota and evidence freshness.",
+        "Version and peer-review instance, file share, capacity/tier, IP endpoint and backup; test representative allow, deny, failure and recovery paths.",
+        "Assign owners for exceptions, findings, key/secret rotation, regional events and incident response."
+      ],
+      "watchPoints": [
+        "private VPC access, NFS export controls, client OS permissions and protected backups",
+        "Confirm Filestore supported services, locations, limits and required service agents before enforcement.",
+        "Filestore is one layer of defense and does not replace application authorization, secure design or human governance."
+      ],
+      "cost": [
+        "Account for Filestore service tier or protected/processed usage where applicable.",
+        "Include logging, storage, scanning, key operations, network and downstream response/recovery services.",
+        "Track cost against protected assets, evaluated requests, retained evidence or recoverable data."
+      ],
+      "alternatives": [
+        "Filestore — Managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics.",
+        "zonal/regional tier, throughput scaling and client mount behavior determine resilience and performance — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Filestore",
+          "fit": "Managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics."
+        },
+        {
+          "name": "zonal/regional tier, throughput scaling and client mount behavior determine resilience and performance",
+          "fit": "zonal/regional tier, throughput scaling and client mount behavior determine resilience and performance"
+        }
+      ],
+      "memoryHooks": [
+        "VM/pod > VPC NFS mount > shared file operations > managed storage > backup/restore.",
+        "private VPC access, NFS export controls, client OS permissions and protected backups",
+        "Certification clue: Managed NFS file storage for Compute Engine and GKE workloads requiring shared POSIX file semantics."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Filestore documentation",
+          "url": "https://docs.cloud.google.com/filestore/docs"
+        }
+      ]
+    },
+    {
+      "slug": "netapp-volumes",
+      "summary": "Managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features.",
+      "concepts": [
+        "storage pool, volume, protocol/export/share, snapshot and replication relationship define the NetApp Volumes resource and control model.",
+        "The service flow is client > VPC NFS/SMB endpoint > volume > snapshot > cross-region replication/recovery.",
+        "NetApp Volumes provides managed controls, while workload owners retain data classification, business authorization and recovery accountability."
+      ],
+      "applicationFit": [
+        "Choose NetApp Volumes when managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features.",
+        "It best fits architectures that need client > VPC NFS/SMB endpoint > volume > snapshot > cross-region replication/recovery.",
+        "Choose pool/service level and volume layout drive performance/cost; replication is not the same as application-consistent backup instead when that alternative's responsibility model dominates."
+      ],
+      "architectureFlows": [
+        {
+          "title": "NetApp Volumes production flow",
+          "note": "Managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features.",
+          "reference": "NetApp Volumes architecture",
+          "steps": [
+            {
+              "title": "1. client",
+              "items": [
+                "Authenticated input",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "2. VPC NFS/SMB endpoint",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "3. volume",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "4. snapshot",
+              "items": [
+                "Controlled transition",
+                "Log and evaluate"
+              ]
+            },
+            {
+              "title": "5. cross-region replication/recovery",
+              "items": [
+                "Controlled transition",
+                "Validate outcome"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed NetApp Volumes",
+          "note": "Identity, data boundary and operations for storage pool, volume, protocol/export/share, snapshot and replication relationship.",
+          "reference": "NetApp Volumes governance",
+          "steps": [
+            {
+              "title": "Scope",
+              "items": [
+                "storage pool, volume, protocol/export/share, snapshot and replication relationship",
+                "Resource hierarchy"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Least privilege",
+                "Separation of duties"
+              ]
+            },
+            {
+              "title": "Control",
+              "items": [
+                "private service networking, AD integration for SMB, export/share permissions and snapshot protection",
+                "Versioned policy"
+              ]
+            },
+            {
+              "title": "Evidence",
+              "items": [
+                "Audit logs",
+                "Test and review"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open NetApp Volumes",
+          "detail": "Google Cloud Console → NetApp Volumes; choose the intended organization/project and supported location."
+        },
+        {
+          "title": "Set scope and configuration",
+          "detail": "Configure storage pool, volume, protocol/export/share, snapshot and replication relationship."
+        },
+        {
+          "title": "Apply security controls",
+          "detail": "Assign least-privilege roles, network/data boundaries, encryption and audit settings appropriate to the service."
+        },
+        {
+          "title": "Validate and operate",
+          "detail": "Exercise client > VPC NFS/SMB endpoint > volume > snapshot > cross-region replication/recovery; confirm findings, logs, alerts or recovery evidence."
+        }
+      ],
+      "security": [
+        "Limit NetApp Volumes administration and runtime access to the roles required for storage pool, volume, protocol/export/share, snapshot and replication relationship.",
+        "Separate policy/key/evidence administrators where NetApp Volumes can affect access, cryptography, findings or recovery.",
+        "Protect logs, findings, secrets, certificates and exported evidence according to their sensitivity."
+      ],
+      "operations": [
+        "Monitor NetApp Volumes policy status, failures, quota and evidence freshness.",
+        "Version and peer-review storage pool, volume, protocol/export/share, snapshot and replication relationship; test representative allow, deny, failure and recovery paths.",
+        "Assign owners for exceptions, findings, key/secret rotation, regional events and incident response."
+      ],
+      "watchPoints": [
+        "private service networking, AD integration for SMB, export/share permissions and snapshot protection",
+        "Confirm NetApp Volumes supported services, locations, limits and required service agents before enforcement.",
+        "NetApp Volumes is one layer of defense and does not replace application authorization, secure design or human governance."
+      ],
+      "cost": [
+        "Account for NetApp Volumes service tier or protected/processed usage where applicable.",
+        "Include logging, storage, scanning, key operations, network and downstream response/recovery services.",
+        "Track cost against protected assets, evaluated requests, retained evidence or recoverable data."
+      ],
+      "alternatives": [
+        "NetApp Volumes — Managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features.",
+        "pool/service level and volume layout drive performance/cost; replication is not the same as application-consistent backup — use when its stated fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "NetApp Volumes",
+          "fit": "Managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features."
+        },
+        {
+          "name": "pool/service level and volume layout drive performance/cost; replication is not the same as application-consistent backup",
+          "fit": "pool/service level and volume layout drive performance/cost; replication is not the same as application-consistent backup"
+        }
+      ],
+      "memoryHooks": [
+        "client > VPC NFS/SMB endpoint > volume > snapshot > cross-region replication/recovery.",
+        "private service networking, AD integration for SMB, export/share permissions and snapshot protection",
+        "Certification clue: Managed enterprise file storage powered by NetApp with NFS/SMB volumes, snapshots, replication and data-management features."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "NetApp Volumes documentation",
+          "url": "https://docs.cloud.google.com/netapp/volumes/docs"
+        }
+      ]
+    }
+  ]
+}

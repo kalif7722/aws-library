@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Amazon FSx for OpenZFS",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "share application files through a managed ZFS filesystem",
+    "input": "The application owner selects the volume hierarchy, client mounts and required file permissions.",
+    "action": "FSx for OpenZFS provides managed NFS storage with ZFS volume and snapshot capabilities. Application clients use the permitted mount paths; the owner chooses suitable capacity, throughput and snapshot policies.",
+    "output": "Application workers share the accepted file dataset and restore an isolated snapshot when testing recovery.",
+    "check": "Validate NFS identity mapping, concurrent access, snapshot rollback effects and restored file contents.",
+    "reference": "https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon File Cache",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical accelerated hybrid dataset cache",
+    "input": "The data owner inventories the cache namespace, linked repositories and authoritative dataset locations.",
+    "action": "File Cache historically accelerated access to supported datasets through a shared cache namespace. Migration planning preserves the authoritative source and validates an alternative storage or caching path before removing cached state.",
+    "output": "The compute application reads required files from the selected replacement storage path.",
+    "check": "Compare path mappings, cold-read performance and source integrity; cached data must not be the only recoverable copy.",
+    "reference": "https://docs.aws.amazon.com/fsx/latest/FileCacheGuide/what-is.html",
+    "legacy": true
+  },
+  {
+    "service": "Amazon FinSpace",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "prepare a governed financial dataset for analytical work",
+    "input": "The financial data owner selects permitted market data, schema and analytical access boundaries.",
+    "action": "FinSpace provides supported financial data and analytics capabilities under the selected environment configuration. Dataset ingestion, entitlement and the chosen analysis runtime must match the financial workload's actual requirements.",
+    "output": "The analyst runs the authorized market-data analysis and retains its dataset version and calculation settings.",
+    "check": "Reconcile market-data timestamps, entitlements and calculation output against known financial reference cases.",
+    "reference": "https://docs.aws.amazon.com/finspace/latest/userguide/what-is-finspace.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Fraud Detector",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical transaction fraud scoring workflow",
+    "input": "The risk team inventories event fields, historical models, rules and fraud decision thresholds.",
+    "action": "Fraud Detector historically evaluated submitted events with configured fraud models and rules to return outcomes. A replacement must reproduce the agreed event schema and validated risk policy, rather than treating a score as a definitive fraud judgment.",
+    "output": "The payment application combines the replacement score with its approved allow, challenge or review policy.",
+    "check": "Compare known legitimate and fraudulent events, false positives and model drift before moving decision traffic.",
+    "reference": "https://docs.aws.amazon.com/frauddetector/latest/ug/what-is-frauddetector.html",
+    "legacy": true
+  },
+  {
+    "service": "Amazon GameLift Servers",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "place a multiplayer match on available game-server capacity",
+    "input": "The matchmaking application supplies player assignments, latency preferences and session requirements.",
+    "action": "GameLift Servers manages configured game-server fleets and supported game-session placement. The selected game process hosts the match and reports its readiness; player authentication and game rules remain in the application.",
+    "output": "Players receive the accepted session connection information and join the assigned server.",
+    "check": "Test placement failure, fleet scale-out, session health and player authorization before opening the match.",
+    "reference": "https://docs.aws.amazon.com/gameliftservers/latest/developerguide/gamelift-intro.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Interactive Video Service",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "deliver a low-latency broadcast to authorized viewers",
+    "input": "The broadcaster publishes a permitted live stream and the viewer requests its playback session.",
+    "action": "IVS ingests the configured live stream and supplies supported low-latency playback or real-time interaction capabilities. Channel or stage configuration and playback authorization determine how viewers join.",
+    "output": "The application presents the broadcast and coordinates its separate chat or business interaction features.",
+    "check": "Test playback authorization, stream interruption and the actual latency mode chosen for the event.",
+    "reference": "https://docs.aws.amazon.com/ivs/latest/LowLatencyUserGuide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Lightsail",
+    "cloud": "AWS",
+    "mode": "runtime",
+    "title": "host a small business website with a predictable instance plan",
+    "input": "The website owner selects the application image, domain and required persistent data backup.",
+    "action": "Lightsail provisions the selected virtual server and supported networking or managed resource features. The web process on the instance handles HTTP requests; the owner maintains application updates and access restrictions.",
+    "output": "The customer reaches the configured website endpoint and the application reads its protected business data.",
+    "check": "Test HTTPS, firewall rules, application updates and restoration from a known recovery point.",
+    "reference": "https://docs.aws.amazon.com/lightsail/latest/userguide/what-is-amazon-lightsail.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Location Service",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "plan a delivery route from approved addresses",
+    "input": "The delivery application submits permitted coordinates, route preferences and authorized map requests.",
+    "action": "Location Service performs supported maps, places, routes, tracking or geofencing operations using the selected resources. The delivery backend chooses the relevant API and interprets the geographic result for its dispatch policy.",
+    "output": "The dispatcher reviews the proposed route and assigns the driver through the delivery application.",
+    "check": "Test coordinate order, route constraints, map licensing and access to sensitive location history.",
+    "reference": "https://docs.aws.amazon.com/location/latest/developerguide/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Lookout for Equipment",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "validate replacement predictive-maintenance alerts",
+    "input": "The equipment owner prepares timestamped sensor history and known maintenance events.",
+    "action": "Lookout for Equipment analyzes configured multivariate equipment measurements to identify abnormal behavior. Preserve trained-model inputs and alert semantics while planning service-lifecycle migration; technicians determine the physical maintenance action.",
+    "output": "The maintenance planner reviews abnormal periods with equipment history and creates a validated work order.",
+    "check": "Compare units, missing measurements, known faults and false alarms before transferring alerts to the replacement.",
+    "reference": "https://docs.aws.amazon.com/lookout-for-equipment/latest/ug/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Lookout for Metrics",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace historical business-metric anomaly detection",
+    "input": "The analyst exports metric definitions, dimensions and historical anomaly feedback.",
+    "action": "Lookout for Metrics historically analyzed configured numerical business metrics and reported anomalies and related dimensions. A replacement must preserve aggregation windows and thresholds before its alerts influence business operations.",
+    "output": "The analyst correlates replacement anomaly alerts with actual sales or traffic events before escalating.",
+    "check": "Replay known seasonal and abnormal periods; compare missed events and false positives before cutover.",
+    "reference": "https://docs.aws.amazon.com/lookoutmetrics/latest/dev/what-is.html",
+    "legacy": true
+  }
+]

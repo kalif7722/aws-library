@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "03",
+  "module_title": "Agentic AI and AWS Agent Services",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original Module 03 slides 15–20 individually reviewed from official course WebP source archive 11–20, including Python tool example and AgentCore diagram.",
+  "part_id": "03",
+  "part_title": "Strands Agents, Agent Squad and AgentCore Introduction",
+  "script_revision": "2026-11-12-m03-p03-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 15,
+      "title": "Strands Agents SDK",
+      "narration": "We're now moving from conceptual patterns to a specific open-source agent development toolkit: Strands Agents. On the left, the user asks an agent to research a topic, analyze findings and provide a clear answer. In the centre, the Strands Agents SDK coordinates the reasoning agent and the tools it can call. Notice the four integration branches on the right. A model provider supplies foundation-model inference, using Amazon Bedrock or another supported provider. Python tools let the agent call application functions. AWS services provide access to cloud resources, with permissions. An optional MCP server can expose compatible external capabilities. The lower example shows three-agent collaboration: a planner delegates research to a specialist, another specialist analyzes findings, and a synthesizer combines results into one answer. The bottom cards summarize the framework's goals: model flexibility, tools-first design, multimodal support where available, and AWS integration. Strands is a developer framework, not a guarantee that every tool call is safe. Design explicit permissions, timeouts and verification around agent actions."
+    },
+    {
+      "slide": 16,
+      "title": "Strands Built-in Tools",
+      "narration": "This slide places a Strands agent in the centre and arranges its possible tools around the outside. The user asks for the current inventory value. First, look at the AWS SDK branch, which can read inventory data from a permitted cloud service. The Python runtime branch can then calculate the total value from those records. Finally, the agent returns a calculated answer on the right. Other tool categories shown include file operations, HTTP requests, memory, and Bedrock Knowledge Bases for retrieval. The purple box at the bottom emphasizes that tools are capabilities configured for an agent; the model chooses which capability to use based on the task. It does not automatically gain permissions to every AWS account or web endpoint. When implementing a production agent, restrict tools to the minimal allowed operations, validate their input arguments, and monitor tool execution. The difference between a strong reasoning model and a trustworthy application often lies in the tool boundaries you enforce."
+    },
+    {
+      "slide": 17,
+      "title": "The Strands Agent Loop",
+      "narration": "Let's trace the lifecycle of one Strands agent request. The user asks, what is twelve times eight? Step one packages the request together with any available conversation context. In step two, the model reasons and chooses between directly answering and calling a calculator tool. In this example it selects the calculator because the tool can compute the value deterministically. Step three executes the tool with twelve multiplied by eight and returns ninety-six. Step four feeds that observation back to the model, which decides whether another action is necessary. The loop can repeat until the model has enough evidence to finish. Finally, step five returns the response: twelve times eight equals ninety-six. The dashed repeat arrow is critical. An agent run is not always one model call; it may involve several model and tool turns. That is why execution limits, error handling and observability matter, especially when using external or chargeable APIs."
+    },
+    {
+      "slide": 18,
+      "title": "Strands Quickstart: Tool to Answer",
+      "narration": "This is the most practical slide in the Strands section. Read the four columns from left to right. First, a Python function named letter_counter is decorated as a tool, making it callable by the agent. It counts how often a chosen letter appears in a word. Second, the developer creates a Strands Agent with that custom tool alongside any supported built-in tools. Third, the user asks how many letter r characters appear in strawberry. The agent has enough information to choose letter_counter and supply the word and letter as parameters. In the fourth panel, the tool returns three. The agent then responds with the result in natural language. Notice the distinction between the example code and the agent's reasoning. The Python function performs the count; the model decides when to call it and how to explain the result. A useful development exercise is to test the tool directly first, then test it through the agent with valid, invalid and ambiguous requests."
+    },
+    {
+      "slide": 19,
+      "title": "AWS Agent Squad: Intent-Based Routing",
+      "narration": "This slide introduces an open-source multi-agent routing pattern using AWS Agent Squad. A user asks for a refund on order forty-two. In the centre, an intent classifier evaluates which of three specialist agents should handle the request: billing, technical support or order status. The highlighted orange route selects the billing agent. Follow that branch to the right. The billing specialist receives shared conversation context, uses an authorized order tool to look up the order, and then explains the refund steps to the user. This is routing rather than a supervisor collecting contributions from three workers. One specialist handles the most relevant intent while the other two are not invoked for that request. The bottom banner notes that the framework can route among specialized agents. The architecture still needs a fallback when intent is unclear, permission checks for private orders, and clear escalation when the specialist cannot complete the task."
+    },
+    {
+      "slide": 20,
+      "title": "Amazon Bedrock AgentCore",
+      "narration": "We close this lecture with the operational platform for agents: Amazon Bedrock AgentCore. At the top left, developers build agents using frameworks such as Strands or LangGraph. A deployment package and configuration move to AgentCore Runtime, which provides a managed environment to run and scale the agent. Now look at the lower half. An application sends an invocation request to the runtime and receives the agent's response. Four capabilities appear on the right: memory for persisted context, gateway for tool access, identity for authentication and authorization integration, and observability for traces and metrics. These are separated because running an agent is only one part of a production system. You still need reliable external tool connections, controlled user identity, appropriate memory policies and monitoring. AgentCore provides managed building blocks for supported frameworks and deployment modes; it does not turn every locally written agent into a production-safe service automatically. The next lecture will explore those AgentCore capabilities individually."
+    }
+  ]
+}

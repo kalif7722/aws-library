@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "05",
+  "module_title": "Managing Models with SageMaker AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original AIP Module 05 site-ready WebP slides individually inspected from archived source images 01–36; narration explains actual visual flows and comparisons. Renderer verifies live R2 sources.",
+  "part_id": "06",
+  "part_title": "Model Registry, Approvals and ML Lineage",
+  "script_revision": "2026-11-12-m05-p06-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 26,
+      "title": "Model Registry Versions",
+      "narration": "This diagram introduces a model package group containing multiple versioned candidates. In the centre, version one is rejected, version two is approved, and version three is pending review. The right-hand arrow shows only an approved candidate being promoted to a SageMaker endpoint. Follow the lifecycle at the bottom: create a model package, evaluate its metrics, approve or reject it, deploy an appropriate version, and keep monitoring. The point of a registry is not just storage for model files; it records version metadata and approval state so teams can discuss exactly which candidate is in use. A newer version should not automatically override a better, approved production candidate. Record training artifacts, evaluation evidence and any responsible approver. Use promotion controls to prevent untested models from reaching production simply because a training job finished successfully."
+    },
+    {
+      "slide": 27,
+      "title": "Promote a Model with Approval",
+      "narration": "Let's follow an entire approval workflow. At the left, data is used to train a candidate model, which is evaluated and registered. The second panel places that candidate in SageMaker Model Registry. In the third, a human reviewer checks quality metrics, business requirements and validation risk before marking the version approved. The candidate is deployed to a staging endpoint for final checks. Only then does the production deployment on the right receive the approved version. The line along the bottom preserves one traceable model version from registration through staging to production. Monitoring and prediction investigation appear underneath as feedback after deployment. This design prevents a gap between the model evaluated in testing and the model ultimately served to users. Approvals should be auditable, and a failed stage should stop the promotion rather than quietly bypassing the gate."
+    },
+    {
+      "slide": 28,
+      "title": "Trace ML Lineage",
+      "narration": "The title asks us to trace machine-learning lineage. Follow the architecture from left to right. An S3 dataset feeds a SageMaker Processing job, whose output becomes the input to a SageMaker Training job. That training run produces a model artifact, which is registered as a model version and finally deployed to an endpoint. The lineage graph connects these entities with version information and relationships. If a team later finds a bad dataset or a compromised model artifact, it can work backward from the endpoint to identify the producing training run and data source. The lower icons show how production monitoring or Clarify findings can feed investigations. Lineage is valuable for reproducibility, governance and audit, but only when jobs and artifacts are recorded consistently. It should support an answer to a concrete question: what data, code, settings and approvals produced this currently deployed model?"
+    },
+    {
+      "slide": 29,
+      "title": "Lineage Entities",
+      "narration": "This slide names the basic lineage entities rather than showing only a model. Experiments group related runs, and trials or trial components record evaluation and training work. Artifacts represent datasets, model files, evaluation reports and similar outputs. Actions represent operations such as processing or training. Contexts associate related entities with an environment or project, while associations link sources, operations and resulting artifacts. The diagram on the right shows a dependency graph assembled from those records. These terms matter because an audit question may ask how a model artifact was created, not merely which model endpoint is running. Recording an artifact without a relationship to its processing action loses an important part of reproducibility. The practical goal is to preserve enough structure to navigate both the results and their origins."
+    },
+    {
+      "slide": 30,
+      "title": "Query Lineage Backwards and Forwards",
+      "narration": "This slide demonstrates two useful directions for a lineage query. Start with the model artifact in the centre. Following upstream arrows identifies the training job and processed dataset that produced it. From there, the graph can lead to the original S3 source and its data-preparation job. Following downstream arrows finds registered model versions, endpoints and monitoring components that depend on that artifact. This becomes valuable when a data incident occurs: a team can identify affected endpoints by tracing forward from a dataset. Or, during a model investigation, it can trace backward from a bad prediction to the model's lineage. The bottom investigation path shows these steps as a practical workflow. The output is not just a chart; it provides evidence for change management, impact analysis and targeted rollback."
+    },
+    {
+      "slide": 31,
+      "title": "Lineage Across AWS Accounts",
+      "narration": "This slide discusses the challenge of preserving provenance when training and deployment are separated by account boundaries. The source account owns training datasets, processing jobs and model artifacts. The target account contains the registry and deployment context. Between them are explicit IAM permissions and an association or metadata link that records the model's origins. Follow the dashed cross-account arrow. Merely copying a model artifact does not automatically reproduce every lineage relationship. The deployment team needs access to approved source metadata, durable identifiers and clearly scoped permissions. The lower row emphasizes the audit trail, the source account's ownership and the association with the target account's deployment. Design for both least-privilege access and enough traceability to determine which data and job created the model running in a separate account."
+    }
+  ]
+}

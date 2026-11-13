@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "15",
+  "module_title": "Migration and Data Transfer",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 Module 15 slides 01–06 passed spatial audit. Legacy titles for slides 05–06 were incorrect; scripts follow actual visible DataSync slides.",
+  "part_id": "02",
+  "part_title": "Agentless Transfer, Task Controls and Data Integrity",
+  "script_revision": "2026-11-13-m15-p02-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 4,
+      "title": "Agentless AWS Storage Transfer",
+      "narration": "This slide removes the on-premises agent from the center of the architecture. It shows supported AWS storage locations on both sides, including Amazon S3, Amazon EFS, and Amazon FSx, with DataSync managing the transfer. For eligible AWS-to-AWS location pairs and modes, an agent that you deploy is not required. But agentless does not mean permissionless: IAM and storage access policies must allow reading from the source and writing to the destination. The lower row explicitly distinguishes the requirements for task modes and location types. Basic and Enhanced modes do not provide identical support across every location combination. Some transfers between supported other-cloud object storage and S3 can also avoid an agent; that does not apply universally to all cloud providers and services. Before creating a task, check whether the exact source and destination pairing is supported, whether an agent is required, and what networking and authorization are needed. For AI workloads, this pattern is useful when consolidating data into one approved storage location before preparing datasets or refreshing downstream knowledge retrieval."
+    },
+    {
+      "slide": 5,
+      "title": "AWS DataSync Task Controls",
+      "narration": "The central DataSync task in this image connects a configured source location and destination location. Around it are the settings that decide what will be copied, when, and under which conditions. Task mode must match the supported source and destination locations. Include and exclude filters limit the eligible directories and files. A schedule can automate recurring transfers, while on-demand runs are useful for controlled migrations. Overwrite and delete protection must be considered carefully: a wrong setting may replace destination content or remove files that another system still needs. The slide also covers metadata handling and verification of integrity after transfer. Bandwidth throttling is not identical across all task modes, so check the applicable options rather than assuming every mode has the same limits. The throughput warning at the bottom is equally important: actual performance depends on storage, number and size of files, network characteristics, and service constraints. Before running the task, preview and review filters, scope, direction, permissions, schedule, integrity options, and destructive behaviors together."
+    },
+    {
+      "slide": 6,
+      "title": "DataSync integrity and archive considerations",
+      "narration": "Finish by following source data through DataSync into destination storage. The diagram differentiates active objects needing immediate access from archival storage classes with differing retrieval characteristics. S3 Standard is suitable for frequent immediate access, and Glacier Instant Retrieval supports immediate retrieval for its archival use case. Glacier Flexible Retrieval and Deep Archive are different because retrieval may require a restore and additional delay. The first bottom panel emphasizes verified transfer and the detailed task report. Review individual file errors, permissions, timestamps, checksums, and metadata mismatches rather than checking only a total byte counter. Archived source objects may have to be restored before the transfer task can read them. Choosing the destination storage class changes the downstream retrieval and verification strategy. The cost panel calls out request and retrieval charges, early deletion considerations, restore operations, and potential data egress charges. A generative AI system must account for when the transferred document is actually readable by its parser or indexing pipeline. A completed data movement task does not by itself guarantee that the content is ready for retrieval."
+    }
+  ]
+}

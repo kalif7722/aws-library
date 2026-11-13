@@ -1,0 +1,1579 @@
+[
+  {
+    "moduleId": "13",
+    "sequence": 1,
+    "title": "Lambda executes events in replaceable environments",
+    "referencePages": [
+      225,
+      228
+    ],
+    "sections": [
+      {
+        "heading": "Start from an event",
+        "text": "A trigger supplies an event to a handler. Lambda initializes a compatible runtime, invokes your code and may reuse the environment for later work."
+      },
+      {
+        "heading": "Externalize durable state",
+        "text": "Keep authoritative data in a suitable database or object store. Reused memory and temporary files can improve efficiency, but they are not a durable session store."
+      },
+      {
+        "heading": "Separate responsibilities",
+        "text": "AWS operates the managed platform. You own code, dependencies, permissions, input validation, idempotency and downstream capacity."
+      }
+    ],
+    "remember": "Environment reuse is an optimization, not a state guarantee.",
+    "diagram": "EventBridge -> Lambda execution environment containing Init and Invoke(handler). Independent handler branch -> external durable DynamoDB/S3. Separate dashed reuse loop back to handler, labelled possible/not guaranteed; no reuse router box.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 2,
+    "title": "A Lambda image must follow the Lambda runtime contract",
+    "referencePages": [
+      228
+    ],
+    "sections": [
+      {
+        "heading": "Choose a supported runtime",
+        "text": "Managed runtime families include Node.js, Python, Java, .NET and Ruby; supported versions change. Custom runtimes can use the Runtime API for languages such as Go or Rust."
+      },
+      {
+        "heading": "Package deliberately",
+        "text": "ZIP deployments and compatible container images have different packaging paths. A container image still needs the Lambda Runtime API and compatible architecture/operating system."
+      },
+      {
+        "heading": "Use the right compute",
+        "text": "ECS or Fargate can suit an arbitrary long-running container. A generic Docker image is not automatically a Lambda function; keep dependencies patched."
+      }
+    ],
+    "remember": "Container packaging does not remove the runtime contract.",
+    "diagram": "Compare ZIP + managed runtime and compatible ECR image + Runtime API feeding Lambda; arbitrary server container branches to ECS/Fargate.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 3,
+    "title": "Memory changes CPU allocation and execution economics",
+    "referencePages": [
+      229
+    ],
+    "sections": [
+      {
+        "heading": "Tune measured demand",
+        "text": "For standard Event Functions, memory is configurable from 128 to 10,240 MB. CPU allocation increases with memory; 1,769 MB gives the equivalent of one vCPU, not two."
+      },
+      {
+        "heading": "Bound execution time",
+        "text": "A standard invocation can run up to 900 seconds. Set a timeout that fits the caller and downstream system; a longer Lambda timeout does not extend an API integration automatically."
+      },
+      {
+        "heading": "Treat temporary storage separately",
+        "text": "Configurable /tmp storage spans 512 to 10,240 MB. It is temporary environment storage; do not confuse it with function memory or a durable database."
+      }
+    ],
+    "remember": "Benchmark duration and cost together; more memory can finish sooner.",
+    "diagram": "Memory slider -> proportional CPU; separate /tmp disk slider; caller timeout and Lambda timeout shown as independent clocks. Visibly correct one-vCPU value.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 4,
+    "title": "Check every package and payload boundary in the path",
+    "referencePages": [
+      229
+    ],
+    "sections": [
+      {
+        "heading": "Deploy within package limits",
+        "text": "ZIP direct upload is limited to 50 MB compressed; uncompressed code plus layers is limited to 250 MB. A compatible container image can be up to 10 GB uncompressed."
+      },
+      {
+        "heading": "Distinguish invocation modes",
+        "text": "Standard buffered synchronous requests and responses allow 6 MB each; asynchronous invocation payloads allow 1 MB. Streamed responses use a separate supported contract."
+      },
+      {
+        "heading": "Design for the smallest gate",
+        "text": "A front door, event producer or destination may impose a smaller limit. Put large objects in S3 and pass a scoped reference when the full chain cannot carry the data."
+      }
+    ],
+    "remember": "The smallest compatible limit controls the end-to-end design.",
+    "diagram": "API -> Lambda -> destination with different size gates; separate S3 large object and small reference; do not imply API 10 MB passes through 6 MB Lambda.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 5,
+    "title": "Concurrency protects both shared capacity and dependencies",
+    "referencePages": [
+      230,
+      231
+    ],
+    "sections": [
+      {
+        "heading": "Estimate in-flight work",
+        "text": "Concurrency is the number of simultaneous invocations. For a steady example, 200 requests per second times 0.5 seconds average duration requires about 100 concurrent executions."
+      },
+      {
+        "heading": "Isolate critical capacity",
+        "text": "Reserved concurrency reserves a function share and caps its maximum. It can protect another function from a noisy neighbor and limit pressure on a database."
+      },
+      {
+        "heading": "Handle throttling",
+        "text": "The usual regional account default is 1,000, with new-account reductions and approved increases possible. Observe throttles, retry with backoff where appropriate and respect scaling rates."
+      }
+    ],
+    "remember": "Reserved capacity is not a pre-initialized environment.",
+    "diagram": "Shared pool split into reserved critical function and unreserved functions; noisy stream blocked at cap before database. Equation 200 x 0.5 = 100.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 6,
+    "title": "Reserved concurrency, provisioned concurrency and SnapStart differ",
+    "referencePages": [
+      230,
+      231,
+      312
+    ],
+    "sections": [
+      {
+        "heading": "Reserve a share",
+        "text": "Reserved concurrency controls capacity allocation and the function ceiling. It does not run initialization ahead of an invocation."
+      },
+      {
+        "heading": "Pre-initialize for latency",
+        "text": "Provisioned concurrency maintains ready environments for a qualified version or alias and adds charges. Requests beyond it may use on-demand capacity if other limits allow."
+      },
+      {
+        "heading": "Restore supported snapshots",
+        "text": "SnapStart reduces initialization for supported runtimes/configurations. Validate compatibility and restore-time uniqueness; it cannot be combined with provisioned concurrency."
+      }
+    ],
+    "remember": "Choose capacity isolation separately from startup-latency optimization.",
+    "diagram": "Three labeled columns: reserved slots, ready environments, snapshot restore. Separate capacity versus latency labels; no combined SnapStart + provisioned configuration.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 7,
+    "title": "A published version and an alias support safer traffic shifts",
+    "referencePages": [
+      232,
+      256
+    ],
+    "sections": [
+      {
+        "heading": "Freeze a release",
+        "text": "Publish an immutable function version after validating code and configuration. An alias provides a stable qualified name pointing to a selected release."
+      },
+      {
+        "heading": "Shift traffic deliberately",
+        "text": "CodeDeploy can automate all-at-once, linear or canary shifts between versions. SAM can define the function, deployment preferences and required infrastructure."
+      },
+      {
+        "heading": "Watch and roll back",
+        "text": "Use pre/post traffic hooks and CloudWatch alarms to validate health. A traffic shift is a deployment control, not proof that new code preserves data compatibility."
+      }
+    ],
+    "remember": "Use versioned releases, measured traffic shifts and a tested rollback.",
+    "diagram": "Alias -> v1 90% and v2 10%, CodeDeploy timeline then alarm branch rollback; label percentages sum100. SAM configuration separate from runtime request path.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "5.2.5"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 8,
+    "title": "Logs, metrics and traces explain different failure layers",
+    "referencePages": [
+      233
+    ],
+    "sections": [
+      {
+        "heading": "Capture execution evidence",
+        "text": "The execution role needs supported CloudWatch Logs permissions. Correlate structured logs with request identifiers and protect secrets and personal data."
+      },
+      {
+        "heading": "Measure symptoms",
+        "text": "Inspect invocations, errors, duration, throttles and concurrency. Add initialization and downstream latency evidence before changing memory or capacity."
+      },
+      {
+        "heading": "Trace with current tooling",
+        "text": "Use supported Lambda/X-Ray tracing permissions and instrumentation. X-Ray SDKs/daemon entered maintenance in February 2026; prefer current OpenTelemetry instrumentation guidance."
+      }
+    ],
+    "remember": "A trace, a log and a metric answer different questions.",
+    "diagram": "Lambda connected to three distinct evidence panels: Logs(request id), Metrics(duration/errors), Trace(downstream segments). Current OpenTelemetry -> X-Ray, not false service retirement.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "5.3.1"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 9,
+    "title": "VPC attachment supplies a private path, not automatic internet",
+    "referencePages": [
+      234
+    ],
+    "sections": [
+      {
+        "heading": "Attach for private resources",
+        "text": "Configure suitable VPC subnets and security groups for private RDS or other dependencies. Lambda uses service-managed networking and Hyperplane ENIs for this access."
+      },
+      {
+        "heading": "Check every network gate",
+        "text": "Validate ENI permissions, DNS, subnet addresses, routes and security groups. Database authorization remains separate from network reachability."
+      },
+      {
+        "heading": "Plan public access",
+        "text": "A public subnet does not give a Lambda function a public IP. Private IPv4 egress usually needs a working NAT path; supported AWS endpoints can avoid internet paths for those services."
+      }
+    ],
+    "remember": "VPC connectivity, internet egress and data permissions are separate.",
+    "diagram": "Lambda service -> Hyperplane ENI in private subnet -> private RDS via SG; separate route toward NAT/public endpoint. Explicit public-subnet-alone != internet badge.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 10,
+    "title": "A NAT egress path can provide a stable public IPv4 identity",
+    "referencePages": [
+      235
+    ],
+    "sections": [
+      {
+        "heading": "Route from private subnets",
+        "text": "Send required IPv4 internet traffic from the function network path to a public NAT gateway in a suitable public subnet."
+      },
+      {
+        "heading": "Complete the path",
+        "text": "The NAT gateway uses an Elastic IP and an internet-gateway route. External systems see the NAT egress identity; Lambda itself still has no public IPv4 address."
+      },
+      {
+        "heading": "Design availability and cost",
+        "text": "Use deliberate AZ routing and allowlist all possible egress addresses. Include NAT processing, transfer, routing and dependency failure in the design."
+      }
+    ],
+    "remember": "A fixed egress IP belongs to the NAT path, not the function.",
+    "diagram": "Private subnet Lambda/ENI -> public subnet NAT(EIP) -> IGW -> external allowlist API; arrows routed correctly distinct subnet boundaries; show EIP on NAT only.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "3.2.2",
+      "3.2.4"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 11,
+    "title": "Synchronous invocation leaves retry decisions with the caller",
+    "referencePages": [
+      236
+    ],
+    "sections": [
+      {
+        "heading": "Wait for the outcome",
+        "text": "A direct SDK/CLI request or API integration waits for a result within its own timeout and response contract."
+      },
+      {
+        "heading": "Interpret both layers",
+        "text": "A successful transport response does not always mean function success. Check function error indicators or the front-door status and correlated logs."
+      },
+      {
+        "heading": "Retry deliberately",
+        "text": "Use bounded backoff, jitter and idempotency for retryable failures. Retrying a completed write after a lost response can create duplicate side effects."
+      }
+    ],
+    "remember": "A timeout can leave the business outcome uncertain.",
+    "diagram": "Caller -> Lambda with response arrow returning outcome; lost-response scenario after committed DBwrite -> retry -> idempotency record prevents duplicate.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 12,
+    "title": "Asynchronous acceptance is not successful processing",
+    "referencePages": [
+      237
+    ],
+    "sections": [
+      {
+        "heading": "Queue before execution",
+        "text": "Supported sources such as S3, SNS and EventBridge can invoke Lambda asynchronously. Acceptance places an event in Lambda-managed processing; it is not a final application result."
+      },
+      {
+        "heading": "Separate retry classes",
+        "text": "By default, function errors get two additional attempts. Throttling and system errors follow queue retry behavior for up to six hours by default, subject to configuration and age."
+      },
+      {
+        "heading": "Expect duplicates",
+        "text": "An event can be delivered more than once, even without a function error. Use stable event identifiers, safe writes and monitored failure retention."
+      }
+    ],
+    "remember": "Three attempts describes default function errors, not every failure.",
+    "diagram": "Source -> async queue(accepted) -> function attempt1,error -> retry2 -> retry3 -> failure retention; side note throttles/system errors have different age/retry path.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 13,
+    "title": "Destinations retain an outcome; a DLQ retains an event",
+    "referencePages": [
+      237
+    ],
+    "sections": [
+      {
+        "heading": "Choose retained evidence",
+        "text": "An asynchronous destination includes an invocation record with request/response context. Configure success and failure destinations independently."
+      },
+      {
+        "heading": "Know destination support",
+        "text": "Supported choices include standard SQS, standard SNS, Lambda and EventBridge; S3 is supported for failure records. A function DLQ uses standard SQS or SNS event content."
+      },
+      {
+        "heading": "Test delivery itself",
+        "text": "The execution role needs destination permissions. Check size compatibility, encryption and DestinationDeliveryFailures; a failure archive is useless if delivery is denied."
+      }
+    ],
+    "remember": "Successful function handling and successful failure-record delivery are separate checks.",
+    "diagram": "Lambda outcome branches success destination record and failure destination record; separate DLQ originalevent panel. Annotate S3 failure-only and SNS256KB smaller-than-async.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 14,
+    "title": "A poll-based event source mapping has its own retry contract",
+    "referencePages": [
+      225,
+      238
+    ],
+    "sections": [
+      {
+        "heading": "Let the mapping poll",
+        "text": "Lambda event source mappings poll supported queues or streams such as SQS, Kinesis and DynamoDB Streams. They batch records and invoke the handler; this is not the async invocation queue."
+      },
+      {
+        "heading": "Control failed records",
+        "text": "For SQS, align visibility, batch processing and supported partial-batch responses. For streams, checkpoints, ordering and retry/age settings affect backlog and poisoned records."
+      },
+      {
+        "heading": "Protect throughput",
+        "text": "Tune source capacity, batch windows, concurrency and idempotency together. A queue buffers demand; it does not create infinite processing capacity."
+      }
+    ],
+    "remember": "Match retries to the source integration, not just to Lambda.",
+    "diagram": "SQS -> ESM poller -> Lambda handler; handler outcomes -> poller; poller deletes successful messages while failed messages remain until visibility/retry. Kinesis -> ESM checkpoint reader -> Lambda; failure retains checkpoint and retries existing records, never reinserts them.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.9",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 15,
+    "title": "A thumbnail workflow needs recursion and duplicate protection",
+    "referencePages": [
+      226
+    ],
+    "sections": [
+      {
+        "heading": "Separate input and output",
+        "text": "Use a dedicated input prefix or bucket and a distinct thumbnail destination. Filter notifications so generated thumbnails do not trigger an endless loop."
+      },
+      {
+        "heading": "Process a stable object",
+        "text": "Read the referenced object with scoped permissions, generate the image and write output plus useful metadata such as source identity, size and creation time."
+      },
+      {
+        "heading": "Handle partial completion",
+        "text": "Object output and DynamoDB metadata writes are separate operations. Use deterministic keys, conditional/idempotent updates, retries and reconciliation for partial failures."
+      }
+    ],
+    "remember": "An event-driven diagram still needs a consistency and recovery design.",
+    "diagram": "Original branching workflow inputphotos/ -> event -> Lambda -> thumbnails/ plus DynamoDBmetadata. No output-to-trigger loop; dedup key and partialfailure checkpointlabels.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.2",
+      "1.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 16,
+    "title": "Scheduled invocation requires permissions and execution evidence",
+    "referencePages": [
+      227
+    ],
+    "sections": [
+      {
+        "heading": "Choose a schedule",
+        "text": "Use a supported EventBridge Scheduler configuration for hourly, cron or one-time work. Specify the intended timezone and flexible window behavior where relevant."
+      },
+      {
+        "heading": "Authorize the target",
+        "text": "The scheduler execution role needs permission to invoke the qualified function. Configure supported retry and failed-delivery retention settings."
+      },
+      {
+        "heading": "Validate completion",
+        "text": "Scheduler delivery success and handler business success are different signals. Make the job idempotent and monitor function results as well as target invocation failures."
+      }
+    ],
+    "remember": "A schedule firing does not prove that the job finished.",
+    "diagram": "Clock schedule -> Scheduler(executionrole) -> Lambda -> completedbusinessrecord; deliveryfailure branch vs processingfailure branch clearly separated.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.2"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 17,
+    "title": "Fan-out and buffering trade latency for controlled work intake",
+    "referencePages": [
+      238
+    ],
+    "sections": [
+      {
+        "heading": "Fan out notifications",
+        "text": "An S3 event can reach SNS and independently subscribed consumers. Each subscription needs its own delivery/security design."
+      },
+      {
+        "heading": "Insert a queue intentionally",
+        "text": "SNS to SQS to a Lambda poller provides buffering, batching and separate consumer pacing. It adds queueing delay and new retention/retry responsibilities."
+      },
+      {
+        "heading": "Keep payload semantics clear",
+        "text": "Raw-message delivery versus an SNS envelope changes the handler input. Handle duplicates and recover the correct business event rather than assuming identical payloads."
+      }
+    ],
+    "remember": "A buffer absorbs bursts only within its retention and processing limits.",
+    "diagram": "Original comparison: SNS branches two independent consumers; lower lane SNS->SQS backlog->poller->Lambda, annotate paced batches and added latency.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 18,
+    "title": "Current Lambda offerings have different execution contracts",
+    "referencePages": [
+      229
+    ],
+    "sections": [
+      {
+        "heading": "Keep the standard scope",
+        "text": "The course core uses standard event-driven Lambda functions. Its ordinary per-invocation duration, memory and concurrency limits must be labelled with that scope."
+      },
+      {
+        "heading": "Recognize supported exceptions",
+        "text": "Lambda Managed Instances uses supported EC2 capacity with Lambda-managed operations. Eligible asynchronous and event-source-mapping invocations can run up to 90 minutes, with source exceptions."
+      },
+      {
+        "heading": "Separate durable orchestration",
+        "text": "Durable functions checkpoint and resume supported multi-step code; wall-clock workflow duration is not one uninterrupted invocation. Newer Lambda offerings require their own current compatibility and quota check."
+      }
+    ],
+    "remember": "Do not turn a standard-function limit into a universal Lambda claim.",
+    "diagram": "Three separate cards: standard event function 15-min invocation; ManagedInstances eligible90-min; durable checkpoints+wait+resume. Label supplementary current-AWS context.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.4"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 19,
+    "title": "Invocation permission differs from the function execution role",
+    "referencePages": [
+      225,
+      233,
+      262
+    ],
+    "sections": [
+      {
+        "heading": "Authorize the caller",
+        "text": "The invoking principal or service must be allowed to invoke the selected function/version/alias. Scope service resource policies to the expected source where supported."
+      },
+      {
+        "heading": "Authorize the code",
+        "text": "The execution role authorizes what handler code can do, including selected database, object, secret, logging and destination operations."
+      },
+      {
+        "heading": "Protect credentials and inputs",
+        "text": "Use temporary credentials, scoped secret retrieval and supported encryption. Validate events and avoid leaking tokens or secret values into logs and error responses."
+      }
+    ],
+    "remember": "The caller invokes; the execution role accesses dependencies.",
+    "diagram": "Caller/service -> invocation permission gate -> Lambda; separate execution-role gate -> S3/DynamoDB/Secrets. Never draw callerpolicy as automatically grantingfunctiondataaccess.",
+    "examSkills": [
+      "1.1.2",
+      "1.1.13",
+      "2.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 20,
+    "title": "Choose REST, HTTP or WebSocket APIs by required features",
+    "referencePages": [
+      255,
+      266,
+      312
+    ],
+    "sections": [
+      {
+        "heading": "REST API feature depth",
+        "text": "Use REST API when supported requirements include usage plans/API keys, request validation, stage caching, WAF, private API endpoints or canary releases."
+      },
+      {
+        "heading": "HTTP API simplicity",
+        "text": "HTTP APIs provide a leaner RESTful front door with supported JWT/IAM/Lambda authorization and integrations. They do not inherit every REST API feature."
+      },
+      {
+        "heading": "WebSocket interaction",
+        "text": "WebSocket APIs keep client connections for bidirectional messages. Connection lifecycle, routes and backend callback permissions become part of the application."
+      }
+    ],
+    "remember": "RESTful HTTP traffic does not identify the API Gateway product.",
+    "diagram": "Three product cards REST/HTTP/WebSocket with precisefeaturebadges and websocketsbidirectionalarrows. No RESTfeaturebadges underHTTP.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.12"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 21,
+    "title": "An integration connects API requests to a compatible backend",
+    "referencePages": [
+      255,
+      257,
+      314
+    ],
+    "sections": [
+      {
+        "heading": "Select the backend contract",
+        "text": "API Gateway can integrate with Lambda, supported AWS service operations or HTTP endpoints. Select proxy versus custom mapping behavior intentionally."
+      },
+      {
+        "heading": "Transform and validate",
+        "text": "Request parameters, body formats, status responses and error mappings depend on API/integration type. Importing OpenAPI helps define the contract but does not authorize the backend."
+      },
+      {
+        "heading": "Authorize and connect",
+        "text": "Use supported invocation permissions or integration credentials, plus network reachability for private/on-premises dependencies. Do not expose arbitrary AWS APIs without a defined allowlist."
+      }
+    ],
+    "remember": "An integration is a contract, permission path and network path.",
+    "diagram": "APImethod branches Lambda proxy, selectedAWSoperation, HTTPbackend; separate mapping/permission/networkgates, include onprem with validatedreachability.",
+    "examSkills": [
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 22,
+    "title": "Direct AWS integration can remove an unnecessary function hop",
+    "referencePages": [
+      257,
+      313
+    ],
+    "sections": [
+      {
+        "heading": "Map one supported operation",
+        "text": "For simple authenticated intake, a supported API integration can call an operation such as sending a message to SQS or starting a workflow."
+      },
+      {
+        "heading": "Scope the integration role",
+        "text": "Grant the minimum target action and resource. Validate input, translate the request shape and return a suitable acceptance response."
+      },
+      {
+        "heading": "Preserve business logic where needed",
+        "text": "Removing a pass-through function can reduce code and an invocation hop. Keep compute when custom validation, orchestration or transformation actually requires it."
+      }
+    ],
+    "remember": "Less code is useful only when the integration still meets the contract.",
+    "diagram": "Compare client->API->pass-throughLambda->SQS with client->API(integrationrole scoped SendMessage)->SQS. Label enqueueacceptance!=jobcomplete.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 23,
+    "title": "An API deployment stage and a Lambda alias are separate controls",
+    "referencePages": [
+      256,
+      232
+    ],
+    "sections": [
+      {
+        "heading": "Deploy an API configuration",
+        "text": "A REST API deployment captures API configuration; a named stage points to a deployment. Stage count is quota-bound, not literally unlimited."
+      },
+      {
+        "heading": "Route to a function release",
+        "text": "The integration can invoke a qualified Lambda alias. API stage selection and alias version weighting are separate mechanisms with independent configuration."
+      },
+      {
+        "heading": "Change and recover deliberately",
+        "text": "Use supported REST canary settings or controlled deployment changes; test permissions, stage variables, cached responses and client compatibility before rollback."
+      }
+    ],
+    "remember": "API rollout and function rollout must be coordinated.",
+    "diagram": "Two independentselectors APIstage->deployment and Lambdaprodalias->v1/v2; distinct knobs, no conflatingAPIcanarywithaliasweight.",
+    "examSkills": [
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 24,
+    "title": "Time and payload limits depend on API type and transfer mode",
+    "referencePages": [
+      255,
+      261,
+      312
+    ],
+    "sections": [
+      {
+        "heading": "Check buffered constraints",
+        "text": "A standard REST API payload limit is 10 MB. Buffered Lambda integration has its own 6-MB request/response boundary and format overhead."
+      },
+      {
+        "heading": "Qualify timeout claims",
+        "text": "Regional and private REST integration timeouts can be raised beyond the usual 29 seconds, potentially reducing account throttle quota. HTTP and edge-optimized APIs have different limits."
+      },
+      {
+        "heading": "Recognize response streaming",
+        "text": "Supported REST proxy response streaming can run up to 15 minutes and exceed buffered response sizes. It does not turn large uploads into streamed requests or remove downstream limits."
+      }
+    ],
+    "remember": "Label API type, integration and transfer mode before quoting a limit.",
+    "diagram": "Three independentgates clientpayload, APIintegrationtimeout, Lambdabuffer; separate supportedRESTresponse-streaminglane(outboundonly).",
+    "examSkills": [
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 25,
+    "title": "Upload large objects directly with a tightly scoped S3 URL",
+    "referencePages": [
+      258
+    ],
+    "sections": [
+      {
+        "heading": "Authorize the upload request",
+        "text": "The application asks a trusted API for upload permission. Validate user/tenant context, intended object key, expiry and allowed operation."
+      },
+      {
+        "heading": "Return a limited capability",
+        "text": "A permitted signer creates a short-lived presigned request. The browser sends object bytes directly to S3 using the signed method and required headers."
+      },
+      {
+        "heading": "Validate the stored result",
+        "text": "Configure S3 CORS where needed, encryption, size/checksum constraints and completion processing. A presigned URL is a bearer capability; protect it from disclosure."
+      }
+    ],
+    "remember": "Issue permission through the API; send large object bytes to S3.",
+    "diagram": "Numbered arrows 1browser->API permission 2API->signer 3URLreturnbrowser 4browser->S3 directly. No largeupload throughLambda/API.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.3",
+      "2.1.4"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 26,
+    "title": "Edge, Regional and private endpoints change the client path",
+    "referencePages": [
+      259
+    ],
+    "sections": [
+      {
+        "heading": "Edge-optimized REST",
+        "text": "A managed CloudFront edge path fronts one regional API. Edge presence does not create independent multi-Region backends."
+      },
+      {
+        "heading": "Regional endpoint",
+        "text": "Clients connect to a regional API endpoint; an intentionally configured CloudFront distribution can add edge behavior with explicit cache and origin settings."
+      },
+      {
+        "heading": "Private REST endpoint",
+        "text": "Private API access uses execute-api interface endpoints and compatible private connectivity, endpoint/resource policies and API authorization."
+      }
+    ],
+    "remember": "Endpoint location and backend resilience are separate decisions.",
+    "diagram": "Three separate paths: managed CloudFront->regional REST, direct regional REST with optional ownCloudFront, private client->execute-api interface endpoint->service-managed private REST API. Customer VPC contains client/endpoint only; API service outside.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.11"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 27,
+    "title": "A private API combines network reachability and policy gates",
+    "referencePages": [
+      268,
+      262
+    ],
+    "sections": [
+      {
+        "heading": "Create a private client path",
+        "text": "Reach an execute-api interface endpoint through a VPC or supported connected network. Configure private DNS, subnet placement and endpoint security groups deliberately."
+      },
+      {
+        "heading": "Evaluate distinct policies",
+        "text": "An endpoint policy and API resource policy restrict access; supported conditions include aws:SourceVpc and aws:SourceVpce. Method authorization still applies."
+      },
+      {
+        "heading": "Support intentional sharing",
+        "text": "One endpoint can reach multiple permitted private APIs, including supported cross-account designs. Private connectivity does not make every API in the Region available."
+      }
+    ],
+    "remember": "Reachability is necessary; endpoint, resource and method authorization still matter.",
+    "diagram": "Privateclient -> endpointSG -> endpointpolicy -> APIresourcepolicy -> methodauth -> API. CrossaccountAPI sidecard samegates; endpointsharedmultipleallowedAPIs.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.4"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 28,
+    "title": "Private backend integration is different from a private API",
+    "referencePages": [
+      257,
+      268,
+      314
+    ],
+    "sections": [
+      {
+        "heading": "Separate the two directions",
+        "text": "A public API can reach a private backend through a VPC link. A private API controls how clients reach API Gateway; the two decisions are independent."
+      },
+      {
+        "heading": "Use current VPC-link support",
+        "text": "Current REST VPC links V2 support compatible ALB/NLB private integrations. Legacy V1 uses its own narrower contract. HTTP APIs have separate integration options."
+      },
+      {
+        "heading": "Validate backend routing",
+        "text": "Check ownership, listener ports, security groups, TLS server name and path mapping. REST private integrations can include the stage in the backend path unless overridden."
+      }
+    ],
+    "remember": "Private ingress and private backend connectivity are different features.",
+    "diagram": "Internetclient->publicAPI->VPCLinkV2->privateALB->service; separate privateclient->privateAPI inset. ClearlyALBbehindVPCLink notpublicAPIitself.",
+    "examSkills": [
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 29,
+    "title": "A cache key is part of the authorization design",
+    "referencePages": [
+      260
+    ],
+    "sections": [
+      {
+        "heading": "Cache compatible responses",
+        "text": "REST API stage caching reduces backend calls. Default TTL is 300 seconds, supported up to 3,600; TTL zero disables caching. GET caching is enabled by default when stage method caching is turned on."
+      },
+      {
+        "heading": "Separate users and variants",
+        "text": "Select cache-key parameters that represent the actual response. Never serve one tenant’s private data to another through a shared cache key."
+      },
+      {
+        "heading": "Operate the cache",
+        "text": "Method overrides, encryption, authorized invalidation and stage flush are separate controls. Monitor hits/misses, response size, stale data and hourly cache cost."
+      }
+    ],
+    "remember": "Fast cached data is wrong if its identity or freshness boundary is wrong.",
+    "diagram": "Cachelookup key(tenant+resource+variant) -> hitresponse or missbackend; two tenants separatedkeys; invalidationpermissiongate.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 30,
+    "title": "Authenticate callers with the mechanism the API supports",
+    "referencePages": [
+      263
+    ],
+    "sections": [
+      {
+        "heading": "IAM and signed requests",
+        "text": "AWS_IAM uses SigV4-signed requests with permitted identities. It suits authorized AWS callers; do not transmit a raw secret access key as a bearer token."
+      },
+      {
+        "heading": "Tokens and authorizers",
+        "text": "REST supports Cognito user-pool and Lambda authorizers. HTTP APIs support compatible JWT authorizers, including suitable Cognito/OIDC issuers, plus supported IAM/Lambda options."
+      },
+      {
+        "heading": "Enforce application permissions",
+        "text": "A valid identity is not blanket access to every record. Scope authorizer caching and check tenant/resource permissions in trusted application logic."
+      }
+    ],
+    "remember": "Validate identity, then authorize the requested operation and data.",
+    "diagram": "IAM caller signs API request. User/client signs in with Cognito or compatible issuer, issuer returns token to client, client sends token to API. Then separate application tenant/resource authorization gate. Issuer never sends client API request.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.2",
+      "2.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 31,
+    "title": "Resource policies, backend roles and TLS solve different gates",
+    "referencePages": [
+      262,
+      263
+    ],
+    "sections": [
+      {
+        "heading": "Restrict API invocation",
+        "text": "A supported REST resource policy can restrict principals and network context. Explicit denies and cross-account policy requirements must be evaluated with method authorization."
+      },
+      {
+        "heading": "Allow the integration",
+        "text": "Backend invocation needs compatible Lambda resource permission or an integration role scoped to the required AWS action. This is separate from the API caller’s data permissions."
+      },
+      {
+        "heading": "Secure the endpoint",
+        "text": "Use compatible ACM certificates and custom-domain mappings with appropriate DNS records. Regional/edge certificate rules differ; a DNS alias is not authorization."
+      }
+    ],
+    "remember": "Caller policy, integration policy and transport protection are not interchangeable.",
+    "diagram": "Actual HTTPS path caller->API Gateway custom-domain TLS endpoint->integration->Lambda and response back. Route53 lookup and ACM certificate are dotted side/configuration associations. Resource/method checks inside API; backend permission is logical annotation.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.3",
+      "2.2.2"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 32,
+    "title": "CORS is a browser response rule, not an API access boundary",
+    "referencePages": [
+      262
+    ],
+    "sections": [
+      {
+        "heading": "Recognize the browser check",
+        "text": "A browser compares origins and may send an OPTIONS preflight for the intended method and headers. Non-browser clients are not secured by CORS."
+      },
+      {
+        "heading": "Return compatible headers",
+        "text": "Configure allowed origins, methods and headers on preflight and relevant actual/error responses. Credentialed requests require an explicit compatible origin, not a wildcard."
+      },
+      {
+        "heading": "Keep real authorization",
+        "text": "IAM/token checks, tenant authorization and CSRF protections where applicable remain necessary. A browser can hide a response even though the backend already processed the request."
+      }
+    ],
+    "remember": "CORS controls browser access to responses; it does not replace authorization.",
+    "diagram": "Browser OPTIONS->APIpreflightthenactualrequest->responseCORSgate; separateCLIpathstillneedsauthnoCORSgate. Showbackendmayexecuteevenifbrowserblocksresponse.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.2"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 33,
+    "title": "Usage-plan keys meter clients; they do not authenticate users",
+    "referencePages": [
+      265
+    ],
+    "sections": [
+      {
+        "heading": "Identify an API consumer",
+        "text": "REST API keys can identify developer customers across associated stages and methods. A usage plan sets supported request-rate and period quota targets."
+      },
+      {
+        "heading": "Retain real authorization",
+        "text": "Use IAM, a Cognito user pool or a compatible authorizer to protect access. A leaked API key is not a trustworthy user or tenant identity."
+      },
+      {
+        "heading": "Budget for best effort",
+        "text": "Usage-plan quotas and throttling are best effort, not hard spending caps. Regional/account and downstream throttles are separate; handle 429 responses with bounded backoff."
+      }
+    ],
+    "remember": "API keys support metering, not secure identity or a hard cost ceiling.",
+    "diagram": "APIkey->usageplanmeter alongside separateJWT/IAMauthgate thenbackend; ratebucket andmonthlyquota targetnot hardcaplabels.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.13",
+      "2.1.2"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 34,
+    "title": "Diagnose API errors at the layer that produced them",
+    "referencePages": [
+      261
+    ],
+    "sections": [
+      {
+        "heading": "Inspect client-side failures",
+        "text": "400 can indicate invalid input; 401/403 can indicate authentication, policy, WAF or other access/path issues. A 429 may come from API throttles or downstream capacity."
+      },
+      {
+        "heading": "Inspect integration failures",
+        "text": "A 502 often indicates a failed or malformed proxy response; 503 signals unavailability; a 504 can indicate integration timeout. Status alone is not a complete root cause."
+      },
+      {
+        "heading": "Correlate before retrying",
+        "text": "Use request identifiers, access/execution logs, integration status and Lambda metrics. Retry only suitable failures with idempotency and investigate continuing work after timeouts."
+      }
+    ],
+    "remember": "An HTTP code narrows the investigation; evidence identifies the cause.",
+    "diagram": "Layereddiagnosticboard client/API/integration/Lambda with400403429502504 routedtolabeledchecks; noall502=orderclaim.",
+    "examSkills": [
+      "1.1.10",
+      "5.4.1"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 35,
+    "title": "API observability separates gateway time from backend time",
+    "referencePages": [
+      264,
+      233
+    ],
+    "sections": [
+      {
+        "heading": "Log the right context",
+        "text": "Supported access logs record request identifiers, caller context and status. REST execution logging can add integration detail; redact credentials and sensitive payloads."
+      },
+      {
+        "heading": "Compare latency layers",
+        "text": "Gateway Latency and IntegrationLatency measure different portions of the path. Add 4XX/5XX counts, throttle signals and REST cache-hit/miss evidence."
+      },
+      {
+        "heading": "Respect product differences",
+        "text": "REST supports execution logs, supported Firehose access-log delivery and X-Ray tracing. HTTP APIs have a leaner monitoring feature set; use current instrumentation guidance."
+      }
+    ],
+    "remember": "Measure the gateway and integration separately before tuning either.",
+    "diagram": "Six chronological events: API receives request, preprocessing, sends integration request, receives integration response, response processing, sends client response. Latency spans full gateway interval. IntegrationLatency spans only integration send to integration response. Separate logs/metrics/traces cards.",
+    "examSkills": [
+      "1.1.10",
+      "5.3.1"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 36,
+    "title": "WebSocket routing handles a connection lifecycle",
+    "referencePages": [
+      266
+    ],
+    "sections": [
+      {
+        "heading": "Connect and authorize",
+        "text": "Clients establish a wss connection. Authenticate at the supported connection gate and retain trusted user/tenant association with the connection identifier."
+      },
+      {
+        "heading": "Route messages",
+        "text": "Use $connect, $disconnect and $default plus application routes selected from message content. Route handlers can use supported Lambda, HTTP or AWS integrations."
+      },
+      {
+        "heading": "Handle connection limits",
+        "text": "Clients need reconnect and resubscribe behavior. Connection state in DynamoDB is an application record; disconnect delivery and cleanup still need robust handling."
+      }
+    ],
+    "remember": "A persistent connection still needs lifecycle, authorization and recovery logic.",
+    "diagram": "Client<->WebSocket API with connect/message/disconnect routes to handlers and trusted connectionId state. Optional configured route response/callback. Reconnect originates client->API. No automatic frame implied from handler return.",
+    "examSkills": [
+      "1.1.12",
+      "1.1.13",
+      "2.1.2"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 37,
+    "title": "WebSocket callbacks use a signed HTTPS management request",
+    "referencePages": [
+      267
+    ],
+    "sections": [
+      {
+        "heading": "Use the right endpoint",
+        "text": "Clients use wss to connect. Backend callbacks use the HTTPS @connections management endpoint for the correct API, stage/custom-domain mapping and connection identifier."
+      },
+      {
+        "heading": "Authorize the backend",
+        "text": "Sign management requests with SigV4 and scope execute-api:ManageConnections permissions. The original client token is not an automatic backend IAM permission."
+      },
+      {
+        "heading": "Handle stale connections",
+        "text": "A callback can fail with GoneException if the client is gone or not yet established. Remove stale state and implement reconnect/recovery without blind repeated sends."
+      }
+    ],
+    "remember": "Client WebSocket traffic and backend HTTPS callbacks are different paths.",
+    "diagram": "Client<->wssAPI persistentconnection; Lambda->signedHTTPSPOST /@connections/id ->API->client; DynamoDBidlookup; staleid -> Gone -> cleanup. NeverwsscallbackURL.",
+    "examSkills": [
+      "1.1.12",
+      "2.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 38,
+    "title": "AppSync resolvers connect a GraphQL schema to data",
+    "referencePages": [
+      269,
+      270
+    ],
+    "sections": [
+      {
+        "heading": "Define the contract",
+        "text": "A GraphQL schema defines available types, fields and operations. Clients request selected fields; schema and resolver logic determine what actually runs."
+      },
+      {
+        "heading": "Choose compatible data sources",
+        "text": "Supported resolvers can reach DynamoDB, eligible Aurora/Data API paths, OpenSearch, HTTP and Lambda-backed custom behavior. Verify the exact data-source contract."
+      },
+      {
+        "heading": "Plan operation and cost",
+        "text": "Resolvers need scoped access and valid mapping/runtime behavior. Monitor requests, errors, latency and fan-out; asking for fewer fields does not guarantee fewer backend operations."
+      }
+    ],
+    "remember": "A GraphQL schema describes data; resolvers enforce the real access path.",
+    "diagram": "Clientselectedfields->AppSyncschema->3resolverbranches DynamoDB/AuroraviaDataAPI/Lambdacustom, smallerHTTP/OpenSearchsourcecards; avoidcopyingPDFfanoutcomposition.",
+    "examSkills": [
+      "1.1.10",
+      "1.1.12"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 39,
+    "title": "AppSync caller authorization and resolver IAM are separate",
+    "referencePages": [
+      271
+    ],
+    "sections": [
+      {
+        "heading": "Authenticate the caller",
+        "text": "Supported GraphQL modes include Cognito user pools, IAM, OIDC, Lambda and API key. Choose a suitable mode rather than treating an unauthenticated key as private user identity."
+      },
+      {
+        "heading": "Authorize fields and tenants",
+        "text": "Cognito group rules can distinguish readers from writers. Enforce owner/tenant predicates in resolver/application logic as well as schema-level permissions."
+      },
+      {
+        "heading": "Authorize the data source",
+        "text": "AppSync resolver roles need scoped backend IAM permissions independently of the caller token. Test negative cross-tenant and forbidden mutation cases."
+      }
+    ],
+    "remember": "A valid JWT does not authorize every field or every data item.",
+    "diagram": "CognitoJWTgroups reader/writer->AppSyncfieldauth->resolvertenantpredicate->separatedatasourceIAMgate->DynamoDB. Reader deniedmutation visible.",
+    "examSkills": [
+      "1.1.12",
+      "1.1.13",
+      "2.1.2",
+      "2.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 40,
+    "title": "Subscriptions and offline synchronization require different designs",
+    "referencePages": [
+      269,
+      270
+    ],
+    "sections": [
+      {
+        "heading": "Push live changes",
+        "text": "AppSync GraphQL subscriptions use secure WebSockets and supported mutation-linked updates. Apply subscription authorization and filtering to avoid exposing another tenant’s events."
+      },
+      {
+        "heading": "Recover client state",
+        "text": "Offline access/synchronization depends on compatible client libraries, local storage and conflict/version handling. Reconnection may require a fresh query, not just replaying a socket."
+      },
+      {
+        "heading": "Distinguish the API product",
+        "text": "AppSync Events supplies a separate managed publish/subscribe event API. It is not the same schema/resolver contract as GraphQL subscriptions; old MQTT illustrations are not a universal current protocol."
+      }
+    ],
+    "remember": "Live transport, durable history and offline conflict resolution are separate.",
+    "diagram": "Mutation->GraphQLsubscription->connectedclient; offlineclientlocalcache->reconnectquery+conflictcheck; separateAppSyncEvents pub/sub card notschemamutation.",
+    "examSkills": [
+      "1.1.12",
+      "1.1.13",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 41,
+    "title": "Choose an HTTP front door by policy, limits and operating model",
+    "referencePages": [
+      311,
+      312,
+      313,
+      314
+    ],
+    "sections": [
+      {
+        "heading": "ALB with Lambda",
+        "text": "An ALB can route compatible HTTP requests to Lambda targets alongside other target groups and supported WAF controls. Its event/size/response contract differs from API Gateway."
+      },
+      {
+        "heading": "API Gateway or function URL",
+        "text": "API Gateway offers product-specific API controls. A Lambda function URL exposes a simpler HTTP endpoint with supported IAM or public access configuration; validate its own permissions and limits."
+      },
+      {
+        "heading": "Choose the full path",
+        "text": "Compare API features, auth, network exposure, payload, latency, scaling and cost. A direct AWS integration may avoid compute; a custom HTTP backend may need private connectivity."
+      }
+    ],
+    "remember": "The simplest front door is the one that still meets every requirement.",
+    "diagram": "Decisionmatrix3cards ALBhybridrouting/APIGatewayAPIfeatures/functionURLsimplerendpoint; bottomdirectAWSbranch. No universalcheaperorcapabilityclaims.",
+    "examSkills": [
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 42,
+    "title": "A regional API needs a separate regional data and recovery plan",
+    "referencePages": [
+      259,
+      312
+    ],
+    "sections": [
+      {
+        "heading": "Duplicate the right layers",
+        "text": "A multi-Region design needs compatible API deployments, function releases, identity configuration, dependencies and secrets in each intended Region."
+      },
+      {
+        "heading": "Choose data behavior",
+        "text": "Replicate or recover data using the chosen datastore’s actual consistency and failover model. Avoid two uncontrolled writers during an incident."
+      },
+      {
+        "heading": "Test traffic recovery",
+        "text": "Validate custom domains, certificates, routing, health checks and client DNS/reconnect behavior. An edge-optimized endpoint still has a regional API behind it."
+      }
+    ],
+    "remember": "Global DNS or an edge entry point is not a complete regional recovery design.",
+    "diagram": "TwoRegionboundaries eachAPI+Lambda+regionaldata, deliberatedatareplicationarrow, DNStrafficselectorhealthseparate; noDNSdatabasepromotionclaim.",
+    "examSkills": [
+      "1.1.5",
+      "1.1.10",
+      "4.3.2",
+      "4.3.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 43,
+    "title": "Lambda walkthrough: prove asynchronous failure retention",
+    "referencePages": [
+      237
+    ],
+    "sections": [
+      {
+        "heading": "Prepare the sandbox",
+        "text": "Use a disposable function, least-privilege execution role and supported failure destination. Set bounded retry/age values and record the test event identifier."
+      },
+      {
+        "heading": "Run a controlled failure",
+        "text": "Submit an asynchronous test invocation. The accepted response proves intake only; inspect handler logs and configured retry behavior."
+      },
+      {
+        "heading": "Verify and clean up",
+        "text": "Find the retained invocation record, validate its event identifier and check delivery-failure metrics. Restore normal code, remove temporary resources and confirm no unexpected invocations continue."
+      }
+    ],
+    "remember": "Verify the failed-event record, not only the accepted invoke response.",
+    "diagram": "Illustrative sandboxthreepanels configuration, accepted202notcomplete, failurearchiveeventidmatchinglogs. No claimactualAWSaccountwasexecuted.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.2",
+      "4.3.3",
+      "5.3.1"
+    ],
+    "visualType": "sandbox-walkthrough",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 44,
+    "title": "Lambda walkthrough: isolate a private-network timeout",
+    "referencePages": [
+      234,
+      235
+    ],
+    "sections": [
+      {
+        "heading": "Start with evidence",
+        "text": "In a disposable VPC-attached function, capture the request ID and exact failed dependency. Separate a private RDS connection from a public HTTPS request."
+      },
+      {
+        "heading": "Inspect the right path",
+        "text": "Check DNS, subnet routes, security groups, NAT/EIP/IGW or the service endpoint, plus relevant IAM and database grants. A public subnet alone is not a fix."
+      },
+      {
+        "heading": "Retest and remove changes",
+        "text": "Make the smallest justified configuration correction and rerun the same bounded request. Confirm success with logs and dependency evidence, then remove sandbox-only rules/resources."
+      }
+    ],
+    "remember": "Diagnose the actual dependency path before raising the timeout.",
+    "diagram": "Illustrative private Lambda -> RDS local connection fails because RDS SG lacks TCP5432 ingress from Lambda SG. Separate public HTTPS path via NAT/IGW succeeds. Add only RDS ingress; retest and remove sandbox rule. NAT is never on the private RDS path.",
+    "examSkills": [
+      "1.1.10",
+      "5.4.1"
+    ],
+    "visualType": "sandbox-walkthrough",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 45,
+    "title": "API walkthrough: distinguish throttling from a malformed response",
+    "referencePages": [
+      261,
+      264,
+      265
+    ],
+    "sections": [
+      {
+        "heading": "Create two controlled cases",
+        "text": "In a sandbox API/Lambda integration, use distinct request identifiers for a bounded throttle test and an intentionally invalid proxy-response shape."
+      },
+      {
+        "heading": "Read correlated evidence",
+        "text": "For an API Gateway stage-throttle 429, inspect stage limits and confirm rejected requests did not invoke Lambda. For 502, inspect integration logs and the REST Lambda proxy response contract."
+      },
+      {
+        "heading": "Verify the specific correction",
+        "text": "Apply an appropriate throttle/capacity or response-shape change, retest the same case and remove temporary settings. Preserve redacted before/after evidence."
+      }
+    ],
+    "remember": "A 429 and a 502 require different evidence and different fixes.",
+    "diagram": "Two illustrative REST cases: API Gateway stage throttle429 and malformed Lambda proxy response502. Correct respective stage throttle or response shape; retest and clean up.",
+    "examSkills": [
+      "1.1.10",
+      "5.4.1"
+    ],
+    "visualType": "sandbox-walkthrough",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 46,
+    "title": "AppSync walkthrough: prove allowed and denied data access",
+    "referencePages": [
+      271
+    ],
+    "sections": [
+      {
+        "heading": "Define a small policy matrix",
+        "text": "Use a disposable schema/table and test identities: an allowed reader, an allowed writer and a different tenant. Record expected query and mutation outcomes."
+      },
+      {
+        "heading": "Run positive and negative tests",
+        "text": "Confirm permitted reads/writes, reject reader mutations and reject cross-tenant item access. A successful token check alone does not prove the data predicate."
+      },
+      {
+        "heading": "Collect safe evidence",
+        "text": "Record operation, trusted identity/tenant, policy version and outcome without logging raw tokens. Remove test identities, items and resources when finished."
+      }
+    ],
+    "remember": "A tenant boundary is demonstrated by expected denials as well as allowed requests.",
+    "diagram": "IllustrativematrixreaderqueryALLOW/readermutationDENY/tenantAcrossTenantBDENY/writerownmutationALLOW; trace callerfieldresolverdatagates.",
+    "examSkills": [
+      "1.1.12",
+      "1.1.13",
+      "2.1.2"
+    ],
+    "visualType": "sandbox-walkthrough",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 47,
+    "title": "Release walkthrough: measure a canary before full promotion",
+    "referencePages": [
+      232,
+      256
+    ],
+    "sections": [
+      {
+        "heading": "Prepare compatible versions",
+        "text": "Publish two sandbox function versions behind an alias and point a test API integration to that alias. Keep schema/data behavior compatible for rollback."
+      },
+      {
+        "heading": "Shift a bounded share",
+        "text": "Use a supported deployment configuration such as a ten-percent canary. Exercise representative requests and observe errors, latency and custom correctness signals."
+      },
+      {
+        "heading": "Promote or recover",
+        "text": "Use hooks/alarms to determine promotion or rollback. Verify the alias target and the API response after the action, then delete unused sandbox releases and settings."
+      }
+    ],
+    "remember": "A successful rollout needs correctness evidence, not only a completed deployment status.",
+    "diagram": "Illustrativealiastraffic90/10->metricscheck->promote100orrollback; separateAPIdeploymentselectorvisible. No realproductiontrafficexecutionclaim.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.10",
+      "5.2.5"
+    ],
+    "visualType": "sandbox-walkthrough",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 48,
+    "title": "Optimize the complete serverless path, not one price line",
+    "referencePages": [
+      229,
+      260,
+      312,
+      313
+    ],
+    "sections": [
+      {
+        "heading": "Measure useful work",
+        "text": "Benchmark memory, duration, initialization and concurrency with realistic payloads. Reduce unnecessary hops or repeated data access only when the business contract remains correct."
+      },
+      {
+        "heading": "Account for supporting charges",
+        "text": "Include API requests, Lambda capacity/duration, provisioned concurrency, NAT, logs, cache hours, data transfer and downstream database operations where applicable."
+      },
+      {
+        "heading": "Keep guardrails",
+        "text": "Use quotas, alarms, budgets, bounded retries and failure retention. Neither automatic scaling nor usage-plan metering guarantees unlimited capacity or a hard spending ceiling."
+      }
+    ],
+    "remember": "Optimize latency, reliability and total cost together.",
+    "diagram": "API Gateway -> Lambda -> private RDS directly. Separate optional Lambda -> NAT -> IGW -> external HTTPS path. Cost tags and illustrative memory-duration curve, explicitly not measured data.",
+    "examSkills": [
+      "1.1.9",
+      "1.1.10"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  },
+  {
+    "moduleId": "13",
+    "sequence": 49,
+    "title": "Identify who invokes Lambda and who retries the work",
+    "referencePages": [
+      225
+    ],
+    "sections": [
+      {
+        "heading": "Wait for selected synchronous triggers",
+        "text": "API Gateway, an ALB or a direct SDK call can wait for a function result. Most Cognito user-pool triggers are synchronous; verify the selected trigger’s fixed timeout, exception and retry contract."
+      },
+      {
+        "heading": "Separate push-source delivery",
+        "text": "S3, SNS and EventBridge can submit asynchronous events. Supported IoT rule and CloudWatch Logs subscription integrations have source-specific permission and payload contracts; source delivery and handler processing are separate."
+      },
+      {
+        "heading": "Recognize poll-based processing",
+        "text": "SQS, Kinesis and DynamoDB Streams use supported event source mappings that poll and batch records. Their checkpoint, visibility and retry behavior differs from Lambda’s asynchronous queue."
+      }
+    ],
+    "remember": "Identify the source integration before choosing timeout, retry and failure retention.",
+    "diagram": "Three clearly separated groups of AWS service icons: synchronous API Gateway/ALB/Cognito with waits; push S3/SNS/EventBridge plus IoT and CloudWatch Logs source-specific integrations; poll SQS/Kinesis/DynamoDB Streams -> event source mapping -> Lambda. Never put a direct push arrow from queue to function without the poller label. Use compact service cards and a distinct retry-owner badge per group, no invented numeric limits.",
+    "examSkills": [
+      "1.1.1",
+      "1.1.3"
+    ],
+    "visualType": "conceptual-explainer",
+    "status": "qa-passed",
+    "generationMethod": "built-in image generation"
+  }
+]

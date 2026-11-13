@@ -1,0 +1,1890 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "Compute",
+  "services": [
+    {
+      "slug": "ai-hypercomputer",
+      "summary": "A systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference.",
+      "concepts": [
+        "accelerator cluster, workload blueprint and AI software stack define the AI Hypercomputer resource and data model.",
+        "The production path is datasets > high-throughput storage > GPU/TPU fabric > distributed job > checkpoints/models.",
+        "AI Hypercomputer manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose AI Hypercomputer when a systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference.",
+        "The strongest fit is a workload whose flow follows datasets > high-throughput storage > GPU/TPU fabric > distributed job > checkpoints/models.",
+        "Choose Vertex AI managed training when platform orchestration should be abstracted instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "AI Hypercomputer production flow",
+          "note": "A systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference.",
+          "reference": "AI Hypercomputer architecture",
+          "steps": [
+            {
+              "title": "1. datasets",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. high-throughput storage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. GPU/TPU fabric",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. distributed job",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. checkpoints/models",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed AI Hypercomputer",
+          "note": "Identity, boundary, resilience and operations around accelerator cluster, workload blueprint and AI software stack.",
+          "reference": "AI Hypercomputer governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "dedicated workload identities, private cluster networking and controlled artifact paths",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "accelerator type/topology, cluster blueprint, storage path and reservation",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "buying accelerators without matching network, storage and software topology produces expensive idle capacity",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "accelerator utilization, collective latency, storage throughput and job goodput",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open AI Hypercomputer",
+          "detail": "Google Cloud Console → AI Hypercomputer; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set accelerator type/topology, cluster blueprint, storage path and reservation."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply dedicated workload identities, private cluster networking and controlled artifact paths."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise datasets > high-throughput storage > GPU/TPU fabric > distributed job > checkpoints/models and inspect accelerator utilization, collective latency, storage throughput and job goodput."
+        }
+      ],
+      "security": [
+        "For AI Hypercomputer, implement dedicated workload identities, private cluster networking and controlled artifact paths.",
+        "Separate administrators, automation and runtime principals for accelerator cluster, workload blueprint and AI software stack.",
+        "Audit AI Hypercomputer configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor accelerator utilization, collective latency, storage throughput and job goodput for AI Hypercomputer.",
+        "Version accelerator type/topology, cluster blueprint, storage path and reservation, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit AI Hypercomputer ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "buying accelerators without matching network, storage and software topology produces expensive idle capacity",
+        "Verify AI Hypercomputer regional availability, quotas, limits and compatibility before standardizing.",
+        "AI Hypercomputer's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "accelerator/VM duration, reservations, storage, interconnect and operations.",
+        "Add dependent storage, network, logging and consuming/producing services to the AI Hypercomputer estimate.",
+        "Measure AI Hypercomputer cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "AI Hypercomputer — A systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference.",
+        "Vertex AI managed training when platform orchestration should be abstracted — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "AI Hypercomputer",
+          "fit": "A systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference."
+        },
+        {
+          "name": "Vertex AI managed training when platform orchestration should be abstracted",
+          "fit": "Vertex AI managed training when platform orchestration should be abstracted"
+        }
+      ],
+      "memoryHooks": [
+        "datasets > high-throughput storage > GPU/TPU fabric > distributed job > checkpoints/models.",
+        "buying accelerators without matching network, storage and software topology produces expensive idle capacity",
+        "Certification clue: A systems-level AI infrastructure architecture combining accelerators, high-performance networking, storage and orchestration for large training and inference."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "AI Hypercomputer documentation",
+          "url": "https://docs.cloud.google.com/ai-hypercomputer/docs"
+        }
+      ]
+    },
+    {
+      "slug": "batch",
+      "summary": "A managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources.",
+      "concepts": [
+        "job, task group, task, runnable and allocation policy define the Batch resource and data model.",
+        "The production path is submit job > provision instances > execute tasks > write outputs > delete workers.",
+        "Batch manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Batch when a managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources.",
+        "The strongest fit is a workload whose flow follows submit job > provision instances > execute tasks > write outputs > delete workers.",
+        "Choose GKE Jobs for Kubernetes-native scheduling or Cloud Run Jobs for simpler serverless containers instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Batch production flow",
+          "note": "A managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources.",
+          "reference": "Batch architecture",
+          "steps": [
+            {
+              "title": "1. submit job",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. provision instances",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. execute tasks",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. write outputs",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. delete workers",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Batch",
+          "note": "Identity, boundary, resilience and operations around job, task group, task, runnable and allocation policy.",
+          "reference": "Batch governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "per-job service account, private networking and protected input/output buckets",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, task count/parallelism, machine/accelerator, service account and retry policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "tasks can retry and run in parallel, so shared outputs and side effects must be idempotent",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "queued/running tasks, exit codes, retries, CPU/GPU utilization and provisioning delay",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Batch",
+          "detail": "Google Cloud Console → Batch; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, task count/parallelism, machine/accelerator, service account and retry policy."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply per-job service account, private networking and protected input/output buckets."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise submit job > provision instances > execute tasks > write outputs > delete workers and inspect queued/running tasks, exit codes, retries, CPU/GPU utilization and provisioning delay."
+        }
+      ],
+      "security": [
+        "For Batch, implement per-job service account, private networking and protected input/output buckets.",
+        "Separate administrators, automation and runtime principals for job, task group, task, runnable and allocation policy.",
+        "Audit Batch configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor queued/running tasks, exit codes, retries, CPU/GPU utilization and provisioning delay for Batch.",
+        "Version region, task count/parallelism, machine/accelerator, service account and retry policy, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Batch ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "tasks can retry and run in parallel, so shared outputs and side effects must be idempotent",
+        "Verify Batch regional availability, quotas, limits and compatibility before standardizing.",
+        "Batch's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "provisioned VM/accelerator time, disks, storage and network; Batch control plane has no separate charge.",
+        "Add dependent storage, network, logging and consuming/producing services to the Batch estimate.",
+        "Measure Batch cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Batch — A managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources.",
+        "GKE Jobs for Kubernetes-native scheduling or Cloud Run Jobs for simpler serverless containers — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Batch",
+          "fit": "A managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources."
+        },
+        {
+          "name": "GKE Jobs",
+          "fit": "GKE Jobs for Kubernetes-native scheduling or Cloud Run Jobs for simpler serverless containers"
+        }
+      ],
+      "memoryHooks": [
+        "submit job > provision instances > execute tasks > write outputs > delete workers.",
+        "tasks can retry and run in parallel, so shared outputs and side effects must be idempotent",
+        "Certification clue: A managed scheduler for running containerized or script-based batch jobs on automatically provisioned Compute Engine resources."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Batch documentation",
+          "url": "https://docs.cloud.google.com/batch/docs"
+        }
+      ]
+    },
+    {
+      "slug": "capacity-planner",
+      "summary": "A planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions.",
+      "concepts": [
+        "capacity plan, forecast, resource scope and scenario define the Capacity Planner resource and data model.",
+        "The production path is usage history > demand forecast > scenario comparison > capacity action > variance review.",
+        "Capacity Planner manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Capacity Planner when a planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions.",
+        "The strongest fit is a workload whose flow follows usage history > demand forecast > scenario comparison > capacity action > variance review.",
+        "Choose Recommender for actionable optimization recommendations rather than forward capacity scenarios instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Capacity Planner production flow",
+          "note": "A planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions.",
+          "reference": "Capacity Planner architecture",
+          "steps": [
+            {
+              "title": "1. usage history",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. demand forecast",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. scenario comparison",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. capacity action",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. variance review",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Capacity Planner",
+          "note": "Identity, boundary, resilience and operations around capacity plan, forecast, resource scope and scenario.",
+          "reference": "Capacity Planner governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "least-privilege access to usage and planning data across projects/folders",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "scope, resource types, forecast horizon, growth assumptions and scenario",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a forecast is decision support, not a capacity guarantee; quota and reservation procurement remain separate",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "forecast error, utilization trend, headroom and unmet-demand risk",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Capacity Planner",
+          "detail": "Google Cloud Console → Capacity Planner; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set scope, resource types, forecast horizon, growth assumptions and scenario."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply least-privilege access to usage and planning data across projects/folders."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise usage history > demand forecast > scenario comparison > capacity action > variance review and inspect forecast error, utilization trend, headroom and unmet-demand risk."
+        }
+      ],
+      "security": [
+        "For Capacity Planner, implement least-privilege access to usage and planning data across projects/folders.",
+        "Separate administrators, automation and runtime principals for capacity plan, forecast, resource scope and scenario.",
+        "Audit Capacity Planner configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor forecast error, utilization trend, headroom and unmet-demand risk for Capacity Planner.",
+        "Version scope, resource types, forecast horizon, growth assumptions and scenario, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Capacity Planner ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "a forecast is decision support, not a capacity guarantee; quota and reservation procurement remain separate",
+        "Verify Capacity Planner regional availability, quotas, limits and compatibility before standardizing.",
+        "Capacity Planner's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "planning service terms plus underlying reserved/on-demand capacity.",
+        "Add dependent storage, network, logging and consuming/producing services to the Capacity Planner estimate.",
+        "Measure Capacity Planner cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Capacity Planner — A planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions.",
+        "Recommender for actionable optimization recommendations rather than forward capacity scenarios — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Capacity Planner",
+          "fit": "A planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions."
+        },
+        {
+          "name": "Recommender",
+          "fit": "Recommender for actionable optimization recommendations rather than forward capacity scenarios"
+        }
+      ],
+      "memoryHooks": [
+        "usage history > demand forecast > scenario comparison > capacity action > variance review.",
+        "a forecast is decision support, not a capacity guarantee; quota and reservation procurement remain separate",
+        "Certification clue: A planning service that analyzes historical and forecast resource demand to support capacity, quota and reservation decisions."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Capacity Planner documentation",
+          "url": "https://docs.cloud.google.com/capacity-planner/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cluster-director",
+      "summary": "A managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads.",
+      "concepts": [
+        "cluster, node set, workload and topology policy define the Cluster Director resource and data model.",
+        "The production path is blueprint > provision nodes/fabric > schedule distributed workload > observe topology > recover node failure.",
+        "Cluster Director manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cluster Director when a managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads.",
+        "The strongest fit is a workload whose flow follows blueprint > provision nodes/fabric > schedule distributed workload > observe topology > recover node failure.",
+        "Choose Cluster Toolkit for infrastructure blueprints without the same managed cluster operations instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cluster Director production flow",
+          "note": "A managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads.",
+          "reference": "Cluster Director architecture",
+          "steps": [
+            {
+              "title": "1. blueprint",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. provision nodes/fabric",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. schedule distributed workload",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. observe topology",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. recover node failure",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cluster Director",
+          "note": "Identity, boundary, resilience and operations around cluster, node set, workload and topology policy.",
+          "reference": "Cluster Director governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "separate cluster administrators, workload submitters and node identities on private networks",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, accelerator topology, node sets, network/storage and workload policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "distributed performance depends on topology-aware placement and coordinated capacity, not individual VM availability",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "node/fabric health, topology placement, workload progress and repair events",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cluster Director",
+          "detail": "Google Cloud Console → Cluster Director; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, accelerator topology, node sets, network/storage and workload policy."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply separate cluster administrators, workload submitters and node identities on private networks."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise blueprint > provision nodes/fabric > schedule distributed workload > observe topology > recover node failure and inspect node/fabric health, topology placement, workload progress and repair events."
+        }
+      ],
+      "security": [
+        "For Cluster Director, implement separate cluster administrators, workload submitters and node identities on private networks.",
+        "Separate administrators, automation and runtime principals for cluster, node set, workload and topology policy.",
+        "Audit Cluster Director configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor node/fabric health, topology placement, workload progress and repair events for Cluster Director.",
+        "Version region, accelerator topology, node sets, network/storage and workload policy, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Cluster Director ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "distributed performance depends on topology-aware placement and coordinated capacity, not individual VM availability",
+        "Verify Cluster Director regional availability, quotas, limits and compatibility before standardizing.",
+        "Cluster Director's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "cluster nodes/accelerators, reservations, network and storage.",
+        "Add dependent storage, network, logging and consuming/producing services to the Cluster Director estimate.",
+        "Measure Cluster Director cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Cluster Director — A managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads.",
+        "Cluster Toolkit for infrastructure blueprints without the same managed cluster operations — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cluster Director",
+          "fit": "A managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads."
+        },
+        {
+          "name": "Cluster Toolkit",
+          "fit": "Cluster Toolkit for infrastructure blueprints without the same managed cluster operations"
+        }
+      ],
+      "memoryHooks": [
+        "blueprint > provision nodes/fabric > schedule distributed workload > observe topology > recover node failure.",
+        "distributed performance depends on topology-aware placement and coordinated capacity, not individual VM availability",
+        "Certification clue: A managed control plane for deploying and operating tightly coupled accelerator clusters used by large AI and HPC workloads."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cluster Director documentation",
+          "url": "https://docs.cloud.google.com/cluster-director/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cluster-toolkit",
+      "summary": "Open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud.",
+      "concepts": [
+        "blueprint, module, deployment group and generated Terraform define the Cluster Toolkit resource and data model.",
+        "The production path is YAML blueprint > module expansion > Terraform plan > infrastructure deployment > workload bootstrap.",
+        "Cluster Toolkit manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Cluster Toolkit when open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud.",
+        "The strongest fit is a workload whose flow follows YAML blueprint > module expansion > Terraform plan > infrastructure deployment > workload bootstrap.",
+        "Choose Cluster Director for managed operation of tightly coupled accelerator clusters instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Cluster Toolkit production flow",
+          "note": "Open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud.",
+          "reference": "Cluster Toolkit architecture",
+          "steps": [
+            {
+              "title": "1. YAML blueprint",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. module expansion",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. Terraform plan",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. infrastructure deployment",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. workload bootstrap",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cluster Toolkit",
+          "note": "Identity, boundary, resilience and operations around blueprint, module, deployment group and generated Terraform.",
+          "reference": "Cluster Toolkit governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "review generated IAM/network resources and protect Terraform state and deployment credentials",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "blueprint modules, variables, deployment groups, state backend and validation",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Toolkit generates infrastructure; it does not operate application jobs or guarantee capacity",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "plan drift, deployment failures, cluster bootstrap and module/version compatibility",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cluster Toolkit",
+          "detail": "Google Cloud Console → Cluster Toolkit; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set blueprint modules, variables, deployment groups, state backend and validation."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply review generated IAM/network resources and protect Terraform state and deployment credentials."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise YAML blueprint > module expansion > Terraform plan > infrastructure deployment > workload bootstrap and inspect plan drift, deployment failures, cluster bootstrap and module/version compatibility."
+        }
+      ],
+      "security": [
+        "For Cluster Toolkit, implement review generated IAM/network resources and protect Terraform state and deployment credentials.",
+        "Separate administrators, automation and runtime principals for blueprint, module, deployment group and generated Terraform.",
+        "Audit Cluster Toolkit configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor plan drift, deployment failures, cluster bootstrap and module/version compatibility for Cluster Toolkit.",
+        "Version blueprint modules, variables, deployment groups, state backend and validation, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Cluster Toolkit ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Toolkit generates infrastructure; it does not operate application jobs or guarantee capacity",
+        "Verify Cluster Toolkit regional availability, quotas, limits and compatibility before standardizing.",
+        "Cluster Toolkit's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "deployed compute/storage/network plus CI and state storage; toolkit code itself is open source.",
+        "Add dependent storage, network, logging and consuming/producing services to the Cluster Toolkit estimate.",
+        "Measure Cluster Toolkit cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Cluster Toolkit — Open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud.",
+        "Cluster Director for managed operation of tightly coupled accelerator clusters — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Cluster Toolkit",
+          "fit": "Open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud."
+        },
+        {
+          "name": "Cluster Director",
+          "fit": "Cluster Director for managed operation of tightly coupled accelerator clusters"
+        }
+      ],
+      "memoryHooks": [
+        "YAML blueprint > module expansion > Terraform plan > infrastructure deployment > workload bootstrap.",
+        "Toolkit generates infrastructure; it does not operate application jobs or guarantee capacity",
+        "Certification clue: Open-source infrastructure blueprints and deployment tooling for repeatable HPC and AI clusters on Google Cloud."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cluster Toolkit documentation",
+          "url": "https://docs.cloud.google.com/cluster-toolkit/docs"
+        }
+      ]
+    },
+    {
+      "slug": "compute-engine",
+      "summary": "Infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking.",
+      "concepts": [
+        "project, zone, VM instance, machine type, image, disk and instance template define the Compute Engine resource and data model.",
+        "The production path is image/template > VM boot > application traffic > persistent data > snapshot/recreate.",
+        "Compute Engine manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Compute Engine when infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking.",
+        "The strongest fit is a workload whose flow follows image/template > VM boot > application traffic > persistent data > snapshot/recreate.",
+        "Choose Cloud Run for stateless serverless containers or GKE for Kubernetes orchestration instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Compute Engine production flow",
+          "note": "Infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking.",
+          "reference": "Compute Engine architecture",
+          "steps": [
+            {
+              "title": "1. image/template",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. VM boot",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. application traffic",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. persistent data",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. snapshot/recreate",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Compute Engine",
+          "note": "Identity, boundary, resilience and operations around project, zone, VM instance, machine type, image, disk and instance template.",
+          "reference": "Compute Engine governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "IAM/OS Login, Shielded VM, least-privilege service account, firewall and no public IP where possible",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region/zone, machine family, image, disks, network, service account and availability policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "zonal VMs are not automatically highly available; design MIGs, load balancing and data replication",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "CPU/memory/disk/network utilization, uptime, guest health and serial logs",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Compute Engine",
+          "detail": "Google Cloud Console → Compute Engine; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region/zone, machine family, image, disks, network, service account and availability policy."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply IAM/OS Login, Shielded VM, least-privilege service account, firewall and no public IP where possible."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise image/template > VM boot > application traffic > persistent data > snapshot/recreate and inspect CPU/memory/disk/network utilization, uptime, guest health and serial logs."
+        }
+      ],
+      "security": [
+        "For Compute Engine, implement IAM/OS Login, Shielded VM, least-privilege service account, firewall and no public IP where possible.",
+        "Separate administrators, automation and runtime principals for project, zone, VM instance, machine type, image, disk and instance template.",
+        "Audit Compute Engine configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor CPU/memory/disk/network utilization, uptime, guest health and serial logs for Compute Engine.",
+        "Version region/zone, machine family, image, disks, network, service account and availability policy, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Compute Engine ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "zonal VMs are not automatically highly available; design MIGs, load balancing and data replication",
+        "Verify Compute Engine regional availability, quotas, limits and compatibility before standardizing.",
+        "Compute Engine's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "vCPU/memory uptime, accelerators, disks, licenses, external IP and egress.",
+        "Add dependent storage, network, logging and consuming/producing services to the Compute Engine estimate.",
+        "Measure Compute Engine cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Compute Engine — Infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking.",
+        "Cloud Run for stateless serverless containers or GKE for Kubernetes orchestration — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Compute Engine",
+          "fit": "Infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking."
+        },
+        {
+          "name": "Cloud Run",
+          "fit": "Cloud Run for stateless serverless containers or GKE for Kubernetes orchestration"
+        }
+      ],
+      "memoryHooks": [
+        "image/template > VM boot > application traffic > persistent data > snapshot/recreate.",
+        "zonal VMs are not automatically highly available; design MIGs, load balancing and data replication",
+        "Certification clue: Infrastructure-as-a-service virtual machines with configurable machine families, disks, images, GPUs and networking."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Compute Engine documentation",
+          "url": "https://docs.cloud.google.com/compute/docs"
+        }
+      ]
+    },
+    {
+      "slug": "container-optimized-os",
+      "summary": "A minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine.",
+      "concepts": [
+        "COS image family, VM, container runtime and update policy define the Container-Optimized OS resource and data model.",
+        "The production path is signed image > VM boot > container launch > logs/metrics > image-based replacement.",
+        "Container-Optimized OS manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Container-Optimized OS when a minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine.",
+        "The strongest fit is a workload whose flow follows signed image > VM boot > container launch > logs/metrics > image-based replacement.",
+        "Choose general-purpose Linux when host customization or unsupported agents are required instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Container-Optimized OS production flow",
+          "note": "A minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine.",
+          "reference": "Container-Optimized OS architecture",
+          "steps": [
+            {
+              "title": "1. signed image",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. VM boot",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. container launch",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. logs/metrics",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. image-based replacement",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Container-Optimized OS",
+          "note": "Identity, boundary, resilience and operations around COS image family, VM, container runtime and update policy.",
+          "reference": "Container-Optimized OS governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "read-only/minimal OS, Shielded VM, OS Login and scoped runtime service account",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "COS milestone/image, machine, container declaration, update strategy and logging",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "COS is intentionally constrained; arbitrary host packages and persistent host customization are poor fits",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "container health, guest/OS logs, disk pressure and update/reboot state",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Container-Optimized OS",
+          "detail": "Google Cloud Console → Container-Optimized OS; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set COS milestone/image, machine, container declaration, update strategy and logging."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply read-only/minimal OS, Shielded VM, OS Login and scoped runtime service account."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise signed image > VM boot > container launch > logs/metrics > image-based replacement and inspect container health, guest/OS logs, disk pressure and update/reboot state."
+        }
+      ],
+      "security": [
+        "For Container-Optimized OS, implement read-only/minimal OS, Shielded VM, OS Login and scoped runtime service account.",
+        "Separate administrators, automation and runtime principals for COS image family, VM, container runtime and update policy.",
+        "Audit Container-Optimized OS configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor container health, guest/OS logs, disk pressure and update/reboot state for Container-Optimized OS.",
+        "Version COS milestone/image, machine, container declaration, update strategy and logging, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Container-Optimized OS ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "COS is intentionally constrained; arbitrary host packages and persistent host customization are poor fits",
+        "Verify Container-Optimized OS regional availability, quotas, limits and compatibility before standardizing.",
+        "Container-Optimized OS's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "Compute Engine instance, disks and network; OS image has no separate license charge.",
+        "Add dependent storage, network, logging and consuming/producing services to the Container-Optimized OS estimate.",
+        "Measure Container-Optimized OS cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Container-Optimized OS — A minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine.",
+        "general-purpose Linux when host customization or unsupported agents are required — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Container-Optimized OS",
+          "fit": "A minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine."
+        },
+        {
+          "name": "general-purpose Linux when host customization or unsupported agents are required",
+          "fit": "general-purpose Linux when host customization or unsupported agents are required"
+        }
+      ],
+      "memoryHooks": [
+        "signed image > VM boot > container launch > logs/metrics > image-based replacement.",
+        "COS is intentionally constrained; arbitrary host packages and persistent host customization are poor fits",
+        "Certification clue: A minimal, auto-updating Google-maintained operating system image optimized for running containers on Compute Engine."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Container-Optimized OS documentation",
+          "url": "https://docs.cloud.google.com/container-optimized-os/docs"
+        }
+      ]
+    },
+    {
+      "slug": "oracle-on-google-cloud-compute",
+      "summary": "Oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations.",
+      "concepts": [
+        "Oracle VM, database storage, license model and HA topology define the Oracle on Google Cloud Compute resource and data model.",
+        "The production path is application > Oracle listener > database VM > block/file storage > backup/standby.",
+        "Oracle on Google Cloud Compute manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Oracle on Google Cloud Compute when oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations.",
+        "The strongest fit is a workload whose flow follows application > Oracle listener > database VM > block/file storage > backup/standby.",
+        "Choose Bare Metal Solution or managed partner offerings when specialized Oracle infrastructure is required instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Oracle on Google Cloud Compute production flow",
+          "note": "Oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations.",
+          "reference": "Oracle on Google Cloud Compute architecture",
+          "steps": [
+            {
+              "title": "1. application",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. Oracle listener",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. database VM",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. block/file storage",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup/standby",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Oracle on Google Cloud Compute",
+          "note": "Identity, boundary, resilience and operations around Oracle VM, database storage, license model and HA topology.",
+          "reference": "Oracle on Google Cloud Compute governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private VPC, database OS controls, Secret Manager and strict separation of DBA/cloud roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "certified machine/image, BYOL/licensing, storage layout, network, backup and HA",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Google manages infrastructure, not Oracle database patching, RAC/Data Guard design or license compliance",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "database wait/IO, VM health, replication lag, backup success and license consumption",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Oracle on Google Cloud Compute",
+          "detail": "Google Cloud Console → Oracle on Google Cloud Compute; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set certified machine/image, BYOL/licensing, storage layout, network, backup and HA."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private VPC, database OS controls, Secret Manager and strict separation of DBA/cloud roles."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise application > Oracle listener > database VM > block/file storage > backup/standby and inspect database wait/IO, VM health, replication lag, backup success and license consumption."
+        }
+      ],
+      "security": [
+        "For Oracle on Google Cloud Compute, implement private VPC, database OS controls, Secret Manager and strict separation of DBA/cloud roles.",
+        "Separate administrators, automation and runtime principals for Oracle VM, database storage, license model and HA topology.",
+        "Audit Oracle on Google Cloud Compute configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor database wait/IO, VM health, replication lag, backup success and license consumption for Oracle on Google Cloud Compute.",
+        "Version certified machine/image, BYOL/licensing, storage layout, network, backup and HA, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Oracle on Google Cloud Compute ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Google manages infrastructure, not Oracle database patching, RAC/Data Guard design or license compliance",
+        "Verify Oracle on Google Cloud Compute regional availability, quotas, limits and compatibility before standardizing.",
+        "Oracle on Google Cloud Compute's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "VM/memory, high-performance disks, backup, egress and Oracle license/support.",
+        "Add dependent storage, network, logging and consuming/producing services to the Oracle on Google Cloud Compute estimate.",
+        "Measure Oracle on Google Cloud Compute cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Oracle on Google Cloud Compute — Oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations.",
+        "Bare Metal Solution or managed partner offerings when specialized Oracle infrastructure is required — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Oracle on Google Cloud Compute",
+          "fit": "Oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations."
+        },
+        {
+          "name": "Bare Metal Solution or managed partner offerings when specialized Oracle infrastructure is required",
+          "fit": "Bare Metal Solution or managed partner offerings when specialized Oracle infrastructure is required"
+        }
+      ],
+      "memoryHooks": [
+        "application > Oracle listener > database VM > block/file storage > backup/standby.",
+        "Google manages infrastructure, not Oracle database patching, RAC/Data Guard design or license compliance",
+        "Certification clue: Oracle database/application software deployed on certified Compute Engine configurations with customer-managed database operations."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Oracle on Google Cloud Compute documentation",
+          "url": "https://docs.cloud.google.com/oracle/compute"
+        }
+      ]
+    },
+    {
+      "slug": "shielded-vms",
+      "summary": "Compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain.",
+      "concepts": [
+        "Shielded VM configuration, vTPM baseline and integrity event define the Shielded VMs resource and data model.",
+        "The production path is signed firmware/bootloader > measured boot > vTPM comparison > integrity alert > remediation.",
+        "Shielded VMs manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Shielded VMs when compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain.",
+        "The strongest fit is a workload whose flow follows signed firmware/bootloader > measured boot > vTPM comparison > integrity alert > remediation.",
+        "Choose Confidential VM when memory-in-use protection is also required instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Shielded VMs production flow",
+          "note": "Compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain.",
+          "reference": "Shielded VMs architecture",
+          "steps": [
+            {
+              "title": "1. signed firmware/bootloader",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. measured boot",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. vTPM comparison",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. integrity alert",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. remediation",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Shielded VMs",
+          "note": "Identity, boundary, resilience and operations around Shielded VM configuration, vTPM baseline and integrity event.",
+          "reference": "Shielded VMs governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "limit shielded-setting changes, protect keys/secrets and review integrity findings",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "Secure Boot, vTPM, integrity monitoring, image compatibility and incident response",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "Secure Boot can block unsigned kernels/drivers; test compatibility before enforcing it broadly",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "integrity validation events, Secure Boot failures and unexpected baseline changes",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Shielded VMs",
+          "detail": "Google Cloud Console → Shielded VMs; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set Secure Boot, vTPM, integrity monitoring, image compatibility and incident response."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply limit shielded-setting changes, protect keys/secrets and review integrity findings."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise signed firmware/bootloader > measured boot > vTPM comparison > integrity alert > remediation and inspect integrity validation events, Secure Boot failures and unexpected baseline changes."
+        }
+      ],
+      "security": [
+        "For Shielded VMs, implement limit shielded-setting changes, protect keys/secrets and review integrity findings.",
+        "Separate administrators, automation and runtime principals for Shielded VM configuration, vTPM baseline and integrity event.",
+        "Audit Shielded VMs configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor integrity validation events, Secure Boot failures and unexpected baseline changes for Shielded VMs.",
+        "Version Secure Boot, vTPM, integrity monitoring, image compatibility and incident response, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Shielded VMs ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "Secure Boot can block unsigned kernels/drivers; test compatibility before enforcing it broadly",
+        "Verify Shielded VMs regional availability, quotas, limits and compatibility before standardizing.",
+        "Shielded VMs's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "no separate Shielded VM charge; VM, logging and security tooling still bill.",
+        "Add dependent storage, network, logging and consuming/producing services to the Shielded VMs estimate.",
+        "Measure Shielded VMs cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Shielded VMs — Compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain.",
+        "Confidential VM when memory-in-use protection is also required — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Shielded VMs",
+          "fit": "Compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain."
+        },
+        {
+          "name": "Confidential VM when memory-in-use protection is also required",
+          "fit": "Confidential VM when memory-in-use protection is also required"
+        }
+      ],
+      "memoryHooks": [
+        "signed firmware/bootloader > measured boot > vTPM comparison > integrity alert > remediation.",
+        "Secure Boot can block unsigned kernels/drivers; test compatibility before enforcing it broadly",
+        "Certification clue: Compute Engine VM hardening controls that use Secure Boot, vTPM and integrity monitoring to protect the boot chain."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Shielded VMs documentation",
+          "url": "https://docs.cloud.google.com/compute/shielded-vm/docs"
+        }
+      ]
+    },
+    {
+      "slug": "vm-manager",
+      "summary": "A fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs.",
+      "concepts": [
+        "OS Config agent, inventory, patch deployment, OS policy assignment and compliance report define the VM Manager resource and data model.",
+        "The production path is agent inventory > policy evaluation > patch rollout > reboot/verify > compliance evidence.",
+        "VM Manager manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose VM Manager when a fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs.",
+        "The strongest fit is a workload whose flow follows agent inventory > policy evaluation > patch rollout > reboot/verify > compliance evidence.",
+        "Choose third-party endpoint management for multi-cloud fleets and broader application patching instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "VM Manager production flow",
+          "note": "A fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs.",
+          "reference": "VM Manager architecture",
+          "steps": [
+            {
+              "title": "1. agent inventory",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. policy evaluation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. patch rollout",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. reboot/verify",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. compliance evidence",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed VM Manager",
+          "note": "Identity, boundary, resilience and operations around OS Config agent, inventory, patch deployment, OS policy assignment and compliance report.",
+          "reference": "VM Manager governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "OS Config service agent, scoped administrators and maintenance-window controls",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "OS Config enablement, target labels/zones, patch window, reboot policy and OS policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "unmanaged/offline agents create blind spots; patch orchestration still needs application-aware testing and rollback",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "agent coverage, patch success, reboot status, policy compliance and vulnerability findings",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open VM Manager",
+          "detail": "Google Cloud Console → VM Manager; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set OS Config enablement, target labels/zones, patch window, reboot policy and OS policy."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply OS Config service agent, scoped administrators and maintenance-window controls."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise agent inventory > policy evaluation > patch rollout > reboot/verify > compliance evidence and inspect agent coverage, patch success, reboot status, policy compliance and vulnerability findings."
+        }
+      ],
+      "security": [
+        "For VM Manager, implement OS Config service agent, scoped administrators and maintenance-window controls.",
+        "Separate administrators, automation and runtime principals for OS Config agent, inventory, patch deployment, OS policy assignment and compliance report.",
+        "Audit VM Manager configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor agent coverage, patch success, reboot status, policy compliance and vulnerability findings for VM Manager.",
+        "Version OS Config enablement, target labels/zones, patch window, reboot policy and OS policy, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit VM Manager ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "unmanaged/offline agents create blind spots; patch orchestration still needs application-aware testing and rollback",
+        "Verify VM Manager regional availability, quotas, limits and compatibility before standardizing.",
+        "VM Manager's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "management features under applicable terms plus VM, logging and network.",
+        "Add dependent storage, network, logging and consuming/producing services to the VM Manager estimate.",
+        "Measure VM Manager cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "VM Manager — A fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs.",
+        "third-party endpoint management for multi-cloud fleets and broader application patching — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "VM Manager",
+          "fit": "A fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs."
+        },
+        {
+          "name": "third-party endpoint management",
+          "fit": "third-party endpoint management for multi-cloud fleets and broader application patching"
+        }
+      ],
+      "memoryHooks": [
+        "agent inventory > policy evaluation > patch rollout > reboot/verify > compliance evidence.",
+        "unmanaged/offline agents create blind spots; patch orchestration still needs application-aware testing and rollback",
+        "Certification clue: A fleet-management suite for inventory, patch, OS policy and vulnerability reporting across Compute Engine VMs."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "VM Manager documentation",
+          "url": "https://docs.cloud.google.com/compute/vm-manager/docs"
+        }
+      ]
+    },
+    {
+      "slug": "vmware-engine",
+      "summary": "A managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads.",
+      "concepts": [
+        "private cloud, vSphere cluster, ESXi node and management appliances define the VMware Engine resource and data model.",
+        "The production path is on-prem vSphere > HCX migration > private cloud > VPC connectivity > backup/DR.",
+        "VMware Engine manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose VMware Engine when a managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads.",
+        "The strongest fit is a workload whose flow follows on-prem vSphere > HCX migration > private cloud > VPC connectivity > backup/DR.",
+        "Choose Migrate to VMs for replatforming VMware guests onto Compute Engine instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "VMware Engine production flow",
+          "note": "A managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads.",
+          "reference": "VMware Engine architecture",
+          "steps": [
+            {
+              "title": "1. on-prem vSphere",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. HCX migration",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. private cloud",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. VPC connectivity",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. backup/DR",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed VMware Engine",
+          "note": "Identity, boundary, resilience and operations around private cloud, vSphere cluster, ESXi node and management appliances.",
+          "reference": "VMware Engine governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "private service access, vCenter/NSX-T roles, firewall segmentation and identity federation",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "region, node type/count, management CIDRs, VPC connectivity, HCX and backup",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "minimum node commitments, IP planning and shared responsibility for guest OS/applications make it unlike elastic VM hosting",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "node/cluster capacity, datastore, HCX migration, network and vCenter alarms",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open VMware Engine",
+          "detail": "Google Cloud Console → VMware Engine; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set region, node type/count, management CIDRs, VPC connectivity, HCX and backup."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply private service access, vCenter/NSX-T roles, firewall segmentation and identity federation."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise on-prem vSphere > HCX migration > private cloud > VPC connectivity > backup/DR and inspect node/cluster capacity, datastore, HCX migration, network and vCenter alarms."
+        }
+      ],
+      "security": [
+        "For VMware Engine, implement private service access, vCenter/NSX-T roles, firewall segmentation and identity federation.",
+        "Separate administrators, automation and runtime principals for private cloud, vSphere cluster, ESXi node and management appliances.",
+        "Audit VMware Engine configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor node/cluster capacity, datastore, HCX migration, network and vCenter alarms for VMware Engine.",
+        "Version region, node type/count, management CIDRs, VPC connectivity, HCX and backup, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit VMware Engine ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "minimum node commitments, IP planning and shared responsibility for guest OS/applications make it unlike elastic VM hosting",
+        "Verify VMware Engine regional availability, quotas, limits and compatibility before standardizing.",
+        "VMware Engine's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "dedicated nodes/commitments, networking, backup and licenses included by service terms.",
+        "Add dependent storage, network, logging and consuming/producing services to the VMware Engine estimate.",
+        "Measure VMware Engine cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "VMware Engine — A managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads.",
+        "Migrate to VMs for replatforming VMware guests onto Compute Engine — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "VMware Engine",
+          "fit": "A managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads."
+        },
+        {
+          "name": "Migrate to VMs",
+          "fit": "Migrate to VMs for replatforming VMware guests onto Compute Engine"
+        }
+      ],
+      "memoryHooks": [
+        "on-prem vSphere > HCX migration > private cloud > VPC connectivity > backup/DR.",
+        "minimum node commitments, IP planning and shared responsibility for guest OS/applications make it unlike elastic VM hosting",
+        "Certification clue: A managed VMware SDDC running on dedicated Google Cloud infrastructure for lift-and-shift and hybrid VMware workloads."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "VMware Engine documentation",
+          "url": "https://docs.cloud.google.com/vmware-engine/docs"
+        }
+      ]
+    },
+    {
+      "slug": "workload-manager",
+      "summary": "A validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules.",
+      "concepts": [
+        "evaluation, rule, scanned project and finding define the Workload Manager resource and data model.",
+        "The production path is resource inventory > workload-specific rules > findings > remediation > reevaluation.",
+        "Workload Manager manages its service control plane; workload correctness, data classification and downstream behavior remain architecture responsibilities."
+      ],
+      "applicationFit": [
+        "Choose Workload Manager when a validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules.",
+        "The strongest fit is a workload whose flow follows resource inventory > workload-specific rules > findings > remediation > reevaluation.",
+        "Choose Security Command Center for broader security posture and threat findings instead when that alternative's operating model is the primary requirement."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Workload Manager production flow",
+          "note": "A validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules.",
+          "reference": "Workload Manager architecture",
+          "steps": [
+            {
+              "title": "1. resource inventory",
+              "items": [
+                "Authenticated input",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "2. workload-specific rules",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "3. findings",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "4. remediation",
+              "items": [
+                "Managed transition",
+                "Observe and retry"
+              ]
+            },
+            {
+              "title": "5. reevaluation",
+              "items": [
+                "Managed transition",
+                "Validate output"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Workload Manager",
+          "note": "Identity, boundary, resilience and operations around evaluation, rule, scanned project and finding.",
+          "reference": "Workload Manager governance",
+          "steps": [
+            {
+              "title": "Identity",
+              "items": [
+                "read-only evaluation identity separated from remediation permissions",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Configuration",
+              "items": [
+                "workload type, project scope, evaluation schedule, rules and exception process",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Reliability",
+              "items": [
+                "a passed evaluation is point-in-time configuration evidence, not continuous workload availability or performance assurance",
+                "Recovery test"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "evaluation coverage, failed rules, severity, exemptions and remediation age",
+                "Audit evidence"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Workload Manager",
+          "detail": "Google Cloud Console → Workload Manager; select the intended project and supported location."
+        },
+        {
+          "title": "Configure resources",
+          "detail": "Set workload type, project scope, evaluation schedule, rules and exception process."
+        },
+        {
+          "title": "Secure access",
+          "detail": "Apply read-only evaluation identity separated from remediation permissions."
+        },
+        {
+          "title": "Validate production behavior",
+          "detail": "Exercise resource inventory > workload-specific rules > findings > remediation > reevaluation and inspect evaluation coverage, failed rules, severity, exemptions and remediation age."
+        }
+      ],
+      "security": [
+        "For Workload Manager, implement read-only evaluation identity separated from remediation permissions.",
+        "Separate administrators, automation and runtime principals for evaluation, rule, scanned project and finding.",
+        "Audit Workload Manager configuration and data access; protect its secrets, encryption keys and network paths according to workload classification."
+      ],
+      "operations": [
+        "Monitor evaluation coverage, failed rules, severity, exemptions and remediation age for Workload Manager.",
+        "Version workload type, project scope, evaluation schedule, rules and exception process, test representative load/failure and retain a rollback or recovery path.",
+        "Assign explicit Workload Manager ownership for quotas, maintenance, regional failure, dependency health and incident response."
+      ],
+      "watchPoints": [
+        "a passed evaluation is point-in-time configuration evidence, not continuous workload availability or performance assurance",
+        "Verify Workload Manager regional availability, quotas, limits and compatibility before standardizing.",
+        "Workload Manager's managed control plane does not remove schema, idempotency, data-quality or application-resilience responsibilities."
+      ],
+      "cost": [
+        "evaluation terms plus logging and remediation resource changes.",
+        "Add dependent storage, network, logging and consuming/producing services to the Workload Manager estimate.",
+        "Measure Workload Manager cost per useful job, transaction, query or delivered workload rather than resource count alone."
+      ],
+      "alternatives": [
+        "Workload Manager — A validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules.",
+        "Security Command Center for broader security posture and threat findings — use when its stated design fit dominates."
+      ],
+      "comparisons": [
+        {
+          "name": "Workload Manager",
+          "fit": "A validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules."
+        },
+        {
+          "name": "Security Command Center",
+          "fit": "Security Command Center for broader security posture and threat findings"
+        }
+      ],
+      "memoryHooks": [
+        "resource inventory > workload-specific rules > findings > remediation > reevaluation.",
+        "a passed evaluation is point-in-time configuration evidence, not continuous workload availability or performance assurance",
+        "Certification clue: A validation and evaluation service that checks specialized workloads against Google Cloud best practices and configuration rules."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Workload Manager documentation",
+          "url": "https://docs.cloud.google.com/workload-manager/docs"
+        }
+      ]
+    }
+  ]
+}

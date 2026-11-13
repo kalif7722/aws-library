@@ -1,0 +1,122 @@
+[
+  {
+    "service": "Amazon Lookout for Vision",
+    "cloud": "AWS",
+    "mode": "migration",
+    "title": "replace a historical manufacturing visual-inspection model",
+    "input": "The quality team retains labeled normal and defective images and its capture conditions.",
+    "action": "Lookout for Vision historically trained and invoked image anomaly models for visual inspection. Revalidate any replacement against the same defect classes, lighting and camera geometry before it controls inspection decisions.",
+    "output": "The inspection application routes uncertain or defective items to the approved human review path.",
+    "check": "Measure known-defect recall, false rejects and capture-condition changes using the retained acceptance dataset.",
+    "reference": "https://docs.aws.amazon.com/lookout-for-vision/latest/developer-guide/what-is.html",
+    "legacy": true
+  },
+  {
+    "service": "Amazon Managed Blockchain",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "submit a permitted blockchain operation through a managed access path",
+    "input": "The application prepares a signed transaction or authorized query for its selected blockchain network.",
+    "action": "Managed Blockchain's selected network or access feature supplies supported blockchain infrastructure access. Network-specific validation and consensus determine accepted ledger state; the application protects signing keys and interprets confirmation status.",
+    "output": "The application reconciles the submitted transaction with the network's resulting ledger state.",
+    "check": "Check network support, signing-key custody and confirmation handling; submission success is not final settlement.",
+    "reference": "https://docs.aws.amazon.com/managed-blockchain/latest/managementguide/what-is-managed-blockchain.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Managed Grafana",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "visualize application metrics from authorized data sources",
+    "input": "The operations owner selects data-source endpoints, dashboard queries and viewer roles.",
+    "action": "Managed Grafana runs the Grafana workspace and queries configured data sources under their authorized credentials. Panels visualize returned metrics or logs; the workspace is not the primary telemetry collector or application processor.",
+    "output": "The on-call engineer inspects latency and error panels to narrow the incident and consults source evidence.",
+    "check": "Check query scope, data freshness, viewer permissions and dashboard behavior when a data source is unavailable.",
+    "reference": "https://docs.aws.amazon.com/grafana/latest/userguide/what-is-Amazon-Managed-Grafana.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Managed Service for Apache Flink",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "calculate event-time sales aggregates from a stream",
+    "input": "The producer emits sale events with timestamps and stable event identifiers to the approved stream.",
+    "action": "Managed Service for Apache Flink runs the configured Flink application, which parses events, applies event-time windows and maintains operator state. Checkpoint and sink semantics determine restart and duplicate handling.",
+    "output": "The sink stores the computed sales aggregates for the dashboard query path.",
+    "check": "Test late events, duplicate inputs, checkpoint recovery and sink consistency before trusting the displayed totals.",
+    "reference": "https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Managed Service for Prometheus",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "query scraped Kubernetes workload metrics",
+    "input": "The platform owner configures approved Prometheus-compatible collectors and remote-write credentials.",
+    "action": "Managed Service for Prometheus ingests permitted remote-write samples into a workspace and supports PromQL queries and configured rules. Collectors scrape the workloads; the service stores and evaluates their metric samples.",
+    "output": "The Grafana workspace or alert receiver uses query and rule results to detect an operational issue.",
+    "check": "Check label cardinality, scrape coverage, query permissions and missing-sample behavior before relying on alerts.",
+    "reference": "https://docs.aws.amazon.com/prometheus/latest/userguide/what-is-Amazon-Managed-Service-Prometheus.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Managed Workflows for Apache Airflow",
+    "cloud": "AWS",
+    "mode": "control",
+    "title": "orchestrate a nightly data pipeline with retryable tasks",
+    "input": "The data engineer publishes DAG code and dependencies for the scheduled warehouse update.",
+    "action": "MWAA supplies the managed Airflow environment that schedules DAG tasks and runs their configured operators. Operators invoke extraction or transformation jobs; Airflow tracks task dependencies and state rather than storing the warehouse dataset.",
+    "output": "The pipeline's final task publishes the accepted warehouse partition after upstream jobs and quality gates succeed.",
+    "check": "Test task retries, backfill idempotency, secret access and a failed upstream dependency before enabling the schedule.",
+    "reference": "https://docs.aws.amazon.com/mwaa/latest/userguide/what-is-mwaa.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Mechanical Turk",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "collect reviewed human labels for a training dataset",
+    "input": "The dataset owner prepares approved labeling tasks, worker requirements and evaluation examples.",
+    "action": "Mechanical Turk distributes human intelligence tasks to eligible workers and collects submitted assignments. Workers provide labels; qualification and acceptance policies control which assignments become training evidence.",
+    "output": "The dataset curator checks agreement and accepts only suitable labels into the versioned training dataset.",
+    "check": "Use known-answer items, worker-quality checks and privacy review before paying for and importing labels.",
+    "reference": "https://docs.aws.amazon.com/AWSMechTurk/latest/AWSMechanicalTurkRequester/Welcome.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon MemoryDB for Redis",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "store application session state in a durable in-memory database",
+    "input": "The application submits authorized session updates and stable keys with explicit expiry policy.",
+    "action": "MemoryDB serves supported Redis-compatible data operations using its configured cluster and durability architecture. Clients handle endpoint discovery and retry ambiguity; application key design determines session ownership and expiration.",
+    "output": "The session backend reads the current permitted session state and returns the authorized application context.",
+    "check": "Test failover, expiry, concurrent writes and replay behavior without allowing cross-user key access.",
+    "reference": "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb-for-redis.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Neptune Analytics",
+    "cloud": "AWS",
+    "mode": "data",
+    "title": "investigate graph relationships in a fraud dataset",
+    "input": "The analyst imports an approved graph of accounts, devices and transactions.",
+    "action": "Neptune Analytics executes supported graph queries and algorithms against the loaded analytical graph. Traversals or similarity analysis identify relationships; analysts validate whether a relationship indicates suspicious behavior.",
+    "output": "The investigation application presents relevant paths and algorithm results as evidence for a reviewer.",
+    "check": "Check graph version, edge meaning, query access and known reference paths before escalating a case.",
+    "reference": "https://docs.aws.amazon.com/neptune-analytics/latest/userguide/what-is-neptune-analytics.html",
+    "legacy": false
+  },
+  {
+    "service": "Amazon Nova",
+    "cloud": "AWS",
+    "mode": "request",
+    "title": "classify a customer document with a selected foundation model",
+    "input": "The application submits the permitted document input to a supported Nova model through Bedrock.",
+    "action": "The selected Nova model generates the requested classification or extraction response from the supplied input. Supported modalities and model settings bound the invocation; application code validates the response schema and business meaning.",
+    "output": "The document handler accepts validated fields and routes uncertain or unsupported output for review.",
+    "check": "Evaluate representative documents, prompt injection, schema errors and sensitive-input policy before release.",
+    "reference": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+    "legacy": false
+  }
+]

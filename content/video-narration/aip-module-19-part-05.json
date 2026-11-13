@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "05",
+  "part_title": "Lab 05 — Diagnose and Roll Back Prompt Version Regressions",
+  "script_revision": "2026-11-13-m19-p05-troubleshoot-local-v1",
+  "review_basis": "Actual repository slides 24–28 visually reviewed against simulator prompt-version guidance.",
+  "scenes": [
+    {
+      "slide": 24,
+      "title": "Scenario and versioned prompt path",
+      "narration": "The incident begins after a new prompt version is released for a product-support application. The earlier prompt produces valid JSON and accurate answers, but the revised prompt returns free-form text and changes the answer content. Follow the diagram: the same evaluation dataset feeds prompt version one and version two, both using the same Bedrock model and inference settings, and the application validates the resulting schema. Open Bedrock Prompt management, choose the prompt and compare version identifiers, creation dates, resolved content and hashes. The pictured v1 result has answer, citations and confidence properties, whereas v2 answers in ordinary prose and fails the expected JSON contract. That is a user-visible regression even when the model invocation itself succeeds. Before blaming the model, record which prompt version the application invoked and resolve any template variables. Use the same questions and model settings to isolate the prompt change. The objective is a repeatable comparison proving which version broke the downstream output contract, not merely an impression that the new wording seems different."
+    },
+    {
+      "slide": 25,
+      "title": "Build a reproducible prompt comparison",
+      "narration": "Start by pinning all variables that could otherwise affect the comparison: model identifier, model settings such as temperature and output limits, evaluation dataset, and exact resolved prompt versions. The slide's console shows v1 and v2 alongside a dataset with questions about password resets, refunds and order status. Save hashes of the resolved prompts so a named version cannot silently change during investigation. Then run the same inputs through both versions and validate the outputs against the application JSON schema. The sample table reports three v1 answers that preserve structured intent fields, while all three v2 answers become prose and fail schema validation. In the illustrative metrics, v1 is one hundred percent JSON valid and v2 is zero, with other latency and token measurements shown for context. Those are fixture results, not a model quality benchmark. The fix cannot be chosen safely until the comparison is controlled. Record input IDs, expected answers, prompt hashes, model parameters and validation failures for reproducibility. A schema change must be considered a compatibility change affecting downstream parsers."
+    },
+    {
+      "slide": 26,
+      "title": "Find variable and output-contract regressions",
+      "narration": "This example highlights two concrete causes to inspect. On the left, prompt v1 refers to a destination variable and a budget variable and explicitly requires a JSON object with recommendations and a total estimate. Prompt v2 instead refers to dest, which does not match the supplied destination input variable, and drops the JSON response requirement. The input contains Paris and a sample budget of fifteen hundred, but the v2 output is an unstructured list of attractions rather than the expected object. Open the resolved prompt view rather than trusting the raw template. Verify that all placeholders were replaced and no braces remain unresolved. Next validate the output's required fields and data types, including numeric estimates, not just whether the text sounds plausible. Keep the model, temperature and test input constant while comparing. Once these regressions are identified, repair the placeholder name and restore the explicit output contract, and enforce schema validation in application code. Model prompting helps shape output but does not replace parser-level validation."
+    },
+    {
+      "slide": 27,
+      "title": "Repair or roll back with schema validation",
+      "narration": "The top of this slide shows the repair decision. First validate the candidate against the actual JSON schema; then correct the prompt variables and output instructions, retest with pinned model parameters and dataset, and roll back if it still fails. The left console illustrates a known-good v1 prompt requiring JSON only and using named customer and order identifiers. The center compares a v2 free-form answer with a v1 JSON object containing customer_id, order_status, eta and tracking_url. On the right, a validation tool rejects v2 because required fields are missing, while v1 passes. This proves a contract regression, not a network failure. In the simulated application, select the stable version or repair v2 and run the schema checker. Do not assume a prompt that produces JSON once is reliable across all inputs. Enforce required fields, types and allowed values in code. Keep the previous approved prompt ready for rollback and change routing only after evaluation and release review."
+    },
+    {
+      "slide": 28,
+      "title": "Verify golden cases and release gate",
+      "narration": "Now use the approved golden set, negative examples and regression cases as the final release gate. The evaluation screen compares pinned prompt versions with the same dataset. The sample results show v1 at ninety-two percent exact match and one hundred percent schema validity, while candidate v2 has lower accuracy, invalid schemas, two safety violations, higher latency and greater token use. These are illustrative numbers; assess the actual deployment against documented acceptance criteria. The right sample shows valid v1 fields, a candidate that changes field names to text and score, and a case that leaves country_capital unresolved. Validate correct answers, schema completeness, negative cases, critical safety requirements, latency and token cost together. If the candidate fails, keep v1 active and do not promote v2 just because it sounds more conversational. Save version hashes, model settings, evaluation results and rollback instructions. Re-run the application parser regression after routing changes, then remove temporary evaluation resources. The result should be an auditable decision to promote only when all relevant quality gates pass."
+    }
+  ]
+}

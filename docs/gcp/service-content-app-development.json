@@ -1,0 +1,3456 @@
+{
+  "schemaVersion": "gcp-service-content.v1",
+  "branch": "App development",
+  "services": [
+    {
+      "slug": "api-gateway",
+      "summary": "A fully managed gateway for publishing, securing and monitoring REST APIs backed by Google Cloud services.",
+      "concepts": [
+        "API configuration and gateway deployment form the core resource model for API Gateway.",
+        "OpenAPI specification and client request enter the service; API key/JWT validation plus route policy govern processing.",
+        "Authenticated request to Cloud Run, functions or other HTTP backend is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose API Gateway when the requirement centers on a fully managed gateway for publishing, securing and monitoring REST APIs backed by Google Cloud services.",
+        "It fits architectures where public gateway endpoint versus private backend authorization must be explicit and operationally owned.",
+        "Prefer Apigee for enterprise API management when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production API Gateway flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "API Gateway architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "OpenAPI specification and client request",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "API Gateway",
+              "items": [
+                "API configuration and gateway deployment",
+                "API key/JWT validation plus route policy"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "Authenticated request to Cloud Run, functions or other HTTP backend",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "request count, latency and 4xx/5xx responses",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed API Gateway delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "API Gateway governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "API definition, gateway region, backend address and service account",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "gateway service account and client identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "public gateway endpoint versus private backend authorization",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "request count, latency and 4xx/5xx responses"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open API Gateway",
+          "detail": "Google Cloud Console → API Gateway; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set API definition, gateway region, backend address and service account."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure gateway service account and client identity; validate public gateway endpoint versus private backend authorization."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify request count, latency and 4xx/5xx responses before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for gateway service account and client identity; keep administrative and runtime identities separate.",
+        "Protect public gateway endpoint versus private backend authorization with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to API configuration and gateway deployment."
+      ],
+      "operations": [
+        "Monitor request count, latency and 4xx/5xx responses and alert on user-impacting deviation rather than raw activity alone.",
+        "Version API definition, gateway region, backend address and service account; promote changes through test and rollback checkpoints.",
+        "For API Gateway, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "API Gateway is a lightweight gateway, not the full lifecycle/monetization platform provided by Apigee",
+        "Confirm regional availability, quotas and lifecycle limits for API configuration and gateway deployment before standardizing the design.",
+        "The API Gateway managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "gateway calls plus backend, logging and network usage.",
+        "For API Gateway, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag API Gateway projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "API Gateway — A fully managed gateway for publishing, securing and monitoring REST APIs backed by Google Cloud services.",
+        "Apigee for enterprise API management — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "API Gateway",
+          "fit": "A fully managed gateway for publishing, securing and monitoring REST APIs backed by Google Cloud services."
+        },
+        {
+          "name": "Apigee",
+          "fit": "Apigee for enterprise API management"
+        }
+      ],
+      "memoryHooks": [
+        "API configuration and gateway deployment → API key/JWT validation plus route policy → Authenticated request to Cloud Run, functions or other HTTP backend.",
+        "API Gateway is a lightweight gateway, not the full lifecycle/monetization platform provided by Apigee",
+        "Certification clue: A fully managed gateway for publishing, securing and monitoring REST APIs backed by Google Cloud services."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "API Gateway documentation",
+          "url": "https://docs.cloud.google.com/api-gateway/docs"
+        }
+      ]
+    },
+    {
+      "slug": "apigee",
+      "summary": "An enterprise API management platform for proxies, reusable policies, developer products, analytics and hybrid runtime options.",
+      "concepts": [
+        "API proxy, environment, environment group and runtime instance form the core resource model for Apigee.",
+        "consumer request, API product and developer credential enter the service; proxy flow policies, quotas, threat protection and mediation govern processing.",
+        "governed call to one or more backend APIs is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Apigee when the requirement centers on an enterprise API management platform for proxies, reusable policies, developer products, analytics and hybrid runtime options.",
+        "It fits architectures where management plane, runtime plane and backend trust boundary must be explicit and operationally owned.",
+        "Prefer API Gateway for simpler managed REST exposure when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Apigee flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Apigee architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "consumer request, API product and developer credential",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Apigee",
+              "items": [
+                "API proxy, environment, environment group and runtime instance",
+                "proxy flow policies, quotas, threat protection and mediation"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "governed call to one or more backend APIs",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "proxy latency, target latency, errors, quota violations and analytics",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Apigee delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Apigee governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "organization, instance, environment, environment group, proxy and API product",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "developer app credentials, Apigee roles and runtime service identities",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "management plane, runtime plane and backend trust boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "proxy latency, target latency, errors, quota violations and analytics"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Apigee",
+          "detail": "Google Cloud Console → Apigee; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set organization, instance, environment, environment group, proxy and API product."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure developer app credentials, Apigee roles and runtime service identities; validate management plane, runtime plane and backend trust boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify proxy latency, target latency, errors, quota violations and analytics before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for developer app credentials, Apigee roles and runtime service identities; keep administrative and runtime identities separate.",
+        "Protect management plane, runtime plane and backend trust boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to API proxy, environment, environment group and runtime instance."
+      ],
+      "operations": [
+        "Monitor proxy latency, target latency, errors, quota violations and analytics and alert on user-impacting deviation rather than raw activity alone.",
+        "Version organization, instance, environment, environment group, proxy and API product; promote changes through test and rollback checkpoints.",
+        "For Apigee, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "policy execution adds latency and Apigee organization/runtime location choices are foundational",
+        "Confirm regional availability, quotas and lifecycle limits for API proxy, environment, environment group and runtime instance before standardizing the design.",
+        "The Apigee managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "subscription/runtime capacity plus networking, analytics and backend charges.",
+        "For Apigee, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Apigee projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Apigee — An enterprise API management platform for proxies, reusable policies, developer products, analytics and hybrid runtime options.",
+        "API Gateway for simpler managed REST exposure — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Apigee",
+          "fit": "An enterprise API management platform for proxies, reusable policies, developer products, analytics and hybrid runtime options."
+        },
+        {
+          "name": "API Gateway",
+          "fit": "API Gateway for simpler managed REST exposure"
+        }
+      ],
+      "memoryHooks": [
+        "API proxy, environment, environment group and runtime instance → proxy flow policies, quotas, threat protection and mediation → governed call to one or more backend APIs.",
+        "policy execution adds latency and Apigee organization/runtime location choices are foundational",
+        "Certification clue: An enterprise API management platform for proxies, reusable policies, developer products, analytics and hybrid runtime options."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Apigee documentation",
+          "url": "https://docs.cloud.google.com/apigee/docs"
+        }
+      ]
+    },
+    {
+      "slug": "app-design-center",
+      "summary": "An application-centric design service for creating, sharing and deploying approved Terraform-backed architecture templates.",
+      "concepts": [
+        "space, component, template, catalog entry and application revision form the core resource model for App Design Center.",
+        "Google or imported Terraform components plus developer parameters enter the service; platform-team guardrails and template revision lifecycle govern processing.",
+        "deployable application infrastructure and exportable Terraform is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose App Design Center when the requirement centers on an application-centric design service for creating, sharing and deploying approved Terraform-backed architecture templates.",
+        "It fits architectures where design catalog versus target project deployment permissions must be explicit and operationally owned.",
+        "Prefer Infra Manager for direct Terraform deployment without a visual application catalog when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production App Design Center flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "App Design Center architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "Google or imported Terraform components plus developer parameters",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "App Design Center",
+              "items": [
+                "space, component, template, catalog entry and application revision",
+                "platform-team guardrails and template revision lifecycle"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "deployable application infrastructure and exportable Terraform",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "template adoption, deployment operations and failed revisions",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed App Design Center delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "App Design Center governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "space, component library, template parameters, catalog publication and deployment target",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "space administrators, template designers and application deployers",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "design catalog versus target project deployment permissions",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "template adoption, deployment operations and failed revisions"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Application Design Center",
+          "detail": "Google Cloud Console → Application Design Center; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set space, component library, template parameters, catalog publication and deployment target."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure space administrators, template designers and application deployers; validate design catalog versus target project deployment permissions."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify template adoption, deployment operations and failed revisions before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for space administrators, template designers and application deployers; keep administrative and runtime identities separate.",
+        "Protect design catalog versus target project deployment permissions with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to space, component, template, catalog entry and application revision."
+      ],
+      "operations": [
+        "Monitor template adoption, deployment operations and failed revisions and alert on user-impacting deviation rather than raw activity alone.",
+        "Version space, component library, template parameters, catalog publication and deployment target; promote changes through test and rollback checkpoints.",
+        "For App Design Center, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "developers can configure published templates but cannot freely alter their component topology",
+        "Confirm regional availability, quotas and lifecycle limits for space, component, template, catalog entry and application revision before standardizing the design.",
+        "The App Design Center managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "underlying deployed resources and supporting automation; design-service terms vary.",
+        "For App Design Center, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag App Design Center projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "App Design Center — An application-centric design service for creating, sharing and deploying approved Terraform-backed architecture templates.",
+        "Infra Manager for direct Terraform deployment without a visual application catalog — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "App Design Center",
+          "fit": "An application-centric design service for creating, sharing and deploying approved Terraform-backed architecture templates."
+        },
+        {
+          "name": "Infra Manager",
+          "fit": "Infra Manager for direct Terraform deployment without a visual application catalog"
+        }
+      ],
+      "memoryHooks": [
+        "space, component, template, catalog entry and application revision → platform-team guardrails and template revision lifecycle → deployable application infrastructure and exportable Terraform.",
+        "developers can configure published templates but cannot freely alter their component topology",
+        "Certification clue: An application-centric design service for creating, sharing and deploying approved Terraform-backed architecture templates."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "App Design Center documentation",
+          "url": "https://docs.cloud.google.com/application-design-center/docs"
+        }
+      ]
+    },
+    {
+      "slug": "app-hub",
+      "summary": "An application inventory that groups discovered cloud resources into services and workloads with ownership and criticality metadata.",
+      "concepts": [
+        "application, service, workload and discovered resource form the core resource model for App Hub.",
+        "supported resources discovered from registered projects enter the service; application registration, resource assignment and metadata governance govern processing.",
+        "application-centric inventory for operations, governance and insights is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose App Hub when the requirement centers on an application inventory that groups discovered cloud resources into services and workloads with ownership and criticality metadata.",
+        "It fits architectures where management project/host project relationship and registered project scope must be explicit and operationally owned.",
+        "Prefer Application Design Center for designing and deploying new application templates when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production App Hub flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "App Hub architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "supported resources discovered from registered projects",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "App Hub",
+              "items": [
+                "application, service, workload and discovered resource",
+                "application registration, resource assignment and metadata governance"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "application-centric inventory for operations, governance and insights",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "unassigned resources, ownership coverage and application health context",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed App Hub delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "App Hub governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "management project, registered projects, application, service/workload assignment and attributes",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "application editors, viewers and management-project service agent",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "management project/host project relationship and registered project scope",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "unassigned resources, ownership coverage and application health context"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open App Hub",
+          "detail": "Google Cloud Console → App Hub; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set management project, registered projects, application, service/workload assignment and attributes."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure application editors, viewers and management-project service agent; validate management project/host project relationship and registered project scope."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify unassigned resources, ownership coverage and application health context before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for application editors, viewers and management-project service agent; keep administrative and runtime identities separate.",
+        "Protect management project/host project relationship and registered project scope with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to application, service, workload and discovered resource."
+      ],
+      "operations": [
+        "Monitor unassigned resources, ownership coverage and application health context and alert on user-impacting deviation rather than raw activity alone.",
+        "Version management project, registered projects, application, service/workload assignment and attributes; promote changes through test and rollback checkpoints.",
+        "For App Hub, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "App Hub organizes existing resources; it does not deploy or move them",
+        "Confirm regional availability, quotas and lifecycle limits for application, service, workload and discovered resource before standardizing the design.",
+        "The App Hub managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "inventory itself plus charges from connected observability and workload services.",
+        "For App Hub, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag App Hub projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "App Hub — An application inventory that groups discovered cloud resources into services and workloads with ownership and criticality metadata.",
+        "Application Design Center for designing and deploying new application templates — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "App Hub",
+          "fit": "An application inventory that groups discovered cloud resources into services and workloads with ownership and criticality metadata."
+        },
+        {
+          "name": "Application Design Center",
+          "fit": "Application Design Center for designing and deploying new application templates"
+        }
+      ],
+      "memoryHooks": [
+        "application, service, workload and discovered resource → application registration, resource assignment and metadata governance → application-centric inventory for operations, governance and insights.",
+        "App Hub organizes existing resources; it does not deploy or move them",
+        "Certification clue: An application inventory that groups discovered cloud resources into services and workloads with ownership and criticality metadata."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "App Hub documentation",
+          "url": "https://docs.cloud.google.com/app-hub/docs"
+        }
+      ]
+    },
+    {
+      "slug": "application-integration",
+      "summary": "A serverless integration platform for orchestrating enterprise applications through triggers, tasks, connectors and mappings.",
+      "concepts": [
+        "integration, trigger, task, connection and execution form the core resource model for Application Integration.",
+        "API, schedule, event or connector data enter the service; visual workflow, branching, data mapping, retries and error catch govern processing.",
+        "updates or responses across SaaS and Google Cloud systems is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Application Integration when the requirement centers on a serverless integration platform for orchestrating enterprise applications through triggers, tasks, connectors and mappings.",
+        "It fits architectures where connector credential store and external application boundary must be explicit and operationally owned.",
+        "Prefer Workflows for developer-centric HTTP/API orchestration when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Application Integration flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Application Integration architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "API, schedule, event or connector data",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Application Integration",
+              "items": [
+                "integration, trigger, task, connection and execution",
+                "visual workflow, branching, data mapping, retries and error catch"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "updates or responses across SaaS and Google Cloud systems",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "execution success, task latency, connector errors and retries",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Application Integration delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Application Integration governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "region, trigger, tasks, connector connection, variable mapping and publish version",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "integration service account, connection credentials and caller identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "connector credential store and external application boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "execution success, task latency, connector errors and retries"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Application Integration",
+          "detail": "Google Cloud Console → Application Integration; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, trigger, tasks, connector connection, variable mapping and publish version."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure integration service account, connection credentials and caller identity; validate connector credential store and external application boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify execution success, task latency, connector errors and retries before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for integration service account, connection credentials and caller identity; keep administrative and runtime identities separate.",
+        "Protect connector credential store and external application boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to integration, trigger, task, connection and execution."
+      ],
+      "operations": [
+        "Monitor execution success, task latency, connector errors and retries and alert on user-impacting deviation rather than raw activity alone.",
+        "Version region, trigger, tasks, connector connection, variable mapping and publish version; promote changes through test and rollback checkpoints.",
+        "For Application Integration, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "integration execution is stateful orchestration; connector quotas and external API limits still apply",
+        "Confirm regional availability, quotas and lifecycle limits for integration, trigger, task, connection and execution before standardizing the design.",
+        "The Application Integration managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "executions, connector operations and dependent systems.",
+        "For Application Integration, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Application Integration projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Application Integration — A serverless integration platform for orchestrating enterprise applications through triggers, tasks, connectors and mappings.",
+        "Workflows for developer-centric HTTP/API orchestration — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Application Integration",
+          "fit": "A serverless integration platform for orchestrating enterprise applications through triggers, tasks, connectors and mappings."
+        },
+        {
+          "name": "Workflows",
+          "fit": "Workflows for developer-centric HTTP/API orchestration"
+        }
+      ],
+      "memoryHooks": [
+        "integration, trigger, task, connection and execution → visual workflow, branching, data mapping, retries and error catch → updates or responses across SaaS and Google Cloud systems.",
+        "integration execution is stateful orchestration; connector quotas and external API limits still apply",
+        "Certification clue: A serverless integration platform for orchestrating enterprise applications through triggers, tasks, connectors and mappings."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Application Integration documentation",
+          "url": "https://docs.cloud.google.com/application-integration/docs"
+        }
+      ]
+    },
+    {
+      "slug": "artifact-analysis",
+      "summary": "A metadata and vulnerability-analysis service for container images and supported software artifacts.",
+      "concepts": [
+        "occurrence, note, scan result and vulnerability finding form the core resource model for Artifact Analysis.",
+        "artifact pushed to Artifact Registry or supplied for analysis enter the service; automatic/on-demand scanning and metadata providers govern processing.",
+        "package inventory, vulnerabilities and build/deployment metadata is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Artifact Analysis when the requirement centers on a metadata and vulnerability-analysis service for container images and supported software artifacts.",
+        "It fits architectures where artifact repository boundary and security finding access must be explicit and operationally owned.",
+        "Prefer third-party scanners when different ecosystems or policy engines are required when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Artifact Analysis flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Artifact Analysis architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "artifact pushed to Artifact Registry or supplied for analysis",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Artifact Analysis",
+              "items": [
+                "occurrence, note, scan result and vulnerability finding",
+                "automatic/on-demand scanning and metadata providers"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "package inventory, vulnerabilities and build/deployment metadata",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "scan status, severity, fix availability and stale findings",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Artifact Analysis delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Artifact Analysis governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "repository scanning settings, image digest, severity and fix availability",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "scanner service agent, artifact readers and security viewers",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "artifact repository boundary and security finding access",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "scan status, severity, fix availability and stale findings"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Artifact Registry → Vulnerabilities",
+          "detail": "Google Cloud Console → Artifact Registry → Vulnerabilities; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set repository scanning settings, image digest, severity and fix availability."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure scanner service agent, artifact readers and security viewers; validate artifact repository boundary and security finding access."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify scan status, severity, fix availability and stale findings before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for scanner service agent, artifact readers and security viewers; keep administrative and runtime identities separate.",
+        "Protect artifact repository boundary and security finding access with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to occurrence, note, scan result and vulnerability finding."
+      ],
+      "operations": [
+        "Monitor scan status, severity, fix availability and stale findings and alert on user-impacting deviation rather than raw activity alone.",
+        "Version repository scanning settings, image digest, severity and fix availability; promote changes through test and rollback checkpoints.",
+        "For Artifact Analysis, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "a finding reports known package risk; it does not patch images or prove exploitability",
+        "Confirm regional availability, quotas and lifecycle limits for occurrence, note, scan result and vulnerability finding before standardizing the design.",
+        "The Artifact Analysis managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "automatic/on-demand scanning and artifact storage.",
+        "For Artifact Analysis, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Artifact Analysis projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Artifact Analysis — A metadata and vulnerability-analysis service for container images and supported software artifacts.",
+        "third-party scanners when different ecosystems or policy engines are required — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Artifact Analysis",
+          "fit": "A metadata and vulnerability-analysis service for container images and supported software artifacts."
+        },
+        {
+          "name": "third-party scanners when different ecosystems or policy engines are required",
+          "fit": "third-party scanners when different ecosystems or policy engines are required"
+        }
+      ],
+      "memoryHooks": [
+        "occurrence, note, scan result and vulnerability finding → automatic/on-demand scanning and metadata providers → package inventory, vulnerabilities and build/deployment metadata.",
+        "a finding reports known package risk; it does not patch images or prove exploitability",
+        "Certification clue: A metadata and vulnerability-analysis service for container images and supported software artifacts."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Artifact Analysis documentation",
+          "url": "https://docs.cloud.google.com/artifact-analysis/docs"
+        }
+      ]
+    },
+    {
+      "slug": "artifact-registry",
+      "summary": "A regional or multi-regional repository service for container images and language/package artifacts.",
+      "concepts": [
+        "repository, package, version, tag and immutable digest form the core resource model for Artifact Registry.",
+        "build output from Cloud Build, CI systems or developers enter the service; repository IAM, cleanup policy, vulnerability metadata and remote/virtual repository rules govern processing.",
+        "versioned artifacts consumed by runtimes and deployment pipelines is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Artifact Registry when the requirement centers on a regional or multi-regional repository service for container images and language/package artifacts.",
+        "It fits architectures where producer project, repository location and runtime project boundary must be explicit and operationally owned.",
+        "Prefer Cloud Storage for generic objects without package semantics when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Artifact Registry flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Artifact Registry architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "build output from Cloud Build, CI systems or developers",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Artifact Registry",
+              "items": [
+                "repository, package, version, tag and immutable digest",
+                "repository IAM, cleanup policy, vulnerability metadata and remote/virtual repository rules"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "versioned artifacts consumed by runtimes and deployment pipelines",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "storage, downloads, cleanup actions and replication/egress behavior",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Artifact Registry delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Artifact Registry governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "format, mode, region, encryption, cleanup policy and repository IAM",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "writer, reader and repository administrator roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "producer project, repository location and runtime project boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "storage, downloads, cleanup actions and replication/egress behavior"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Artifact Registry",
+          "detail": "Google Cloud Console → Artifact Registry; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set format, mode, region, encryption, cleanup policy and repository IAM."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure writer, reader and repository administrator roles; validate producer project, repository location and runtime project boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify storage, downloads, cleanup actions and replication/egress behavior before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for writer, reader and repository administrator roles; keep administrative and runtime identities separate.",
+        "Protect producer project, repository location and runtime project boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to repository, package, version, tag and immutable digest."
+      ],
+      "operations": [
+        "Monitor storage, downloads, cleanup actions and replication/egress behavior and alert on user-impacting deviation rather than raw activity alone.",
+        "Version format, mode, region, encryption, cleanup policy and repository IAM; promote changes through test and rollback checkpoints.",
+        "For Artifact Registry, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "tags are mutable pointers; production deployment should record a digest or immutable version",
+        "Confirm regional availability, quotas and lifecycle limits for repository, package, version, tag and immutable digest before standardizing the design.",
+        "The Artifact Registry managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "stored bytes, data transfer and scanning/remote-repository activity.",
+        "For Artifact Registry, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Artifact Registry projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Artifact Registry — A regional or multi-regional repository service for container images and language/package artifacts.",
+        "Cloud Storage for generic objects without package semantics — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Artifact Registry",
+          "fit": "A regional or multi-regional repository service for container images and language/package artifacts."
+        },
+        {
+          "name": "Cloud Storage",
+          "fit": "Cloud Storage for generic objects without package semantics"
+        }
+      ],
+      "memoryHooks": [
+        "repository, package, version, tag and immutable digest → repository IAM, cleanup policy, vulnerability metadata and remote/virtual repository rules → versioned artifacts consumed by runtimes and deployment pipelines.",
+        "tags are mutable pointers; production deployment should record a digest or immutable version",
+        "Certification clue: A regional or multi-regional repository service for container images and language/package artifacts."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Artifact Registry documentation",
+          "url": "https://docs.cloud.google.com/artifact-registry/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-build",
+      "summary": "A managed build service that runs containerized steps from source and produces deployable artifacts with logs and provenance.",
+      "concepts": [
+        "build, step, trigger, worker pool and build configuration form the core resource model for Cloud Build.",
+        "repository event, source archive or manual/API submission enter the service; ordered build steps, substitutions, approvals and private-pool network govern processing.",
+        "image/package in Artifact Registry plus logs, attestations and deployment input is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Build when the requirement centers on a managed build service that runs containerized steps from source and produces deployable artifacts with logs and provenance.",
+        "It fits architectures where Google-hosted or private worker pool versus protected dependencies must be explicit and operationally owned.",
+        "Prefer external CI when orchestration is already standardized elsewhere when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Build flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Build architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "repository event, source archive or manual/API submission",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Build",
+              "items": [
+                "build, step, trigger, worker pool and build configuration",
+                "ordered build steps, substitutions, approvals and private-pool network"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "image/package in Artifact Registry plus logs, attestations and deployment input",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "queue time, step duration, failure rate and worker-pool capacity",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Build delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Build governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "repository connection, trigger event, build config, service account and worker pool",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "build service account and trigger invoker",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "Google-hosted or private worker pool versus protected dependencies",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "queue time, step duration, failure rate and worker-pool capacity"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Build",
+          "detail": "Google Cloud Console → Cloud Build; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set repository connection, trigger event, build config, service account and worker pool."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure build service account and trigger invoker; validate Google-hosted or private worker pool versus protected dependencies."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify queue time, step duration, failure rate and worker-pool capacity before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for build service account and trigger invoker; keep administrative and runtime identities separate.",
+        "Protect Google-hosted or private worker pool versus protected dependencies with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to build, step, trigger, worker pool and build configuration."
+      ],
+      "operations": [
+        "Monitor queue time, step duration, failure rate and worker-pool capacity and alert on user-impacting deviation rather than raw activity alone.",
+        "Version repository connection, trigger event, build config, service account and worker pool; promote changes through test and rollback checkpoints.",
+        "For Cloud Build, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "the default build identity can be highly privileged; pin builders and minimize its permissions",
+        "Confirm regional availability, quotas and lifecycle limits for build, step, trigger, worker pool and build configuration before standardizing the design.",
+        "The Cloud Build managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "build minutes/machine type, private pools, logs and artifact/network usage.",
+        "For Cloud Build, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Build projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Build — A managed build service that runs containerized steps from source and produces deployable artifacts with logs and provenance.",
+        "external CI when orchestration is already standardized elsewhere — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Build",
+          "fit": "A managed build service that runs containerized steps from source and produces deployable artifacts with logs and provenance."
+        },
+        {
+          "name": "external CI when orchestration is already standardized elsewhere",
+          "fit": "external CI when orchestration is already standardized elsewhere"
+        }
+      ],
+      "memoryHooks": [
+        "build, step, trigger, worker pool and build configuration → ordered build steps, substitutions, approvals and private-pool network → image/package in Artifact Registry plus logs, attestations and deployment input.",
+        "the default build identity can be highly privileged; pin builders and minimize its permissions",
+        "Certification clue: A managed build service that runs containerized steps from source and produces deployable artifacts with logs and provenance."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Build documentation",
+          "url": "https://docs.cloud.google.com/build/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-code",
+      "summary": "IDE extensions that provide Google Cloud project, Kubernetes, Cloud Run and local development workflows inside supported editors.",
+      "concepts": [
+        "IDE project configuration, run target and deployment profile form the core resource model for Cloud Code.",
+        "local source, Skaffold configuration and developer credentials enter the service; local debug/build/deploy commands and cloud resource browsing govern processing.",
+        "developer feedback and a deployment submitted to the chosen runtime is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Code when the requirement centers on iDE extensions that provide Google Cloud project, Kubernetes, Cloud Run and local development workflows inside supported editors.",
+        "It fits architectures where developer workstation versus cluster/project permissions must be explicit and operationally owned.",
+        "Prefer Cloud Shell for a managed browser terminal rather than an IDE extension when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Code flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Code architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "local source, Skaffold configuration and developer credentials",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Code",
+              "items": [
+                "IDE project configuration, run target and deployment profile",
+                "local debug/build/deploy commands and cloud resource browsing"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "developer feedback and a deployment submitted to the chosen runtime",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "local build/debug status, deployment output and referenced cloud logs",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Code delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Code governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "Google Cloud project, Kubernetes context, Skaffold profile and run/debug target",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "developer login and impersonated/runtime service accounts",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "developer workstation versus cluster/project permissions",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "local build/debug status, deployment output and referenced cloud logs"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open IDE → Cloud Code",
+          "detail": "Google Cloud Console → IDE → Cloud Code; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set Google Cloud project, Kubernetes context, Skaffold profile and run/debug target."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure developer login and impersonated/runtime service accounts; validate developer workstation versus cluster/project permissions."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify local build/debug status, deployment output and referenced cloud logs before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for developer login and impersonated/runtime service accounts; keep administrative and runtime identities separate.",
+        "Protect developer workstation versus cluster/project permissions with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to IDE project configuration, run target and deployment profile."
+      ],
+      "operations": [
+        "Monitor local build/debug status, deployment output and referenced cloud logs and alert on user-impacting deviation rather than raw activity alone.",
+        "Version Google Cloud project, Kubernetes context, Skaffold profile and run/debug target; promote changes through test and rollback checkpoints.",
+        "For Cloud Code, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "Cloud Code improves the developer loop but is not a CI/CD control plane",
+        "Confirm regional availability, quotas and lifecycle limits for IDE project configuration, run target and deployment profile before standardizing the design.",
+        "The Cloud Code managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "no separate runtime meter; builds, clusters and deployed services incur charges.",
+        "For Cloud Code, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Code projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Code — IDE extensions that provide Google Cloud project, Kubernetes, Cloud Run and local development workflows inside supported editors.",
+        "Cloud Shell for a managed browser terminal rather than an IDE extension — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Code",
+          "fit": "IDE extensions that provide Google Cloud project, Kubernetes, Cloud Run and local development workflows inside supported editors."
+        },
+        {
+          "name": "Cloud Shell",
+          "fit": "Cloud Shell for a managed browser terminal rather than an IDE extension"
+        }
+      ],
+      "memoryHooks": [
+        "IDE project configuration, run target and deployment profile → local debug/build/deploy commands and cloud resource browsing → developer feedback and a deployment submitted to the chosen runtime.",
+        "Cloud Code improves the developer loop but is not a CI/CD control plane",
+        "Certification clue: IDE extensions that provide Google Cloud project, Kubernetes, Cloud Run and local development workflows inside supported editors."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Code documentation",
+          "url": "https://docs.cloud.google.com/code/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-deploy",
+      "summary": "A managed continuous-delivery service for promoting releases through GKE and Cloud Run targets with approvals and rollout strategies.",
+      "concepts": [
+        "delivery pipeline, target, release, rollout and phase form the core resource model for Cloud Deploy.",
+        "rendered or renderable manifests plus container image references enter the service; ordered promotion, approval, canary and verification hooks govern processing.",
+        "deployed revision in each target environment is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Deploy when the requirement centers on a managed continuous-delivery service for promoting releases through GKE and Cloud Run targets with approvals and rollout strategies.",
+        "It fits architectures where delivery project versus target clusters/projects and execution environment must be explicit and operationally owned.",
+        "Prefer GitOps controllers when cluster reconciliation from Git is the required operating model when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Deploy flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Deploy architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "rendered or renderable manifests plus container image references",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Deploy",
+              "items": [
+                "delivery pipeline, target, release, rollout and phase",
+                "ordered promotion, approval, canary and verification hooks"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "deployed revision in each target environment",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "rollout phase, deploy/verify status, approval delay and failure",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Deploy delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Deploy governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "pipeline, targets, execution environment, service account, approval and canary strategy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "delivery service account, deployer and approver roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "delivery project versus target clusters/projects and execution environment",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "rollout phase, deploy/verify status, approval delay and failure"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Deploy",
+          "detail": "Google Cloud Console → Cloud Deploy; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set pipeline, targets, execution environment, service account, approval and canary strategy."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure delivery service account, deployer and approver roles; validate delivery project versus target clusters/projects and execution environment."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify rollout phase, deploy/verify status, approval delay and failure before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for delivery service account, deployer and approver roles; keep administrative and runtime identities separate.",
+        "Protect delivery project versus target clusters/projects and execution environment with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to delivery pipeline, target, release, rollout and phase."
+      ],
+      "operations": [
+        "Monitor rollout phase, deploy/verify status, approval delay and failure and alert on user-impacting deviation rather than raw activity alone.",
+        "Version pipeline, targets, execution environment, service account, approval and canary strategy; promote changes through test and rollback checkpoints.",
+        "For Cloud Deploy, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "Cloud Deploy promotes artifacts; it does not build images or replace runtime health design",
+        "Confirm regional availability, quotas and lifecycle limits for delivery pipeline, target, release, rollout and phase before standardizing the design.",
+        "The Cloud Deploy managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "active delivery pipelines/releases plus Cloud Build, logging and target runtime usage.",
+        "For Cloud Deploy, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Deploy projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Deploy — A managed continuous-delivery service for promoting releases through GKE and Cloud Run targets with approvals and rollout strategies.",
+        "GitOps controllers when cluster reconciliation from Git is the required operating model — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Deploy",
+          "fit": "A managed continuous-delivery service for promoting releases through GKE and Cloud Run targets with approvals and rollout strategies."
+        },
+        {
+          "name": "GitOps controllers when cluster reconciliation from Git is the required operating model",
+          "fit": "GitOps controllers when cluster reconciliation from Git is the required operating model"
+        }
+      ],
+      "memoryHooks": [
+        "delivery pipeline, target, release, rollout and phase → ordered promotion, approval, canary and verification hooks → deployed revision in each target environment.",
+        "Cloud Deploy promotes artifacts; it does not build images or replace runtime health design",
+        "Certification clue: A managed continuous-delivery service for promoting releases through GKE and Cloud Run targets with approvals and rollout strategies."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Deploy documentation",
+          "url": "https://docs.cloud.google.com/deploy/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-scheduler",
+      "summary": "A managed cron service that sends authenticated HTTP, Pub/Sub or App Engine requests on a schedule.",
+      "concepts": [
+        "regional job, schedule, time zone and target form the core resource model for Cloud Scheduler.",
+        "cron expression and payload enter the service; scheduled attempt, authentication token and retry policy govern processing.",
+        "HTTP request, Pub/Sub message or App Engine invocation is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Scheduler when the requirement centers on a managed cron service that sends authenticated HTTP, Pub/Sub or App Engine requests on a schedule.",
+        "It fits architectures where scheduler control plane versus target authorization must be explicit and operationally owned.",
+        "Prefer Workflows or Cloud Tasks when multi-step state or per-item queue control is needed when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Scheduler flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Scheduler architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "cron expression and payload",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Scheduler",
+              "items": [
+                "regional job, schedule, time zone and target",
+                "scheduled attempt, authentication token and retry policy"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "HTTP request, Pub/Sub message or App Engine invocation",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "attempt count, response code, latency and retry exhaustion",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Scheduler delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Scheduler governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "region, cron, time zone, target, auth header and retry settings",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Scheduler service agent and per-job caller service account",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "scheduler control plane versus target authorization",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "attempt count, response code, latency and retry exhaustion"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Scheduler",
+          "detail": "Google Cloud Console → Cloud Scheduler; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, cron, time zone, target, auth header and retry settings."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure Scheduler service agent and per-job caller service account; validate scheduler control plane versus target authorization."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify attempt count, response code, latency and retry exhaustion before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for Scheduler service agent and per-job caller service account; keep administrative and runtime identities separate.",
+        "Protect scheduler control plane versus target authorization with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to regional job, schedule, time zone and target."
+      ],
+      "operations": [
+        "Monitor attempt count, response code, latency and retry exhaustion and alert on user-impacting deviation rather than raw activity alone.",
+        "Version region, cron, time zone, target, auth header and retry settings; promote changes through test and rollback checkpoints.",
+        "For Cloud Scheduler, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "delivery is at least once; handlers must be idempotent and daylight-saving behavior follows the selected time zone",
+        "Confirm regional availability, quotas and lifecycle limits for regional job, schedule, time zone and target before standardizing the design.",
+        "The Cloud Scheduler managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "job count/attempts plus target service and network usage.",
+        "For Cloud Scheduler, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Scheduler projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Scheduler — A managed cron service that sends authenticated HTTP, Pub/Sub or App Engine requests on a schedule.",
+        "Workflows or Cloud Tasks when multi-step state or per-item queue control is needed — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Scheduler",
+          "fit": "A managed cron service that sends authenticated HTTP, Pub/Sub or App Engine requests on a schedule."
+        },
+        {
+          "name": "Workflows or Cloud Tasks when multi-step state or per-item queue control is needed",
+          "fit": "Workflows or Cloud Tasks when multi-step state or per-item queue control is needed"
+        }
+      ],
+      "memoryHooks": [
+        "regional job, schedule, time zone and target → scheduled attempt, authentication token and retry policy → HTTP request, Pub/Sub message or App Engine invocation.",
+        "delivery is at least once; handlers must be idempotent and daylight-saving behavior follows the selected time zone",
+        "Certification clue: A managed cron service that sends authenticated HTTP, Pub/Sub or App Engine requests on a schedule."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Scheduler documentation",
+          "url": "https://docs.cloud.google.com/scheduler/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-shell",
+      "summary": "An ephemeral browser-accessible Linux environment with gcloud, editors and common developer tools preinstalled.",
+      "concepts": [
+        "Cloud Shell VM, persistent home directory and active project form the core resource model for Cloud Shell.",
+        "interactive commands, uploaded files and cloned repositories enter the service; user session, gcloud configuration and optional web preview govern processing.",
+        "administrative/development API calls and files in the home disk is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Shell when the requirement centers on an ephemeral browser-accessible Linux environment with gcloud, editors and common developer tools preinstalled.",
+        "It fits architectures where ephemeral VM versus persistent home directory and target projects must be explicit and operationally owned.",
+        "Prefer Cloud Workstations for controlled persistent enterprise development environments when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Shell flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Shell architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "interactive commands, uploaded files and cloned repositories",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Shell",
+              "items": [
+                "Cloud Shell VM, persistent home directory and active project",
+                "user session, gcloud configuration and optional web preview"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "administrative/development API calls and files in the home disk",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "session state, command exit/log output and home-disk quota",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Shell delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Shell governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "active project, account/impersonation, region-sensitive commands and home-directory hygiene",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "signed-in user's credentials and optional impersonation",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "ephemeral VM versus persistent home directory and target projects",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "session state, command exit/log output and home-disk quota"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Activate Cloud Shell",
+          "detail": "Google Cloud Console → Activate Cloud Shell; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set active project, account/impersonation, region-sensitive commands and home-directory hygiene."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure signed-in user's credentials and optional impersonation; validate ephemeral VM versus persistent home directory and target projects."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify session state, command exit/log output and home-disk quota before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for signed-in user's credentials and optional impersonation; keep administrative and runtime identities separate.",
+        "Protect ephemeral VM versus persistent home directory and target projects with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to Cloud Shell VM, persistent home directory and active project."
+      ],
+      "operations": [
+        "Monitor session state, command exit/log output and home-disk quota and alert on user-impacting deviation rather than raw activity alone.",
+        "Version active project, account/impersonation, region-sensitive commands and home-directory hygiene; promote changes through test and rollback checkpoints.",
+        "For Cloud Shell, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "the VM is temporary but the home directory persists; never treat it as a production host",
+        "Confirm regional availability, quotas and lifecycle limits for Cloud Shell VM, persistent home directory and active project before standardizing the design.",
+        "The Cloud Shell managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "basic use is provided with limits; invoked cloud services still bill normally.",
+        "For Cloud Shell, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Shell projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Shell — An ephemeral browser-accessible Linux environment with gcloud, editors and common developer tools preinstalled.",
+        "Cloud Workstations for controlled persistent enterprise development environments — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Shell",
+          "fit": "An ephemeral browser-accessible Linux environment with gcloud, editors and common developer tools preinstalled."
+        },
+        {
+          "name": "Cloud Workstations",
+          "fit": "Cloud Workstations for controlled persistent enterprise development environments"
+        }
+      ],
+      "memoryHooks": [
+        "Cloud Shell VM, persistent home directory and active project → user session, gcloud configuration and optional web preview → administrative/development API calls and files in the home disk.",
+        "the VM is temporary but the home directory persists; never treat it as a production host",
+        "Certification clue: An ephemeral browser-accessible Linux environment with gcloud, editors and common developer tools preinstalled."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Shell documentation",
+          "url": "https://docs.cloud.google.com/shell/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-source-repositories",
+      "summary": "A legacy managed private Git repository service integrated with Google Cloud build and deployment tooling.",
+      "concepts": [
+        "project-scoped Git repository, branch and commit form the core resource model for Cloud Source Repositories.",
+        "developer Git pushes or mirrored repositories enter the service; IAM, branch workflow and build triggers govern processing.",
+        "versioned source and source-change events is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Source Repositories when the requirement centers on a legacy managed private Git repository service integrated with Google Cloud build and deployment tooling.",
+        "It fits architectures where Google Cloud project IAM boundary must be explicit and operationally owned.",
+        "Prefer Secure Source Manager or an external SCM connected through Developer Connect when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Source Repositories flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Source Repositories architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "developer Git pushes or mirrored repositories",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Source Repositories",
+              "items": [
+                "project-scoped Git repository, branch and commit",
+                "IAM, branch workflow and build triggers"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "versioned source and source-change events",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "push activity, repository access and connected build status",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Source Repositories delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Source Repositories governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "existing eligible project, repository access, remote URL and migration destination",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "repository reader/writer/admin roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "Google Cloud project IAM boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "push activity, repository access and connected build status"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Source Repositories",
+          "detail": "Google Cloud Console → Source Repositories; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set existing eligible project, repository access, remote URL and migration destination."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure repository reader/writer/admin roles; validate Google Cloud project IAM boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify push activity, repository access and connected build status before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for repository reader/writer/admin roles; keep administrative and runtime identities separate.",
+        "Protect Google Cloud project IAM boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to project-scoped Git repository, branch and commit."
+      ],
+      "operations": [
+        "Monitor push activity, repository access and connected build status and alert on user-impacting deviation rather than raw activity alone.",
+        "Version existing eligible project, repository access, remote URL and migration destination; promote changes through test and rollback checkpoints.",
+        "For Cloud Source Repositories, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "the service is End of Sale and unavailable to new customers since June 17, 2024; plan migration",
+        "Confirm regional availability, quotas and lifecycle limits for project-scoped Git repository, branch and commit before standardizing the design.",
+        "The Cloud Source Repositories managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "repository usage and connected build/storage services under applicable terms.",
+        "For Cloud Source Repositories, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Source Repositories projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Source Repositories — A legacy managed private Git repository service integrated with Google Cloud build and deployment tooling.",
+        "Secure Source Manager or an external SCM connected through Developer Connect — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Source Repositories",
+          "fit": "A legacy managed private Git repository service integrated with Google Cloud build and deployment tooling."
+        },
+        {
+          "name": "Secure Source Manager or an external SCM connected through Developer Connect",
+          "fit": "Secure Source Manager or an external SCM connected through Developer Connect"
+        }
+      ],
+      "memoryHooks": [
+        "project-scoped Git repository, branch and commit → IAM, branch workflow and build triggers → versioned source and source-change events.",
+        "the service is End of Sale and unavailable to new customers since June 17, 2024; plan migration",
+        "Certification clue: A legacy managed private Git repository service integrated with Google Cloud build and deployment tooling."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Source Repositories documentation",
+          "url": "https://docs.cloud.google.com/source-repositories/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-tasks",
+      "summary": "A managed queue for dispatching individual asynchronous HTTP/App Engine tasks with rate, retry and schedule controls.",
+      "concepts": [
+        "regional queue, task, schedule time and dispatch deadline form the core resource model for Cloud Tasks.",
+        "application-created task payload enter the service; queue rate limits, concurrency, retry/backoff and OIDC/OAuth authentication govern processing.",
+        "authenticated request to a worker endpoint is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Tasks when the requirement centers on a managed queue for dispatching individual asynchronous HTTP/App Engine tasks with rate, retry and schedule controls.",
+        "It fits architectures where producer, queue and worker authorization boundaries must be explicit and operationally owned.",
+        "Prefer Pub/Sub for fan-out event messaging without per-task scheduling/rate control when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Tasks flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Tasks architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "application-created task payload",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Tasks",
+              "items": [
+                "regional queue, task, schedule time and dispatch deadline",
+                "queue rate limits, concurrency, retry/backoff and OIDC/OAuth authentication"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "authenticated request to a worker endpoint",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "queue depth, oldest task age, attempts, latency and terminal failures",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Tasks delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Tasks governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "queue region, rate/concurrency, retry policy, task URL, auth and schedule time",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "enqueueing principal and queue service account",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "producer, queue and worker authorization boundaries",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "queue depth, oldest task age, attempts, latency and terminal failures"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Tasks",
+          "detail": "Google Cloud Console → Cloud Tasks; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set queue region, rate/concurrency, retry policy, task URL, auth and schedule time."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure enqueueing principal and queue service account; validate producer, queue and worker authorization boundaries."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify queue depth, oldest task age, attempts, latency and terminal failures before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for enqueueing principal and queue service account; keep administrative and runtime identities separate.",
+        "Protect producer, queue and worker authorization boundaries with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to regional queue, task, schedule time and dispatch deadline."
+      ],
+      "operations": [
+        "Monitor queue depth, oldest task age, attempts, latency and terminal failures and alert on user-impacting deviation rather than raw activity alone.",
+        "Version queue region, rate/concurrency, retry policy, task URL, auth and schedule time; promote changes through test and rollback checkpoints.",
+        "For Cloud Tasks, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "delivery is at least once and ordering is not guaranteed; workers must be idempotent",
+        "Confirm regional availability, quotas and lifecycle limits for regional queue, task, schedule time and dispatch deadline before standardizing the design.",
+        "The Cloud Tasks managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "API operations plus worker runtime, logging and network usage.",
+        "For Cloud Tasks, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Tasks projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Tasks — A managed queue for dispatching individual asynchronous HTTP/App Engine tasks with rate, retry and schedule controls.",
+        "Pub/Sub for fan-out event messaging without per-task scheduling/rate control — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Tasks",
+          "fit": "A managed queue for dispatching individual asynchronous HTTP/App Engine tasks with rate, retry and schedule controls."
+        },
+        {
+          "name": "Pub/Sub",
+          "fit": "Pub/Sub for fan-out event messaging without per-task scheduling/rate control"
+        }
+      ],
+      "memoryHooks": [
+        "regional queue, task, schedule time and dispatch deadline → queue rate limits, concurrency, retry/backoff and OIDC/OAuth authentication → authenticated request to a worker endpoint.",
+        "delivery is at least once and ordering is not guaranteed; workers must be idempotent",
+        "Certification clue: A managed queue for dispatching individual asynchronous HTTP/App Engine tasks with rate, retry and schedule controls."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Tasks documentation",
+          "url": "https://docs.cloud.google.com/tasks/docs"
+        }
+      ]
+    },
+    {
+      "slug": "cloud-workstations",
+      "summary": "Managed, reproducible developer workstations based on centrally governed configurations and container images.",
+      "concepts": [
+        "cluster, configuration and workstation form the core resource model for Cloud Workstations.",
+        "approved workstation image, machine type, network and developer assignment enter the service; administrator-defined policy, persistent disk and start/stop lifecycle govern processing.",
+        "browser/IDE development environment inside the customer VPC is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Cloud Workstations when the requirement centers on managed, reproducible developer workstations based on centrally governed configurations and container images.",
+        "It fits architectures where control plane, VPC workstation cluster and private dependency boundary must be explicit and operationally owned.",
+        "Prefer Cloud Shell for lightweight ephemeral administration when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Cloud Workstations flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Cloud Workstations architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "approved workstation image, machine type, network and developer assignment",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Cloud Workstations",
+              "items": [
+                "cluster, configuration and workstation",
+                "administrator-defined policy, persistent disk and start/stop lifecycle"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "browser/IDE development environment inside the customer VPC",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "startup latency, running/idle time, CPU/disk and configuration failures",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Cloud Workstations delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Cloud Workstations governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "cluster network, configuration image/machine, service account, persistent disk and idle timeout",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "workstation user, administrator and runtime service account",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "control plane, VPC workstation cluster and private dependency boundary",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "startup latency, running/idle time, CPU/disk and configuration failures"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Cloud Workstations",
+          "detail": "Google Cloud Console → Cloud Workstations; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set cluster network, configuration image/machine, service account, persistent disk and idle timeout."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure workstation user, administrator and runtime service account; validate control plane, VPC workstation cluster and private dependency boundary."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify startup latency, running/idle time, CPU/disk and configuration failures before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for workstation user, administrator and runtime service account; keep administrative and runtime identities separate.",
+        "Protect control plane, VPC workstation cluster and private dependency boundary with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to cluster, configuration and workstation."
+      ],
+      "operations": [
+        "Monitor startup latency, running/idle time, CPU/disk and configuration failures and alert on user-impacting deviation rather than raw activity alone.",
+        "Version cluster network, configuration image/machine, service account, persistent disk and idle timeout; promote changes through test and rollback checkpoints.",
+        "For Cloud Workstations, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "a stopped workstation can retain persistent disks; idle policy and image patching require governance",
+        "Confirm regional availability, quotas and lifecycle limits for cluster, configuration and workstation before standardizing the design.",
+        "The Cloud Workstations managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "workstation uptime, machine/GPU, persistent disks and network.",
+        "For Cloud Workstations, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Cloud Workstations projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Cloud Workstations — Managed, reproducible developer workstations based on centrally governed configurations and container images.",
+        "Cloud Shell for lightweight ephemeral administration — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Cloud Workstations",
+          "fit": "Managed, reproducible developer workstations based on centrally governed configurations and container images."
+        },
+        {
+          "name": "Cloud Shell",
+          "fit": "Cloud Shell for lightweight ephemeral administration"
+        }
+      ],
+      "memoryHooks": [
+        "cluster, configuration and workstation → administrator-defined policy, persistent disk and start/stop lifecycle → browser/IDE development environment inside the customer VPC.",
+        "a stopped workstation can retain persistent disks; idle policy and image patching require governance",
+        "Certification clue: Managed, reproducible developer workstations based on centrally governed configurations and container images."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Cloud Workstations documentation",
+          "url": "https://docs.cloud.google.com/workstations/docs"
+        }
+      ]
+    },
+    {
+      "slug": "developer-connect",
+      "summary": "A centralized service for securely connecting Google Cloud products to GitHub, GitLab and other source-code management systems.",
+      "concepts": [
+        "connection, repository link and host configuration form the core resource model for Developer Connect.",
+        "SCM app installation, token or private host connectivity enter the service; regional connection lifecycle and repository authorization govern processing.",
+        "trusted repository link consumed by Cloud Build and developer services is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Developer Connect when the requirement centers on a centralized service for securely connecting Google Cloud products to GitHub, GitLab and other source-code management systems.",
+        "It fits architectures where Google Cloud connection versus external/private SCM host must be explicit and operationally owned.",
+        "Prefer manual per-product SCM connections when central lifecycle management is unnecessary when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Developer Connect flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Developer Connect architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "SCM app installation, token or private host connectivity",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Developer Connect",
+              "items": [
+                "connection, repository link and host configuration",
+                "regional connection lifecycle and repository authorization"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "trusted repository link consumed by Cloud Build and developer services",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "connection health, repository-link state and token/webhook failures",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Developer Connect delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Developer Connect governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "region, provider, app installation/token, host connectivity and repository link",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "Developer Connect service agent and SCM installation identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "Google Cloud connection versus external/private SCM host",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "connection health, repository-link state and token/webhook failures"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Developer Connect",
+          "detail": "Google Cloud Console → Developer Connect; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, provider, app installation/token, host connectivity and repository link."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure Developer Connect service agent and SCM installation identity; validate Google Cloud connection versus external/private SCM host."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify connection health, repository-link state and token/webhook failures before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for Developer Connect service agent and SCM installation identity; keep administrative and runtime identities separate.",
+        "Protect Google Cloud connection versus external/private SCM host with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to connection, repository link and host configuration."
+      ],
+      "operations": [
+        "Monitor connection health, repository-link state and token/webhook failures and alert on user-impacting deviation rather than raw activity alone.",
+        "Version region, provider, app installation/token, host connectivity and repository link; promote changes through test and rollback checkpoints.",
+        "For Developer Connect, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "a connection grants a path to source but does not itself build or deploy it",
+        "Confirm regional availability, quotas and lifecycle limits for connection, repository link and host configuration before standardizing the design.",
+        "The Developer Connect managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "connection usage plus Secret Manager, network and consuming-service charges.",
+        "For Developer Connect, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Developer Connect projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Developer Connect — A centralized service for securely connecting Google Cloud products to GitHub, GitLab and other source-code management systems.",
+        "manual per-product SCM connections when central lifecycle management is unnecessary — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Developer Connect",
+          "fit": "A centralized service for securely connecting Google Cloud products to GitHub, GitLab and other source-code management systems."
+        },
+        {
+          "name": "manual per-product SCM connections when central lifecycle management is unnecessary",
+          "fit": "manual per-product SCM connections when central lifecycle management is unnecessary"
+        }
+      ],
+      "memoryHooks": [
+        "connection, repository link and host configuration → regional connection lifecycle and repository authorization → trusted repository link consumed by Cloud Build and developer services.",
+        "a connection grants a path to source but does not itself build or deploy it",
+        "Certification clue: A centralized service for securely connecting Google Cloud products to GitHub, GitLab and other source-code management systems."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Developer Connect documentation",
+          "url": "https://docs.cloud.google.com/developer-connect/docs"
+        }
+      ]
+    },
+    {
+      "slug": "developer-device-platform",
+      "summary": "A remote device orchestration platform for testing applications and experiences across managed physical device fleets.",
+      "concepts": [
+        "device, fleet/lab resource, session and test artifact form the core resource model for Developer Device Platform.",
+        "application build, test definition and device requirements enter the service; device allocation, remote execution and result collection govern processing.",
+        "test logs, video/screenshots and device telemetry is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Developer Device Platform when the requirement centers on a remote device orchestration platform for testing applications and experiences across managed physical device fleets.",
+        "It fits architectures where cloud control plane versus physical-device lab and uploaded binaries must be explicit and operationally owned.",
+        "Prefer self-managed device labs when specialized hardware control is mandatory when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Developer Device Platform flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Developer Device Platform architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "application build, test definition and device requirements",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Developer Device Platform",
+              "items": [
+                "device, fleet/lab resource, session and test artifact",
+                "device allocation, remote execution and result collection"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "test logs, video/screenshots and device telemetry",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "allocation wait, session success, device health and test pass rate",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Developer Device Platform delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Developer Device Platform governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "device pool, OS/model constraints, test artifact, session timeout and result destination",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "developer/test runner and device-platform service identities",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "cloud control plane versus physical-device lab and uploaded binaries",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "allocation wait, session success, device health and test pass rate"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Developer Device Platform",
+          "detail": "Google Cloud Console → Developer Device Platform; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set device pool, OS/model constraints, test artifact, session timeout and result destination."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure developer/test runner and device-platform service identities; validate cloud control plane versus physical-device lab and uploaded binaries."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify allocation wait, session success, device health and test pass rate before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for developer/test runner and device-platform service identities; keep administrative and runtime identities separate.",
+        "Protect cloud control plane versus physical-device lab and uploaded binaries with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to device, fleet/lab resource, session and test artifact."
+      ],
+      "operations": [
+        "Monitor allocation wait, session success, device health and test pass rate and alert on user-impacting deviation rather than raw activity alone.",
+        "Version device pool, OS/model constraints, test artifact, session timeout and result destination; promote changes through test and rollback checkpoints.",
+        "For Developer Device Platform, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "device models, OS versions and regional availability constrain reproducibility and capacity",
+        "Confirm regional availability, quotas and lifecycle limits for device, fleet/lab resource, session and test artifact before standardizing the design.",
+        "The Developer Device Platform managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "device/session usage, artifact storage and network transfer under product terms.",
+        "For Developer Device Platform, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Developer Device Platform projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Developer Device Platform — A remote device orchestration platform for testing applications and experiences across managed physical device fleets.",
+        "self-managed device labs when specialized hardware control is mandatory — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Developer Device Platform",
+          "fit": "A remote device orchestration platform for testing applications and experiences across managed physical device fleets."
+        },
+        {
+          "name": "self-managed device labs when specialized hardware control is mandatory",
+          "fit": "self-managed device labs when specialized hardware control is mandatory"
+        }
+      ],
+      "memoryHooks": [
+        "device, fleet/lab resource, session and test artifact → device allocation, remote execution and result collection → test logs, video/screenshots and device telemetry.",
+        "device models, OS versions and regional availability constrain reproducibility and capacity",
+        "Certification clue: A remote device orchestration platform for testing applications and experiences across managed physical device fleets."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Developer Device Platform documentation",
+          "url": "https://docs.cloud.google.com/developer-device-platform"
+        }
+      ]
+    },
+    {
+      "slug": "eventarc",
+      "summary": "A managed event-routing service that delivers Google Cloud, Audit Log, Pub/Sub and custom events to supported destinations using CloudEvents.",
+      "concepts": [
+        "trigger, event provider, event filter, channel and destination form the core resource model for Eventarc.",
+        "direct provider event, audit log entry or Pub/Sub message enter the service; attribute filtering and at-least-once delivery govern processing.",
+        "CloudEvent to Cloud Run, functions, GKE or Workflows is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Eventarc when the requirement centers on a managed event-routing service that delivers Google Cloud, Audit Log, Pub/Sub and custom events to supported destinations using CloudEvents.",
+        "It fits architectures where event producer project/location versus destination authorization must be explicit and operationally owned.",
+        "Prefer Pub/Sub for direct topic/subscription messaging without managed provider routing when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Eventarc flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Eventarc architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "direct provider event, audit log entry or Pub/Sub message",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Eventarc",
+              "items": [
+                "trigger, event provider, event filter, channel and destination",
+                "attribute filtering and at-least-once delivery"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "CloudEvent to Cloud Run, functions, GKE or Workflows",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "delivered/undelivered events, destination errors and latency",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Eventarc delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Eventarc governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "trigger type, region, provider/event filters, destination and service account",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "trigger service account, Eventarc service agent and destination invoker",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "event producer project/location versus destination authorization",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "delivered/undelivered events, destination errors and latency"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Eventarc",
+          "detail": "Google Cloud Console → Eventarc; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set trigger type, region, provider/event filters, destination and service account."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure trigger service account, Eventarc service agent and destination invoker; validate event producer project/location versus destination authorization."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify delivered/undelivered events, destination errors and latency before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for trigger service account, Eventarc service agent and destination invoker; keep administrative and runtime identities separate.",
+        "Protect event producer project/location versus destination authorization with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to trigger, event provider, event filter, channel and destination."
+      ],
+      "operations": [
+        "Monitor delivered/undelivered events, destination errors and latency and alert on user-impacting deviation rather than raw activity alone.",
+        "Version trigger type, region, provider/event filters, destination and service account; promote changes through test and rollback checkpoints.",
+        "For Eventarc, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "filters are exact-match at trigger creation and consumers must tolerate duplicates and out-of-order events",
+        "Confirm regional availability, quotas and lifecycle limits for trigger, event provider, event filter, channel and destination before standardizing the design.",
+        "The Eventarc managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "event delivery plus Pub/Sub transport, logging and destination compute.",
+        "For Eventarc, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Eventarc projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Eventarc — A managed event-routing service that delivers Google Cloud, Audit Log, Pub/Sub and custom events to supported destinations using CloudEvents.",
+        "Pub/Sub for direct topic/subscription messaging without managed provider routing — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Eventarc",
+          "fit": "A managed event-routing service that delivers Google Cloud, Audit Log, Pub/Sub and custom events to supported destinations using CloudEvents."
+        },
+        {
+          "name": "Pub/Sub",
+          "fit": "Pub/Sub for direct topic/subscription messaging without managed provider routing"
+        }
+      ],
+      "memoryHooks": [
+        "trigger, event provider, event filter, channel and destination → attribute filtering and at-least-once delivery → CloudEvent to Cloud Run, functions, GKE or Workflows.",
+        "filters are exact-match at trigger creation and consumers must tolerate duplicates and out-of-order events",
+        "Certification clue: A managed event-routing service that delivers Google Cloud, Audit Log, Pub/Sub and custom events to supported destinations using CloudEvents."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Eventarc documentation",
+          "url": "https://docs.cloud.google.com/eventarc/docs"
+        }
+      ]
+    },
+    {
+      "slug": "integration-connectors",
+      "summary": "Managed connectors that expose normalized actions and entities for SaaS, databases and enterprise systems.",
+      "concepts": [
+        "connection, connector version, entity and action form the core resource model for Integration Connectors.",
+        "credentials, endpoint/network settings and operation parameters enter the service; connector runtime, schema mapping and throttling govern processing.",
+        "read/write operation against the external system is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Integration Connectors when the requirement centers on managed connectors that expose normalized actions and entities for SaaS, databases and enterprise systems.",
+        "It fits architectures where Google-managed connector runtime to public or private external endpoint must be explicit and operationally owned.",
+        "Prefer custom Cloud Run adapter when unsupported APIs or bespoke behavior are needed when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Integration Connectors flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Integration Connectors architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "credentials, endpoint/network settings and operation parameters",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Integration Connectors",
+              "items": [
+                "connection, connector version, entity and action",
+                "connector runtime, schema mapping and throttling"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "read/write operation against the external system",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "connection health, operation latency, throttling and provider errors",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Integration Connectors delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Integration Connectors governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "connector/provider, region, authentication, endpoint/network, entities and test operation",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "connection service account plus secret/OAuth identity",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "Google-managed connector runtime to public or private external endpoint",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "connection health, operation latency, throttling and provider errors"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Integration Connectors",
+          "detail": "Google Cloud Console → Integration Connectors; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set connector/provider, region, authentication, endpoint/network, entities and test operation."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure connection service account plus secret/OAuth identity; validate Google-managed connector runtime to public or private external endpoint."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify connection health, operation latency, throttling and provider errors before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for connection service account plus secret/OAuth identity; keep administrative and runtime identities separate.",
+        "Protect Google-managed connector runtime to public or private external endpoint with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to connection, connector version, entity and action."
+      ],
+      "operations": [
+        "Monitor connection health, operation latency, throttling and provider errors and alert on user-impacting deviation rather than raw activity alone.",
+        "Version connector/provider, region, authentication, endpoint/network, entities and test operation; promote changes through test and rollback checkpoints.",
+        "For Integration Connectors, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "connector schemas, quotas and supported actions vary by provider/version; external permissions remain authoritative",
+        "Confirm regional availability, quotas and lifecycle limits for connection, connector version, entity and action before standardizing the design.",
+        "The Integration Connectors managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "connection/node and operation usage plus external-system/network charges.",
+        "For Integration Connectors, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Integration Connectors projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Integration Connectors — Managed connectors that expose normalized actions and entities for SaaS, databases and enterprise systems.",
+        "custom Cloud Run adapter when unsupported APIs or bespoke behavior are needed — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Integration Connectors",
+          "fit": "Managed connectors that expose normalized actions and entities for SaaS, databases and enterprise systems."
+        },
+        {
+          "name": "custom Cloud Run adapter when unsupported APIs or bespoke behavior are needed",
+          "fit": "custom Cloud Run adapter when unsupported APIs or bespoke behavior are needed"
+        }
+      ],
+      "memoryHooks": [
+        "connection, connector version, entity and action → connector runtime, schema mapping and throttling → read/write operation against the external system.",
+        "connector schemas, quotas and supported actions vary by provider/version; external permissions remain authoritative",
+        "Certification clue: Managed connectors that expose normalized actions and entities for SaaS, databases and enterprise systems."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Integration Connectors documentation",
+          "url": "https://docs.cloud.google.com/integration-connectors/docs"
+        }
+      ]
+    },
+    {
+      "slug": "secure-source-manager",
+      "summary": "A managed single-tenant Git source-management service with repositories, pull requests, issues and Google Cloud IAM integration.",
+      "concepts": [
+        "regional instance, repository, branch, pull request and hook form the core resource model for Secure Source Manager.",
+        "Git pushes and code-review activity enter the service; instance/repository IAM, branch protection and review workflow govern processing.",
+        "trusted source events for builds and deployments is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Secure Source Manager when the requirement centers on a managed single-tenant Git source-management service with repositories, pull requests, issues and Google Cloud IAM integration.",
+        "It fits architectures where single-tenant instance network/region versus CI consumers must be explicit and operationally owned.",
+        "Prefer external SCM through Developer Connect when collaboration must remain outside Google Cloud when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Secure Source Manager flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Secure Source Manager architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "Git pushes and code-review activity",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Secure Source Manager",
+              "items": [
+                "regional instance, repository, branch, pull request and hook",
+                "instance/repository IAM, branch protection and review workflow"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "trusted source events for builds and deployments",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "repository activity, hook delivery, storage and access failures",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Secure Source Manager delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Secure Source Manager governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "instance region/network, repository, IAM, branch protection and webhook/build integration",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "instance accessor, repository reader/writer and administrator roles",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "single-tenant instance network/region versus CI consumers",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "repository activity, hook delivery, storage and access failures"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Secure Source Manager",
+          "detail": "Google Cloud Console → Secure Source Manager; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set instance region/network, repository, IAM, branch protection and webhook/build integration."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure instance accessor, repository reader/writer and administrator roles; validate single-tenant instance network/region versus CI consumers."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify repository activity, hook delivery, storage and access failures before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for instance accessor, repository reader/writer and administrator roles; keep administrative and runtime identities separate.",
+        "Protect single-tenant instance network/region versus CI consumers with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to regional instance, repository, branch, pull request and hook."
+      ],
+      "operations": [
+        "Monitor repository activity, hook delivery, storage and access failures and alert on user-impacting deviation rather than raw activity alone.",
+        "Version instance region/network, repository, IAM, branch protection and webhook/build integration; promote changes through test and rollback checkpoints.",
+        "For Secure Source Manager, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "instance location and private access/connectivity must be planned before onboarding teams",
+        "Confirm regional availability, quotas and lifecycle limits for regional instance, repository, branch, pull request and hook before standardizing the design.",
+        "The Secure Source Manager managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "instance/repository storage and connected build/network services.",
+        "For Secure Source Manager, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Secure Source Manager projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Secure Source Manager — A managed single-tenant Git source-management service with repositories, pull requests, issues and Google Cloud IAM integration.",
+        "external SCM through Developer Connect when collaboration must remain outside Google Cloud — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Secure Source Manager",
+          "fit": "A managed single-tenant Git source-management service with repositories, pull requests, issues and Google Cloud IAM integration."
+        },
+        {
+          "name": "external SCM through Developer Connect when collaboration must remain outside Google Cloud",
+          "fit": "external SCM through Developer Connect when collaboration must remain outside Google Cloud"
+        }
+      ],
+      "memoryHooks": [
+        "regional instance, repository, branch, pull request and hook → instance/repository IAM, branch protection and review workflow → trusted source events for builds and deployments.",
+        "instance location and private access/connectivity must be planned before onboarding teams",
+        "Certification clue: A managed single-tenant Git source-management service with repositories, pull requests, issues and Google Cloud IAM integration."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Secure Source Manager documentation",
+          "url": "https://docs.cloud.google.com/secure-source-manager/docs"
+        }
+      ]
+    },
+    {
+      "slug": "service-infrastructure",
+      "summary": "Foundational control-plane services used by API producers to manage service configuration, consumer projects, quotas and usage.",
+      "concepts": [
+        "managed service configuration, consumer project and service control record form the core resource model for Service Infrastructure.",
+        "API producer configuration plus consumer check/report calls enter the service; Service Management and Service Control for enablement, quota and accounting govern processing.",
+        "authorized API consumption with usage telemetry is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Service Infrastructure when the requirement centers on foundational control-plane services used by API producers to manage service configuration, consumer projects, quotas and usage.",
+        "It fits architectures where producer organization versus consumer project/service perimeter must be explicit and operationally owned.",
+        "Prefer API Gateway or Apigee when the need is request proxying rather than producer control-plane integration when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Service Infrastructure flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Service Infrastructure architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "API producer configuration plus consumer check/report calls",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Service Infrastructure",
+              "items": [
+                "managed service configuration, consumer project and service control record",
+                "Service Management and Service Control for enablement, quota and accounting"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "authorized API consumption with usage telemetry",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "check/report errors, quota consumption and service enablement",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Service Infrastructure delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Service Infrastructure governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "managed service config, producer project, consumer enablement, quota and check/report integration",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "service producer identity and consumer project principals",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "producer organization versus consumer project/service perimeter",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "check/report errors, quota consumption and service enablement"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Service Infrastructure / Service Management",
+          "detail": "Google Cloud Console → Service Infrastructure / Service Management; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set managed service config, producer project, consumer enablement, quota and check/report integration."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure service producer identity and consumer project principals; validate producer organization versus consumer project/service perimeter."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify check/report errors, quota consumption and service enablement before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for service producer identity and consumer project principals; keep administrative and runtime identities separate.",
+        "Protect producer organization versus consumer project/service perimeter with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to managed service configuration, consumer project and service control record."
+      ],
+      "operations": [
+        "Monitor check/report errors, quota consumption and service enablement and alert on user-impacting deviation rather than raw activity alone.",
+        "Version managed service config, producer project, consumer enablement, quota and check/report integration; promote changes through test and rollback checkpoints.",
+        "For Service Infrastructure, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "this platform is for service producers; it is not the same as merely enabling an existing Google API",
+        "Confirm regional availability, quotas and lifecycle limits for managed service configuration, consumer project and service control record before standardizing the design.",
+        "The Service Infrastructure managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "control-plane calls and the producer's own backend/telemetry infrastructure.",
+        "For Service Infrastructure, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Service Infrastructure projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Service Infrastructure — Foundational control-plane services used by API producers to manage service configuration, consumer projects, quotas and usage.",
+        "API Gateway or Apigee when the need is request proxying rather than producer control-plane integration — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Service Infrastructure",
+          "fit": "Foundational control-plane services used by API producers to manage service configuration, consumer projects, quotas and usage."
+        },
+        {
+          "name": "API Gateway or Apigee when the need is request proxying rather than producer control-plane integration",
+          "fit": "API Gateway or Apigee when the need is request proxying rather than producer control-plane integration"
+        }
+      ],
+      "memoryHooks": [
+        "managed service configuration, consumer project and service control record → Service Management and Service Control for enablement, quota and accounting → authorized API consumption with usage telemetry.",
+        "this platform is for service producers; it is not the same as merely enabling an existing Google API",
+        "Certification clue: Foundational control-plane services used by API producers to manage service configuration, consumer projects, quotas and usage."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Service Infrastructure documentation",
+          "url": "https://docs.cloud.google.com/service-infrastructure/docs"
+        }
+      ]
+    },
+    {
+      "slug": "software-supply-chain-security",
+      "summary": "A set of Google Cloud controls for protecting source-to-build-to-deploy integrity with provenance, vulnerability analysis and policy enforcement.",
+      "concepts": [
+        "source revision, build provenance, artifact digest, attestation and deploy policy form the core resource model for Software supply chain security.",
+        "reviewed source and hermetic/reproducible build inputs enter the service; SLSA-aligned build evidence, scanning, signing and Binary Authorization govern processing.",
+        "verified artifact admitted to a trusted runtime is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Software supply chain security when the requirement centers on a set of Google Cloud controls for protecting source-to-build-to-deploy integrity with provenance, vulnerability analysis and policy enforcement.",
+        "It fits architectures where trust boundaries between SCM, build pool, registry and runtime must be explicit and operationally owned.",
+        "Prefer third-party platforms when cross-cloud policy and ecosystem coverage dominate when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Software supply chain security flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Software supply chain security architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "reviewed source and hermetic/reproducible build inputs",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Software supply chain security",
+              "items": [
+                "source revision, build provenance, artifact digest, attestation and deploy policy",
+                "SLSA-aligned build evidence, scanning, signing and Binary Authorization"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "verified artifact admitted to a trusted runtime",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "provenance coverage, critical vulnerabilities, policy denials and unsigned deployments",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Software supply chain security delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Software supply chain security governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "source connection, build provenance, Artifact Analysis, attestor and Binary Authorization policy",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "separate source, builder, attestor and deployer identities",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "trust boundaries between SCM, build pool, registry and runtime",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "provenance coverage, critical vulnerabilities, policy denials and unsigned deployments"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Security → Software supply chain",
+          "detail": "Google Cloud Console → Security → Software supply chain; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set source connection, build provenance, Artifact Analysis, attestor and Binary Authorization policy."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure separate source, builder, attestor and deployer identities; validate trust boundaries between SCM, build pool, registry and runtime."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify provenance coverage, critical vulnerabilities, policy denials and unsigned deployments before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for separate source, builder, attestor and deployer identities; keep administrative and runtime identities separate.",
+        "Protect trust boundaries between SCM, build pool, registry and runtime with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to source revision, build provenance, artifact digest, attestation and deploy policy."
+      ],
+      "operations": [
+        "Monitor provenance coverage, critical vulnerabilities, policy denials and unsigned deployments and alert on user-impacting deviation rather than raw activity alone.",
+        "Version source connection, build provenance, Artifact Analysis, attestor and Binary Authorization policy; promote changes through test and rollback checkpoints.",
+        "For Software supply chain security, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "scanning alone is not supply-chain security; identity separation and verified provenance are required",
+        "Confirm regional availability, quotas and lifecycle limits for source revision, build provenance, artifact digest, attestation and deploy policy before standardizing the design.",
+        "The Software supply chain security managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "build/scanning/registry/attestation/logging plus runtime costs.",
+        "For Software supply chain security, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Software supply chain security projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Software supply chain security — A set of Google Cloud controls for protecting source-to-build-to-deploy integrity with provenance, vulnerability analysis and policy enforcement.",
+        "third-party platforms when cross-cloud policy and ecosystem coverage dominate — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Software supply chain security",
+          "fit": "A set of Google Cloud controls for protecting source-to-build-to-deploy integrity with provenance, vulnerability analysis and policy enforcement."
+        },
+        {
+          "name": "third-party platforms when cross-cloud policy and ecosystem coverage dominate",
+          "fit": "third-party platforms when cross-cloud policy and ecosystem coverage dominate"
+        }
+      ],
+      "memoryHooks": [
+        "source revision, build provenance, artifact digest, attestation and deploy policy → SLSA-aligned build evidence, scanning, signing and Binary Authorization → verified artifact admitted to a trusted runtime.",
+        "scanning alone is not supply-chain security; identity separation and verified provenance are required",
+        "Certification clue: A set of Google Cloud controls for protecting source-to-build-to-deploy integrity with provenance, vulnerability analysis and policy enforcement."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Software supply chain security documentation",
+          "url": "https://docs.cloud.google.com/software-supply-chain-security/docs"
+        }
+      ]
+    },
+    {
+      "slug": "workflows",
+      "summary": "A serverless orchestration service that executes YAML/JSON-defined steps across Google Cloud and HTTP APIs with state, retries and parallel branches.",
+      "concepts": [
+        "workflow definition, execution, step and callback form the core resource model for Workflows.",
+        "API request, event, schedule or manual execution arguments enter the service; expressions, conditions, loops, retries, parallel steps and connectors govern processing.",
+        "coordinated API calls plus durable execution state/result is the managed result, while dependent runtimes and data stores retain their own lifecycle."
+      ],
+      "applicationFit": [
+        "Choose Workflows when the requirement centers on a serverless orchestration service that executes YAML/JSON-defined steps across Google Cloud and HTTP APIs with state, retries and parallel branches.",
+        "It fits architectures where orchestration project versus called service/project authorization must be explicit and operationally owned.",
+        "Prefer Application Integration for visual enterprise/SaaS integration; Cloud Composer for data DAG scheduling when that neighboring requirement is the dominant design constraint."
+      ],
+      "architectureFlows": [
+        {
+          "title": "Production Workflows flow",
+          "note": "Shows the service-specific request or delivery path and its trust boundaries.",
+          "reference": "Workflows architecture",
+          "steps": [
+            {
+              "title": "Producer / client",
+              "items": [
+                "API request, event, schedule or manual execution arguments",
+                "Authenticated entry"
+              ]
+            },
+            {
+              "title": "Workflows",
+              "items": [
+                "workflow definition, execution, step and callback",
+                "expressions, conditions, loops, retries, parallel steps and connectors"
+              ]
+            },
+            {
+              "title": "Managed output",
+              "items": [
+                "coordinated API calls plus durable execution state/result",
+                "Failure/retry path"
+              ]
+            },
+            {
+              "title": "Operations",
+              "items": [
+                "execution count, step latency, retries, failures and callback wait",
+                "Audit evidence"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Governed Workflows delivery",
+          "note": "Separates identity, configuration and runtime responsibilities for production use.",
+          "reference": "Workflows governance",
+          "steps": [
+            {
+              "title": "Configuration",
+              "items": [
+                "region, YAML/JSON definition, service account, connectors, retry/catch and trigger",
+                "Versioned change"
+              ]
+            },
+            {
+              "title": "Identity",
+              "items": [
+                "workflow service account and execution invoker",
+                "Least privilege"
+              ]
+            },
+            {
+              "title": "Boundary",
+              "items": [
+                "orchestration project versus called service/project authorization",
+                "Encryption / network"
+              ]
+            },
+            {
+              "title": "Release",
+              "items": [
+                "Test and promote",
+                "execution count, step latency, retries, failures and callback wait"
+              ]
+            }
+          ]
+        }
+      ],
+      "consoleSteps": [
+        {
+          "title": "Open Workflows",
+          "detail": "Google Cloud Console → Workflows; select the intended project and supported region."
+        },
+        {
+          "title": "Configure the service",
+          "detail": "Set region, YAML/JSON definition, service account, connectors, retry/catch and trigger."
+        },
+        {
+          "title": "Apply identity and boundaries",
+          "detail": "Configure workflow service account and execution invoker; validate orchestration project versus called service/project authorization."
+        },
+        {
+          "title": "Test and observe",
+          "detail": "Run a representative flow and verify execution count, step latency, retries, failures and callback wait before production promotion."
+        }
+      ],
+      "security": [
+        "Grant only the roles needed for workflow service account and execution invoker; keep administrative and runtime identities separate.",
+        "Protect orchestration project versus called service/project authorization with appropriate network, encryption, secret and organization-policy controls.",
+        "Retain Admin Activity and relevant data-access evidence for changes to workflow definition, execution, step and callback."
+      ],
+      "operations": [
+        "Monitor execution count, step latency, retries, failures and callback wait and alert on user-impacting deviation rather than raw activity alone.",
+        "Version region, YAML/JSON definition, service account, connectors, retry/catch and trigger; promote changes through test and rollback checkpoints.",
+        "For Workflows, document ownership of quota, dependency failure, regional recovery and incident response."
+      ],
+      "watchPoints": [
+        "Workflows orchestrates calls but does not host business code or provide queue-style throughput control",
+        "Confirm regional availability, quotas and lifecycle limits for workflow definition, execution, step and callback before standardizing the design.",
+        "The Workflows managed control plane does not take ownership of application data quality, idempotency or downstream authorization."
+      ],
+      "cost": [
+        "executed steps, external API calls, logging and called services.",
+        "For Workflows, include dependent compute, storage, logging and network transfer instead of evaluating its meter alone.",
+        "Tag Workflows projects/resources and track cost per successful delivery or transaction."
+      ],
+      "alternatives": [
+        "Workflows — A serverless orchestration service that executes YAML/JSON-defined steps across Google Cloud and HTTP APIs with state, retries and parallel branches.",
+        "Application Integration for visual enterprise/SaaS integration; Cloud Composer for data DAG scheduling — choose when its stated capability is the primary requirement."
+      ],
+      "comparisons": [
+        {
+          "name": "Workflows",
+          "fit": "A serverless orchestration service that executes YAML/JSON-defined steps across Google Cloud and HTTP APIs with state, retries and parallel branches."
+        },
+        {
+          "name": "Application Integration",
+          "fit": "Application Integration for visual enterprise/SaaS integration; Cloud Composer for data DAG scheduling"
+        }
+      ],
+      "memoryHooks": [
+        "workflow definition, execution, step and callback → expressions, conditions, loops, retries, parallel steps and connectors → coordinated API calls plus durable execution state/result.",
+        "Workflows orchestrates calls but does not host business code or provide queue-style throughput control",
+        "Certification clue: A serverless orchestration service that executes YAML/JSON-defined steps across Google Cloud and HTTP APIs with state, retries and parallel branches."
+      ],
+      "relatedServices": [],
+      "sources": [
+        {
+          "title": "Workflows documentation",
+          "url": "https://docs.cloud.google.com/workflows/docs"
+        }
+      ]
+    }
+  ]
+}

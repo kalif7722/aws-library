@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "02",
+  "module_title": "Managing Data for Generative AI",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original 2048×1152 site-ready slide images 135–138 visually inspected from Module 02 redesign source ZIP. Match to real diagrams and validate live R2 originals.",
+  "part_id": "18",
+  "part_title": "S3 Access Logging, Logging-Loop Protection and VPC Access Points",
+  "script_revision": "2026-11-12-m02-p18-visual-aligned-v1",
+  "scenes": [
+    {
+      "slide": 135,
+      "title": "S3 Server Access Logging",
+      "narration": "Let's look at how S3 records access activity. The slide shows clients issuing GET, PUT and DELETE requests against a source bucket on the left. For supported requests, S3 server access logging can generate log records and deliver them to a separate destination bucket in the same AWS Region. Follow the orange request arrows into the green source bucket, then the dashed orange delivery line to the purple log bucket. This separation is intentional: the original bucket contains the business objects, while the destination holds records of access activity that can later be analysed. The bottom cards describe security investigation, troubleshooting, and reporting as uses for these logs. There is a timing caveat: server access log delivery is best effort and not real time. Do not assume that an absent log entry always proves a request never happened. Keep the destination bucket secure, select a useful key prefix, and apply retention rules to prevent unnecessary storage growth."
+    },
+    {
+      "slide": 136,
+      "title": "Avoid S3 Logging Loops",
+      "narration": "The left-hand diagram highlights a dangerous S3 server access logging configuration: sending a bucket's access logs back into the same bucket. Each log delivery is itself an S3 write request. That request can produce another log entry, causing a repeating cycle and rapidly growing log volume. The red cross identifies the self-logging pattern we must avoid. Now compare the right-hand diagram. A source bucket sends access logs to a separate dedicated logging bucket. The log destination should not send its own access logs back to itself or into another configuration that recreates a loop. In addition to separating the buckets, configure appropriate ownership, permissions, object prefixes, monitoring and lifecycle policies so logging remains sustainable. Notice the title's operational focus: logging is useful for accountability only if its own configuration does not become a source of cost or noise. This design choice belongs in the architecture review, not as a cleanup task after deployment."
+    },
+    {
+      "slide": 137,
+      "title": "S3 Access Points",
+      "narration": "This slide starts with one shared Amazon S3 bucket named company-data, then branches into three application-specific access points. Follow the paths from finance, sales and analytics applications. Each application has its own access-point endpoint and an access-point policy designed for its data needs. Finance can be limited to a finance prefix, sales to a sales prefix, and analytics can receive read-only access to the appropriate data. The purple, cyan and orange outlines help separate those policy boundaries visually. Now look at the blue note across the bottom: the underlying bucket permissions still apply. An access point does not bypass other relevant access policies or automatically grant broad access just because an endpoint exists. This pattern is valuable when a large shared bucket serves many teams with different policies. Instead of one increasingly complex access policy, access points can make distinct application entry points easier to manage and review."
+    },
+    {
+      "slide": 138,
+      "title": "VPC-Origin S3 Access Point",
+      "narration": "Our final security slide shows a VPC-origin S3 access point. Start with the EC2 workload on the far left inside a VPC. The next box is an S3 VPC endpoint, which provides a network path toward the S3 access point configured for VPC origin. Follow the cyan arrows through the VPC-origin access point to the S3 bucket. The three lower policy boxes matter: the endpoint policy, the access point policy and the bucket policy must all permit the relevant request. Having a network route is not the same as receiving authorization. The purple banner states the design goal: this access point can only be accessed through a VPC path, subject to its configuration. This can help restrict application access to objects from approved private network environments. Before deploying, confirm the correct endpoint, DNS or service routing behaviour, IAM permissions and policies for the workload. Next we'll use more visual, console-style walkthroughs to practise processing enterprise data."
+    }
+  ]
+}

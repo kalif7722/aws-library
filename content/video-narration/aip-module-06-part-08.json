@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "06",
+  "module_title": "More Tools for Building AI Applications",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "Original R2 slides 49–55 audited and narration covers exact SQS flow, autoscaling sequence, AI front end and EventBridge policy diagrams.",
+  "part_id": "08",
+  "part_title": "SQS Operations, Amplify and EventBridge Routing",
+  "script_revision": "2026-11-12-m06-p08-r2-audited-v3",
+  "scenes": [
+    {
+      "slide": 49,
+      "title": "Produce and consume an SQS message",
+      "narration": "This slide walks through the full life of one SQS message. Follow the five stages across the top. First, a producer sends a JSON job request to the queue. SQS durably stores it. A consumer receives the message and, during the visibility timeout, other consumers normally don't see that same in-flight message. The worker processes the job; in this example it might generate a summary. Only after success should it call DeleteMessage, using the receipt handle from the receive operation. Notice the two JSON examples: the input contains the job identifier and requested task, while the output records that the job completed. Now follow the failure path at the bottom. If the worker crashes or the visibility timeout expires before deletion, the message may become visible and be received again. That is why message handlers must tolerate retries. After repeated failures, a redrive policy can move a poison message into a dead-letter queue for investigation. Be careful with long AI jobs: choose an appropriate visibility timeout or extend it during processing. The key lesson is that receipt, successful processing and deletion are separate actions."
+    },
+    {
+      "slide": 50,
+      "title": "Scale workers from queue depth",
+      "narration": "This architecture shows how an SQS backlog can drive a fleet of workers. On the left, users submit jobs through a web tier into SQS. In the middle, EC2 workers in an Auto Scaling group poll and process those jobs. CloudWatch monitors a queue-depth metric, such as backlog per worker, and scaling policies adjust capacity. Now follow the five snapshots along the bottom. At steady state, the queue is empty and only two workers run. A burst of one hundred jobs arrives, producing a backlog. The group scales outward to ten workers so more messages can be processed concurrently. After the jobs drain, the group can scale back toward two workers instead of paying for unused capacity. Notice the time lag: jobs can accumulate before new instances become ready, so scaling doesn't instantaneously remove the backlog. The slide's important note asks you to choose a backlog-per-worker target and maximum capacity based on job duration and acceptable waiting time. For AI processing, also consider Bedrock or downstream API quotas so more workers don't overwhelm the service they call. Scaling should reflect both queue demand and downstream capacity."
+    },
+    {
+      "slide": 51,
+      "title": "Secure an SQS-backed AI job queue",
+      "narration": "This slide applies security controls to an AI work queue. Follow the main path: a producer submits a job message to SQS; an authorised consumer receives it, processes the AI task and writes the result to an application store such as S3 or a database. Network connections use HTTPS, which protects messages in transit. At rest, the queue can use server-side encryption, including a customer-managed KMS key when that option is chosen. Look at the permissions shown under each component. The producer needs only the right to send messages to its particular queue. The consumer requires receive and delete permissions for the same queue, and possibly change-message-visibility permission for longer work. IAM identity policies and SQS resource policies need to agree on who may interact with it. With a customer-managed KMS key, the relevant principals and key policy must also permit the necessary cryptographic operations. The failure branch directs repeatedly failing jobs to a dead-letter queue for controlled investigation. Don't put secrets or unnecessary sensitive prompt data directly in a job message. Prefer references to secured objects and apply least privilege at every hop."
+    },
+    {
+      "slide": 52,
+      "title": "Amplify for a generative AI front end",
+      "narration": "This slide separates the user interface from generative AI inference. Start on the left with a developer committing front-end code. Amplify builds and hosts the web application, which users then open in a browser. The front end authenticates users through an appropriate identity service and calls a protected API. Behind that API, Lambda handles application logic and calls Amazon Bedrock for model inference. Follow the example in the bottom half. A user asks an AI travel assistant for a three-day food-focused itinerary in Kyoto. The browser displays a structured itinerary with places such as Nishiki Market, Gion and Arashiyama after the backend returns the result. The key distinction is where each responsibility lives. Amplify handles front-end development and hosting, not foundation-model execution. The browser should not contain privileged Bedrock credentials or call sensitive backends without authorisation. API Gateway and Lambda can validate the request, enforce permissions and shape the response for display. An engaging front end matters, but it must be paired with a secure and observable inference path. That's the architecture this slide is illustrating."
+    },
+    {
+      "slide": 53,
+      "title": "EventBridge schedule versus event pattern",
+      "narration": "This side-by-side slide compares two mechanisms that can both trigger work but answer different questions. On the left is EventBridge Scheduler. It invokes a target such as Lambda according to a cron expression or rate schedule. The example runs a periodic task every five minutes, whether or not any specific business event has happened. On the right is an EventBridge rule attached to an event bus. It listens for events from AWS services or applications and matches selected fields before routing matching events to a target. The JSON example contains an S3 Object Created detail type and a bucket-and-object reference. The rule can use source and detail-type fields to decide which events are relevant. So Scheduler answers, 'When should this run?' A rule answers, 'Which event just occurred, and should this target respond?' Don't use a time-based schedule when you actually need immediate event-driven processing, or assume that matching an event is equivalent to running at a fixed time. Both mechanisms have delivery and retry considerations, so the target handler should be safe to invoke more than once."
+    },
+    {
+      "slide": 54,
+      "title": "Route events through EventBridge buses",
+      "narration": "This slide shows how EventBridge separates event producers from downstream consumers. Look at the three event-source categories on the left: AWS services, custom application events and supported partner events. Their events enter the appropriate default, custom or partner bus. Rules on those buses inspect event content and send matching messages to targets such as Lambda, SQS or Step Functions. The centre example is a model-job-completed event with job ID, success status, source and detail type. The rule pattern matches fields such as source myapp and detail-type model-job-completed. A Lambda target could post-process the result, SQS could buffer additional work, or Step Functions could orchestrate a follow-up workflow. The producer need not know each consumer's implementation. At the bottom, optional archive and replay support lets a team retain matching events and replay them later where configured, for debugging or recovery. A rule only routes events that actually match its pattern; mismatched field names or detail types silently prevent a target from being selected. This is why inspecting the event envelope matters as much as examining the destination."
+    },
+    {
+      "slide": 55,
+      "title": "Cross-account EventBridge access",
+      "narration": "The final slide shows an event crossing an AWS account boundary. Begin in producer Account A, where an application sends an event through EventBridge using PutEvents. The receiving event bus lives in Account B. The arrow crosses accounts only if permissions allow it. First, the producer's IAM identity policy must allow the PutEvents action toward the intended receiver bus. Second, the receiving bus has a resource policy that permits the producer account or authorised principal to send events. Those are different sides of the trust relationship. After the event reaches Account B, a rule filters it using fields such as source app.orders and an Order event type. Only matching events continue to the configured target, perhaps Lambda, SNS or SQS. Finally, the target needs its own invocation permissions or resource policy appropriate to the service. Allowing a producer to write to the bus does not automatically grant the bus permission to invoke every target. The diagram is teaching three distinct security checks: send permission, bus acceptance, and target delivery. That separation is essential for secure multi-account event architectures."
+    }
+  ]
+}

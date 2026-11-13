@@ -1,0 +1,12 @@
+import {reviewedNext01} from "./reviewed-next-01";
+import {reviewedNext02} from "./reviewed-next-02";
+import {reviewedNext03} from "./reviewed-next-03";
+import {reviewedNext04} from "./reviewed-next-04";
+import {reviewedNext05} from "./reviewed-next-05";
+import {reviewedNext06} from "./reviewed-next-06";
+import {reviewedNext07} from "./reviewed-next-07";
+import {reviewedNext08} from "./reviewed-next-08";
+import {reviewedNext09} from "./reviewed-next-09";
+import {reviewedNext10} from "./reviewed-next-10";
+export const reviewedNextBatches=[reviewedNext01,reviewedNext02,reviewedNext03,reviewedNext04,reviewedNext05,reviewedNext06,reviewedNext07,reviewedNext08,reviewedNext09,reviewedNext10];
+export const reviewedNextArchitectures=Object.assign({},...reviewedNextBatches);

@@ -1,0 +1,110 @@
+/**
+ * AWS Management Console service directory.
+ *
+ * "implemented" means a service has a dedicated simulator screen today.
+ * Catalog-only entries can be pinned from search, but are clearly marked as
+ * not yet simulated so the UI never implies that a placeholder is functional.
+ */
+export type AwsServiceDirectoryEntry = {
+  name: string;
+  category: string;
+  icon: string;
+  description: string;
+  count: string;
+  implemented: boolean;
+  screen?: string;
+  kind?: "service" | "console-page";
+};
+
+export const AWS_SERVICE_DIRECTORY: AwsServiceDirectoryEntry[] = [
+  { name: "EC2", category: "Compute", icon: "▣", description: "Virtual servers in the cloud", count: "1 instance", implemented: true, screen: "EC2 Dashboard" },
+  { name: "VPC", category: "Networking & Content Delivery", icon: "◇", description: "Isolated virtual networks and routing", count: "1 VPC", implemented: true, screen: "VPCs" },
+  { name: "Security Groups", category: "Networking & Security", icon: "⬡", description: "Stateful traffic controls for resources", count: "4 security groups", implemented: true, screen: "Security Groups", kind: "console-page" },
+  { name: "Route Tables", category: "Networking & Security", icon: "⇄", description: "Subnet routing configuration", count: "2 route tables", implemented: true, screen: "Route Tables", kind: "console-page" },
+  { name: "Network ACLs", category: "Networking & Security", icon: "▤", description: "Stateless subnet traffic controls", count: "1 network ACL", implemented: true, screen: "Network ACLs", kind: "console-page" },
+  { name: "Load Balancers", category: "Networking & Content Delivery", icon: "⇋", description: "Distribute application traffic", count: "1 load balancer", implemented: true, screen: "Load Balancers", kind: "console-page" },
+  { name: "Target Groups", category: "Networking & Content Delivery", icon: "◎", description: "Register targets for load balancers", count: "2 target groups", implemented: true, screen: "Target Groups", kind: "console-page" },
+  { name: "S3", category: "Storage", icon: "▰", description: "Object storage with sample object operations", count: "4 buckets", implemented: true, screen: "S3" },
+  { name: "IAM", category: "Security, Identity & Compliance", icon: "♙", description: "Users, roles, policies, and permissions", count: "3 roles · sample policies", implemented: true, screen: "IAM" },
+  { name: "RDS", category: "Database", icon: "▤", description: "Managed relational databases", count: "1 database", implemented: true, screen: "RDS" },
+  { name: "Lambda", category: "Compute", icon: "λ", description: "Run code without managing servers", count: "3 functions", implemented: true, screen: "Lambda" },
+  { name: "CloudWatch", category: "Management & Governance", icon: "◷", description: "Metrics, logs, alarms, and events", count: "4 linked alarms", implemented: true, screen: "CloudWatch" },
+  { name: "Route 53", category: "Networking & Content Delivery", icon: "⌘", description: "DNS and health checks", count: "2 hosted zones", implemented: true, screen: "Route 53" },
+  { name: "DynamoDB", category: "Database", icon: "▦", description: "Managed NoSQL database", count: "2 tables", implemented: true, screen: "DynamoDB" },
+  { name: "Cost Explorer", category: "Cloud Financial Management", icon: "$", description: "Explore usage and spending", count: "Current month", implemented: true, screen: "Cost Explorer" },
+  { name: "Reachability Analyzer", category: "Network & Security", icon: "⌁", description: "Analyze paths between network resources", count: "Available", implemented: true, screen: "Reachability Analyzer", kind: "console-page" },
+  { name: "CloudTrail", category: "Management & Governance", icon: "≋", description: "Audit API activity and account events", count: "Event history", implemented: true, screen: "CloudTrail" },
+  { name: "Elastic Load Balancing", category: "Networking & Content Delivery", icon: "⇋", description: "Application, network, and gateway load balancers", count: "Catalog entry", implemented: false },
+  { name: "Auto Scaling", category: "Compute", icon: "↗", description: "Scale compute capacity to demand", count: "Catalog entry", implemented: false },
+  { name: "Systems Manager", category: "Management & Governance", icon: "⚙", description: "Operate and manage cloud resources", count: "Catalog entry", implemented: false },
+  { name: "AWS Config", category: "Management & Governance", icon: "☷", description: "Track resource configuration and compliance", count: "Catalog entry", implemented: false },
+  { name: "Secrets Manager", category: "Security, Identity & Compliance", icon: "🔑", description: "Store and rotate application secrets", count: "Catalog entry", implemented: false },
+  { name: "KMS", category: "Security, Identity & Compliance", icon: "⚿", description: "Create and manage encryption keys", count: "Catalog entry", implemented: false },
+  { name: "ECS", category: "Containers", icon: "▦", description: "Run and manage containers", count: "Catalog entry", implemented: false },
+  { name: "EKS", category: "Containers", icon: "◈", description: "Managed Kubernetes", count: "Catalog entry", implemented: false },
+  { name: "ECR", category: "Containers", icon: "▤", description: "Store and distribute container images", count: "Catalog entry", implemented: false },
+  { name: "Step Functions", category: "Application Integration", icon: "⌘", description: "Coordinate distributed workflows", count: "Catalog entry", implemented: false },
+  { name: "SQS", category: "Application Integration", icon: "☰", description: "Managed message queues", count: "Catalog entry", implemented: false },
+  { name: "SNS", category: "Application Integration", icon: "◉", description: "Managed pub/sub notifications", count: "Catalog entry", implemented: false },
+  { name: "EventBridge", category: "Application Integration", icon: "↔", description: "Route events between services", count: "Catalog entry", implemented: false },
+  { name: "Glue", category: "Analytics", icon: "⋈", description: "Serverless data integration and ETL", count: "1 ETL job", implemented: true, screen: "Glue" },
+  { name: "Athena", category: "Analytics", icon: "⌕", description: "Query data in Amazon S3", count: "Catalog entry", implemented: false },
+  { name: "Redshift", category: "Analytics", icon: "▥", description: "Cloud data warehouse", count: "Catalog entry", implemented: false },
+  { name: "OpenSearch Service", category: "Analytics", icon: "⌕", description: "Search and analyze application data", count: "Catalog entry", implemented: false },
+  { name: "ElastiCache", category: "Database", icon: "▧", description: "In-memory caching", count: "Catalog entry", implemented: false },
+  { name: "EFS", category: "Storage", icon: "▤", description: "Elastic shared file storage", count: "Catalog entry", implemented: false },
+  { name: "FSx", category: "Storage", icon: "▤", description: "Managed file systems", count: "Catalog entry", implemented: false },
+  { name: "CloudFront", category: "Networking & Content Delivery", icon: "◉", description: "Content delivery network", count: "Catalog entry", implemented: false },
+  { name: "WAF", category: "Security, Identity & Compliance", icon: "⛨", description: "Protect web applications from common attacks", count: "Catalog entry", implemented: false },
+  { name: "GuardDuty", category: "Security, Identity & Compliance", icon: "◉", description: "Detect threats in AWS accounts and workloads", count: "Catalog entry", implemented: false },
+  { name: "Security Hub", category: "Security, Identity & Compliance", icon: "⛨", description: "Centralize security findings and posture", count: "Catalog entry", implemented: false },
+  { name: "Macie", category: "Security, Identity & Compliance", icon: "◈", description: "Discover and protect sensitive data in S3", count: "Catalog entry", implemented: false },
+  { name: "Organizations", category: "Management & Governance", icon: "▣", description: "Manage accounts and organizational policies", count: "Catalog entry", implemented: false },
+  { name: "Control Tower", category: "Management & Governance", icon: "⌂", description: "Govern multi-account AWS environments", count: "Catalog entry", implemented: false },
+  { name: "Backup", category: "Storage", icon: "↻", description: "Centralize and automate backups", count: "Catalog entry", implemented: false },
+  { name: "Bedrock", category: "Artificial Intelligence", icon: "✧", description: "Explore foundation models, playground inference, knowledge bases, and guardrails", count: "2 models · 1 knowledge base", implemented: true, screen: "Bedrock" },
+  { name: "SageMaker AI", category: "Artificial Intelligence", icon: "✧", description: "Manage model artifacts, training jobs, and inference endpoints", count: "1 model · 1 endpoint", implemented: true, screen: "SageMaker AI" },
+
+  { name: "CloudFormation", category: "Management & Governance", icon: "⌘", description: "Provision infrastructure as code", count: "Catalog entry", implemented: false },
+  { name: "Transit Gateway", category: "Networking & Content Delivery", icon: "◇", description: "Connect VPCs and on-premises networks", count: "Catalog entry", implemented: false },
+  { name: "Direct Connect", category: "Networking & Content Delivery", icon: "⇄", description: "Dedicated network connectivity to AWS", count: "Catalog entry", implemented: false },
+  { name: "Site-to-Site VPN", category: "Networking & Content Delivery", icon: "⇄", description: "Encrypted connectivity to a VPC", count: "Catalog entry", implemented: false },
+  { name: "VPC Lattice", category: "Networking & Content Delivery", icon: "◇", description: "Secure service-to-service communication", count: "Catalog entry", implemented: false },
+  { name: "PrivateLink", category: "Networking & Content Delivery", icon: "◇", description: "Private access to services and VPC endpoints", count: "Catalog entry", implemented: false },
+  { name: "Network Firewall", category: "Networking & Content Delivery", icon: "⛨", description: "Managed network traffic inspection and filtering", count: "Catalog entry", implemented: false },
+  { name: "Global Accelerator", category: "Networking & Content Delivery", icon: "↗", description: "Improve global application availability", count: "Catalog entry", implemented: false },
+  { name: "Certificate Manager", category: "Security, Identity & Compliance", icon: "▤", description: "Provision and manage TLS certificates", count: "Catalog entry", implemented: false },
+  { name: "IAM Identity Center", category: "Security, Identity & Compliance", icon: "♙", description: "Central workforce access to AWS accounts and apps", count: "Catalog entry", implemented: false },
+  { name: "Inspector", category: "Security, Identity & Compliance", icon: "⛨", description: "Automated workload vulnerability management", count: "Catalog entry", implemented: false },
+  { name: "Detective", category: "Security, Identity & Compliance", icon: "⌕", description: "Investigate security findings and activity", count: "Catalog entry", implemented: false },
+  { name: "Firewall Manager", category: "Security, Identity & Compliance", icon: "⛨", description: "Centrally manage firewall rules", count: "Catalog entry", implemented: false },
+  { name: "Trusted Advisor", category: "Management & Governance", icon: "✓", description: "Review cost, security, performance, and resilience", count: "Catalog entry", implemented: false },
+  { name: "Health Dashboard", category: "Management & Governance", icon: "♥", description: "View AWS service events affecting resources", count: "Catalog entry", implemented: false },
+  { name: "Service Quotas", category: "Management & Governance", icon: "▤", description: "View and manage service quotas", count: "Catalog entry", implemented: false },
+  { name: "Resource Explorer", category: "Management & Governance", icon: "⌕", description: "Search resources across Regions", count: "Catalog entry", implemented: false },
+  { name: "X-Ray", category: "Management & Governance", icon: "⌁", description: "Trace requests across distributed applications", count: "Catalog entry", implemented: false },
+  { name: "Kinesis", category: "Analytics", icon: "≋", description: "Collect and process streaming data", count: "Catalog entry", implemented: false },
+  { name: "Lake Formation", category: "Analytics", icon: "▤", description: "Build and govern data lakes", count: "Catalog entry", implemented: false },
+  { name: "EMR", category: "Analytics", icon: "▦", description: "Run big data frameworks", count: "Catalog entry", implemented: false },
+  { name: "QuickSight", category: "Analytics", icon: "▥", description: "Business intelligence and dashboards", count: "Catalog entry", implemented: false },
+  { name: "DocumentDB", category: "Database", icon: "▤", description: "Managed document database", count: "Catalog entry", implemented: false },
+  { name: "Neptune", category: "Database", icon: "◇", description: "Managed graph database", count: "Catalog entry", implemented: false },
+  { name: "Aurora", category: "Database", icon: "▤", description: "Managed relational database", count: "Catalog entry", implemented: false },
+  { name: "Database Migration Service", category: "Database", icon: "⇄", description: "Migrate databases to AWS", count: "Catalog entry", implemented: false },
+  { name: "Elastic Beanstalk", category: "Compute", icon: "▣", description: "Deploy and manage web applications", count: "Catalog entry", implemented: false },
+  { name: "Batch", category: "Compute", icon: "▦", description: "Run batch computing jobs", count: "Catalog entry", implemented: false },
+  { name: "App Runner", category: "Compute", icon: "↗", description: "Run containerized web applications", count: "Catalog entry", implemented: false },
+  { name: "Fargate", category: "Containers", icon: "◈", description: "Serverless compute for containers", count: "Catalog entry", implemented: false },
+  { name: "API Gateway", category: "Application Integration", icon: "⇆", description: "Create and manage application APIs", count: "Catalog entry", implemented: false },
+  { name: "AppSync", category: "Application Integration", icon: "⇆", description: "Managed GraphQL and real-time APIs", count: "Catalog entry", implemented: false },
+  { name: "Amazon MQ", category: "Application Integration", icon: "⇄", description: "Managed message brokers", count: "Catalog entry", implemented: false },
+  { name: "Managed Workflows for Apache Airflow", category: "Application Integration", icon: "⌘", description: "Orchestrate data workflows", count: "Catalog entry", implemented: false },
+  { name: "Amazon Q Business", category: "Artificial Intelligence", icon: "✧", description: "Manage enterprise knowledge applications, indexes, and S3 data sources", count: "1 application · 1 index", implemented: true, screen: "Amazon Q Business" },
+  { name: "Amazon Q Developer", category: "Artificial Intelligence", icon: "✧", description: "Manage developer assistant subscriptions and user assignments", count: "3 users", implemented: true, screen: "Amazon Q Developer" },
+  { name: "Comprehend", category: "Artificial Intelligence", icon: "✧", description: "Run batch sentiment-analysis jobs over text stored in Amazon S3", count: "1 batch job", implemented: true, screen: "Comprehend" },
+  { name: "Textract", category: "Artificial Intelligence", icon: "✧", description: "Run document text detection and expense-analysis jobs", count: "1 document job", implemented: true, screen: "Textract" },
+  { name: "Amplify", category: "Front-End Web & Mobile", icon: "✧", description: "Build and host web and mobile applications", count: "Catalog entry", implemented: false },
+  { name: "Transfer Family", category: "Storage", icon: "⇄", description: "Managed SFTP and file transfer", count: "Catalog entry", implemented: false },
+  { name: "Storage Gateway", category: "Storage", icon: "▤", description: "Hybrid cloud storage integration", count: "Catalog entry", implemented: false },
+  { name: "DataSync", category: "Storage", icon: "⇄", description: "Move data between storage systems", count: "Catalog entry", implemented: false },
+];
