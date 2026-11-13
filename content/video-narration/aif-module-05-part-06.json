@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "06",
+  "part_title": "Monitoring, Pricing and Cost Optimization",
+  "output_prefix": "aif-module-05-part-06",
+  "script_revision": "2026-11-13-aif-m05-p06-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 25,
+      "title": "Amazon Bedrock & CloudWatch",
+      "narration": "Monitoring is necessary after deployment because latency, token usage, filtering and user outcomes can change over time. A security team sees unsafe response interventions. Explain runtime metrics versus optional prompt logging, privacy, and guardrail intervention counts. CloudWatch runtime metrics and optional model invocation logging are separate. The PDF's ContentFilteredCount example is historical; current AWS Guardrails documentation lists InvocationsIntervened in AWS/Bedrock/Guardrails to count interventions, with policy and input/output dimensions. The AWS/Bedrock namespace carries runtime metrics. Configure logs to CloudWatch Logs or S3 only when needed and protect sensitive prompt content. Check: should detailed prompt logs be enabled without reviewing privacy risks? No. Protect or avoid sensitive content."
+    },
+    {
+      "slide": 26,
+      "title": "Amazon Bedrock – Pricing",
+      "narration": "Bedrock pricing depends on the model and usage mode; understanding which resources are billed is part of architecture design. A company serves small sporadic batches of requests and periodic offline workloads. Explain token-based, batch, provisioned and customization pricing considerations. On-demand usage commonly charges text input/output tokens, embedding input, or generated images according to the model. Batch inference handles eligible offline files in S3 and may have a different price. Provisioned throughput reserves capacity for supported models; customization and deployed custom models add model-specific costs. Avoid relying on the source's historic fixed terms, universal model eligibility, or up-to-50% discount without checking current pricing. Check: is there one universal per-token price for Bedrock? No. Pricing depends on model, Region and operation."
+    },
+    {
+      "slide": 27,
+      "title": "Model Improvement Techniques Cost Order",
+      "narration": "Model improvement approaches differ in data needs, maintenance and operational effort, so evaluate the cheapest adequate option first. A company considers prompting, retrieval, instruction tuning and continued pretraining. Explain the effort ladder and why it is not a universal price ranking. A useful effort ladder is prompting → RAG → instruction tuning → continued pre-training → training from scratch. Prompting and RAG do not update FM weights, whereas customization does. The ladder is a rule of thumb, not a universal total-cost ranking: a large retrieval index can cost more than a small fine-tuning job, and changing facts favor RAG. Check: is training from scratch always cheaper than RAG after enough traffic? No. Compare the actual workload."
+    },
+    {
+      "slide": 28,
+      "title": "Bedrock – Cost savings",
+      "narration": "To manage model cost, understand what is consumed at each stage of a request and how model choice and workload shape affect the total. A team wants to reduce generated-response spending. Explain input/output tokens, model choice, batching, capacity, and why sampling controls are not price items. Input and output tokens are major text-inference cost drivers. Temperature, top-p and top-k do not directly create a price line item, although they can affect output length and usage indirectly. Prefer on-demand for variable traffic, batch for eligible offline work and provisioned throughput for suitable steady capacity; compare model-specific prices and quality before committing. Check: does changing temperature directly reduce a token price? No. Only resulting usage may change."
+    }
+  ]
+}

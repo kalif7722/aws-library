@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "01",
+  "part_title": "Fine-Tuning and Continued Pre-Training",
+  "output_prefix": "aif-module-05-part-01",
+  "script_revision": "2026-11-13-aif-m05-p01-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Amazon Bedrock – Fine-Tuning a Model",
+      "narration": "Start by separating the problem from the model customization technique. Fine-tuning changes supported pretrained model weights using task examples, rather than merely adding new instructions to one prompt. An invoice complaint may be routed to Billing after the model learns from labeled examples. Contrast an updated model with a prompt that merely describes the intended behavior. Fine-tuning updates a supported model's weights using a model-specific training format in Amazon S3. Check supported models, Regions, and current deployment options before promising on-demand access; provisioned throughput was the route emphasized in the source lecture. Check: if the task is stable ticket categorization, could a small curated fine-tuning dataset be appropriate? Yes, if the selected model supports it and evaluation confirms improvement."
+    },
+    {
+      "slide": 2,
+      "title": "Instruction-based Fine Tuning",
+      "narration": "Instruction tuning teaches a model an expected response pattern from labeled examples of what a user says and what the assistant should say. A help desk receives an invoice complaint and should label it Billing rather than Shipping. Explain why held-out test examples matter before deploying an adapted model. Instruction tuning uses labeled instruction–response pairs. For example, a ticket 'Invoice total is incorrect' should map to Billing; keep separate held-out pairs to check whether the adapted model generalizes. Check: should we test on the same examples used to tune the model? No. Keep a separate held-out set to measure generalization. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 3,
+      "title": "Continued Pre-training",
+      "narration": "Continued pre-training builds domain familiarity from a large corpus of unlabeled text, continuing the model's original language-learning process. A language model sees a specialist engineering manual full of new technical vocabulary. Explain why training on unlabeled passages differs from instruction-response examples. Continued pre-training uses a large unlabeled domain corpus and keeps training the language modeling objective, rather than teaching a fixed set of desired responses. Domain vocabulary such as industry acronyms may improve, but measure the result against held-out domain tasks. Check: does continued pre-training automatically teach a desired response format? No. It primarily adapts domain language knowledge. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    }
+  ]
+}

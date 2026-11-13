@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "04",
+  "part_title": "RAG, Knowledge Bases and Vector Search",
+  "output_prefix": "aif-module-05-part-04",
+  "script_revision": "2026-11-13-aif-m05-p04-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 15,
+      "title": "Amazon Bedrock – RAG & Knowledge Base",
+      "narration": "Retrieval-augmented generation, or RAG, gives a generative model relevant external source passages at the time of a question. An employee asks who owns a product. Explain why pulling the current owner from a source record is more reliable than baking the name into model weights. RAG retrieves relevant external data when a question arrives, combines source chunks with the prompt, and generates an answer without updating the FM weights. For 'Who manages this product?', retrieve the current support record rather than teaching the manager's name through fine-tuning. Retrieval may fail or return stale material, so validate the citation and answer. Check: does RAG update foundation-model weights? No. It adds retrieved information to the request context."
+    },
+    {
+      "slide": 16,
+      "title": "RAG architecture with S3 and a knowledge base",
+      "narration": "An AWS knowledge base has two linked workflows: preparing source documents for search, and retrieving relevant content when a question arrives. A company uploads manuals to an S3 bucket. Walk through chunking, embedding, retrieval and answer generation, and explain what syncing changes. Ingestion: Amazon S3 document → parsing/chunking → embedding model → configured vector store. Runtime: question → compatible query embedding → relevant chunks → model prompt → cited response. Source synchronization controls freshness; Retrieve and RetrieveAndGenerate expose distinct integration choices. Check: will uploading an updated file always instantly change retrieval? No. Synchronization and indexing must occur. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 17,
+      "title": "Amazon Bedrock – RAG Vector Databases",
+      "narration": "Vectors are numerical representations that support semantic similarity comparisons, but the storage and access architecture still matter. A product policy search uses document vectors. Distinguish a document bucket from a vector index and stress authorization checks. The source names Amazon OpenSearch Service, Amazon Aurora PostgreSQL, Amazon Neptune Analytics and Amazon S3 Vectors as possible AWS retrieval stores. Amazon S3 holding original documents is distinct from an S3 Vectors index holding embeddings. Similarity retrieves candidates; it does not prove they are correct or that the caller may see them. Check: does nearest-neighbor similarity establish access rights? No. Authorization remains separate. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 18,
+      "title": "RAG Vector Databases by AWS",
+      "narration": "Different vector database choices can support different kinds of workloads; there is no universally best store. A company already uses PostgreSQL and is choosing between vector-capable databases. Contrast integrated relational, search-focused, graph and scalable vector stores. Choose OpenSearch for search-rich queries, Aurora PostgreSQL when relational data and pgvector fit, Neptune Analytics for graph relationships, or S3 Vectors for vector indexing at scale. Supported Bedrock Knowledge Bases integrations, Regions, features, latency and cost differ; these are not interchangeable drop-in stores. Check: can every Bedrock integration use every vector store identically? No. Confirm current compatibility. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 19,
+      "title": "Amazon Bedrock – RAG Data Sources",
+      "narration": "Knowledge bases depend on both the source connectors they support and how securely the data can be ingested and retrieved. A knowledge base needs current internal documents from several systems. Explain why connector eligibility, permissions and operational mode must be checked. The source lists S3, Confluence, SharePoint, Salesforce and websites. As of September 30, 2026, AWS stopped creating new Confluence, SharePoint, Salesforce and Web Crawler connectors on customer-managed Knowledge Bases; existing connectors continue to ingest and retrieve. Managed Knowledge Base has a different supported connector set (including S3, Confluence, SharePoint, Google Drive, OneDrive and Web Crawler). Check service, Region, permissions and migration path before a lab. For customer-managed SharePoint, source permissions do not automatically restrict all callers with bedrock:Retrieve; design access controls explicitly. Check: is a source connector alone sufficient for secure retrieval? No. Check identity, permissions and source governance."
+    },
+    {
+      "slide": 20,
+      "title": "Amazon Bedrock – RAG – Use Cases",
+      "narration": "RAG can support many types of question answering, but a retrieved paragraph is evidence to inspect, not guaranteed truth. A support bot retrieves a policy passage. Explain why source citation improves traceability but does not replace factual checking or professional judgment. Customer support retrieves product specifications and troubleshooting guides; legal research retrieves statutes, precedents and opinions with expert review; healthcare Q&A retrieves clinical guidelines and research with qualified clinician review and patient-data privacy controls. A cited passage is useful evidence, not automatic verification of a safe answer. Check: should legal or health answers be accepted solely because a source is cited? No. Expert review may still be needed."
+    }
+  ]
+}

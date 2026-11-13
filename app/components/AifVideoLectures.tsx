@@ -18,6 +18,14 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "05":[
+    {id:"01",title:"Fine-Tuning and Continued Pre-Training",start:1,end:3},
+    {id:"02",title:"Training Datasets, Transfer Learning and Customization Choices",start:4,end:8},
+    {id:"03",title:"Evaluating Foundation Models and Business Outcomes",start:9,end:14},
+    {id:"04",title:"RAG, Knowledge Bases and Vector Search",start:15,end:20},
+    {id:"05",title:"Guardrails and Bedrock Agent Workflows",start:21,end:24},
+    {id:"06",title:"Monitoring, Pricing and Cost Optimization",start:25,end:28},
+  ],
   "03":[
     {id:"01",title:"AI Fundamentals, Use Cases and Rule-Based vs Learning Systems",start:1,end:5},
     {id:"02",title:"Deep Learning and Neural Networks Explained Visually",start:6,end:8},

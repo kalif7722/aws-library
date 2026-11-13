@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "03",
+  "part_title": "Evaluating Foundation Models and Business Outcomes",
+  "output_prefix": "aif-module-05-part-03",
+  "script_revision": "2026-11-13-aif-m05-p03-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "Amazon Bedrock – Evaluating a Model",
+      "narration": "Model evaluation asks whether a system is useful and reliable on new tasks rather than just whether a training job finished. An application compares candidate models using a fixed set of questions. Explain the difference between automatic metrics, reference answers and model-based judges. Automatic evaluation compares model responses on built-in or business-specific prompt datasets. The available task types and recommended metrics vary. A reference answer is needed for reference-based metrics; some evaluator or judge approaches score without one. Keep the evaluation set separate from training. Check: does a high automatic score guarantee a safe answer? No. Evaluate failure modes and human-facing quality separately. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 10,
+      "title": "Benchmark datasets: quality and representativeness",
+      "narration": "Benchmarks must represent the problems learners and customers will actually face, including edge cases where performance might fail. A benchmark looks good on average but fails for one language. Explain representative datasets, difficult cases, held-out evaluation and slice analysis. A benchmark should cover typical and difficult prompts, languages, demographic slices where applicable, and rare failures. Track accuracy, latency and efficiency separately. Check disparate results across groups and avoid training-set overlap; a high aggregate score can conceal an important failure slice. Check: can one average score hide a serious failure? Yes. Inspect results by task, language and risk group. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 11,
+      "title": "Amazon Bedrock – Evaluating a Model",
+      "narration": "Humans can assess response quality when automatic scores fail to capture usefulness, nuance, safety or context. Subject-matter experts compare two generated answers for usefulness and safety. Explain the scoring rubric and why evaluation feedback is not itself RLHF. Human evaluation uses a selected employee or subject-matter-expert team and a defined rubric, such as thumbs-up, ranking, helpfulness, or safety. It can assess built-in tasks or a custom task. Reviewer scoring compares outputs; RLHF additionally uses feedback in a model-training process. Check: is human evaluation alone the same as training with human feedback? No. RLHF uses feedback to influence training. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 12,
+      "title": "Automated Metrics to Evaluate an FM",
+      "narration": "Automatic metrics provide useful signals, but different metrics measure different properties and none is a universal quality score. A translation can use BLEU for overlap, while a generated summary can use ROUGE or BERTScore. Explain why perplexity is a different measurement. ROUGE-N compares n-gram overlap; ROUGE-L uses the longest common subsequence. BLEU emphasizes n-gram precision and penalizes very short translations. BERTScore compares contextual token embeddings. Perplexity measures next-token predictive uncertainty, so lower is better on the same held-out corpus; unlike the first three, it is not a generated-text/reference-text similarity measure. Check: can lower perplexity be compared as if it were a ROUGE percentage? No. The definitions and interpretation differ."
+    },
+    {
+      "slide": 13,
+      "title": "Automated model evaluation workflow",
+      "narration": "An offline score measures some characteristic of generated text; a business metric checks whether the product workflow improves. A product-description assistant has good similarity scores but conversion remains flat. Explain why product metrics and offline language metrics answer different questions. For a product recommendation or description workflow, inputs can include clickstream, cart, purchases and feedback. Reference-based ROUGE, BLEU or BERTScore may compare text, while click-through, conversion and returns assess outcomes. Neither kind of score alone establishes factuality or business impact. Check: can a text similarity score prove financial benefit? No. Validate actual business outcomes. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 14,
+      "title": "Business Metrics to Evaluate a Model On",
+      "narration": "Business metrics connect AI system behavior to measurable outcomes such as user satisfaction, revenue or conversion. A store tracks conversion rate and satisfaction after adding AI recommendations. Explain why denominator, time period and control group are necessary. The source lecture names user satisfaction, average revenue per user (ARPU), cross-domain performance, conversion rate, and computational/resource efficiency. Define a numerator, denominator, time window and comparison group for each business metric; use controlled experiments when attributing a change to the AI feature. Check: can rising conversion be attributed to AI without comparison? Not reliably. Use an appropriate baseline or experiment. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    }
+  ]
+}

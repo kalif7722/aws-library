@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "02",
+  "part_title": "Training Datasets, Transfer Learning and Customization Choices",
+  "output_prefix": "aif-module-05-part-02",
+  "script_revision": "2026-11-13-aif-m05-p02-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 4,
+      "title": "Single-turn instruction-tuning datasets",
+      "narration": "A training record is a structured example. Single-turn examples usually show one user request and the corresponding intended answer. A student prepares a JSON dataset record containing a user request and one ideal assistant response. Explain roles, content, and model-specific schema validation. A single-turn chat training record can contain an optional system instruction and a messages array with one user message followed by the desired assistant message. Each message has a role and content. The exact JSON schema and allowed fields depend on the selected model and customization method. Check: is any JSON message format accepted by every model? No. Validate against the specific customization schema."
+    },
+    {
+      "slide": 5,
+      "title": "Multi-turn instruction-tuning datasets",
+      "narration": "Multi-turn instruction tuning trains a model to follow context through a conversation, not simply respond to independent questions. An assistant must answer a follow-up question referring to the previous answer. Explain why the training record must preserve the full sequence of conversational turns. A multi-turn example retains the whole conversation in one record: user → assistant → user follow-up → assistant. The alternating roles let the model learn to respond in context; do not treat separately labeled turns as an unconnected set of single-turn examples. Check: can we drop the prior exchange and still faithfully teach reference resolution? Usually not; preserve the relevant context. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 6,
+      "title": "Fine-Tuning: good to know",
+      "narration": "The total work behind model adaptation is broader than the short training job itself; collect data, validate it, evaluate the result and operate the model. A team budgets not just for model training but for cleanup, evaluation, hosting, and drift checks. Explain that deployment support depends on chosen model and Region. Budget for dataset curation, compute, evaluation, deployment, monitoring, and ML expertise. Instruction tuning often needs fewer examples and less compute than broad domain adaptation; actual pricing and serving methods depend on model, Region, and current Bedrock support. Check: is the training fee the complete cost? No. Include data engineering, evaluation and serving. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 7,
+      "title": "Note: Transfer Learning",
+      "narration": "Transfer learning is the general idea of reusing already learned representations for a new job instead of starting from zero. An image classifier reuses a pretrained encoder before adding its own category classifier. Distinguish frozen feature extraction from updating old weights. Transfer learning reuses representations learned on another task. In image classification, a frozen image encoder plus a new classifier is transfer learning; updating pretrained weights for the new labeled task is the fine-tuning variant. The same broad idea applies to pretrained language models. Check: is a frozen feature extractor the same operation as full fine-tuning? No. Only the new head is trained in that case."
+    },
+    {
+      "slide": 8,
+      "title": "Fine-Tuning – Use cases",
+      "narration": "Fine-tuning is most helpful for relatively stable task behavior, formats or categories, while rapidly changing facts need another source of truth. A chatbot must always return a stable JSON schema, but a shipping policy changes weekly. Explain when fine-tuning helps and when retrieval is better. Fine-tuning is suitable for stable behavior such as persona, output format, or domain task labels. It can absorb proprietary historical examples, but a frequently changing product fact or current policy is better retrieved from maintained source data; weight updates do not provide automatic freshness. Check: will fine-tuning automatically learn tomorrow's policy update? No. Retrieve time-sensitive facts instead. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    }
+  ]
+}

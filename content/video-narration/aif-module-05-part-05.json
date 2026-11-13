@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Foundation Model Customization, Evaluation and Bedrock Applications",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "05",
+  "part_title": "Guardrails and Bedrock Agent Workflows",
+  "output_prefix": "aif-module-05-part-05",
+  "script_revision": "2026-11-13-aif-m05-p05-beginner-visual-v1",
+  "review_basis": "Prepared from reviewed AIF module lesson titles and learning notes. Original visual asset existence and order are checked in the rendering workflow; scene narration should be visually reviewed before production approval.",
+  "scenes": [
+    {
+      "slide": 21,
+      "title": "Amazon Bedrock – Guardrails",
+      "narration": "Guardrails add checks around model interactions to reduce specific undesirable outputs or exposure of sensitive information. A chatbot could leak personal data or generate unsafe responses. Explain guardrail checks and the separate requirement for IAM and application authorization. Guardrails can check harmful content, denied topics, words, sensitive data and contextual grounding where supported. Configure separate policies as needed and test both prompts and responses. Masking sensitive information and grounding checks have feature and configuration limits; IAM permissions and application authorization remain separate controls. Check: do guardrails replace IAM? No. They address a different layer of control. In a real application, start with a small representative scenario, identify the right AWS capability, and evaluate whether the outcome meets the task's requirements. Remember that setup details and supported features may change by model and Region; verify those before making production decisions."
+    },
+    {
+      "slide": 22,
+      "title": "Amazon Bedrock – Agents",
+      "narration": "An AI agent is an application pattern that can combine a model with authorized actions and retrieved information to complete a task. A customer asks about an order but has not provided its ID. Explain how the agent requests the missing input, calls a permitted tool and summarizes the result. An agent can orchestrate multi-step work using model instructions, history, action groups and optional Knowledge Bases. For an order-status request, ask for the missing ID, perform an authorized read-only lookup, then summarize the result. Permissions and tool definitions constrain which actions can run. Check: should an agent place an order without the required permission or confirmation? No. Constrain sensitive operations."
+    },
+    {
+      "slide": 23,
+      "title": "Agent action groups and tool contracts",
+      "narration": "An action group defines a tool's name, input shape and integration; the declared contract is not itself an authorization grant. An agent knows functions named getOrder, suggestItem and placeOrder. Explain how operation schemas, Lambda and permissions work together. An action group can define operations and parameters using OpenAPI or function details. For example, purchase lookup, recommendations and order placement are distinct operations; a Lambda-backed action can access a database, while a Knowledge Base retrieves a return policy. A schema documents a tool but does not itself execute or authorize it. Check: does an OpenAPI schema itself make a database action safe? No. Enforce authorization in the implementation."
+    },
+    {
+      "slide": 24,
+      "title": "Agent reasoning and tool-use workflow",
+      "narration": "Agents can plan or choose tools repeatedly, receive results, and assemble an answer using the data those tools returned. An agent looks up an order, fetches a return policy and replies. Explain stepwise tool selection, tool result validation and tracing. At each step the agent passes the task, conversation history, available actions and Knowledge Base context to its model; it may call a configured action, receive a result, search knowledge and continue before final response. Trace the tool call and result for debugging without assuming a full private reasoning chain is exposed. Check: should debugging depend on access to hidden private reasoning? No. Inspect supported traces and tool outputs."
+    }
+  ]
+}
