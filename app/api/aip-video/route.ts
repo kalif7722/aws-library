@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-10": {
+  "19-11": {
+    prefix: "module-19/part-11/aip-module-19-part-11",
+    revision: "2026-11-13-m19-p11-troubleshoot-local-v1",
+    firstSlide: 62,
+    count: 6,
+    firstTitle: "Scenario and trust-boundary map",
+    title: "Lab 11 — Troubleshoot Unsafe Input, Prompt Injection and Output Leakage",
+  },  "19-10": {
     prefix: "module-19/part-10/aip-module-19-part-10",
     revision: "2026-11-13-m19-p10-troubleshoot-local-v1",
     firstSlide: 55,
