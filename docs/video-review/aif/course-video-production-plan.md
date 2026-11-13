@@ -100,3 +100,13 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - Narration manifests: `content/video-narration/aif-module-03-part-07.json` through `part-09.json`; audited push-triggered workflows: `.github/workflows/render-aif-m03-part-07.yml` through `part-09.yml`. API and AIF left playlist include all three lessons with status gated on R2 manifests and MP4s.
 - Observed GitHub Actions **in progress**: Part 07 run 43401529092, Part 08 run 43401534066, Part 09 run 43401539391. Do not count as published until actual R2 manifest and MP4 are confirmed.
 - Cumulative authored AIF coverage is now **75/349 slides and 16 configured lectures**. Next untouched original is Module 03 slide 37. Module 03 Parts 05–06 workflows have completed successfully.
+
+## Progress checkpoint — November 13, 2026 (Module 03 Parts 10–12)
+
+- The original numbered WebPs **37–45** were individually inspected against the approved visual-first standard. Slides 46–48 were also reviewed to establish the next natural lesson boundary (classification confusion matrices).
+- Added **three topic-based beginner narration manifests**: Part 10 slide 37 (RL applications and safety), Part 11 slides 38–40 (RLHF, human preferences and factual grounding), and Part 12 slides 41–45 (underfitting, overfitting, bias, variance and generalization).
+- Narration follows on-screen visual order with examples and comprehension decisions, uses en-US-AndrewNeural at -3%, and preserves each exact original image title. Part 10's single slide is a deliberate continuation of the RL topic rather than arbitrary chunking.
+- Push-triggered audit, render and Cloudflare R2 workflows were committed as `.github/workflows/render-aif-m03-part-10.yml` through `part-12.yml`. AIF API revision mapping and left-side player playlist include all three parts.
+- GitHub render jobs observed **in_progress**: Part 10 run 43408302139, Part 11 run 43408306556, Part 12 run 43408316114. Do not call them published until verified MP4 and R2 manifests are present.
+- Parts 07–09 from the prior batch all show completed GitHub workflow **success**; live player availability should still be verified separately.
+- **Cumulative authored coverage: 84 of 349 AIF slides across 19 configured lectures.** Next untouched narration begins at Module 03 **slide 46**, with evaluation and confusion matrices.
