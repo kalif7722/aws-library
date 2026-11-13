@@ -452,7 +452,9 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
       if (available.some(p => p.id === current)) setSelected(current!);
     }
     void refresh(ctrl.signal);
-    return () => ctrl.abort();
+    // Newly published R2 manifests are discovered without a page reload.
+    const poll = setInterval(() => { void refresh(ctrl.signal); }, 30000);
+    return () => { ctrl.abort(); clearInterval(poll); };
   }, [moduleId, refresh]);
 
   const choose = (part: string, startPlaying = false) => {
