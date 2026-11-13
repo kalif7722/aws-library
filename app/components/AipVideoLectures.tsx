@@ -230,7 +230,7 @@ function VideoPlayer({
         playsInline
         preload="metadata"
         aria-label="Lecture video. Use the custom controls below for playback and fullscreen navigation."
-        poster={`https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
+        poster={slideBase.startsWith("/") ? slideBase : `https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals/${slideBase}`}
         onClick={togglePlayback}
         onDoubleClick={event=>{
           if(onToggleFullscreen){event.preventDefault();onToggleFullscreen();}
@@ -360,7 +360,7 @@ function VideoPlayer({
             <button type="button" onClick={() => jump(ch.startSeconds)} aria-label={`Play explanation for slide ${ch.slide}`}>
               <span>{fmt(ch.startSeconds)}</span> {String(ch.slide).padStart(2, "0")} · {ch.title}
             </button>
-            <a href={`${COURSE_URL}/visual/module-${moduleId}?slide=${ch.slide}${partId ? `&videoPart=${partId}` : ""}#visual-lessons`}
+            <a href={moduleId === "19" ? `/course-visuals/genai-troubleshooting/module19-slide-${String(ch.slide).padStart(2,"0")}.webp` : `${COURSE_URL}/visual/module-${moduleId}?slide=${ch.slide}${partId ? `&videoPart=${partId}` : ""}#visual-lessons`} target={moduleId === "19" ? "_blank" : undefined} rel={moduleId === "19" ? "noopener noreferrer" : undefined}
               title={`Open full-size slide ${ch.slide}`} aria-label={`Open slide ${ch.slide} in viewer`}>Slide ↗</a>
           </div>
         ))}
@@ -468,7 +468,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
   useEffect(() => {
     const ctrl = new AbortController();
     setSelected("01");
-    if (moduleId === "01" || moduleId === "02" || moduleId === "03" || moduleId === "04" || moduleId === "05" || moduleId === "06" || moduleId === "07" || moduleId === "08") {
+    if (moduleId !== "00") {
       const current = new URLSearchParams(window.location.search).get("videoPart");
       const available=AIP_VIDEO_PARTS[moduleId]??[];
       if (available.some(p => p.id === current)) setSelected(current!);
@@ -662,7 +662,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
           </span>
         </div>
         {results[active.id]?.status === "ready"
-          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={`module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id} autoStart={autoStartPart===active.id}
+          ? <VideoPlayer key={active.id} item={results[active.id] as Ready} storageKey={`aip-video-${moduleId}-${active.id}-progress`} slideBase={moduleId === "19" ? `/course-visuals/genai-troubleshooting/module19-slide-${String(active.start).padStart(2,"0")}.webp` : `module-${moduleId}/slide-${String(active.start).padStart(2,"0")}.webp`} moduleId={moduleId} partId={active.id} autoStart={autoStartPart===active.id}
               onFinished={onVideoEnded} fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen}
               onPrevious={prev ? () => choose(prev.id,true) : undefined}
               onNext={next ? () => choose(next.id,true) : undefined}
