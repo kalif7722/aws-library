@@ -9,12 +9,12 @@ const api=read("app/api/aif-video/route.ts");
 const renderer=read("scripts/render_aip_course_video.py");
 const audit=read("scripts/audit_aif_local_visuals.py");
 const moduleMap=JSON.parse(read("app/courses/aws-ai-practitioner/visual-lesson-map.json"));
-const lessonCounts={"00":4,"01":6,"02":29,"03":62};
-const videoSceneCounts={"00":4,"01":6,"02":6,"03":5};
+const lessonCounts={"00":4,"01":6,"02":29,"03":62,"04":20};
+const videoSceneCounts={"00":4,"01":6,"02":6,"03":5,"04":3};
 
 test("AIF module pages show original lessons and beginner-first video lectures",()=>{
   assert.match(page,/import AifVideoLectures/);
-  assert.match(page,/\['00','01','02','03'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
   assert.ok(page.indexOf("<AifVideoLectures")<page.indexOf("<AifModuleLessons"));
   assert.match(page,/id!=='14'&&<AifModuleLessons/);
   assert.match(catalog,/id="video-lectures"/);
@@ -89,4 +89,17 @@ test("AIF Module 03 teaching-unit boundaries use the correct original slide sequ
   assert.ok(api.includes('"03-02":'));
   assert.ok(api.includes('count: 3, firstSlide: 6, firstTitle: "What is Deep Learning (DL)?"'));
   assert.ok(catalog.includes('title:"Deep Learning and Neural Networks Explained Visually",start:6,end:8'));
+});
+
+test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
+  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  for(const [part,start,end] of [["01",1,3],["02",4,7],["03",8,11]]){
+    const manifest=JSON.parse(read(`content/video-narration/aif-module-04-part-${part}.json`));
+    const workflow=read(`.github/workflows/render-aif-m04-part-${part}.yml`);
+    assert.deepEqual(manifest.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,i)=>start+i));
+    assert.ok(workflow.includes("audit_aif_local_visuals.py --module 04"));
+    assert.ok(workflow.includes(`start: ${start}\n            end: ${end}`));
+    assert.ok(api.includes(`"04-${part}":`));
+    assert.ok(catalog.includes(`id:"${part}"`));
+  }
 });
