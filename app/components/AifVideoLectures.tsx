@@ -1,5 +1,6 @@
 "use client";
 import {useCallback,useEffect,useRef,useState,type PointerEvent,type KeyboardEvent} from "react";
+import CourseVideoCaptions from "./CourseVideoCaptions";
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
@@ -253,6 +254,10 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
       .aif-video-stage:fullscreen .aif-video-fullscreen-nav:focus-within{opacity:1}
       .aif-video-fullscreen-nav button{pointer-events:auto;border:1px solid #527da2;border-radius:10px;padding:13px 17px;background:#0c2943dd;color:white;cursor:pointer;font-size:20px}
       .aif-video-fullscreen-nav button:disabled{opacity:.35;cursor:default}
+      .aif-video-fullscreen-nav button{position:relative}
+      .aif-video-fullscreen-nav button::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 10px);left:0;width:max-content;max-width:min(330px,65vw);overflow-wrap:break-word;padding:9px 12px;border:1px solid #b9dffa;border-radius:8px;color:#fff;background:#0a233bed;box-shadow:0 8px 20px #0008;font-size:12px;font-weight:750;line-height:1.4;text-align:left;opacity:0;visibility:hidden;pointer-events:none}
+      .aif-video-fullscreen-nav button:last-child::after{left:auto;right:0}
+      .aif-video-fullscreen-nav button:not(:disabled):is(:hover,:focus-visible)::after{opacity:1;visibility:visible}
       @media(prefers-reduced-motion:reduce){.aif-video-stage:fullscreen .cv-controls,.aif-video-fullscreen-nav{transition:none}}
     `}</style>
     <div className="aif-video-shell">
@@ -319,9 +324,10 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
               <track src={ready.captionsUrl} kind="subtitles" srcLang="en" label="English"/>
               Your browser does not support HTML5 video.
             </video>
+            <CourseVideoCaptions src={ready.captionsUrl} position={position} enabled={captionsOn}/>
             {fullscreen&&<div className="aif-video-fullscreen-nav" role="group" aria-label="Fullscreen lecture navigation">
-              <button type="button" disabled={!hasPrev} onClick={selectPrevious} aria-label="Previous lecture" title="Previous lecture">❮</button>
-              <button type="button" disabled={!hasNext} onClick={selectNext} aria-label="Next lecture" title="Next lecture">❯</button>
+              <button type="button" disabled={!hasPrev} onClick={selectPrevious} aria-label="Previous lecture" title={previous?.title??(previousModule?`Module ${previousModule}`:"No previous video")} data-tooltip={previous?`Previous: ${previous.title}`:previousModule?`Previous module: ${previousModule}`:"No previous video"}>❮</button>
+              <button type="button" disabled={!hasNext} onClick={selectNext} aria-label="Next lecture" title={following?.title??(nextModule?`Module ${nextModule}`:"No next video")} data-tooltip={following?`Next: ${following.title}`:nextModule?`Next module: ${nextModule}`:"No next video"}>❯</button>
             </div>}
             <CourseVideoControls playing={playing} position={position} duration={duration||ready.durationSeconds}
               playbackSpeed={speed} muted={muted} volume={volume} captionsOn={captionsOn} fullscreen={fullscreen}
