@@ -12,6 +12,7 @@ const LECTURES:Record<string,Lecture[]>={
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
     {id:"02",title:"What Cloud Computing Is and Why Businesses Use It",start:7,end:13},
+    {id:"03",title:"Cloud Service Models, Responsibility and Pricing",start:14,end:17},
   ],
 };
 const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
