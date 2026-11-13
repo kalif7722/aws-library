@@ -76,6 +76,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "09", title: "Lab 09 — Detect Unsupported Answers and Citation Grounding Failures", subtitle: "Trace claims to source spans, distinguish retrieval from generation and abstain safely", start: 49, end: 54 },
     { id: "10", title: "Lab 10 — Debug Agent Tool Loops, Contracts, Permissions and Retries", subtitle: "Agent traces, schema, Lambda IAM, bounded retries and approval", start: 55, end: 61 },
     { id: "11", title: "Lab 11 — Troubleshoot Unsafe Input, Prompt Injection and Output Leakage", subtitle: "Trust boundaries, guardrail versions, scoped tools and streaming safety", start: 62, end: 67 },
+    { id: "12", title: "Lab 12 — Diagnose and Roll Back GenAI Deployment Regression", subtitle: "Compare bundles, canary metrics, quality gates and compatible rollback", start: 68, end: 74 },
   ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
