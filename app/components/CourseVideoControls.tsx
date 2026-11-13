@@ -31,6 +31,10 @@ export default function CourseVideoControls(p:Props) {
       .cv-controls .av-control-row button {border:1px solid #557b9a;border-radius:8px;padding:8px 10px;color:#effaff;background:#173b5b;font-size:12px;font-weight:750;white-space:nowrap;min-height:36px;cursor:pointer}
       .cv-controls .av-control-row button:hover:not(:disabled),.cv-controls .av-control-row button:focus-visible {background:#17639b;outline:2px solid #8ddcff;outline-offset:1px}
       .cv-controls .av-control-row button:disabled {opacity:.5;cursor:not-allowed}
+      .cv-controls .cv-lecture-nav{position:relative}
+      .cv-controls .cv-lecture-nav::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 9px);left:0;max-width:min(300px,65vw);width:max-content;white-space:normal;text-align:left;background:#0a233b;color:#fff;border:1px solid #b9dffa;border-radius:8px;padding:8px 11px;box-shadow:0 8px 18px #0009;font-size:12px;line-height:1.4;font-weight:750;opacity:0;visibility:hidden;pointer-events:none;z-index:20}
+      .cv-controls .cv-lecture-nav-next::after{left:auto;right:0}
+      .cv-controls .cv-lecture-nav:not(:disabled):is(:hover,:focus-visible)::after{opacity:1;visibility:visible}
       .cv-controls .av-speed-control {display:flex;gap:5px;align-items:center;font-size:12px;font-weight:750}
       .cv-controls .av-speed-control select {background:#173b5b;color:white;border:1px solid #557b9a;border-radius:7px;padding:7px;min-height:36px}
       .cv-controls .av-volume {width:75px;accent-color:#79d8ff}
@@ -56,8 +60,8 @@ export default function CourseVideoControls(p:Props) {
       <button type="button" onClick={()=>p.onSkip(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds">5s ↷</button>
       <span className="av-timestamp">{formatVideoTime(p.position)} / {formatVideoTime(p.duration)}</span>
       <span className="av-controls-grow"/>
-      <button type="button" disabled={!p.onPrevious} onClick={p.onPrevious} aria-label={p.previousTitle?`Previous video: ${p.previousTitle}`:"No previous video"} title={p.previousTitle??"No previous video"}>❮</button>
-      <button type="button" disabled={!p.onNext} onClick={p.onNext} aria-label={p.nextTitle?`Next video: ${p.nextTitle}`:"No next video"} title={p.nextTitle??"No next video"}>❯</button>
+      <button type="button" className="cv-lecture-nav" data-tooltip={p.previousTitle?`Previous: ${p.previousTitle}`:"No previous video"} disabled={!p.onPrevious} onClick={p.onPrevious} aria-label={p.previousTitle?`Previous video: ${p.previousTitle}`:"No previous video"} title={p.previousTitle??"No previous video"}>❮</button>
+      <button type="button" className="cv-lecture-nav cv-lecture-nav-next" data-tooltip={p.nextTitle?`Next: ${p.nextTitle}`:"No next video"} disabled={!p.onNext} onClick={p.onNext} aria-label={p.nextTitle?`Next video: ${p.nextTitle}`:"No next video"} title={p.nextTitle??"No next video"}>❯</button>
       <label className="av-speed-control"><span>Speed</span>
         <select aria-label="Video playback speed" value={p.playbackSpeed} onChange={e=>p.onChangeSpeed(Number(e.currentTarget.value))}>
           {COURSE_VIDEO_SPEEDS.map(n=><option key={n} value={n}>{n}×</option>)}
