@@ -71,6 +71,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "04", title: "Lab 04 — Diagnose Incomplete Streaming Responses and Timeouts", subtitle: "Trace stream events, locate disconnects and verify terminal completion", start: 18, end: 23 },
     { id: "05", title: "Lab 05 — Diagnose and Roll Back Prompt Version Regressions", subtitle: "Pinned version comparison, variable repair, JSON schema and release gate", start: 24, end: 28 },
     { id: "06", title: "Lab 06 — Diagnose a Stale Bedrock Knowledge Base After Update", subtitle: "Trace S3 version, ingestion failures, source retrieval and answer caching", start: 29, end: 35 },
+    { id: "07", title: "Lab 07 — Diagnose Irrelevant Retrieved Context Without Weakening Security", subtitle: "Inspect top-K, chunking, metadata and ranking with tenant filters intact", start: 36, end: 41 },
   ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
