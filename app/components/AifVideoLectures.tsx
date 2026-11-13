@@ -14,6 +14,8 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"02",title:"Deep Learning and Neural Networks Explained Visually",start:6,end:8},
     {id:"03",title:"Generative AI, Transformers, Diffusion and Multimodal Models Explained",start:9,end:14},
     {id:"04",title:"Training Data, Labels and Structured versus Unstructured Information",start:15,end:18},
+    {id:"05",title:"Supervised Learning — Regression and Classification",start:19,end:21},
+    {id:"06",title:"Preparing and Evaluating ML Data — Splits, Features and Leakage",start:22,end:24},
   ],
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
