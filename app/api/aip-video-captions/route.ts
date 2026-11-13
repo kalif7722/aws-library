@@ -133,11 +133,15 @@ export async function GET(request: NextRequest) {
   const module = request.nextUrl.searchParams.get("module") ?? "";
   const part = request.nextUrl.searchParams.get("part");
   const key = part ? `${module}-${part}` : module;
-  if (!CAPTIONS[key]) return new Response("Not found", { status: 404 });
+  if (!/^[0-9]{2}$/.test(module) || (part !== null && !/^[0-9]{2}$/.test(part)))
+    return new Response("Invalid video ID", { status: 400 });
+  const captionPath = CAPTIONS[key] ?? (part
+    ? `module-${module}/part-${part}/aip-module-${module}-part-${part}.vtt`
+    : `module-${module}/aip-module-${module}.vtt`);
   try {
     const revision = request.nextUrl.searchParams.get("rev");
     const versionSuffix = revision ? `?v=${encodeURIComponent(revision)}` : "";
-    const result = await fetch(`${ROOT}/${CAPTIONS[key]}${versionSuffix}`, {
+    const result = await fetch(`${ROOT}/${captionPath}${versionSuffix}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(6500),
     });
