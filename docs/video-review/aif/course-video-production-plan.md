@@ -71,3 +71,13 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - **Not yet independently verified:** successful GitHub Actions completion, R2 MP4/manifest presence and live website deployment. Nine narration/render workflows are configured; this is **not** a claim of nine completed MP4s. The user previously indicated reviewing the first video, so at least one player experience has been observed by the user, but this session cannot confirm how many of all nine are currently published. The live course API was inaccessible to the checking tools. The AIF player now displays the real, API-verified `ready` count for each module. 
 - **Playback fix:** `app/api/aif-video/route.ts` now verifies each part against its `firstSlide` rather than incorrectly assuming all parts start with slide 1. This is essential for Parts 02–05 to become playable after publication.
 - Module 02 is fully narrated. Module 03's first eight original images have been inspected and narrated in two teaching units. Continue Module 03 from slide 09 onward, following each original image; do not infer content from lesson titles.
+
+## Progress checkpoint — November 13, 2026 (latest)
+
+- **11 AIF lectures configured** across Modules 00–03: Module 00 has 1, Module 01 has 1, Module 02 has 5, and Module 03 has 4. This is the number of committed narration + rendering workflow pairs, **not** an independently verified count of R2 MP4 renders.
+- **57 original slides covered by narration**: 4 in M00, 6 in M01, 29 in M02, and 18 in M03. The next untouched lesson is M03 slide 19, on supervised machine learning.
+- Module 03 Part 03 (slides 09–14): generative AI, attention, diffusion, multimodal models and architecture families; narration `content/video-narration/aif-module-03-part-03.json`; renderer `.github/workflows/render-aif-m03-part-03.yml`.
+- Module 03 Part 04 (slides 15–18): training data, labels, structured and unstructured information; narration `content/video-narration/aif-module-03-part-04.json`; renderer `.github/workflows/render-aif-m03-part-04.yml`.
+- All eleven parts are represented in `app/api/aif-video/route.ts` and `app/components/AifVideoLectures.tsx`; shared play/pause, ±5-second, caption, speed, next/previous and fullscreen controls remain standard.
+- Fixed Module 03 Part 02 workflow's incorrect `part-01.json` trigger. Future modifications to Part 02 will now trigger Part 02 rendering as intended.
+- **Published-media count remains unverified**: neither live course API nor Cloudflare R2 MP4/manifest checks were available to this session. Do not report eleven rendered or uploaded videos without observing their actual R2 assets or completed GitHub job logs.
