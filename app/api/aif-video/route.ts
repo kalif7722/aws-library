@@ -3,6 +3,15 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "03-16": { title: "Machine Learning Lifecycle — From Business Goals to Monitoring",
+    revision: "2026-11-13-aif-m03-p16-beginner-visual-v1",
+    count: 5, firstSlide: 54, firstTitle: "The ML lifecycle: complete overview" },
+  "03-17": { title: "Hyperparameter Tuning and How to Prevent Overfitting",
+    revision: "2026-11-13-aif-m03-p17-beginner-visual-v1",
+    count: 3, firstSlide: 59, firstTitle: "Hyperparameter tuning: concepts and purpose" },
+  "03-18": { title: "Choosing Traditional Rules Instead of Machine Learning",
+    revision: "2026-11-13-aif-m03-p18-beginner-visual-v1",
+    count: 1, firstSlide: 62, firstTitle: "When machine learning is not the right solution" },
   "00-01": { title: "Start Here — Your AI Practitioner Learning Journey",
     revision: "2026-11-13-aif-m00-p01-beginner-visual-v1",
     count: 4, firstSlide: 1, firstTitle: "Your AI Practitioner learning path" },
