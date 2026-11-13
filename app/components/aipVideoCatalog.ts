@@ -69,6 +69,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "02", title: "Lab 02 — Diagnose Bedrock Converse API Schema and Response Errors", subtitle: "Triage HTTP errors, repair content blocks and validate parsing", start: 6, end: 11 },
     { id: "03", title: "Lab 03 — Diagnose Bedrock Throttling and Retry Storms", subtitle: "429s, token quotas, jitter, admission limits and cost", start: 12, end: 17 },
     { id: "04", title: "Lab 04 — Diagnose Incomplete Streaming Responses and Timeouts", subtitle: "Trace stream events, locate disconnects and verify terminal completion", start: 18, end: 23 },
+    { id: "05", title: "Lab 05 — Diagnose and Roll Back Prompt Version Regressions", subtitle: "Pinned version comparison, variable repair, JSON schema and release gate", start: 24, end: 28 },
   ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
