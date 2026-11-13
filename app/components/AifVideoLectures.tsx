@@ -13,6 +13,7 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"01",title:"AI Fundamentals, Use Cases and Rule-Based vs Learning Systems",start:1,end:5},
     {id:"02",title:"Deep Learning and Neural Networks Explained Visually",start:6,end:8},
     {id:"03",title:"Generative AI, Transformers, Diffusion and Multimodal Models Explained",start:9,end:14},
+    {id:"04",title:"Training Data, Labels and Structured versus Unstructured Information",start:15,end:18},
   ],
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
