@@ -63,28 +63,34 @@ def download_slide(session: requests.Session, root: str, module: str,
 
 
 def load_local_slide(module: str, number: int, local_dir: str,
-                     folder: Path) -> tuple[Path, str]:
-    """Use original checked-in source visuals, rather than an unrelated R2 module."""
-    if module != "19":
-        raise ValueError("Local slide mode is currently restricted to AIP Module 19")
+                     folder: Path, course_slug: str = "aip") -> tuple[Path, str]:
+    """Validate and copy only the approved original images for this course."""
     root = Path(__file__).resolve().parents[1]
     source_dir = (root / local_dir).resolve()
-    expected_dir = (root / "public/course-visuals/genai-troubleshooting").resolve()
+    if course_slug == "aif":
+        expected_dir = (root / f"public/course-visuals/aif-course/module-{module}").resolve()
+        filename = f"slide-{number:02}.webp"
+        public_url = f"/course-visuals/aif-course/module-{module}/{filename}"
+    elif course_slug == "aip" and module == "19":
+        expected_dir = (root / "public/course-visuals/genai-troubleshooting").resolve()
+        filename = f"module19-slide-{number:02}.webp"
+        public_url = f"/course-visuals/genai-troubleshooting/{filename}"
+    else:
+        raise ValueError(f"Unsupported source mode: {course_slug}, module {module}")
     if source_dir != expected_dir:
-        raise ValueError("Module 19 original slide directory does not match approved local source")
-    source = source_dir / f"module19-slide-{number:02}.webp"
+        raise ValueError(f"Original source directory mismatches approved {course_slug} module {module}")
+    source = source_dir / filename
     if not source.is_file():
-        raise FileNotFoundError(f"Missing original local Module 19 slide: {source}")
+        raise FileNotFoundError(f"Missing original source slide: {source}")
     with Image.open(source) as img:
         img.verify()
     with Image.open(source) as img:
         if img.width < 800 or img.height < 450:
-            raise ValueError(f"Invalid original Module 19 slide dimensions: {source} {img.size}")
+            raise ValueError(f"Invalid original slide dimensions: {source} {img.size}")
     target = folder / f"slide-{number:02}.webp"
     import shutil
     shutil.copyfile(source, target)
-    # Manifest image provenance must use the deployable course URL, not runner-local file:// paths.
-    return target, f"/course-visuals/genai-troubleshooting/module19-slide-{number:02}.webp"
+    return target, public_url
 
 
 def timecode(seconds: float) -> str:
@@ -139,7 +145,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     first_slide = scenes[0]["slide"]
     if [s["slide"] for s in scenes] != list(range(first_slide, first_slide + len(scenes))):
         raise ValueError("Scenes must cover consecutive slides in a single topic part")
-    if len(scenes) != 12 and manifest["module_id"] == "00":
+    if len(scenes) != 12 and manifest["module_id"] == "00" and manifest.get("course_slug", "aip") == "aip":
         raise ValueError("AIP module 00 has 12 verified original slides")
     destination.mkdir(parents=True, exist_ok=True)
     scratch = destination / "_work"
@@ -157,7 +163,7 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     for scene in scenes:
         index = scene["slide"]
         if manifest.get("slide_local_dir"):
-            file, url = load_local_slide(manifest["module_id"], index, manifest["slide_local_dir"], images)
+            file, url = load_local_slide(manifest["module_id"], index, manifest["slide_local_dir"], images, manifest.get("course_slug", "aip"))
         else:
             file, url = download_slide(session, manifest["slide_base"], manifest["module_id"], index, images)
         downloaded.append((file, url))
@@ -168,8 +174,8 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     segments = []
     captions = []
     current_time = 0.0
-    output_prefix = f"aip-module-{manifest['module_id']}"
-    if manifest.get("part_id"):
+    output_prefix = manifest.get("output_prefix") or f"aip-module-{manifest['module_id']}"
+    if not manifest.get("output_prefix") and manifest.get("part_id"):
         output_prefix += "-part-" + str(manifest["part_id"])
     for scene, (picture, origin) in zip(scenes, downloaded):
         number = scene["slide"]
