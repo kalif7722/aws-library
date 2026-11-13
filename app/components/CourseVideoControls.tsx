@@ -2,6 +2,7 @@
 
 export const COURSE_VIDEO_SPEEDS = [0.75,1,1.25,1.5,1.75,2] as const;
 export const COURSE_VIDEO_SPEED_KEY = "course-video-playback-speed:v1";
+export const COURSE_VIDEO_AUTO_NEXT_KEY = "course-video-auto-next:v1";
 
 export function formatVideoTime(seconds:number) {
   if (!Number.isFinite(seconds)) return "—";
