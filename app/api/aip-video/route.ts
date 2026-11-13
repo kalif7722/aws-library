@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-03": {
+  "19-04": {
+    prefix: "module-19/part-04/aip-module-19-part-04",
+    revision: "2026-11-13-m19-p04-troubleshoot-local-v1",
+    firstSlide: 18,
+    count: 6,
+    firstTitle: "Scenario and end-to-end streaming path",
+    title: "Lab 04 — Diagnose Incomplete Streaming Responses and Timeouts",
+  },  "19-03": {
     prefix: "module-19/part-03/aip-module-19-part-03",
     revision: "2026-11-13-m19-p03-troubleshoot-local-v1",
     firstSlide: 12,
