@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "04",
+  "module_title": "Generative AI and Amazon Bedrock",
+  "slide_local_dir": "public/course-visuals/aif-course/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "06",
+  "part_title": "Tokens, Context Windows and Semantic Embeddings",
+  "output_prefix": "aif-module-04-part-06",
+  "script_revision": "2026-11-13-aif-m04-p06-beginner-visual-v1",
+  "review_basis": "Original Module 04 local WebP slides 17–20 inspected visually; narration follows actual arrows, diagrams, labels, decisions and worked examples.",
+  "scenes": [
+    {
+      "slide": 17,
+      "title": "Tokenization: words and subwords",
+      "narration": "Before an AI language model can process a sentence, a tokenizer converts the text into units called tokens. The example across the top reads Small gardens need water. Look to the left, where the illustrative word-based tokenizer produces four tokens: Small, gardens, need, and water. Each has a numerical identifier. On the right, the same sentence is broken into five illustrative subword tokens: Small, garden, s, need, and water. These pieces also have identifiers. Actual token splitting depends on the model's tokenizer, and these particular IDs are examples, not a guaranteed output from a named model. Why does this matter? The model processes token identifiers, not raw English words directly. The bottom panels show that each token maps to a number, tokenizer boundaries can include punctuation or whitespace, and token counts matter for finite context limits and usage-based billing. A long document may contain more tokens than its word count suggests. Decision check: does one written word always equal exactly one model token? No. Some words split into subword pieces, and punctuation can occupy separate tokens."
+    },
+    {
+      "slide": 18,
+      "title": "Context window: what fits in the prompt",
+      "narration": "This slide illustrates a model's context window as a horizontal sequence of colored blocks. A context window is the limited amount of token information a model can consider for a request. Read the labels along the top. System instructions provide behavioral guidance. Conversation history contains previous exchanges. The user message is the current question. Retrieved passages bring in relevant company information for R A G. The pale blocks at the right represent generated output where the model and API count them against the applicable token budget. All of these can compete for limited capacity, with details varying by model and interface. The left note explains what to do when the material is too long: split documents into chunks, retrieve only useful sections, or summarize earlier messages while keeping critical facts. The right note explains why a larger context is not always free or optimal: additional text can increase processing cost and latency, and an enormous window does not automatically improve answer quality. For example, a help desk could retrieve the few policy paragraphs relevant to a refund question rather than sending every company document. Check: if the context limit is reached, does the model automatically remember all earlier conversations anyway? No. The application must manage available context explicitly."
+    },
+    {
+      "slide": 19,
+      "title": "Embeddings: content as vectors",
+      "narration": "Embeddings represent the meaning of content using numbers. Begin with the first text on the left: refund policy for damaged item. It goes through an embedding model to produce an illustrative vector, a list of decimal values such as zero point one two, negative zero point three four, and zero point five six. Below, the related phrase return a broken product produces another numeric vector with similar values. The actual vectors usually have many dimensions, not merely the handful shown here. On the right, the plotted semantic space shows two related sentences close together while weather forecast tomorrow is farther away. The axes show conceptual embedding dimensions rather than literal business metrics. Nearby vectors suggest similar meaning, even if the wording is different. The bottom panel extends the idea to multimodal embedding systems that can place compatible text, image or audio inputs into a shared semantic space, if the chosen model supports that. This is useful for semantic search, which looks for related meaning rather than only identical keywords. Caution: a vector is not a human-readable explanation, and closeness does not prove that a statement is true. Check: does an embedding model normally write the final customer response? No. Its primary role here is converting content into vectors for retrieval or comparison."
+    },
+    {
+      "slide": 20,
+      "title": "Semantic similarity in embedding space",
+      "narration": "Now use embeddings for an actual search task. The graph on the left is a simplified two-dimensional picture of a much larger embedding space; the slide explicitly says it is illustrative and not to scale. The yellow query says puppy care. Close to it are dog care article, puppy training guide, and adult dog nutrition. Far away are home maintenance tips, mortgage rates, and buying a house guide. The point is that different words can still represent related subjects. On the right, follow the three numbered steps. First, create embedding vectors for documents and the query. Second, compare the query vector with document vectors using an appropriate similarity measure such as cosine similarity to find nearby candidates. Third, return the relevant source content, even when exact query words are absent from the document. A company could use this to locate product-return policy paragraphs for a customer who describes a damaged purchase rather than using the precise policy title. The bottom warning is essential: similarity is not proof of truth or usefulness, and retrieval must still be checked for relevance, permissions and source quality. Decision check: should the nearest vector always be treated as an authoritative answer? No. It is a search candidate that needs evaluation before relying on it."
+    }
+  ]
+}
