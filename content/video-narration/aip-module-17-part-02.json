@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "17",
+  "module_title": "Storage and Generative AI Architectural Decisions",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All twenty numbered original Module 17 R2 WebP slides passed spatial audit; narration follows original slide order and on-screen teaching details rather than legacy lesson map.",
+  "part_id": "02",
+  "part_title": "EFS Shared Storage and Choosing Storage for AI Pipelines",
+  "script_revision": "2026-11-13-m17-p02-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Amazon EFS: Shared File Storage for Linux in the Cloud",
+      "narration": "Unlike the single-instance block device shown earlier, Amazon EFS is a managed NFS filesystem designed for Linux and other supported POSIX-style clients to access shared files. The central regional filesystem connects through mount targets in multiple Availability Zones, with clients in those zones. Follow the access path from the client to the appropriate mount target. Network security groups must permit NFS over TCP port twenty forty-nine from authorized clients, while filesystem permissions control which users can access directories and objects. EFS access points can help apply intended ownership and directory boundaries, and IAM-based authorization can add another layer where configured. The lower protection section notes encryption at rest using AWS KMS and encryption in transit with TLS. EFS helps distributed data preparation workers share files, but it does not automatically provide a vector-search database or solve application-level consistency requirements."
+    },
+    {
+      "slide": 7,
+      "title": "Amazon EFS Performance and Throughput Modes",
+      "narration": "This slide separates two choices that are easy to mix up. Performance mode controls the latency and concurrency characteristics of file operations; General Purpose is the normal low-latency choice, while Max I/O is a specialized option with compatibility restrictions. Throughput mode controls how the filesystem's throughput capacity responds to usage. Elastic throughput adjusts with workload demand, provisioned throughput sets a capacity target, and bursting throughput relates performance to stored capacity and burst allowances. Read the compatibility notes at the bottom before combining settings: not every mode can be used with every filesystem type, and Max I/O is not supported for One Zone configurations or with Elastic throughput. Actual limits and supported configurations can evolve, so treat the slide as a decision framework, not a permanent numerical throughput guarantee. For concurrent AI preprocessing, test throughput and latency with representative file counts, read patterns and worker concurrency."
+    },
+    {
+      "slide": 8,
+      "title": "Amazon EFS Lifecycle Storage Classes",
+      "narration": "Follow file access patterns from Standard through Infrequent Access and, where available, Archive. Standard targets frequently accessed files, while lifecycle policies can transition less frequently accessed files into lower-storage-cost classes. Archive can reduce cost for rarely accessed data under supported filesystem and Region configurations, but retrieval and access charges and performance considerations must be assessed. The slide compares a regional filesystem, which stores data across Availability Zones, with a One Zone filesystem, which stores data in one zone and trades resilience for cost. Do not assume every storage class or lifecycle feature works with every filesystem type and mode. Minimum residence periods and policies also affect how files transition. A generative AI application may store actively processed content differently from old intermediate files; define retention, access patterns and recovery needs before applying an aggressive lifecycle policy."
+    },
+    {
+      "slide": 9,
+      "title": "Choose EBS, EFS, or Instance Store",
+      "narration": "The three columns compare block, shared file and local ephemeral storage. Amazon EBS is a persistent block volume attached to a compatible EC2 instance in the same Availability Zone, with provisioned performance and encryption options. Amazon EFS is a shared managed NFS filesystem accessible by supported clients in multiple Availability Zones of its Region. Instance store resides on the underlying compute host and is suited to fast temporary scratch data, caches and intermediate files; do not treat it as a durable system of record, because lifecycle events and host failure can remove the data. Read the lower warning: persistent EBS and EFS data can still be deleted or corrupted, so protection and backups matter. For a model preprocessing job, use S3 for durable source objects, EFS for shared workspaces when needed, and instance store for recreatable temporary artifacts. Select the service based on the data's lifetime and access pattern."
+    },
+    {
+      "slide": 10,
+      "title": "Storage for a Pipeline",
+      "narration": "Follow the purpose-built pipeline across the top. Source documents and media begin in Amazon S3, which provides durable scalable object storage. Shared preprocessing workers can use Amazon EFS for common files. Compute instances may use EBS for persistent node-level disks and instance store for disposable caches or high-throughput scratch space. The resulting vector embeddings and metadata move into a separate vector database or search engine for similarity retrieval. The bottom of the image emphasizes that EFS is not a vector database and S3 source objects do not magically become a searchable embedding index. Security and recovery apply end to end: use least-privilege IAM and storage policies, KMS encryption where required, retention and backups, and measured throughput. Build a pipeline where each stage uses the storage semantics it actually needs, and ensure disposable scratch data can be regenerated after a failed worker."
+    }
+  ]
+}
