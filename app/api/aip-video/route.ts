@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-08": {
+  "19-09": {
+    prefix: "module-19/part-09/aip-module-19-part-09",
+    revision: "2026-11-13-m19-p09-troubleshoot-local-v1",
+    firstSlide: 49,
+    count: 6,
+    firstTitle: "Scenario and evidence chain",
+    title: "Lab 09 — Detect Unsupported Answers and Citation Grounding Failures",
+  },  "19-08": {
     prefix: "module-19/part-08/aip-module-19-part-08",
     revision: "2026-11-13-m19-p08-troubleshoot-local-v1",
     firstSlide: 42,
