@@ -67,7 +67,7 @@ function VideoPlayer({
   // A single browser-local preference applies across all AIP course videos.
   useEffect(()=>{
     try{
-      const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??"1");
+      const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??localStorage.getItem("aip-video-playback-speed:v1")??"1");
       const rate=PLAYBACK_SPEEDS.some(value=>value===saved)?saved:1;
       setPlaybackSpeed(rate);
       if(player.current)player.current.playbackRate=rate;
@@ -245,7 +245,7 @@ function VideoPlayer({
           // Apply saved rate even when a newly selected video mounts before effects.
           let rate=playbackSpeed;
           try{
-            const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??"1");
+            const saved=Number(localStorage.getItem(PLAYBACK_SPEED_KEY)??localStorage.getItem("aip-video-playback-speed:v1")??"1");
             if(PLAYBACK_SPEEDS.some(candidate=>candidate===saved))rate=saved;
           }catch{/* Keep state rate */}
           video.playbackRate=rate;
