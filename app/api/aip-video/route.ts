@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-11": {
+  "19-12": {
+    prefix: "module-19/part-12/aip-module-19-part-12",
+    revision: "2026-11-13-m19-p12-troubleshoot-local-v1",
+    firstSlide: 68,
+    count: 7,
+    firstTitle: "Scenario and release dependency graph",
+    title: "Lab 12 — Diagnose and Roll Back GenAI Deployment Regression",
+  },  "19-11": {
     prefix: "module-19/part-11/aip-module-19-part-11",
     revision: "2026-11-13-m19-p11-troubleshoot-local-v1",
     firstSlide: 62,
