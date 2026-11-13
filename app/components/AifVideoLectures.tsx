@@ -14,6 +14,9 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"01",title:"Generative AI and Foundation Models — What They Are and How to Choose",start:1,end:3},
     {id:"02",title:"How Large Language Models Predict and Sample Tokens",start:4,end:7},
     {id:"03",title:"Image Generation, Visual Understanding and Diffusion",start:8,end:11},
+    {id:"04",title:"Amazon Bedrock — Managed Model Access and Application Architecture",start:12,end:14},
+    {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
+    {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
   "03":[
     {id:"01",title:"AI Fundamentals, Use Cases and Rule-Based vs Learning Systems",start:1,end:5},
