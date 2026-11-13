@@ -80,7 +80,8 @@ const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
 
 export default function AifVideoLectures({moduleId}:{moduleId:string}){
-  const entries=LECTURES[moduleId]??[];
+  const [extraLectures,setExtraLectures]=useState<Record<string,Lecture[]>>({});
+  const entries=[...(LECTURES[moduleId]??[]),...(extraLectures[moduleId]??[])];
   const [active,setActive]=useState("01");
   const [results,setResults]=useState<Record<string,Result>>({});
   const [checking,setChecking]=useState(true);
@@ -129,18 +130,45 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
 
   useEffect(()=>{
     const controller=new AbortController();
+    let busy=false;
     setChecking(true);
     setActive("01");
     setResults({});
-    Promise.all((LECTURES[moduleId]??[]).map(async x=>{
+    setExtraLectures(previous=>({...previous,[moduleId]:[]}));
+    const refresh=async()=>{
+      if(busy || controller.signal.aborted)return;
+      busy=true;
       try{
-        const res=await fetch(`/api/aif-video?module=${moduleId}&part=${x.id}`,{cache:"no-store",signal:controller.signal});
-        const value=(res.ok?await res.json():{status:"processing"}) as Result;
-        return [x.id,value] as const;
-      }catch{return [x.id,{status:"processing"} as Result] as const;}
-    })).then(items=>{if(!controller.signal.aborted){setResults(Object.fromEntries(items));setChecking(false);}})
-      .catch(()=>{if(!controller.signal.aborted)setChecking(false);});
-    return ()=>controller.abort();
+        const known=LECTURES[moduleId]??[];
+        const lastPart=Math.max(0,...known.map(x=>Number(x.id)));
+        // Probe a few additional consecutive part IDs, so new rendered parts appear
+        // without adding a lecture to source code or redeploying the site.
+        const parts=[...known.map(x=>x.id),...Array.from({length:6},(_,i)=>String(lastPart+i+1).padStart(2,"0"))];
+        const found=await Promise.all(parts.map(async id=>{
+          try{
+            const res=await fetch(`/api/aif-video?module=${moduleId}&part=${id}`,
+              {cache:"no-store",signal:controller.signal});
+            const value=(res.ok?await res.json():{status:"processing"}) as Result;
+            return [id,value] as const;
+          }catch{return [id,{status:"processing"} as Result] as const;}
+        }));
+        if(controller.signal.aborted)return;
+        setResults(Object.fromEntries(found));
+        const extras:Lecture[]=found.filter(([id,value])=>Number(id)>lastPart&&value.status==="ready")
+          .map(([id,value])=>{
+            const ready=value as Ready;
+            return {id,title:ready.title,
+              start:ready.chapters[0].slide,
+              end:ready.chapters[ready.chapters.length-1].slide};
+          }).sort((a,b)=>Number(a.id)-Number(b.id));
+        setExtraLectures(previous=>({...previous,[moduleId]:extras}));
+        setChecking(false);
+      }finally{busy=false;}
+    };
+    void refresh();
+    // Existing page sessions pick up verified R2 uploads without needing a refresh.
+    const poll=setInterval(()=>void refresh(),30000);
+    return()=>{controller.abort();clearInterval(poll);};
   },[moduleId]);
 
   useEffect(()=>{
