@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "17",
+  "module_title": "Storage and Generative AI Architectural Decisions",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All twenty numbered original Module 17 R2 WebP slides passed spatial audit; narration follows original slide order and on-screen teaching details rather than legacy lesson map.",
+  "part_id": "05",
+  "part_title": "Durable AI Orchestration and Chatbot Architecture Walkthroughs",
+  "script_revision": "2026-11-13-m17-p05-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 18,
+      "title": "Step Functions for Generative AI Workflows",
+      "narration": "The diagram contrasts a short Lambda-based request with a durable AWS Step Functions state machine. A simple one-step API call may be sufficiently handled directly, but a multi-stage AI workflow often needs explicit model invocations, quality checks, retries, conditional branches, approvals and result storage. Follow the state machine across the slide: receive input, invoke a model, evaluate quality, enter a human approval wait if needed, and then post-process and notify. A task token can allow an authorized reviewer to resume the workflow, but a timeout and escalation path should be defined so an approval never waits indefinitely. Execution history can support troubleshooting and auditing of state transitions, errors and timing, subject to appropriate protection of sensitive data. Step Functions does not automatically make every external operation idempotent: design safe retries. Use orchestration where the work truly spans stages and can outlive a single request, not for each generated model token."
+    },
+    {
+      "slide": 19,
+      "title": "Internal Legal Q&A Architecture",
+      "narration": "Start with the employee asking a legal question. The API and identity layer authenticates that person, validates their token and establishes a trusted identity context. Kendra searches internal documents, including policies and guidelines from supported enterprise sources, but filters retrieval based on the user's permissions so inaccessible documents are excluded. Only permitted passages go into the model's grounding context. Amazon Bedrock then generates a response based on those passages and returns citations to the underlying sources. The lower ingestion path is separate: enterprise documents and source access control lists are indexed before users issue queries. The crucial safeguard is permission-aware retrieval, not just a prompt telling the model to keep information confidential. Test access with employees who have different roles, verify revocation updates, and make sure citation links do not expose restricted source documents. The final answer should be traceable to authorized source evidence."
+    },
+    {
+      "slide": 20,
+      "title": "Customer-Facing Chatbot Architecture",
+      "narration": "This diagram has two distinct flows. In the live request path, a web client uses CloudFront protected by AWS WAF before reaching an authenticated API Gateway, with Lambda orchestrating retrieval and model generation. The application queries an authorized OpenSearch index, sends appropriate context to Amazon Bedrock, applies output validation or guardrails and returns a personalized response. The lower path begins when new source documents enter S3, are queued with SQS, processed through Lambda, embedded using a supported model and indexed into OpenSearch. Keep these ingestion and inference pipelines decoupled so document updates do not block every user request. The key design choice shown on the slide is to avoid sharing cached, user-specific answers across callers. Authorization must apply to retrieval results as well as API access. Monitor ingestion freshness, queue failures, model invocation limits, cost and response quality for a reliable customer-facing service."
+    }
+  ]
+}
