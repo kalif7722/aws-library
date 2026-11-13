@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Model Customization, RAG and Agents",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "03",
+  "part_title": "Transfer Learning, Fine-Tuning Choices and Model Evaluation",
+  "output_prefix": "aif-module-05-part-03",
+  "script_revision": "2026-11-13-aif-m05-p03-beginner-visual-v1",
+  "review_basis": "Original local WebP slides 7-9 individually inspected, including diagrams, labels and examples.",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Transfer Learning and Fine-tuning",
+      "narration": "A pretrained image model on the left has already learned reusable representations such as edges, textures, shapes and objects. In the center, the new task is inspecting manufactured parts to classify good versus defective examples. Rather than learning every visual pattern from scratch, we reuse the existing model as a starting point. The right section compares two approaches. In feature extraction, earlier layers stay frozen and only a new classifier is trained. In fine-tuning, some or all pretrained weights are updated using the new dataset. The bottom compares training from random weights, generally requiring more examples and compute, with starting from pretrained weights. Transfer learning is the broad idea; fine-tuning is one technique within it. Choose an approach based on how similar the new task is to prior training, the available labelled data, cost and measured quality. A frozen backbone may be a useful fast baseline, while larger adaptations require careful validation. Check: must transfer learning always update every pretrained layer? No."
+    },
+    {
+      "slide": 8,
+      "title": "When fine-tuning helps",
+      "narration": "The top panels show three practical aims: consistent support-persona tone, categorizing specialized tickets, and using company terminology and a required response format. The before-and-after examples show how labelled examples can steer the model toward stable output patterns. The middle classification path routes damaged-item returns to Returns and Refunds, an app connection issue to Technical Support, and a billing question to Billing and Payments. The lower left shows that fine-tuning changes model weights. The lower middle calls for high-quality examples, variety and realistic evaluation; poor data may teach undesirable behavior. The lower right makes an essential distinction: frequently changing policies, product details or inventory should usually be retrieved from trusted sources rather than baked into model weights. Fine-tuning does not promise factual accuracy, privacy or bias-free results. A good choice question is whether the requirement concerns stable format or fresh facts. For stable tone, fine-tuning might help; for yesterday's inventory numbers, retrieval is typically more direct."
+    },
+    {
+      "slide": 9,
+      "title": "Automatic foundation-model evaluation",
+      "narration": "This picture shows a four-step evaluation workflow in Amazon Bedrock. First create a representative collection of prompts, with reference answers where the chosen metric requires them. The left-hand examples include document summarization and a question about the capital of France. Second, use a selected model to generate answers. Third, an evaluator scores qualities such as correctness, relevance and grounding, depending on available settings. Fourth, compare scores and inspect failures rather than trusting a single average. The lower examples compare a generated summary with an approved reference, and the factual answer Paris with the reference Paris. Easy questions alone are not an adequate real-world test. The bottom note is important: evaluation is separate from training and does not update model weights automatically. Model and metric support can vary by AWS Region. Human review remains useful for high-impact or ambiguous outcomes. Check: if a model achieves good scores but repeatedly invents citations, is it ready for production? Not without addressing that failure and verifying its sources."
+    }
+  ]
+}

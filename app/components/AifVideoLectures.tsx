@@ -10,6 +10,11 @@ type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
   "00":[{id:"01",title:"Start Here — Your AI Practitioner Learning Journey",start:1,end:4}],
   "01":[{id:"01",title:"AI Fundamentals — From Everyday Examples to Generative AI",start:1,end:6}],
+  "05":[
+    {id:"01",title:"Fine-tuning and Continued Pretraining",start:1,end:3},
+    {id:"02",title:"Instruction Datasets and the Fine-Tuning Lifecycle",start:4,end:6},
+    {id:"03",title:"Transfer Learning, Fine-Tuning Choices and Model Evaluation",start:7,end:9},
+  ],
   "04":[
     {id:"01",title:"Generative AI and Foundation Models — What They Are and How to Choose",start:1,end:3},
     {id:"02",title:"How Large Language Models Predict and Sample Tokens",start:4,end:7},

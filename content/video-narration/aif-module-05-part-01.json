@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Model Customization, RAG and Agents",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "01",
+  "part_title": "Fine-tuning and Continued Pretraining",
+  "output_prefix": "aif-module-05-part-01",
+  "script_revision": "2026-11-13-aif-m05-p01-beginner-visual-v1",
+  "review_basis": "Original local WebP slides 1-3 individually inspected, including diagrams, labels and examples.",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Fine-tuning a model in Amazon Bedrock",
+      "narration": "Follow the full process from left to right. On the left are curated question-and-answer examples stored in Amazon S3, including support-response tone and format. A model customization job in Amazon Bedrock uses those examples and a supported base foundation model. An IAM service role must permit access to the training files. Fine-tuning updates model weights, producing the separate customized model shown in the middle. Next comes evaluation using held-out examples that were not used for training. Finally, a supported deployment option makes the customized model usable by an application. The exact customization, deployment and pricing options vary by model and AWS Region. The boxes below explain the purpose: train consistent behavior or style, not automatically memorize accurate current business facts. For updated inventory or policies, retrieve trusted documents at runtime. A student should distinguish training, when weights change, from inference, when an already-trained model responds. Check: should you deploy immediately after fine-tuning? No. Test realistic cases, security and bias first."
+    },
+    {
+      "slide": 2,
+      "title": "Instruction-based fine-tuning",
+      "narration": "Here a model learns from supervised, labelled instructions. The left training dataset maps customer complaints to categories. I cannot sign in maps to Account access, My invoice is incorrect to Billing, and The app keeps crashing to Technical issue. Below, a separate evaluation set contains different example phrasings. Its purpose is to check generalization without leaking test examples into training. Follow the arrows: the records are stored in Amazon S3, a compatible pretrained foundation model is chosen, and a customization job creates a fine-tuned version. On the far right, a new ticket saying I cannot reset my password enters the customized model and the illustrated output is Account access. The training examples need the model-specific schema, typically instruction and desired completion pairs, not merely a random list of tickets. The key is representative data, clear labels and a reliable held-out check. At inference time, a new instruction is submitted, which is different from the labelled training examples. Question: if we test only on the same messages used to train, is the result reliable evidence of real-world quality? No."
+    },
+    {
+      "slide": 3,
+      "title": "Continued pre-training",
+      "narration": "Continued pretraining adapts an already pretrained language model using domain-specific, largely unlabeled text. Read the numbered panels. First, collect engineering manuals, technical guides, standards and terminology in a permitted, curated corpus stored in S3. Second, a supported Bedrock customization job continues the language-learning objective, such as predicting the next token, on that domain text. Third, the updated weights yield a domain-adapted model. Fourth, evaluate with held-out technical questions, summaries, classifications and extraction tasks. The comparison at the bottom explains the difference from instruction tuning. Instruction tuning learns from task instructions paired with desired answers; continued pretraining learns from raw domain documents without manually supplied response labels. This may help with vocabulary and style, but it requires significant data and compute and does not guarantee correct domain facts. It also does not mean every Bedrock model supports continued pretraining. For a company whose manuals change frequently, retrieve approved sources for up-to-date answers instead of relying on the model's older weights. Check: does domain pretraining eliminate the need for factual verification? No."
+    }
+  ]
+}

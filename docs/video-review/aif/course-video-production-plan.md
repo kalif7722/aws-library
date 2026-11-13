@@ -148,3 +148,9 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - These three narration manifests and audited R2-rendering workflows are committed as `aif-module-04-part-04` through `part-06`. API and AIP-standard AIF left player now map all Module 04 slides **1–20** without gaps.
 - **Cumulative committed coverage: 121/349 slides across 31 configured lectures; Module 04 has six configured lectures covering 20/20 slides.** Next untouched narration begins at Module 05 slide 01.
 - Site deployment, GitHub job completion and live R2 MP4/manifest validation were **not independently verified**; the player must continue to label unpublished parts as pending rather than ready.
+
+## Staged AIF M05 batch — 2026-11-13
+- Inspected original slides 01–09 and authored three beginner-first visual topic videos: customization types (1–3), single/multi-turn datasets and fine-tuning lifecycle (4–6), transfer learning/when to fine-tune/evaluation (7–9).
+- Changes remain on `aif-video-staging` with no Cloudflare deployment from main. Three source-audited R2 video workflow configurations and playlist/API mappings are staged.
+- Cumulative narration planned or committed: 130/349 visual scenes across 34 configured lectures; readiness is not claimed until R2 manifest and MP4 checks pass.
+- Next original source: M05 slide 10.

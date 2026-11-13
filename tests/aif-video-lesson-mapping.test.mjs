@@ -9,12 +9,12 @@ const api=read("app/api/aif-video/route.ts");
 const renderer=read("scripts/render_aip_course_video.py");
 const audit=read("scripts/audit_aif_local_visuals.py");
 const moduleMap=JSON.parse(read("app/courses/aws-ai-practitioner/visual-lesson-map.json"));
-const lessonCounts={"00":4,"01":6,"02":29,"03":62,"04":20};
-const videoSceneCounts={"00":4,"01":6,"02":6,"03":5,"04":3};
+const lessonCounts={"00":4,"01":6,"02":29,"03":62,"04":20,"05":28};
+const videoSceneCounts={"00":4,"01":6,"02":6,"03":5,"04":3,"05":3};
 
 test("AIF module pages show original lessons and beginner-first video lectures",()=>{
   assert.match(page,/import AifVideoLectures/);
-  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/\['00','01','02','03','04','05'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
   assert.ok(page.indexOf("<AifVideoLectures")<page.indexOf("<AifModuleLessons"));
   assert.match(page,/id!=='14'&&<AifModuleLessons/);
   assert.match(catalog,/id="video-lectures"/);
@@ -92,7 +92,7 @@ test("AIF Module 03 teaching-unit boundaries use the correct original slide sequ
 });
 
 test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
-  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/\['00','01','02','03','04','05'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
   for(const [part,start,end] of [["01",1,3],["02",4,7],["03",8,11],["04",12,14],["05",15,16],["06",17,20]]){
     const manifest=JSON.parse(read(`content/video-narration/aif-module-04-part-${part}.json`));
     const workflow=read(`.github/workflows/render-aif-m04-part-${part}.yml`);
@@ -103,3 +103,5 @@ test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
     assert.ok(catalog.includes(`id:"${part}"`));
   }
 });
+
+test("AIF Module 05 staged video batch maps slides 1–9 without gaps",()=>{for(const [p,s,e] of [["01",1,3],["02",4,6],["03",7,9]]){const m=JSON.parse(read(`content/video-narration/aif-module-05-part-${p}.json`));const w=read(`.github/workflows/render-aif-m05-part-${p}.yml`);assert.deepEqual(m.scenes.map(x=>x.slide),Array.from({length:e-s+1},(_,i)=>s+i));assert.ok(w.includes("audit_aif_local_visuals.py --module 05"));assert.ok(api.includes(`"05-${p}":`));} });

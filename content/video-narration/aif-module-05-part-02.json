@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "05",
+  "module_title": "Model Customization, RAG and Agents",
+  "slide_local_dir": "public/course-visuals/aif-course/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "02",
+  "part_title": "Instruction Datasets and the Fine-Tuning Lifecycle",
+  "output_prefix": "aif-module-05-part-02",
+  "script_revision": "2026-11-13-aif-m05-p02-beginner-visual-v1",
+  "review_basis": "Original local WebP slides 4-6 individually inspected, including diagrams, labels and examples.",
+  "scenes": [
+    {
+      "slide": 4,
+      "title": "Single-turn Instruction-Tuning Datasets",
+      "narration": "The left panel shows single-turn training pairs: one user instruction and one intended assistant response. A complaint about an incorrect invoice gets Billing; a missing package gets Shipping; an app that will not open gets Technical Support. These examples must be accurate and diverse. Second, the model-specific formatting panel shows optional system instructions and user-assistant message records. Third, the formatted training file is stored in Amazon S3. Fourth, a supported Bedrock customization job adjusts the model to follow similar instructions. The lower left stresses clear intent, consistent labels and realistic variation. The red panel distinguishes training records from a live user conversation: the examples teach behavior, but they are not real-time requests for an answer. Keep a separate evaluation set and check privacy before uploading tickets. A simple analogy is marking a set of worked examples for a student, then giving a different test. Quick decision: should a single-turn example include an entire conversation history? No; its key structure is one instruction and its desired response."
+    },
+    {
+      "slide": 5,
+      "title": "Multi-turn Instruction-Tuning Datasets",
+      "narration": "The first column follows a conversation: a user asks to categorize support tickets, the assistant requests the issue, the user reports an incorrect invoice, and the assistant replies Billing. Later the user reports they cannot sign in, and the assistant says Account Access. Each answer depends partly on the exchange that came before. That is a multi-turn training example. The second panel places many such conversations in a correctly formatted dataset in S3. The third invokes a supported customization job. The fourth depicts a model better able to follow conversation context and stay consistent across turns. At the bottom, compare single-turn instruction tuning, where every question and answer stands alone, with multi-turn examples containing alternating user and assistant messages. The goal is learning conversational relationships rather than memorizing a particular dialogue. Training records containing real support conversations need careful consent, redaction and data-quality review. Check: if the user says also I cannot sign in, does the earlier conversation matter? Yes, because the model should understand this is a second support issue within the same exchange."
+    },
+    {
+      "slide": 6,
+      "title": "Fine-tuning: the complete work involved",
+      "narration": "Read the five large panels from left to right. First, data preparation: collect genuine support-ticket examples, remove sensitive information, apply accurate labels and ensure categories are representative. Second, customization compute: choose a supported foundation model and AWS Region, set appropriate training options, and run the job. Third, held-out evaluation: measure quality, task fit and errors on cases that were not part of training, including bias across ticket categories. Fourth, deployment: choose a supported inference option for that customized model. Fifth, monitoring: track accuracy, latency, cost and new complaint types, with alerts and correction plans. The lower section contrasts focused instruction tuning with broader continued training; the latter may require more data and compute, but expenses depend on model and workload. The worked example at the bottom classifies a failed payment as Billing. Model customization is therefore an ongoing production process rather than one isolated training run. Question: would a successful training-job status prove the model is reliable for customers? No; independent evaluation and production monitoring are still required."
+    }
+  ]
+}
