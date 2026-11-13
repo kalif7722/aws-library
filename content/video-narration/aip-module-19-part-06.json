@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "19",
+  "module_title": "GenAI Troubleshooting",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "",
+  "slide_local_dir": "public/course-visuals/genai-troubleshooting",
+  "part_id": "06",
+  "part_title": "Lab 06 — Diagnose a Stale Bedrock Knowledge Base After Update",
+  "script_revision": "2026-11-13-m19-p06-troubleshoot-local-v1",
+  "review_basis": "Original 2048x1152 repository slides 29–35 visually inspected; source, ingestion, retrieval and cache evidence cross-checked against lab simulator guidance.",
+  "scenes": [
+    {
+      "slide": 29,
+      "title": "Scenario and ingestion versus query architecture",
+      "narration": "Our incident is a refund-policy assistant answering fourteen days when the updated document says thirty days. Start with two independent pipelines on the slide. On the left, an S3 source document is read by a Knowledge Base data source, parsed into chunks, and written into a retrieval index. On the right, a user asks for the refund window, the application retrieves relevant indexed passages, and Bedrock generates an answer with citations. The sample response still quotes refund policy version sixteen, even though version eighteen now exists. That citation is a powerful clue: the model may be accurately using stale context. Before editing any prompt, establish exactly which policy version is present in S3, which content was ingested, and which source the application actually retrieved. Open the S3 bucket and Bedrock Knowledge Bases data source view. Record the last synchronization time, selected knowledge base, data source, object prefix, and citation. A green status from an old synchronization does not prove the most recent policy was indexed. We will diagnose source freshness, ingestion, direct retrieval, application caching and routing in that order."
+    },
+    {
+      "slide": 30,
+      "title": "Verify source object and policy version",
+      "narration": "Begin in Amazon S3, open the refund policy bucket and the policies prefix, and enable object versions where appropriate. The slide highlights latest synthetic version eighteen beside older version sixteen. Check the object key, version ID, last modified time, PDF content type and expected document size. The right-hand sample uses an S3 head-object command with a specific bucket, key and version ID to collect metadata; treat those names and IDs as synthetic fixtures rather than universal values. Metadata alone does not prove which refund text the file contains, so open or securely inspect the actual latest PDF. The illustrated page explicitly says customers may request a refund within thirty days. If the source still says fourteen days, the problem is upstream of Bedrock and the content owner must correct it. If version eighteen is present with the expected thirty-day rule, retain its object identifier and timestamp, then proceed to the Knowledge Base ingestion history. This separates the physical source of truth from the search index and prevents a pointless prompt change."
+    },
+    {
+      "slide": 31,
+      "title": "Inspect data source sync and ingestion failures",
+      "narration": "Now open Bedrock Knowledge Bases, select the intended knowledge base, choose Data sources and inspect the latest synchronization run. The screenshot shows a failed run for the refund PDF: no new document was ingested, and the details say access was denied when retrieving an object from S3. The adjacent log names the Knowledge Base service role and the missing s3:GetObject permission for the relevant object. Meanwhile, parsed document status still shows version sixteen available with twelve chunks and version eighteen not ingested. That is evidence of an ingestion permission failure, not a foundation model hallucination. Navigate to IAM Roles and inspect the exact service role used by the data source; compare its resource-scoped S3 read permission and any applicable bucket policy with the correct source prefix. The sample indicates KMS access is healthy, so do not randomly change KMS permissions. Repair only the demonstrated S3 access gap, preserve least privilege and audit the change. Then rerun synchronization rather than assuming an IAM policy update automatically refreshes the vector index."
+    },
+    {
+      "slide": 32,
+      "title": "Repair scoped access parsing and indexing",
+      "narration": "Follow the four numbered stages shown: check the source scope, run the synchronization, inspect parsed content, and retrieve from the actual knowledge base. First validate that the data source points to the intended S3 bucket and prefix, and that the include pattern, shown as PDF files, matches version eighteen. Then grant only the missing service-role read access supported by the previous slide's log and start a fresh data source sync. The example completed job reports one document parsed, twelve chunks created and zero failed documents. That is an encouraging intermediate result, but it is not the final success condition. Inspect the parsing log and look for the thirty-day refund sentence in the extracted text. Confirm the parsed chunks are associated with the intended Knowledge Base, then use the Knowledge Base test interface in Retrieve only mode. The right panel now displays a passage from refund policy version eighteen containing thirty days. If the job completes without the correct passage, investigate filters, parsing, indexing and the source path before moving on."
+    },
+    {
+      "slide": 33,
+      "title": "Retrieve directly and eliminate stale duplicates",
+      "narration": "Even after a successful sync, search relevance can still surface obsolete content. Open the Bedrock Knowledge Base Test interface, select Retrieve only, and ask the refund question while viewing source passages, locations and versions before the model generates an answer. The sample returns version sixteen saying fourteen days at a similarity score of point eight two, followed by version eighteen saying thirty days at point five eight. The old source ranks higher, but those illustrative scores are not universal relevance thresholds. The right-hand S3 view shows separate old and new PDF objects. If the older copy is no longer authorized as current policy, follow your document-retention approval and remove it from the active ingestion scope; do not blindly destroy records required for audit or legal retention. Run synchronization again and confirm that the index no longer surfaces the obsolete passage for normal queries. The final example returns only version eighteen with thirty days. This step proves search freshness independently of response generation or application caching."
+    },
+    {
+      "slide": 34,
+      "title": "Check answer cache routing and citations",
+      "narration": "Now imagine the Knowledge Base returns the correct passage but the chat application still answers fourteen days. Follow the diagram from the user through the application, which can choose either a cached answer or a Knowledge Base retrieval. The upper branch shows an application-managed cached version sixteen result, while the lower branch retrieves version eighteen with the thirty-day policy. Check whether the application cache key includes tenant, question identity, policy version and the intended Knowledge Base route. The sample cache key contains tenant acme, a question hash, policy version eighteen and a Knowledge Base identifier; these are application values, not native Bedrock console switches. In the simulated application workbench, invalidate only the stale entry and direct the query to the updated knowledge base. Then compare the final answer and citation against version eighteen. If the answer changes with caching disabled, investigate cache invalidation logic rather than resyncing repeatedly. Also ensure a tenant-specific cached answer cannot be reused by another tenant with different permissions."
+    },
+    {
+      "slide": 35,
+      "title": "Verify updated answer and regression evidence",
+      "narration": "Complete the incident by testing the full answer path, not merely the last sync status. In the Knowledge Base test interface ask for the refund window and verify thirty days with a citation to the approved version eighteen source. The example also shows two failures to detect: the old fourteen-day answer citing version sixteen and a regression that still retrieves the obsolete document after cleanup. Compare the answer's exact source span and version so an apparently plausible response cannot pass on wording alone. Next run a no-answer fixture and an appropriate cross-tenant case to confirm permission filtering and cache separation remain intact. Check ingestion job completion, indexed document status, application routing, cache keys, and the response citation together. If a legitimate record-retention requirement applies, archive old policy versions outside the active retrieval scope rather than deleting historical evidence blindly. Add an alert or release check for failed sync jobs, test updated policy retrieval after each ingestion, and log index or policy version identifiers for future diagnosis. The fix is verified only when the synthetic user consistently receives thirty days from the current approved source."
+    }
+  ]
+}
