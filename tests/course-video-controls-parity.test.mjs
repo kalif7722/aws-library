@@ -54,7 +54,7 @@ test("Both courses share playback-speed and auto-next preferences",()=>{
   assert.match(aip,/const PLAYBACK_SPEED_KEY = COURSE_VIDEO_SPEED_KEY/);
   assert.match(aip,/const AUTO_NEXT_KEY = COURSE_VIDEO_AUTO_NEXT_KEY/);
   assert.match(aif,/localStorage\.getItem\(COURSE_VIDEO_SPEED_KEY\)/);
-  assert.match(aif,/const AUTO_NEXT_KEY="course-video-auto-next:v1"/);
+  assert.match(aif,/const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY/);
   assert.match(aif,/onEnded=\{finish\}/);
   assert.match(aif,/if\(autoNext&&hasNext\)selectNext\(\)/);
 });
