@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY} from "./CourseVideoControls";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 import {readCompleted} from "./StudyProgress";
 import {AIP_VIDEO_PARTS,getAipVideoProgress} from "./aipVideoCatalog";
@@ -20,8 +21,8 @@ type VideoResult = Ready | { status: "processing" };
 const COURSE_URL = "/courses/aws-generative-ai-developer-professional";
 const MODULE_01 = `${COURSE_URL}/visual/module-01`;
 const AUTO_NEXT_KEY = "aip-auto-next:v1";
-const PLAYBACK_SPEED_KEY = "aip-video-playback-speed:v1";
-const PLAYBACK_SPEEDS = [0.75,1,1.25,1.5,1.75,2] as const;
+const PLAYBACK_SPEED_KEY = COURSE_VIDEO_SPEED_KEY;
+const PLAYBACK_SPEEDS = COURSE_VIDEO_SPEEDS;
 
 function fmt(seconds: number) {
   if (!Number.isFinite(seconds)) return "—";
@@ -308,38 +309,13 @@ function VideoPlayer({
         Browser autoplay is paused.
         <button type="button" onClick={()=>{void player.current?.play().catch(()=>setAutoPlayBlocked(true));}}>▶ Play lecture</button>
       </div>}
-      <div className="av-custom-controls" role="group" aria-label="Video playback controls">
-        <input className="av-timeline" type="range" min={0} max={Math.max(1,duration)} step={0.1}
-          value={Math.min(Math.max(0,position),Math.max(1,duration))}
-          onChange={event=>seekTo(Number(event.currentTarget.value))}
-          aria-label="Video playback position" aria-valuetext={`${fmt(position)} of ${fmt(duration)}`}/>
-        <div className="av-control-row">
-          <button type="button" onClick={togglePlayback} aria-label={playing?"Pause video":"Play video"} title={playing?"Pause":"Play"}>{playing?"❚❚":"▶"}</button>
-          <button type="button" onClick={()=>skipSeconds(-5)} aria-label="Rewind 5 seconds" title="Back 5 seconds">↶ 5s</button>
-          <button type="button" onClick={()=>skipSeconds(5)} aria-label="Forward 5 seconds" title="Forward 5 seconds">5s ↷</button>
-          <span className="av-timestamp">{fmt(position)} / {fmt(duration)}</span>
-          <span className="av-controls-grow"/>
-          <label className="av-speed-control">
-            <span>Speed</span>
-            <select aria-label="Video playback speed" value={playbackSpeed}
-              onChange={event=>changePlaybackSpeed(Number(event.currentTarget.value))}>
-              {PLAYBACK_SPEEDS.map(rate=><option key={rate} value={rate}>{rate}×</option>)}
-            </select>
-          </label>
-          <button type="button" onClick={toggleCaptions} aria-pressed={captionsOn}
-            aria-label={captionsOn?"Turn off captions":"Turn on captions"} title="English subtitles">CC{captionsOn?" ✓":""}</button>
-          <button type="button" onClick={toggleMute} aria-label={muted?"Unmute":"Mute"} title={muted?"Unmute":"Mute"}>{muted?"🔇":"🔊"}</button>
-          <input className="av-volume" type="range" min={0} max={1} step={0.05} value={muted?0:volume}
-            onChange={event=>adjustVolume(Number(event.currentTarget.value))} aria-label="Volume"/>
-          <button type="button" className="av-mark-complete" onClick={completeManually}
-            disabled={completed} aria-label={completed?"Video completed":"Mark this video complete"}>
-            {completed?"✓ Completed":"✓ Mark complete"}
-          </button>
-          {onToggleFullscreen && <button type="button" onClick={onToggleFullscreen}
-            aria-label={fullscreen?"Exit fullscreen":"Fullscreen with navigation"}
-            title={fullscreen?"Exit fullscreen":"Fullscreen with navigation"}>{fullscreen?"⤢":"⛶"}</button>}
-        </div>
-      </div>
+      <CourseVideoControls playing={playing} position={position} duration={duration}
+        playbackSpeed={playbackSpeed} muted={muted} volume={volume} captionsOn={captionsOn}
+        fullscreen={fullscreen} onTogglePlayback={togglePlayback} onSkip={skipSeconds}
+        onSeek={seekTo} onChangeSpeed={changePlaybackSpeed} onToggleCaptions={toggleCaptions}
+        onToggleMute={toggleMute} onVolume={adjustVolume} onFullscreen={onToggleFullscreen}
+        onPrevious={onPrevious} onNext={onNext} previousTitle={previousTitle} nextTitle={nextTitle}
+        onMarkComplete={completeManually} completed={completed}/>
     </div>
     <div className="av-tools">
       {onToggleFullscreen && <button type="button" className="av-action av-fullscreen-button"
