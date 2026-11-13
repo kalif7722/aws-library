@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "17",
+  "module_title": "Storage and Generative AI Architectural Decisions",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All twenty numbered original Module 17 R2 WebP slides passed spatial audit; narration follows original slide order and on-screen teaching details rather than legacy lesson map.",
+  "part_id": "03",
+  "part_title": "Production GenAI and Vector Store Architecture Decisions",
+  "script_revision": "2026-11-13-m17-p03-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 11,
+      "title": "Production GenAI Architecture Beyond the Model",
+      "narration": "Read the six request stages across the top of this architecture. Authenticate the user and establish access permissions first, then admit traffic through a protected API layer with validation and throttling. The orchestration layer manages prompts, tool calls, retrieval and resilience, while the retrieval stage returns only context the caller is allowed to access. The foundation model generates a response from that context, and output validation checks safety, formatting and application rules before sending the answer back. The lower ingestion pipeline is separate from live inference: source content is parsed, cleaned, chunked, embedded and indexed with access metadata. Production visibility is more than a single latency metric. Capture appropriate logs, traces, quality evaluations and user feedback while protecting sensitive content. Add cost and quotas, retries, fallback behavior and operational monitoring. Successful model invocation is not the same as a trusted production application."
+    },
+    {
+      "slide": 12,
+      "title": "AIP Storage and GenAI Architectural Decisions",
+      "narration": "The upper decision matrix lists the requirements that should drive vector-store selection: query latency and recall, workload scale, hybrid keyword-and-vector retrieval, metadata filters, document-level permissions, existing platforms, operating effort and total cost. In the data path beneath it, source information is transformed into embeddings and written to a vector index; queries must use compatible embedding model dimensions and distance metrics. Amazon Aurora PostgreSQL with pgvector, OpenSearch and S3 Vectors are examples of choices with different transaction, search and storage characteristics. Do not declare one service the universal winner. Test realistic query loads with filters, representative datasets and per-tenant authorization. Compare both ingestion costs and retrieval costs as well as operational work. In a multi-tenant AI product, an excellent similarity score is not enough if the application cannot consistently prevent one tenant from retrieving another tenant's documents."
+    },
+    {
+      "slide": 13,
+      "title": "Architectural Decision: Amazon OpenSearch Managed or Serverless?",
+      "narration": "This comparison separates an OpenSearch Service managed domain from an OpenSearch Serverless collection. With a provisioned domain, you choose and operate instance counts, node capacity and storage configurations, allowing more direct control of performance tuning and capacity planning. In the Serverless model, AWS manages the collection's underlying capacity and reduces some cluster administration, but compute capacity is still billable through OpenSearch Compute Units alongside storage. Serverless is not necessarily charged only per query and should not be assumed to scale to zero. Both options still require thoughtful ingestion, index design, network exposure, authentication, role and data access policy configuration, encryption, performance tests and cost monitoring. The architecture includes search, analytics and semantic retrieval use cases, so identify the real workload rather than assuming a text-search service is automatically optimized for every vector database scenario. Use measured latency, scale and operating constraints to decide."
+    }
+  ]
+}
