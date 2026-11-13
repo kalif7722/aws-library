@@ -70,3 +70,24 @@ test("AIF keeps real R2 verification and original slides while sharing controls"
   assert.match(page,/<AifVideoLectures moduleId=\{id\}/);
   assert.match(page,/<AifModuleLessons key=\{id\}/);
 });
+
+test("Spoken captions use the same timed WebVTT overlay and safe proxy across AIP and AIF",()=>{
+  const captions=read("app/components/CourseVideoCaptions.tsx");
+  const proxy=read("app/api/course-video-captions/route.ts");
+  assert.match(aip,/import CourseVideoCaptions/);
+  assert.match(aif,/import CourseVideoCaptions/);
+  assert.match(aip,/<CourseVideoCaptions src=\{item.captionsUrl\} position=\{position\} enabled=\{captionsOn\}/);
+  assert.match(aif,/<CourseVideoCaptions src=\{ready.captionsUrl\} position=\{position\} enabled=\{captionsOn\}/);
+  assert.match(captions,/parseCourseVideoVtt/);
+  assert.match(captions,/position>=c.start&&position<c.end/);
+  assert.match(captions,/Captions unavailable for this video/);
+  assert.match(proxy,/source.origin!==ROOT/);
+  assert.match(proxy,/WEBVTT/);
+});
+test("Shared previous and next buttons expose destination-specific hover details",()=>{
+  assert.match(controls,/data-tooltip=\{p.previousTitle/);
+  assert.match(controls,/data-tooltip=\{p.nextTitle/);
+  assert.match(aif,/data-tooltip=\{previous\?/);
+  assert.match(aif,/data-tooltip=\{following\?/);
+  assert.match(aif,/aif-video-layout\{display:grid;grid-template-columns:minmax\(235px,310px\)/);
+});
