@@ -128,3 +128,14 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - Narration manifests committed in `content/video-narration/aif-module-03-part-16.json` through `part-18.json`; push-triggered GitHub Actions workflows committed as `.github/workflows/render-aif-m03-part-16.yml` through `part-18.yml` using the established source audit, en-US-AndrewNeural at -3%, full caption/transcript/manifest creation and verified Cloudflare R2 publication gate.
 - Added all three lessons to the standard AIF left playlist and the API's revision-gated publication registry. **Do not count a lecture as playable until the GitHub render succeeds and R2 MP4 plus matching manifest are verified.**
 - **Current committed narration: 101/349 original slides across 25 configured lectures**. Module 03 is fully scripted; continue at Module 04 slide 01 after checking original visuals.
+
+## Progress checkpoint — November 13, 2026 (Module 04 Parts 01–03)
+
+- Inspected original Module 04 local WebP images **01–12** visually. Slides **01–11** were narrated in detail from actual diagrams, labels, probability examples, model licensing choices, image transformations and diffusion process. Slide 12 previews the next Amazon Bedrock topic but has not yet been narrated.
+- **Part 01 (slides 01–03):** generative AI versus classification, pretrained foundation models, task-specific modality, provider choices, licensing and API-versus-self-hosting tradeoffs.
+- **Part 02 (slides 04–07):** language model pretraining/inference, tokenization, autoregressive next-token generation, numerical token distributions, temperature/top-k/top-p and an actual worked sampling example.
+- **Part 03 (slides 08–11):** text-to-image, image-to-image, image-to-text and forward noise/reverse denoising diffusion, with accuracy and human-review caveats.
+- Original-image-grounded scripts committed as `content/video-narration/aif-module-04-part-01.json` through `part-03.json`; new push-triggered audited workflows `.github/workflows/render-aif-m04-part-01.yml` through `part-03.yml`. Voice is `en-US-AndrewNeural` at `-3%`. Uses the established audited rendering and AIF-specific R2 publication path.
+- All three lectures registered in `app/api/aif-video/route.ts` and shared AIF playlist `app/components/AifVideoLectures.tsx`. Availability remains gated on matching published manifest and confirmed MP4.
+- **Current configured narration coverage: 112/349 original slides across 28 lecture parts.** The next untouched image is **Module 04 slide 12**, beginning the Amazon Bedrock managed-model architecture section.
+- Committed workflow configuration does not itself prove the GitHub Action rendered or R2 published the media; verify the jobs and R2 before reporting playback ready.
