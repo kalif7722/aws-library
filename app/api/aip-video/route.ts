@@ -1092,79 +1092,62 @@ const CONFIG: Record<string, {
 
 type Scene = { slide?: number; title?: string; start_seconds?: number; duration_seconds?: number };
 type Manifest = {
-  script_revision?: string;
-  scenes?: Scene[];
-  duration_seconds?: number;
+  module?: string; part?: string | null; script_revision?: string;
+  scenes?: Scene[]; duration_seconds?: number;
 };
 
 const response = (status: "ready" | "processing", details?: Record<string, unknown>) =>
-  Response.json({ status, ...details }, { headers: { "Cache-Control": "no-store, max-age=0" } });
+  Response.json({status,...details},{headers:{"Cache-Control":"no-store, max-age=0"}});
 
+// The current R2 manifest, not a duplicated GitHub revision/title, is the source of truth.
 export async function GET(request: NextRequest) {
   const module = request.nextUrl.searchParams.get("module") ?? "";
   const part = request.nextUrl.searchParams.get("part");
-  const key = part ? `${module}-${part}` : module;
-  const config = CONFIG[key];
-  if (!config) {
-    return Response.json({ error: "Video not published for this part." }, { status: 404 });
-  }
-
-  const url = `${ROOT}/${config.prefix}`;
-  const cacheVersion = `?v=${encodeURIComponent(config.revision)}`;
+  if (!/^[0-9]{2}$/.test(module) || (part !== null && !/^[0-9]{2}$/.test(part)))
+    return Response.json({error:"Invalid module or part."},{status:400});
+  const key=part ? `${module}-${part}` : module;
+  const config=CONFIG[key];
+  const prefix=config?.prefix ?? (part
+    ? `module-${module}/part-${part}/aip-module-${module}-part-${part}`
+    : `module-${module}/aip-module-${module}`);
+  const url=`${ROOT}/${prefix}`;
   try {
-    const manifestResult = await fetch(`${url}-manifest.json${cacheVersion}`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(6500),
+    const manifestResult=await fetch(`${url}-manifest.json`,{
+      cache:"no-store",signal:AbortSignal.timeout(6500)
     });
-    if (!manifestResult.ok) return response("processing");
-
-    const manifest = await manifestResult.json() as Manifest;
-    const scenes = manifest.scenes ?? [];
-    if (
-      manifest.script_revision !== config.revision ||
-      scenes.length !== config.count ||
-      scenes[0]?.title !== config.firstTitle ||
-      scenes.some((scene, i) =>
-        scene.slide !== config.firstSlide + i ||
-        !Number.isFinite(scene.start_seconds) ||
-        !Number.isFinite(scene.duration_seconds))
-    ) return response("processing");
-
-    const mp4Url = `${url}.mp4${cacheVersion}`;
-    const videoCheck = await fetch(mp4Url, {
-      method: "HEAD",
-      cache: "no-store",
-      signal: AbortSignal.timeout(6500),
-    });
+    if(!manifestResult.ok)return response("processing");
+    const manifest=await manifestResult.json() as Manifest;
+    const scenes=manifest.scenes??[];
+    if(manifest.module!==module ||
+       (part!==null && manifest.part!==part) ||
+       !manifest.script_revision || !Number.isFinite(manifest.duration_seconds) ||
+       (manifest.duration_seconds??0)<=0 || !scenes.length ||
+       scenes.some((scene,i)=>!Number.isInteger(scene.slide) || !scene.title ||
+         (i>0&&scene.slide!==(scenes[i-1].slide??0)+1) ||
+         !Number.isFinite(scene.start_seconds) ||
+         !Number.isFinite(scene.duration_seconds) ||
+         (scene.duration_seconds??0)<=0))return response("processing");
+    const version=`?v=${encodeURIComponent(manifest.script_revision)}`;
+    const mp4Url=`${url}.mp4${version}`;
+    const videoCheck=await fetch(mp4Url,{method:"HEAD",cache:"no-store",
+      signal:AbortSignal.timeout(6500)});
     await videoCheck.body?.cancel();
-    if (!videoCheck.ok) {
-      // R2 gateways may fail HEAD while allowing a byte-range GET.
-      const rangeCheck = await fetch(mp4Url, {
-        method: "GET",
-        headers: { Range: "bytes=0-0" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(6500),
-      });
+    if(!videoCheck.ok){
+      const rangeCheck=await fetch(mp4Url,{method:"GET",
+        headers:{Range:"bytes=0-0"},cache:"no-store",
+        signal:AbortSignal.timeout(6500)});
       await rangeCheck.body?.cancel();
-      if (!rangeCheck.ok) return response("processing");
+      if(!rangeCheck.ok)return response("processing");
     }
-
-    return response("ready", {
-      module, part,
-      title: config.title,
-      revision: config.revision,
-      videoUrl: mp4Url,
-      captionsUrl: `/api/aip-video-captions?module=${module}${part ? `&part=${part}` : ""}&rev=${encodeURIComponent(config.revision)}`,
-      transcriptUrl: `${url}-transcript.txt`,
-      durationSeconds: manifest.duration_seconds,
-      chapters: scenes.map((scene) => ({
-        slide: scene.slide,
-        title: scene.title,
-        startSeconds: scene.start_seconds,
-        durationSeconds: scene.duration_seconds,
-      })),
+    return response("ready",{
+      module,part,title:config?.title??scenes[0].title,
+      revision:manifest.script_revision,
+      videoUrl:mp4Url,
+      captionsUrl:`/api/aip-video-captions?module=${module}${part?`&part=${part}`:""}&rev=${encodeURIComponent(manifest.script_revision)}`,
+      transcriptUrl:`${url}-transcript.txt${version}`,
+      durationSeconds:manifest.duration_seconds,
+      chapters:scenes.map(scene=>({slide:scene.slide,title:scene.title,
+        startSeconds:scene.start_seconds,durationSeconds:scene.duration_seconds}))
     });
-  } catch {
-    return response("processing");
-  }
+  }catch{return response("processing");}
 }
