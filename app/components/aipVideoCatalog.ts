@@ -64,6 +64,13 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "01", title: "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration", subtitle: "DataSync vs Transfer Family, task lifecycle and NFS/SMB migration", start: 1, end: 3 },
     { id: "02", title: "Agentless Transfer, Task Controls and Data Integrity", subtitle: "AWS storage transfers, overwrite/delete settings, verification and archives", start: 4, end: 6 },
   ],
+  "17": [
+    { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
+    { id: "02", title: "EFS Shared Storage and Choosing Storage for AI Pipelines", subtitle: "EFS design, lifecycle classes and pipeline storage", start: 6, end: 10 },
+    { id: "03", title: "Production GenAI and Vector Store Architecture Decisions", subtitle: "RAG architecture and OpenSearch deployment choices", start: 11, end: 13 },
+    { id: "04", title: "Permission-Aware Retrieval, SQL Vectors, Graphs and S3 Vectors", subtitle: "Kendra, Aurora pgvector, Neptune Analytics and S3 Vectors", start: 14, end: 17 },
+    { id: "05", title: "Durable AI Orchestration and Chatbot Architecture Walkthroughs", subtitle: "Step Functions, legal Q&A and customer chatbot design", start: 18, end: 20 },
+  ],
   "16": [
     { id: "01", title: "CloudFront Edge Delivery, Secure Origins and Cache Policies", subtitle: "Cache flow, private origins, OAC, TTL and replication comparison", start: 1, end: 5 },
     { id: "02", title: "Elastic Load Balancing: ALB, NLB, Gateway and TLS", subtitle: "Health, listeners, Layer 7, Layer 4, inspection and HTTPS", start: 6, end: 10 },
