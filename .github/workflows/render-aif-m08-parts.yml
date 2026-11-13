@@ -14,7 +14,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aif-m08-video-batch-v1
+  group: aif-m08-video-visual-redo-v3
   cancel-in-progress: false
 
 jobs:
@@ -30,31 +30,11 @@ jobs:
           - part: "01"
             start: 1
             end: 5
-            revision: "2026-11-13-aif-m08-p01-visual-first-webp-audit-v2"
+            revision: "2026-11-14-aif-m08-p01-visualfirst-redo-v3"
           - part: "02"
             start: 6
             end: 11
-            revision: "2026-11-13-aif-m08-p02-visual-first-webp-audit-v2"
-          - part: "03"
-            start: 12
-            end: 15
-            revision: "2026-11-13-aif-m08-p03-visual-first-webp-audit-v2"
-          - part: "04"
-            start: 16
-            end: 18
-            revision: "2026-11-13-aif-m08-p04-visual-first-webp-audit-v2"
-          - part: "05"
-            start: 19
-            end: 23
-            revision: "2026-11-13-aif-m08-p05-visual-first-webp-audit-v2"
-          - part: "06"
-            start: 24
-            end: 26
-            revision: "2026-11-13-aif-m08-p06-visual-first-webp-audit-v2"
-          - part: "07"
-            start: 27
-            end: 29
-            revision: "2026-11-13-aif-m08-p07-visual-first-webp-audit-v2"
+            revision: "2026-11-14-aif-m08-p02-visualfirst-redo-v3"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -127,9 +107,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m08-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aif-m08-p${{ matrix.part }}-tts-visual-redo-v3-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            aif-m08-p${{ matrix.part }}-tts-batch-v1-
+            aif-m08-p${{ matrix.part }}-tts-visual-redo-v3-
 
       - name: Verify live local original visuals and render narration in one consistent voice
         env:
@@ -147,7 +127,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m08-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          key: aif-m08-p${{ matrix.part }}-tts-visual-redo-v3-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
