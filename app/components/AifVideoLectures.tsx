@@ -20,6 +20,9 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"07",title:"Unstructured Features and Unsupervised Pattern Discovery",start:25,end:29},
     {id:"08",title:"Semi-Supervised and Self-Supervised Learning Explained",start:30,end:32},
     {id:"09",title:"Reinforcement Learning — Rewards, Policies and Exploration",start:33,end:36},
+    {id:"10",title:"Reinforcement Learning Applications and Safe Sequential Decisions",start:37,end:37},
+    {id:"11",title:"RLHF — Learning from Human Preferences and Response Quality",start:38,end:40},
+    {id:"12",title:"Generalization — Underfitting, Overfitting and Bias–Variance Trade-offs",start:41,end:45},
   ],
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
