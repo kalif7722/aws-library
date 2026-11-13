@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "course": "AWS Certified Generative AI Developer – Professional (AIP-C01)",
+  "module_id": "17",
+  "module_title": "Storage and Generative AI Architectural Decisions",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "slide_base": "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals",
+  "review_basis": "All twenty numbered original Module 17 R2 WebP slides passed spatial audit; narration follows original slide order and on-screen teaching details rather than legacy lesson map.",
+  "part_id": "01",
+  "part_title": "EBS Block Storage, Placement, Performance and Recovery",
+  "script_revision": "2026-11-13-m17-p01-r2-topic-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Amazon EBS Block Storage",
+      "narration": "Start with the EC2 instance and its attached Amazon EBS volume, both inside the same Availability Zone. EBS exposes a network-attached block device that a guest operating system can partition, format and mount using a filesystem such as ext4 or XFS. It is not a shared NFS filesystem. The diagram calls out the usual single-instance attachment, while special Multi-Attach support exists for eligible volume types and applications. Next, notice the lifecycle note: data persistence and what happens during instance termination depend on the volume's DeleteOnTermination setting, rather than a blanket assumption that every attached volume survives. An unattached volume still incurs storage charges. For a production AI application, EBS makes sense for instance-local persistent database or processing disks, not for multi-instance document sharing. Plan a backup and recovery method even though the volume is persistent."
+    },
+    {
+      "slide": 2,
+      "title": "Amazon EBS Placement and Reattachment",
+      "narration": "The slide presents two paths. In the left path, an EBS volume is safely unmounted, detached from EC2 instance A and reattached to instance B in the same Availability Zone. The volume itself does not move between zones. The right path is different: to restore data in another Availability Zone, capture an EBS snapshot, then create a new volume from that snapshot in the target zone and attach it there. Follow the arrows and distinguish reattachment from snapshot-based restoration. The snapshot is regional, not bound to the volume's original zone. The warning about active writes is critical. Unmount and stop application writes before detaching to reduce filesystem corruption risk. If a workload needs recovery across zones, design the recovery process in advance instead of expecting an existing disk to attach directly across an Availability Zone boundary."
+    },
+    {
+      "slide": 3,
+      "title": "Amazon EBS: Performance Choices for Your Workload",
+      "narration": "Compare the three storage-performance choices represented here. The general-purpose SSD options include gp3, where capacity, IOPS and throughput can be adjusted independently within limits, and gp2, where baseline performance depends more closely on provisioned size. The provisioned-IOPS SSD family, including supported io1 and io2 use cases, targets more demanding and latency-sensitive workloads. Performance should be selected using measured IOPS, throughput in mebibytes per second, queue length and observed latency rather than by guessing from total disk space. The lower panel adds a special caveat about Multi-Attach: it is not a general feature of every EBS volume. Eligible io1 or io2 configurations require the right instance compatibility and a cluster-aware application or filesystem to avoid conflicting writes. For model preprocessing or a local vector index, benchmark the real access pattern before paying for higher provisioned performance."
+    },
+    {
+      "slide": 4,
+      "title": "Architectural Decisions — DeleteOnTermination",
+      "narration": "Look at the instance with its root volume and data volume. Each attachment has its own DeleteOnTermination attribute, and that setting controls whether the particular EBS volume is deleted when the EC2 instance terminates. The slide illustrates a common configuration: a root volume marked true and a data volume marked false. That is a pattern, not a universal default to assume for every instance or launch template. The important operational step is to inspect the actual block-device mapping before termination. After the instance is removed, the retained data volume remains available for later attachment or recovery, but it also continues accumulating EBS storage charges. A retained disk is not itself a backup: accidental deletion, corruption, or ransomware can still affect its data. Use appropriate snapshots or another backup system and test restoration instead of relying only on the termination attribute."
+    },
+    {
+      "slide": 5,
+      "title": "EBS Snapshots and Recovery",
+      "narration": "Follow the backup and restoration workflow across the diagram. Begin with an EBS volume connected to an active instance in one Availability Zone. For an application-consistent recovery point, quiesce the application and flush pending writes before requesting the snapshot; otherwise the snapshot is generally a point-in-time crash-consistent view. The completed EBS snapshot is a regional resource. Create a new volume from that snapshot in another Availability Zone within the same Region, attach it to a recovery instance, mount the filesystem and verify application data. To recover in a separate Region, first copy the snapshot to that Region, subject to permissions. The lower panel also highlights encryption: encrypted snapshots produce encrypted restored volumes, and cross-account or cross-Region recovery must account for KMS key policies and IAM permissions. A backup is useful only when you know how to restore and validate it."
+    }
+  ]
+}
