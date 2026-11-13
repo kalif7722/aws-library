@@ -32,3 +32,6 @@
 - Begin with AIF Module 00, slides 01–04, one coherent orientation lecture.
 - Follow with Module 01's six beginner fundamentals slides once the visual source check is complete.
 - Use an ordinary student / recent graduate perspective. Every lab or practice explanation should include a concrete expected answer and why an incorrect choice is wrong.
+
+## Mandatory shared video player
+Use `docs/video-review/shared-course-video-player-standard.md` and `app/components/CourseVideoControls.tsx` for all course playback experiences, with identical 5-second skips, captions, volume, speed, next/previous, fullscreen auto-hide, resume and chapter tools. Do not replace these with minimal native video controls when adding a new course.
