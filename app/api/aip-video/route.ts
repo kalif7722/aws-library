@@ -1112,7 +1112,7 @@ export async function GET(request: NextRequest) {
     : `module-${module}/aip-module-${module}`);
   const url=`${ROOT}/${prefix}`;
   try {
-    const manifestResult=await fetch(`${url}-manifest.json`,{
+    const manifestResult=await fetch(`${url}-manifest.json?check=${Date.now()}`,{
       cache:"no-store",signal:AbortSignal.timeout(6500)
     });
     if(!manifestResult.ok)return response("processing");
