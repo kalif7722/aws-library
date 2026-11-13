@@ -90,3 +90,13 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - Added push-triggered audited render/publish workflows and the matching API / AIF left-playlist entries. The existing player remains shared with AIP.
 - GitHub Actions runs were observed **in_progress** during this update: Part 05 run 43398950789 and Part 06 run 43398955504. MP4 and R2 manifest publication are **not yet verified**; do not count them as ready until completed and confirmed.
 - Current authored coverage: **63 of 349 slides across 13 configured lectures**. The next unreviewed AIF visual is Module 03 slide 25.
+
+## Progress checkpoint — November 13, 2026 (Module 03 Parts 07–09)
+
+- **Three sequential, topic-complete AIF lectures** were authored after visually reviewing all original WebP slides 25–36 (12 scenes). Narrations explain on-screen diagrams, exact examples, labels, numerical values and decision cues with the approved AIF beginner-first standard; voice en-US-AndrewNeural at -3%.
+- Part 07: slides **25–29**, unstructured feature vectors; unsupervised learning; clustering customer segments; transaction association rules; anomaly detection and investigation.
+- Part 08: slides **30–32**, small labeled and large unlabeled datasets, pseudo-label risks, masked words and self-supervised pretext tasks.
+- Part 09: slides **33–36**, agent/state/action/reward/policy loop; maze rewards of -1, -10 and +100; exploration versus exploitation and cumulative rewards.
+- Narration manifests: `content/video-narration/aif-module-03-part-07.json` through `part-09.json`; audited push-triggered workflows: `.github/workflows/render-aif-m03-part-07.yml` through `part-09.yml`. API and AIF left playlist include all three lessons with status gated on R2 manifests and MP4s.
+- Observed GitHub Actions **in progress**: Part 07 run 43401529092, Part 08 run 43401534066, Part 09 run 43401539391. Do not count as published until actual R2 manifest and MP4 are confirmed.
+- Cumulative authored AIF coverage is now **75/349 slides and 16 configured lectures**. Next untouched original is Module 03 slide 37. Module 03 Parts 05–06 workflows have completed successfully.
