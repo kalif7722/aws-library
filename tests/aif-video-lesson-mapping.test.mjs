@@ -93,7 +93,7 @@ test("AIF Module 03 teaching-unit boundaries use the correct original slide sequ
 
 test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
   assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
-  for(const [part,start,end] of [["01",1,3],["02",4,7],["03",8,11]]){
+  for(const [part,start,end] of [["01",1,3],["02",4,7],["03",8,11],["04",12,14],["05",15,16],["06",17,20]]){
     const manifest=JSON.parse(read(`content/video-narration/aif-module-04-part-${part}.json`));
     const workflow=read(`.github/workflows/render-aif-m04-part-${part}.yml`);
     assert.deepEqual(manifest.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,i)=>start+i));
