@@ -1,4 +1,4 @@
-name: Render AIF Module 05 — beginner AI learning foundations lecture 06
+name: Render AIF Module 05 — six topic-first video lessons
 
 on:
   push:
@@ -53,6 +53,18 @@ jobs:
             revision: "2026-11-13-aif-m05-p06-beginner-visual-v1"
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Verify complete repository checkout before installing packages
+        run: |
+          pwd
+          git rev-parse --short HEAD
+          test -f scripts/audit_aif_local_visuals.py
+          test -f scripts/render_aip_course_video.py
+          test -f app/courses/aws-ai-practitioner/visual-lesson-map.json
+          test -f content/video-narration/aif-module-05-part-01.json
+          echo 'Module 05 repository sources verified.'
 
       - uses: actions/setup-python@v5
         with:
