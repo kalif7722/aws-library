@@ -164,43 +164,57 @@ const MODULES: Record<string, { title: string; revision: string; count: number; 
     count: 6, firstSlide: 1, firstTitle: "What is artificial intelligence?" },
 };
 type Scene = {slide?: number; title?: string; start_seconds?: number; duration_seconds?: number};
-type Manifest = {script_revision?: string; duration_seconds?: number; scenes?: Scene[]};
-const processing = () => Response.json({status:"processing"}, {headers:{"Cache-Control":"no-store"}});
+type Manifest = {
+  module?: string; part?: string; script_revision?: string; duration_seconds?: number;
+  scenes?: Scene[];
+};
+const responseHeaders = {"Cache-Control": "no-store, max-age=0"};
+const processing = () => Response.json({status:"processing"}, {headers:responseHeaders});
+
+// The R2 manifest is the publication catalog for each video. Neither a script revision
+// change nor a new slide title requires a new site commit or a Cloudflare rebuild.
 export async function GET(request: NextRequest) {
   const module = request.nextUrl.searchParams.get("module") ?? "";
   const part = request.nextUrl.searchParams.get("part") ?? "01";
-  const config = MODULES[`${module}-${part}`];
-  if (!config) return Response.json({error:"No video lesson is mapped for this module."}, {status:404});
+  if (!/^[0-9]{2}$/.test(module) || !/^[0-9]{2}$/.test(part))
+    return Response.json({error:"Invalid video module or part."}, {status:400,headers:responseHeaders});
+  const config = MODULES[`${module}-${part}`]; // Optional display metadata; never an availability gate.
   const stem = `aif-module-${module}-part-${part}`;
   const prefix = `${ROOT}/module-${module}/part-${part}/${stem}`;
-  const version = `?v=${encodeURIComponent(config.revision)}`;
   try {
-    const result = await fetch(`${prefix}-manifest.json${version}`, {
+    const result = await fetch(`${prefix}-manifest.json`, {
       cache:"no-store", signal:AbortSignal.timeout(6500),
     });
     if (!result.ok) return processing();
     const manifest = await result.json() as Manifest;
     const scenes = manifest.scenes ?? [];
-    if (manifest.script_revision !== config.revision ||
-        scenes.length !== config.count || scenes[0]?.title !== config.firstTitle ||
-        scenes.some((scene,i) => scene.slide !== config.firstSlide+i ||
-          !Number.isFinite(scene.start_seconds) ||
-          !Number.isFinite(scene.duration_seconds))) return processing();
+    // Validate the published media itself, not duplicated title/revision constants.
+    if (manifest.module !== module || manifest.part !== part ||
+        !manifest.script_revision || !Number.isFinite(manifest.duration_seconds) ||
+        (manifest.duration_seconds ?? 0) <= 0 || scenes.length === 0 ||
+        scenes.some((scene,i) => !Number.isInteger(scene.slide) ||
+          (i > 0 && scene.slide !== (scenes[i-1].slide ?? 0)+1) ||
+          !scene.title || !Number.isFinite(scene.start_seconds) ||
+          !Number.isFinite(scene.duration_seconds) ||
+          (scene.duration_seconds ?? 0) <= 0)) return processing();
+    const version = `?v=${encodeURIComponent(manifest.script_revision)}`;
     const videoUrl = `${prefix}.mp4${version}`;
-    let media = await fetch(videoUrl, {method:"HEAD", cache:"no-store",signal:AbortSignal.timeout(6500)});
+    let media = await fetch(videoUrl, {method:"HEAD",cache:"no-store",signal:AbortSignal.timeout(6500)});
     await media.body?.cancel();
     if (!media.ok) {
-      media = await fetch(videoUrl,{method:"GET",headers:{Range:"bytes=0-0"},cache:"no-store",signal:AbortSignal.timeout(6500)});
+      media = await fetch(videoUrl,{method:"GET",headers:{Range:"bytes=0-0"},
+        cache:"no-store",signal:AbortSignal.timeout(6500)});
       await media.body?.cancel();
       if (!media.ok) return processing();
     }
     return Response.json({
-      status:"ready",module,part,title:config.title,videoUrl,
-      captionsUrl:`${prefix}.vtt${version}`,
+      status:"ready",module,part,revision:manifest.script_revision,
+      title:config?.title ?? scenes[0].title ?? `Video lesson ${part}`,
+      videoUrl,captionsUrl:`${prefix}.vtt${version}`,
       transcriptUrl:`${prefix}-transcript.txt${version}`,
       durationSeconds:manifest.duration_seconds,
       chapters:scenes.map(scene=>({slide:scene.slide,title:scene.title,
         startSeconds:scene.start_seconds,durationSeconds:scene.duration_seconds}))
-    },{headers:{"Cache-Control":"no-store"}});
+    },{headers:responseHeaders});
   } catch {return processing();}
 }
