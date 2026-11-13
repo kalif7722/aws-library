@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import CourseVideoCaptions from "./CourseVideoCaptions";
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY} from "./CourseVideoControls";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 import {readCompleted} from "./StudyProgress";
@@ -295,6 +296,7 @@ function VideoPlayer({
         <track src={item.captionsUrl} kind="subtitles" srcLang="en" label="English"/>
         Your browser does not support this video.
       </video>
+      <CourseVideoCaptions src={item.captionsUrl} position={position} enabled={captionsOn}/>
       {fullscreen && <div className="av-fullscreen-nav" role="group" aria-label="Fullscreen lecture navigation">
         <button type="button" className="av-nav-previous" disabled={!onPrevious} onClick={onPrevious}
           aria-label={previousTitle?`Previous video: ${previousTitle}`:"No previous video"}
