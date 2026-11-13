@@ -134,9 +134,9 @@ test("AIF Module 06 prompt-engineering video manifest coverage is contiguous and
     assert.equal(manifest.module_id,"06");
     assert.equal(manifest.part_id,part);
     assert.deepEqual(manifest.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,j)=>start+j));
-    assert.ok(manifest.scenes.every(s=>s.narration.trim().split(/\\s+/).length>=100));
+    assert.ok(manifest.scenes.every(s=>s.narration.trim().split(/\s+/).length>=100));
     assert.ok(workflow.includes(`- part: "${part}"`));
-    assert.ok(workflow.includes(`start: ${start}\\n            end: ${end}`));
+    assert.ok(workflow.includes(`start: ${start}\n            end: ${end}`));
     assert.ok(workflow.includes(manifest.script_revision));
     assert.ok(api.includes(`"06-${part}":`));
     assert.ok(catalog.includes(`id:"${part}",title:`));
