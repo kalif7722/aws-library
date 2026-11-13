@@ -14,6 +14,7 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"02",title:"What Cloud Computing Is and Why Businesses Use It",start:7,end:13},
     {id:"03",title:"Cloud Service Models, Responsibility and Pricing",start:14,end:17},
     {id:"04",title:"AWS History, Global Infrastructure and Regional Design",start:18,end:25},
+    {id:"05",title:"AWS Console, Security Responsibilities and Safe Learning Costs",start:26,end:29},
   ],
 };
 const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
