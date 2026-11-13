@@ -761,6 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
+  "19-02": {
+    prefix: "module-19/part-02/aip-module-19-part-02",
+    revision: "2026-11-13-m19-p02-troubleshoot-local-v1",
+    firstSlide: 6,
+    count: 6,
+    firstTitle: "Scenario and request path",
+    title: "Lab 02 — Diagnose Bedrock Converse API Schema and Response Errors",
+  },
   "19-01": {
     prefix: "module-19/part-01/aip-module-19-part-01",
     revision: "2026-11-13-m19-p01-troubleshoot-r2-local-v1",
