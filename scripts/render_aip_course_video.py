@@ -61,6 +61,31 @@ def download_slide(session: requests.Session, root: str, module: str,
     raise RuntimeError(f"Missing or invalid original slide {number:02}: " + "; ".join(errors))
 
 
+
+def load_local_slide(module: str, number: int, local_dir: str,
+                     folder: Path) -> tuple[Path, str]:
+    """Use original checked-in source visuals, rather than an unrelated R2 module."""
+    if module != "19":
+        raise ValueError("Local slide mode is currently restricted to AIP Module 19")
+    root = Path(__file__).resolve().parents[1]
+    source_dir = (root / local_dir).resolve()
+    expected_dir = (root / "public/course-visuals/genai-troubleshooting").resolve()
+    if source_dir != expected_dir:
+        raise ValueError("Module 19 original slide directory does not match approved local source")
+    source = source_dir / f"module19-slide-{number:02}.webp"
+    if not source.is_file():
+        raise FileNotFoundError(f"Missing original local Module 19 slide: {source}")
+    with Image.open(source) as img:
+        img.verify()
+    with Image.open(source) as img:
+        if img.width < 800 or img.height < 450:
+            raise ValueError(f"Invalid original Module 19 slide dimensions: {source} {img.size}")
+    target = folder / f"slide-{number:02}.webp"
+    import shutil
+    shutil.copyfile(source, target)
+    return target, source.as_uri()
+
+
 def timecode(seconds: float) -> str:
     ms = max(0, round(seconds * 1000))
     hours, ms = divmod(ms, 3_600_000)
@@ -130,7 +155,10 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     # Check ALL slide assets before beginning voice synthesis.
     for scene in scenes:
         index = scene["slide"]
-        file, url = download_slide(session, manifest["slide_base"], manifest["module_id"], index, images)
+        if manifest.get("slide_local_dir"):
+            file, url = load_local_slide(manifest["module_id"], index, manifest["slide_local_dir"], images)
+        else:
+            file, url = download_slide(session, manifest["slide_base"], manifest["module_id"], index, images)
         downloaded.append((file, url))
         print(f"  Slide {index:02}: verified", flush=True)
 
