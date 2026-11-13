@@ -17,7 +17,7 @@ The 2026-10-30 AIF audit reports **349/349 reviewed WebP lessons** across 15 mod
 | --- | --- | ---: | ---: |
 | 00 | Course Introduction | 4 | 4 |
 | 01 | Introduction to Artificial Intelligence | 6 | 6 |
-| 02 | AWS and Cloud Computing | 29 | 6 |
+| 02 | AWS and Cloud Computing | 29 | 29 |
 | 03 | AI and Machine Learning | 62 | 0 |
 | 04 | Generative AI and Amazon Bedrock | 20 | 0 |
 | 05 | Model Customization, RAG and Agents | 28 | 0 |
@@ -31,7 +31,7 @@ The 2026-10-30 AIF audit reports **349/349 reviewed WebP lessons** across 15 mod
 | 13 | Current Exam Guide Additions | 12 | 0 |
 | 14 | Practice Exam | 2 | 0 |
 
-**Current committed narration: 16 of 349 visual scenes.** M00 Part 01, M01 Part 01 and M02 Part 01. These scenes do not imply the related MP4s are already live.
+**Current committed narration: 39 of 349 visual scenes across seven topic-based videos.** M00 Part 01, M01 Part 01 and M02 Parts 01–05. These figures describe authored scripts and workflows, not confirmed MP4 publication.
 
 ## Committed pilot lectures
 
@@ -41,11 +41,16 @@ The 2026-10-30 AIF audit reports **349/349 reviewed WebP lessons** across 15 mod
 | 01 / 01 | 01–06 | What AI means, training/inference, history, use cases, document workflow and GenAI categories | `content/video-narration/aif-module-01-part-01.json` | `.github/workflows/render-aif-m01-part-01.yml` |
 | 02 / 01 | 01–06 | Website requests, networking, servers, traditional data centers and why cloud exists | `content/video-narration/aif-module-02-part-01.json` | `.github/workflows/render-aif-m02-part-01.yml` |
 
-## Module 02 suggested remaining teaching units (must inspect actual images)
-1. Slides 07–13 — What cloud computing means, cloud deployment types, benefits, key characteristics and real business needs.
-2. Slides 14–17 — IaaS vs PaaS vs SaaS, ownership boundaries, choosing service models and pricing.
-3. Slides 18–25 — AWS evolution and global infrastructure; Region, Availability Zone and edge-location selection.
-4. Slides 26–29 — AWS Console, shared responsibility, responsible use and safe learning budget.
+| 02 / 02 | 07–13 | What cloud computing is and business benefits | `content/video-narration/aif-module-02-part-02.json` | `.github/workflows/render-aif-m02-part-02.yml` |
+| 02 / 03 | 14–17 | Cloud service models and pricing | `content/video-narration/aif-module-02-part-03.json` | `.github/workflows/render-aif-m02-part-03.yml` |
+| 02 / 04 | 18–25 | AWS global infrastructure, Regions, AZs and edge locations | `content/video-narration/aif-module-02-part-04.json` | `.github/workflows/render-aif-m02-part-04.yml` |
+| 02 / 05 | 26–29 | Console, shared responsibility, safe use and budget planning | `content/video-narration/aif-module-02-part-05.json` | `.github/workflows/render-aif-m02-part-05.yml` |
+
+## Completed Module 02 teaching units — original visuals inspected
+1. Slides 07–13 — Cloud computing, deployment types, essential characteristics and business benefits — Part 02.
+2. Slides 14–17 — IaaS, PaaS, SaaS, shared management and pricing — Part 03.
+3. Slides 18–25 — AWS history, workloads, Region/AZ architecture and edge caching — Part 04.
+4. Slides 26–29 — Console navigation, shared responsibility, responsible use and budget safety — Part 05.
 
 The grouping above is provisional, not a five-slide quota. Original images and complete concepts determine final boundaries.
 
@@ -60,5 +65,6 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 
 ## Publication status and next steps
 - **GitHub source scripts, workflows and player mappings committed on main.**
-- **Not yet verified:** successful GitHub Actions completion, R2 MP4/manifest presence and live website deployment. A committed workflow is not a completed render.
-- Continue sequentially by visually reviewing original Module 02 slides 07–29, completing their topic-first lectures, and then Module 03. Do not automatically infer the unreviewed slide content from lesson names.
+- **Not yet verified:** successful GitHub Actions completion, R2 MP4/manifest presence and live website deployment. Three initial and four additional lecture workflows are configured; seven successful MP4 renders have **not** been established. The live course API could not be reached from this session. 
+- **Playback fix:** `app/api/aif-video/route.ts` now verifies each part against its `firstSlide` rather than incorrectly assuming all parts start with slide 1. This is essential for Parts 02–05 to become playable after publication.
+- Module 02 is fully narrated. Continue with Module 03 after inspecting original images; do not infer their content from lesson titles.
