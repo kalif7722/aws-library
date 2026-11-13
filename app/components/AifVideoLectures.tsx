@@ -1,6 +1,6 @@
 "use client";
-import {useCallback,useEffect,useRef,useState,type PointerEvent} from "react";
-import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,formatVideoTime} from "./CourseVideoControls";
+import {useCallback,useEffect,useRef,useState,type PointerEvent,type KeyboardEvent} from "react";
+import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
 type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;durationSeconds:number;chapters:Chapter[]};
@@ -12,7 +12,7 @@ const LECTURES:Record<string,Lecture[]>={
   "02":[{id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6}],
 };
 const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
-const AUTO_NEXT_KEY="course-video-auto-next:v1";
+const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
 const frame={background:"#101d36",border:"1px solid #3b526d",borderRadius:16,padding:18,color:"#e9f2ff"} as const;
 
 export default function AifVideoLectures({moduleId}:{moduleId:string}){
@@ -177,7 +177,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
     const y=event.clientY-area.top,x=event.clientX-area.left;
     if(y<120||y>area.height-160||x<115||x>area.width-115)revealHud(2500);
   };
-  const handleKeyboard=(event:React.KeyboardEvent<HTMLDivElement>)=>{
+  const handleKeyboard=(event:KeyboardEvent<HTMLDivElement>)=>{
     const target=event.target as HTMLElement;
     if(["INPUT","SELECT","TEXTAREA","BUTTON"].includes(target.tagName)||!ready)return;
     const key=event.key.toLowerCase();
