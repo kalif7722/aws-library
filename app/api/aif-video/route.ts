@@ -182,7 +182,7 @@ export async function GET(request: NextRequest) {
   const stem = `aif-module-${module}-part-${part}`;
   const prefix = `${ROOT}/module-${module}/part-${part}/${stem}`;
   try {
-    const result = await fetch(`${prefix}-manifest.json`, {
+    const result = await fetch(`${prefix}-manifest.json?check=${Date.now()}`, {
       cache:"no-store", signal:AbortSignal.timeout(6500),
     });
     if (!result.ok) return processing();
