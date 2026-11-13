@@ -61,7 +61,7 @@ jobs:
           python - <<'PY'
           import json
           audit=json.load(open("/tmp/aif-m05-visual-audit.json"))
-          assert audit["course_slug"]=="aif" and audit["module"]=="04"
+          assert audit["course_slug"]=="aif" and audit["module"]=="05"
           assert audit["mapped_slides"]==28 and audit["verified_slides"]==28
           assert [s["slide"] for s in audit["slides"]]==list(range(1,29))
           print("Original AIF source visual audit passed before narration synthesis")
@@ -80,7 +80,7 @@ jobs:
           p=os.environ["PART"]
           m=json.loads(Path(f"content/video-narration/aif-module-05-part-{p}.json").read_text())
           slides=list(range(int(os.environ["START"]),int(os.environ["END"])+1))
-          assert m["course_slug"]=="aif" and m["module_id"]=="04" and m["part_id"]==p
+          assert m["course_slug"]=="aif" and m["module_id"]=="05" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
           assert all(len(s["narration"].split())>=100 for s in m["scenes"])
