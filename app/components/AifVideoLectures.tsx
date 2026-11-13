@@ -9,7 +9,10 @@ type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
   "00":[{id:"01",title:"Start Here — Your AI Practitioner Learning Journey",start:1,end:4}],
   "01":[{id:"01",title:"AI Fundamentals — From Everyday Examples to Generative AI",start:1,end:6}],
-  "02":[{id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6}],
+  "02":[
+    {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
+    {id:"02",title:"What Cloud Computing Is and Why Businesses Use It",start:7,end:13},
+  ],
 };
 const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
