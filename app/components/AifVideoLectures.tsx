@@ -18,6 +18,13 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "07":[
+    {id:"01",title:"Enterprise Retrieval, Citations and Access Permissions",start:1,end:4},
+    {id:"02",title:"Q Business Controls and Q Apps in Context",start:5,end:6},
+    {id:"03",title:"Amazon Q Developer for AWS and Coding Workflows",start:7,end:10},
+    {id:"04",title:"Analytics, EC2, Chat Operations and Glue Assistance",start:11,end:14},
+    {id:"05",title:"PartyRock — Building a No-Code AI Playground",start:15,end:15},
+  ],
   "06":[
     {id:"01",title:"Clear Prompts, Context and Negative Instructions",start:1,end:4},
     {id:"02",title:"Sampling Controls, Token Choice and Latency",start:5,end:7},

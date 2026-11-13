@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "07",
+  "module_title": "Amazon Q and AI Assistants",
+  "slide_local_dir": "public/course-visuals/aif-course/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "01",
+  "part_title": "Enterprise Retrieval, Citations and Access Permissions",
+  "output_prefix": "aif-module-07-part-01",
+  "script_revision": "2026-11-13-aif-m07-p01-beginner-visual-v1",
+  "review_basis": "Narration prepared from the AIF module 07 lesson map and historical/current product caveats. Original numbered WebP integrity is gated in workflow; image-by-image visual content review not independently completed in this session.",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Amazon Q Business",
+      "narration": "Start with the problem of finding a trustworthy answer across company documents. An employee might ask how much leave they can take, but the answer may be stored in a policy rather than in the model's built in knowledge. Amazon Q Business was designed as a workplace assistant that retrieves information from configured enterprise sources. In the architecture, an administrator connects supported data sources, configures user identity and permissions, and makes the application available to employees. The employee asks a question, authorized source passages are retrieved, and the assistant produces an answer that may include citations. A citation points to evidence, but it does not automatically prove a statement is accurate or up to date. Important product context: the course's Q Business workflow is historical. The source notes say Amazon Q Business stopped accepting new customers on July thirty first, twenty twenty six. Existing customers can still study and operate supported applications, but a new workplace assistant should be evaluated against Amazon Quick and current AWS migration documentation. Check: is signing in enough to access every indexed document? No, the source permissions must also allow access."
+    },
+    {
+      "slide": 2,
+      "title": "A grounded answer from company documents",
+      "narration": "Consider the concrete leave policy question. Two documents might be indexed: a public employee leave policy that the signed in worker can read, and a restricted human resources handbook intended for a different group. A grounded assistant should retrieve the employee accessible policy, identify the relevant leave allowance, and include a reference to the passage used. It must not quote or reveal the restricted handbook just because the index contains it. This is why retrieval is more than a keyword search. The application needs to apply an access control list, often shortened to A C L, that describes who can read each source item. The assistant also needs to distinguish what a document says from what a user wishes it said. If the cited policy is from last year, check whether a newer policy supersedes it before treating the response as authoritative. A fluent response can still be wrong or unauthorized. The decision test is simple: would the same employee have been allowed to open that source document directly? If not, the assistant should not use it to answer."
+    },
+    {
+      "slide": 3,
+      "title": "Connectors versus plugins",
+      "narration": "This lesson compares connectors with plugins. A connector brings content from a configured enterprise system into the search and retrieval experience. Think of indexing company policies so a question can find the correct paragraph. A plugin or configured action, in contrast, performs a task through an external service A P I. Looking up a leave policy is retrieval; submitting an actual leave request is an action that changes an application record. These operations need different controls. Source permission mapping governs which documents can be used, while an action requires separately configured credentials, API permissions and validation of who may do what. If an assistant can read a leave policy, that does not automatically mean it may approve a vacation or edit an employee record. For an exam question, look for the verb: search, summarize or cite suggests retrieval; create, update or submit suggests an action integration. The slide describes Q Business features for eligible existing applications, not guaranteed onboarding options for new customers. Always verify supported connectors, plugin availability and current product lifecycle guidance."
+    },
+    {
+      "slide": 4,
+      "title": "Identity and source permissions",
+      "narration": "Authentication and authorization answer different questions. Authentication is the process of identifying the employee, perhaps through an enterprise sign in. Authorization determines which data and actions that identity is allowed to access. For a workplace assistant, an administrator must ensure that user names, groups and document access lists are synchronized from the source system. Imagine a staff member in Finance searching for a quarterly compensation report. Their successful sign in proves who they are, but access to that report depends on the document's permitted groups. If synchronization or group mapping is wrong, an assistant may either hide information that should be visible or expose material that should be restricted. The secure pattern is to carry the signed in identity into retrieval filtering, and then validate permissions again for any connected action. The model's answer text is not an authority to grant access. Check: can a helpful chatbot decide that a private document is safe to reveal because the question sounds reasonable? No. Permissions are established by the connected identity and data systems."
+    }
+  ]
+}

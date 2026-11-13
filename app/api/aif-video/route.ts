@@ -3,6 +3,21 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "07-01": { title: "Enterprise Retrieval, Citations and Access Permissions",
+    revision: "2026-11-13-aif-m07-p01-beginner-visual-v1",
+    count: 4, firstSlide: 1, firstTitle: "Amazon Q Business" },
+  "07-02": { title: "Q Business Controls and Q Apps in Context",
+    revision: "2026-11-13-aif-m07-p02-beginner-visual-v1",
+    count: 2, firstSlide: 5, firstTitle: "Q Business admin controls" },
+  "07-03": { title: "Amazon Q Developer for AWS and Coding Workflows",
+    revision: "2026-11-13-aif-m07-p03-beginner-visual-v1",
+    count: 4, firstSlide: 7, firstTitle: "Amazon Q Developer" },
+  "07-04": { title: "Analytics, EC2, Chat Operations and Glue Assistance",
+    revision: "2026-11-13-aif-m07-p04-beginner-visual-v1",
+    count: 4, firstSlide: 11, firstTitle: "Generative BI in Amazon Quick" },
+  "07-05": { title: "PartyRock — Building a No-Code AI Playground",
+    revision: "2026-11-13-aif-m07-p05-beginner-visual-v1",
+    count: 1, firstSlide: 15, firstTitle: "PartyRock app playground" },
   "06-01": { title: "Clear Prompts, Context and Negative Instructions",
     revision: "2026-11-13-aif-m06-p01-beginner-visual-v1",
     count: 4, firstSlide: 1, firstTitle: "Prompt engineering: give the model a clear task" },
