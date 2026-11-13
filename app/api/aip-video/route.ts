@@ -761,6 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
+  "19-01": {
+    prefix: "module-19/part-01/aip-module-19-part-01",
+    revision: "2026-11-13-m19-p01-troubleshoot-r2-local-v1",
+    firstSlide: 1,
+    count: 5,
+    firstTitle: "Scenario and architecture",
+    title: "Lab 01 — Diagnose and Fix Context Overflow and Truncated Inputs",
+  },
   "17-01": {
     prefix: "module-17/part-01/aip-module-17-part-01",
     revision: "2026-11-13-m17-p01-r2-topic-v1",
