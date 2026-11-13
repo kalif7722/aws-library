@@ -172,3 +172,28 @@ test("AIF Module 07 Q assistant lessons are mapped in sequence and R2 gated",()=
   assert.ok(workflow.includes("audit_aif_local_visuals.py --module 07"));
   assert.ok(workflow.includes("Publish only verified files to Cloudflare R2"));
 });
+
+test("AIF Module 08 managed AI service lectures cover all original lesson slides",()=>{
+  const ranges=[[1,5],[6,11],[12,15],[16,18],[19,23],[24,26],[27,29]];
+  const workflow=read(".github/workflows/render-aif-m08-parts.yml");
+  const all=[];
+  for(let i=0;i<ranges.length;i++){
+    const [start,end]=ranges[i];
+    const part=String(i+1).padStart(2,"0");
+    const m=JSON.parse(read(`content/video-narration/aif-module-08-part-${part}.json`));
+    assert.equal(m.course_slug,"aif");
+    assert.equal(m.module_id,"08");
+    assert.equal(m.part_id,part);
+    assert.deepEqual(m.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,j)=>start+j));
+    assert.ok(m.scenes.every(s=>s.narration.trim().split(/\s+/).length>=100));
+    assert.ok(workflow.includes(`- part: "${part}"`));
+    assert.ok(workflow.includes(`start: ${start}\n            end: ${end}`));
+    assert.ok(api.includes(`"08-${part}":`));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    all.push(...m.scenes.map(s=>s.slide));
+  }
+  assert.deepEqual(all,Array.from({length:29},(_,i)=>i+1));
+  assert.ok(workflow.includes("audit_aif_local_visuals.py --module 08"));
+  assert.ok(workflow.includes('["verified_slides"]==29'));
+  assert.ok(api.includes("manifest.script_revision !== config.revision"));
+});

@@ -18,6 +18,15 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "08":[
+    {id:"01",title:"Managed AI APIs and Amazon Comprehend Text Analysis",start:1,end:5},
+    {id:"02",title:"Translation, Speech Transcription and Polly Voices",start:6,end:11},
+    {id:"03",title:"Rekognition, Custom Labels and Moderation",start:12,end:15},
+    {id:"04",title:"Lex Conversations and Personalize Recommendations",start:16,end:18},
+    {id:"05",title:"Textract, Enterprise Search and Human Review",start:19,end:23},
+    {id:"06",title:"Medical Speech, Clinical Entities and Safe Review",start:24,end:26},
+    {id:"07",title:"EC2 Fundamentals and AI Accelerator Choices",start:27,end:29},
+  ],
   "07":[
     {id:"01",title:"Enterprise Retrieval, Citations and Access Permissions",start:1,end:4},
     {id:"02",title:"Q Business Controls and Q Apps in Context",start:5,end:6},

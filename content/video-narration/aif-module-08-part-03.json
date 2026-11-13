@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "08",
+  "module_title": "AWS Managed AI Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-08",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "03",
+  "part_title": "Rekognition, Custom Labels and Moderation",
+  "output_prefix": "aif-module-08-part-03",
+  "script_revision": "2026-11-13-aif-m08-p03-beginner-visual-v1",
+  "review_basis": "Narrations prepared against current lesson-map notes and service lifecycle caveats; original images and slide counts audited at rendering preflight. Direct visual inspection of slide image layouts was not available in this session.",
+  "scenes": [
+    {
+      "slide": 12,
+      "title": "Amazon Rekognition",
+      "narration": "Amazon Rekognition analyzes visual inputs. A photograph of a storefront might produce labels describing objects or scenes, and a supported operation may detect text inside the image. Other features include face detection, face comparison or search, where permitted and supported. Detection means the algorithm finds a visual feature, while identification or verification is a distinct and sensitive use case. Scores express model confidence or similarity according to an operation, not proof of someone's identity, intent or emotional state. Image, stored-video and streaming-video operations have different support and throughput characteristics. Before choosing Rekognition, ask whether the goal is classifying image content, reading a document's structured fields or generating an image. A document with tables and form fields usually points toward Textract rather than general image labeling."
+    },
+    {
+      "slide": 13,
+      "title": "Amazon Rekognition – Custom Labels",
+      "narration": "Rekognition Custom Labels supports recognizing object categories or scenes specific to a business. For example, a manufacturer may want to detect a particular machine part that a generic model does not label precisely. The team supplies correctly labeled representative images, trains the supported model and evaluates it on images not used during training. Lighting, camera angle, blur and background can change results, so test data should cover realistic variation. Set confidence thresholds appropriate to the cost of a missed detection versus an incorrect alert, and include human review where needed. A fixed number of example images is not a guarantee of acceptable accuracy. Compare with standard Rekognition labels: if a built-in label solves the need, custom training adds unnecessary effort. Custom Labels is for a defined visual category problem, not automatically for generating descriptive prose."
+    },
+    {
+      "slide": 14,
+      "title": "Amazon Rekognition – Content Moderation",
+      "narration": "Content moderation evaluates whether an image or video matches supported content categories. Rekognition can return moderation labels and confidence values that a platform uses as input to its own policy decisions. A simple application might allow clearly acceptable images, block well-supported prohibited categories and refer uncertain cases to trained reviewers. The policy's acceptable risk level determines thresholds; a low confidence result is not proof that content is harmless. Custom moderation adapters can help adapt supported categories to relevant labeled examples, but effectiveness still needs measurement. Review how false positives affect legitimate users and how false negatives expose users to unwanted content. Avoid memorizing a universal review percentage because workload and local policy drive how many items need human judgment. The service produces predictions; the application decides how to act."
+    },
+    {
+      "slide": 15,
+      "title": "Content moderation with human review",
+      "narration": "Consider a generative image workflow. The model produces a picture, then the application checks that generated asset with DetectModerationLabels before displaying or delivering it. Review-sensitive or uncertain outputs can be routed to people, and reviewer decisions should be recorded for accountability. This is not the same as claiming all generated content passes automatically through a human review system. A historical example may mention Amazon Augmented AI, also called A2I, but the course's service note says it is no longer available to new customers. Existing-customer eligibility and present alternatives must be checked. The security goal stays the same even when a named managed service changes: design a moderation policy, evaluate model confidence, define escalation and keep review data protected. A student should know both the automated service and the human decision point in the architecture."
+    }
+  ]
+}

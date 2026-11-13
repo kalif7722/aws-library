@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "08",
+  "module_title": "AWS Managed AI Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-08",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "02",
+  "part_title": "Translation, Speech Transcription and Polly Voices",
+  "output_prefix": "aif-module-08-part-02",
+  "script_revision": "2026-11-13-aif-m08-p02-beginner-visual-v1",
+  "review_basis": "Narrations prepared against current lesson-map notes and service lifecycle caveats; original images and slide counts audited at rendering preflight. Direct visual inspection of slide image layouts was not available in this session.",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Amazon Translate",
+      "narration": "Imagine a multilingual website that must display product instructions in another supported language. Amazon Translate accepts source text and returns machine-translated text. An interactive customer chat might use a low-latency real-time request, whereas translating a large collection of documents may be better suited to a batch job. Custom terminology can help preserve brand names or approved translations of technical terms. A translated sentence that sounds fluent may still alter a safety warning, legal qualification or cultural nuance, so important content needs review. Translation changes the language of text; it does not transcribe spoken audio or synthesize speech. A frequent exam confusion is choosing Translate for an audio recording. First determine whether the starting input is text or speech, then assemble services if both speech recognition and translation are required."
+    },
+    {
+      "slide": 7,
+      "title": "Amazon Transcribe",
+      "narration": "Amazon Transcribe turns spoken audio into written text. It can support recorded jobs and streaming transcription for compatible use cases. Think of a recorded customer-support call. The output may contain words and timing information; speaker partitioning attempts to separate speakers, while channel identification relates to distinct recorded audio channels. Those are not identical concepts. Custom vocabulary helps recognize specialized terms, but an accent, background noise, microphone quality or overlapping voices may still cause errors. A confidence score is a prediction and must not be interpreted as absolute proof. A proper review compares the transcription against representative audio, especially important names and numbers. If the task is speaking a written answer aloud, that is text to speech and points to Polly, not Transcribe."
+    },
+    {
+      "slide": 8,
+      "title": "Transcribe – Toxicity Detection",
+      "narration": "Toxicity detection adds analysis to supported speech-transcription workflows. In the documented Transcribe feature, toxicity detection operates on US English batch transcription and provides segment-level confidence scores associated with supported categories. Think of moderating a recorded interaction: the system can flag a portion of speech for policy review, but it does not decide every borderline case reliably on its own. A company should select appropriate review thresholds and account for false positives and false negatives. Human reviewers must be protected from unnecessary exposure to disturbing content, and speech recordings can contain personal data. A segment classified as toxic is a model output under a defined policy, not an immutable statement about a speaker's character. The exam distinction is transcription for words versus additional toxicity scoring for moderation."
+    },
+    {
+      "slide": 9,
+      "title": "Amazon Transcribe – Improving Accuracy",
+      "narration": "Improving speech recognition starts by understanding why transcription errors happen. Industry jargon, unusual product names or noisy recordings can lead to incorrect text. A custom vocabulary supplies supported phrase entries and optional display forms to influence recognition of these terms. Current documentation notes that historical pronunciation-related fields such as IPA and SoundsLike are ignored, so do not rely on an outdated configuration example. A custom language model takes a broader approach by learning domain-related patterns from text. These tools address different causes of error and may be combined where supported. Compare word error rates and the recognition of important names on held-out recordings before declaring an improvement. Avoid teaching that adding vocabulary always fixes a noisy or poor-quality recording."
+    },
+    {
+      "slide": 10,
+      "title": "Amazon Polly",
+      "narration": "Amazon Polly performs text-to-speech conversion. A customer support app may receive a textual response and turn it into spoken audio for a caller. The direction is important: text enters and speech leaves. Amazon Transcribe performs the opposite conversion. A design can combine Transcribe, a language processing step and Polly for conversational experiences, but each component has a separate role. Select a Polly voice, language, compatible engine and audio output format suitable for the listener. Availability can vary by AWS Region and voice. Evaluate pronunciation, intelligibility and the user experience, especially for names or important instructions. The exam check is simple: if the requirement says read text aloud naturally, use Polly; if it says convert a recorded conversation to written words, use Transcribe."
+    },
+    {
+      "slide": 11,
+      "title": "Polly – Advanced Features",
+      "narration": "Polly provides more than one voice and synthesis engine. Standard, neural, long-form and generative options can differ in capability, pricing, voice availability and supported features. Lexicons help control how selected terms or names are pronounced, while supported SSML tags can control aspects of speech rendering. Speech marks return timing or structural metadata rather than an audio recording; an application that needs both speech playback and synchronized highlighting must request suitable outputs separately. Be careful with engine-specific compatibility: current documentation says speech marks are not available for Polly's generative engine, unlike several other supported engines. A good student should distinguish voice selection from speech marks, and a pronunciation dictionary from the complete text to be spoken. Test sample pronunciations instead of assuming a polished voice gets every name right."
+    }
+  ]
+}

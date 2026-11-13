@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "08",
+  "module_title": "AWS Managed AI Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-08",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "05",
+  "part_title": "Textract, Enterprise Search and Human Review",
+  "output_prefix": "aif-module-08-part-05",
+  "script_revision": "2026-11-13-aif-m08-p05-beginner-visual-v1",
+  "review_basis": "Narrations prepared against current lesson-map notes and service lifecycle caveats; original images and slide counts audited at rendering preflight. Direct visual inspection of slide image layouts was not available in this session.",
+  "scenes": [
+    {
+      "slide": 19,
+      "title": "Amazon Textract",
+      "narration": "Amazon Textract extracts content from supported documents, including printed or handwritten text and document structure such as forms or tables. Imagine scanning an invoice: the business needs the vendor, line items, dates and totals. General image labels would not solve the structured extraction requirement, and a free-form chatbot answer may invent unsupported values. Textract returns detected content and, for supported operations, structured relationships that downstream code can validate. Low confidence fields need review, and applications should reconcile totals or compare values against expected formats where appropriate. Document type, operation and supported file format matter. Extracting a value from a receipt is not the same as approving a payment; business logic and authorization remain external to the extraction service. The exam cue is identifying forms, tables and document data."
+    },
+    {
+      "slide": 20,
+      "title": "Amazon Kendra",
+      "narration": "Amazon Kendra has historically provided enterprise search across indexed documents. It can return relevant results or answer passages based on a query, and some configurations support relevance tuning or learning from feedback. An index is a searchable representation of source content; it does not itself generate every answer in full natural language. The lesson's lifecycle note is essential: Kendra is in maintenance mode and closed to new customers according to the current course audit. AWS points new search and RAG architectures toward Bedrock Knowledge Bases. Existing customers can still study or operate supported Kendra indexes within documented limits. Distinguish search from generation: the search layer retrieves possible evidence and a generative model can then use that evidence to compose a response. Always check permissions and document freshness."
+    },
+    {
+      "slide": 21,
+      "title": "Amazon Mechanical Turk",
+      "narration": "Some AI tasks still need people because judgment, interpretation or labeling can be difficult to automate reliably. Amazon Mechanical Turk provides a marketplace of workers who complete defined human intelligence tasks. For example, a requester may ask workers to identify whether a product image shows a damaged package. They define instructions, qualifications, rewards, acceptance criteria and quality checks. Worker answers may disagree, so a robust process compares results or investigates uncertain examples. A public workforce is not an appropriate destination for sensitive private documents without appropriate authorization and safeguards. The business must assess privacy, data processing needs and the true quality of the labels. The key distinction is that Mechanical Turk provides access to a human task workforce; it is not itself a supervised model that learns from the answers."
+    },
+    {
+      "slide": 22,
+      "title": "Human labeling workflow",
+      "narration": "A labeling pipeline converts raw examples into annotated training data. A team defines categories, writes clear instructions, selects an appropriate workforce and tests agreement on a pilot set. When labels disagree, adjudication or better guidelines may be needed before model training. Amazon SageMaker Ground Truth historically helped orchestrate such labeling jobs and could integrate workforce options, including Mechanical Turk for suitable tasks. The course notes warn that Ground Truth is no longer open to new customers; treat this as an existing-customer workflow example rather than a guaranteed new deployment. Choosing a labeling workforce is also a privacy decision. Sensitive records may require an internal team instead of an external marketplace. Remember: human-generated labels are useful training signals but can contain errors, inconsistencies and bias."
+    },
+    {
+      "slide": 23,
+      "title": "Amazon Augmented AI (A2I)",
+      "narration": "Amazon Augmented AI, or A2I, was designed to route selected model predictions for human review. Imagine a document extractor that confidently reads most ordinary invoice fields but sends uncertain fields to a trained reviewer. The application specifies review activation conditions, and the results may be stored in Amazon S3 for later business processing. The workflow requires configuration and is not a magical step automatically applied to every AWS AI service. A high confidence bypass, multiple-reviewer consolidation or using the human correction for later training are design choices. The course notes identify A2I as closed to new customers, so a new workload should assess supported alternatives or a custom review application. The architectural principle still matters: combine automated prediction with an explicit human decision when error costs are high."
+    }
+  ]
+}

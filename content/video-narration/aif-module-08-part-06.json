@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "08",
+  "module_title": "AWS Managed AI Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-08",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "06",
+  "part_title": "Medical Speech, Clinical Entities and Safe Review",
+  "output_prefix": "aif-module-08-part-06",
+  "script_revision": "2026-11-13-aif-m08-p06-beginner-visual-v1",
+  "review_basis": "Narrations prepared against current lesson-map notes and service lifecycle caveats; original images and slide counts audited at rendering preflight. Direct visual inspection of slide image layouts was not available in this session.",
+  "scenes": [
+    {
+      "slide": 24,
+      "title": "Amazon Transcribe Medical",
+      "narration": "Clinical audio can contain specialized terms, medication names and sensitive patient information. Amazon Transcribe Medical is designed to turn supported medical speech into text through batch or streaming operations, where available. The output is a transcription, not a diagnosis or a validated clinical record. Medical staff should review important terms and numbers because a recognition error could change the meaning of a sentence. HIPAA eligibility has operational conditions: an applicable AWS Business Associate Addendum and correctly configured access, encryption, logging, retention and workflows. Using an eligible service alone does not make an application compliant. Compare this with ordinary Transcribe: the medical service targets clinical speech use cases and may have different input requirements. Protect recordings and transcripts as sensitive data throughout the pipeline."
+    },
+    {
+      "slide": 25,
+      "title": "Amazon Comprehend Medical",
+      "narration": "Amazon Comprehend Medical analyzes supported clinical text to identify entities and relationships, such as mentions of conditions, treatments or medications. This is not the same as deciding what diagnosis a patient has. The service can also detect possible protected health information through DetectPHI, but detection by itself does not remove or de-identify sensitive content. An application must actually redact or mask detected spans, validate the result, and enforce strict access controls. Imagine a doctor's dictated note that has already been transcribed: a clinical text analysis step can organize relevant mentions for review. Humans remain responsible for interpreting the medical significance. The exam distinction is between speech transcription, text entity extraction and a healthcare decision; these are separate activities with separate safeguards."
+    },
+    {
+      "slide": 26,
+      "title": "Medical transcription and entity extraction workflow",
+      "narration": "Follow the medical workflow from source to reviewed information. If the input starts as audio, Transcribe Medical may produce a draft text transcript; if the input is already text, that speech step is unnecessary. A Comprehend Medical operation can then extract relevant clinical entities or link supported mentions to recognized medical vocabularies. An application may present the results to qualified clinicians, who verify the transcript and extracted relationships. The example entities shown in teaching diagrams are illustrative, not guaranteed service output for every input. A detected condition mention could be historical, negated or part of a family history, so it must not be treated as a confirmed diagnosis. Before storing or sharing the result, enforce appropriate patient-data permissions and protect any remaining personal identifiers. This is an information-processing workflow with human clinical judgment, not an automated prescription system."
+    }
+  ]
+}
