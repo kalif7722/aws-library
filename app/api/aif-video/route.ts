@@ -4,10 +4,10 @@ import { NextRequest } from "next/server";
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
   "08-01": { title: "Managed AI APIs and Amazon Comprehend Text Analysis",
-    revision: "2026-11-13-aif-m08-p01-visual-first-webp-audit-v2",
+    revision: "2026-11-14-aif-m08-p01-visualfirst-redo-v3",
     count: 5, firstSlide: 1, firstTitle: "Why AWS AI Managed Services?" },
   "08-02": { title: "Translation, Speech Transcription and Polly Voices",
-    revision: "2026-11-13-aif-m08-p02-visual-first-webp-audit-v2",
+    revision: "2026-11-14-aif-m08-p02-visualfirst-redo-v3",
     count: 6, firstSlide: 6, firstTitle: "Amazon Translate" },
   "08-03": { title: "Rekognition, Custom Labels and Moderation",
     revision: "2026-11-13-aif-m08-p03-visual-first-webp-audit-v2",
