@@ -25,7 +25,6 @@ const LECTURES:Record<string,Lecture[]>={
 };
 const MODULE_PATH="/courses/aws-ai-practitioner/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
-const frame={background:"#101d36",border:"1px solid #3b526d",borderRadius:16,padding:18,color:"#e9f2ff"} as const;
 
 export default function AifVideoLectures({moduleId}:{moduleId:string}){
   const entries=LECTURES[moduleId]??[];
@@ -205,7 +204,42 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
   if(!entries.length)return null;
   return <section id="video-lectures" aria-label="Beginner-friendly video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
     <style>{`
-      .aif-video-layout{display:grid;grid-template-columns:minmax(235px,310px) minmax(0,1fr);align-items:start;gap:16px}\n      .aif-video-list{display:flex;flex-direction:column;gap:8px;min-width:0;max-height:720px;overflow-y:auto;align-self:stretch;align-content:start}\n      .aif-video-main{min-width:0}\n      @media(max-width:840px){.aif-video-layout{grid-template-columns:minmax(0,1fr)}.aif-video-list{max-height:260px;overflow-y:auto}}\n      .aif-video-stage{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:12px;background:#061726}
+      .aif-video-shell{background:#fff;border:1px solid #d4e1f0;border-radius:20px;overflow:hidden;color:#162947;box-shadow:0 12px 32px #152d4612}
+      .aif-video-head{background:linear-gradient(118deg,#0f1b3c,#154a7c 65%,#0b7089);color:#fff;padding:24px 26px}
+      .aif-video-head strong{font-size:11px;letter-spacing:.12em;color:#bde7ff}
+      .aif-video-head h2{font-size:clamp(21px,2.4vw,27px);margin:6px 0;color:white}
+      .aif-video-head p{font-size:13px;line-height:1.6;color:#dceafa;margin:0}
+      .aif-video-head a{font-size:13px;font-weight:700;color:#c0e9ff;text-decoration:underline}
+      .aif-video-layout{display:grid;grid-template-columns:minmax(235px,310px) minmax(0,1fr);align-items:start}
+      .aif-video-list{background:#f5f8fc;border-right:1px solid #dce5f1;padding:13px;display:flex;flex-direction:column;gap:5px;min-width:0;align-self:stretch}
+      .aif-video-list-title{margin:4px 8px 12px;font-size:12px;font-weight:800;color:#405d7d;letter-spacing:.06em}
+      .aif-video-lesson{display:flex;align-items:flex-start;width:100%;gap:12px;text-align:left;padding:13px 10px;background:transparent;color:#183353;border:1px solid transparent;border-radius:12px;cursor:pointer;font:inherit}
+      .aif-video-lesson:hover{background:#e8f1fb;border-color:#cbdff2}
+      .aif-video-lesson[aria-current="true"]{background:white;border-color:#65a8e6;box-shadow:0 3px 12px #11375d12}
+      .aif-video-number{background:#dbeafa;border-radius:8px;padding:7px;min-width:34px;text-align:center;font-size:12px;font-weight:900;color:#13538e}
+      .aif-video-lesson[aria-current="true"] .aif-video-number{background:#155a91;color:white}
+      .aif-video-copy{min-width:0;flex:1}
+      .aif-video-copy b{font-size:13px;line-height:1.35;display:block}
+      .aif-video-copy small{font-size:11px;color:#637a91;line-height:1.5;display:block;margin-top:4px}
+      .aif-video-status{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:#227556}
+      .aif-video-status.pending{color:#687990}
+      .aif-video-main{min-width:0;padding:22px}
+      .aif-video-main-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+      .aif-video-main-top h3{font-size:19px;margin:5px 0;color:#153956}
+      .aif-video-main-top small{font-size:12px;color:#627b97}
+      .aif-video-pill{padding:5px 10px;border-radius:9px;font-size:11px;font-weight:800;background:#e9f7ef;color:#187347}
+      .aif-video-pill.pending{background:#eff3f8;color:#60728a}
+      .aif-video-tools{display:flex;flex-wrap:wrap;align-items:center;gap:13px;margin:12px 0 16px;color:#546b84;font-size:12px}
+      .aif-video-tools a{color:#1466b2;text-decoration:underline;font-weight:700}
+      .aif-video-chapters{border:1px solid #e0e9f3;border-radius:12px;margin-top:15px;overflow:hidden;color:#1d5486}
+      .aif-video-chapters summary{cursor:pointer;padding:12px 14px;font-size:13px;font-weight:800;background:#f4f8fd}
+      .aif-video-chapter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:12px}
+      .aif-video-chapter{display:flex;align-items:center;gap:7px;padding:7px;background:#f4f8fc;border-radius:8px}
+      .aif-video-chapter button{border:0;background:none;color:#1f4a70;cursor:pointer;text-align:left;font-size:12px;flex:1}
+      .aif-video-chapter a{font-size:11px;color:#1761a4;white-space:nowrap}
+      .aif-video-empty{border:1px dashed #bfd2e6;background:#f6f9fc;padding:24px;border-radius:12px;color:#506883;font-size:13px;line-height:1.7}
+      @media(max-width:840px){.aif-video-layout{grid-template-columns:1fr}.aif-video-list{border-right:0;border-bottom:1px solid #dce5f1;max-height:340px;overflow-y:auto}.aif-video-main{padding:17px}.aif-video-chapter-grid{grid-template-columns:1fr}}
+      .aif-video-stage{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:12px;background:#061726}
       .aif-video-stage video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#061726;cursor:pointer}
       .aif-video-stage:fullscreen{width:100vw;height:100dvh;max-width:none;border-radius:0;background:#03101e}
       .aif-video-stage:fullscreen video{flex:1;min-height:0;height:100%;width:100%;aspect-ratio:auto}
@@ -219,21 +253,42 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
       .aif-video-fullscreen-nav button:disabled{opacity:.35;cursor:default}
       @media(prefers-reduced-motion:reduce){.aif-video-stage:fullscreen .cv-controls,.aif-video-fullscreen-nav{transition:none}}
     `}</style>
-    <div style={{...frame,background:"linear-gradient(130deg,#101c35,#17365a)"}}>
-      <p style={{letterSpacing:".11em",fontWeight:800,fontSize:12,color:"#74e0fa",margin:"0 0 8px"}}>VISUAL-FIRST VIDEO LESSONS</p>
-      <h2 style={{fontSize:"clamp(20px,2.3vw,29px)",margin:"0 0 8px",color:"#fff"}}>Learn AI step by step — no prior experience required</h2>
-      <p style={{color:"#cbdcf0",lineHeight:1.65,margin:"0 0 20px"}}>Every slide is explained in plain English with examples and practical decisions. Video controls follow the same standard as the AIP course.</p>
-      <p role="status" aria-live="polite" style={{color:"#a7e9ff",fontWeight:700,fontSize:13,margin:"-7px 0 14px"}}>{checking?"Checking published videos…":`${readyCount} of ${entries.length} module videos ready to watch`}</p>
-      <div className="aif-video-layout">
-        <div role="list" aria-label="Video lessons" className="aif-video-list">
-          {entries.map(item=><button key={item.id} type="button" role="listitem" onClick={()=>choose(item.id)}
-            aria-current={item.id===active?"true":undefined}
-            style={{cursor:"pointer",border:item.id===active?"2px solid #56d9ff":"1px solid #46617a",borderRadius:10,padding:"13px 14px",textAlign:"left",background:item.id===active?"#1d4366":"#14283f",color:"#f2f7ff"}}>
-            <strong style={{display:"block",fontSize:15}}>Video {item.id} · {item.title}</strong>
-            <small style={{color:"#b2d2ed"}}>Slides {item.start}–{item.end} · {results[item.id]?.status==="ready"?(completed&&item.id===active?"✓ Completed":"Ready to watch"):checking?"Checking video":"In preparation"}</small>
-          </button>)}
+    <div className="aif-video-shell">
+      <div className="aif-video-head">
+        <strong>AIF-C01 · VIDEO LEARNING PATH</strong>
+        <h2>{moduleId==="00"?"Introduction · Guided Video":`Module ${moduleId} · Video Lectures`}</h2>
+        <p>Learn AI and cloud foundations step by step. Choose a topic, watch the video, or study its original slides.</p>
+        <div style={{display:"flex",gap:18,marginTop:14,flexWrap:"wrap"}}>
+          <a href="#visual-lessons">Open visual slides ↓</a>
+          <a href="/courses/aws-ai-practitioner">All course modules</a>
         </div>
-        {ready&&!mediaError?<div className="aif-video-main">
+      </div>
+      <div className="aif-video-layout">
+        <nav aria-label="Choose video lecture" className="aif-video-list">
+          <div className="aif-video-list-title">PLAYLIST · {readyCount}/{entries.length} AVAILABLE</div>
+          {entries.map(item=>{
+            const itemResult=results[item.id];
+            const isReady=itemResult?.status==="ready";
+            return <button key={item.id} type="button" className="aif-video-lesson" onClick={()=>choose(item.id)} aria-current={item.id===active?"true":undefined}>
+              <span className="aif-video-number">{item.id}</span>
+              <span className="aif-video-copy">
+                <b>{item.title}</b>
+                <small>Slides {item.start}–{item.end}</small>
+                <span className={isReady?"aif-video-status":"aif-video-status pending"}>{isReady?(completed&&item.id===active?"✓ Completed":`▶ Watch · ${formatVideoTime(itemResult.durationSeconds)}`):checking?"Checking video":"In preparation"}</span>
+              </span>
+            </button>;
+          })}
+        </nav>
+        <div className="aif-video-main">
+          <div className="aif-video-main-top">
+            <div>
+              <small>PART {selected.id} OF {String(entries.length).padStart(2,"0")} · SLIDES {selected.start}–{selected.end}</small>
+              <h3>{selected.title}</h3>
+              <small>Visual-first, beginner-friendly guided explanation</small>
+            </div>
+            <span className={ready?"aif-video-pill":"aif-video-pill pending"}>{ready?(completed?"✓ Completed":"Ready to watch"):"In preparation"}</span>
+          </div>
+          {ready&&!mediaError?<div>
           <div ref={stageRef} className="aif-video-stage" data-hud={hudVisible?"visible":"hidden"}
             tabIndex={fullscreen?0:undefined} onPointerMove={trackHud}
             onPointerDown={e=>{if(fullscreen&&e.pointerType==="touch")revealHud(4000);}}
@@ -276,30 +331,31 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
               nextTitle={following?.title??(nextModule?"Next module":"")}
               onFullscreen={()=>void toggleFullscreen()} onMarkComplete={markComplete} completed={completed}/>
           </div>
-          <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",gap:13,margin:"12px 0 16px"}}>
-            <label style={{display:"inline-flex",gap:7,alignItems:"center",fontSize:13,color:"#d8ebff"}}>
+          <div className="aif-video-tools">
+            <label style={{display:"inline-flex",gap:7,alignItems:"center",fontSize:13,color:"#284f71"}}>
               <input type="checkbox" checked={autoNext} onChange={e=>changeAutoNext(e.currentTarget.checked)}/>
               Auto-play next lecture
             </label>
-            <span style={{fontSize:12,color:"#cbdcf0"}}>{formatVideoTime(ready.durationSeconds)} · {ready.chapters.length} slide chapters</span>
-            <a href={ready.transcriptUrl} target="_blank" rel="noopener noreferrer" style={{color:"#7ae0ff",fontSize:13}}>Read transcript</a>
-            <a href={ready.videoUrl} target="_blank" rel="noopener noreferrer" style={{color:"#7ae0ff",fontSize:13}}>Open MP4</a>
+            <span style={{fontSize:12,color:"#546b84"}}>{formatVideoTime(ready.durationSeconds)} · {ready.chapters.length} slide chapters</span>
+            <a href={ready.transcriptUrl} target="_blank" rel="noopener noreferrer" >Read transcript</a>
+            <a href={ready.videoUrl} target="_blank" rel="noopener noreferrer" >Open MP4</a>
           </div>
-          {notice&&<p role="status" style={{color:"#ffe6a7"}}>{notice}</p>}
-          <details style={{color:"#eaf6ff"}}><summary style={{cursor:"pointer",padding:"8px 0"}}>Chapters — jump to any slide explanation</summary>
-            <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:12}}>
-              {ready.chapters.map(ch=><div key={ch.slide} style={{display:"flex",gap:7,alignItems:"center"}}>
+          {notice&&<p role="status" style={{color:"#91551b"}}>{notice}</p>}
+          <details className="aif-video-chapters"><summary>Chapters — jump to any slide explanation</summary>
+            <div className="aif-video-chapter-grid">
+              {ready.chapters.map(ch=><div key={ch.slide} className="aif-video-chapter">
                 <button type="button" onClick={()=>{seek(ch.startSeconds);void videoRef.current?.play().catch(()=>{});}}
-                  style={{border:"1px solid #44617c",borderRadius:8,padding:"8px 10px",background:"#213651",color:"#f4f9ff",cursor:"pointer",fontSize:12}}>
+                  >
                   {formatVideoTime(ch.startSeconds)} · {String(ch.slide).padStart(2,"0")} · {ch.title}
                 </button>
-                <a href={source(ch.slide)} target="_blank" rel="noopener noreferrer" style={{color:"#7ae0ff",fontSize:12}} aria-label={`Open original slide ${ch.slide}`}>Slide ↗</a>
+                <a href={source(ch.slide)} target="_blank" rel="noopener noreferrer"  aria-label={`Open original slide ${ch.slide}`}>Slide ↗</a>
               </div>)}
             </div>
           </details>
-        </div>:<div role="status" style={{border:"1px dashed #58718b",padding:18,borderRadius:10,color:"#d4e5f4"}}>
+        </div>:<div role="status" className="aif-video-empty">
           {mediaError?"Video playback encountered a media error; the original slides are still available below.":checking?"Checking the narrated lecture on the media server…":"This video is being prepared. The source slides remain available below, and the full player appears after the MP4 and manifest are verified."}
         </div>}
+        </div>
       </div>
     </div>
   </section>;
