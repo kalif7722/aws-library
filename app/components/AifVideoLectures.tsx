@@ -134,7 +134,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
     const video=videoRef.current;
     if(!video)return;
     const next=!captionsOn;
-    for(let i=0;i<video.textTracks.length;i++)video.textTracks[i].mode=next?"showing":"disabled";
+    for(let i=0;i<video.textTracks.length;i++)video.textTracks[i].mode=next?"hidden":"disabled";
     setCaptionsOn(next);
   };
   const toggleMute=()=>{
