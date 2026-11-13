@@ -9,11 +9,12 @@ const api=read("app/api/aif-video/route.ts");
 const renderer=read("scripts/render_aip_course_video.py");
 const audit=read("scripts/audit_aif_local_visuals.py");
 const moduleMap=JSON.parse(read("app/courses/aws-ai-practitioner/visual-lesson-map.json"));
-const titlesByModule={"00":4,"01":6};
+const lessonCounts={"00":4,"01":6,"02":29};
+const videoSceneCounts={"00":4,"01":6,"02":6};
 
 test("AIF module pages show original lessons and beginner-first video lectures",()=>{
   assert.match(page,/import AifVideoLectures/);
-  assert.match(page,/\['00','01'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/\['00','01','02'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
   assert.ok(page.indexOf("<AifVideoLectures")<page.indexOf("<AifModuleLessons"));
   assert.match(page,/id!=='14'&&<AifModuleLessons/);
   assert.match(catalog,/id="video-lectures"/);
@@ -29,7 +30,7 @@ test("AIF local images, player and R2 paths are separate from AIP",()=>{
   assert.match(api,/manifest\.script_revision !== config\.revision/);
 });
 
-for(const [module,count] of Object.entries(titlesByModule)){
+for(const [module,count] of Object.entries(lessonCounts)){
   test("AIF Module "+module+" has a verified source-to-video map",()=>{
     const lessons=moduleMap.lessons.filter(item=>item.moduleId===module);
     assert.equal(lessons.length,count);
@@ -43,10 +44,10 @@ for(const [module,count] of Object.entries(titlesByModule)){
     const manifest=JSON.parse(read(`content/video-narration/aif-module-${module}-part-01.json`));
     assert.equal(manifest.course_slug,"aif");
     assert.equal(manifest.module_id,module);
-    assert.equal(manifest.scenes.length,count);
+    assert.equal(manifest.scenes.length,videoSceneCounts[module]);
     assert.ok(w.includes('assert m["course_slug"]=="aif"'));
     assert.ok(w.includes('aws-course-videos/previews/aif/module-'+module));
-    for(let i=0;i<count;i++){
+    for(let i=0;i<videoSceneCounts[module];i++){
       assert.equal(manifest.scenes[i].slide,i+1);
       assert.ok(manifest.scenes[i].narration.split(/\s+/).length>=150);
     }
