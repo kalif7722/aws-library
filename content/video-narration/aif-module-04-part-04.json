@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "04",
+  "module_title": "Generative AI and Amazon Bedrock",
+  "slide_local_dir": "public/course-visuals/aif-course/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "04",
+  "part_title": "Amazon Bedrock — Managed Model Access and Application Architecture",
+  "output_prefix": "aif-module-04-part-04",
+  "script_revision": "2026-11-13-aif-m04-p04-beginner-visual-v1",
+  "review_basis": "Original Module 04 local WebP slides 12–14 inspected visually; narration follows actual arrows, diagrams, labels, decisions and worked examples.",
+  "scenes": [
+    {
+      "slide": 12,
+      "title": "Amazon Bedrock: the managed foundation-model layer",
+      "narration": "Think of an application that wants to answer a customer question using a foundation model. Follow the central horizontal route in the picture. The enterprise web application on the left assembles a prompt, including the user's words and any useful context, then sends an API request to Amazon Bedrock Runtime. An A P I is a defined way for software systems to request services from one another. Bedrock gives managed access to supported foundation models, so a team does not have to build and operate the underlying model-hosting system. The selected model returns its response through Bedrock and back to the application on the right. At the top are four optional capabilities. Knowledge Bases can retrieve company information for retrieval augmented generation, abbreviated R A G. Guardrails can apply configured safety and content controls. Agents can coordinate tools and multistep tasks. Model customization can adapt supported models. Optional means these are not all automatically active for every API invocation. Under the center, I A M, Identity and Access Management, controls which principals may invoke specific models and operations. The usage billing panel shows that model requests and features have costs. Finally, the customer-responsibility box reminds us to protect data, set permissions, validate outputs, and monitor the application. Decision check: does using Bedrock mean AWS automatically verifies every generated answer for business correctness? No. The application owner still needs evaluation and appropriate checks."
+    },
+    {
+      "slide": 13,
+      "title": "Amazon Bedrock foundation models",
+      "narration": "Read the left-to-right diagram as a model-selection and invocation flow. The user's application starts on the left. The catalog box shows different categories such as text, image and embedding models. An embedding model transforms content into numerical representations useful for semantic search; it is not the same as a text-generation model. Three numbered selection checks appear beside the catalog: supported capabilities and modalities, context window and compatible API, and availability in the required AWS Region. A Region is a geographic AWS location where services run; not every model is available in every Region. The next box is the Bedrock runtime applying supported data-protection mechanisms, followed by the chosen model, then the response. Notice the text on the slide about prompts and outputs not being used to train base models. Still, design your own access, logging and privacy practices appropriately. The dashed lower path illustrates optional customization for supported models, producing a separate customized model artifact. It does not imply the base model changes each time a user asks something. Question: if the application needs image understanding, can we select any catalog entry labelled text model? No. Check that the specific model supports image input and the required API in the target Region."
+    },
+    {
+      "slide": 14,
+      "title": "Module 04 – Bedrock application architecture",
+      "narration": "This architecture slide has three separate flows, and each solves a different need. First look at the top runtime lane. A user sends a question or prompt to an application backend. Its I A M role authorizes the Bedrock operation. The backend invokes Bedrock Runtime, which sends the prompt to a selected foundation model. Follow the arrows back as the response returns from the model to Bedrock, to the backend, and finally to the user. Now read the yellow outlined R A G section below. On the left, the ingestion stage stores company product documents in Amazon S3. Bedrock Knowledge Bases processes them into searchable representations, often using embeddings, and stores them in a configured vector store. On the right, a user question retrieves relevant source chunks; the application can add those passages to the prompt, or use an integrated retrieval-and-generation operation. The model can then produce an answer grounded in retrieved company material, with references where the application supports them. Retrieval does not guarantee factual correctness; check source relevance and citations. Finally look at the bottom dashed fine-tuning lane. Domain-specific training examples feed a customization job that produces a customized model for supported use cases. R A G retrieves fresh facts at request time, whereas fine-tuning changes model behavior through an offline training process. Quick decision: if product policies change every week and need citations, is a knowledge base often preferable to fine-tuning the model with every update? Yes, because relevant documents can be refreshed and retrieved."
+    }
+  ]
+}
