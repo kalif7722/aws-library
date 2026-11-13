@@ -66,6 +66,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
   ],
   "19": [
     { id: "01", title: "Lab 01 — Diagnose and Fix Context Overflow and Truncated Inputs", subtitle: "Reproduce, inspect prompts and token budget, repair chunk selection, verify regressions", start: 1, end: 5 },
+    { id: "02", title: "Lab 02 — Diagnose Bedrock Converse API Schema and Response Errors", subtitle: "Triage HTTP errors, repair content blocks and validate parsing", start: 6, end: 11 },
   ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
