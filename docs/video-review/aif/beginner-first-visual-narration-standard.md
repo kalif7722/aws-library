@@ -16,6 +16,16 @@
 - Deliver instructional depth according to the actual content; never force a fixed number of slides, word count or video duration. Four visually dense slides may need more teaching than ten simple slides.
 - The learner should be able to retell the concept in their own words and recognize it in a simple AWS AI Practitioner exam scenario.
 
+## Concise visual-first teaching (approved 2026-11-14)
+- Preserve the approved Part 01–04 visual-first teaching style, but make subsequent scripts noticeably tighter: **aim for roughly 15–25% fewer spoken words** compared with equally complex recent lectures, when this can be achieved without losing instructional clarity. This is a soft editing goal, not a fixed per-slide word count or duration.
+- Walk through the actual visual in meaningful order, explain the technical mechanism and one useful application, and teach the most important distinction or decision. Spend words where the slide is difficult; dense architecture or safety-critical material may require longer treatment.
+- Remove duplicated definitions, repeated conclusions, generic reminders, and unnecessary transitions. Define terms once and refer back naturally; do not restate the same warning on every slide.
+- Prefer one directly relevant example developed clearly over multiple loosely related anecdotes. If a slide already contains a worked example, **teach that example** rather than inventing an additional one.
+- For large numbered workflows, explain every meaningful stage but group obvious adjacent operations where natural. Avoid mechanically describing decorative icons or reading every label aloud.
+- Include quick checks only where they genuinely reinforce a decision, not as a formula at the end of every slide. Keep sentences conversational, with natural pacing and no artificially accelerated speech.
+- Do not shorten by deleting source-grounded architecture detail, conditions, limitations, security or correctness caveats essential to understanding. Avoid a mandatory minimum of 100+ words for each individual slide in future workflows; validate instructional adequacy instead.
+- Continue fresh-audio synthesis for rewritten scripts, with narration revision and captions generated from the same approved text; never restore audio from earlier script revisions.
+
 ## Source and narration preflight
 1. Use the reviewed original local WebP images `public/course-visuals/aif-course/module-NN/slide-MM.webp`; map them to `app/courses/aws-ai-practitioner/visual-lesson-map.json`.
 2. Audit all original WebPs in the target module for existence, dimensions, file format and slide order before synthesis. Historical `docs/aif-audit-completion-2026-10-30.md` reports all 349 as reviewed, but the current render still validates each file.
