@@ -121,3 +121,29 @@ test("AIF Module 05 published lectures mount automatically and cover all 28 slid
   assert.equal(previous,28);
   assert.match(read(".github/workflows/render-aif-m05-parts.yml"),/audit_aif_local_visuals.py --module 05/);
 });
+
+test("AIF Module 06 prompt-engineering video manifest coverage is contiguous and R2 gated",()=>{
+  const intervals=[[1,4],[5,7],[8,11],[12,15]];
+  const workflow=read(".github/workflows/render-aif-m06-parts.yml");
+  const all=[];
+  for(let i=0;i<intervals.length;i++){
+    const part=String(i+1).padStart(2,"0");
+    const [start,end]=intervals[i];
+    const manifest=JSON.parse(read(`content/video-narration/aif-module-06-part-${part}.json`));
+    assert.equal(manifest.course_slug,"aif");
+    assert.equal(manifest.module_id,"06");
+    assert.equal(manifest.part_id,part);
+    assert.deepEqual(manifest.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,j)=>start+j));
+    assert.ok(manifest.scenes.every(s=>s.narration.trim().split(/\\s+/).length>=100));
+    assert.ok(workflow.includes(`- part: "${part}"`));
+    assert.ok(workflow.includes(`start: ${start}\\n            end: ${end}`));
+    assert.ok(workflow.includes(manifest.script_revision));
+    assert.ok(api.includes(`"06-${part}":`));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    all.push(...manifest.scenes.map(s=>s.slide));
+  }
+  assert.deepEqual(all,Array.from({length:15},(_,i)=>i+1));
+  assert.ok(workflow.includes("audit_aif_local_visuals.py --module 06"));
+  assert.ok(workflow.includes("Publish only verified files to Cloudflare R2"));
+  assert.ok(api.includes("manifest.script_revision !== config.revision"));
+});
