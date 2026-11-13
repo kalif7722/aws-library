@@ -81,3 +81,12 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - All eleven parts are represented in `app/api/aif-video/route.ts` and `app/components/AifVideoLectures.tsx`; shared play/pause, ±5-second, caption, speed, next/previous and fullscreen controls remain standard.
 - Fixed Module 03 Part 02 workflow's incorrect `part-01.json` trigger. Future modifications to Part 02 will now trigger Part 02 rendering as intended.
 - **Published-media count remains unverified**: neither live course API nor Cloudflare R2 MP4/manifest checks were available to this session. Do not report eleven rendered or uploaded videos without observing their actual R2 assets or completed GitHub job logs.
+
+## Progress checkpoint — November 13, 2026 (Module 03 Parts 05–06)
+
+- Reviewed original local Module 03 WebP visuals individually for slides 19–24, including the numeric house-price examples, spam classification, k-NN diagram, training/validation/test split, and feature engineering leakage safeguards.
+- Added two topic-first beginner narration manifests: Part 05 slides 19–21 (supervised learning, regression, classification) and Part 06 slides 22–24 (dataset splitting, feature engineering, target leakage).
+- Both parts use the shared approved voice en-US-AndrewNeural at -3%, visual-order walkthroughs, familiar examples, decision checks, exact scene numbering, and independent R2 media prefixes.
+- Added push-triggered audited render/publish workflows and the matching API / AIF left-playlist entries. The existing player remains shared with AIP.
+- GitHub Actions runs were observed **in_progress** during this update: Part 05 run 43398950789 and Part 06 run 43398955504. MP4 and R2 manifest publication are **not yet verified**; do not count them as ready until completed and confirmed.
+- Current authored coverage: **63 of 349 slides across 13 configured lectures**. The next unreviewed AIF visual is Module 03 slide 25.
