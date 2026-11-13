@@ -205,7 +205,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
   if(!entries.length)return null;
   return <section id="video-lectures" aria-label="Beginner-friendly video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
     <style>{`
-      .aif-video-stage{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:12px;background:#061726}
+      .aif-video-layout{display:grid;grid-template-columns:minmax(235px,310px) minmax(0,1fr);align-items:start;gap:16px}\n      .aif-video-list{display:flex;flex-direction:column;gap:8px;min-width:0;max-height:720px;overflow-y:auto;align-self:stretch;align-content:start}\n      .aif-video-main{min-width:0}\n      @media(max-width:840px){.aif-video-layout{grid-template-columns:minmax(0,1fr)}.aif-video-list{max-height:260px;overflow-y:auto}}\n      .aif-video-stage{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:12px;background:#061726}
       .aif-video-stage video{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#061726;cursor:pointer}
       .aif-video-stage:fullscreen{width:100vw;height:100dvh;max-width:none;border-radius:0;background:#03101e}
       .aif-video-stage:fullscreen video{flex:1;min-height:0;height:100%;width:100%;aspect-ratio:auto}
@@ -224,8 +224,8 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
       <h2 style={{fontSize:"clamp(20px,2.3vw,29px)",margin:"0 0 8px",color:"#fff"}}>Learn AI step by step — no prior experience required</h2>
       <p style={{color:"#cbdcf0",lineHeight:1.65,margin:"0 0 20px"}}>Every slide is explained in plain English with examples and practical decisions. Video controls follow the same standard as the AIP course.</p>
       <p role="status" aria-live="polite" style={{color:"#a7e9ff",fontWeight:700,fontSize:13,margin:"-7px 0 14px"}}>{checking?"Checking published videos…":`${readyCount} of ${entries.length} module videos ready to watch`}</p>
-      <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr)",gap:16}}>
-        <div role="list" aria-label="Video lessons" style={{display:"grid",gap:8}}>
+      <div className="aif-video-layout">
+        <div role="list" aria-label="Video lessons" className="aif-video-list">
           {entries.map(item=><button key={item.id} type="button" role="listitem" onClick={()=>choose(item.id)}
             aria-current={item.id===active?"true":undefined}
             style={{cursor:"pointer",border:item.id===active?"2px solid #56d9ff":"1px solid #46617a",borderRadius:10,padding:"13px 14px",textAlign:"left",background:item.id===active?"#1d4366":"#14283f",color:"#f2f7ff"}}>
@@ -233,7 +233,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
             <small style={{color:"#b2d2ed"}}>Slides {item.start}–{item.end} · {results[item.id]?.status==="ready"?(completed&&item.id===active?"✓ Completed":"Ready to watch"):checking?"Checking video":"In preparation"}</small>
           </button>)}
         </div>
-        {ready&&!mediaError?<div>
+        {ready&&!mediaError?<div className="aif-video-main">
           <div ref={stageRef} className="aif-video-stage" data-hud={hudVisible?"visible":"hidden"}
             tabIndex={fullscreen?0:undefined} onPointerMove={trackHud}
             onPointerDown={e=>{if(fullscreen&&e.pointerType==="touch")revealHud(4000);}}
