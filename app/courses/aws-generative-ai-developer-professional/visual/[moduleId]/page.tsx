@@ -34,7 +34,10 @@ export default async function GenAIModulePage({ params }: { params: Promise<{ mo
   if (id === "19") return <main style={{maxWidth:1400,margin:"0 auto",padding:"24px 20px 48px"}}>
     <style>{heroCss}</style>
     <section className="genai-deep-hero"><Link href="/courses/aws-generative-ai-developer-professional">← All course modules</Link><p style={{letterSpacing:".12em",fontSize:11,fontWeight:800}}>MODULE 19 · AIP-C01 TROUBLESHOOTING</p><h1>GenAI Troubleshooting</h1><p>Practical failure diagnosis across model requests, retrieval, prompts, agents, and deployment.</p></section>
-    <GenAITroubleshootingModule />
+    {hasVideoLectures && <AipVideoLectures moduleId={id} />}
+    <section id="visual-lessons" style={{scrollMarginTop:24}}>
+      <GenAITroubleshootingModule />
+    </section>
   </main>;
   const { id: num, title, sourcePageStart, sourcePageEnd, description: desc } = selected;
   const imageBase = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-genai-course-visuals";
