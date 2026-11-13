@@ -118,3 +118,13 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - Preserve the original diagram order, numerical examples, comprehensible definitions and practical exam-style decision checks. Voice stays `en-US-AndrewNeural` at `-3%`. Standard AIP-style left playlist, shared player, captions and navigation remain in use.
 - Registered all three revisions in the R2-verified AIF API and Module 03 playlist. Rendering workflow success and published media availability must still be verified independently.
 - Previous Parts 10–12 completed successfully. Total configured coverage is **92/349 original slides, 22 lectures**. Next untouched narration begins at Module 03 slide **54** (ML lifecycle).
+
+## Progress checkpoint — November 13, 2026 (Module 03 Parts 16–18)
+
+- Directly inspected all nine original numbered local WebP images for Module 03 slides **54–62**. Each image's diagram, text, charts, numeric examples and decision cues informed the narration; no PDF-title-only inference was used.
+- **Part 16 (slides 54–58):** complete ML lifecycle, business problem framing, data preparation, EDA with correlation matrix, deployment, drift monitoring and retraining.
+- **Part 17 (slides 59–61):** hyperparameters versus trained weights, learning rate, batch size, epochs, regularization, 1,000÷100=10 updates per epoch and 30 updates in three epochs, early stopping and overfitting remedies.
+- **Part 18 (slide 62):** when deterministic computation is preferable to ML/LLMs; 3 blue cards of 10 yield 0.3, versus illustrative approximate model answers 0.28 and 0.25.
+- Narration manifests committed in `content/video-narration/aif-module-03-part-16.json` through `part-18.json`; push-triggered GitHub Actions workflows committed as `.github/workflows/render-aif-m03-part-16.yml` through `part-18.yml` using the established source audit, en-US-AndrewNeural at -3%, full caption/transcript/manifest creation and verified Cloudflare R2 publication gate.
+- Added all three lessons to the standard AIF left playlist and the API's revision-gated publication registry. **Do not count a lecture as playable until the GitHub render succeeds and R2 MP4 plus matching manifest are verified.**
+- **Current committed narration: 101/349 original slides across 25 configured lectures**. Module 03 is fully scripted; continue at Module 04 slide 01 after checking original visuals.
