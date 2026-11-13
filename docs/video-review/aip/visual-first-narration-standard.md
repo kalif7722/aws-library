@@ -47,3 +47,6 @@ not a replacement for a human check of diagrams.
 - GitHub upload-artifact is optional; an uploaded R2 MP4 and matching R2 manifest are the authoritative publication status. Do not claim videos are ready until both have been verified, and do not repeat successful chunks unnecessarily.
 - Where one module finishes, use the same preflight for the next module automatically. Do not silently override an unverified audit or fabricate missing media; report the specific blocked step.
 - Implemented first for Module 15: `.github/workflows/audit-aip-m15-visuals-01-06.yml` and `.github/workflows/render-aip-m15-parts-01-02.yml`, with scripts under `content/video-narration/` and player mappings under `app/api/` and `app/components/`.
+
+## Mandatory shared video player
+Use `docs/video-review/shared-course-video-player-standard.md` and `app/components/CourseVideoControls.tsx` for all course playback experiences, with identical 5-second skips, captions, volume, speed, next/previous, fullscreen auto-hide, resume and chapter tools. Do not replace these with minimal native video controls when adding a new course.
