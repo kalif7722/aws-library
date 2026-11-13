@@ -139,3 +139,12 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - All three lectures registered in `app/api/aif-video/route.ts` and shared AIF playlist `app/components/AifVideoLectures.tsx`. Availability remains gated on matching published manifest and confirmed MP4.
 - **Current configured narration coverage: 112/349 original slides across 28 lecture parts.** The next untouched image is **Module 04 slide 12**, beginning the Amazon Bedrock managed-model architecture section.
 - Committed workflow configuration does not itself prove the GitHub Action rendered or R2 published the media; verify the jobs and R2 before reporting playback ready.
+
+## Visibility fix and completion checkpoint — November 13, 2026 (Module 04)
+
+- **Root cause of invisible Module 04 playlist:** `app/courses/aws-ai-practitioner/visual/[moduleId]/page.tsx` mounted `AifVideoLectures` only for modules 00–03, despite Module 04 already existing in the API and player catalog. Expanded the module allowlist to include `04`; the original visual lesson gallery remains unchanged.
+- Added regression coverage in `tests/aif-video-lesson-mapping.test.mjs` for the Module 04 page mounting, 20 original slides, all six playlist entries, source-audit workflow paths and contiguous slide ranges.
+- Visually inspected original Module 04 WebP slides **12–20** and authored three further complete-concept lectures. **Part 04 (12–14):** Bedrock managed runtime, IAM, optional knowledge bases/guardrails/agents/customization, application request/response, RAG ingestion/retrieval and customization architecture. **Part 05 (15–16):** choosing models by business requirement, modality, region/API, citations, latency, governance, context and cost. **Part 06 (17–20):** tokenization, context-window allocation, embeddings and semantic vector search with source quality caveats.
+- These three narration manifests and audited R2-rendering workflows are committed as `aif-module-04-part-04` through `part-06`. API and AIP-standard AIF left player now map all Module 04 slides **1–20** without gaps.
+- **Cumulative committed coverage: 121/349 slides across 31 configured lectures; Module 04 has six configured lectures covering 20/20 slides.** Next untouched narration begins at Module 05 slide 01.
+- Site deployment, GitHub job completion and live R2 MP4/manifest validation were **not independently verified**; the player must continue to label unpublished parts as pending rather than ready.
