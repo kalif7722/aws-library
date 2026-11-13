@@ -72,6 +72,7 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "05", title: "Lab 05 — Diagnose and Roll Back Prompt Version Regressions", subtitle: "Pinned version comparison, variable repair, JSON schema and release gate", start: 24, end: 28 },
     { id: "06", title: "Lab 06 — Diagnose a Stale Bedrock Knowledge Base After Update", subtitle: "Trace S3 version, ingestion failures, source retrieval and answer caching", start: 29, end: 35 },
     { id: "07", title: "Lab 07 — Diagnose Irrelevant Retrieved Context Without Weakening Security", subtitle: "Inspect top-K, chunking, metadata and ranking with tenant filters intact", start: 36, end: 41 },
+    { id: "08", title: "Lab 08 — Troubleshoot Slow Vector Search and OpenSearch Serverless", subtitle: "Trace p95, security gates, index health, OCUs and search relevance", start: 42, end: 48 },
   ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
