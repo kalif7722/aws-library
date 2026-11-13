@@ -206,7 +206,7 @@ function VideoPlayer({
     if(!video)return;
     const next=!captionsOn;
     for(let i=0;i<video.textTracks.length;i++)
-      video.textTracks[i].mode=next?"showing":"disabled";
+      video.textTracks[i].mode=next?"hidden":"disabled";
     setCaptionsOn(next);
   };
   const completeManually=()=>{
