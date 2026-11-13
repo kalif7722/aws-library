@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-07": {
+  "19-08": {
+    prefix: "module-19/part-08/aip-module-19-part-08",
+    revision: "2026-11-13-m19-p08-troubleshoot-local-v1",
+    firstSlide: 42,
+    count: 7,
+    firstTitle: "Scenario and latency budget",
+    title: "Lab 08 — Troubleshoot Slow Vector Search and OpenSearch Serverless",
+  },  "19-07": {
     prefix: "module-19/part-07/aip-module-19-part-07",
     revision: "2026-11-13-m19-p07-troubleshoot-local-v1",
     firstSlide: 36,
