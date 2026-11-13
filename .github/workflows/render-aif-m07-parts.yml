@@ -1,4 +1,4 @@
-name: Render AIF Module 07 — five topic-first AI assistant lessons
+name: Render AIF Module 07 — five visually verified AI assistant lessons, fresh audio
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aif-m07-video-batch-v1
+  group: aif-m07-visualfirst-fresh-v2
   cancel-in-progress: false
 
 jobs:
@@ -30,23 +30,23 @@ jobs:
           - part: "01"
             start: 1
             end: 4
-            revision: "2026-11-13-aif-m07-p01-beginner-visual-v1"
+            revision: "2026-11-14-aif-m07-p01-webp-visualfirst-balanced-v2"
           - part: "02"
             start: 5
             end: 6
-            revision: "2026-11-13-aif-m07-p02-beginner-visual-v1"
+            revision: "2026-11-14-aif-m07-p02-webp-visualfirst-balanced-v2"
           - part: "03"
             start: 7
             end: 10
-            revision: "2026-11-13-aif-m07-p03-beginner-visual-v1"
+            revision: "2026-11-14-aif-m07-p03-webp-visualfirst-balanced-v2"
           - part: "04"
             start: 11
             end: 14
-            revision: "2026-11-13-aif-m07-p04-beginner-visual-v1"
+            revision: "2026-11-14-aif-m07-p04-webp-visualfirst-balanced-v2"
           - part: "05"
             start: 15
             end: 15
-            revision: "2026-11-13-aif-m07-p05-beginner-visual-v1"
+            revision: "2026-11-14-aif-m07-p05-webp-visualfirst-balanced-v2"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -111,17 +111,15 @@ jobs:
           assert m["course_slug"]=="aif" and m["module_id"]=="07" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
+          assert m["review_basis"].startswith("Visually inspected original numbered WebP slides")
           assert all(len(s["narration"].split())>=100 for s in m["scenes"])
           print(f"Verified AIF M07 Part {p}: {len(slides)} visually grounded lecture scenes")
           PY
 
-      - name: Restore existing valid audio chunks from a previous interrupted run
-        uses: actions/cache/restore@v4
-        with:
-          path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m07-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            aif-m07-p${{ matrix.part }}-tts-batch-v1-
+      - name: Remove prior audio and synthesize every scene from the new script
+        run: |
+          rm -rf video-output/part-${{ matrix.part }}
+          mkdir -p video-output/part-${{ matrix.part }}
 
       - name: Verify live local original visuals and render narration in one consistent voice
         env:
@@ -133,13 +131,6 @@ jobs:
             --manifest content/video-narration/aif-module-07-part-${{ matrix.part }}.json \
             --output video-output/part-${{ matrix.part }} \
             --width 1920 --height 1080 --fps 24
-
-      - name: Save completed audio on success or failure
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m07-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
