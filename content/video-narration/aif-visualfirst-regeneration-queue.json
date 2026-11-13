@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "course_slug": "aif",
+  "requested_at": "2026-11-13",
+  "requested_scope": "Modules 05 onward",
+  "status": "queued_for_visual_review_and_script_rewrite",
+  "render_authorized": false,
+  "governing_standards": [
+    "docs/video-review/aif/beginner-first-visual-narration-standard.md",
+    "docs/video-review/aip/visual-first-narration-standard.md",
+    "docs/video-review/shared-course-video-player-standard.md"
+  ],
+  "priority": [
+    "05",
+    "06",
+    "07",
+    "08"
+  ],
+  "modules": [
+    {
+      "module_id": "05",
+      "parts": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06"
+      ],
+      "status": "needs_original_webp_visual_audit_and_rewrite",
+      "reason": "Existing scripts declare they were prepared from lesson titles and notes, without completed original-image review."
+    },
+    {
+      "module_id": "06",
+      "parts": [
+        "01",
+        "02",
+        "03",
+        "04"
+      ],
+      "status": "needs_original_webp_visual_audit_and_rewrite",
+      "reason": "Existing scripts explicitly record direct image visual review as pending."
+    },
+    {
+      "module_id": "07",
+      "parts": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05"
+      ],
+      "status": "needs_original_webp_visual_audit_and_rewrite",
+      "reason": "Existing scripts explicitly record image-by-image visual review not independently completed."
+    },
+    {
+      "module_id": "08",
+      "parts": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07"
+      ],
+      "status": "review_before_rerender",
+      "reason": "Scripts claim original-WebP visual review; verify correspondence against slides and user feedback before replacing."
+    }
+  ],
+  "quality_gate": {
+    "primary_source": "Read each original numbered WebP in public/course-visuals/aif-course/module-NN, not only lesson-map text.",
+    "required_per_scene": [
+      "Confirm exact slide number and visible title",
+      "Describe on-screen labels, arrows, diagrams, charts, data or examples in meaningful visual order",
+      "Define beginner terminology at first use",
+      "Explain how the on-screen mechanism works and why choices differ",
+      "Limit off-screen additions to brief directly relevant teaching examples",
+      "Use natural, varied teaching speech; no repeated generic boilerplate",
+      "Verify every specific AWS service and claim actually belongs to the pictured slide"
+    ],
+    "block_when": [
+      "Images have not been individually inspected",
+      "Narration comes from title/notes alone",
+      "Generic unrelated paragraphs recur across scenes",
+      "Script mentions visuals or numerical values not verified on image",
+      "Scene sequence/slide IDs do not match originals"
+    ],
+    "required_before_publication": [
+      "New approved script_revision for each part",
+      "Visually grounded scene audit",
+      "Render MP4, VTT, SRT, transcript and manifest from same revised script",
+      "Check caption/audio synchronization and chapter/slide sequence",
+      "Verify MP4 and manifest objects in Cloudflare R2 before site availability",
+      "Retain previous published version until replacement is validated"
+    ]
+  },
+  "execution": "This queue is a worklist, not a renderer trigger. Do not rerun current scripts unchanged. After image-by-image review and script rewrite, update narration manifests and workflow expected revision together; their existing push triggers then queue rendering."
+}
