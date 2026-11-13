@@ -44,6 +44,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
   const hudTimeout=useRef<ReturnType<typeof setTimeout>|null>(null);
   const selected=entries.find(x=>x.id===active)??entries[0];
   const result=results[active];
+  const readyCount=entries.filter(lecture=>results[lecture.id]?.status==="ready").length;
   const ready=result?.status==="ready"?result:null;
   const storageKey=`aif-video-${moduleId}-${active}-position`;
   const completedKey=`aif-video-${moduleId}-${active}-complete`;
@@ -216,6 +217,7 @@ export default function AifVideoLectures({moduleId}:{moduleId:string}){
       <p style={{letterSpacing:".11em",fontWeight:800,fontSize:12,color:"#74e0fa",margin:"0 0 8px"}}>VISUAL-FIRST VIDEO LESSONS</p>
       <h2 style={{fontSize:"clamp(20px,2.3vw,29px)",margin:"0 0 8px",color:"#fff"}}>Learn AI step by step — no prior experience required</h2>
       <p style={{color:"#cbdcf0",lineHeight:1.65,margin:"0 0 20px"}}>Every slide is explained in plain English with examples and practical decisions. Video controls follow the same standard as the AIP course.</p>
+      <p role="status" aria-live="polite" style={{color:"#a7e9ff",fontWeight:700,fontSize:13,margin:"-7px 0 14px"}}>{checking?"Checking published videos…":`${readyCount} of ${entries.length} module videos ready to watch`}</p>
       <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr)",gap:16}}>
         <div role="list" aria-label="Video lessons" style={{display:"grid",gap:8}}>
           {entries.map(item=><button key={item.id} type="button" role="listitem" onClick={()=>choose(item.id)}
