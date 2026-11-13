@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
-import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY} from "./CourseVideoControls";
+import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY} from "./CourseVideoControls";
 import {useAipVideoWatchProgress} from "./useAipVideoWatchProgress";
 import {readCompleted} from "./StudyProgress";
 import {AIP_VIDEO_PARTS,getAipVideoProgress} from "./aipVideoCatalog";
@@ -20,7 +20,7 @@ type VideoResult = Ready | { status: "processing" };
 
 const COURSE_URL = "/courses/aws-generative-ai-developer-professional";
 const MODULE_01 = `${COURSE_URL}/visual/module-01`;
-const AUTO_NEXT_KEY = "aip-auto-next:v1";
+const AUTO_NEXT_KEY = COURSE_VIDEO_AUTO_NEXT_KEY;
 const PLAYBACK_SPEED_KEY = COURSE_VIDEO_SPEED_KEY;
 const PLAYBACK_SPEEDS = COURSE_VIDEO_SPEEDS;
 
@@ -385,7 +385,7 @@ export default function AipVideoLectures({ moduleId }: { moduleId: string }) {
     else hideHudSoon(1100);
   };
   useEffect(()=>{
-    try{setAutoNext(localStorage.getItem(AUTO_NEXT_KEY)==="true");}
+    try{setAutoNext((localStorage.getItem(AUTO_NEXT_KEY)??localStorage.getItem("aip-auto-next:v1"))==="true");}
     catch{/* Site storage may be disabled */}
   },[]);
   const [progressDone,setProgressDone]=useState<string[]>([]);
