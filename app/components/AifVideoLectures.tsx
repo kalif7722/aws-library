@@ -7,6 +7,7 @@ type Result = Ready | {status:"processing"};
 const LECTURES:Record<string,{id:string;title:string;start:number;end:number}[]> = {
   "00":[{id:"01",title:"Start Here — Your AI Practitioner Learning Journey",start:1,end:4}],
   "01":[{id:"01",title:"AI Fundamentals — From Everyday Examples to Generative AI",start:1,end:6}],
+  "02":[{id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6}],
 };
 const fmt=(v:number)=>Number.isFinite(v)?`${Math.floor(v/60)}:${String(Math.floor(v%60)).padStart(2,"0")}`:"–";
 const frame={background:"#101d36",border:"1px solid #3b526d",borderRadius:16,padding:18,color:"#e9f2ff"} as const;
