@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-05": {
+  "19-06": {
+    prefix: "module-19/part-06/aip-module-19-part-06",
+    revision: "2026-11-13-m19-p06-troubleshoot-local-v1",
+    firstSlide: 29,
+    count: 7,
+    firstTitle: "Scenario and ingestion versus query architecture",
+    title: "Lab 06 — Diagnose a Stale Bedrock Knowledge Base After Update",
+  },  "19-05": {
     prefix: "module-19/part-05/aip-module-19-part-05",
     revision: "2026-11-13-m19-p05-troubleshoot-local-v1",
     firstSlide: 24,
