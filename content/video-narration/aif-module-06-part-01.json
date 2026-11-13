@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "06",
+  "module_title": "Prompt Engineering",
+  "slide_local_dir": "public/course-visuals/aif-course/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "01",
+  "part_title": "Clear Prompts, Context and Negative Instructions",
+  "output_prefix": "aif-module-06-part-01",
+  "script_revision": "2026-11-13-aif-m06-p01-beginner-visual-v1",
+  "review_basis": "Slide lesson descriptions and detailed technical notes cross-checked against source lesson map. Original WebP availability and slide numbering must be checked in the GitHub rendering preflight; direct image visual review is pending.",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Prompt engineering: give the model a clear task",
+      "narration": "A prompt is the information that we give to a generative AI model when we want it to perform a task. Begin with the difference between a vague request and a well specified request. Summarize AWS is ambiguous: which service, for whom, how long, and based on which document? A helpful prompt separates four ideas. The instruction tells the model what to do. Context gives background, such as a beginner audience or the purpose of the answer. Input data contains the actual article or customer message to process. An output indicator specifies the answer format, such as two or three sentences. In this lesson, prompting controls the model at inference time, meaning when it generates a response; it does not retrain the model's internal weights. Think of asking a new employee for a report: without an audience, source material and deadline or format, the answer may miss your intent. When reviewing any model output, first check that it actually followed the task and used the supplied facts."
+    },
+    {
+      "slide": 2,
+      "title": "Build an enhanced prompt",
+      "narration": "Now apply prompt structure to the concrete AWS article example. The input describes Amazon EC2 for compute, Amazon S3 for storage, Amazon RDS for managed relational databases, and AWS Lambda for running code without managing servers. The article also mentions learning resources. The requested output is a two to three sentence beginner friendly summary. Rather than asking the model to invent a tour of every AWS service, the enhanced prompt gives an exact purpose, source material, audience and output length. A strong response might group those services by the job they do, but every statement must be supported by the provided article. Do not confuse the cloud provider with a single service: EC2, S3, RDS and Lambda solve different infrastructure problems. The central skill is to make the success criteria measurable. Does the generated summary stay within the sentence limit? Does it avoid unsupported cost, salary or certification claims? If the answer introduces services the source never mentioned, it has gone beyond the evidence and needs revision."
+    },
+    {
+      "slide": 3,
+      "title": "Negative prompting: specify exclusions",
+      "narration": "Negative prompting means naming things that the answer should avoid. It works alongside positive instructions: tell the model to summarize the AWS article in plain language, and separately request no unnecessary technical jargon, pricing estimates or unrelated marketing. This is useful because an instruction like be clear does not specify which unwanted patterns a reviewer should watch for. You can think of it as defining the boundaries of a school assignment: explain the topic, but do not add unrelated material or make up numbers. Importantly, negative prompting is not a security boundary. A model may still ignore an instruction, misunderstand a term or generate unsafe details. If private information must never be revealed, use application permissions and controls rather than relying on the prompt alone. After generation, check both sides of the requirement: the intended topic should be covered and the excluded material should not appear. This makes prompt quality easier to evaluate."
+    },
+    {
+      "slide": 4,
+      "title": "Negative prompt: a worked example",
+      "narration": "This worked example combines everything from the earlier slides. Start with a positive task: summarize the given article about AWS cloud services. Add the reader context: the audience is new to cloud computing. Supply the source text, then demand a concise response of two or three sentences. Finally include exclusions, such as not using heavy jargon and not inventing prices or promotional advice. When the model responds, compare each claim with the source article. If it calls S3 a database, that is a factual error because S3 is object storage. If it invents a guaranteed career path from the article, that is also outside the source. Notice how this is different from model training: we can change the prompt for the next audience immediately without changing the model itself. An effective prompt defines what a correct answer must include and what would count as a failure. This becomes especially valuable when the same task is repeated for many students or customers."
+    }
+  ]
+}

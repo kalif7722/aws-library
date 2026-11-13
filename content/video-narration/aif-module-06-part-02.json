@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "06",
+  "module_title": "Prompt Engineering",
+  "slide_local_dir": "public/course-visuals/aif-course/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "02",
+  "part_title": "Sampling Controls, Token Choice and Latency",
+  "output_prefix": "aif-module-06-part-02",
+  "script_revision": "2026-11-13-aif-m06-p02-beginner-visual-v1",
+  "review_basis": "Slide lesson descriptions and detailed technical notes cross-checked against source lesson map. Original WebP availability and slide numbering must be checked in the GitHub rendering preflight; direct image visual review is pending.",
+  "scenes": [
+    {
+      "slide": 5,
+      "title": "Token probabilities and sampling",
+      "narration": "A language model usually generates text one token at a time. Tokens may be words, parts of words or punctuation, depending on the model's tokenizer. Consider the illustrative sentence, After the rain, the streets were. The next token could be wet, flooded, slippery, empty, muddy, clean or blocked, but the model assigns different relative probabilities. The illustrated values are a teaching example, not actual measured output from a specific foundation model. The probabilities for all possible next tokens form a distribution, and a sampling strategy uses that distribution to choose an output token. Higher probability does not mean the word is guaranteed, because another candidate may be selected depending on the decoding method. This matters because two answers to the same prompt can differ even when both are grammatically plausible. Before changing settings, separate what the model predicts from what the application chooses to sample. A credible answer still needs to be checked for accuracy, whatever its token probabilities."
+    },
+    {
+      "slide": 6,
+      "title": "Optimize prompt performance",
+      "narration": "Inference settings affect how a generative model chooses words and how much it returns. Begin with system instructions, which describe broad assistant behavior within the application's instruction hierarchy. Then consider temperature, often used to make the sampled distribution more or less concentrated. Lower temperature tends to favor high probability options; it does not guarantee factual correctness. Top k restricts sampling to up to k leading token candidates, while top p selects the smallest group of leading candidates whose cumulative probability reaches a threshold. These are alternative or combined ways of narrowing choice, depending on model support. Maximum output length limits how long the model may answer, and a supported stop sequence can signal where to end. Every model has its own accepted parameters and numeric ranges, so an AWS architect should not copy values blindly between model families. For a deterministic invoice classification task, use constrained output and validation. For drafting creative story ideas, more variety may be useful. Always test actual outputs rather than assuming one setting is universally best."
+    },
+    {
+      "slide": 7,
+      "title": "Understand prompt latency",
+      "narration": "Latency is the elapsed time between making a request and receiving a result. People may care about time to the first streamed token, which affects how quickly a reply appears, and total completion time, which includes generating the full response. Consider a long document summarization prompt compared with a short support ticket label request. The longer input may require more processing, and a longer output normally takes more time to generate. Model architecture, provider capacity, network conditions and service load also influence responsiveness. Sampling controls such as temperature are not usually the principal latency driver, although implementation details vary. To improve experience, measure the request instead of guessing: record input tokens, output tokens, model version, time to first token and total time. Then compare quality before shortening the prompt or changing models. For a user waiting on an interactive chatbot, first-token speed may matter more than for an overnight batch report. Do not optimize for speed by removing essential task context or safety checks."
+    }
+  ]
+}

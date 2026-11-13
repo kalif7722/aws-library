@@ -3,6 +3,18 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "06-01": { title: "Clear Prompts, Context and Negative Instructions",
+    revision: "2026-11-13-aif-m06-p01-beginner-visual-v1",
+    count: 4, firstSlide: 1, firstTitle: "Prompt engineering: give the model a clear task" },
+  "06-02": { title: "Sampling Controls, Token Choice and Latency",
+    revision: "2026-11-13-aif-m06-p02-beginner-visual-v1",
+    count: 3, firstSlide: 5, firstTitle: "Token probabilities and sampling" },
+  "06-03": { title: "Zero-Shot, Few-Shot, Structured Prompts and RAG",
+    revision: "2026-11-13-aif-m06-p03-beginner-visual-v1",
+    count: 4, firstSlide: 8, firstTitle: "Zero-shot prompting" },
+  "06-04": { title: "Prompt Templates, Injection and Safe Applications",
+    revision: "2026-11-13-aif-m06-p04-beginner-visual-v1",
+    count: 4, firstSlide: 12, firstTitle: "Reusable prompt templates" },
   "05-01": { title: "Fine-Tuning and Continued Pre-Training",
     revision: "2026-11-13-aif-m05-p01-beginner-visual-v1",
     count: 3, firstSlide: 1, firstTitle: "Amazon Bedrock – Fine-Tuning a Model" },

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "06",
+  "module_title": "Prompt Engineering",
+  "slide_local_dir": "public/course-visuals/aif-course/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "04",
+  "part_title": "Prompt Templates, Injection and Safe Applications",
+  "output_prefix": "aif-module-06-part-04",
+  "script_revision": "2026-11-13-aif-m06-p04-beginner-visual-v1",
+  "review_basis": "Slide lesson descriptions and detailed technical notes cross-checked against source lesson map. Original WebP availability and slide numbering must be checked in the GitHub rendering preflight; direct image visual review is pending.",
+  "scenes": [
+    {
+      "slide": 12,
+      "title": "Reusable prompt templates",
+      "narration": "A reusable prompt template contains fixed instructions and placeholders for values that will differ each time. Imagine a multiple choice task with variables for the source text, the question and three candidate choices. The application fills those placeholders before submitting the resulting prompt to the model. This reduces copy and paste errors and makes behavior easier to test across repeated requests. The placeholder names are not instructions on their own; they identify where input data belongs. Some templates also contain a few labeled examples so the model can follow a preferred format. Amazon Bedrock Prompt management is a feature for organizing reusable prompts; agent advanced prompt configuration is related but distinct. Choose features based on the actual application architecture rather than assuming every prompt requires an agent. A useful check is whether the final rendered prompt preserves the intended instructions and treats supplied question text as data. Validate required variables before calling the model."
+    },
+    {
+      "slide": 13,
+      "title": "Prompt template: worked AWS example",
+      "narration": "In this worked template example, an application needs to recommend the right storage type for website images. The prompt template has fixed instructions and placeholders for a scenario and available choices. Once filled, the generated prompt describes images and asks whether object, block or file storage best fits the need. Object storage, such as Amazon S3, is generally the appropriate answer for storing and retrieving website image objects. Block storage behaves more like volumes attached to compute instances, while file storage provides shared file-system semantics. Notice that a template does not magically determine the answer: the model still must interpret the filled scenario, and the application should verify that the chosen option is actually one of the supplied options. If the scenario changes to an operating-system disk, the right storage class can change. This lesson connects prompt construction to a concrete AWS exam decision. Check that the rendered prompt and final answer remain aligned."
+    },
+    {
+      "slide": 14,
+      "title": "Prompt injection in template inputs",
+      "narration": "Prompt injection is an attempt to turn lower trust content into instructions that override the application's actual task. The example hides words such as ignore the task inside an answer choice in a multiple choice prompt. That answer choice should be evaluated as candidate data, not obeyed as a command. A fabricated secret appearing in an illustrative failure does not represent a real key, but it shows why we should not let user supplied strings dictate system behavior. Placing input inside clearly marked fields or delimiters can help distinguish data from instructions, but formatting alone is not a complete defense. An attacker may also place instructions inside retrieved web pages, documents or tool outputs. Separate sensitive credentials from the model, validate which choices are allowed and authorize any tool action outside the text generator. If a choice says reveal secrets instead of describing a storage option, the application should reject or ignore that text as an instruction, rather than comply."
+    },
+    {
+      "slide": 15,
+      "title": "Defend prompt-based applications",
+      "narration": "Defending a prompt based application requires several coordinated controls. State the legitimate task clearly and tell the model to treat quoted documents, web pages and user supplied choices as untrusted data. Then enforce behavior in code: validate inputs, restrict tool permissions, check outputs and log relevant security events without exposing private content. Amazon Bedrock Guardrails can help filter supported harmful content and prompt attacks in the configured scope, but guardrails are not a substitute for identity, access control or application validation. Review feature limits carefully; a protection mechanism that checks one type of input may not automatically cover external tool results. For example, a customer support assistant can retrieve an order status only after the application confirms that the user is authorized to see that order. No prompt should grant that permission. As a final decision, ask what happens if the model ignores every security instruction. The application must still keep secrets protected and block unauthorized actions. That is the boundary between a helpful prompt and enforceable security."
+    }
+  ]
+}

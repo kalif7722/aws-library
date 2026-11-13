@@ -18,6 +18,12 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "06":[
+    {id:"01",title:"Clear Prompts, Context and Negative Instructions",start:1,end:4},
+    {id:"02",title:"Sampling Controls, Token Choice and Latency",start:5,end:7},
+    {id:"03",title:"Zero-Shot, Few-Shot, Structured Prompts and RAG",start:8,end:11},
+    {id:"04",title:"Prompt Templates, Injection and Safe Applications",start:12,end:15},
+  ],
   "05":[
     {id:"01",title:"Fine-Tuning and Continued Pre-Training",start:1,end:3},
     {id:"02",title:"Training Datasets, Transfer Learning and Customization Choices",start:4,end:8},

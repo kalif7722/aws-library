@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "06",
+  "module_title": "Prompt Engineering",
+  "slide_local_dir": "public/course-visuals/aif-course/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "part_id": "03",
+  "part_title": "Zero-Shot, Few-Shot, Structured Prompts and RAG",
+  "output_prefix": "aif-module-06-part-03",
+  "script_revision": "2026-11-13-aif-m06-p03-beginner-visual-v1",
+  "review_basis": "Slide lesson descriptions and detailed technical notes cross-checked against source lesson map. Original WebP availability and slide numbering must be checked in the GitHub rendering preflight; direct image visual review is pending.",
+  "scenes": [
+    {
+      "slide": 8,
+      "title": "Zero-shot prompting",
+      "narration": "Zero shot prompting asks a pretrained model to perform a task without including task specific worked examples. The underlying lesson uses a dog mystery story to show the idea, while the instructional visual presents a support ticket labeling task. In both cases, the model receives a fresh instruction, then responds using what it already learned before this request. For example, classify the message My invoice shows the wrong total as Billing, even though no labeled sample ticket was included in the prompt. Zero shot does not mean the model has never seen related material in its training; it means this prompt contains no demonstrations of the requested mapping. Clear labels and output format still matter. The model might confuse similar categories, so test varied cases and validate the resulting label. When is zero shot useful? When the task is clear, model capability is adequate and adding examples would be unnecessary overhead. For unfamiliar or ambiguous labeling conventions, examples may improve consistency."
+    },
+    {
+      "slide": 9,
+      "title": "Few-shot prompting",
+      "narration": "Few shot prompting adds a small number of demonstrations to the prompt itself. In the support ticket example, a handful of messages are paired with their correct labels, such as a damaged parcel mapping to Shipping and an incorrect invoice mapping to Billing. The model then receives a new message and is asked to continue the pattern. The original lesson also uses animal mystery stories as examples of following a storytelling style. These are illustrations of in context learning: examples influence the current response but do not update the model's weights. With just one example, the method is often called one shot prompting. Make the examples representative and unambiguous. If every demonstration is about one category, the model may overproduce that label. Compare few shot with fine tuning: the former changes a request; the latter uses a training process to adjust supported model weights. An exam scenario asking for better output consistency without training often points toward few shot examples."
+    },
+    {
+      "slide": 10,
+      "title": "Structured reasoning prompts: concept and limits",
+      "narration": "A structured prompt guides the shape of an explanation. In a story, we might ask for a setting, clues and a resolution. In an AWS architecture decision, we might request requirements, viable choices, constraints and a recommendation supported by evidence. A structured response is useful because a reviewer can check the stated assumptions and compare the options systematically. It can be combined with zero shot instructions or few shot demonstrations. However, asking a model to display a long private chain of reasoning is not the same as obtaining verifiable proof. Prefer short checkable explanations, assumptions, sources and calculations that an independent reviewer could evaluate. For example, if a service choice depends on object storage versus block storage, ask which requirement makes object storage fit rather than demanding an inaccessible internal thought trace. The purpose of structure is transparency about the answer, not a promise that every intermediate model statement is correct."
+    },
+    {
+      "slide": 11,
+      "title": "Ground prompts with retrieval",
+      "narration": "Retrieval augmented generation, or RAG, combines a prompt with relevant information retrieved from an external source. A user asks a question or requests a story, an application searches its documents or knowledge base, and selected passages are inserted into the context before the foundation model generates a response. The lesson includes a creative example: a dog mystery could use retrieved facts about canine scent tracking, so those details are based on source material rather than improvised. For business applications, a support assistant might retrieve the current product return policy. The key distinction is that retrieval does not modify the model's trained weights. It changes the information available for this request. Retrieved text may be outdated, irrelevant or malicious; the application should evaluate source quality, freshness and access permissions. If the model has no reliable source for a claim, it should not invent a confident answer. The principle is to ground responses in evidence while still verifying the result."
+    }
+  ]
+}
