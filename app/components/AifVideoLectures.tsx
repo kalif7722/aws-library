@@ -26,6 +26,9 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"13",title:"Classification Evaluation — Confusion Matrices, Precision, Recall and ROC",start:46,end:49},
     {id:"14",title:"Regression Evaluation — MAE, MAPE, RMSE and R-Squared",start:50,end:51},
     {id:"15",title:"Choosing Inference Modes — Real-Time, Batch, Asynchronous, Serverless and Edge",start:52,end:53},
+    {id:"16",title:"Machine Learning Lifecycle — From Business Goals to Monitoring",start:54,end:58},
+    {id:"17",title:"Hyperparameter Tuning and How to Prevent Overfitting",start:59,end:61},
+    {id:"18",title:"Choosing Traditional Rules Instead of Machine Learning",start:62,end:62},
   ],
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
