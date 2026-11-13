@@ -761,7 +761,14 @@ const CONFIG: Record<string, {
     firstTitle: "Agentless AWS Storage Transfer",
     title: "Agentless Transfer, Task Controls and Data Integrity",
   },
-  "19-09": {
+  "19-10": {
+    prefix: "module-19/part-10/aip-module-19-part-10",
+    revision: "2026-11-13-m19-p10-troubleshoot-local-v1",
+    firstSlide: 55,
+    count: 7,
+    firstTitle: "Scenario and agent tool architecture",
+    title: "Lab 10 — Debug Agent Tool Loops, Contracts, Permissions and Retries",
+  },  "19-09": {
     prefix: "module-19/part-09/aip-module-19-part-09",
     revision: "2026-11-13-m19-p09-troubleshoot-local-v1",
     firstSlide: 49,
