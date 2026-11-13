@@ -14,7 +14,7 @@ const videoSceneCounts={"00":4,"01":6,"02":6,"03":5,"04":3};
 
 test("AIF module pages show original lessons and beginner-first video lectures",()=>{
   assert.match(page,/import AifVideoLectures/);
-  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/id!=='14'&&<AifVideoLectures moduleId=\{id\}\/>/);
   assert.ok(page.indexOf("<AifVideoLectures")<page.indexOf("<AifModuleLessons"));
   assert.match(page,/id!=='14'&&<AifModuleLessons/);
   assert.match(catalog,/id="video-lectures"/);
@@ -92,7 +92,7 @@ test("AIF Module 03 teaching-unit boundaries use the correct original slide sequ
 });
 
 test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
-  assert.match(page,/\['00','01','02','03','04'\]\.includes\(id\)&&<AifVideoLectures moduleId=\{id\}\/>/);
+  assert.match(page,/id!=='14'&&<AifVideoLectures moduleId=\{id\}\/>/);
   for(const [part,start,end] of [["01",1,3],["02",4,7],["03",8,11],["04",12,14],["05",15,16],["06",17,20]]){
     const manifest=JSON.parse(read(`content/video-narration/aif-module-04-part-${part}.json`));
     const workflow=read(`.github/workflows/render-aif-m04-part-${part}.yml`);
@@ -102,4 +102,22 @@ test("AIF Module 04 video section is mounted and maps real lecture parts",()=>{
     assert.ok(api.includes(`"04-${part}":`));
     assert.ok(catalog.includes(`id:"${part}"`));
   }
+});
+
+test("AIF Module 05 published lectures mount automatically and cover all 28 slides",()=>{
+  assert.match(page,/id!=='14'&&<AifVideoLectures moduleId=\{id\}\/>/);
+  const intervals=[[1,3],[4,8],[9,14],[15,20],[21,24],[25,28]];
+  let previous=0;
+  for(let i=0;i<intervals.length;i++){
+    const part=String(i+1).padStart(2,"0");
+    const [start,end]=intervals[i];
+    const manifest=JSON.parse(read(`content/video-narration/aif-module-05-part-${part}.json`));
+    assert.equal(start,previous+1);
+    assert.deepEqual(manifest.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,j)=>start+j));
+    assert.ok(api.includes(`"05-${part}":`));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    previous=end;
+  }
+  assert.equal(previous,28);
+  assert.match(read(".github/workflows/render-aif-m05-parts.yml"),/audit_aif_local_visuals.py --module 05/);
 });
