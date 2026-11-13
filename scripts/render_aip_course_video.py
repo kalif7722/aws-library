@@ -83,7 +83,8 @@ def load_local_slide(module: str, number: int, local_dir: str,
     target = folder / f"slide-{number:02}.webp"
     import shutil
     shutil.copyfile(source, target)
-    return target, source.as_uri()
+    # Manifest image provenance must use the deployable course URL, not runner-local file:// paths.
+    return target, f"/course-visuals/genai-troubleshooting/module19-slide-{number:02}.webp"
 
 
 def timecode(seconds: float) -> str:
