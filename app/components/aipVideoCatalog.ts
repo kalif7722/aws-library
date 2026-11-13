@@ -64,6 +64,9 @@ export const AIP_VIDEO_PARTS: Record<string, readonly AipLecturePart[]> = {
     { id: "01", title: "Transfer Service Choice, DataSync Lifecycle and On-Premises Migration", subtitle: "DataSync vs Transfer Family, task lifecycle and NFS/SMB migration", start: 1, end: 3 },
     { id: "02", title: "Agentless Transfer, Task Controls and Data Integrity", subtitle: "AWS storage transfers, overwrite/delete settings, verification and archives", start: 4, end: 6 },
   ],
+  "19": [
+    { id: "01", title: "Lab 01 — Diagnose and Fix Context Overflow and Truncated Inputs", subtitle: "Reproduce, inspect prompts and token budget, repair chunk selection, verify regressions", start: 1, end: 5 },
+  ],
   "17": [
     { id: "01", title: "EBS Block Storage, Placement, Performance and Recovery", subtitle: "EBS volumes, AZ boundaries, snapshots and performance", start: 1, end: 5 },
     { id: "02", title: "EFS Shared Storage and Choosing Storage for AI Pipelines", subtitle: "EFS design, lifecycle classes and pipeline storage", start: 6, end: 10 },
