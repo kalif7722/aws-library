@@ -1,4 +1,4 @@
-name: Render AIF Module 05 — six topic-first video lessons
+name: Render AIF Module 05 — visual-first replacement pilot (Part 01 only, fresh audio)
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
 # Recovery group deliberately differs from the old artifact-backend groups:
 # orphaned queued runs in the previous group must not block new validated builds.
 concurrency:
-  group: aif-m05-video-batch-v1
+  group: aif-m05-visualfirst-pilot-fresh-audio-v2
   cancel-in-progress: false
 
 jobs:
@@ -30,27 +30,7 @@ jobs:
           - part: "01"
             start: 1
             end: 3
-            revision: "2026-11-13-aif-m05-p01-beginner-visual-v1"
-          - part: "02"
-            start: 4
-            end: 8
-            revision: "2026-11-13-aif-m05-p02-beginner-visual-v1"
-          - part: "03"
-            start: 9
-            end: 14
-            revision: "2026-11-13-aif-m05-p03-beginner-visual-v1"
-          - part: "04"
-            start: 15
-            end: 20
-            revision: "2026-11-13-aif-m05-p04-beginner-visual-v1"
-          - part: "05"
-            start: 21
-            end: 24
-            revision: "2026-11-13-aif-m05-p05-beginner-visual-v1"
-          - part: "06"
-            start: 25
-            end: 28
-            revision: "2026-11-13-aif-m05-p06-beginner-visual-v1"
+            revision: "2026-11-13-aif-m05-p01-verified-webp-visualfirst-v2"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -115,17 +95,17 @@ jobs:
           assert m["course_slug"]=="aif" and m["module_id"]=="05" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
+          assert m["review_basis"].startswith("Visually inspected original numbered WebP slides")
           assert all(len(s["narration"].split())>=100 for s in m["scenes"])
           print(f"Verified AIF M05 Part {p}: {len(slides)} visually grounded lecture scenes")
           PY
 
-      - name: Restore existing valid audio chunks from a previous interrupted run
-        uses: actions/cache/restore@v4
-        with:
-          path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m05-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            aif-m05-p${{ matrix.part }}-tts-batch-v1-
+      - name: Ensure replacement audio cannot use any old cache
+        run: |
+          rm -rf video-output/part-${{ matrix.part }}/_work/audio
+          rm -rf video-output/part-${{ matrix.part }}
+          mkdir -p video-output/part-${{ matrix.part }}
+          echo 'Cold audio synthesis: no GitHub audio cache restored.'
 
       - name: Verify live local original visuals and render narration in one consistent voice
         env:
@@ -137,13 +117,6 @@ jobs:
             --manifest content/video-narration/aif-module-05-part-${{ matrix.part }}.json \
             --output video-output/part-${{ matrix.part }} \
             --width 1920 --height 1080 --fps 24
-
-      - name: Save completed audio on success or failure
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: video-output/part-${{ matrix.part }}/_work/audio
-          key: aif-m05-p${{ matrix.part }}-tts-batch-v1-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify playable MP4, subtitles, duration and slide order
         env:
