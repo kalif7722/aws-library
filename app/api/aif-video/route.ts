@@ -2,28 +2,28 @@ import { NextRequest } from "next/server";
 
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
-const MODULES: Record<string, { title: string; revision: string; count: number; firstTitle: string }> = {
+const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
   "00-01": { title: "Start Here — Your AI Practitioner Learning Journey",
     revision: "2026-11-13-aif-m00-p01-beginner-visual-v1",
-    count: 4, firstTitle: "Your AI Practitioner learning path" },
+    count: 4, firstSlide: 1, firstTitle: "Your AI Practitioner learning path" },
   "02-05": { title: "AWS Console, Security Responsibilities and Safe Learning Costs",
     revision: "2026-11-13-aif-m02-p05-beginner-visual-v1",
-    count: 4, firstTitle: "Finding services in the AWS Console" },
+    count: 4, firstSlide: 26, firstTitle: "Finding services in the AWS Console" },
   "02-04": { title: "AWS History, Global Infrastructure and Regional Design",
     revision: "2026-11-13-aif-m02-p04-beginner-visual-v1",
-    count: 8, firstTitle: "How AWS cloud services developed" },
+    count: 8, firstSlide: 18, firstTitle: "How AWS cloud services developed" },
   "02-03": { title: "Cloud Service Models, Responsibility and Pricing",
     revision: "2026-11-13-aif-m02-p03-beginner-visual-v1",
-    count: 4, firstTitle: "IaaS, PaaS and SaaS" },
+    count: 4, firstSlide: 14, firstTitle: "IaaS, PaaS and SaaS" },
   "02-02": { title: "What Cloud Computing Is and Why Businesses Use It",
     revision: "2026-11-13-aif-m02-p02-beginner-visual-v1",
-    count: 7, firstTitle: "What is cloud computing?" },
+    count: 7, firstSlide: 7, firstTitle: "What is cloud computing?" },
   "02-01": { title: "Cloud Foundations — How the Internet and Servers Work",
     revision: "2026-11-13-aif-m02-p01-beginner-visual-v1",
-    count: 6, firstTitle: "How a website request reaches a server" },
+    count: 6, firstSlide: 1, firstTitle: "How a website request reaches a server" },
   "01-01": { title: "AI Fundamentals — From Everyday Examples to Generative AI",
     revision: "2026-11-13-aif-m01-p01-beginner-visual-v1",
-    count: 6, firstTitle: "What is artificial intelligence?" },
+    count: 6, firstSlide: 1, firstTitle: "What is artificial intelligence?" },
 };
 type Scene = {slide?: number; title?: string; start_seconds?: number; duration_seconds?: number};
 type Manifest = {script_revision?: string; duration_seconds?: number; scenes?: Scene[]};
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const scenes = manifest.scenes ?? [];
     if (manifest.script_revision !== config.revision ||
         scenes.length !== config.count || scenes[0]?.title !== config.firstTitle ||
-        scenes.some((scene,i) => scene.slide !== i+1 ||
+        scenes.some((scene,i) => scene.slide !== config.firstSlide+i ||
           !Number.isFinite(scene.start_seconds) ||
           !Number.isFinite(scene.duration_seconds))) return processing();
     const videoUrl = `${prefix}.mp4${version}`;
