@@ -23,6 +23,9 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"10",title:"Reinforcement Learning Applications and Safe Sequential Decisions",start:37,end:37},
     {id:"11",title:"RLHF — Learning from Human Preferences and Response Quality",start:38,end:40},
     {id:"12",title:"Generalization — Underfitting, Overfitting and Bias–Variance Trade-offs",start:41,end:45},
+    {id:"13",title:"Classification Evaluation — Confusion Matrices, Precision, Recall and ROC",start:46,end:49},
+    {id:"14",title:"Regression Evaluation — MAE, MAPE, RMSE and R-Squared",start:50,end:51},
+    {id:"15",title:"Choosing Inference Modes — Real-Time, Batch, Asynchronous, Serverless and Edge",start:52,end:53},
   ],
   "02":[
     {id:"01",title:"Cloud Foundations — How the Internet and Servers Work",start:1,end:6},
