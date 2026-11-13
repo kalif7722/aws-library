@@ -110,3 +110,11 @@ The grouping above is provisional, not a five-slide quota. Original images and c
 - GitHub render jobs observed **in_progress**: Part 10 run 43408302139, Part 11 run 43408306556, Part 12 run 43408316114. Do not call them published until verified MP4 and R2 manifests are present.
 - Parts 07–09 from the prior batch all show completed GitHub workflow **success**; live player availability should still be verified separately.
 - **Cumulative authored coverage: 84 of 349 AIF slides across 19 configured lectures.** Next untouched narration begins at Module 03 **slide 46**, with evaluation and confusion matrices.
+
+## Progress checkpoint — November 13, 2026 (Module 03 Parts 13–15)
+
+- Three topic-complete lectures now cover **slides 46–53**, based on individually inspected original AIF diagrams. Narration manifests and video workflows reside at `content/video-narration/aif-module-03-part-13.json` through `part-15.json`, and `.github/workflows/render-aif-m03-part-13.yml` through `part-15.yml`.
+- Part 13 slides **46–49**: spam confusion matrices, true/false positives and negatives, precision, recall, F1, accuracy, multiclass evaluation and fraud ROC-AUC. Part 14 slides **50–51**: school-score regression errors, MAE, MAPE, RMSE and R-squared. Part 15 slides **52–53**: real-time, batch, asynchronous, serverless and edge inference.
+- Preserve the original diagram order, numerical examples, comprehensible definitions and practical exam-style decision checks. Voice stays `en-US-AndrewNeural` at `-3%`. Standard AIP-style left playlist, shared player, captions and navigation remain in use.
+- Registered all three revisions in the R2-verified AIF API and Module 03 playlist. Rendering workflow success and published media availability must still be verified independently.
+- Previous Parts 10–12 completed successfully. Total configured coverage is **92/349 original slides, 22 lectures**. Next untouched narration begins at Module 03 slide **54** (ML lifecycle).
