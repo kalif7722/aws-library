@@ -53,3 +53,26 @@ for(const [module,count] of Object.entries(lessonCounts)){
     }
   });
 }
+
+test("All five AIF Module 02 lectures cover every slide without gaps and validate actual start",()=>{
+  const intervals=[[1,6],[7,13],[14,17],[18,25],[26,29]];
+  const spans=[...catalog.matchAll(/\{id:"(0[1-5])",title:"[^"]+",start:(\d+),end:(\d+)\}/g)]
+    .map(m=>[Number(m[2]),Number(m[3])]);
+  assert.deepEqual(spans.slice(-5),intervals);
+  for(let i=0;i<intervals.length;i++){
+    const part=String(i+1).padStart(2,"0");
+    const [start,end]=intervals[i];
+    const m=JSON.parse(read(`content/video-narration/aif-module-02-part-${part}.json`));
+    const w=read(`.github/workflows/render-aif-m02-part-${part}.yml`);
+    assert.deepEqual(m.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,j)=>start+j));
+    assert.ok(m.scenes.every(s=>s.narration.trim().split(/\s+/).length>=100));
+    assert.ok(w.includes(`- part: "${part}"`));
+    assert.ok(w.includes(`start: ${start}\n            end: ${end}`));
+    assert.ok(w.includes(m.script_revision));
+    assert.ok(api.includes(`"02-${part}":`));
+    assert.ok(api.includes(`firstSlide: ${start}, firstTitle:`));
+    assert.ok(w.includes("audit_aif_local_visuals.py --module 02"));
+  }
+  assert.ok(api.includes("scene.slide !== config.firstSlide+i"),
+    "Media readiness must check actual chapter slide numbers, not assume every part starts at slide 1");
+});
