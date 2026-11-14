@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "09",
+  "module_title": "Amazon SageMaker AI",
+  "slide_local_dir": "public/course-visuals/aif-course/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Each original numbered Module 09 WebP in this part was individually viewed, with diagrams, example tables, numerical illustrations, AWS service references and decision cues traced in their visible order. Narration is grounded in those visuals.",
+  "part_id": "04",
+  "part_title": "Data Wrangler — Import, Inspect, Visualize, Transform and Reuse Data",
+  "output_prefix": "aif-module-09-part-04",
+  "script_revision": "2026-11-14-aif-m09-p04-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "SageMaker – Data Wrangler",
+      "narration": "The main diagram introduces a four-stage visual data preparation workflow in SageMaker Canvas Data Wrangler. First, import source files from Amazon S3 or local files, including formats such as CSV and Parquet. Second, inspect data quality: look at column types, missing fields and unusual distributions. Third, apply transformations, such as filling missing ages, encoding categories and splitting the data. Fourth, export a reusable flow so the same preparation steps can be applied consistently to new records. Look below at the Titanic passenger example. The input table includes passenger class, age, sex and whether the passenger survived. The inspection panel calls out missing ages and different column types. The transformation panel proposes a median replacement for missing ages, one-hot encoding for sex, creating a family-size feature from siblings, spouses, parents and children, and splitting data for training and testing. Export preserves the preparation process for reuse. A model cannot reliably learn from badly prepared inputs, so Data Wrangler solves a data-quality problem before model training."
+    },
+    {
+      "slide": 10,
+      "title": "Data preparation: importing data",
+      "narration": "Start on the left with the Amazon S3 bucket and a Titanic CSV file. A CSV is a plain table of rows and comma-separated columns. The second numbered panel previews the schema, meaning the column names and data types. The visible examples classify PassengerId, Survived and Pclass as integer-like values, Name and Sex as strings, and Age as a decimal number. These types matter because a model should not treat a passenger's name or a categorical code as an ordinary continuous quantity. The third panel turns the imported source into a visual data flow: source file, cleanup or type transformations, column selection, then data ready for modeling. The fourth panel passes prepared data into the modeling stage. The example at the bottom selects titanic.csv from an S3 location and shows sample names, ages, fares and sex values before building a simple flow. Importing data is not the same as training a model; it makes the source readable and starts the preparation process."
+    },
+    {
+      "slide": 11,
+      "title": "Data preparation: previewing records",
+      "narration": "Follow the top arrow from S3 training data into a SageMaker Studio notebook, then to a preview table, and finally to a data validation check. A preview means looking at a small sample of records before any training. Examine the Titanic table below. The columns Pclass and Survived are shown as int64, while Age and Fare are float64, meaning they can hold decimal values. The highlighted NaN in the Age column means a missing numerical entry, not an actual passenger age. The slide asks you to identify missing values and confirm column types so preprocessing can repair problems or handle them deliberately. Notice the multiple-choice question on the right: answer A is correct because previewing helps detect missing values and validate types. It does not automatically generate new training data, deploy a model or inherently make training faster. This is a basic but important habit: inspect the records you actually have rather than assuming the dataset is clean."
+    },
+    {
+      "slide": 12,
+      "title": "Data preparation: visualizing distributions",
+      "narration": "Read the upper pipeline from Amazon S3 to a SageMaker Studio notebook, then to visual analysis and better-prepared data. The bottom panel shows three different checks on an illustrative Titanic dataset. On the left, the age histogram uses years along the horizontal axis and passenger count vertically. Most visible observations cluster among younger passengers, with a tail extending toward older ages; this is a right-skewed distribution. In the middle, survival rate by passenger class is approximately 0.65 for first class, 0.40 for second, and 0.22 for third in this example. That suggests a relationship worth testing, not proof that class alone caused survival. On the right, the missing-values chart shows around 20 percent missing Age, 77 percent missing Cabin, and 2 percent missing Embarked, with other displayed fields at zero. A heavily missing field may need special treatment or removal. The exam cue calls this exploratory data analysis: understand skew, imbalance and missing data before choosing transformations or training."
+    },
+    {
+      "slide": 13,
+      "title": "Data preparation: transforming features",
+      "narration": "This slide transforms raw Titanic records into model inputs. Follow the main arrows from an S3 CSV through the illustrated AWS Glue transformation box to a prepared dataset and SageMaker training. The transformation list contains three distinct decisions: fill missing ages, one-hot encode passenger class and keep the Survived label separate. Below, the before-and-after tables make this concrete. The raw input shows one Age as NaN. The transformed example replaces that missing age with 28, an illustrative median calculated from training data. Passenger class becomes separate binary columns such as Pclass_1, Pclass_2 and Pclass_3, and sex is represented with male and female indicator columns. The rightmost Survived column remains the target, called y, while predictors are X. The exam tip is especially important: split training, validation and test data before fitting an imputer or encoder. Learn the median and category mapping only from training records, then apply those settings to held-out records. Otherwise, information can leak from evaluation data into the training process and make model performance look better than it really is."
+    },
+    {
+      "slide": 14,
+      "title": "Data preparation: creating a baseline model",
+      "narration": "The top row shows a short learning-and-improvement loop. Start with cleaned Titanic data from Data Wrangler, then build a quick baseline model in SageMaker Canvas. A baseline is an initial reference model; its purpose is to establish how well the current data and approach perform. Next, review feature importance to understand which inputs appear most influential for the model, and inspect evaluation metrics on appropriate held-out data. The bottom example lists inputs such as passenger class, sex, age, siblings, parents, fare and embarkation location, with Survived as the target. The illustrated importance bars rank Sex highest, then Pclass, Fare, Age and the two family-count fields. Those bars are example results, not universal causes of survival. The final purple panel loops back into Data Wrangler to adjust cleaning, transformations and feature engineering before rebuilding and comparing results. You should compare models using consistent evaluation data rather than assuming each new transformation improves them. Canvas is useful for obtaining this first reference point with less coding."
+    },
+    {
+      "slide": 15,
+      "title": "Data preparation: exporting a reusable flow",
+      "narration": "This final data-preparation slide follows five numbered stages from left to right. Import a customer CSV from Amazon S3, inspect data quality, impute missing fields such as an absent numeric value, encode categorical features such as customer type, and export the result for reuse. Imputation means filling or otherwise handling missing values; one-hot encoding converts a category into separate indicator fields that a model can use. At the far right, the diagram shows two different outcomes. You can export processed CSV or Parquet data back to S3 for later consumption, or use the preparation flow in a SageMaker Pipelines automation workflow for repeatable training. The lower customer-data example repeats this choice, showing a cleaned dataset in S3 on one branch and a pipeline on the other. Reuse is valuable because a model trained on one set of transformations should receive consistently prepared inputs later. The decision cue is to choose a stored prepared dataset when you need the output now, and an automated pipeline when the preparation and training should run again predictably."
+    }
+  ]
+}
