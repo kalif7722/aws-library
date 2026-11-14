@@ -18,6 +18,10 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "09":[
+    {id:"01",title:"SageMaker AI Training, Lifecycle, Algorithms and Tuning",start:1,end:4},
+    {id:"02",title:"SageMaker Real-Time, Serverless, Async and Batch Inference",start:5,end:7},
+  ],
   "08":[
     {id:"01",title:"Managed AI APIs and Amazon Comprehend Text Analysis",start:1,end:5},
     {id:"02",title:"Translation, Speech Transcription and Polly Voices",start:6,end:11},
