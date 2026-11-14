@@ -110,8 +110,14 @@ def validate(path: Path, *, check_manifests: bool = False) -> list[str]:
             errors.append(f"{manifest}: original image directory does not match module")
         seen.extend(actual)
 
-    if len(parts) > 1 and seen != list(range(1, count + 1)):
-        errors.append(f"{path}: module coverage not continuous from 1 through {count}: {seen}")
+    # Each workflow can render one complete module or a consecutive batch of
+    # topic videos. Validate ranges within that workflow; do not require every
+    # future module to fit into one GitHub Actions batch.
+    if seen:
+        if seen[0] < 1 or seen[-1] > count:
+            errors.append(f"{path}: scenes outside Module {module} 1..{count}: {seen}")
+        if seen != list(range(seen[0], seen[-1] + 1)):
+            errors.append(f"{path}: slide gaps, overlaps, or wrong part ordering: {seen}")
     return errors
 
 
