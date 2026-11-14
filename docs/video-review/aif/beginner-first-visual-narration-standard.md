@@ -55,3 +55,16 @@ Use `docs/video-review/shared-course-video-player-standard.md` and `app/componen
 3. Run `python scripts/validate_aif_video_workflow.py --all` to check all render workflows. `.github/workflows/validate-aif-video-workflows.yml` also runs this automatically on PR/push; for modules 11+, it validates narration revisions and full original-slide coverage.
 4. Never mark preflight as `continue-on-error`. If any module/revision/slide mismatch occurs, stop before synthesizing speech, producing video, or publishing to R2.
 5. Avoid copy-paste mistakes by deriving or validating every module-specific reference from the workflow's filename and approved narration manifests. Changes to previous modules must not accidentally queue new renders.
+
+## Visual-to-voice sequence (approved for Module 12 and every subsequent module)
+
+Every narrated slide must be **a guided tour of its actual image**, not an adjacent lecture on the same topic:
+
+1. **Orient (~one or two natural sentences).** Briefly tell the student what the pictured slide is about and what question the whole diagram answers. Do this **before** naming arrows and boxes. Avoid repeated canned openers; for example: "This diagram explains how an IAM request becomes an allow or a deny."
+2. **Walk the actual picture in meaningful visual order.** Refer to the visible columns, numbered steps, arrows, labels, service icons, policies, example values, branches, charts and boundaries. Explain each *important* panel's function and why it connects to the next. For comparisons, teach the compared options rather than pretending the columns are a mandatory workflow. Don't ignore sidebars, exception paths or negative branches.
+3. **Teach the pictured example or console/code block.** Follow the example's actual inputs, values and outcomes. State what a key field, security boundary or decision changes. Where a source graphic uses simplified behavior, label it as an illustration; do not silently replace its specifics with a different example.
+4. **Reconnect to the full architecture.** In concise terms, explain what the pieces accomplish together, where responsibility or data flows, and the important limitation or exam decision shown. This is a *synthesis* of the original picture, not an unrelated closing speech.
+
+**Coverage gate:** For each original numbered WebP, record a short `visual_overview`, an ordered `visual_walkthrough` list naming the important visible elements and arrows, `visual_example` (when present), and `visual_synthesis` in the narration JSON. The spoken `narration` must cover those anchors, not just include the metadata. Every new AIF module from 12 onward must include these fields to pass `scripts/validate_aif_video_workflow.py`.
+
+The visual's title/notes may help confirm vocabulary, but they are never a substitute for looking at the original image. Avoid excessive introduction, repeating identical points between slide and example, mechanically naming decorative icons, or shortening narration by skipping an important diagram path. A dense technical slide should run longer than a simple one when needed. Maintain natural speed and the approved voice; do not force fixed slide counts or minimum runtimes.
