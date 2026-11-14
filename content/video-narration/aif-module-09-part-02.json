@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "09",
+  "module_title": "Amazon SageMaker AI",
+  "slide_local_dir": "public/course-visuals/aif-course/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected original Module 09 slide WebPs individually, including architecture arrows, examples, labels, distinctions, and exam cues. Spoken walkthroughs follow the numbered images directly; no lessons inferred from titles alone.",
+  "part_id": "02",
+  "part_title": "SageMaker Real-Time, Serverless, Async and Batch Inference",
+  "output_prefix": "aif-module-09-part-02",
+  "script_revision": "2026-11-14-aif-m09-p02-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 5,
+      "title": "SageMaker – Model Deployment & Inference",
+      "narration": "The slide splits into two side-by-side endpoint choices. On the left, a client sends a request to a SageMaker real-time endpoint and receives a low-latency prediction. This option is suitable for interactive tasks with steady traffic, but keeping capacity available can add running cost. The worked example is an online payment requiring an immediate fraud-risk result while a customer checks out. On the right, a client invokes a serverless inference endpoint on demand. SageMaker manages the capacity, and this option can scale down when there is no traffic, but the first request may encounter a cold start. The example is an occasional document analysis tool rather than a continuously busy payment system. The bottom decision cue is about response time and traffic shape, not about whether one model is smarter than another. Select persistent real-time capacity for consistently fast interactive predictions, or serverless when irregular usage and simpler capacity management matter more."
+    },
+    {
+      "slide": 6,
+      "title": "SageMaker inference modes: latency and workload choices",
+      "narration": "Compare the top and bottom pipelines. The top flow is asynchronous inference. A client sends an InvokeEndpointAsync request to a SageMaker asynchronous endpoint, which queues work rather than requiring the client to hold an open connection. The endpoint processes the request and writes its result to Amazon S3. This is useful when a single request may take several minutes, such as analyzing a large high-resolution document. Now follow the bottom row. Batch Transform reads a collection of existing input records from S3, runs an offline processing job, and writes prediction files back to S3. There is no persistent serving endpoint. The bottom example illustrates scoring millions of customer records together. Both approaches may produce S3 results, but the decision is different: asynchronous inference handles individual long-running submitted requests, while Batch Transform handles large offline datasets on a batch schedule. Neither is the default answer for a customer waiting for an immediate synchronous response."
+    },
+    {
+      "slide": 7,
+      "title": "SageMaker Model Deployment Comparison",
+      "narration": "This comparison puts all four inference options on one screen. Start with the blue real-time column: a persistent endpoint accepts a request and returns a synchronous, low-latency prediction. Think fraud checking during an online purchase. The purple serverless column also serves requests, but it is designed for sporadic demand and may experience a cold start, so an internal tool used occasionally can fit. The cyan asynchronous column queues a long-running request; the application later retrieves results from object storage. The listed examples include lengthy document or video processing. Finally, the gold Batch Transform column reads many records from object storage, processes them offline, and writes predictions back without keeping an endpoint alive. Its example is scoring millions of records overnight. These are different deployment choices for a trained model, not four distinct learning algorithms. The exam decision cues at the bottom reduce to three questions: must the result be immediate, is traffic continuous or occasional, and is the task a single long request or a bulk offline dataset?"
+    }
+  ]
+}
