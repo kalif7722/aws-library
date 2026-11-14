@@ -18,6 +18,16 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "11":[
+    {id:"01",title:"Regulated AI, Compliance Evidence and Model Documentation",start:1,end:4},
+    {id:"02",title:"Governance Policies, Ownership and Continuous Oversight",start:5,end:9},
+    {id:"03",title:"Data Governance, Lifecycle and Traceability",start:10,end:12},
+    {id:"04",title:"Secure AI Architecture and Prompt Injection Defenses",start:13,end:14},
+    {id:"05",title:"Monitoring Model Quality, Service Health and Incident Response",start:15,end:15},
+    {id:"06",title:"AWS and Customer Responsibilities for AI Workloads",start:16,end:17},
+    {id:"07",title:"Secure Data Engineering, Identity and Recoverability",start:18,end:19},
+    {id:"08",title:"Responsibility Scope, Governed ML Lifecycle and MLOps",start:20,end:23},
+  ],
   "10":[
     {id:"01",title:"Responsible AI, Governance and AWS Accountability Tools",start:1,end:5},
     {id:"02",title:"Model Explainability, Decision Trees and Human Oversight",start:6,end:9},
