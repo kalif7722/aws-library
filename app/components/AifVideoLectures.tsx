@@ -23,6 +23,9 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"02",title:"SageMaker Real-Time, Serverless, Async and Batch Inference",start:5,end:7},
     {id:"03",title:"SageMaker Studio and Visual Development Tools",start:8,end:8},
     {id:"04",title:"Data Wrangler — Import, Inspect, Visualize, Transform and Reuse Data",start:9,end:15},
+    {id:"05",title:"ML Features and SageMaker Feature Store",start:16,end:17},
+    {id:"06",title:"SageMaker Clarify — Evaluation, Explainability and Bias",start:18,end:21},
+    {id:"07",title:"Human Labeling and Model Governance",start:22,end:23},
   ],
   "08":[
     {id:"01",title:"Managed AI APIs and Amazon Comprehend Text Analysis",start:1,end:5},
