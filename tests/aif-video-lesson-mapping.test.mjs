@@ -234,3 +234,33 @@ test("AIF Module 11 image-reviewed governance and MLOps lectures cover all 23 or
   assert.ok(api.includes("const config = MODULES["));
   assert.ok(api.includes("!manifest.script_revision"));
 });
+
+
+test("AIF Module 12 VisualFirst narration follows reviewed slide structure for first 10 visuals",()=>{
+  const workflow=read(".github/workflows/render-aif-m12-parts-01-02.yml");
+  const ranges=[["01",1,5],["02",6,10]];
+  const seen=[];
+  assert.equal(moduleMap.lessons.filter(l=>l.moduleId==="12").length,52);
+  assert.ok(workflow.includes("audit_aif_local_visuals.py --module 12"));
+  assert.ok(workflow.includes('audit["module"]=="12"'));
+  assert.ok(workflow.includes('m["module_id"]=="12"'));
+  assert.ok(workflow.includes('audit["verified_slides"]==52'));
+  assert.ok(workflow.includes('validate_aif_video_workflow.py --workflow .github/workflows/render-aif-m12-parts-01-02.yml'));
+  assert.ok(!workflow.includes('m["module_id"]=="11"'));
+  for(const [part,start,end] of ranges){
+    const m=JSON.parse(read(`content/video-narration/aif-module-12-part-${part}.json`));
+    assert.equal(m.module_id,"12");
+    assert.equal(m.part_id,part);
+    assert.deepEqual(m.scenes.map(s=>s.slide),Array.from({length:end-start+1},(_,i)=>start+i));
+    assert.ok(m.scenes.every(s=>s.narration.split(/\s+/).length>=150));
+    assert.ok(m.scenes.every(s=>s.visual_overview?.trim()));
+    assert.ok(m.scenes.every(s=>s.visual_walkthrough?.length>=3));
+    assert.ok(m.scenes.every(s=>typeof s.visual_example==="string"));
+    assert.ok(m.scenes.every(s=>s.visual_synthesis?.trim()));
+    assert.ok(workflow.includes(m.script_revision));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    assert.ok(api.includes(`"12-${part}":`));
+    seen.push(...m.scenes.map(s=>s.slide));
+  }
+  assert.deepEqual(seen,Array.from({length:10},(_,i)=>i+1));
+});
