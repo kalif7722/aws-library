@@ -45,3 +45,13 @@
 
 ## Mandatory shared video player
 Use `docs/video-review/shared-course-video-player-standard.md` and `app/components/CourseVideoControls.tsx` for all course playback experiences, with identical 5-second skips, captions, volume, speed, next/previous, fullscreen auto-hide, resume and chapter tools. Do not replace these with minimal native video controls when adding a new course.
+
+## Mandatory module-scoped rendering validation (from Module 11 onward)
+
+**Do not copy a previous module's renderer workflow and publish without a full module-ID preflight.** For every new AIF module:
+
+1. The workflow's filename and AIF module ID must match its source audit argument, audit output assertion, narration JSON module IDs, part ranges, revision strings and R2 output prefix. Do not leave a previous module number in any condition, path or status message.
+2. Add a preflight step **before package installation or audio synthesis**: `python scripts/validate_aif_video_workflow.py --workflow .github/workflows/<actual-new-workflow-filename>.yml`.
+3. Run `python scripts/validate_aif_video_workflow.py --all` to check all render workflows. `.github/workflows/validate-aif-video-workflows.yml` also runs this automatically on PR/push; for modules 11+, it validates narration revisions and full original-slide coverage.
+4. Never mark preflight as `continue-on-error`. If any module/revision/slide mismatch occurs, stop before synthesizing speech, producing video, or publishing to R2.
+5. Avoid copy-paste mistakes by deriving or validating every module-specific reference from the workflow's filename and approved narration manifests. Changes to previous modules must not accidentally queue new renders.

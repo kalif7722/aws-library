@@ -1,0 +1,36 @@
+name: Validate AIF video module alignment
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/render-aif-m*.yml"
+      - "content/video-narration/aif-module-*-part-*.json"
+      - "scripts/validate_aif_video_workflow.py"
+      - "app/courses/aws-ai-practitioner/visual-lesson-map.json"
+      - ".github/workflows/validate-aif-video-workflows.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/render-aif-m*.yml"
+      - "content/video-narration/aif-module-*-part-*.json"
+      - "scripts/validate_aif_video_workflow.py"
+      - "app/courses/aws-ai-practitioner/visual-lesson-map.json"
+      - ".github/workflows/validate-aif-video-workflows.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Fail fast on AIF module/slide/manifest mismatches
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check all AIF workflow IDs and complete visual-first narration coverage
+        run: |
+          python scripts/validate_aif_video_workflow.py --all

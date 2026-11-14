@@ -78,6 +78,10 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Fail fast on copied module IDs and narration mismatches
+        run: |
+          python scripts/validate_aif_video_workflow.py --workflow .github/workflows/render-aif-m11-parts-01-08.yml
+
       - name: Install narration and video engine
         run: |
           # Use wheel-bundled FFmpeg rather than apt or runner PATH.
@@ -97,11 +101,11 @@ jobs:
 
       - name: Verify AIF Module 11 original visual lesson inventory
         run: |
-          python scripts/audit_aif_local_visuals.py --module 10 --output /tmp/aif-m11-visual-audit.json
+          python scripts/audit_aif_local_visuals.py --module 11 --output /tmp/aif-m11-visual-audit.json
           python - <<'PY'
           import json
           audit=json.load(open("/tmp/aif-m11-visual-audit.json"))
-          assert audit["course_slug"]=="aif" and audit["module"]=="10"
+          assert audit["course_slug"]=="aif" and audit["module"]=="11"
           assert audit["mapped_slides"]==23 and audit["verified_slides"]==23
           assert [s["slide"] for s in audit["slides"]]==list(range(1,24))
           print("Original AIF source visual audit passed before narration synthesis")
@@ -120,7 +124,7 @@ jobs:
           p=os.environ["PART"]
           m=json.loads(Path(f"content/video-narration/aif-module-11-part-{p}.json").read_text())
           slides=list(range(int(os.environ["START"]),int(os.environ["END"])+1))
-          assert m["course_slug"]=="aif" and m["module_id"]=="10" and m["part_id"]==p
+          assert m["course_slug"]=="aif" and m["module_id"]=="11" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
           assert all(len(s["narration"].split())>=90 for s in m["scenes"])
