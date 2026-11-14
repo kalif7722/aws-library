@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "12",
+  "module_title": "AWS Security and Supporting Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-12",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Inspected original Module 12 slides 34–40 directly, including audit event fields, provider/third-party report evidence, framework gaps and support-plan comparison.",
+  "part_id": "08",
+  "part_title": "CloudTrail API Audits, AWS Artifact, Audit Manager and Trusted Advisor",
+  "output_prefix": "aif-module-12-part-08",
+  "script_revision": "2026-11-14-aif-m12-p08-original-webp-visualintro-v1",
+  "scenes": [
+    {
+      "slide": 34,
+      "title": "AWS CloudTrail",
+      "visual_overview": "CloudTrail captures AWS API request metadata for audit investigation, with different management and selected data-event scopes.",
+      "visual_walkthrough": [
+        "Console, CLI and SDK activity flows into CloudTrail",
+        "Event fields who, what, which resource, when, source IP",
+        "Event history 90-day management events",
+        "Trails send ongoing selected events to S3 and optionally CloudWatch Logs",
+        "S3 object-level data events require explicit selector",
+        "Bottom John RunInstances JSON and Config comparison"
+      ],
+      "visual_example": "A user named John calls RunInstances; CloudTrail records eventName, identity, eventTime and sourceIPAddress.",
+      "visual_synthesis": "CloudTrail is an API activity log, while Config records supported resource configuration state.",
+      "narration": "The purpose of this slide is to explain where an auditor looks to find who called an AWS API. Start with the left panel: requests can originate in the AWS Console, CLI, SDK or application code. They converge on AWS CloudTrail, which records supported events with information such as user identity, API action, resource, timestamp and source IP. Follow the third numbered section on the right. CloudTrail Event history provides recent management events for ninety days in a Region. An ongoing trail can deliver chosen management and data events to S3, with optional delivery to CloudWatch Logs for monitoring. These destinations serve different retention and search needs. The yellow warning states that object-level S3 activity requires data-event selection and may incur additional charges; it does not automatically appear in ordinary Event history. The lower example shows user John creating an EC2 instance. A CloudTrail event has eventName RunInstances, a user identity, eventTime and a sample source IP. Compare the neighboring panel with AWS Config: CloudTrail answers who performed an API operation and when, while Config helps reconstruct the resource settings before or after it. CloudTrail is essential audit evidence, but it is not an application-level diagnostic log."
+    },
+    {
+      "slide": 35,
+      "title": "CloudTrail Event Collection Architecture",
+      "visual_overview": "A detailed CloudTrail dataflow separates event recording, configured log delivery and optional automation.",
+      "visual_walkthrough": [
+        "IAM principal makes signed API call to EC2/S3/service",
+        "CloudTrail records identity, operation, time, IP, request and response metadata",
+        "Trail delivers to S3 and optionally CloudWatch Logs",
+        "EventBridge routes supported events to SNS, Lambda or Step Functions",
+        "Bottom Alice StartInstances event and two log destinations",
+        "Caution that CloudTrail is not application logging"
+      ],
+      "visual_example": "Alice starts an EC2 instance; the management event is recorded, delivered to an S3 trail destination and optionally to CloudWatch Logs.",
+      "visual_synthesis": "API auditing observes selected activity without replacing application output or requiring S3 to feed CloudWatch.",
+      "narration": "This diagram shows a complete event-collection architecture rather than a single log record. Begin on the far left with an IAM user, role or federated principal. It makes a signed API call against a service such as EC2 or S3. In the next box the service processes the request, and CloudTrail records supported metadata: who made it, what action occurred, when it happened, source IP and relevant request or response details. Now follow the branches on the right. A configured trail delivers log files to an S3 bucket for retention and auditing. CloudWatch Logs is an optional separate destination for monitoring and analysis; it is not fed by that S3 bucket as a mandatory intermediate step. Another dashed branch shows EventBridge routing supported AWS events to automation such as Lambda functions, Step Functions or SNS alerts. The lower worked example is specific: Alice issues the EC2 StartInstances API call, and the recorded event can be available through the configured trail destinations. Notice the final warning at the top and bottom: CloudTrail logs API metadata, not every application error or complete request and response body. The architecture supports investigation and timely reactions only for the categories and destinations actually configured."
+    },
+    {
+      "slide": 36,
+      "title": "AWS Artifact: Compliance Reports",
+      "visual_overview": "An authorized user retrieves AWS provider reports and agreements, while Audit Manager gathers evidence from the customer's workload.",
+      "visual_walkthrough": [
+        "Sign in to AWS Console with report permissions",
+        "Artifact self-service portal",
+        "SOC 1/2/3, ISO and other provider reports/agreements",
+        "Evidence used in an audit review",
+        "Right comparison: Audit Manager gathers EC2/S3/CloudTrail evidence",
+        "Bottom download SOC 2 report example"
+      ],
+      "visual_example": "A compliance analyst opens Artifact, downloads an authorized SOC 2 report, and attaches it to an audit submission.",
+      "visual_synthesis": "AWS provider audit evidence supports due diligence; it does not certify the customer's architecture.",
+      "narration": "This slide is about collecting AWS's own compliance evidence, as distinct from evaluating controls inside your application. Follow the three numbered panels. An authorized AWS account user signs in, opens the AWS Artifact self-service portal, and retrieves available reports or agreements. The center examples include SOC reports, ISO certification documentation and other audit material. The arrow ends at compliance evidence that a team can attach to a regulatory or audit review. Now compare the separate purple panel on the right, which is deliberately labeled a different purpose. AWS Audit Manager collects and organizes evidence from resources such as EC2, S3 and CloudTrail in your own environment. Artifact provides AWS provider reports; Audit Manager helps organize your workload evidence. The bottom worked example walks an auditor's request for SOC 2: sign in with the correct permissions, navigate to Artifact, select the applicable report and download it, then include it in the audit package. Check its period and service scope before relying on it. The exam cue is the division of responsibility: retrieving an AWS audit report is useful due diligence, but it is not automatic certification that the customer's application meets every legal or security obligation."
+    },
+    {
+      "slide": 37,
+      "title": "Third-Party Compliance Evidence",
+      "visual_overview": "Marketplace Vendor Insights and Artifact may expose vendor-provided compliance reports when the vendor grants access.",
+      "visual_walkthrough": [
+        "ISV publishes SOC/ISO documentation",
+        "AWS Marketplace Vendor Insights exposes available evidence",
+        "Vendor grants restricted report access when required",
+        "Authorized report viewed through Artifact capabilities",
+        "Report used in procurement and risk due diligence",
+        "Bottom third-party AI vendor example"
+      ],
+      "visual_example": "A company evaluating an AI product checks Vendor Insights, requests the vendor's authorization, then reviews permitted SOC evidence as part of procurement.",
+      "visual_synthesis": "Third-party reports depend on vendor participation and report scope; do not assume all products expose them.",
+      "narration": "This slide extends the compliance-evidence discussion from AWS's own reports to a third-party software vendor. The first box shows an independent software vendor, or ISV, supplying documentation such as SOC or ISO material. The next step displays available reports through AWS Marketplace Vendor Insights. In the third step, the vendor may need to grant your account permission to access restricted documents. The fourth panel shows authorized material viewed using supported AWS Artifact capabilities, and the last panel is the human decision: use those reports for vendor assurance, compliance assessment and procurement review. These are access and review stages, not a guarantee every vendor publishes all information. Follow the worked example along the bottom. Your organization considers an external AI service offered in Marketplace. The risk team checks Vendor Insights, requests access where required, opens the authorized report, and reviews its scope, audit period and stated controls before approval. The right-hand reminder is essential: a report that is unavailable or outdated cannot be assumed to prove compliance. Even an available report describes the vendor's examined controls, not every way your organization might configure or use that service."
+    },
+    {
+      "slide": 38,
+      "title": "AWS Audit Manager",
+      "visual_overview": "How a risk or compliance team scopes an assessment, gathers evidence and sends it to a human auditor.",
+      "visual_walkthrough": [
+        "Five-stage framework, scope, collect, report and auditor review chain",
+        "AWS-managed, industry and custom framework options",
+        "Organizations accounts, EC2, S3, IAM resource control mapping",
+        "Automated plus manual evidence categories",
+        "SOC 2 bottom worked example",
+        "Explicit no automatic certification callout"
+      ],
+      "visual_example": "Select SOC 2, scope production accounts and controls, gather AWS activity and manual policy evidence, generate a report for external review.",
+      "visual_synthesis": "Audit Manager organizes evidence and gaps; an auditor still determines formal compliance.",
+      "narration": "This architecture shows the audit preparation lifecycle inside AWS Audit Manager. Start with the first numbered column: select a suitable AWS-managed, industry or custom framework. The second column scopes AWS accounts, resources such as EC2, S3 and IAM, and the controls relevant to the assessment. The third column has two streams of evidence. Supported AWS service data and configuration can be collected automatically, while policies, procedures and external attestations may need manual upload or review. The fourth step groups evidence into an assessment report with control status, and the fifth step sends it to a human auditor. The gold warning is not optional: Audit Manager does not issue automatic compliance certification. Now follow the SOC 2 worked example at the bottom. A team selects the framework, includes production resources, gathers service activity plus policy documents, and shares an assessment report with an external auditor. Notice this differs from AWS Artifact, which supplies provider-side reports. Audit Manager helps organize your own controls and evidence. The entire picture links framework selection to accountable audit review, but gathering data cannot substitute for meeting the control requirements or correcting identified gaps."
+    },
+    {
+      "slide": 39,
+      "title": "Automated Compliance Evidence Collection",
+      "visual_overview": "A closer evidence pipeline maps CloudTrail, Config, S3 and IAM signals to controls and highlights where proof is missing.",
+      "visual_walkthrough": [
+        "Source panel CloudTrail API, S3 settings, Config state and IAM controls",
+        "Audit Manager continuous eligible collection and control mapping",
+        "Assessment statuses green collected versus yellow missing control",
+        "Report generation and gap review",
+        "Bottom access-control audit checks MFA for human sessions, unused keys and overbroad role permissions"
+      ],
+      "visual_example": "An access audit finds evidence for session MFA and access-key hygiene but detects an overly permissive role requiring investigation.",
+      "visual_synthesis": "Collected evidence is not a guarantee of passing a control or a certification; human review remains necessary.",
+      "narration": "This slide zooms into how Audit Manager assembles an assessment from AWS evidence. Begin with the source column: CloudTrail records supported API activity, S3 contributes relevant configuration, Config holds resource state, and IAM describes access controls. The arrow into Audit Manager represents ongoing collection where the selected framework and service integrations support it. The central box explains the next work: map evidence to controls, group results and show status. Look at the assessment panel next. Several example controls have green indicators for collected evidence, while one yellow control is flagged as a gap. The arrow to the report highlights issues requiring review rather than quietly turning them into a pass. Now walk through the access-control example at the bottom. The audit objective is to verify appropriate access. Evidence is collected for IAM identities and role configurations, API activity and permission changes. The checks include human sign-in or role-assumption MFA, unused access keys and a role whose permissions are broader than expected. The yellow warning on that role requires action; IAM roles themselves do not register MFA devices like human users. The final exam cue emphasizes that the service simplifies collection and reporting, while humans must interpret evidence, remediate issues and make compliance decisions."
+    },
+    {
+      "slide": 40,
+      "title": "AWS Trusted Advisor",
+      "visual_overview": "Account-level AWS best-practice checks give recommendations, with scope depending on support entitlement.",
+      "visual_walkthrough": [
+        "Federated IAM access into Trusted Advisor account checks",
+        "Six branches cost, performance, security, fault tolerance, limits, operational excellence",
+        "Recommendations panel",
+        "Right support plan availability comparison",
+        "S3 public access recommendation example",
+        "Not same as Config continuous state/history distinction"
+      ],
+      "visual_example": "Trusted Advisor flags a publicly accessible S3 bucket and recommends blocking public access, tightening policies and following least privilege.",
+      "visual_synthesis": "Best-practice recommendations are not the same as Config compliance-rule history or an automatic fix.",
+      "narration": "This slide introduces AWS Trusted Advisor as a source of account-level best-practice recommendations. Start at the left with an authorized identity, ideally federated using an identity provider, accessing the AWS account. The central Trusted Advisor panel fans into six categories: cost optimization, performance, security, fault tolerance, service limits and operational excellence. The arrows then join a recommendations box containing prioritized guidance and links to supporting documentation. Now inspect the far-right support-plan panel. The available checks differ by AWS Support plan; the slide distinguishes limited checks for Basic and Developer from fuller check access under qualifying business or enterprise-level plans. Actual entitlements should be verified against the current plan. The bottom-left worked example illustrates a public S3 bucket. Trusted Advisor reports a high-severity concern and recommends blocking public access, adjusting bucket policies and applying least privilege. The service does not necessarily make those changes itself. Finally, read the explicit comparison at the bottom center: Trusted Advisor performs best-practice checks and recommends improvements, whereas Config records supported resource configuration state and evaluates rules over time. Pick Trusted Advisor when the question asks for account recommendations, and Config when it asks for resource-history or rule-compliance monitoring."
+    }
+  ]
+}
