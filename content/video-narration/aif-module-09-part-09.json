@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "09",
+  "module_title": "Amazon SageMaker AI",
+  "slide_local_dir": "public/course-visuals/aif-course/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected every original numbered WebP in this part. Narration follows the exact visual reading order, shown AWS components, sample values and distinctions. All slides 24–36 visually checked as a complete consecutive section.",
+  "part_id": "09",
+  "part_title": "Model Registry, Pipelines and Quality Gates",
+  "output_prefix": "aif-module-09-part-09",
+  "script_revision": "2026-11-14-aif-m09-p09-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 26,
+      "title": "SageMaker – Model Registry",
+      "narration": "The four large panels describe safe model version management. First, a training job produces a model artifact and metadata, illustrated as a model archive stored in S3. Second, SageMaker Model Registry records model package versions with lineage, metrics and other details. Third, reviewers assign an approval status such as Pending, Approved or Rejected. Fourth, a deployment pipeline selects an approved package version and sends it to a SageMaker endpoint. Study the bottom example. A recommendation model is retrained weekly. Version two was trained on January data but remains Pending, while version one was trained on December data and is Approved. The deployment workflow therefore continues to use version one. A newer model is not automatically a better or approved model. The exam asks for the service that stores and versions trained model packages and tracks approvals; that is Model Registry. The registry manages the record and status, while a deployment workflow performs the actual deployment."
+    },
+    {
+      "slide": 27,
+      "title": "SageMaker Pipelines",
+      "narration": "The slide shows a directed acyclic graph, or DAG, of ML tasks. Directed means the arrows specify dependencies, and acyclic means the workflow does not loop endlessly back to an earlier step within the same execution. Read the five stages: SageMaker Processing prepares data, training builds the model, an evaluation step checks its performance, RegisterModel records an approved model, and an optional deployment stage creates or updates an endpoint. A pipeline automates these steps in the required order; independent tasks can run in parallel if their dependencies allow it. The product-demand example below repeats the sequence using sales data. Processing transforms the records, training learns a forecasting model, evaluation checks an example error measure such as MAPE, and registration makes an accepted model version available for deployment. The dashed border around deployment matters: deploying is not an obligatory step in every pipeline. Choose SageMaker Pipelines when the question asks for a repeatable, automated lifecycle workflow, not simply a place to store a model version."
+    },
+    {
+      "slide": 28,
+      "title": "ML pipeline stages and dependencies",
+      "narration": "This picture expands the workflow to six configured stages. Amazon S3 holds incoming training data. Processing cleans the data and constructs features. Training consumes that processed output and produces model artifacts. Evaluation compares performance against business criteria. A quality gate, illustrated using SageMaker Clarify or custom checks, determines whether the model meets the required quality or bias thresholds. Only the Yes branch registers the model; the No branch stops the current run so the team can revise data or the model and start another execution. The lower image-classification example shows product images being resized and normalized, a convolutional neural network being trained, and accuracy, precision and recall measured before bias checks and registration. Crucially, the slide says these gates and stages are configurable: they are common patterns, not a mandatory fixed template imposed by SageMaker. The exam decision is that training follows data processing, while a configured evaluation gate can prevent a poor model from being registered."
+    }
+  ]
+}
