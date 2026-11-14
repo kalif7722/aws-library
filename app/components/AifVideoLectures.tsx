@@ -21,6 +21,8 @@ const LECTURES:Record<string,Lecture[]>={
   "09":[
     {id:"01",title:"SageMaker AI Training, Lifecycle, Algorithms and Tuning",start:1,end:4},
     {id:"02",title:"SageMaker Real-Time, Serverless, Async and Batch Inference",start:5,end:7},
+    {id:"03",title:"SageMaker Studio and Visual Development Tools",start:8,end:8},
+    {id:"04",title:"Data Wrangler — Import, Inspect, Visualize, Transform and Reuse Data",start:9,end:15},
   ],
   "08":[
     {id:"01",title:"Managed AI APIs and Amazon Comprehend Text Analysis",start:1,end:5},
