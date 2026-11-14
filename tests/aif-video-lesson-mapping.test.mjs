@@ -214,10 +214,10 @@ test("AIF Module 11 image-reviewed governance and MLOps lectures cover all 23 or
     assert.equal(manifest.part_id,part);
     assert.equal(manifest.voice,"en-US-AndrewNeural");
     assert.equal(manifest.speech_rate,"-3%");
-    assert.ok(manifest.scenes.every(scene=>scene.narration.trim().split(/\\s+/).length>=90));
+    assert.ok(manifest.scenes.every(scene=>scene.narration.trim().split(/\s+/).length>=90));
     assert.deepEqual(manifest.scenes.map(scene=>scene.slide),Array.from({length:end-start+1},(_,n)=>start+n));
     assert.ok(workflow.includes(`- part: "${part}"`));
-    assert.ok(workflow.includes(`start: ${start}\\n            end: ${end}`));
+    assert.ok(workflow.includes(`start: ${start}\n            end: ${end}`));
     assert.ok(workflow.includes(manifest.script_revision));
     assert.ok(catalog.includes(`id:"${part}",title:`));
     assert.ok(api.includes(`"11-${part}":`));
