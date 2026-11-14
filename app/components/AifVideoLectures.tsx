@@ -18,6 +18,12 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "10":[
+    {id:"01",title:"Responsible AI, Governance and AWS Accountability Tools",start:1,end:5},
+    {id:"02",title:"Model Explainability, Decision Trees and Human Oversight",start:6,end:9},
+    {id:"03",title:"Generative AI Limitations, Hallucinations and Content Integrity",start:10,end:13},
+    {id:"04",title:"Prompt Injection, Information Exposure and Jailbreak Defenses",start:14,end:16},
+  ],
   "09":[
     {id:"01",title:"SageMaker AI Training, Lifecycle, Algorithms and Tuning",start:1,end:4},
     {id:"02",title:"SageMaker Real-Time, Serverless, Async and Batch Inference",start:5,end:7},
