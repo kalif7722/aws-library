@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "12",
+  "module_title": "AWS Security and Supporting Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-12",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Inspected original numbered Module 12 WebPs 06–10 at full resolution. All spoken narration follows visual-first introduction, actual source diagrams and exact example values, then synthesis, with recorded anchor checklists.",
+  "part_id": "02",
+  "part_title": "Amazon S3 Buckets, Objects, Keys, Use Cases and Versioning",
+  "output_prefix": "aif-module-12-part-02",
+  "script_revision": "2026-11-14-aif-m12-p02-original-webp-visualintro-v1",
+  "scenes": [
+    {
+      "slide": 6,
+      "title": "Amazon S3: Object Storage Foundations",
+      "visual_overview": "How an S3 bucket in a chosen Region stores many independent objects for ML datasets, model artifacts and backups.",
+      "visual_walkthrough": [
+        "Left uses: training data, model artifacts, backups",
+        "Upload arrow into an S3 bucket in the selected AWS Region",
+        "Three objects with actual keys and example file sizes",
+        "Right properties: designed durability, scale and Region",
+        "Bottom worked example: one million images, upload with meaningful keys, stored as individual objects",
+        "S3 objects contrasted with a mounted block filesystem"
+      ],
+      "visual_example": "A team uploads one million training images; objects use keys like datasets/images/cat.jpg, alongside model archives and backup files.",
+      "visual_synthesis": "An S3 object is data addressed by a key inside a regional bucket; the service is durable object storage rather than a block disk.",
+      "narration": "This slide is an overview of how Amazon S3 stores files for an AI project. The whole picture answers two questions: what goes into S3, and how can we find it again? Start on the left where three types of content are shown. Training data includes images, text and logs. Model artifacts include trained-model files and checkpoints. Backups preserve datasets and results. A blue upload arrow carries these files into the large green S3 bucket in the center. Above it, the AWS Region label matters: you create a bucket in a chosen Region, and objects live in that bucket. Follow the three yellow arrows out to the right. The same bucket contains separate objects with distinct keys, for example datasets/images/cat.jpg shown as 120 kilobytes, models/model-v1.tar.gz shown as 250 megabytes, and backups/run-2024-10-01.zip shown as 5 gigabytes. Those sizes illustrate different content types, not fixed S3 limits. On the far right are three properties. S3 storage is designed for eleven nines of object durability, it can store very large amounts of data, and the bucket belongs to a selected Region. Durability describes resistance to losing objects; it is not the same as a guarantee that every request always succeeds. Now follow the bottom worked example: a team prepares a million training images, uploads them to its bucket using meaningful keys such as datasets/images, and stores each image as an object. The final reminder ties the picture together: S3 is an object store. You address whole objects through keys and APIs; it is not a traditional mounted block filesystem."
+    },
+    {
+      "slide": 7,
+      "title": "Amazon S3 Use Cases",
+      "visual_overview": "How one S3 bucket can support different storage workloads and teams while controlling each team's access to specific key prefixes.",
+      "visual_walkthrough": [
+        "Five left-side uses: backups, archive, static content, data lake and ML datasets/artifacts",
+        "Center bucket with six key-prefix categories: backups, archive, static-website, data-lake, ml-datasets, ml-artifacts",
+        "Five consumers on the right mapped to matching prefixes and IAM permissions",
+        "Bottom worked example: backups, storage-class lifecycle changes and two separate teams",
+        "Exam cue on multi-use buckets and key-prefix policies"
+      ],
+      "visual_example": "Database backups go to /backups, older objects transition to an archival storage class, analysts read /data-lake and ML staff read /ml-datasets and /ml-artifacts.",
+      "visual_synthesis": "Different teams can share one bucket as long as resource-scoped permissions and storage policies are designed for each workload.",
+      "narration": "This slide shows why S3 is often a shared storage foundation rather than a bucket dedicated to only one application. The question is how several teams can store different data in one place without receiving access to everything. Look at the five use cases on the left: backups keep application or database copies, archive holds older infrequently used data, static content serves website assets, a data lake brings analytical data together, and ML datasets and model artifacts support training. Each colored arrow points into the central S3 bucket. Inside that bucket, the picture lists key prefixes such as backups, archive, static-website, data-lake, ml-datasets and ml-artifacts. These are organizational names within object keys, not physical directories that divide the disk. Now follow the matching arrows to the right. A backup team is shown with access to the backups prefix. Analysts read data-lake objects. A web application reads static content. The machine-learning team reads both the dataset and artifact prefixes, and an archive process works with older archived files. The IAM policy boxes are important: access is scoped to the actions and object keys each consumer needs, rather than granted to the entire bucket by default. At the bottom, the worked example takes daily database backups, moves older backups into archival storage classes using lifecycle rules, and lets analytics and ML teams consume their own data. Notice that changing a storage class does not rename the object key. Taken together, the slide illustrates storage reuse, organized keys, and least-privilege access for different consumers."
+    },
+    {
+      "slide": 8,
+      "title": "Amazon S3 Buckets",
+      "visual_overview": "The four decisions needed to create a suitably private S3 bucket: name, Region, encryption/public access and ownership/permissions.",
+      "visual_walkthrough": [
+        "Step 1: globally unique bucket name within an AWS partition, sample ai-training-data",
+        "Step 2: specific Region us-east-1 shown on the map",
+        "Step 3: SSE-S3 versus SSE-KMS encryption and block public access",
+        "Step 4: account ownership and IAM least-privilege permissions",
+        "Bottom private AI-training bucket configuration table and resulting private/encrypted bucket",
+        "Exam cue checks name uniqueness, Region, encryption, public access and identity controls"
+      ],
+      "visual_example": "The diagram configures bucket ai-training-data in us-east-1, with SSE-KMS, all Block Public Access options enabled and access scoped by IAM.",
+      "visual_synthesis": "Private S3 configuration is a combination of naming, geographic placement, encryption, public-access blocking and permissions; each solves a different concern.",
+      "narration": "This is a practical S3 setup slide. It shows the four choices a team makes when creating a bucket for private AI training data, and why each choice matters. Begin with step one on the far left. The example bucket is named ai-training-data. A bucket name must be unique across AWS accounts and Regions within the relevant AWS partition, so you may need a more distinctive name in a real account. Step two places that bucket in a Region. The map highlights US East, Northern Virginia, whose code is us-east-1. Region selection affects where the data is stored and may be important for latency, governance and data-residency requirements. The gold step three panel has two independent protections. Encryption can use S3-managed keys, called SSE-S3, or AWS KMS keys, called SSE-KMS. The panel beneath it enables Block Public Access to help keep objects from being exposed publicly. Encryption does not, by itself, prevent an authorized identity from sharing data; public-access controls and policies are also necessary. Step four shows ownership and access. Your AWS account owns the bucket, while IAM policies and other applicable bucket controls determine which identities can perform which actions. The bottom worked example puts the decisions together: ai-training-data, us-east-1, SSE-KMS, all public-access blocks enabled, account ownership and least-privilege IAM access. The shield at the end represents the intended result, a private and encrypted storage location. Remember that a secure bucket is the result of several coordinated settings, not a single checkbox."
+    },
+    {
+      "slide": 9,
+      "title": "S3 Object Keys and Data",
+      "visual_overview": "How an S3 URI separates the bucket name from the object's full key and how key prefixes appear in the console.",
+      "visual_walkthrough": [
+        "Left Amazon S3 bucket called example-bucket",
+        "Middle full S3 URI s3://example-bucket/datasets/train.csv",
+        "Color-coded bucket name, prefix datasets/ and basename train.csv",
+        "Object key datasets/train.csv contrasted with the full URI",
+        "Right object body shows a CSV with id, feature and price rows",
+        "Bottom S3 console breadcrumb example-bucket > datasets, file size/modified fields and exam cue"
+      ],
+      "visual_example": "The CSV training file has S3 URI s3://example-bucket/datasets/train.csv, but the key inside that bucket is just datasets/train.csv.",
+      "visual_synthesis": "A bucket contains objects identified by complete keys; slashes form path-like prefixes in the key, not a physical filesystem tree.",
+      "narration": "This image clarifies a small but important S3 detail that often causes confusion: a bucket name, an object key and a full S3 URI are not the same thing. Start with the green bucket on the left. It is named example-bucket. Follow the arrow to the large colored address in the center: s3 colon slash slash example-bucket slash datasets slash train.csv. That complete string is the S3 URI. The three colored callouts beneath break it apart. The cyan section is the bucket name. The purple section, datasets slash, is an optional prefix used to organize related objects. The yellow final part, train.csv, is the basename. Together, datasets slash train.csv is the object key inside that bucket. Importantly, s3 colon slash slash and the bucket name are not part of the key. Follow the arrow to the panel on the right: the object body is the actual CSV content, illustrated with an id column, a feature column and prices such as 100 and 150. The name identifies the object; the body holds its data. Now look at the console example along the bottom. The breadcrumb shows example-bucket then datasets, and a row for train.csv with a sample size of 12.4 kilobytes and a last-modified timestamp. The console makes the prefix look like a folder, but S3 stores objects under keys rather than traditional physical folders. The full picture connects three ideas: locate the bucket, specify the complete object key, and retrieve the content stored at that address."
+    },
+    {
+      "slide": 10,
+      "title": "S3 Object Metadata and Versioning",
+      "visual_overview": "How an S3 object has content, key and metadata, and how enabling versioning retains earlier content when the same key is overwritten.",
+      "visual_walkthrough": [
+        "Left any-file upload into the S3 bucket",
+        "Center object anatomy: body, key, system/user metadata, tags and optional version ID",
+        "Overwrite arrow creates multiple versions to the right, latest and two earlier entries",
+        "Lower green protection panel: previous versions, restoration and unique version IDs",
+        "Lower caution panels: lifecycle/retention, permissions, not a permanent backup",
+        "Bottom step-by-step q1.pdf v1, v2, v3 and retrieval of v2 by version ID"
+      ],
+      "visual_example": "reports/q1.pdf is uploaded three times with the same key, generating versions 90b4, a8c1 and 3f2a; the example retrieves the middle version if needed.",
+      "visual_synthesis": "Versioning helps recover prior object states, but lifecycle rules, object lock, authorization and backup requirements still control actual protection.",
+      "narration": "This slide builds on the idea of an S3 object by showing what is stored about it and what happens when a file is replaced. Begin at the far left: you can upload many kinds of files, from documents to images and video. The arrow enters the S3 bucket in the middle, where versioning is enabled. The central object is divided into three parts. Its body is the actual file data. Its key is the unique full path-like name within the bucket. Its metadata describes the object, such as content type or user-defined values; the picture also groups tags here, although S3 manages object tags as a separate set of key-value attributes. Below is an optional version ID, which identifies this particular stored version. Now follow the gold overwrite arrow to the right. Uploading another file with the same key does not necessarily destroy the previous contents when versioning is enabled. The list displays a latest version, 3f2a, and older versions, a8c1 and 90b4. The green panel below explains the benefit: a team can retrieve a prior version after an accidental overwrite. But the three warning boxes matter too. Lifecycle rules may expire old versions, retention and Object Lock settings can protect them when configured, and IAM permissions are still required to retrieve or delete versions. Versioning alone is not a permanent independent backup. Finally trace the worked example along the bottom: upload reports/q1.pdf as version one, replace it with updated version two, upload final version three, and later request the earlier version by its ID. The complete picture is about preserving object history while planning retention and access deliberately."
+    }
+  ]
+}
