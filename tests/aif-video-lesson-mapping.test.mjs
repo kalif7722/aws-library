@@ -27,7 +27,7 @@ test("AIF local images, player and R2 paths are separate from AIP",()=>{
   assert.match(catalog,/\/course-visuals\/aif-course\/module-/);
   assert.match(api,/aws-course-videos\/previews\/aif/);
   assert.match(api,/method:"HEAD"/);
-  assert.match(api,/manifest\.script_revision !== config\.revision/);
+  assert.match(api,/!manifest\.script_revision/);
 });
 
 for(const [module,count] of Object.entries(lessonCounts)){
@@ -225,6 +225,10 @@ test("AIF Module 11 image-reviewed governance and MLOps lectures cover all 23 or
   }
   assert.deepEqual(seen,Array.from({length:23},(_,i)=>i+1));
   assert.ok(workflow.includes("audit_aif_local_visuals.py --module 11"));
+  assert.ok(workflow.includes('audit["module"]=="11"'));
+  assert.ok(workflow.includes('m["module_id"]=="11"'));
+  assert.ok(workflow.includes("python scripts/validate_aif_video_workflow.py --workflow .github/workflows/render-aif-m11-parts-01-08.yml"));
+  assert.ok(!workflow.includes("audit_aif_local_visuals.py --module 10"));
   assert.ok(workflow.includes('["verified_slides"]==23'));
   assert.ok(workflow.includes("Publish only verified files to Cloudflare R2"));
   assert.ok(api.includes("const config = MODULES["));
