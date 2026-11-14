@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "09",
+  "module_title": "Amazon SageMaker AI",
+  "slide_local_dir": "public/course-visuals/aif-course/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected each original Module 09 numbered WebP for this part, tracing its actual diagrams, numerical examples, decisions, and caveats. Scripts follow original visual reading order.",
+  "part_id": "05",
+  "part_title": "ML Features and SageMaker Feature Store",
+  "output_prefix": "aif-module-09-part-05",
+  "script_revision": "2026-11-14-aif-m09-p05-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "What are ML Features?",
+      "narration": "Begin with the four boxes in the top row. Raw information, stored here in Amazon S3, is transformed by feature engineering, illustrated with AWS Glue. Those derived features become inputs to SageMaker model training and ultimately to predictions. A feature is a measurable input used by a model, not the answer we want to predict. The lower example makes that distinction concrete. The raw table lists customer identifier, purchase dates, and transaction amounts, including three purchases for customer C123. From that history we derive recency, meaning days since the latest purchase; frequency, meaning purchases within the last thirty days; and a rolling average of purchase amounts over that same window. The target on the right is customer churn, shown as one if the customer leaves and zero if they stay. These engineered inputs summarize behavior in a form a model can learn from. Be careful to calculate them using information available at prediction time, so later purchases do not leak into earlier training examples."
+    },
+    {
+      "slide": 17,
+      "title": "SageMaker – Feature Store",
+      "narration": "Read the diagram from left to right, starting with application records and transaction data. A feature pipeline transforms those sources into reusable model inputs. SageMaker Feature Store organizes them into feature groups; the slide shows groups for customers, products, and interactions. At the right, two paths serve different needs. The top online store supports low-latency feature retrieval for a real-time SageMaker inference endpoint. The lower offline store, illustrated in Amazon S3, preserves feature history for training and analytics. Now inspect the churn example across the bottom: customer usage, support tickets, and plan details produce features such as usage frequency, support-ticket count, plan type, and days since last login. The same feature definitions support model training and predictions for an active customer. That consistency helps avoid training-serving skew, where a model sees differently calculated inputs in production. However, storing a feature does not automatically guarantee that its value is recent, accurate, or appropriate for the time being predicted. The exam choice is a centrally managed repository of reusable ML features, not a general document store."
+    }
+  ]
+}
