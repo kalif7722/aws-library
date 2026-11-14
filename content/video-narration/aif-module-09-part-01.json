@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "09",
+  "module_title": "Amazon SageMaker AI",
+  "slide_local_dir": "public/course-visuals/aif-course/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected original Module 09 slide WebPs individually, including architecture arrows, examples, labels, distinctions, and exam cues. Spoken walkthroughs follow the numbered images directly; no lessons inferred from titles alone.",
+  "part_id": "01",
+  "part_title": "SageMaker AI Training, Lifecycle, Algorithms and Tuning",
+  "output_prefix": "aif-module-09-part-01",
+  "script_revision": "2026-11-14-aif-m09-p01-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Amazon SageMaker AI",
+      "narration": "Start at the four connected boxes across the slide. On the left, Amazon S3 holds the training data, such as images, text, or CSV files. S3 is object storage: a place to keep files in the cloud. The first arrow sends those files to a SageMaker AI training job. Training means using examples to learn a useful pattern, rather than coding every possible answer by hand. The middle arrow writes the resulting model artifact back to S3. A model artifact is the saved output of training, not the original training dataset. The final arrow deploys that artifact to a SageMaker inference endpoint, where an application can ask for a prediction. Look below at the cat and dog image classification example: labeled photos become a trained classifier, and a new picture returns the predicted class, Cat. The decision panel emphasizes managed model training and deployment. SageMaker does not guarantee correct predictions; data quality and testing still matter."
+    },
+    {
+      "slide": 2,
+      "title": "SageMaker – End-to-End ML Service",
+      "narration": "Read the four numbered panels from left to right. First, collect and prepare data with Amazon S3 for storage and AWS Glue for cleaning, transforming, or cataloging. Second, SageMaker builds, trains, and tunes a model. Third, deployment makes the trained model available for inference, meaning predictions on new data. Fourth, Amazon CloudWatch and SageMaker Model Monitor help watch operational metrics and changes in incoming data. The long arrow at the bottom loops back to preparation. That feedback loop matters because the patterns a model learned can become less useful as customers or conditions change. Follow the customer churn example below: historic account and support records train a model that estimates which customers might leave. Its predictions support outreach, while monitoring tells the team when to investigate or retrain. The exam box asks you to match the AWS service to the lifecycle stage, not treat SageMaker as the only service in the whole workflow."
+    },
+    {
+      "slide": 3,
+      "title": "SageMaker – Built-in Algorithms (extract)",
+      "narration": "This slide compares two horizontal training paths. The upper row is supervised learning: an S3 dataset includes labels, which are known answers, and SageMaker can train a built-in linear learner. The saved trained model is the artifact at the far right. The home-price example at the bottom left shows inputs such as size, bedrooms, and location, with the actual sale price as the target to predict. The lower row is unsupervised learning, where there is no answer label. SageMaker uses a built-in K-means algorithm to find groups of similar data points, then saves its trained artifact to S3. In the bottom middle example, customers group according to behavior such as purchase or browsing history. These clusters are discovered patterns, not guaranteed meaningful customer categories. The exam tip is a useful choice: predicting a known value from labeled examples points toward supervised learning; finding natural groupings in unlabeled records points toward clustering."
+    },
+    {
+      "slide": 4,
+      "title": "SageMaker – Automatic Model Tuning (AMT)",
+      "narration": "Follow the four numbered steps. First, choose a training dataset, a validation metric, and ranges of hyperparameters. Hyperparameters are settings selected before or during training, such as learning rate or maximum tree depth. The validation metric evaluates how well each candidate works on data held aside from training. Next, SageMaker Automatic Model Tuning launches multiple training jobs with different settings. The examples on screen show learning rates of 0.01, 0.05, and 0.1, alongside different depths. The third panel compares illustrative metric scores: 0.78, 0.82, 0.87, and 0.80. For this example, where a higher metric is better, the 0.87 candidate wins. The bottom customer churn example shows an accuracy objective and parameter ranges. Remember that not every metric is maximized: an error metric like RMSE is usually minimized. Automatic tuning is optional, and a strong validation score still needs checking on a separate test set."
+    }
+  ]
+}
