@@ -106,6 +106,18 @@ def validate(path: Path, *, check_manifests: bool = False) -> list[str]:
             errors.append(f"{manifest}: slide sequence {actual} != {expected}")
         if not all(len(scene.get("narration", "").split()) >= 90 for scene in doc.get("scenes", [])):
             errors.append(f"{manifest}: missing/too-short image-grounded narration")
+        if int(module) >= 12:
+            for scene in doc.get("scenes", []):
+                checklist = scene.get("visual_walkthrough")
+                required_text = ("visual_overview", "visual_synthesis")
+                if any(not str(scene.get(key, "")).strip() for key in required_text):
+                    errors.append(f"{manifest}: slide {scene.get('slide')}: missing visual orientation/synthesis")
+                if not isinstance(checklist, list) or len(checklist) < 3 or any(
+                    not isinstance(item, str) or not item.strip() for item in checklist
+                ):
+                    errors.append(f"{manifest}: slide {scene.get('slide')}: incomplete visual walkthrough checklist")
+                if scene.get("visual_example") is None:
+                    errors.append(f"{manifest}: slide {scene.get('slide')}: missing example review (use empty string only when no example exists)")
         if doc.get("slide_local_dir") != f"public/course-visuals/aif-course/module-{module}":
             errors.append(f"{manifest}: original image directory does not match module")
         seen.extend(actual)

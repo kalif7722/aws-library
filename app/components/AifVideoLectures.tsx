@@ -18,6 +18,10 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"Choosing Bedrock Models for Real Business Workloads",start:15,end:16},
     {id:"06",title:"Tokens, Context Windows and Semantic Embeddings",start:17,end:20},
   ],
+  "12":[
+    {id:"01",title:"IAM Identities, Policies, Permission Evaluation and Service Roles",start:1,end:5},
+    {id:"02",title:"Amazon S3 Buckets, Objects, Keys, Use Cases and Versioning",start:6,end:10},
+  ],
   "11":[
     {id:"01",title:"Regulated AI, Compliance Evidence and Model Documentation",start:1,end:4},
     {id:"02",title:"Governance Policies, Ownership and Continuous Oversight",start:5,end:9},

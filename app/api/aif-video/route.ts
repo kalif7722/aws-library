@@ -3,6 +3,12 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "12-01": { title: "IAM Identities, Policies, Permission Evaluation and Service Roles",
+    revision: "2026-11-14-aif-m12-p01-original-webp-visualintro-v1",
+    count: 5, firstSlide: 1, firstTitle: "IAM: Users and Groups" },
+  "12-02": { title: "Amazon S3 Buckets, Objects, Keys, Use Cases and Versioning",
+    revision: "2026-11-14-aif-m12-p02-original-webp-visualintro-v1",
+    count: 5, firstSlide: 6, firstTitle: "Amazon S3: Object Storage Foundations" },
   "11-01": { title: "Regulated AI, Compliance Evidence and Model Documentation",
     revision: "2026-11-14-aif-m11-p01-original-webp-visualfirst-v1",
     count: 4, firstSlide: 1, firstTitle: "Regulated Workloads" },
