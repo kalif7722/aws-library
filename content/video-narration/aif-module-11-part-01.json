@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "11",
+  "module_title": "AI Governance, Compliance and MLOps",
+  "slide_local_dir": "public/course-visuals/aif-course/module-11",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected all 23 original numbered Module 11 WebP slides directly, including the actual titles, diagrams, labels, examples and cautions; source order and concept boundaries were verified before narration.",
+  "part_id": "01",
+  "part_title": "Regulated AI, Compliance Evidence and Model Documentation",
+  "output_prefix": "aif-module-11-part-01",
+  "script_revision": "2026-11-14-aif-m11-p01-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Regulated Workloads",
+      "narration": "Start with the three industries on the left: finance, healthcare and aerospace. Their AI projects may face extra audit, reporting, archiving or security obligations, but the exact requirements depend on jurisdiction and use case. Now follow the five arrows in the mortgage example. A customer submits documents, the business stores them in Amazon S3 with encryption and access controls, and Amazon Bedrock can help summarize or extract key details. Importantly, the fourth stage is a person reviewing the results before a regulated decision. The last column separates the records: CloudWatch provides operational and access-related logs where configured; DynamoDB can store application and review history; and S3 can archive documents and decision records. These services assist an evidence trail, but do not make the decision compliant automatically. The practical question is: can an auditor reconstruct what happened, who approved it and which controls were active?"
+    },
+    {
+      "slide": 2,
+      "title": "AI Standard Compliance Challenges",
+      "narration": "The four boxes across the top explain why AI is difficult to audit. Opacity means you may not fully understand a model's internal reasoning. Changing versions can make a previous evaluation outdated. Emergent behavior means new or unexpected outcomes may appear. Bias and privacy create risks both for people affected and for sensitive information. Read the lower architecture from left to right: data enters S3; SageMaker builds and versions a model; each deployed version produces predictions; CloudWatch provides operational monitoring; and AWS Audit Manager organizes selected audit evidence for human review. In the finance-document example, preserve the data source, model version, output and reviewer decision for each run. Notice the final comparison: human bias can enter during judgments or labeling; data bias can reflect historical patterns or under-representation. Neither problem is solved merely by storing more logs. You need targeted evaluation and accountable oversight as well."
+    },
+    {
+      "slide": 3,
+      "title": "AWS Compliance",
+      "narration": "This slide separates AWS's evidence from your obligations. Across the top diagram, AWS provides relevant compliance reports and agreements through AWS Artifact. Your auditors and risk team can use those documents during due diligence. But below the dotted line, your company still designs, configures and maintains controls for its own applications, data and AI use cases. Legal and compliance staff then decide which obligations apply. On the right are examples, not interchangeable certificates: NIST is a standards body, ISO standards can support certifications, SOC reports describe assessed controls, HIPAA is a United States health-information law, GDPR is an EU data-protection regulation, and PCI DSS is a payment-card standard. Their applicability differs. In the example, downloading an Artifact report is only one input to an audit; it is not automatic certification of your workload. Remember the responsibility boundary: AWS documents its controls, while you demonstrate your own."
+    },
+    {
+      "slide": 4,
+      "title": "Model Cards",
+      "narration": "Compare the left and right columns carefully. A SageMaker Model Card documents a particular model, including its intended use, data sources and licenses, evaluation methods, results, known risks and limits. Follow the center diagram: training data feeds SageMaker, training and evaluation produce the model, and the model card communicates evidence to the people who must approve or operate it. The right column shows a different document, an AWS AI Service Card, which describes an AWS-managed AI service rather than one customer-trained model. The bottom example is about creating and sharing a model card so reviewers understand where the model is appropriate and where it is not. The red warning matters: a well-written card supports transparency and audits, but is not proof of legal compliance, nor a substitute for accuracy, fairness or security testing."
+    }
+  ]
+}

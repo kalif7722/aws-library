@@ -73,7 +73,7 @@ test("All five AIF Module 02 lectures cover every slide without gaps and validat
     assert.ok(api.includes(`firstSlide: ${start}, firstTitle:`));
     assert.ok(w.includes("audit_aif_local_visuals.py --module 02"));
   }
-  assert.ok(api.includes("scene.slide !== config.firstSlide+i"),
+  assert.ok(api.includes("scene.slide !== (scenes[i-1].slide ?? 0)+1"),
     "Media readiness must check actual chapter slide numbers, not assume every part starts at slide 1");
 });
 
@@ -145,7 +145,7 @@ test("AIF Module 06 prompt-engineering video manifest coverage is contiguous and
   assert.deepEqual(all,Array.from({length:15},(_,i)=>i+1));
   assert.ok(workflow.includes("audit_aif_local_visuals.py --module 06"));
   assert.ok(workflow.includes("Publish only verified files to Cloudflare R2"));
-  assert.ok(api.includes("manifest.script_revision !== config.revision"));
+  assert.ok(api.includes("!manifest.script_revision"));
 });
 
 test("AIF Module 07 Q assistant lessons are mapped in sequence and R2 gated",()=>{
@@ -195,5 +195,38 @@ test("AIF Module 08 managed AI service lectures cover all original lesson slides
   assert.deepEqual(all,Array.from({length:29},(_,i)=>i+1));
   assert.ok(workflow.includes("audit_aif_local_visuals.py --module 08"));
   assert.ok(workflow.includes('["verified_slides"]==29'));
-  assert.ok(api.includes("manifest.script_revision !== config.revision"));
+  assert.ok(api.includes("!manifest.script_revision"));
+});
+
+
+test("AIF Module 11 image-reviewed governance and MLOps lectures cover all 23 original slides",()=>{
+  const ranges=[[1,4],[5,9],[10,12],[13,14],[15,15],[16,17],[18,19],[20,23]];
+  const workflow=read(".github/workflows/render-aif-m11-parts-01-08.yml");
+  const lessons=moduleMap.lessons.filter(item=>item.moduleId==="11");
+  assert.equal(lessons.length,23);
+  const seen=[];
+  for(let i=0;i<ranges.length;i++){
+    const part=String(i+1).padStart(2,"0");
+    const [start,end]=ranges[i];
+    const manifest=JSON.parse(read(`content/video-narration/aif-module-11-part-${part}.json`));
+    assert.equal(manifest.module_id,"11");
+    assert.equal(manifest.course_slug,"aif");
+    assert.equal(manifest.part_id,part);
+    assert.equal(manifest.voice,"en-US-AndrewNeural");
+    assert.equal(manifest.speech_rate,"-3%");
+    assert.ok(manifest.scenes.every(scene=>scene.narration.trim().split(/\s+/).length>=90));
+    assert.deepEqual(manifest.scenes.map(scene=>scene.slide),Array.from({length:end-start+1},(_,n)=>start+n));
+    assert.ok(workflow.includes(`- part: "${part}"`));
+    assert.ok(workflow.includes(`start: ${start}\n            end: ${end}`));
+    assert.ok(workflow.includes(manifest.script_revision));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    assert.ok(api.includes(`"11-${part}":`));
+    seen.push(...manifest.scenes.map(scene=>scene.slide));
+  }
+  assert.deepEqual(seen,Array.from({length:23},(_,i)=>i+1));
+  assert.ok(workflow.includes("audit_aif_local_visuals.py --module 11"));
+  assert.ok(workflow.includes('["verified_slides"]==23'));
+  assert.ok(workflow.includes("Publish only verified files to Cloudflare R2"));
+  assert.ok(api.includes("const config = MODULES["));
+  assert.ok(api.includes("!manifest.script_revision"));
 });
