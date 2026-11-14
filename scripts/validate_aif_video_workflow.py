@@ -52,6 +52,13 @@ def validate(path: Path, *, check_manifests: bool = False) -> list[str]:
                     f"but filename targets module {module}"
                 )
 
+    # Newly created modules must never bypass the module-alignment check.
+    # Older workflows predate this policy and remain available for reruns.
+    if int(module) >= 11 and "parts" in path.name:
+        required = f"python scripts/validate_aif_video_workflow.py --workflow .github/workflows/{path.name}"
+        if required not in body:
+            errors.append(f"{path}: missing mandatory fail-fast AIF preflight: {required}")
+
     if not check_manifests:
         return errors
 
@@ -122,7 +129,11 @@ def main() -> None:
         if not MODULE_FILE.fullmatch(path.name):
             continue
         checked += 1
-        errors.extend(validate(path, check_manifests=not args.all))
+        # In CI, all new modules (11 onward) receive strict manifest and
+        # original-slide coverage checks. Legacy workflows receive static checks.
+        module_number = int(MODULE_FILE.fullmatch(path.name).group("module"))
+        strict = not args.all or (module_number >= 11 and "parts" in path.name)
+        errors.extend(validate(path, check_manifests=strict))
     if checked == 0:
         errors.append("No matching AIF rendering workflows found")
     if errors:
