@@ -292,7 +292,7 @@ test("AIF Module 12 all 52 source images map to ten image-introduced lectures wi
       assert.ok(scene.visual_walkthrough?.length>=3,`slide ${scene.slide} missing actual panel/arrow anchors`);
       assert.ok(scene.visual_example?.trim(),`slide ${scene.slide} missing worked-example reference`);
       assert.ok(scene.visual_synthesis?.trim(),`slide ${scene.slide} missing full-picture explanation`);
-      assert.ok(scene.narration?.trim().split(/\\s+/).length>=90,`slide ${scene.slide} narration not substantial`);
+      assert.ok(scene.narration?.trim().split(/\s+/).length>=90,`slide ${scene.slide} narration not substantial`);
     }
     const wf=Number(part)<=2?old:w;
     assert.ok(wf.includes(`- part: "${part}"\n            start: ${start}\n            end: ${end}`));
