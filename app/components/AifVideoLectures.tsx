@@ -26,6 +26,11 @@ const LECTURES:Record<string,Lecture[]>={
     {id:"05",title:"ML Features and SageMaker Feature Store",start:16,end:17},
     {id:"06",title:"SageMaker Clarify — Evaluation, Explainability and Bias",start:18,end:21},
     {id:"07",title:"Human Labeling and Model Governance",start:22,end:23},
+    {id:"08",title:"Model Dashboard and Production Model Monitoring",start:24,end:25},
+    {id:"09",title:"Model Registry, Pipelines and Quality Gates",start:26,end:28},
+    {id:"10",title:"JumpStart and Pretrained Model Selection",start:29,end:30},
+    {id:"11",title:"Canvas, Ready-to-Use Models and Managed MLflow",start:31,end:33},
+    {id:"12",title:"SageMaker Build, Operate and DeepAR Review",start:34,end:36},
   ],
   "08":[
     {id:"01",title:"Managed AI APIs and Amazon Comprehend Text Analysis",start:1,end:5},
