@@ -21,6 +21,14 @@ const LECTURES:Record<string,Lecture[]>={
   "12":[
     {id:"01",title:"IAM Identities, Policies, Permission Evaluation and Service Roles",start:1,end:5},
     {id:"02",title:"Amazon S3 Buckets, Objects, Keys, Use Cases and Versioning",start:6,end:10},
+    {id:"03",title:"S3 Storage Class Selection, Availability and Resilience",start:11,end:13},
+    {id:"04",title:"S3 Infrequent and Glacier Classes, Intelligent-Tiering and Cost Decisions",start:14,end:18},
+    {id:"05",title:"EC2 Compute Selection, AI Serving, Bootstrap and Launch",start:19,end:22},
+    {id:"06",title:"AWS Lambda Fundamentals, Event Pipelines, Scheduling and Pricing",start:23,end:28},
+    {id:"07",title:"Macie Sensitive-Data Discovery, AWS Config and Inspector Vulnerabilities",start:29,end:33},
+    {id:"08",title:"CloudTrail API Audits, AWS Artifact, Audit Manager and Trusted Advisor",start:34,end:40},
+    {id:"09",title:"VPC and Subnets, Private AI Routing, NAT and PrivateLink",start:41,end:45},
+    {id:"10",title:"AWS Security Recap, Bedrock Controls, KMS, SageMaker and Private Model Auditing",start:46,end:52},
   ],
   "11":[
     {id:"01",title:"Regulated AI, Compliance Evidence and Model Documentation",start:1,end:4},

@@ -264,3 +264,42 @@ test("AIF Module 12 VisualFirst narration follows reviewed slide structure for f
   }
   assert.deepEqual(seen,Array.from({length:10},(_,i)=>i+1));
 });
+
+
+test("AIF Module 12 all 52 source images map to ten image-introduced lectures without gaps",()=>{
+  const expected=[["01",1,5],["02",6,10],["03",11,13],["04",14,18],["05",19,22],
+    ["06",23,28],["07",29,33],["08",34,40],["09",41,45],["10",46,52]];
+  const w=read(".github/workflows/render-aif-m12-parts-03-10.yml");
+  const old=read(".github/workflows/render-aif-m12-parts-01-02.yml");
+  const all=[];
+  assert.ok(w.includes("validate_aif_video_workflow.py --workflow .github/workflows/render-aif-m12-parts-03-10.yml"));
+  assert.ok(w.includes("audit_aif_local_visuals.py --module 12"));
+  assert.ok(w.includes('audit["module"]=="12"'));
+  assert.ok(w.includes('m["module_id"]=="12"'));
+  assert.ok(w.includes('audit["mapped_slides"]==52 and audit["verified_slides"]==52'));
+  assert.ok(!w.includes("audit_aif_local_visuals.py --module 11"));
+  assert.ok(!w.includes('m["module_id"]=="11"'));
+  assert.ok(!old.includes('aif-module-12-part-*.json'),"Original two-lesson batch must not rerender on additional manifests");
+  for (const [part,start,end] of expected){
+    const m=JSON.parse(read(`content/video-narration/aif-module-12-part-${part}.json`));
+    assert.equal(m.course_slug,"aif");
+    assert.equal(m.module_id,"12");
+    assert.equal(m.part_id,part);
+    assert.equal(m.slide_local_dir,"public/course-visuals/aif-course/module-12");
+    assert.deepEqual(m.scenes.map(v=>v.slide),Array.from({length:end-start+1},(_,j)=>start+j));
+    for(const scene of m.scenes){
+      assert.ok(scene.visual_overview?.trim(),`slide ${scene.slide} missing visual orientation`);
+      assert.ok(scene.visual_walkthrough?.length>=3,`slide ${scene.slide} missing actual panel/arrow anchors`);
+      assert.ok(scene.visual_example?.trim(),`slide ${scene.slide} missing worked-example reference`);
+      assert.ok(scene.visual_synthesis?.trim(),`slide ${scene.slide} missing full-picture explanation`);
+      assert.ok(scene.narration?.trim().split(/\s+/).length>=90,`slide ${scene.slide} narration not substantial`);
+    }
+    const wf=Number(part)<=2?old:w;
+    assert.ok(wf.includes(`- part: "${part}"\n            start: ${start}\n            end: ${end}`));
+    assert.ok(wf.includes(m.script_revision));
+    assert.ok(api.includes(`"12-${part}":`));
+    assert.ok(catalog.includes(`id:"${part}",title:`));
+    all.push(...m.scenes.map(v=>v.slide));
+  }
+  assert.deepEqual(all,Array.from({length:52},(_,j)=>j+1));
+});

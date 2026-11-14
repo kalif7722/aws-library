@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "12",
+  "module_title": "AWS Security and Supporting Services",
+  "slide_local_dir": "public/course-visuals/aif-course/module-12",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Directly inspected original WebP slides 41–45 for VPC diagrams, AZ placement, detailed routes, request/response arrows, ALB security groups and gateway versus interface endpoint differences.",
+  "part_id": "09",
+  "part_title": "VPC and Subnets, Private AI Routing, NAT and PrivateLink",
+  "output_prefix": "aif-module-12-part-09",
+  "script_revision": "2026-11-14-aif-m12-p09-original-webp-visualintro-v1",
+  "scenes": [
+    {
+      "slide": 41,
+      "title": "VPC: Crash Course",
+      "visual_overview": "The diagram maps a regional VPC, public and private subnets, routes, NAT, endpoints and an AI inference request.",
+      "visual_walkthrough": [
+        "Left glossary: VPC, subnets, routes, security groups, IGW, NAT and endpoints",
+        "Center VPC 10.0.0.0/16, public/private subnets in AZ A and B",
+        "Internet gateway to public resources and optional bastion",
+        "Private model inference server and NAT gateway for outbound",
+        "S3 gateway route and Bedrock Runtime interface endpoint, AWS services outside VPC",
+        "Right decision tree for internet versus AWS-only access",
+        "Bottom HTTPS ALB to private inference via Bedrock example"
+      ],
+      "visual_example": "An internet client reaches a publicly accessible load balancer, a private AI inference service processes requests, and a VPC interface endpoint can access Bedrock privately.",
+      "visual_synthesis": "Route tables determine packet paths; IAM, security groups and endpoints govern a separate access boundary.",
+      "narration": "This is a crash course in how the network components of an AWS AI application fit together. Begin with the left glossary: a VPC is a logically isolated regional network, subnets divide it within Availability Zones, route tables decide where traffic goes, and security groups control permitted instance or interface traffic. An internet gateway supports public access; NAT supports outbound IPv4 traffic from private subnets; VPC endpoints can reach supported AWS services privately. Now inspect the large center drawing. The VPC spans two AZs and has public and private subnets. Public resources use routes to the internet gateway. A private inference server does not need a directly reachable public address. In the other AZ a NAT gateway can provide outbound access, while the Bedrock Runtime interface endpoint offers a private API path. The route table examples distinguish the public internet default route, the private NAT route and a special S3 gateway-endpoint prefix-list route. The right decision tree asks whether outbound internet access is needed and then whether AWS services must be reached without it. Finally, follow the bottom example from a user through a public load balancer to private inference and onward to Bedrock through PrivateLink. These choices are complementary: private subnets, endpoints, routing and IAM must work together."
+    },
+    {
+      "slide": 42,
+      "title": "VPC and Subnet Foundations",
+      "visual_overview": "How one VPC spans AZs, while public subnets use an IGW route and private subnets lack a direct public route.",
+      "visual_walkthrough": [
+        "Left numbered internet request, route, security, response and private-resource conditions",
+        "VPC 10.0.0.0/16 and two AZ diagrams with 10.0.x.0/24 subnet ranges",
+        "Public web server and bastion, private RDS and inference resources",
+        "Right public route table default via IGW versus private local-only table",
+        "Security-group example inbound TCP443 and outbound, plus public-address warning",
+        "Bottom web application with private database and inference"
+      ],
+      "visual_example": "A public HTTPS web server receives client requests, while RDS and an inference service stay in private subnets without direct Internet access.",
+      "visual_synthesis": "A public route alone does not allocate a public address or grant firewall access; private subnet doesn't forbid approved internal paths.",
+      "narration": "This slide explains how a VPC is divided into public and private subnets without mixing up a route with a firewall rule. The large region diagram contains a VPC with address range 10.0.0.0/16 spanning two Availability Zones. Within the zones are separate non-overlapping subnet ranges: public subnets contain a web server and an optional bastion host; private subnets contain RDS and an ML inference instance. Follow the numbered story on the left. An internet client sends a request, the internet gateway provides the public network path, and a security group must permit the relevant inbound traffic, shown here as HTTPS port 443. The response can return to the client. Now compare the two route tables on the right. The public table has a default route 0.0.0.0/0 to the internet gateway. The private table has only the local VPC route and no direct public default route. A separate condition is easy to overlook: a publicly reachable instance also needs an appropriate public address and correctly configured security controls. The lower architecture connects internet users to public web servers, while databases and inference resources remain privately addressed. The whole picture is about placing workloads according to necessary reachability, not making every resource publicly accessible."
+    },
+    {
+      "slide": 43,
+      "title": "VPC Architecture: Trace the Request",
+      "visual_overview": "Follow a secure HTTPS request through one multi-AZ application load balancer to private inference instances and back.",
+      "visual_walkthrough": [
+        "External user HTTPS443 enters ALB public subnet nodes across two AZs",
+        "ALB forwards to private inference in 10.0.3.0/24 and 10.0.4.0/24",
+        "Response returns from inference to ALB and client",
+        "Side ALB group allows public443, inference group permits ALB only",
+        "Bottom model-artifact S3 access and no public IP",
+        "Note two drawn ALB nodes are one logical ALB, not separate services"
+      ],
+      "visual_example": "A public AI chatbot request enters ALB, goes to an LLM inference instance in a private subnet, reads authorized S3 model artifacts and returns through ALB.",
+      "visual_synthesis": "The load balancer is the public entry point; backend instances have no direct inbound internet path.",
+      "narration": "This picture is an end-to-end trace of a request for a privately hosted AI service. It begins with an internet user on the left sending HTTPS traffic on port 443. The request reaches an Application Load Balancer, or ALB, represented by nodes in public subnets across two Availability Zones. The two ALB drawings illustrate one logical load balancer operating across zones, not two unrelated load balancers. Now follow the gold arrow from the ALB to an inference instance in a private subnet. Another private inference instance is drawn in the second AZ, optionally supported by Auto Scaling to handle load and resilience. The purple return arrow goes from the inference result back through the load balancer and then to the user. The security panel on the right defines the trust boundary: the ALB's security group accepts HTTPS from clients, while the inference instances accept the necessary application traffic only from the ALB security group. They have no directly reachable public addresses. The lower example adds model artifacts stored in S3; the private model server loads the files through an appropriately authorized path. This architecture separates the public request endpoint from private inference execution, using load balancing, network rules and authorization together."
+    },
+    {
+      "slide": 44,
+      "title": "Internet Gateway and NAT Gateway",
+      "visual_overview": "A private IPv4 instance uses a NAT gateway's public-subnet route to initiate internet requests without accepting unsolicited incoming connections.",
+      "visual_walkthrough": [
+        "Left private EC2 10.0.1.10 and default route to NAT",
+        "Public subnet NAT 10.0.2.5 with Elastic IP, route to IGW",
+        "IGW and internet destinations with outbound and purple return arrows",
+        "Route tables: private 0.0.0.0/0 NAT, public 0.0.0.0/0 IGW",
+        "Red warning no unsolicited inbound",
+        "Bottom software-update request four steps"
+      ],
+      "visual_example": "An EC2 instance with private IP 10.0.1.10 downloads a software update through a NAT gateway and IGW, and the response returns along the established path.",
+      "visual_synthesis": "NAT provides outbound initiation, not a public inbound service; it costs money and differs from private service endpoints.",
+      "narration": "This slide traces an outbound connection from a private EC2 instance and explains why a NAT gateway is not an internet gateway. Begin at the leftmost box: the EC2 instance has private address 10.0.1.10 and needs a software update from an external site. Its route table contains a default IPv4 route to a NAT gateway. Follow the blue outbound arrow to the purple NAT icon placed in a public subnet. That subnet has its own default route to the internet gateway, or IGW, shown in the next box; a public NAT gateway also uses an Elastic IP for the internet-facing translation. The traffic then reaches the external website. Now trace the purple return arrows backward: the response for that established connection comes through the IGW and NAT to the original private instance. The large red panel warns that unsolicited inbound internet traffic cannot reach this private host through the NAT gateway. The bottom worked example restates exactly these four steps for downloading software. The two route-table cards provide the exam distinction: private 0.0.0.0/0 points to NAT, while public 0.0.0.0/0 points to IGW. A NAT gateway is useful for internet egress, whereas a suitable VPC endpoint may be preferable for private AWS API access."
+    },
+    {
+      "slide": 45,
+      "title": "VPC Endpoints and AWS PrivateLink",
+      "visual_overview": "A private application reaches Bedrock Runtime through interface endpoint ENIs; S3/DynamoDB gateway endpoints use a different routing mechanism.",
+      "visual_walkthrough": [
+        "Main private application 10.0.1.0/24 sends HTTPS to Bedrock interface endpoint ENI",
+        "PrivateLink arrow across AWS network to managed Bedrock outside VPC",
+        "Purple response arrows and crossed-out public internet",
+        "Security sidebar: endpoint group, endpoint policy, caller IAM",
+        "Bottom contrast: route table gateway endpoint for S3 and DynamoDB",
+        "Exam distinction endpoint types and authorization"
+      ],
+      "visual_example": "A private app calls a Bedrock Runtime API using an interface endpoint with private IP; an S3 read can use a separate gateway endpoint.",
+      "visual_synthesis": "Private connectivity does not replace IAM authorization, endpoint policies, DNS or security-group controls.",
+      "narration": "This slide compares two ways to privately reach AWS services, beginning with Bedrock Runtime. In the main diagram on the left, the application is located in a private subnet. Its HTTPS call travels to an interface VPC endpoint, represented by network interfaces with private IP addresses inside your subnets. The blue arrow continues across AWS PrivateLink to Amazon Bedrock, which is an AWS-managed service outside your VPC. The purple arrows show the response returning over the same private path, and the crossed-out public-internet arrow confirms that no internet route is needed for this API connection. Now read the security panel on the right: the endpoint security group must allow traffic, the endpoint policy can restrict supported actions and resources, and the application's IAM role must still be authorized. The lower comparison is crucial. A gateway endpoint for S3 or DynamoDB uses route-table targets and service prefix lists rather than ENIs and PrivateLink. The bottom example shows a private application using the Bedrock interface endpoint, while the neighboring diagram sends S3 traffic through an S3 gateway endpoint. Do not treat both endpoint types as interchangeable. The overall architecture gives private network transport with independent authorization controls."
+    }
+  ]
+}
