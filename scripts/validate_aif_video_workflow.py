@@ -23,7 +23,7 @@ REFERENCES = {
     "Narration module assertion": r'm\[["\x27]module_id["\x27]\]\s*==\s*["\x27](\d{2})["\x27]',
     "AIF R2 storage prefix": r"aws-course-videos/previews/aif/module-(\d{2})",
     "AIF module display name": r"(?:AIF\s+)?Module\s+(\d{2})",
-    "AIF render job name": r"AIF\s+M(\d{2})\s+Part",
+    "AIF render job name": r"(?m)^\s*name:\s*AIF\s+M(\d{2})\s+Part",
 }
 PARTS = re.compile(
     r'^\s+- part: ["\x27](\d{2})["\x27]\s*\n'
