@@ -275,11 +275,11 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
     <div className="sap-video-shell">
       <div className="sap-video-head">
         <strong>SAP-C03 · VIDEO LEARNING PATH</strong>
-        <h2>{moduleId==="00"?"Introduction · Guided Video":`Module ${moduleId} · Video Lectures`}</h2>
-        <p>Learn AI and cloud foundations step by step. Choose a topic, watch the video, or study its original slides.</p>
+        <h2>{`Module ${moduleId} · Architecture Video Lectures`}</h2>
+        <p>Learn professional-level architecture decisions through concise visual walkthroughs. Choose a video or inspect the original SAP slides.</p>
         <div style={{display:"flex",gap:18,marginTop:14,flexWrap:"wrap"}}>
           <a href="#visual-lessons">Open visual slides ↓</a>
-          <a href="/courses/aws-ai-practitioner">All course modules</a>
+          <a href="/courses/aws-solutions-architect-professional">All course modules</a>
         </div>
       </div>
       <div className="sap-video-layout">
