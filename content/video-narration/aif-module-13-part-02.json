@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "course_slug": "aif",
+  "course": "AWS Certified AI Practitioner (AIF-C01)",
+  "module_id": "13",
+  "module_title": "Current Exam Guide Additions",
+  "slide_local_dir": "public/course-visuals/aif-course/module-13",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected full-resolution original Module 13 WebP slides 05–08 and taught the displayed boxes, workflow arrows, actual examples, service comparisons, constraints and decisions.",
+  "part_id": "02",
+  "part_title": "Strands and AgentCore, Safe Tool Actions, Amazon Quick and Kiro",
+  "output_prefix": "aif-module-13-part-02",
+  "script_revision": "2026-11-15-aif-m13-p02-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 5,
+      "title": "Strands Agents and AgentCore",
+      "visual_overview": "Four columns explain how an open-source agent framework differs from managed production capabilities for runtime, gateway and memory.",
+      "visual_walkthrough": [
+        "Developer writes sample Strands Agent() and asks how to reset a password",
+        "AgentCore Runtime hosts and scales the agent",
+        "Gateway connects only approved AWS and external tools or APIs",
+        "AgentCore Memory maintains permitted remembered context",
+        "Support assistant example connects knowledge-base lookup and ticket-creation API; lower comparison separates framework from operating services"
+      ],
+      "visual_example": "Customer asks how to reset a password; a Strands-based support agent hosted in Runtime can retrieve approved help articles and use an authorized support-ticket tool when configured.",
+      "visual_synthesis": "Strands implements agent reasoning and tools; optional AgentCore components operate, connect and remember in production, but access and tools are never configured automatically.",
+      "narration": "This diagram separates building an AI agent from operating it reliably in production. First, the developer uses the open-source Strands Agents SDK. The code creates an Agent and sends a password-reset question. That short example illustrates calling an agent; it does not automatically connect corporate documents or grant permission to create support tickets. Follow the arrows across the three AgentCore panels. AgentCore Runtime provides an environment to host and run the agent, including managing sessions and scaling. AgentCore Gateway helps expose approved AWS or third-party tools to the agent. An API is a defined way for software systems to exchange requests and responses; access still requires appropriate authentication and authorization. AgentCore Memory can store and retrieve permitted context, such as user preferences, without making every conversation permanently accessible. Now look at the worked support example along the bottom. A customer asks how to reset a password. The Strands agent decides whether to fetch company instructions from a connected knowledge base or invoke an approved support API to open a ticket. Runtime hosts that logic; Gateway and Memory can be added as needed. The lower comparison makes the service-selection point: Strands is the framework for defining agent behavior, while AgentCore offers operating capabilities. These services are modular, not a mandatory four-stage purchasing sequence."
+    },
+    {
+      "slide": 6,
+      "title": "AgentCore Identity and Policy",
+      "visual_overview": "A user-to-agent-to-CRM flow places delegated identity and business policy checks before any external tool action.",
+      "visual_walkthrough": [
+        "Authenticated user enters left identity box",
+        "AgentCore Identity supports configured delegated authorization",
+        "Agent requests an action and AgentCore policy checks business rules",
+        "Allowed versus denied tool-call branches before CRM",
+        "IAM versus business-tool policy distinction, and read-case/large-refund worked example with logged denial"
+      ],
+      "visual_example": "Reading customer case status is allowed, but a refund larger than the configured threshold is blocked before the CRM call and the attempted action is recorded.",
+      "visual_synthesis": "Identity, IAM, external API access and agent business policies must align; no single policy layer bypasses the others.",
+      "narration": "This architecture asks a practical question: how can a support agent use customer data without taking unauthorized actions? Follow the top row from left to right. A user authenticates. AgentCore Identity can help manage an agent's identity and configured delegated access, so an agent may act with the permissions it was actually given, not unrestricted access to every customer. The agent proposes a CRM action. Before an integrated tool call is sent, the orange AgentCore Policy stage can evaluate a configured business rule. The next small panel shows the two outcomes: allow or deny. Only permitted calls proceed to the CRM, meaning the customer relationship management system on the far right. The wide middle strip distinguishes AWS IAM, which governs relevant AWS resource permissions, from business-level policy controlling a tool operation. Both layers matter; a business rule does not override IAM or the CRM's own access checks. The worked example at the bottom makes the distinction visible. Reading a case status is approved, but issuing a large refund exceeds the allowed threshold. Trace the numbered denial path: the agent requests the refund, policy rejects it, the CRM call is stopped, and the attempt is logged for review. The key learning point is defense in depth: verify identity, enforce least privilege and check business rules before sensitive actions."
+    },
+    {
+      "slide": 7,
+      "title": "Amazon Quick",
+      "visual_overview": "Five steps show an employee receiving cited answers, dashboards and optional actions from approved enterprise data, compared with building apps using Bedrock.",
+      "visual_walkthrough": [
+        "Employee asks for Q3 sales results and team summary",
+        "Amazon Quick connects to approved S3, RDS, OpenSearch and SharePoint sources",
+        "Research answer cites sales report, analytics dashboard and strategy document",
+        "Quick Sight dashboard displays illustrative Q3 $48.2M and 12 percent improvement",
+        "Workflow may generate, email and save a summary; compare workplace Quick with developer-focused Bedrock"
+      ],
+      "visual_example": "An employee requests Q3 sales results, gets a cited illustrative $48.2 million answer with 12% growth versus Q2, checks charts, then sends a team summary through configured actions.",
+      "visual_synthesis": "Choose Quick for workplace knowledge, analytics and authorized actions; choose Bedrock building blocks when developing a custom generative-AI application.",
+      "narration": "This slide follows an employee from a business question to a documented answer and a useful action. First, the employee asks what the third-quarter sales results were and requests a team summary. Second, Amazon Quick uses configured connections to approved business sources. The pictured sources include S3 documents, RDS business data, OpenSearch knowledge and SharePoint sites; the user must still be authorized to see the underlying information. Third, the research result includes a sample answer and source citations. Notice the links to a sales report, finance dashboard and strategy document. These matter because a generated number should be checked against its source. Fourth, the Quick Sight dashboard shows the illustrative third-quarter sales value of forty-eight point two million dollars, twelve percent higher than the previous quarter, plus trend and regional charts. Finally, the right-hand workflow creates an executive summary, emails the team, saves it and creates a follow-up task, but only when those integrations and permissions are configured. The lower worked example repeats question, cited answer, visual analysis and action. In the top-right comparison, Amazon Quick is a workplace assistant for knowledge and insights, whereas Amazon Bedrock provides foundation-model capabilities for developers building their own AI applications. The exam decision depends on whether employees need a connected workplace assistant or engineers need to create a custom application."
+    },
+    {
+      "slide": 8,
+      "title": "Kiro",
+      "visual_overview": "A five-stage spec-driven developer workflow moves from a natural-language request through requirements, architecture, tasks, code and review.",
+      "visual_walkthrough": [
+        "Developer asks for ticket search by keyword, status or customer",
+        "requirements.md specifies two-second response, 50-per-page pagination, authenticated access and testable acceptance criteria",
+        "design.md lays out search UI, API and ticket database",
+        "tasks.md lists implementation in ordered steps including auth and tests",
+        "Conceptual pseudocode processes query, authorization, permitted search and pagination; bottom comparison distinguishes Kiro from Amazon Quick"
+      ],
+      "visual_example": "Support-ticket search requires keyword/status/customer filters, responses within two seconds, maximum 50 results per page and access restricted to authorized agents, with tests verifying behavior.",
+      "visual_synthesis": "Kiro helps developers produce and review code from clear specifications; its generated code is not automatically production-ready or a substitute for security tests.",
+      "narration": "Kiro's diagram explains a spec-driven approach to AI-assisted software development. Instead of jumping straight from a vague request to code, the developer first describes a support-ticket search feature: find tickets by keyword, status or customer. Follow the five numbered columns. In the second column, Kiro creates a requirements document called requirements dot m d. It records measurable conditions: results should return within two seconds, pagination should show no more than fifty per page, and access should be limited to authenticated and authorized agents. The green checks below are acceptance criteria that can be tested. The third column is design dot m d. It sketches a search interface connected to an API and a ticket database, with filtering, pagination and security boundaries. Fourth comes tasks dot m d, breaking implementation into pieces such as creating the endpoint, adding pagination and authorization, writing tests and updating documentation. These tasks must actually be completed and reviewed; a checklist is not proof that the software works. Finally, the code-and-review column shows conceptual search pseudocode: receive the query, authorize the caller, search only permitted tickets and return paginated results. It is not complete deployable code; real authentication, storage integration and testing remain necessary. The bottom comparison separates Kiro, a developer tool for specification and implementation, from Amazon Quick, a workplace assistant for business users. The overall lesson is to review requirements, design, code and tests before trusting generated software."
+    }
+  ]
+}
