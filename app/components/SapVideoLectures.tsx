@@ -8,7 +8,7 @@ type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;trans
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
-  "00":[{id:"01",title:"SAP-C03 Introduction — Architecture Decisions and Learning Approach",start:1,end:4}],
+  "00":[{id:"01",title:"SAP-C03 Visual Course Introduction and Architecture Journey",start:1,end:5}],
   "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4},{id:"02",title:"Effective Permissions — Identity, Resource and Organizational Controls",start:5,end:8},{id:"03",title:"Cross-Account Role Trust, External ID and Service Role Access",start:9,end:13}],
 };
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
@@ -42,7 +42,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
   const ready=result?.status==="ready"?result:null;
   const storageKey=`sap-video-${moduleId}-${active}-position`;
   const completedKey=`sap-video-${moduleId}-${active}-complete`;
-  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}.webp`;
+  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
   const currentIndex=entries.findIndex(x=>x.id===active);
   const previous=entries[currentIndex-1];
   const following=entries[currentIndex+1];
@@ -218,7 +218,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
   };
 
   if(!entries.length)return null;
-  return <section id="video-lectures" aria-label="Beginner-friendly video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
+  return <section id="video-lectures" aria-label="Professional architecture video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
     <style>{`
       .sap-video-shell{background:#fff;border:1px solid #d4e1f0;border-radius:20px;overflow:hidden;color:#162947;box-shadow:0 12px 32px #152d4612}
       .sap-video-head{background:linear-gradient(118deg,#0f1b3c,#154a7c 65%,#0b7089);color:#fff;padding:24px 26px}
