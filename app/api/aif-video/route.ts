@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "13-03": { title: "Prompt Caching, Distillation, LLM Evaluation and Prompt Versioning", revision: "2026-11-15-aif-m13-p03-original-webp-visualfirst-v1", count: 4, firstSlide: 9, firstTitle: "Prompt caching and inference cost trade-offs" },
   "13-02": { title: "Strands and AgentCore, Safe Tool Actions, Amazon Quick and Kiro", revision: "2026-11-15-aif-m13-p02-original-webp-visualfirst-v1", count: 4, firstSlide: 5, firstTitle: "Strands Agents and Bedrock AgentCore: service selection" },
   "13-01": { title: "Context Engineering, Agents, MCP Tools and Memory", revision: "2026-11-15-aif-m13-p01-original-webp-visualfirst-v1", count: 4, firstSlide: 1, firstTitle: "Context engineering" },
   "12-01": { title: "IAM Identities, Policies, Permission Evaluation and Service Roles",
