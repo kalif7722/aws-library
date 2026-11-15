@@ -1,0 +1,339 @@
+{
+  "visualStandard": "AIP_SECURITY_GLOSS_V1",
+  "prompts": [
+    {
+      "m": "01",
+      "n": 4,
+      "title": "An exclusion from Allow is not a Deny",
+      "pages": [
+        285
+      ],
+      "layout": "action selection inside a resource-scope lens",
+      "refs": [
+        "managing-data-generative-ai-approved.png",
+        "sagemaker-endpoint-io-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 04. Title 'An exclusion from Allow is not a Deny'. A large scope lens encloses ONE S3 object prefix 'finance-reports/reports/*'. At left an amber policy document with exactly 'Effect: Allow', 'NotAction: s3:DeleteObject', 'Resource: object prefix'. A stream of labeled action tokens enters the lens: 's3:GetObject' and 's3:PutObject' emerge cyan with text 'Allowed by this statement'; 's3:DeleteObject' diverts to a neutral gray branch 'Excluded \u2014 no Allow from this statement'. A separate small permission document on that gray path says 'Another policy could still allow it'. An EC2 action token outside the lens says 'Outside the S3 resource scope'. Unboxed supporting line 'NotAction selects applicable actions outside the named set; Effect determines what happens to them.' Attractive real bucket/folder pictogram, not a generic card grid. Gray for exclusion, never a red Deny badge on the excluded DeleteObject. Other applicable controls still govern effective access. No table or bottom strip."
+    },
+    {
+      "m": "01",
+      "n": 5,
+      "title": "A Deny exception still needs an Allow",
+      "pages": [
+        286
+      ],
+      "layout": "guardrail barrier with an independent permission gate",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 05. Title 'A Deny exception still needs an Allow'. Main visual is a red guardrail across action paths. Above it conceptual policy fields 'Effect: Deny / NotAction: iam:* / Resource: *'. 'ec2:DescribeInstances' and 's3:GetObject' hit the red barrier and stop with 'Explicitly denied by this statement'. A purple 'iam:GetRole' token passes THROUGH the exception opening, then reaches a SECOND small gate 'Matching Allow elsewhere?'. Yes branch goes to green 'May proceed if other controls permit'; No branch goes to amber 'Implicit deny'. The two gates must be visibly separate. Place a magnifier annotation 'iam:* is outside this Deny, not automatically authorized'. No table, no uniform panels, no forced footer. Use service/action pictograms with careful red versus neutral exception semantics. Illustrative unconditional statement; do not imply all IAM activity is safe or that exempted actions bypass other policies."
+    },
+    {
+      "m": "01",
+      "n": 6,
+      "title": "Action selects; Effect decides",
+      "pages": [
+        288
+      ],
+      "layout": "a purposeful two-by-two policy comparison",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "managing-data-generative-ai-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 06. Title 'Action selects; Effect decides'. This topic genuinely needs a compact 2x2 visual comparison. Columns 'Effect: Allow' and 'Effect: Deny'. Rows 'Action: sqs:*' and 'NotAction: sqs:*'. Label above 'Example scope: Resource *; showing this statement only'. In upper-left: sqs:CreateQueue \u2192 ALLOW; s3:GetObject \u2192 NO MATCH. Upper-right: sqs:CreateQueue \u2192 EXPLICIT DENY; s3:GetObject \u2192 NO MATCH. Lower-left: sqs:CreateQueue \u2192 NO MATCH; s3:GetObject \u2192 ALLOW. Lower-right: sqs:CreateQueue \u2192 NO MATCH; s3:GetObject \u2192 EXPLICIT DENY. Give each cell two readable action tokens and a small meaningful selector graphic rather than paragraphs. Gray NO MATCH, green ALLOW, red EXPLICIT DENY. Under the comparison, a small open diagram 'Other policies' \u2192 'Final effective decision', with sentence 'No match is not an explicit Deny; evaluate every applicable policy.' Keep title proportional and exact action names readable. No extra cards or footer box."
+    },
+    {
+      "m": "01",
+      "n": 7,
+      "title": "An account principal delegates to the account",
+      "pages": [
+        289,
+        290
+      ],
+      "layout": "magnified ARN and cross-account delegation architecture",
+      "refs": [
+        "bedrock-data-automation-approved.png",
+        "sagemaker-endpoint-io-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 07. Title 'An account principal delegates to the account'. Subtitle 'The :root suffix in an account Principal does not mean root-only access.' Show S3 bucket resource policy in Account B pointing to an Account A boundary. The policy's conceptual principal value is 'arn:aws:iam::111122223333:root'; magnify the account ID and the ':root' suffix. Inside Account A, an administrator assigns an identity policy to 'ReportReader role'; that role sends 's3:GetObject' into Account B's S3 bucket. Clearly two authorizations: 'Bucket policy delegates to Account A' and 'Account A authorizes its caller'. Keep permission grant dotted line B policy\u2192A boundary separate from the API request arrow role\u2192bucket. Small lower-right distinction 'Different use: aws:PrincipalArn equals the root ARN identifies the root user itself.' Explain that this is a semantic distinction, not a recommendation to use root credentials. No table, root crown as small annotation only, no huge boxes, no bottom banner. Applicable controls still apply."
+    },
+    {
+      "m": "01",
+      "n": 10,
+      "title": "Combine conditions without changing their logic",
+      "pages": [
+        291,
+        292
+      ],
+      "layout": "boolean circuit with one worked input",
+      "refs": [
+        "bda-audio-processing-approved.png",
+        "sagemaker-endpoint-io-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 10. Title 'Combine conditions without changing their logic'. Draw a readable logic circuit, not a table. Two alternative department chips 'Finance' OR 'Audit' converge into a department-check gate labeled 'aws:PrincipalTag/Department'. A separate endpoint chip 'vpce-approved' feeds a gate 'aws:SourceVpce'. The department result and endpoint result converge at a large AND junction, then into a document labeled 'This Allow statement matches'. Worked request shown below circuit: 'Department=Finance' green and 'Endpoint=vpce-other' amber; trace the endpoint failure to 'Statement does not match'. Small annotations attached to wires: 'Multiple allowed values for one positive operator: OR'; 'Different keys/operators: AND'. A separate compact negation inset with two blocked chips says 'Negated matching with multiple policy values uses NOR'. Small scope label 'Illustrative StringEquals conditions; a nonmatch is not an explicit Deny'. No footer strip, no giant control panels, meaningful circuit geometry is the focal point."
+    },
+    {
+      "m": "01",
+      "n": 11,
+      "title": "Missing context changes the result",
+      "pages": [
+        291,
+        292
+      ],
+      "layout": "three diagnostic branches from an absent key",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 11. Title 'Missing context changes the result'. A request envelope opens at center, showing an EMPTY dashed tag slot 'aws:SourceVpce not present'. Three clearly separated paths radiate from this same missing key, as a semantic diagram rather than equal cards. Path A 'StringEquals' \u2192 'Positive equality does not match'. Path B 'StringEqualsIfExists' \u2192 'Missing key satisfies this condition'. Path C 'Null: false' \u2192 'Requires the key to exist; missing key fails'. Above the envelope a tiny public-endpoint route explains why an endpoint key can be absent. To right a warning annotation tied only to B: 'IfExists can weaken an Allow if absence should be rejected'. A small lower note 'A Deny with StringNotEqualsIfExists can still deny when the key is absent'. Final unboxed cue 'Evaluate operator + missing-key behavior + Effect together'. Use a single clear protagonist, readable keys and different connector colors; no table, no footer banner. Do not claim a condition result alone determines overall authorization."
+    },
+    {
+      "m": "01",
+      "n": 12,
+      "title": "Require TLS without blocking trusted service calls",
+      "pages": [
+        292
+      ],
+      "layout": "two transport paths and a scoped deny gate",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bda-audio-processing-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 12. Title 'Require TLS without blocking trusted service calls'. Large Amazon S3 bucket on right; two client request paths across the open canvas. Cyan 'HTTPS' path carries 'aws:SecureTransport=true' and reaches a policy checkpoint; red 'HTTP' carries 'aws:SecureTransport=false' and stops at an explicit Deny. Put a small policy document by the red gate with conceptual fields 'Deny when: SecureTransport=false AND PrincipalIsAWSService=false'. Beneath the two client paths, a distinct AWS-service-principal path approaches the same bucket. Label it 'Service-to-service authorization context can be redacted' and 'Exclude direct service principals from this transport Deny'. A narrow connector from policy document to that exception explains 'aws:PrincipalIsAWSService=true: this Deny does not match'. Very clear unboxed note beside bucket 'Passing the transport check does not grant S3 access'. No suggestion the exception permits any service automatically. Glossy green S3, blue lock on TLS path, thin actual traffic arrows. No equal panels, no table and no footer strip."
+    },
+    {
+      "m": "01",
+      "n": 13,
+      "title": "A regional guardrail needs a global-service path",
+      "pages": [
+        287,
+        293,
+        294
+      ],
+      "layout": "region boundaries with one carefully scoped bypass",
+      "refs": [
+        "bedrock-data-automation-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 13. Title 'A regional guardrail needs a global-service path'. Show one user at left sending EC2 requests into two meaningful Region boundaries: 'eu-central-1 \u00b7 approved' green and 'us-west-2 \u00b7 outside approved set' red. Inside each a small EC2 icon; approved route continues, outside route hits a Deny. At top a global IAM service icon sits OUTSIDE these Region boundaries, marked 'IAM global endpoint \u00b7 us-east-1 context'. A small conceptual guardrail document reads 'Deny outside approved Regions', 'StringNotEquals: aws:RequestedRegion', 'NotAction: deliberately reviewed global-service actions'. Draw a clearly distinct exception path from request to IAM past the regional Deny with label 'Outside THIS Deny; still needs authorization'. Use IAM as the concrete global-service example; do not claim every global service always has identical behavior. Small nearby reminder 'Exceptions do not grant permissions'. Geography abstract regions, not a fake world map. No matrix or footer banner. Important: label approved EC2 outcome 'Not denied by this guardrail' rather than unconditional access."
+    },
+    {
+      "m": "01",
+      "n": 14,
+      "title": "The API Region is not the whole data journey",
+      "pages": [
+        293,
+        294
+      ],
+      "layout": "two-Region replication architecture separating control from data",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 14. Centered modest title 'The API Region is not the whole data journey'. Teach 'aws:RequestedRegion controls the endpoint called, not every cross-Region effect'. Main architecture: a caller sends a thin CYAN control arrow 'API request to eu-central-1 endpoint' into a service/API checkpoint in Region A. Below that checkpoint an S3 bucket 'Source data \u00b7 eu-central-1' connects with a thick PURPLE dashed data arrow 'Configured replication' to a second S3 bucket 'Destination data \u00b7 eu-west-1' in Region B. The request-context magnifier at API checkpoint reads 'aws:RequestedRegion = eu-central-1'. Use visually separate control arrow and data-transfer arrow. At right a small residency boundary sign asks 'Where can the data be stored or copied?' and points to destination configuration, permissions and service-specific controls. Text near Region A 'An allowed API Region alone does not prove data residency'. It is an illustrative authorized replication configuration, not a claim any S3 call automatically copies data. No tables, no big common framing, no branded footer. Match two meaningful Region boundaries, accurate different service/control roles."
+    },
+    {
+      "m": "01",
+      "n": 15,
+      "title": "Follow the caller through a service chain",
+      "pages": [
+        297
+      ],
+      "layout": "a chain of forwarded identity and an alternate service-role path",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bda-audio-processing-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 15. Title 'Follow the caller through a service chain'. Upper large open flow 'Analyst role' \u2192 'Amazon Athena' \u2192 'Amazon S3', with white identity thread carried along both request arrows. Mark the Athena-to-S3 request 'Forward access session: caller identity is used'. A magnifier on this downstream request reveals conceptual context 'aws:CalledVia includes athena.amazonaws.com'. Text beside magnifier 'Use set operators: this key can contain multiple service values'. Below it a smaller DIFFERENT path 'Application service' \u2192 'Assumed service role' \u2192 'Resource', with a separate violet credential thread and note 'Service-role credentials are a different model; CalledVia is not populated for that path'. Useful short notes: 'Supported services only' and 'Caller still needs required permissions'. No claim Athena has permission just because it appears in CalledVia; no invented service principal grants. Make the identity thread, not panels, the main visual. No table, no automatic footer, no fake aws logo. Pictograms clearly name Athena and S3 and actual downstream request arrows point toward resources."
+    },
+    {
+      "m": "01",
+      "n": 16,
+      "title": "The network path changes the request context",
+      "pages": [
+        298,
+        299
+      ],
+      "layout": "parallel public and VPC endpoint routes with context annotations",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "/workspace/scratch/f3a2bc8c55a4/recovered/image(20261114-182658).png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 16. Title 'The network path changes the request context'. Two organically separated routes converge on one S3 bucket at right, not a comparison table. Upper route: laptop \u2192 public S3 endpoint \u2192 bucket; attached callout 'aws:SourceIp: public caller IP'. Lower route: private EC2 at '10.0.1.20' inside a meaningful VPC boundary \u2192 'VPC endpoint: vpce-approved' \u2192 bucket. Attached lower context tags 'aws:VpcSourceIp: 10.0.1.20', 'aws:SourceVpc: vpc-approved', 'aws:SourceVpce: vpce-approved'. A gray crossed-out SourceIp tag on lower route says 'aws:SourceIp is absent on this endpoint path'. Lower-right magnified miniature of two DIFFERENT VPCs both using '10.0.1.20', with note 'Private CIDRs can overlap: pair VpcSourceIp with SourceVpc or SourceVpce'. Small note near source route 'Service-mediated calls need separately tested exceptions'. No claim network conditions alone grant access. No footer strip or equal cards; use routing geometry to teach where each context value comes from."
+    },
+    {
+      "m": "01",
+      "n": 17,
+      "title": "Organization membership narrows the trust boundary",
+      "pages": [
+        313
+      ],
+      "layout": "organization boundary filtering principals at one resource",
+      "refs": [
+        "bedrock-data-automation-approved.png",
+        "managing-data-generative-ai-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 17. Title 'Organization membership narrows the trust boundary'. Main visual an organization boundary labeled 'Organization o-example' containing two member-account role pictograms and a selected S3 bucket. Role arrows inside approach a small condition gate 'aws:PrincipalOrgID = o-example'. Outside boundary one unrelated account sends an orange request that does not match the organization condition. Clearly label inside success 'Organization condition matches \u2014 other permissions still required'; outside result 'This Allow does not match'. Off to one side, AWS service principal symbol has separate narrow route to bucket labeled 'Required AWS service integrations: authorize separately'. A compact note explains 'OrgID is not present for every caller; blanket Deny rules need carefully tested service exceptions'. Small policy document labels 'Resource policy + principal context'. Do not show AWS service as a member account or grant all AWS services. No table, no footer warning bar, no universal source-processor-output layout. Focus on the physical boundary and membership distinction."
+    },
+    {
+      "m": "01",
+      "n": 22,
+      "title": "Trace the statement that answers the request",
+      "pages": [
+        305
+      ],
+      "layout": "four request tokens routed through a small original policy",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 22. Title 'Trace the statement that answers the request'. An original worked policy puzzle, not copied exam content. Left policy document displays two clearly named statements using conceptual fields, not JSON. 'Allow: s3:GetObject / Resource: finance-reports/reports/*'. 'Deny: s3:DeleteObject / Resource: finance-reports/*'. Center a routing/magnifier mechanism checks four request tokens: 'Get reports/june.csv' \u2192 green 'Matching Allow'; 'Get raw/data.csv' \u2192 gray 'No matching Allow'; 'Delete reports/june.csv' \u2192 red 'Matching explicit Deny'; 'sqs:CreateQueue' \u2192 gray 'No matching Allow'. At right outcomes 'ALLOW', 'IMPLICIT DENY', 'EXPLICIT DENY', 'IMPLICIT DENY' adjacent to the corresponding arrows. A small label 'Assume no other relevant policies or overriding controls in this exercise'. Useful learner cue near magnifier 'Read Action, Resource and Effect before choosing the result'. Avoid a tabular grid; use separate request lanes with one shared policy document and named selection paths. Policy uses a fictitious example bucket. No bottom banner or stock three-stage frame."
+    },
+    {
+      "m": "01",
+      "n": 40,
+      "title": "Make the access window precise",
+      "pages": [
+        291
+      ],
+      "layout": "UTC timeline with two date gates and boundary tests",
+      "refs": [
+        "bda-video-processing-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 40. Centered title 'Make the access window precise'. One large UTC timeline is the primary visual, showing an illustrative window on '1 December 2026 \u00b7 UTC'. A green open span from '09:00 inclusive' to '10:00 exclusive'. Left gate 'DateGreaterThanEquals', right gate 'DateLessThan', both compare 'aws:CurrentTime'. Above the timeline, a tiny conceptual Allow document says 'Both date conditions must match'. Four clock markers placed accurately: '08:59 \u00b7 no match', '09:00 \u00b7 matches', '09:59 \u00b7 matches', '10:00 \u00b7 no match'. Use gray outside the interval and cyan/green inside; no table or video filmstrip imagery. A magnifier at the closing boundary explains 'LessThan excludes 10:00 exactly'. A small side annotation 'AWS request time is evaluated, not a caller-selected clock value'. Unboxed scope statement 'This is one Allow condition; other policy checks still apply'. Exact operators and times readable, no fictitious guarantee of session revocation or token expiry at the window boundary."
+    },
+    {
+      "m": "01",
+      "n": 41,
+      "title": "A wildcard does not ignore letter case",
+      "pages": [
+        291
+      ],
+      "layout": "pattern stencil separating matching and nonmatching text",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 41. Title 'A wildcard does not ignore letter case'. Main focal point a large pattern stencil/magnifying lens labeled 'StringLike: finance-*'. Three input tags move toward it: 'finance-read' emerges green 'MATCH'; 'Finance-read' diverts amber 'CASE DIFFERS'; 'finance' diverts gray 'MISSING HYPHEN'. Highlight the literal lower-case 'finance-' and the '*' wildcard differently. At upper-left a compact illustrative comparison 'StringEquals: Finance' accepts 'Finance' but not 'finance'; connect it as a small literal-matching example, not a second equal card. Lower-right an ARN-shaped route tag says 'Use ARN operators for ARN comparisons: ArnLike / ArnEquals' with note 'Both ARN operators support wildcard matching'. Clearly distinguish wildcard behavior from case-insensitive operators. Small learner cue 'Choose the operator and value pattern deliberately'. No table, no default footer, no three equal panels. Provide breathing room so exact case and punctuation are obvious."
+    },
+    {
+      "m": "01",
+      "n": 42,
+      "title": "A same-account resource grant can supply the Allow",
+      "pages": [
+        307
+      ],
+      "layout": "direct user grant beside an empty identity policy and a deny overlay",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 42. Title 'A same-account resource grant can supply the Allow'. Subtitle 'Example: the bucket policy grants access directly to an IAM user ARN.' Draw ONE AWS account boundary around 'IAM user Alice', a visibly empty identity-policy document 'No identity-policy Allow', and an S3 bucket. The bucket policy contains a large readable conceptual principal value 'arn:aws:iam::111122223333:user/Alice' plus 'Allow: s3:GetObject / approved object'. Alice sends a cyan API arrow to the bucket and receives a small document return arrow. Annotation 'The direct resource-policy grant supplies the Allow in this example'. To the lower right a red explicit-Deny policy overlays a second faded version of this request, with outcome 'Applicable explicit Deny still wins'. Side note 'Same-account IAM user ARN case; role and role-session grants have different rules'. Small organization guardrail symbols with text 'Applicable organization controls still apply'. Never imply every resource grant bypasses every boundary, never treat a role as Alice, no table, no generic cards, no bottom strip. State the exact principal type visibly."
+    },
+    {
+      "m": "00",
+      "n": 1,
+      "title": "Meet the workload we will protect",
+      "pages": [],
+      "layout": "a simplified account, Region and VPC reference architecture",
+      "refs": [
+        "/workspace/scratch/f3a2bc8c55a4/recovered/image(20261114-182658).png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 00 \u00b7 SLIDE 01. Title 'Meet the workload we will protect'. Subtitle 'Follow one report application through identity, network, data and evidence.' One clear architecture, not a card grid. An AWS workload-account boundary contains a Region 'eu-central-1'. Inside the Region a VPC contains a public subnet with ALB and a private subnet with EC2 report application, both in an illustrative Availability Zone. Client at far left sends HTTPS to ALB, then ALB sends to EC2. EC2 has a small dotted identity attachment 'ReportReader IAM role'. EC2 sends a data-request path through an S3 gateway endpoint INSIDE the VPC to an S3 bucket 'finance-reports' OUTSIDE the VPC but inside the Region. Separate violet dashed evidence line from workload account to 'CloudTrail' then to a log bucket in a DIFFERENT 'Security/logging account'. Mark that evidence line 'API activity', not packet traffic. Small definitions beside real boundaries: 'Account: ownership and policy boundary'; 'Region: geographic service location'; 'Subnet: belongs to one Availability Zone'. Add small scope note 'Simplified teaching workload; production resilience and service integrations are separate design decisions'. Use proper recognizable ALB/EC2/S3/IAM/logging pictograms, no false VPC boundary around S3, no table, no footer banner. Role is an identity attachment, not a network hop."
+    },
+    {
+      "m": "00",
+      "n": 3,
+      "title": "More managed does not mean no customer responsibility",
+      "pages": [],
+      "layout": "a service ownership cross-section with a shifting management boundary",
+      "refs": [
+        "managing-data-generative-ai-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 00 \u00b7 SLIDE 03. Title 'More managed does not mean no customer responsibility'. An architectural cutaway shows service stacks of different heights arranged as a staircase from 'Amazon EC2' through 'Amazon RDS' to 'Amazon S3'. Shared blue foundation 'AWS: physical infrastructure and underlying platform'. Amber customer-owned layers remain visible above each stack. EC2 amber layers 'Guest OS patches', 'Applications', 'Data, IAM and network configuration'. Standard RDS amber layers 'Data and database access', 'Configuration and maintenance choices'; AWS blue layers include 'Managed database platform and host OS'. S3 amber layers 'Data classification', 'Access policies', 'Encryption and lifecycle choices'; AWS blue layers 'Storage platform and infrastructure'. A continuous thin amber line spans the TOP of all stacks labeled 'You still own secure use of your data and access'. Place labels beside the specific layers, not inside a comparison table. Small note beside RDS 'Standard managed RDS; RDS Custom has a different control boundary'. Keep a visual service stack/cross-section, no three equal cards, no table or mandatory bottom strip. Do not claim the customer has zero patching decisions on RDS, and do not claim AWS controls the customer's S3 bucket policy."
+    },
+    {
+      "m": "00",
+      "n": 4,
+      "title": "Different evidence answers different questions",
+      "pages": [],
+      "layout": "investigation scene with three annotated evidence artifacts",
+      "refs": [
+        "bda-audio-processing-approved.png",
+        "sagemaker-endpoint-io-approved.png"
+      ],
+      "prompt": "MODULE 00 \u00b7 SLIDE 04. Title 'Different evidence answers different questions'. A security investigation workspace surrounds one small EC2 workload icon in the center, with three different evidence artifacts linked by fine contextual lines, not equal cards. Left a CloudTrail API record document with readable illustrative fields 'eventName: StopInstances', 'actor: OpsRole', 'eventTime: 09:15 UTC', label 'Who called which API, and when?'. Top-right a network-flow strip with plain text '198.51.100.20 \u2192 10.0.1.20 \u00b7 TCP/22 \u00b7 REJECT', labeled 'VPC Flow Logs: network metadata, not packet payloads'. Lower-right a GuardDuty finding document labeled 'Unusual API activity \u00b7 investigate', question 'What behavior needs validation?'. Magnifier at center says 'Correlate account, resource and time'. Unboxed scope note 'Independent illustrative records; a finding is not proof of compromise'. Small CloudTrail note 'This is a management API example; data-event logging is configured separately'. Use distinctive log, flow and finding iconography, meaningful evidence lines rather than fake request arrows. No full JSON, no table, no automatic stages or footer banner."
+    },
+    {
+      "m": "00",
+      "n": 6,
+      "title": "Start with the failing boundary",
+      "pages": [],
+      "layout": "a four-symptom diagnostic constellation with guided questions",
+      "refs": [
+        "bedrock-data-automation-approved.png",
+        "data-wrangler-workflow-approved.png"
+      ],
+      "prompt": "MODULE 00 \u00b7 SLIDE 06. Title 'Start with the failing boundary'. A central simplified report workload has four different symptom scenes around it connected by numbered evidence pointers, not a table or equal card grid. Upper-left a broken route/laptop scene 'Connection times out' with question 'Did the request reach the service?'. Upper-right a policy gate scene 'S3 AccessDenied' with question 'Which principal, action, resource and context?'. Lower-right a key/S3 interaction scene 'KMS AccessDenied' with question 'Does key authorization permit this use?'. Lower-left a finding/magnifier scene 'Unexpected security finding' with question 'What evidence confirms scope and impact?'. Each symptom scene has its own appropriate miniature visual, colored semantic accents and enough breathing room. Along one lower curved path show 'Trace evidence \u2192 choose the relevant control \u2192 test the expected result'. Small learner invitation 'Pause and name the first boundary you would inspect'. Do not reveal a fabricated single root cause or claim each symptom has only one possible cause. No footer strip, no table, no prescribed three-stage shell. Make the diagram feel like a thoughtful troubleshooting map students can use throughout the course."
+    },
+    {
+      "m": "01",
+      "n": 43,
+      "title": "Read the policy envelope and the statement separately",
+      "pages": [
+        284
+      ],
+      "layout": "annotated document cutaway without executable JSON",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "bedrock-data-automation-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 43. Title 'Read the policy envelope and the statement separately'. One large policy document opens like an annotated cutaway at center. Outer document labels: 'Version: 2012-10-17' with note 'Policy language version, not creation date'; 'Id: optional policy identifier'; 'Statement: one or more statements'. INSIDE a single clearly nested statement area show 'Sid: optional statement identifier', 'Effect: Allow or Deny', 'Action / Resource', 'Condition: optional context tests'. On the right a separate small resource-policy document shows 'Principal: identifies who is covered' while a nearby identity-policy badge says 'Identity policy: caller is determined by attachment'. A cyan annotation explicitly connects 'Statement' outer label to its nested area. Use magnified document layers and connector callouts to teach scope and nesting. Do NOT render literal JSON, braces, arrays or pseudo-code; these are explanatory field labels. White readable labels, amber for outer envelope, violet for statement fields, no table or generic three-column frame, no footer strip."
+    },
+    {
+      "m": "01",
+      "n": 44,
+      "title": "Cross-account queue reads need both sides",
+      "pages": [
+        314
+      ],
+      "layout": "queue consumer authorization with separate request and response paths",
+      "refs": [
+        "sagemaker-endpoint-io-approved.png",
+        "/workspace/scratch/f3a2bc8c55a4/recovered/image(20261114-182658).png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 44. Title 'Cross-account queue reads need both sides'. Meaningful two-account architecture. Left Account A owns an SQS queue 'work-items'. Right Account B holds an EC2 worker with 'QueueReader role'. Draw CYAN request arrow FROM worker TO queue labeled 'ReceiveMessage / DeleteMessage'; draw a separate violet return arrow FROM queue TO worker labeled 'Message returned'. Beside worker an identity-policy document says 'Allow the required SQS actions on Account A queue ARN'. Beside queue a queue-policy document says 'Allow Account B QueueReader role to perform those actions'. Two small approval stamps align with the request path: 'Caller-side Allow' and 'Queue-side Allow'. A red isolated test path from a different role reads 'Not the approved principal: no matching queue grant'. Side note 'Encrypted queue? Review KMS authorization as well.' A concise scope note 'Illustrative direct cross-account access; other applicable controls must also permit the request'. No table or footer strip, no role assumption hop, no request arrow wrongly pointing to consumer. Keep source/consumer and the return data flow distinct."
+    },
+    {
+      "m": "01",
+      "n": 45,
+      "title": "Let trusted tags connect the role to its instances",
+      "pages": [
+        300,
+        315,
+        316
+      ],
+      "layout": "one role attribute compared with two EC2 resource attributes",
+      "refs": [
+        "bedrock-data-automation-approved.png",
+        "sagemaker-endpoint-io-approved.png"
+      ],
+      "prompt": "MODULE 01 \u00b7 SLIDE 45. Title 'Let trusted tags connect the role to its instances'. An IAM role at upper-left wears tag 'Project=Blue'. It sends an illustrative 'ec2:StartInstances' request toward two distinct EC2 instances at right: one tagged 'Project=Blue', one 'Project=Gold'. Place a large attribute-comparison mechanism between role and instances. Readable condition label 'aws:ResourceTag/Project equals aws:PrincipalTag/Project'. Blue matching path ends 'This Allow condition matches'; Gold path diverts 'Condition does not match'. A small empty tag chip below demonstrates 'Missing required tag: this Allow cannot match'. Show a little protected tag-issuance control underneath role, with label 'Protect who can set principal and resource tags'. Small scope note 'Tag-supported EC2 actions; other authorization checks still apply'. No S3 object icon, no table, no fabricated policy JSON or unsupported broad all-service claim. Tags should appear attached to the actual role and instances, not floating decorative cards. Make the matching Blue relationship visually immediate; Gold is a genuine alternative, not an error code."
+    },
+    {
+      "m": "01",
+      "n": 3,
+      "title": "Match the action to the right resource",
+      "pages": [
+        284
+      ],
+      "layout": "bucket versus object ARN architecture",
+      "prompt": "MODULE 01 \u00b7 SLIDE 03. Title 'Match the action to the right resource'. Claim: 'S3 bucket actions and object actions use different resource ARNs.' An open, asymmetrical architecture canvas: a luminous green S3 bucket at center-right with one clearly visible reports/ folder and a june.csv object. On left, two illustrated API request documents travel on separate cyan paths. Upper request 's3:ListBucket' connects to the BUCKET itself; label its resource 'arn:aws:s3:::finance-reports'. Lower request 's3:GetObject' connects directly to the june.csv OBJECT inside the reports/ folder; resource 'arn:aws:s3:::finance-reports/reports/*'. Place a small magnifier beside each ARN emphasizing absence/presence of the object path. Beside upper path show condition concept 's3:prefix can limit listed keys'. Beside lower path show 'Object ARN limits which objects may be read'. Near the object display a small separate request 's3:GetObject \u2192 raw/data.csv' with blocked arrow and text 'Outside reports/*: this Allow does not match'. A clear compact note beside policy document 'Example: no other Allow and no overriding Deny'. End with a small unboxed sentence 'Listing names does not grant permission to read the objects.' Use accurate request arrows toward resource, no fake full JSON, no table, no equal panels and no footer banner. Main bucket/folder relationship must be the visual protagonist."
+    }
+  ],
+  "correctionPolicy": "Final corrected images supersede original generation; see accepted batch record."
+}

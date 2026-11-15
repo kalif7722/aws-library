@@ -70,3 +70,9 @@ Do not default to tabular presentation. Use tables only when a precise compariso
 ## Follow-up visuals 36–39
 
 Four accepted visuals apply the composition refinement: an internal-access architecture, an activity-to-policy transformation, an unused-permission review timeline and a scoped policy-simulation walkthrough. No tables. Total accepted mapped inventory: 17 images (6 recovered + 11 newly generated). Earlier 20 new assets and 10 reuse mappings remain unresolved. The module remains incomplete pending source recovery and audit.
+
+## Reconstructed backfill and teaching supplements — 15 November 2026
+
+The historical missing-asset counts above are superseded by `recovery-batch-2026-11-15.json`: 24 accepted new images and 10 newly reviewed SAP reuse mappings fill the initial gaps and add source-backed worked cases. The missing originals were reconstructed; the unknown original reuse selection was replaced by a verified selection, not recovered verbatim. The current manifest contains Module 00 orientation (6 lessons) and Module 01 IAM (45 lessons), 51 mapped lessons total. Preserve existing slides 23–39 and all reused SAP originals. Source PDF pages 284–317 have a per-page topic crosswalk; an official objective-level module audit is still pending, so do not infer full course completion.
+
+Module-aware links use `?module=00&slide=1`; links with only `?slide=23` retain their Module 01 behavior. Read the current production files and manifest before continuing; historical counts are not the current inventory. Continue from the remaining objective audit and the source-backed course plan, not from an invented next slide number.
