@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original full-resolution SAP-C03 Module 01 slides 01–04 individually visually inspected; one coherent topic on principals, credential choices, IAM statement fields and full effective authorization.",
+  "part_id": "01",
+  "part_title": "Who Can Make an AWS Request? IAM Identity and Authorization",
+  "output_prefix": "sap-module-01-part-01",
+  "script_revision": "2026-11-15-sap-m01-p01-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Who makes the AWS request?",
+      "visual_overview": "The diagram introduces the principal behind an AWS API request and shows that authorization depends on both its credentials and the requested operation.",
+      "visual_walkthrough": [
+        "Four caller categories on left: workforce user, application, AWS service and external workload",
+        "Arrows converge on the current principal identified through actual credentials",
+        "Request is evaluated against action, resource and context",
+        "Authorization outcome at right and bottom reminder to start with actual caller"
+      ],
+      "visual_example": "An application accessing Amazon S3 might use a role session rather than the credentials of the person who initially launched the application.",
+      "visual_synthesis": "Always identify the active principal and credentials before reasoning about permission policies.",
+      "narration": "This first diagram answers an essential architecture question: who is actually making an AWS request? On the left, four possible callers appear: a workforce user, an application, an AWS service, and an external workload. Follow their arrows toward the middle. AWS evaluates the current principal represented by the credentials used for that specific request. A principal is the identity that makes or is represented by an authenticated request; it may not be the human who started the process. The next blue box identifies the action, resource and context. For example, reading an object from S3 is a different request from changing an S3 bucket policy, even if both involve S3. Finally, authorization determines whether the request is permitted under the applicable controls. Imagine a developer launching an application on EC2. If that application uses an instance role, the S3 call is evaluated using the role session, not automatically the developer's personal identity. The instruction at the bottom captures the troubleshooting habit: identify the caller and the credentials it actually uses before analyzing access."
+    },
+    {
+      "slide": 2,
+      "title": "IAM users, roles and root credentials",
+      "visual_overview": "Three side-by-side credential choices distinguish long-term IAM users, temporary role sessions, and the AWS account root identity.",
+      "visual_walkthrough": [
+        "Left IAM user panel describes long-term keys when genuinely required",
+        "Middle IAM role uses temporary session credentials",
+        "Right root user reserved for exceptional account-level operations",
+        "Bottom recommendation chooses temporary roles for workload and routine access"
+      ],
+      "visual_example": "An EC2 workload uses an IAM role and short-lived credentials instead of embedding an IAM user's access key in its application configuration.",
+      "visual_synthesis": "Prefer temporary least-privilege credentials; keep the root identity protected and avoid long-term keys where possible.",
+      "narration": "This slide compares three AWS identities and highlights which credentials architects should prefer. Read the columns from left to right. An IAM user can have long-term credentials, including access keys when genuinely necessary. Those static keys create rotation and exposure risks, so they should not be the default for applications. The center panel shows an IAM role, which is assumed to obtain temporary session credentials. A role can be used by AWS workloads, federated workforce users or approved external identities, provided its trust and permission policies allow the use. Unlike a permanent access key, a temporary session expires. On the right is the account root user. It has exceptional account-level authority and should be protected with multi-factor authentication and reserved for tasks requiring root. Notice the bottom message emphasizing temporary roles for workloads and routine access. In a production design, an EC2 application should normally obtain credentials through its instance role instead of storing an IAM user key in code. The architectural principle is to minimize long-lived secrets and keep each session's authority narrow."
+    },
+    {
+      "slide": 3,
+      "title": "Four questions inside an IAM policy statement",
+      "visual_overview": "Four policy fields explain whether a request is granted or denied, which API action is scoped, which resource is targeted, and which optional conditions must match.",
+      "visual_walkthrough": [
+        "Effect column: Allow or Deny",
+        "Action column: named API operation",
+        "Resource column: ARN or resource pattern",
+        "Condition column: additional context if specified",
+        "Worked ribbon: Allow s3:GetObject for one bucket prefix with matching project tag"
+      ],
+      "visual_example": "The illustrated statement allows s3:GetObject only for matching object resources under a specified bucket prefix, subject to the depicted project-tag condition.",
+      "visual_synthesis": "The statement must match the request's action, resource and relevant conditions; an allow alone does not override other applicable denies or restrictions.",
+      "narration": "This picture offers a practical way to read an IAM policy without getting lost in JSON. It asks four questions across the top. First, Effect: is this statement an Allow or a Deny? Second, Action: which API operation does it describe? Third, Resource: which resource ARN or pattern is in scope? And fourth, Condition: does the request satisfy any additional context requirements? Now follow the colored example ribbon beneath those columns. The statement illustrates Allow for s3:GetObject, limited to objects under one bucket prefix, with a matching project-tag condition. The exact condition key and tag context must be chosen correctly in a real policy; not every service supports every condition key. Crucially, the four panels describe checks on the same request, not four separate sequential calls. The bottom message says the applicable statement parts must match. Even when one identity policy appears to allow an action, an explicit deny or another applicable permission limit can still block it. When reviewing a policy in an exam scenario, inspect the exact action, ARN scope and condition rather than assuming a general service permission."
+    },
+    {
+      "slide": 4,
+      "title": "How an AWS request is authorized",
+      "visual_overview": "The authorization diagram traces the principal and requested action through policy evaluation into explicit deny, effective allow or implicit deny, with guardrails limiting access.",
+      "visual_walkthrough": [
+        "Left principal panel identifies caller or role session",
+        "Action-plus-resource panel describes the specific request",
+        "Policy evaluation box and lower guardrails: SCP/RCP, permissions boundary and session policy",
+        "Top branch: any applicable explicit deny leads to deny",
+        "Middle branch: effective allow without blocking controls leads to allow",
+        "Bottom branch: no matching allow leads to deny"
+      ],
+      "visual_example": "A role might have an identity-based S3 read permission, but an applicable SCP, boundary, session policy or explicit deny can still prevent the request.",
+      "visual_synthesis": "Authorization means a matching effective grant without an applicable explicit deny or restrictive guardrail; missing permission results in default denial.",
+      "narration": "This architecture connects the prior three slides into one authorization decision. Start on the left with the principal: AWS needs to know which identity or role session is making the request. Next comes the exact action and resource. The central policy-evaluation panel represents all applicable AWS permission rules for that request. The dashed box beneath it highlights guardrails such as Organizations service or resource control policies, permissions boundaries, and session policies. Their scope and evaluation behavior vary, but a broad identity allow cannot simply bypass them. Follow the three outgoing branches. The upper red path says an applicable explicit deny wins, regardless of a separate allow. The green middle path means the request has an effective permission and no applicable deny or other blocking limit. The lower red path illustrates default denial when no applicable allow exists. Consider a role granted S3 object reads. If an applicable Organizations control blocks that action, the read still fails. A useful troubleshooting method is to check the actual principal, API action, resource ARN and each applicable control before concluding why AWS allowed or denied a call. That's the full picture this slide is teaching."
+    }
+  ]
+}
