@@ -22,7 +22,7 @@ export async function GET(request:NextRequest){
   const head=await fetch(videoUrl,{method:"HEAD",cache:"no-store",signal:AbortSignal.timeout(6500)});
   await head.body?.cancel();
   if(!head.ok)return pending();
-  return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":scenes[0].title,
+  return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="00"&&part==="01"?"SAP-C03 Introduction — Architecture Decisions and Learning Approach":module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":scenes[0].title,
    videoUrl,captionsUrl:`${prefix}.vtt${v}`,transcriptUrl:`${prefix}-transcript.txt${v}`,
    durationSeconds:data.duration_seconds,chapters:scenes.map(s=>({slide:s.slide,title:s.title,startSeconds:s.start_seconds,durationSeconds:s.duration_seconds}))},{headers});
  }catch{return pending();}
