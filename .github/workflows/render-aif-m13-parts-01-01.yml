@@ -1,10 +1,11 @@
-name: Render AIF Module 13 Parts 01–02 — original image-audited lessons
+name: Render AIF Module 13 Part 01 — original image-audited lessons
 
 on:
   push:
     branches: [main]
     paths:
       - "content/video-narration/aif-module-13-part-01.json"
+      - ".github/workflows/render-aif-m13-parts-01-01.yml"
   workflow_dispatch:
 
 permissions:
@@ -72,11 +73,11 @@ jobs:
 
       - name: Verify AIF Module 13 original visual lesson inventory
         run: |
-          python scripts/audit_aif_local_visuals.py --module 12 --output /tmp/aif-m13-visual-audit.json
+          python scripts/audit_aif_local_visuals.py --module 13 --output /tmp/aif-m13-visual-audit.json
           python - <<'PY'
           import json
           audit=json.load(open("/tmp/aif-m13-visual-audit.json"))
-          assert audit["course_slug"]=="aif" and audit["module"]=="12"
+          assert audit["course_slug"]=="aif" and audit["module"]=="13"
           assert audit["mapped_slides"]==12 and audit["verified_slides"]==12
           assert [s["slide"] for s in audit["slides"]]==list(range(1,13))
           print("Original AIF source visual audit passed before narration synthesis")
@@ -95,7 +96,7 @@ jobs:
           p=os.environ["PART"]
           m=json.loads(Path(f"content/video-narration/aif-module-13-part-{p}.json").read_text())
           slides=list(range(int(os.environ["START"]),int(os.environ["END"])+1))
-          assert m["course_slug"]=="aif" and m["module_id"]=="12" and m["part_id"]==p
+          assert m["course_slug"]=="aif" and m["module_id"]=="13" and m["part_id"]==p
           assert m["script_revision"]==os.environ["REVISION"]
           assert [s["slide"] for s in m["scenes"]]==slides
           assert all(len(s["narration"].split())>=90 for s in m["scenes"])
