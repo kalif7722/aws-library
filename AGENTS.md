@@ -12,3 +12,5 @@ The approved standard is the dark navy glossy Security variant of AIP, reference
 Preserve original slide numbers and source mappings. Display Module 01 corresponds to planning Module 08 (advanced IAM); exam-domain numbers are a different system. Map only reviewed existing assets. Do not declare the module complete while earlier assets or objective coverage remain unresolved.
 
 Normally publish 20–25 accepted images together, maximum 30. An explicit request to push pending or recovered work authorizes a smaller recovery batch. Verify the current remote branch and image blob hashes before reporting publication. Keep unrelated course changes out of a Security commit.
+
+Latest user direction (15 November 2026): do not default to tables. Choose architecture stories, annotated mechanisms, timelines, branching decisions or worked examples according to the teaching claim. Use a table only when the topic specifically benefits from row-by-row comparison. Preserve visual appeal and useful course content; do not substitute sparse decorative slides.
