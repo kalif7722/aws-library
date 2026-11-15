@@ -28,9 +28,9 @@ jobs:
           from pathlib import Path
           manifest=Path("content/video-narration/sap-module-01-part-02.json")
           m=json.loads(manifest.read_text())
-          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","01","01")
+          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","01","02")
           assert m["output_prefix"]=="sap-module-01-part-02"
-          assert m["script_revision"]=="2026-11-16-sap-m01-p02-original-webp-visualfirst-v1"
+          assert m["script_revision"]=="2026-11-16-sap-m01-p02-visualfirst-v1"
           assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-01"
           assert [s["slide"] for s in m["scenes"]]==[5,6,7,8]
           assert all(len(s["narration"].split())>=95 and s.get("visual_overview") and len(s.get("visual_walkthrough",[]))>=3 and s.get("visual_synthesis") for s in m["scenes"])
@@ -59,8 +59,8 @@ jobs:
           root=Path("video-output/sap-m01-p02")
           stem="sap-module-01-part-02"
           m=json.loads((root/f"{stem}-manifest.json").read_text())
-          assert m["module"]=="01" and m["part"]=="01"
-          assert m["script_revision"]=="2026-11-16-sap-m01-p02-original-webp-visualfirst-v1"
+          assert m["module"]=="01" and m["part"]=="02"
+          assert m["script_revision"]=="2026-11-16-sap-m01-p02-visualfirst-v1"
           assert [s["slide"] for s in m["scenes"]]==[5,6,7,8]
           assert (root/f"{stem}.vtt").read_text().startswith("WEBVTT")
           assert (root/f"{stem}.srt").is_file() and (root/f"{stem}-transcript.txt").is_file()
