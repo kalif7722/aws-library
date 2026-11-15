@@ -1,6 +1,6 @@
 # Active Security visual standard — 16 November 2026
 
-For new AWS Security images use `VISUAL_STANDARD=AIP_SECURITY_TEACHING_V2`. Read `docs/scs-c03/AIP_SECURITY_TEACHING_V2.md`, `docs/scs-c03/visual-standards.json`, the owning module production sheet, the current manifest and course-plan coverage review before generation or publication. This latest approved AIP presentation supersedes conflicting visual directions below. Keep existing accepted reuse unchanged. The SAP intro is a secondary atmosphere/background reference, not a new page template. Current mapped inventory after this release is 69; Module 02 has 13 lessons and remains partial. Batch size: ten images.
+For new AWS Security images use `VISUAL_STANDARD=AIP_SECURITY_TEACHING_V2`. Read `docs/scs-c03/AIP_SECURITY_TEACHING_V2.md`, `docs/scs-c03/visual-standards.json`, the owning module production sheet, the current manifest and course-plan coverage review before generation or publication. This latest approved AIP presentation supersedes conflicting visual directions below. Keep existing accepted reuse unchanged. The SAP intro is a secondary atmosphere/background reference, not a new page template. Current mapped inventory after the second credential batch is 79; Module 02 has 23 lessons and remains partial. Read docs/scs-c03/credentials-batch-02-2026-11-16.json for current coverage and remaining audit/checkpoint work. Batch size: ten images.
 
 # Course production instructions
 
