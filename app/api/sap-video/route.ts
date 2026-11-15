@@ -15,6 +15,9 @@ export async function GET(request:NextRequest){
   if(!res.ok)return pending();
   const data=await res.json() as Manifest;
   const scenes=data.scenes??[];
+  // Module 00 must not show the retired four-slide video after the cover upgrade.
+  if(module==="00"&&part==="01"&&data.script_revision!=="2026-11-16-sap-m00-p01-approved-cover-five-slides-v2")return pending();
+
   if(data.module!==module||data.part!==part||!data.script_revision||!Number.isFinite(data.duration_seconds)||(data.duration_seconds??0)<=0||!scenes.length||
    scenes.some((x,i)=>!Number.isInteger(x.slide)||!x.title||!Number.isFinite(x.start_seconds)||!Number.isFinite(x.duration_seconds)||x.duration_seconds<=0||(i>0&&x.slide!==scenes[i-1].slide+1)))return pending();
   const v=`?v=${encodeURIComponent(data.script_revision)}`;
