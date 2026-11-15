@@ -8,6 +8,7 @@ type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;trans
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
+  "00":[{id:"01",title:"SAP-C03 Introduction — Architecture Decisions and Learning Approach",start:1,end:4}],
   "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4}],
 };
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
