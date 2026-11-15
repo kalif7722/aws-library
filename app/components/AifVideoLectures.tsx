@@ -8,6 +8,7 @@ type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;trans
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
+  "13":[{id:"01",title:"Context Engineering, Agents, MCP Tools and Memory",start:1,end:4}],
   "00":[{id:"01",title:"Start Here — Your AI Practitioner Learning Journey",start:1,end:4}],
   "01":[{id:"01",title:"AI Fundamentals — From Everyday Examples to Generative AI",start:1,end:6}],
   "04":[
