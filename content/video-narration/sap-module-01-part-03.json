@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 01 numbered WebP slides inspected individually; diagram reading order and AWS access-control exceptions preserved.",
+  "part_id": "03",
+  "part_title": "Cross-Account Role Trust, External ID and Service Role Access",
+  "output_prefix": "sap-module-01-part-03",
+  "script_revision": "2026-11-16-sap-m01-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "Cross-account role access",
+      "visual_overview": "Two AWS accounts exchange an AssumeRole request; a trust policy and caller-side authorization precede temporary target-role access.",
+      "visual_walkthrough": [
+        "Account A's caller and identity policy allows sts:AssumeRole",
+        "STS AssumeRole request creates temporary credentials",
+        "Account B's target role accepts caller through trust policy",
+        "New role credentials access narrowly scoped resources",
+        "Bottom contrast between trust and actual role permissions"
+      ],
+      "visual_example": "An engineer in Account A assumes an approved role in Account B, then reads only resources permitted to that target role session.",
+      "visual_synthesis": "Check both permission to assume and trust to be assumed, then evaluate the new role's permissions for subsequent calls.",
+      "narration": "This architecture shows cross-account access without sharing permanent AWS access keys. On the left, Account A contains the caller and an identity policy allowing the STS AssumeRole action on a particular role. Follow the arrow to the center, where AWS Security Token Service provides temporary role-session credentials only when the applicable trust and permission checks pass. In Account B, the target role's trust policy determines whether the specified caller can assume it. The final arrow uses the resulting target-role session to reach scoped resources. Importantly, the original caller's permissions do not automatically become the target role's permissions. The target role policies, session restrictions and applicable resource controls govern subsequent requests. In a cross-account troubleshooting case, first check the caller's ability to assume the role, then the trust relationship, then the target session's resource authorization. This separation allows centralized access without distributing long-lived secrets."
+    },
+    {
+      "slide": 10,
+      "title": "External ID and the confused deputy",
+      "visual_overview": "A vendor service sends AssumeRole requests with distinct external IDs; the customer's trust policy separates customer-specific access.",
+      "visual_walkthrough": [
+        "Vendor service at left operates for multiple customers",
+        "Upper request carries External ID Customer A",
+        "Lower request carries External ID Customer B",
+        "Customer A trust-policy condition allows matching ID and rejects mismatch",
+        "Bottom distinction: external ID is trust condition, not resource permission"
+      ],
+      "visual_example": "A third-party vendor attempts to assume Customer A's role; the configured Customer A external ID satisfies the trust condition while Customer B's does not.",
+      "visual_synthesis": "External IDs mitigate confused-deputy risk in third-party access; they do not replace an explicit trusted principal or grant data access.",
+      "narration": "This slide illustrates the confused-deputy problem: one vendor operates for different customers, and a malicious or mistaken request must not use the vendor's authority to enter another customer's account. Start with the vendor service on the left. It can submit STS AssumeRole requests on behalf of Customer A or Customer B. The upper request includes the external ID assigned to Customer A. That value matches the condition on Customer A's role trust policy, leading to the green allow path. The lower request includes Customer B's external ID, which fails Customer A's condition and follows the red deny path. The external ID is not a password that by itself authorizes access, and it is not an S3 or database permission. The vendor's AWS principal must still be trusted, and the role's permissions continue to limit its actions after assumption. When designing third-party access, require a vendor-assigned customer-specific external ID in the role trust policy to help prevent cross-customer confusion."
+    },
+    {
+      "slide": 11,
+      "title": "Role chaining changes the active identity",
+      "visual_overview": "A human session assumes Role A and then Role B before using Role B credentials for a final API call.",
+      "visual_walkthrough": [
+        "Human session enters first STS AssumeRole and trust check",
+        "Role A session becomes active intermediate principal",
+        "Second STS AssumeRole and trust check creates Role B session",
+        "Final API call runs under Role B credentials",
+        "Chained session maximum one hour note and bottom audit cue"
+      ],
+      "visual_example": "A federated engineer assumes an operations role, then a separate audit role in another account; the final resource request is evaluated as the audit role session.",
+      "visual_synthesis": "Trace each role-assumption hop, the current credentials and the one-hour role-chaining session maximum.",
+      "narration": "The central message here is that an API request is evaluated using the current active identity, not the identity from the beginning of a login journey. Follow the chain from left to right. A human session assumes Role A after the required trust and authorization checks. Role A now has temporary credentials. The session then performs another STS AssumeRole operation to become Role B, again subject to its trust and permission checks. Finally, the request to the target resource uses Role B's credentials. When tracing an AccessDenied event, examine each trust hop and identify which role actually made the final API call. The gold note below Role B highlights an important limit: when one assumed role is used to assume another, the chained role session has a maximum duration of one hour. This matters when troubleshooting unexpected session expiration or designing long-running administrative workflows. Role chaining does not combine all prior role grants; each new assumed-role session has its own effective authority."
+    },
+    {
+      "slide": 12,
+      "title": "ABAC compares trusted attributes",
+      "visual_overview": "The diagram compares principal session Project tags against the Project tag of a resource using IAM policy conditions.",
+      "visual_walkthrough": [
+        "Principal A carries Project Blue",
+        "Principal B carries Project Gold",
+        "Target object carries Project Blue",
+        "IAM condition compares aws:PrincipalTag/Project with aws:ResourceTag/Project",
+        "Matching Blue allowed subject to other controls, Gold denied; bottom warning protects tag writers"
+      ],
+      "visual_example": "A Project Blue session can read an appropriately tagged Blue object if other permissions permit; Project Gold does not satisfy the illustrated equality condition.",
+      "visual_synthesis": "Attribute-based access control scales access decisions through trusted tags; controlling who may set tags is critical.",
+      "narration": "This slide explains attribute-based access control, or ABAC, through a simple tag comparison. On the left, Principal A has a session attribute Project equals Blue. In the middle, Principal B has Project equals Gold. The object on the right carries resource tag Project equals Blue. Follow the arrows toward the IAM condition in the center. The condition compares aws PrincipalTag Project with aws ResourceTag Project. The Blue session matches the Blue object and reaches the green allow path, assuming the request also has an applicable allow and no other restriction. The Gold session does not match, so this condition cannot authorize its request. This avoids writing a separate policy for every project when your tag model is consistent. But the warning at the bottom is fundamental: if users can freely change their own principal tags or resource tags, they may manipulate the condition. Protect the systems that set session attributes and resource tags, and use least privilege around tagging operations. ABAC is only as trustworthy as its attributes."
+    },
+    {
+      "slide": 13,
+      "title": "A service role has two policy questions",
+      "visual_overview": "The diagram follows an AWS service workload through role trust and role permissions to a scoped target resource.",
+      "visual_walkthrough": [
+        "AWS service workload begins an access request",
+        "First trust policy asks whether the service may assume the role",
+        "Role session is established",
+        "Permissions policy asks which actions and resources the session may use",
+        "Bottom comparison of service role and service-linked role"
+      ],
+      "visual_example": "A service workload assumes its configured role to access an S3 target; trust must name the appropriate service principal while permissions restrict the S3 operations and resource ARNs.",
+      "visual_synthesis": "Trust controls assumption; permissions control the resulting session. A service-linked role is a service-managed integration with different lifecycle constraints.",
+      "narration": "This architecture separates two policy questions for an AWS service role. Begin on the left with a workload running in an AWS service. The first shield is the trust policy: may this particular service principal assume the role? If that check succeeds, the service obtains a role session. Next comes the permissions policy, which defines what that session may do and which resources it may access. The final bucket represents a scoped target, not an automatic grant to all S3 objects. These checks solve different problems: a correct trust relationship does not imply broad access to S3, and generous S3 permissions do not help if the service cannot assume the role. Along the bottom, the slide distinguishes a workload-configured service role from a service-linked role associated with a particular AWS service. Service-linked roles have service-defined relationships and management restrictions. In the exam, if an application cannot obtain credentials, inspect trust first; if it has credentials but gets AccessDenied, inspect effective permissions and other applicable controls."
+    }
+  ]
+}
