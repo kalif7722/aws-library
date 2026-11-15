@@ -9,7 +9,7 @@ type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
   "00":[{id:"01",title:"SAP-C03 Introduction — Architecture Decisions and Learning Approach",start:1,end:4}],
-  "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4}],
+  "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4},{id:"02",title:"Effective Permissions — Identity, Resource and Organizational Controls",start:5,end:8},{id:"03",title:"Cross-Account Role Trust, External ID and Service Role Access",start:9,end:13}],
 };
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
