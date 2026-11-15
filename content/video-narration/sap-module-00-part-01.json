@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "00",
+  "module_title": "SAP-C03 Architecture Journey",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-00",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected all four original SAP Module 00 WebP slides at full resolution; narrated only the visible journey, constraints funnel, five-lens customer portal and four-stage learning loop.",
+  "part_id": "01",
+  "part_title": "SAP-C03 Orientation — Architecture Decisions and Learning Approach",
+  "output_prefix": "sap-module-00-part-01",
+  "script_revision": "2026-11-16-sap-m00-p01-original-webp-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Your SAP-C03 architecture journey",
+      "visual_overview": "A mountain-path illustration introduces the certification journey through five dimensions of professional AWS architecture, with weights printed beside the stops.",
+      "visual_walkthrough": [
+        "Roadmap starts at cloud design 25 percent and continues to security 25 percent",
+        "Middle path visits cost 15 percent and resilience 15 percent",
+        "Final stop is operations 20 percent with the summit at the right",
+        "Bottom instructional principle: learn mechanisms, compare trade-offs, apply the design"
+      ],
+      "visual_example": "For a hypothetical multi-Region customer application, designing connectivity is only the start: identity boundaries, transfer cost, recovery and operating changes can invalidate an otherwise workable design.",
+      "visual_synthesis": "Treat the displayed percentages as the slide's course roadmap; the learning outcome is an integrated architecture decision rather than memorizing individual AWS service names.",
+      "narration": "This opening slide introduces the SAP-C03 architecture journey. The rising path toward the summit represents how we develop professional architectural judgment, not simply memorize AWS services. Follow the stops from left to right. Cloud design and security are each shown as twenty-five percent. Cost and resilience are each fifteen percent, and operations is twenty percent. These are the course's displayed areas and relative emphasis. Cloud design involves selecting services and connections that satisfy performance and workload requirements. Security asks who can access what, and where trust boundaries exist. Cost asks whether the design is affordable, including often-missed data-transfer charges. Resilience considers how the workload survives failure and recovers within its business targets. Operations asks how we deploy, observe and change the system safely. Imagine a customer-facing application serving several countries. A fast design may still be unacceptable if it violates data residency, is too expensive, or cannot recover on time. The bottom sentence gives our method for the course: learn the mechanism, compare the trade-offs, and apply the design to actual constraints."
+    },
+    {
+      "slide": 2,
+      "title": "Read the constraints before choosing services",
+      "visual_overview": "This funnel shows how architects narrow several candidate designs by requirements and violations before comparing the remaining valid options.",
+      "visual_walkthrough": [
+        "Top architecture-question box lists RTO 30 minutes, data stays in Region, hybrid connectivity and lowest operational effort",
+        "Left stack of candidate architecture diagrams feeds requirements screen",
+        "Eliminate-violations stage removes any designs that break hard requirements",
+        "Compare-valid-designs stage weighs remaining trade-offs and selects best fit",
+        "Bottom message warns that a service name alone is not an answer"
+      ],
+      "visual_example": "A candidate that requires cross-Region movement of restricted data fails the stated Region-residency constraint even if it has attractive recovery speed. A remaining design must satisfy the 30-minute recovery target and hybrid requirement before comparing operational burden.",
+      "visual_synthesis": "Hard constraints eliminate designs first; cost, operational effort and other preferences then differentiate the feasible solutions.",
+      "narration": "This slide explains the most useful habit for a Solutions Architect Professional scenario: read the constraints before choosing services. Start at the top. The sample problem specifies an RTO of thirty minutes, meaning the business wants service restored within that recovery-time objective. It also requires data to stay in its Region, hybrid connectivity, and as little operational effort as possible. Follow the flow from the stack of candidate designs on the left. First, extract the requirements. Second, eliminate any option violating a hard condition. A solution that moves protected data into another Region is invalid under the stated requirement, regardless of how attractive it looks otherwise. Next, compare only the valid designs. Operational effort can now help distinguish two otherwise compliant approaches, perhaps favoring a managed service over one you must maintain yourself. The rightmost best-fit icon is therefore the end of a disciplined evaluation, not a guess based on a familiar AWS service name. In an exam question, separate mandatory constraints from preferences, rule out violations, and then choose the strongest remaining trade-off."
+    },
+    {
+      "slide": 3,
+      "title": "One workload, five architecture lenses",
+      "visual_overview": "A single international customer portal in the center is surrounded by five connected perspectives, illustrating that architectural requirements must be considered together.",
+      "visual_walkthrough": [
+        "Central international customer portal and its globally distributed users",
+        "Design lens upper left covers latency and data flow",
+        "Security lens upper right covers identity and residency",
+        "Cost lower left examines transfer and replication",
+        "Resilience below the portal covers recovery targets",
+        "Operations lower right covers observable changes; all lines point back to the same workload"
+      ],
+      "visual_example": "For a global portal, an edge delivery choice affects customer latency, while replicated data may increase transfer cost and create residency questions; recovery and operational visibility must be designed alongside them.",
+      "visual_synthesis": "The five lenses are parallel evaluations of one architecture, not independent projects or a mandatory sequence.",
+      "narration": "This diagram puts one international customer portal at the center and asks us to examine it through five connected lenses. Start with the portal itself: the same application serves users across locations, so every architectural decision can affect several requirements. At the upper left, design focuses on latency and data flow. Where do requests travel, and how quickly can the customer receive a response? At the upper right, security focuses on identity and data residency. Which users and services are trusted, and where may regulated information be stored or processed? The cost lens at the lower left highlights transfer and replication, because making data available in more places can create recurring charges. Below the portal, resilience asks how quickly service must recover and how much data loss the business will tolerate. Finally, operations asks whether teams can observe failures, deploy changes and investigate unexpected behavior. These are not five sequential steps. They are five ways to challenge the same proposal. For example, a replication strategy might improve recovery but add costs or violate location constraints. A professional architect explains why the complete design satisfies all hard requirements."
+    },
+    {
+      "slide": 4,
+      "title": "How each visual lesson builds judgment",
+      "visual_overview": "A four-part circular teaching loop explains how the course develops architectural decision-making through understanding, comparing, applying and revisiting.",
+      "visual_walkthrough": [
+        "Understand panel traces a client request through a distributor to application nodes and a database",
+        "Compare panel contrasts two candidate implementation shapes and their trade-offs",
+        "Apply panel translates a scenario into a tested decision",
+        "Revisit panel contrasts an incorrect connection with a corrected architecture path",
+        "Loop arrows show continuous learning rather than a one-time checklist"
+      ],
+      "visual_example": "Trace a request through an entry point and application tier to a database, compare alternative designs, choose one that meets requirements, then revisit the path if a failure or permission boundary makes the first answer wrong.",
+      "visual_synthesis": "Practice describing the end-to-end mechanism, stating why the selected choice wins, and correcting it when new evidence exposes a weakness.",
+      "narration": "The final introduction slide shows how to study each visual lesson in this course. Begin in the upper-left Understand panel. The picture traces a client request through an entry component, then application servers, and eventually a database. The first task is to explain what the components do and how a request moves between them. Follow the arrow to Compare. Here the slide presents two architecture shapes and asks us to identify their strengths, limits and trade-offs rather than choosing by appearance. Next comes Apply: take a scenario and use those facts to select the design that meets the stated constraints. In the lower-left Revisit panel, the red incorrect path is contrasted with a corrected one. This is the important final habit: if a test, failure or requirement exposes a flaw, explain why the first proposal fails and revise it. The arrows form a loop because strong architecture judgment improves with repeated decisions. As you progress through SAP-C03, ask four questions of every diagram: how does it work, what are the alternatives, which option satisfies this scenario, and what would make me change my answer?"
+    }
+  ]
+}
