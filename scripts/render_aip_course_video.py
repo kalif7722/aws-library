@@ -71,6 +71,10 @@ def load_local_slide(module: str, number: int, local_dir: str,
         expected_dir = (root / f"public/course-visuals/aif-course/module-{module}").resolve()
         filename = f"slide-{number:02}.webp"
         public_url = f"/course-visuals/aif-course/module-{module}/{filename}"
+    elif course_slug == "sap":
+        expected_dir = (root / f"public/course-visuals/sap-c03/module-{module}").resolve()
+        filename = f"slide-{number:02}.webp"
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     elif course_slug == "aip" and module == "19":
         expected_dir = (root / "public/course-visuals/genai-troubleshooting").resolve()
         filename = f"module19-slide-{number:02}.webp"
