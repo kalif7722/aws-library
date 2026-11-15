@@ -4,7 +4,6 @@ on:
     branches: [main]
     paths:
       - "content/video-narration/sap-module-00-part-01.json"
-      - ".github/workflows/render-sap-m00-part-01.yml"
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,15 +29,15 @@ jobs:
           m=json.loads(manifest.read_text())
           assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","00","01")
           assert m["output_prefix"]=="sap-module-00-part-01"
-          assert m["script_revision"]=="2026-11-16-sap-m00-p01-original-webp-visualfirst-v1"
+          assert m["script_revision"]=="2026-11-16-sap-m00-p01-approved-cover-five-slides-v2"
           assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-00"
-          assert [s["slide"] for s in m["scenes"]]==[1,2,3,4]
+          assert [s["slide"] for s in m["scenes"]]==[1,2,3,4,5]
           assert all(len(s["narration"].split())>=95 and s.get("visual_overview") and len(s.get("visual_walkthrough",[]))>=3 and s.get("visual_synthesis") for s in m["scenes"])
-          for n in range(1,5):
+          for n in range(1,6):
               f=Path(f"public/course-visuals/sap-c03/module-00/slide-{n:02}.webp")
               assert f.is_file() and f.stat().st_size>10000,f"Missing original SAP slide {n}"
               assert f.open("rb").read(4)==b"RIFF",f"Invalid WebP {n}"
-          print("PASS: SAP Module 00, Part 01, 4 original WebPs, script and lesson boundaries")
+          print("PASS: SAP Module 00, Part 01, 5 original WebPs, script and lesson boundaries")
           PY
       - name: Install narration and video engine
         run: |
@@ -60,12 +59,12 @@ jobs:
           stem="sap-module-00-part-01"
           m=json.loads((root/f"{stem}-manifest.json").read_text())
           assert m["module"]=="00" and m["part"]=="01"
-          assert m["script_revision"]=="2026-11-16-sap-m00-p01-original-webp-visualfirst-v1"
-          assert [s["slide"] for s in m["scenes"]]==[1,2,3,4]
+          assert m["script_revision"]=="2026-11-16-sap-m00-p01-approved-cover-five-slides-v2"
+          assert [s["slide"] for s in m["scenes"]]==[1,2,3,4,5]
           assert (root/f"{stem}.vtt").read_text().startswith("WEBVTT")
           assert (root/f"{stem}.srt").is_file() and (root/f"{stem}-transcript.txt").is_file()
           assert abs(media_seconds(root/f"{stem}.mp4")-m["duration_seconds"])<3.5
-          print("PASS: MP4, 4 chapters, subtitles, transcript, revision")
+          print("PASS: MP4, 5 chapters, subtitles, transcript, revision")
           PY
       - name: Publish verified media and manifest to R2
         env:
