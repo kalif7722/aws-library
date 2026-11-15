@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 // AIF has separate original visuals and media storage from the AIP course.
 const ROOT = "https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/aif";
 const MODULES: Record<string, { title: string; revision: string; count: number; firstSlide: number; firstTitle: string }> = {
+  "13-01": { title: "Context Engineering, Agents, MCP Tools and Memory", revision: "2026-11-15-aif-m13-p01-original-webp-visualfirst-v1", count: 4, firstSlide: 1, firstTitle: "Context engineering" },
   "12-01": { title: "IAM Identities, Policies, Permission Evaluation and Service Roles",
     revision: "2026-11-14-aif-m12-p01-original-webp-visualintro-v1",
     count: 5, firstSlide: 1, firstTitle: "IAM: Users and Groups" },
