@@ -7,7 +7,7 @@ const pending=()=>Response.json({status:"processing"},{headers});
 export async function GET(request:NextRequest){
  const module=request.nextUrl.searchParams.get("module")??"";
  const part=request.nextUrl.searchParams.get("part")??"01";
- if(!/^\\d{2}$/.test(module)||!/^\\d{2}$/.test(part))return Response.json({error:"Invalid module or part"},{status:400,headers});
+ if(!/^\d{2}$/.test(module)||!/^\d{2}$/.test(part))return Response.json({error:"Invalid module or part"},{status:400,headers});
  const stem=`sap-module-${module}-part-${part}`;
  const prefix=`${ROOT}/module-${module}/part-${part}/${stem}`;
  try{
