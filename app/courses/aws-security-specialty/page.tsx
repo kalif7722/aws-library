@@ -1,9 +1,11 @@
+import SecurityVisualCourse from "../../components/SecurityVisualCourse";
 import CertificationCourse from "../../components/CertificationCourse";
 import AwsSecurityCourseGuide from "../../components/AwsSecurityCourseGuide";
 import { scsScope } from "../../security-scope";
 
 export default function SecuritySpecialty() {
   return <>
+    <SecurityVisualCourse />
     <AwsSecurityCourseGuide />
     <CertificationCourse
     code="SCS"
