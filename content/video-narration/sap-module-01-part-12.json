@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Each of the approved high-resolution SAP Module 01 slides 46–52 (slide-NN-v2.webp) inspected directly; narration traces the actual panels and comparisons.",
+  "part_id": "12",
+  "part_title": "Directory Architecture — Managed AD, Hybrid Trust and Resilience",
+  "output_prefix": "sap-module-01-part-12",
+  "script_revision": "2026-11-16-sap-m01-p12-approved-v2-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 46,
+      "title": "Choose Managed Microsoft AD, AD Connector or Simple AD",
+      "visual_overview": "Three side-by-side directory choices show fully managed Microsoft AD, a forwarding connector to an existing directory, and a limited standalone Samba-based directory.",
+      "visual_walkthrough": [
+        "Left: AWS Managed Microsoft AD with AWS-operated controllers and customer-managed directory objects and permissions",
+        "Center: AD Connector forwards supported directory requests across a working network to an existing directory without replicating users",
+        "Right: Simple AD supports limited compatible domain and LDAP workflows, but not full Microsoft AD capabilities",
+        "Bottom decision criterion: required features, network failure dependencies and operational responsibility"
+      ],
+      "visual_example": "For an application requiring a genuine Microsoft AD domain and supported trusts, Managed Microsoft AD is usually preferable; if the business must continue using its existing on-premises directory without a copy, consider AD Connector but account for network dependency.",
+      "visual_synthesis": "Select the directory architecture by the workload's precise AD features and resilience requirements, not by a generic SSO label.",
+      "narration": "This slide compares three AWS Directory Service choices, and the columns are alternatives rather than steps of one workflow. Start on the left with AWS Managed Microsoft AD. AWS runs the managed domain controllers, while your organization still manages directory users, groups, access and application integrations. This is the option for workloads needing supported traditional Microsoft Active Directory capabilities and trusts. In the middle, AD Connector is fundamentally different. It forwards supported authentication or directory requests to an existing Active Directory over your network connection; it is not another domain controller, an offline copy or a local password cache. The arrows show its dependency on the existing directory and reachable network path. On the right, Simple AD offers a standalone Samba-based option for basic compatible directory functions, but it lacks important Microsoft AD features including supported forest trusts. The examples at the bottom lead to the architecture decision: first verify required directory features, trust relationships and application support. Then consider failure domains. A connector does not eliminate WAN dependency, and using a managed directory does not automatically configure application permissions. Choose by functionality, connectivity and operating responsibilities, not by the word SSO."
+    },
+    {
+      "slide": 47,
+      "title": "Managed Microsoft AD: availability, sharing and integrations",
+      "visual_overview": "Three diagrams cover domain controllers deployed across Availability Zones, supported application integrations, and optional multi-Region directory replication.",
+      "visual_walkthrough": [
+        "Multi-AZ directory controllers, backups and scaling in the left panel",
+        "Windows applications, supported RDS SQL Server and virtual desktop integrations connect through appropriate DNS/network paths in the middle",
+        "Regional directory deployment and supported multi-Region replication appear on the right",
+        "Bottom reminder separates directory availability, workload resilience and access permissions"
+      ],
+      "visual_example": "A managed directory may remain available across an AZ failure while a Windows application still fails if its own servers or DNS pathways lack the corresponding redundancy.",
+      "visual_synthesis": "Directory resilience, application connectivity, regional replication and workload authorization must be engineered together.",
+      "narration": "This slide shows three dimensions of operating AWS Managed Microsoft AD reliably. The left diagram starts with managed domain controllers across two Availability Zones. AWS manages their infrastructure, and supported backups and scaling improve directory availability. But read the warning: a resilient directory does not automatically make every dependent application highly available. In the center, Windows domain-joined servers, compatible SQL Server workloads and virtual desktops connect to the directory. These integrations depend on correct DNS, network routing, allowed traffic and directory permissions. A directory can be healthy while an application cannot locate or authenticate to it. On the right, the diagram shows supported multi-Region replication. That capability may extend directory availability for a multi-Region strategy, but it is not the same mechanism as a forest trust or an arbitrary self-managed replica. Verify the specific regional replication features, application support and authentication constraints before choosing it. The three architectural responsibilities therefore reinforce each other: deploy resilient directory infrastructure, design working application connectivity and permissions, and explicitly plan regional failure behavior. Do not mistake one service's high availability for the full workload's recovery plan."
+    },
+    {
+      "slide": 48,
+      "title": "Trust and replication preserve different directory boundaries",
+      "visual_overview": "The slide contrasts domain trust with directory replication and shows the network, DNS and configuration dependencies required for hybrid integration.",
+      "visual_walkthrough": [
+        "Left: two domains linked through directional trust without copying every user",
+        "Upper-right: on-premises directory reaches AWS through Direct Connect or VPN, with DNS forwarding and required ports",
+        "Lower-right: a self-managed EC2 domain-controller replica synchronizes supported directory state and requires customer operations",
+        "Bottom distinction: trust links identities; replication copies directory state"
+      ],
+      "visual_example": "A company may establish a supported trust between an AWS-managed directory and its existing AD to authenticate across boundaries, while a separately built self-managed replica on EC2 addresses different latency and WAN resilience requirements.",
+      "visual_synthesis": "Trust, federation and replication are different mechanisms; choose them based on authentication boundaries versus synchronized directory availability.",
+      "narration": "This visual distinguishes two concepts often confused in hybrid Active Directory architecture: trust and replication. Look at the left panel. Domain A and Domain B have a supported one-way or two-way trust relationship. That trust enables authentication across the defined directory boundary according to its direction and permissions. It does not copy every account, group or directory record into the other domain. Now move to the upper-right hybrid connectivity path. To use a trust across on-premises and AWS environments, the network must support appropriate VPN or Direct Connect routing, DNS forwarding, reachable domain controllers and required authentication ports. Trust configuration alone cannot compensate for broken name resolution. The lower-right panel illustrates a different design: a self-managed domain controller replica on EC2 can replicate a supported existing AD domain closer to workloads. With that approach, your team owns replication, patches, backups, recovery and security. An AD Connector is only a request-forwarding gateway and cannot remove WAN dependency in that way. The key exam decision is to choose trust when you need to authenticate across separate directory boundaries, and replication when you need synchronized domain state under its supported model. Validate application authorization separately from both."
+    }
+  ]
+}
