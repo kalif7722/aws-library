@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "03",
+  "module_title": "Secure and Resilient Architectures — Encryption and Key Management",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-03",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "All original SAP Module 03 diagrams 09-32 individually examined; original numbered WebP files 09-26 and approved -v2 WebPs 27-32.",
+  "part_id": "04",
+  "part_title": "Encrypted S3 Access and Secrets Rotation",
+  "output_prefix": "sap-module-03-part-04",
+  "script_revision": "2026-11-17-sap-m03-p04-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "Cross-account encrypted S3 reads",
+      "visual_overview": "This slide explains cross-account encrypted s3 reads by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "Account A owns the S3 bucket and a customer managed KMS key. Follow the upper gate: a reader role in Account B needs an IAM GetObject permission and Account A must authorize the cross-account principal through its bucket policy. Follow the lower gate: the owner's KMS key policy and the caller's IAM permissions must allow the required Decrypt operation. Both checks are independent. An explicit Deny at either gate blocks the request.",
+        "Distinguish permission, security and operational responsibilities",
+        "S3 access and KMS key access must both succeed; diagnose their separate access errors."
+      ],
+      "visual_example": "Account A owns the S3 bucket and a customer managed KMS key. Follow the upper gate: a reader role in Account B needs an IAM GetObject permission and Account A must authorize the cross-account principal through its bucket policy. Follow the lower gate: the owner's KMS key policy and the caller's IAM permissions must allow the required Decrypt operation. Both checks are independent. An explicit Deny at either gate blocks the request.",
+      "visual_synthesis": "S3 access and KMS key access must both succeed; diagnose their separate access errors.",
+      "narration": "This slide explains cross-account encrypted s3 reads through the actual architecture shown. Account A owns the S3 bucket and a customer managed KMS key. Follow the upper gate: a reader role in Account B needs an IAM GetObject permission and Account A must authorize the cross-account principal through its bucket policy. Follow the lower gate: the owner's KMS key policy and the caller's IAM permissions must allow the required Decrypt operation. Both checks are independent. An explicit Deny at either gate blocks the request. S3 access and KMS key access must both succeed; diagnose their separate access errors. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 10,
+      "title": "Secrets Manager rotation workflow",
+      "visual_overview": "This slide explains secrets manager rotation workflow by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "Start at the central Secrets Manager version labels. Step one creates an AWSPENDING credential while AWSCURRENT still identifies the active credential. The rotation Lambda or supported managed rotation then updates the target database or service. Step three tests whether the pending credential works. Step four promotes the successful version to AWSCURRENT; the old credential can remain available for a controlled fallback. Application clients and connection pools must also refresh.",
+        "Distinguish permission, security and operational responsibilities",
+        "Rotation needs target updates, testing, promotion and application refresh; it is not universal by default."
+      ],
+      "visual_example": "Start at the central Secrets Manager version labels. Step one creates an AWSPENDING credential while AWSCURRENT still identifies the active credential. The rotation Lambda or supported managed rotation then updates the target database or service. Step three tests whether the pending credential works. Step four promotes the successful version to AWSCURRENT; the old credential can remain available for a controlled fallback. Application clients and connection pools must also refresh.",
+      "visual_synthesis": "Rotation needs target updates, testing, promotion and application refresh; it is not universal by default.",
+      "narration": "This slide explains secrets manager rotation workflow through the actual architecture shown. Start at the central Secrets Manager version labels. Step one creates an AWSPENDING credential while AWSCURRENT still identifies the active credential. The rotation Lambda or supported managed rotation then updates the target database or service. Step three tests whether the pending credential works. Step four promotes the successful version to AWSCURRENT; the old credential can remain available for a controlled fallback. Application clients and connection pools must also refresh. Rotation needs target updates, testing, promotion and application refresh; it is not universal by default. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 11,
+      "title": "Parameter Store versus Secrets Manager",
+      "visual_overview": "This slide explains parameter store versus secrets manager by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "The central decision asks whether the value is configuration or a credential. The left panel shows Parameter Store with hierarchical names, such as slash prod slash api slash endpoint, and KMS-encrypted SecureString for suitable sensitive configuration. The right panel shows Secrets Manager for credentials with supported managed or Lambda rotation and optional cross-Region replication. A SecureString is encrypted, but encryption alone does not update the target service or rotate a password. Both services need scoped access.",
+        "Distinguish permission, security and operational responsibilities",
+        "Choose by value type and lifecycle, not simply by encryption capability."
+      ],
+      "visual_example": "The central decision asks whether the value is configuration or a credential. The left panel shows Parameter Store with hierarchical names, such as slash prod slash api slash endpoint, and KMS-encrypted SecureString for suitable sensitive configuration. The right panel shows Secrets Manager for credentials with supported managed or Lambda rotation and optional cross-Region replication. A SecureString is encrypted, but encryption alone does not update the target service or rotate a password. Both services need scoped access.",
+      "visual_synthesis": "Choose by value type and lifecycle, not simply by encryption capability.",
+      "narration": "This slide explains parameter store versus secrets manager through the actual architecture shown. The central decision asks whether the value is configuration or a credential. The left panel shows Parameter Store with hierarchical names, such as slash prod slash api slash endpoint, and KMS-encrypted SecureString for suitable sensitive configuration. The right panel shows Secrets Manager for credentials with supported managed or Lambda rotation and optional cross-Region replication. A SecureString is encrypted, but encryption alone does not update the target service or rotate a password. Both services need scoped access. Choose by value type and lifecycle, not simply by encryption capability. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    }
+  ]
+}
