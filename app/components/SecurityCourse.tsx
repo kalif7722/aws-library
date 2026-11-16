@@ -1,13 +1,12 @@
 'use client';
 import {Fragment,useEffect,useRef,useState} from 'react';
 import type {CSSProperties} from 'react';
-import {ArrowRight,BookOpen,GraduationCap,Layers,ShieldCheck} from 'lucide-react';
+import {ArrowRight,BookOpen,GraduationCap,Layers,ShieldCheck,Compass,KeyRound,Clock3,UsersRound,HardDrive,LockKeyhole,KeyRound as KmsKey,DatabaseBackup,FileKey2,Network,ShieldAlert,ServerCog,BrainCircuit,ScrollText,ScanEye,SearchCheck,Settings2,Siren,Building2,Workflow,ClipboardCheck} from 'lucide-react';
 import plan from '../courses/aws-security-specialty/visual-plan.json';
-import {architectureModuleTile} from './ArchitectureModuleTiles';
 import './AifVisualCourse.css';
-import './ArchitectureModuleTiles.css';
 import './SaaVisualCourse.css';
 import './CourseStudyTools.css';
+import './SecurityModuleCards.css';
 import CourseSearch from './CourseSearch';
 import {CourseProgress,StudyStatus,useStudyProgress} from './StudyProgress';
 
@@ -15,6 +14,8 @@ type Lesson={id:string;title:string;summary:string;asset:string;status:string;te
 type LearningStage={number:number;title:string;description:string;startLessonId:string;lessonCount:number};
 type Module={id:string;title:string;scope:string;lessons:Lesson[];learningStages?:LearningStage[]};
 const modules:Module[]=plan.modules.map(m=>({id:m.id,title:m.title,scope:m.description,lessons:m.slides.map(s=>({id:`scs-${m.id}-${s.number}`,title:s.title,summary:'',asset:s.src,status:s.status,terms:s.title}))}));
+const securityIcons=[Compass,KeyRound,Clock3,UsersRound,HardDrive,LockKeyhole,KmsKey,DatabaseBackup,FileKey2,Network,ShieldAlert,ServerCog,BrainCircuit,ScrollText,ScanEye,SearchCheck,Settings2,Siren,Building2,Workflow,ClipboardCheck];
+const securityAccents=['#71849a','#6f66eb','#169dc5','#9b54c9','#dd8535','#258e95','#8064df','#29977c','#b47827','#2f6fdd','#d45161','#4880a6','#9d5cc8','#327d95','#2da28b','#c05b50','#6080ac','#dc7841','#875cc2','#398c87','#c17d37'];
 const base='/courses/aws-security-specialty/visual/module-';
 const courseItems=modules.flatMap(m=>(m.lessons||[]).map(l=>({id:l.id,title:l.title,moduleTitle:`Module ${m.id} · ${m.title}`,href:`${base}${m.id}?lesson=${encodeURIComponent(l.id)}`,terms:`${l.summary} ${m.title}`})));
 const progressItems=courseItems.map(x=>({id:x.id,moduleId:x.moduleTitle,title:x.title,href:x.href}));
@@ -24,8 +25,8 @@ export function SecurityOverview(){
  const available=modules.reduce((n,m)=>n+(m.lessons?.length||0),0);
  return <main className="aif-course"><section className="aif-hero"><div><p className="aif-eyebrow">VISUAL LEARNING PATH · AWS SCS-C03</p><h1>Understand the control.<br/>Follow the security decision.</h1><p className="aif-hero-copy">Explore AWS security through visual lessons, architecture examples and practical permission decisions.</p><a className="aif-hero-action" href={`${base}00`}>Explore the learning path <ArrowRight size={17}/></a></div><div><img className="aif-hero-badge" src="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-certification-badges/security-specialty.png" alt="AWS Certified Security Specialty badge"/><div className="aif-hero-stats"><div><Layers/><strong>{modules.length}</strong><span>learning modules</span></div><div><BookOpen/><strong>{available}</strong><span>visual lessons available</span></div><div><ShieldCheck/><strong>SCS-C03</strong><span>exam objectives</span></div><div><GraduationCap/><strong>Study</strong><span>track each slide</span></div></div></div></section>
  <nav className="aif-quicknav" aria-label="Course navigation"><a href="#learning-path">Learning modules</a><a href="https://docs.aws.amazon.com/pdfs/aws-certification/latest/security-specialty-03/security-specialty-03.pdf" target="_blank" rel="noreferrer">Official exam guide ↗</a><a href="/courses/aws-security-specialty/exam-objectives">Exam objectives</a><a href="/courses/aws-security-specialty/services">Services reference</a><CourseSearch items={courseItems}/><CourseProgress course="scs" lessons={progressItems}/></nav>
- <section className="aif-section-heading" id="learning-path"><div><p className="aif-eyebrow">ONE CONNECTED ARCHITECTURE JOURNEY</p><h2>Your learning path</h2><p>Follow 21 sequenced modules from foundational decisions through IAM, data protection, network security, detection, incident response and integrated case studies. Visuals appear in each module as they pass review.</p></div><span className="aif-path-tag">Understand · Compare · Apply</span></section>
- <div className="aif-module-grid architecture-module-grid">{modules.map(m=>{const {Icon:DefaultIcon,accent}=architectureModuleTile('saa',m.id);const Icon=m.id==='03'?ShieldCheck:DefaultIcon;return <a key={m.id} href={`${base}${m.id}`} className="aif-module-card" style={{'--aif-accent':accent} as CSSProperties}><div className="aif-card-top"><span className="aif-module-icon"><Icon size={27} strokeWidth={1.7}/></span><span>MODULE {m.id}</span></div><h3>{m.title}</h3><p>{m.scope}</p><div className="aif-card-meta"><span>{m.lessons?.length?`${m.lessons.length} available`:'In preparation'}</span></div><div className="aif-card-footer">Explore topics <ArrowRight size={16}/></div></a>})}</div>
+ <section className="aif-section-heading" id="learning-path"><div><p className="aif-eyebrow">ONE CONNECTED ARCHITECTURE JOURNEY</p><h2>Your learning path</h2><p>Start with security fundamentals and IAM, then learn encryption, networking, detection, incident response and real AWS security architectures.</p></div><span className="aif-path-tag">Understand · Compare · Apply</span></section>
+ <div className="aif-module-grid security-module-grid">{modules.map(m=>{const index=Number(m.id);const Icon=securityIcons[index]||ShieldCheck;const accent=securityAccents[index%securityAccents.length];return <a key={m.id} href={`${base}${m.id}`} className="aif-module-card security-module-card" style={{'--aif-accent':accent} as CSSProperties}><div className="aif-card-top"><span className="aif-module-icon"><Icon size={27} strokeWidth={1.7}/></span><span>MODULE {m.id}</span></div><h3>{m.title}</h3><p>{m.scope}</p><div className="aif-card-meta"><span>{m.lessons?.length?`${m.lessons.length} visuals available`:'Visuals in preparation'}</span></div><div className="aif-card-footer">Explore topics <ArrowRight size={16}/></div></a>})}</div>
 </main>;
 }
 
