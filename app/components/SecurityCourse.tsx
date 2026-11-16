@@ -13,7 +13,7 @@ import {CourseProgress,StudyStatus,useStudyProgress} from './StudyProgress';
 type Lesson={id:string;title:string;summary:string;asset:string;status:string;terms:string};
 type LearningStage={number:number;title:string;description:string;startLessonId:string;lessonCount:number};
 type Module={id:string;title:string;scope:string;lessons:Lesson[];learningStages?:LearningStage[]};
-const modules:Module[]=plan.modules.map(m=>({id:m.id,title:m.title,scope:m.description,lessons:m.slides.map(s=>({id:`scs-${m.id}-${s.number}`,title:s.title,summary:'',asset:s.src,status:s.status,terms:s.title}))}));
+const modules:Module[]=plan.modules.map(m=>({id:m.id,title:m.title,scope:m.description,lessons:m.slides.map(s=>({id:('lessonId' in s&&typeof s.lessonId==='string'?s.lessonId:`scs-${m.id}-${s.number}`),title:s.title,summary:'',asset:s.src,status:s.status,terms:s.title}))}));
 const securityIcons=[Compass,KeyRound,Clock3,UsersRound,HardDrive,LockKeyhole,KmsKey,DatabaseBackup,FileKey2,Network,ShieldAlert,ServerCog,BrainCircuit,ScrollText,ScanEye,SearchCheck,Settings2,Siren,Building2,Workflow,ClipboardCheck];
 const securityAccents=['#71849a','#6f66eb','#169dc5','#9b54c9','#dd8535','#258e95','#8064df','#29977c','#b47827','#2f6fdd','#d45161','#4880a6','#9d5cc8','#327d95','#2da28b','#c05b50','#6080ac','#dc7841','#875cc2','#398c87','#c17d37'];
 const base='/courses/aws-security-specialty/visual/module-';
