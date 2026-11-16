@@ -1,0 +1,52 @@
+name: Map uploaded SAP M02 slides 27-32
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/append_sap_m02_slides_27_32.py"
+      - ".github/workflows/map-sap-m02-slides-27-32.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: map-sap-m02-uploaded-slides
+  cancel-in-progress: false
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate six uploaded WebPs and update Module 02 lesson JSON
+        run: |
+          python -m pip install --disable-pip-version-check "Pillow>=10,<13"
+          python scripts/append_sap_m02_slides_27_32.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("app/courses/aws-solutions-architect-professional/visual-lesson-map.json")
+          lessons=json.loads(p.read_text())["lessonsByModule"]["02"]
+          assert len(lessons)==32
+          assert [x["sequence"] for x in lessons]==list(range(1,33))
+          for n in range(27,33):
+            x=lessons[n-1]
+            assert x["id"]==f"sap-02-{n:03d}" and x["status"]=="qa-passed"
+          print("PASS: all 32 mapped in intended order")
+          PY
+      - name: Commit map changes only if required
+        run: |
+          set -euo pipefail
+          git add app/courses/aws-solutions-architect-professional/visual-lesson-map.json
+          if git diff --cached --quiet; then echo "Already mapped"; exit 0; fi
+          git diff --cached --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Publish SAP Module 02 uploaded slides 27-32 in course map"
+          git pull --rebase origin main
+          git push origin HEAD:main
