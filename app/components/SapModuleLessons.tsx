@@ -8,12 +8,32 @@ import {StudyStatus,useStudyProgress} from './StudyProgress';
 
 type Lesson={id:string;moduleId:string;sequence:number;title:string;asset:string|null;status:string;learningNotes:string[];decisionCue:string;examSkills:string[]};
 const lessonsByModule=plan.lessonsByModule as Record<string,Lesson[]>;
+// Safeguard for the six approved, uploaded SAP M02 visuals. This also keeps older
+// cached course-map builds from silently hiding the newly published images.
+const M02_ADDITIONS:Lesson[]=[
+  {id:'sap-02-027',title:'AWS Control Tower — Drift Detection and Remediation'},
+  {id:'sap-02-028',title:'CloudFormation StackSets Across Accounts and Regions'},
+  {id:'sap-02-029',title:'AWS Budgets, Cost Categories and Cost Allocation'},
+  {id:'sap-02-030',title:'AWS Account Lifecycle and Closure'},
+  {id:'sap-02-031',title:'Control Tower — Landing-Zone Updates and Account Enrollment'},
+  {id:'sap-02-032',title:'Multi-Account Governance — Troubleshooting Example'}
+].map((x,i)=>({...x,moduleId:'02',sequence:i+27,asset:`/course-visuals/sap-c03/module-02/slide-${i+27}.webp`,status:'qa-passed',learningNotes:[],decisionCue:'Follow the pictured governance architecture and validate its effective controls.',examSkills:[]}));
+function publishedModuleLessons(moduleId:string):Lesson[]{
+ const existing=lessonsByModule[moduleId]||[];
+ if(moduleId!=='02')return existing;
+ const bySequence=new Map(existing.map(l=>[l.sequence,l]));
+ for(const addition of M02_ADDITIONS){
+   const old=bySequence.get(addition.sequence);
+   if(!old||!old.asset||old.status!=='qa-passed')bySequence.set(addition.sequence,addition);
+ }
+ return [...bySequence.values()].sort((a,b)=>a.sequence-b.sequence);
+}
 
 export default function SapModuleLessons({moduleId}:{moduleId:string}){
- const own=lessonsByModule[moduleId]||[];
+ const own=publishedModuleLessons(moduleId);
  const [availableOnly,setAvailableOnly]=useState(false),[query,setQuery]=useState(''),[active,setActive]=useState<number|null>(null);
  const opener=useRef<HTMLElement|null>(null),dialog=useRef<HTMLDivElement|null>(null);
- const visuals=own.filter(l=>l.asset&&l.status==='qa-passed');const imageUrl=(asset:string)=>moduleId==='00'?`${asset}?v=sap-m00-cover-v2`:asset;const study=useStudyProgress('sap',active===null?null:visuals[active]?.id||null);
+ const visuals=own.filter(l=>l.asset&&l.status==='qa-passed');const imageUrl=(asset:string)=>moduleId==='00'?`${asset}?v=sap-m00-cover-v2`:moduleId==='02'?`${asset}?v=sap-m02-approved-32`:asset;const study=useStudyProgress('sap',active===null?null:visuals[active]?.id||null);
  useEffect(()=>{const lesson=new URLSearchParams(window.location.search).get('lesson');const index=visuals.findIndex(l=>l.id===lesson);if(index>=0)setActive(index)},[moduleId]);
  useEffect(()=>{if(active===null)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape'){setActive(null);opener.current?.focus()}if(e.key==='ArrowRight'){e.preventDefault();setActive(n=>n===null?n:Math.min(visuals.length-1,n+1))}if(e.key==='ArrowLeft'){e.preventDefault();setActive(n=>n===null?n:Math.max(0,n-1))}if(e.key==='Tab'){const buttons=Array.from(dialog.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')??[]);const first=buttons[0],last=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}};document.addEventListener('keydown',onKey);return()=>{document.body.style.overflow=previous;document.removeEventListener('keydown',onKey)}},[active,visuals.length]);
  const shown=own.filter(l=>(!availableOnly||l.asset)&&`${l.title} ${(l.learningNotes||[]).join(' ')} ${l.decisionCue||''}`.toLowerCase().includes(query.toLowerCase()));
