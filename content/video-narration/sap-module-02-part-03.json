@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "02",
+  "module_title": "Multi-Account Governance and Landing Zones",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-02",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original 2048x1152 SAP Module 02 WebP slides 09–22 visually inspected. Each scene follows displayed system flow, examples and operational constraints.",
+  "part_id": "03",
+  "part_title": "Policy Exceptions, Audit Evidence and Security Data Pipelines",
+  "output_prefix": "sap-module-02-part-03",
+  "script_revision": "2026-11-16-sap-m02-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "Policy inheritance and exception design",
+      "visual_overview": "A root SCP flows down through security, production and sandbox OUs, while exceptions require changes at the governing policy level.",
+      "visual_walkthrough": [
+        "Follow the root baseline that blocks disabling CloudTrail into the Security and Workloads OUs",
+        "The production branch adds its own regional restriction; the sandbox inherits the root protection",
+        "A lower-level IAM Allow cannot defeat an explicit Deny inherited from the root",
+        "The right-side example describes an approved pipeline exception: change the restrictive policy's scope or conditions at the source, with security approval, rather than adding an Allow beneath it",
+        "The bottom sequence tests the change with policy simulation, representative real API calls and CloudTrail review before approval.",
+        "Conclude: Exceptions require scoped changes to the controlling guardrail, validated through tests and review."
+      ],
+      "visual_example": "Follow the root baseline that blocks disabling CloudTrail into the Security and Workloads OUs. The production branch adds its own regional restriction; the sandbox inherits the root protection. A lower-level IAM Allow cannot defeat an explicit Deny inherited from the root. The right-side example describes an approved pipeline exception: change the restrictive policy's scope or conditions at the source, with security approval, rather than adding an Allow beneath it. The bottom sequence tests the change with policy simulation, representative real API calls and CloudTrail review before approval.",
+      "visual_synthesis": "Exceptions require scoped changes to the controlling guardrail, validated through tests and review.",
+      "narration": "This slide teaches how AWS Organizations guardrails are inherited and how to design exceptions without weakening the whole organization. Start at the top with the organization root SCP denying attempts to disable CloudTrail. Follow the branching lines into the Security OU and the Workloads OU. Production inherits the root Deny and adds a separate restriction, such as limiting approved Regions; sandbox inherits the root baseline without the production-specific rule. Now read the red callout on the right. A child OU or IAM policy cannot cancel an explicit Deny attached higher in the hierarchy. If a production pipeline has a legitimate exception, the governing policy must be redesigned with a narrowly scoped condition or attachment, subject to review. The bottom four-step sequence validates the proposed change with policy simulation, real API tests, CloudTrail evidence and security approval. Remember that the management account is outside SCP enforcement. The architectural goal is consistent protection with carefully governed exceptions, not a collection of broad administrator overrides."
+    },
+    {
+      "slide": 10,
+      "title": "Organization CloudTrail and protected log archive",
+      "visual_overview": "A single organization trail gathers management events and selected data events across member accounts into a protected central S3 log archive.",
+      "visual_walkthrough": [
+        "The left panel shows an organization trail created by an authorized administrator",
+        "Member accounts, future accounts, multiple Regions and relevant global service events feed the central archive",
+        "Management events are a core audit stream; S3 and Lambda data events require explicit selection and may increase volume and cost",
+        "In the log archive account, a bucket policy, SSE-KMS, versioning and optional Object Lock limit tampering while allowing delivery and auditor access",
+        "Alerts can integrate CloudWatch or EventBridge; CloudTrail records events but does not prevent them.",
+        "Conclude: Use an organization trail for durable centralized evidence, separate from per-account event history and preventive controls."
+      ],
+      "visual_example": "The left panel shows an organization trail created by an authorized administrator. Member accounts, future accounts, multiple Regions and relevant global service events feed the central archive. Management events are a core audit stream; S3 and Lambda data events require explicit selection and may increase volume and cost. In the log archive account, a bucket policy, SSE-KMS, versioning and optional Object Lock limit tampering while allowing delivery and auditor access. Alerts can integrate CloudWatch or EventBridge; CloudTrail records events but does not prevent them.",
+      "visual_synthesis": "Use an organization trail for durable centralized evidence, separate from per-account event history and preventive controls.",
+      "narration": "This architecture shows how to collect durable audit evidence across an AWS organization. Start on the upper left, where an authorized management or delegated CloudTrail administrator configures an organization trail. The central panels show current member accounts, a future account and activity from multiple AWS Regions. Management events are recorded, while high-volume data events, such as S3 object or Lambda invocation events, must be selected explicitly when needed. Follow the flow into the green log archive account. Its S3 bucket receives the organization trail, protected by delivery permissions, encryption through KMS where configured, versioning and optional S3 Object Lock retention. Notice the red arrow: member-account operators should not be able to tamper with the central archive. On the right, CloudWatch or EventBridge can alert on delivery and other signals, while a security read role enables audit review. At the bottom, distinguish CloudTrail Event History, which is limited and account-scoped, from a durable organization trail. CloudTrail records what happened; it doesn't itself block an API call."
+    },
+    {
+      "slide": 11,
+      "title": "AWS Config aggregation across accounts",
+      "visual_overview": "Member-account Config recorders and rules feed configuration and compliance metadata to an organization aggregator, with separate S3 delivery of full history.",
+      "visual_walkthrough": [
+        "On the left, account A and B record resources in one Region while account C records another Region",
+        "Each enabled recorder evaluates Config rules or conformance packs",
+        "The central delegated administrator account uses an organization aggregator to give a cross-account, multi-Region read-only view of resources and noncompliant rules",
+        "It does not enable member recorders, change resources or automatically remediate findings",
+        "The lower archive account receives separately delivered configuration history in S3",
+        "Conclude: Aggregate visibility only after recorder and rules coverage is configured, and explicitly build remediation workflows."
+      ],
+      "visual_example": "On the left, account A and B record resources in one Region while account C records another Region. Each enabled recorder evaluates Config rules or conformance packs. The central delegated administrator account uses an organization aggregator to give a cross-account, multi-Region read-only view of resources and noncompliant rules. It does not enable member recorders, change resources or automatically remediate findings. The lower archive account receives separately delivered configuration history in S3. The dashboard sample highlights an S3 public bucket finding and a separate investigation-and-fix loop.",
+      "visual_synthesis": "Aggregate visibility only after recorder and rules coverage is configured, and explicitly build remediation workflows.",
+      "narration": "This slide shows how AWS Config provides organization-wide compliance visibility. Begin at the left in three member accounts spanning two Regions. Each account needs an enabled AWS Config recorder and applicable rules or conformance packs for the resources you want evaluated. Follow the blue arrows to the organization aggregator in the delegated administrator account. Its job is to collect configuration and compliance metadata for a centralized, read-only view, not to start recording in every account. The console example at the lower right shows resource totals and a noncompliant S3 bucket. A security team can investigate the account and Region from this shared view. Now follow the separate dashed delivery path into the log archive account. Full configuration history and snapshots are stored through the configured S3 delivery channel, not through the aggregator itself. Finally, the bottom remediation flow is independent: investigate, change the bucket configuration and re-evaluate the rule. Config findings detect posture problems; they do not automatically deny or repair the original action."
+    },
+    {
+      "slide": 12,
+      "title": "GuardDuty and Security Hub organization view",
+      "visual_overview": "Telemetry from enrolled accounts is analyzed by GuardDuty, then findings reach Security Hub for aggregation, prioritization and optional response automation.",
+      "visual_walkthrough": [
+        "Left-side member accounts provide sources such as CloudTrail events, VPC flow metadata, DNS and supported workload signals",
+        "GuardDuty detects suspicious behavior and produces threat findings",
+        "Security Hub receives GuardDuty and other integrated findings, evaluates standards and displays a delegated-admin organization view",
+        "Cross-Region aggregation requires appropriately configured aggregation Regions",
+        "EventBridge can route findings to Lambda, CloudWatch or incident systems, but neither detection service inherently remediates.",
+        "Conclude: GuardDuty detects potential threats; Security Hub manages posture and findings; responses require explicit automation and service coverage."
+      ],
+      "visual_example": "Left-side member accounts provide sources such as CloudTrail events, VPC flow metadata, DNS and supported workload signals. GuardDuty detects suspicious behavior and produces threat findings. Security Hub receives GuardDuty and other integrated findings, evaluates standards and displays a delegated-admin organization view. Cross-Region aggregation requires appropriately configured aggregation Regions. EventBridge can route findings to Lambda, CloudWatch or incident systems, but neither detection service inherently remediates.",
+      "visual_synthesis": "GuardDuty detects potential threats; Security Hub manages posture and findings; responses require explicit automation and service coverage.",
+      "narration": "This slide distinguishes two security services that often appear together in professional architecture scenarios. On the left, member accounts and Regions produce telemetry such as CloudTrail activity, VPC flow and DNS information, plus supported S3 or EKS signals. Follow the arrow into GuardDuty: it analyzes available telemetry and creates findings for potential threats, such as suspicious API usage or exfiltration. The next arrow takes those findings into Security Hub. Security Hub aggregates findings from GuardDuty and other integrated services and evaluates enabled security controls and standards. The center panel shows a delegated administrator providing a broader organization view, with a home Region and linked Regions when cross-Region aggregation is configured. Move to the right: EventBridge can route selected findings to Lambda, notifications or incident systems. That response needs deliberate rules and permissions. Finally, read the comparison table. GuardDuty primarily detects threats; Security Hub focuses on security posture and finding management. Neither automatically repairs every finding, and their account and Region coverage must be configured."
+    },
+    {
+      "slide": 13,
+      "title": "Amazon Security Lake and security data pipelines",
+      "visual_overview": "Multi-account security records are normalized to OCSF and stored in Region-specific S3 data lakes, then shared with authorized query and analytics subscribers.",
+      "visual_walkthrough": [
+        "CloudTrail, VPC Flow Logs, DNS activity, Security Hub findings and supported partner feeds enter the delegated administrator's Security Lake",
+        "The central pipeline ingests and normalizes into OCSF schema, stores data in the selected Regions using S3, and applies retention and access controls",
+        "Athena subscribers query approved tables; an external SIEM can receive governed data access",
+        "KMS, lifecycle, subscriber permissions and data residency still matter.",
+        "Conclude: Security Lake centralizes normalized security evidence; it complements rather than replaces GuardDuty detection and Security Hub posture management."
+      ],
+      "visual_example": "CloudTrail, VPC Flow Logs, DNS activity, Security Hub findings and supported partner feeds enter the delegated administrator's Security Lake. The central pipeline ingests and normalizes into OCSF schema, stores data in the selected Regions using S3, and applies retention and access controls. Athena subscribers query approved tables; an external SIEM can receive governed data access. KMS, lifecycle, subscriber permissions and data residency still matter.",
+      "visual_synthesis": "Security Lake centralizes normalized security evidence; it complements rather than replaces GuardDuty detection and Security Hub posture management.",
+      "narration": "This diagram introduces Amazon Security Lake as a centralized security-data platform rather than a threat detector. Start with the member accounts on the left. CloudTrail events, VPC Flow Logs, Route 53 Resolver DNS data, Security Hub findings and other supported sources feed the configured data lake. Follow the gold arrow into the delegated administrator's Security Lake pipeline. It ingests records, normalizes supported data into the Open Cybersecurity Schema Framework, and stores it in Amazon S3 in the chosen Regions. The storage is governed through encryption, lifecycle policies and permissions, and data-residency choices matter because these are regional lakes. To the right are two subscriber types. An approved query subscriber can analyze data through Athena, while a permitted data-access subscriber can use governed sharing for an external SIEM or analytics platform. The bottom panels emphasize that you must select accounts, Regions, sources and retention deliberately. Security Lake improves centralized analytics and evidence access, but it doesn't replace GuardDuty for threat detection or Security Hub for posture findings."
+    },
+    {
+      "slide": 14,
+      "title": "CloudWatch Logs and AI invocation evidence",
+      "visual_overview": "An application invoking Bedrock creates three distinct evidence streams: application logs, explicitly configured model invocation logging and CloudTrail API events.",
+      "visual_walkthrough": [
+        "The left workload sends a model invocation with an application correlation ID, then optionally logs request metadata to CloudWatch",
+        "The central Bedrock invocation can emit invocation records when logging is configured, with content only where supported and enabled",
+        "The CloudTrail stream records API call metadata such as who called the service and when, not prompts and generated text by default",
+        "The three evidence streams can be linked by an application-implemented correlation identifier; destination, privacy and Region controls are independent.",
+        "Conclude: Separate service API activity from model content and application context; configure correlation, redaction, retention and access explicitly."
+      ],
+      "visual_example": "The left workload sends a model invocation with an application correlation ID, then optionally logs request metadata to CloudWatch. The central Bedrock invocation can emit invocation records when logging is configured, with content only where supported and enabled. The CloudTrail stream records API call metadata such as who called the service and when, not prompts and generated text by default. The three evidence streams can be linked by an application-implemented correlation identifier; destination, privacy and Region controls are independent.",
+      "visual_synthesis": "Separate service API activity from model content and application context; configure correlation, redaction, retention and access explicitly.",
+      "narration": "This slide explains three kinds of evidence produced when an application invokes an Amazon Bedrock model. Start on the left with the workload in Account A. The application sends a request to Bedrock, and in this example it implements a correlation identifier so operators can link related events. The first panel is application logging: the workload can record request IDs, model identifiers and deliberately redacted business context in CloudWatch Logs. The second panel is Bedrock model invocation logging. When supported and explicitly enabled, it can deliver configured invocation records, potentially including prompts and responses, to selected log destinations such as CloudWatch or S3. The third panel is CloudTrail, which records relevant API events, caller identity, timestamps and request metadata; it does not automatically contain the entire prompt and response body. The privacy strip at the bottom applies across all three: minimize sensitive data, encrypt the destinations, set retention periods and control cross-account access. A shared correlation ID only works when your application implements it. Do not assume these logs are interchangeable."
+    }
+  ]
+}
