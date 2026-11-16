@@ -4,15 +4,21 @@ on:
     branches: [main]
     paths:
       - "content/video-narration/sap-module-00-part-01.json"
+      - ".github/workflows/render-sap-m00-part-01.yml"
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Install approved SAP M00 cover and queue replacement video"]
+    types: [completed]
+    branches: [main]
 permissions:
   contents: read
 concurrency:
-  group: sap-m00-part-01-visualfirst-v1
+  group: sap-m00-part-01-visualfirst-v2
   cancel-in-progress: false
 jobs:
   render:
     name: SAP M00 Part 01 — guided original visuals
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
