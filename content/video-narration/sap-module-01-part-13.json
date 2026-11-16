@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Each of the approved high-resolution SAP Module 01 slides 46–52 (slide-NN-v2.webp) inspected directly; narration traces the actual panels and comparisons.",
+  "part_id": "13",
+  "part_title": "STS Session Types, IAM Conditions and Managed-Policy Boundaries",
+  "output_prefix": "sap-module-01-part-13",
+  "script_revision": "2026-11-16-sap-m01-p13-approved-v2-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 49,
+      "title": "STS APIs create different kinds of temporary sessions",
+      "visual_overview": "Three columns distinguish normal role assumption, SAML/OIDC federation, and IAM user or federation broker credential requests.",
+      "visual_walkthrough": [
+        "AssumeRole checks a trusted role, caller authorization and session restrictions before issuing temporary credentials",
+        "AssumeRoleWithSAML versus AssumeRoleWithWebIdentity accept different trusted assertions or identity tokens",
+        "GetSessionToken gives eligible IAM users temporary credentials; GetFederationToken creates broker-scoped federated-user credentials",
+        "Bottom warns to identify which API and principal issued the session"
+      ],
+      "visual_example": "A cross-account operator commonly uses AssumeRole; an external CI workload with trusted OIDC can use AssumeRoleWithWebIdentity; an eligible IAM user may use GetSessionToken for a temporary MFA-aware session.",
+      "visual_synthesis": "Temporary credentials share an expiration mechanism but differ in identity, trust, allowed API operations and effective authorization.",
+      "narration": "This slide organizes AWS STS APIs by the kind of identity creating the session. Begin on the left with AssumeRole. A caller requests an IAM role, and AWS evaluates the caller's authorization, the role's trust policy and relevant conditions before issuing temporary credentials. This is common for cross-account administration and workload delegation. The middle column shows two federation APIs. AssumeRoleWithSAML accepts an eligible signed SAML assertion from a configured federation provider, while AssumeRoleWithWebIdentity accepts a supported OIDC or web identity token. The role trust should verify the intended issuer, audience and subject where supported; a signed token alone does not grant AWS authority. On the right, GetSessionToken provides temporary credentials to eligible IAM users, including supported MFA context. GetFederationToken instead supports a broker-created federated-user session with its own authorization and policy constraints. These aren't interchangeable methods just because every result contains an access key, secret key and session token. For an exam scenario, start with who the caller is and how the identity is trusted. Then select the appropriate STS API and analyze the session's effective permissions and lifespan."
+    },
+    {
+      "slide": 50,
+      "title": "Policy conditions: choose the operator and context key",
+      "visual_overview": "The slide shows value-type matching, supported policy variables, and explicit evaluation of missing request context keys.",
+      "visual_walkthrough": [
+        "Left: StringEquals, StringLike, numeric, date, Boolean, IP and ARN operators compare different value types",
+        "Middle: variable interpolation draws from available caller identity and request context, which can differ between IAM users and role sessions",
+        "Right: Null, IfExists and negated operators change behavior when a context key is absent",
+        "Bottom emphasizes that operator, context key and missing-key behavior form one security decision"
+      ],
+      "visual_example": "A StringEquals condition requiring aws:SourceVpce only matches when that network context is present and correct; requests without it need separate analysis rather than assuming a match.",
+      "visual_synthesis": "Write and test IAM conditions against actual context keys for all supported callers, request paths and absent-key cases.",
+      "narration": "This diagram explains why IAM conditions need more care than just putting a name in a JSON statement. Read the three columns in order. On the left, condition operators match different kinds of values. StringEquals and StringLike compare strings; numeric, date, Boolean, IP address and ARN operators handle other request data. Using the wrong operator or an unsupported context key can silently make a statement fail to match. The middle panel shows policy variables. They can insert values such as a principal tag or supported username into a resource or condition, but those fields are not guaranteed for every principal. An assumed-role session may not have the same context as an IAM user. On the right, the slide compares a request with a key present against one without it. Null can explicitly check key presence, while IfExists and negated forms have distinct missing-key behavior that must be understood for Allow and Deny statements. The practical example is a VPC endpoint condition: if SourceVpce is absent, don't pretend it matches your approved endpoint. Test both the expected path and the missing-context path. A sound IAM boundary depends on the operator, the chosen condition key, and its behavior when that key is absent."
+    },
+    {
+      "slide": 51,
+      "title": "Tag set operators do not automatically require every tag",
+      "visual_overview": "The left diagram compares ForAllValues and ForAnyValue set matching; the right panels address mandatory tag presence and tag lifecycle authorization.",
+      "visual_walkthrough": [
+        "ForAllValues checks every provided multivalue request element while ForAnyValue checks for at least one matching element",
+        "An allowed aws:TagKeys list alone does not enforce the presence of specific aws:RequestTag values",
+        "ForAllValues may evaluate true when the key is missing; combine presence checks and required-tag conditions",
+        "Protect who can add, edit or remove ABAC-relevant identity and resource tags"
+      ],
+      "visual_example": "An account policy allowing only Project and CostCenter as tag names does not necessarily require that both tags are supplied; separate conditions must enforce mandatory values and the ability to change those tags.",
+      "visual_synthesis": "Allowed tag names, mandatory tag presence and permission to mutate trusted attributes require different IAM controls.",
+      "narration": "This slide addresses a subtle tag-policy mistake. Start on the left with the set operators. ForAllValues tests whether every supplied value in a multivalued request key satisfies the policy comparison; ForAnyValue tests whether at least one supplied value matches. These operators are useful for multivalued keys such as aws TagKeys, but they do not independently enforce that a request included every required tag. Move to the top-right panel. A condition limiting submitted tag names to Project and CostCenter may allow only approved keys, yet it does not prove the request supplied both tags with approved values. You need suitable presence and explicit aws RequestTag conditions for each mandatory attribute. Be especially careful because ForAllValues can evaluate true when the key is absent, depending on the rest of the statement; a Null check can close that gap. Finally, look at the lower-right tag lifecycle diagram. Even strong creation-time requirements are ineffective if a user can later rewrite or remove the security-relevant tags. Restrict tagging operations and trusted principal attributes used for ABAC. The architectural lesson is that approved keys, mandatory tags and authorization to modify them are three different controls."
+    },
+    {
+      "slide": 52,
+      "title": "Managed policies: broad access is not an explicit deny",
+      "visual_overview": "Three comparisons show AdministratorAccess as a broad IAM grant, PowerUserAccess as a managed policy with exceptions, and NotAction as an action selector rather than a Deny.",
+      "visual_walkthrough": [
+        "AdministratorAccess identity-policy Allow remains constrained by SCP/RCP, boundaries, resource rules and explicit denies",
+        "PowerUserAccess allows broad service use while limiting identity/account-management operations according to the live managed policy version",
+        "NotAction selects the complement of named actions but relies on its statement's Effect to determine Allow or Deny",
+        "Bottom conclusion: evaluate effect, selected actions and all applicable authorization boundaries together"
+      ],
+      "visual_example": "An IAM administrator with AdministratorAccess may still be denied by an applicable Organizations SCP, while a NotAction clause inside an Allow statement does not itself deny the excluded actions.",
+      "visual_synthesis": "No AWS-managed policy name proves final access; the entire evaluation context, current policy version and statement Effect determine authorization.",
+      "narration": "This final slide compares two broad AWS managed policies and one often misunderstood policy element. In the left panel, AdministratorAccess grants very broad identity permissions. That does not remove AWS Organizations controls, resource policies, permission boundaries or explicit Deny statements. A member account administrator may still be unable to perform an operation blocked by an applicable SCP. The center panel describes PowerUserAccess. It generally enables broad use of AWS services while limiting certain identity and account administrative actions, but the exact exclusions can change with the managed policy version. For professional-level architecture questions, inspect the current policy rather than memorizing an old list. On the right, NotAction is only an action-selection mechanism. It selects actions outside a named set within the statement; whether those actions are allowed or denied depends on the statement's Effect and the other applicable policies. A NotAction element in an Allow statement is not itself an explicit Deny. The conclusion at the bottom brings Module 01 together: identify the caller, inspect the exact action selection and Effect, then evaluate every relevant guardrail and permission boundary. Broad access is not unlimited access."
+    }
+  ]
+}
