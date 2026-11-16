@@ -9,7 +9,7 @@ type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
   "00":[{id:"01",title:"SAP-C03 Visual Course Introduction and Architecture Journey",start:1,end:5}],
-  "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4},{id:"02",title:"Effective Permissions — Identity, Resource and Organizational Controls",start:5,end:8},{id:"03",title:"Cross-Account Role Trust, External ID and Service Role Access",start:9,end:13}],
+  "01":[{id:"01",title:"AWS Request Principals, Credentials and Authorization",start:1,end:4},{id:"02",title:"Effective Permissions — Identity, Resource and Organizational Controls",start:5,end:8},{id:"03",title:"Cross-Account Role Trust, External ID and Service Role Access",start:9,end:13},{id:"04",title:"Workforce Federation, Identity Center, SAML, SCIM and OIDC Trust",start:14,end:18},{id:"05",title:"Cognito, OAuth and Tenant-Aware Application Authorization",start:19,end:22}],
 };
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
