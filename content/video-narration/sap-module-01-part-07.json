@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP-C03 Module 01 high-resolution WebP slides 23–30 inspected separately; narrations trace their actual diagrams, comparisons, permissions and security caveats.",
+  "part_id": "07",
+  "part_title": "Cross-Account Patterns, Data Perimeters and IAM Access Analyzer",
+  "output_prefix": "sap-module-01-part-07",
+  "script_revision": "2026-11-16-sap-m01-p07-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 27,
+      "title": "Cross-account resource access: choose the pattern",
+      "visual_overview": "The slide compares two cross-account authorization approaches: assume a role in Account B versus directly authorize Account A's principal using a resource policy.",
+      "visual_walkthrough": [
+        "Left STS role assumption from Account A to Account B with temporary credentials",
+        "Caller identity policy, target role trust, role permissions and optional resource policy checks",
+        "Right direct S3 resource-policy request without role switch",
+        "Cross-account requirements and guardrails listed below each path",
+        "Bottom decision comparison, KMS policy caveat and explicit denies"
+      ],
+      "visual_example": "For broad operations across AWS services, Account A assumes a role in Account B; for an approved S3 object share, Account B can grant Account A's principal access through its bucket policy and applicable caller-side permissions.",
+      "visual_synthesis": "Prefer role assumption for controlled multi-service access, resource policies for supported direct sharing; always evaluate the actual caller and every applicable policy.",
+      "narration": "This slide asks an important SAP-level design question: how should one AWS account access resources belonging to another? The left panel illustrates role assumption. A principal in Account A calls STS AssumeRole, subject to its caller permissions and Account B's role trust policy. STS returns temporary credentials for the target role, and its role permissions control subsequent requests to the resource. An additional resource policy is needed only where the service and access path require it. On the right is direct sharing. An Account A principal makes a request directly to an S3 bucket owned by Account B, with the bucket's resource policy authorizing that caller. The caller's relevant IAM permissions and applicable guardrails must also be considered. Compare the choice boxes along the bottom. Role assumption generally suits broader controlled access across services; direct resource policies suit targeted sharing when the service supports them. The warnings remind us that role trust does not itself grant resource actions, that KMS key policies have separate requirements for encrypted data, and that permission boundaries, Organizations policies and explicit denies can still block the operation. Follow the identity and authorization path, rather than assuming either pattern universally works."
+    },
+    {
+      "slide": 28,
+      "title": "Data perimeter: trusted identity, resource and network",
+      "visual_overview": "An AWS Organizations example uses three preventive IAM-condition gates to limit who accesses S3, which bucket belongs to an approved organization and how a request reaches it.",
+      "visual_walkthrough": [
+        "Trusted organization contains management, production and development accounts",
+        "S3 request from principal enters identity, resource and network gates",
+        "PrincipalOrgID checks trusted calling identity",
+        "ResourceOrgID or ResourceAccount checks target; SourceVpce verifies approved network path",
+        "Bottom three deny scenarios plus caveat on AWS service-initiated calls"
+      ],
+      "visual_example": "A request originating from outside the trusted organization, targeting an unapproved bucket, or arriving outside an approved VPC endpoint can be denied by correctly placed applicable policy conditions.",
+      "visual_synthesis": "A perimeter is a coordinated set of policies, not one feature; test service exceptions and condition-key support before enforcing.",
+      "narration": "This diagram introduces the AWS data perimeter as several security boundaries working together. Start at the AWS Organizations box on the left, containing trusted production and development accounts. A principal issues an S3 GetObject request, which the slide examines through three policy dimensions. The identity gate can use a condition such as aws PrincipalOrgID to distinguish principals belonging to the approved organization. The resource gate can use supported resource organization or account condition keys to restrict destinations. The network gate checks whether the request uses an authorized VPC endpoint, using an appropriate SourceVpce condition. The green result appears only when the applicable policy statements and conditions allow the request. The red examples below show an external principal, an unapproved bucket and an unexpected network path. Notice the right warning: some AWS service-initiated operations do not carry the original request's network context, so a careless blanket condition can break legitimate integrations. Use narrowly scoped exceptions, verify which condition keys are supported for each action, test the actual service calls, and monitor behavior. This is defense in depth, not a replacement for encryption or monitoring."
+    },
+    {
+      "slide": 29,
+      "title": "VPC endpoint policy: an additional authorization filter",
+      "visual_overview": "An EC2 S3 GetObject request traverses an interface or gateway endpoint, whose policy filters calls in addition to IAM and S3 resource authorization.",
+      "visual_walkthrough": [
+        "EC2 workload in private VPC uses IAM role",
+        "S3 interface endpoint or gateway endpoint alternative",
+        "Endpoint policy allows GetObject on approved bucket prefix",
+        "AWS S3 and subsequent IAM and bucket policy checks",
+        "Bottom separates principal permissions, endpoint filter and resource policy; warns different paths bypass this filter"
+      ],
+      "visual_example": "An EC2 role allowed to read S3 can still be blocked through an endpoint if its endpoint policy limits reads to an approved bucket, while a request using a different route does not pass through that endpoint policy.",
+      "visual_synthesis": "Endpoint policies restrict traffic traversing that endpoint and do not grant IAM permissions or replace bucket policy enforcement.",
+      "narration": "This slide explains where a VPC endpoint policy fits in the authorization path. On the left, a private EC2 workload uses an IAM role to request an S3 object. Follow the arrow into the middle endpoint box. The illustration shows an S3 interface endpoint using PrivateLink or an S3 gateway endpoint, as alternative connectivity choices. An endpoint policy can limit which actions and resource ARNs are accepted through that specific endpoint. The example permits GetObject only on objects under an approved bucket. After that filter, the request still needs to satisfy applicable IAM and S3 bucket authorization. The three explanatory boxes at the bottom separate these responsibilities: the principal's identity policy answers what the caller may request; the endpoint policy restricts what traverses this endpoint; and the resource policy can constrain access to the bucket, including requirements such as a particular SourceVpce. The caution strip is crucial: the endpoint policy does not grant permission, and it does not apply to traffic routed elsewhere. Endpoint policy support also varies by service and endpoint type. To force a private path, combine suitable routing with resource and identity policy conditions rather than relying on the endpoint policy alone."
+    },
+    {
+      "slide": 30,
+      "title": "IAM Access Analyzer: discover unintended sharing",
+      "visual_overview": "An external-access analyzer reviews a resource policy against an account or organization's zone of trust, produces possible external-access findings, and guides review and remediation.",
+      "visual_walkthrough": [
+        "S3 bucket resource policy permits an external AWS account principal",
+        "Analyzer compares resource policy against defined zone of trust",
+        "Finding shows principal, resource, action and condition",
+        "Five steps create analyzer, inspect finding, assess intent, archive or narrow policy, recheck",
+        "Bottom contrasts unused access analysis and policy validation and warns findings are potential, not observed access"
+      ],
+      "visual_example": "A bucket policy permits GetObject by an account outside the organization; Access Analyzer reports potential external access even if no external API call actually occurred.",
+      "visual_synthesis": "Use Access Analyzer to identify and remediate risky policy grants, with CloudTrail for observed usage; it does not automatically enforce a deny.",
+      "narration": "This slide shows IAM Access Analyzer finding a possible cross-account exposure. The left diagram starts with an S3 bucket whose resource policy allows a principal outside the trusted account or organization. Access Analyzer evaluates that policy against the configured zone of trust. The dashed arrow leads to the external principal, while the right panel displays a simplified finding with the principal, S3 resource, GetObject action and any condition. Follow the numbered review steps below. Create the analyzer for the intended scope, inspect active findings, and review exactly which principal, resource and action are involved. Decide whether the access is intentional. If it is legitimate, document and archive the finding as appropriate; if not, narrow or remove the granting policy and then check that the finding is resolved. Along the bottom, unused-access analysis is a separate capability for reducing stale permissions, and policy validation helps catch errors before deploying changes. The final caveat matters: a finding means a policy permits potential access, not that an attacker actually used it. Check CloudTrail or service activity logs for observed calls. Access Analyzer is an assessment tool, not a firewall or automatic deny mechanism."
+    }
+  ]
+}
