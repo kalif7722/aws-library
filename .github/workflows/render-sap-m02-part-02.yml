@@ -1,0 +1,90 @@
+name: Render SAP Module 02 Part 02 — visually audited architecture concepts
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/sap-module-02-part-02.json"
+      - ".github/workflows/render-sap-m02-part-02.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sap-m02-part-02-visualfirst-v1
+  cancel-in-progress: false
+jobs:
+  render:
+    name: SAP M02 Part 02 — guided original visuals
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify SAP module, source images, teaching script, and revision before synthesis
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=Path("content/video-narration/sap-module-02-part-02.json")
+          m=json.loads(manifest.read_text())
+          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","02","02")
+          assert m["output_prefix"]=="sap-module-02-part-02"
+          assert m["script_revision"]=="2026-11-16-sap-m02-p02-visualfirst-v1"
+          assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-02"
+          assert [s["slide"] for s in m["scenes"]]==[6,7,8]
+          assert all(len(s["narration"].split())>=95 and s.get("visual_overview") and len(s.get("visual_walkthrough",[]))>=3 and s.get("visual_synthesis") for s in m["scenes"])
+          for n in range(6,9):
+              f=Path(f"public/course-visuals/sap-c03/module-02/slide-{n:02}.webp")
+              assert f.is_file() and f.stat().st_size>10000,f"Missing original SAP slide {n}"
+              assert f.open("rb").read(4)==b"RIFF",f"Invalid WebP {n}"
+          print("PASS: SAP Module 02, Part 02, 3 original WebPs, script and lesson boundaries")
+          PY
+      - name: Install narration and video engine
+        run: |
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
+      - name: Render fresh voice and synchronized video, captions and transcript
+        env:
+          AIP_TTS_MAX_ATTEMPTS: "15"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "30"
+        run: |
+          python scripts/render_aip_course_video.py --manifest content/video-narration/sap-module-02-part-02.json --output video-output/sap-m02-p02 --width 1920 --height 1080 --fps 24
+      - name: Validate narrated video before publishing
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.aip_media_tools import media_seconds
+          root=Path("video-output/sap-m02-p02")
+          stem="sap-module-02-part-02"
+          m=json.loads((root/f"{stem}-manifest.json").read_text())
+          assert m["module"]=="02" and m["part"]=="02"
+          assert m["script_revision"]=="2026-11-16-sap-m02-p02-visualfirst-v1"
+          assert [s["slide"] for s in m["scenes"]]==[6,7,8]
+          assert (root/f"{stem}.vtt").read_text().startswith("WEBVTT")
+          assert (root/f"{stem}.srt").is_file() and (root/f"{stem}-transcript.txt").is_file()
+          assert abs(media_seconds(root/f"{stem}.mp4")-m["duration_seconds"])<3.5
+          print("PASS: MP4, 3 chapters, subtitles, transcript, revision")
+          PY
+      - name: Publish verified media and manifest to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          test -n "$AWS_ACCESS_KEY_ID" && test -n "$AWS_SECRET_ACCESS_KEY" && test -n "$R2_ENDPOINT" && test -n "$R2_BUCKET"
+          SRC="video-output/sap-m02-p02"
+          STEM="sap-module-02-part-02"
+          DEST="s3://$R2_BUCKET/aws-course-videos/previews/sap/module-02/part-02"
+          for ext in mp4 vtt srt; do
+            aws s3 cp "$SRC/$STEM.$ext" "$DEST/$STEM.$ext" --endpoint-url "$R2_ENDPOINT" --no-progress
+          done
+          aws s3 cp "$SRC/$STEM-transcript.txt" "$DEST/$STEM-transcript.txt" --endpoint-url "$R2_ENDPOINT" --no-progress
+          aws s3 cp "$SRC/$STEM-manifest.json" "$DEST/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" --no-progress
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-02/part-02/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-02/part-02/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          echo 'Published verified SAP MP4 and manifest to R2.'
