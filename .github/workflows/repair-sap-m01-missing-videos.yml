@@ -1,0 +1,124 @@
+name: SAP Module 01 — render only missing or outdated video lectures
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repair-sap-m01-missing-videos.yml"
+permissions:
+  contents: read
+concurrency:
+  group: sap-module-01-missing-video-recovery
+  cancel-in-progress: false
+jobs:
+  repair:
+    name: Verify or render SAP M01 Part ${{ matrix.part }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        part: ["01","02","03","04","05","06","07","08","09","10","11"]
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      AWS_EC2_METADATA_DISABLED: "true"
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      PART: ${{ matrix.part }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check source manifest and approved original slide sequence
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          part=os.environ["PART"]
+          root=Path("content/video-narration")
+          docs=[json.loads((root/f"sap-module-01-part-{p:02}.json").read_text()) for p in range(1,12)]
+          all_slides=[s["slide"] for d in docs for s in d["scenes"]]
+          assert all_slides==list(range(1,46)),f"Incomplete/overlapping Module 01 coverage: {all_slides}"
+          m=docs[int(part)-1]
+          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","01",part)
+          assert m["output_prefix"]==f"sap-module-01-part-{part}"
+          assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-01"
+          assert all(len(s["narration"].split())>=95 and s.get("visual_overview") and s.get("visual_walkthrough") and s.get("visual_synthesis") for s in m["scenes"])
+          for scene in m["scenes"]:
+              number=scene["slide"]
+              path=Path(f"public/course-visuals/sap-c03/module-01/slide-{number:02}.webp")
+              if number==45: path=path.with_name("slide-45-v2.webp")
+              assert path.is_file() and path.stat().st_size>10000,path
+              assert path.open("rb").read(4)==b"RIFF",path
+          print(f"PASS: SAP M01 Part {part}, original WebPs, script {m['script_revision']}, entire 45-slide continuity")
+          PY
+      - name: Determine whether a valid MP4 and matching manifest already exist in R2
+        id: gate
+        run: |
+          set -euo pipefail
+          test -n "$AWS_ACCESS_KEY_ID" && test -n "$AWS_SECRET_ACCESS_KEY" && test -n "$R2_ENDPOINT" && test -n "$R2_BUCKET"
+          STEM="sap-module-01-part-$PART"
+          KEY="aws-course-videos/previews/sap/module-01/part-$PART"
+          EXPECTED=$(python -c 'import json,os;print(json.load(open("content/video-narration/sap-module-01-part-"+os.environ["PART"]+".json"))["script_revision"])')
+          if aws s3 cp "s3://$R2_BUCKET/$KEY/$STEM-manifest.json" "/tmp/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" --no-progress >/dev/null 2>&1; then
+            if python -c 'import json,os,sys;d=json.load(open(sys.argv[1]));sys.exit(0 if d.get("script_revision")==sys.argv[2] and d.get("module")=="01" and d.get("part")==os.environ["PART"] and len(d.get("scenes",[]))>0 else 1)' "/tmp/$STEM-manifest.json" "$EXPECTED" && aws s3api head-object --bucket "$R2_BUCKET" --key "$KEY/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null 2>&1; then
+              echo "render=false" >> "$GITHUB_OUTPUT"
+              echo "Current video already published: $STEM ($EXPECTED)"
+              exit 0
+            fi
+          fi
+          echo "render=true" >> "$GITHUB_OUTPUT"
+          echo "Missing or outdated: $STEM ($EXPECTED) — render fresh"
+      - name: Install video renderer dependencies
+        if: steps.gate.outputs.render == 'true'
+        run: |
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
+      - name: Fresh VisualFirst voice, video, subtitle and transcript render
+        if: steps.gate.outputs.render == 'true'
+        env:
+          AIP_TTS_MAX_ATTEMPTS: "15"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "30"
+        run: |
+          python scripts/render_aip_course_video.py --manifest "content/video-narration/sap-module-01-part-$PART.json" --output "video-output/sap-m01-p$PART" --width 1920 --height 1080 --fps 24
+      - name: Validate rendered scenes, duration and captions
+        if: steps.gate.outputs.render == 'true'
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.aip_media_tools import media_seconds
+          part=os.environ["PART"]
+          stem=f"sap-module-01-part-{part}"
+          folder=Path(f"video-output/sap-m01-p{part}")
+          expected=json.loads(Path(f"content/video-narration/{stem}.json").read_text())
+          got=json.loads((folder/f"{stem}-manifest.json").read_text())
+          assert got["module"]=="01" and got["part"]==part
+          assert got["script_revision"]==expected["script_revision"]
+          assert [x["slide"] for x in got["scenes"]]==[x["slide"] for x in expected["scenes"]]
+          assert (folder/f"{stem}.vtt").read_text().startswith("WEBVTT")
+          assert (folder/f"{stem}.srt").stat().st_size>0
+          assert (folder/f"{stem}-transcript.txt").stat().st_size>0
+          assert abs(media_seconds(folder/f"{stem}.mp4")-got["duration_seconds"])<3.5
+          print("PASS: encoded MP4, chapters, audio duration, captions and transcript")
+          PY
+      - name: Upload only complete verified lecture
+        if: steps.gate.outputs.render == 'true'
+        run: |
+          set -euo pipefail
+          STEM="sap-module-01-part-$PART"
+          SRC="video-output/sap-m01-p$PART"
+          DEST="s3://$R2_BUCKET/aws-course-videos/previews/sap/module-01/part-$PART"
+          for ext in mp4 vtt srt; do
+            aws s3 cp "$SRC/$STEM.$ext" "$DEST/$STEM.$ext" --endpoint-url "$R2_ENDPOINT" --no-progress
+          done
+          aws s3 cp "$SRC/$STEM-transcript.txt" "$DEST/$STEM-transcript.txt" --endpoint-url "$R2_ENDPOINT" --no-progress
+          # Publish manifest last: only fully available lectures become visible to the course player.
+          aws s3 cp "$SRC/$STEM-manifest.json" "$DEST/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" --no-progress
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-01/part-$PART/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-01/part-$PART/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          echo "Published fresh SAP Part $PART with matching audio and manifest"
