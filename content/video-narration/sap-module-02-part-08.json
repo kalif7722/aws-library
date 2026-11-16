@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "02",
+  "module_title": "Multi-Account Governance and Landing Zones",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-02",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Inspected and verified committed individual SAP-C03 slides 27-32, matching filenames and topics; follow diagrams and examples shown, with caveats for AWS remediation and SCP policy evaluation.",
+  "part_id": "08",
+  "part_title": "Account Decommissioning, Control Tower Enrollment and Governance Troubleshooting",
+  "scenes": [
+    {
+      "slide": 30,
+      "title": "AWS Account Lifecycle and Closure",
+      "visual_overview": "A four-stage account lifecycle moves from creation through governed operation and optional suspension or freeze to carefully planned closure, with resource and audit-retention safeguards.",
+      "visual_walkthrough": [
+        "Start with account creation and Control Tower or Organizations onboarding",
+        "Observe ongoing guardrails, monitoring and cost ownership",
+        "Treat suspension or freeze as a planned transitional operational stage, not an automatic service phase",
+        "Review resource cleanup, dependencies and preserved records before using the supported account closure process"
+      ],
+      "visual_example": "A retired development account has remaining EBS volumes, cross-account roles and DNS references. Operators retire resources, preserve required audit information externally, and verify dependencies before the account is closed.",
+      "visual_synthesis": "Closure is a controlled decommissioning process; cleanup, retention and cost verification must precede closure, and closed accounts have recovery and billing constraints.",
+      "narration": "This slide walks through the complete lifecycle of an AWS account. Begin on the left with account creation through AWS Organizations or Account Factory. The goal is to bring the new account into the correct organizational unit with appropriate governance from the start. Next comes operation: SCPs, security controls, monitoring and cost allocation protect and manage the workload during its useful life. The third box represents an optional suspension or preparation stage. It is an operational choice to restrict changes or stop activity; it should not be confused with a universal AWS account lifecycle state. The last box represents closure. Before closing an account, identify applications and integrations that still depend on it, clean up unnecessary resources, preserve required backups and audit records outside the account, and check financial or contractual obligations. The simplified bottom example shows stopping resources, exporting data and completing closure through the supported organization process. Do not assume closing an account immediately deletes every obligation or preserves future access to all records. The architecture lesson is that decommissioning needs its own governance workflow, evidence and business approval."
+    },
+    {
+      "slide": 31,
+      "title": "Control Tower — Landing-Zone Updates and Account Enrollment",
+      "visual_overview": "Control Tower supports two related but distinct operations: updating the governed landing zone and enrolling or provisioning accounts under that governance.",
+      "visual_walkthrough": [
+        "Start at the Control Tower landing zone on the left",
+        "Follow the upper branch to update governance baselines, controls and shared resources",
+        "Follow the lower branch to enroll an eligible existing account or provision a new one through Account Factory",
+        "Observe production, staging and development after the applied change",
+        "Use the lower workflow to validate changes, deployment and compliance"
+      ],
+      "visual_example": "An organization updates its landing-zone version and separately enrolls an existing development account once required roles, Region settings and security prerequisites have been checked.",
+      "visual_synthesis": "Updating a landing zone and enrolling accounts are different operations; both require prerequisite checks and verification after deployment.",
+      "narration": "This visual separates two common AWS Control Tower administration jobs. Start on the left with the existing landing zone. The upper branch is a landing-zone update. Teams review the supported change, release prerequisites and affected shared resources, then apply the update in a controlled way. The lower branch is account enrollment. An existing AWS account may need eligibility and baseline preparation before it can be enrolled into Control Tower, while Account Factory can provision new governed accounts. The two branches converge at a set of governed production, staging and development accounts, but that convergence does not mean every enrolled account automatically inherits every possible workload security configuration. Read the workflow along the bottom: prepare and approve a change, deploy it, and verify that required controls, logging and account state are healthy. Pay attention to conflicting existing configurations, service-linked and execution roles, Region prerequisites and landing-zone drift. An organization might have a successfully updated landing zone but an account that is not fully enrolled. Troubleshoot those as separate situations. The architectural objective is consistent governance with controlled change and observable compliance."
+    },
+    {
+      "slide": 32,
+      "title": "Multi-Account Governance — Troubleshooting Example",
+      "visual_overview": "An EC2 RunInstances request in a member account is denied by an applicable SCP, so the architect traces caller authorization and inherited policy restrictions.",
+      "visual_walkthrough": [
+        "Identify the EC2 launch AccessDenied symptom in the member account",
+        "Review the principal, action, resource and available CloudTrail events",
+        "Trace inherited SCPs from organization root through OU to the member account",
+        "Locate the effective Deny or missing Allow in an allow-list SCP strategy",
+        "Apply a narrow policy change at the controlling attachment and retest"
+      ],
+      "visual_example": "An application role has ec2:RunInstances in its IAM policy, but an explicit inherited SCP denies the action; adding more IAM permissions cannot override the SCP Deny.",
+      "visual_synthesis": "Diagnose the entire authorization path; modify the controlling SCP only after confirming business intent and preserving other guardrails.",
+      "narration": "This slide presents a concrete governance troubleshooting case. A workload owner tries to launch an EC2 instance in a member account and receives AccessDenied. Start in the scenario box on the left. The first temptation might be to attach more IAM permissions, but that may not solve the problem. Follow the troubleshooting boxes in the center. First check which principal made the request and the precise API action, such as ec2 RunInstances. Inspect the service error and relevant CloudTrail events to confirm the attempted request. Next trace the organization's effective SCP hierarchy from the root, through the account's organizational unit, down to the member account. An explicit SCP Deny overrides any matching IAM Allow. A restrictive allow-list SCP design can also block an action if the required Allow is not present at all applicable levels. When the actual restriction is identified, determine whether the request should legitimately be permitted. Change the controlling policy or applicable scope narrowly, then rerun the operation and confirm both success and continued protection. The resolution on the right applies only when business approval and the remaining policies permit it. The exam takeaway is to find the blocking policy layer before making changes."
+    }
+  ],
+  "output_prefix": "sap-module-02-part-08",
+  "script_revision": "2026-11-17-sap-m02-p08-approved-upload-visualfirst-v1"
+}
