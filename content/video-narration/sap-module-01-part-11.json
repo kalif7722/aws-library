@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Reviewed the approved original full-resolution SAP Module 01 slide-45-v2.webp: AD DS directory structure, AD FS SAML sign-in, and distinct AWS federation trust/session.",
+  "part_id": "11",
+  "part_title": "Directory Services, SAML Federation and AWS Trust",
+  "output_prefix": "sap-module-01-part-11",
+  "script_revision": "2026-11-16-sap-m01-p11-approved-slide45-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 45,
+      "title": "Directory identity: AD DS and AD FS do different jobs",
+      "visual_overview": "The visual separates an AD DS directory storing identities and domain hierarchy, AD FS federation issuing SAML assertions, and the AWS trust and session authorization path.",
+      "visual_walkthrough": [
+        "Left panel: users, computers, groups and other objects connect to Active Directory domain controllers, with domain trees and forests defining trust boundaries",
+        "Top-right panel: corporate user authenticates with AD FS, which issues a SAML assertion for an application's sign-in",
+        "Lower-right panel: AD FS is configured as a trusted identity provider for AWS role federation, establishing a role session only through applicable role trust and permission checks",
+        "Bottom Remember line distinguishes directory objects from federation claims"
+      ],
+      "visual_example": "An employee exists in AD DS, signs in via AD FS, presents a valid SAML assertion to an appropriately configured AWS federation endpoint, and obtains a temporary authorized role session rather than an AWS access key from AD FS.",
+      "visual_synthesis": "AD DS manages directory identities, AD FS federates authentication, and AWS trusts an identity provider and authorizes a role independently; a directory trust does not itself grant AWS permissions.",
+      "narration": "This final IAM visual distinguishes three related systems that solve different identity problems. Start with the large panel on the left. Active Directory Domain Services, or AD DS, stores directory objects: employees, computers, groups and other domain records. Domain controllers serve those identities, while trees and forests describe directory structure and trust relationships. Follow the flow across the upper-right panel. A corporate user authenticates through Active Directory Federation Services, or AD FS. As a federation service, AD FS can issue a signed SAML assertion that another application uses to recognize the authenticated user. A SAML assertion is not an AWS access key and does not by itself grant AWS API privileges. Now move to the lower-right AWS example. The organization configures the federation provider and role trust so the authenticated identity can request an appropriate AWS role session. AWS separately evaluates the trusted identity provider, role assumption conditions and permissions before giving that session access to AWS resources. The line at the bottom states the distinction plainly: the directory stores identities, federation carries an authentication claim across a trust boundary, and authorization decides what the resulting identity may do. For SAP exam scenarios, do not confuse AD DS directory trust, AD FS single sign-on and IAM role permissions."
+    }
+  ]
+}
