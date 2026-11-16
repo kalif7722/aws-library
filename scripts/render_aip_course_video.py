@@ -86,6 +86,10 @@ def load_local_slide(module: str, number: int, local_dir: str,
     source = source_dir / filename
     # The approved SAP M01 directory/federation lesson is versioned as slide-45-v2.webp.
     # Resolve only this explicitly audited variant; never use a generic visual substitute.
+    if course_slug == "sap" and module == "02" and 23 <= number <= 26 and not source.is_file():
+        filename = f"slide-{number:02}-v2.webp"
+        source = source_dir / filename
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     if course_slug == "sap" and module == "01" and 45 <= number <= 52 and not source.is_file():
         filename = f"slide-{number:02}-v2.webp"
         source = source_dir / filename
