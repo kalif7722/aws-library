@@ -84,6 +84,12 @@ def load_local_slide(module: str, number: int, local_dir: str,
     if source_dir != expected_dir:
         raise ValueError(f"Original source directory mismatches approved {course_slug} module {module}")
     source = source_dir / filename
+    # The approved SAP M01 directory/federation lesson is versioned as slide-45-v2.webp.
+    # Resolve only this explicitly audited variant; never use a generic visual substitute.
+    if course_slug == "sap" and module == "01" and number == 45 and not source.is_file():
+        filename = "slide-45-v2.webp"
+        source = source_dir / filename
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     if not source.is_file():
         raise FileNotFoundError(f"Missing original source slide: {source}")
     with Image.open(source) as img:
