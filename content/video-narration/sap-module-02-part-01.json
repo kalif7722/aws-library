@@ -17,67 +17,67 @@
     {
       "slide": 1,
       "title": "The landing zone as a governance foundation",
-      "visual_overview": "Guide through the original diagram, its components and the concrete governance decision depicted.",
+      "visual_overview": "This slide teaches the landing zone as a governance foundation through its original multi-account architecture and worked policy or governance example.",
       "visual_walkthrough": [
         "Identify the complete architectural goal and main components",
         "Trace the visual boxes, links, examples, alternative paths and guards in their printed order",
         "Explain which policy or service is responsible and why the decision matters"
       ],
-      "visual_example": "Use the specific original slide's pictured account, organizational unit, policy, service and outcome.",
+      "visual_example": "Trace the precise services, account boundaries, permission inheritance and action outcomes displayed on original slide 1.",
       "visual_synthesis": "Choose a governable multi-account architecture that preserves correct permission boundaries and centralized visibility.",
-      "narration": "The central AWS Organizations hierarchy separates security, shared infrastructure and workload accounts; Control Tower provides the opinionated setup."
+      "narration": "This slide introduces a landing zone as the governance foundation established before application teams deploy workloads. Begin with AWS Organizations in the middle. Its hierarchy separates a Security OU containing log archive and audit accounts, an infrastructure and shared services OU for networking, identity and reusable capabilities, and a Workloads OU dividing nonproduction from production. Follow the dotted arrow to AWS Control Tower on the right. Control Tower helps orchestrate an opinionated multi-account setup with identity integration, networking patterns, centralized logging, encryption standards, preventive policies, and account vending. These are baseline capabilities rather than automatic security for every application. At the bottom, the three benefits are consistent account security foundations, application team autonomy within guardrails, and standardized audit evidence. A landing zone isn't merely a VPC or an account structure. It is the governed operating model for how new AWS accounts enter the organization and stay compliant."
     },
     {
       "slide": 2,
       "title": "Organizations hierarchy: root, OUs and accounts",
-      "visual_overview": "Guide through the original diagram, its components and the concrete governance decision depicted.",
+      "visual_overview": "This slide teaches organizations hierarchy: root, ous and accounts through its original multi-account architecture and worked policy or governance example.",
       "visual_walkthrough": [
         "Identify the complete architectural goal and main components",
         "Trace the visual boxes, links, examples, alternative paths and guards in their printed order",
         "Explain which policy or service is responsible and why the decision matters"
       ],
-      "visual_example": "Use the specific original slide's pictured account, organizational unit, policy, service and outcome.",
+      "visual_example": "Trace the precise services, account boundaries, permission inheritance and action outcomes displayed on original slide 2.",
       "visual_synthesis": "Choose a governable multi-account architecture that preserves correct permission boundaries and centralized visibility.",
-      "narration": "A hierarchical organization root contains security, workload and sandbox OUs, with more restrictive production SCPs inherited by nested accounts."
+      "narration": "This diagram shows how AWS Organizations arranges its root, organizational units and member accounts. Start at the top with the root of the organization, and notice the management account beside it. That account retains organization administration and billing and is not restricted by service control policies. Follow the hierarchy downward to the Security OU, Workloads OU and Sandbox OU. Security contains log archive and audit accounts. Workloads branches into production and nonproduction OUs; each contains its own app or data accounts. The dashed boundaries illustrate inherited SCPs. The baseline attached to the root applies to member accounts, and the stricter production OU policy further restricts accounts beneath it. On the right, the slide emphasizes that SCPs set maximum permission boundaries and do not grant IAM permissions. An OU is only an organizational container, not a separately authenticated AWS account or an IAM Identity Center assignment target. When you move an account between OUs, review inherited guardrails before and after the move."
     },
     {
       "slide": 3,
       "title": "Management account and delegated administrators",
-      "visual_overview": "Guide through the original diagram, its components and the concrete governance decision depicted.",
+      "visual_overview": "This slide teaches management account and delegated administrators through its original multi-account architecture and worked policy or governance example.",
       "visual_walkthrough": [
         "Identify the complete architectural goal and main components",
         "Trace the visual boxes, links, examples, alternative paths and guards in their printed order",
         "Explain which policy or service is responsible and why the decision matters"
       ],
-      "visual_example": "Use the specific original slide's pictured account, organizational unit, policy, service and outcome.",
+      "visual_example": "Trace the precise services, account boundaries, permission inheritance and action outcomes displayed on original slide 3.",
       "visual_synthesis": "Choose a governable multi-account architecture that preserves correct permission boundaries and centralized visibility.",
-      "narration": "The management account remains organization owner while a security account can administer supported services through a delegated administrator registration."
+      "narration": "This diagram separates ownership of the organization from supported delegated security administration. On the left, the AWS Organizations management account is the organization owner. It handles consolidated billing, policy administration, and the account and OU lifecycle. The tree underneath shows production, development and shared-services OUs. Follow the arrow toward the security account on the right. The management account can register a member account as delegated administrator for supported services such as Security Hub, GuardDuty, Firewall Manager and Inspector. That security account can operate service-level organization features within the allowed scope, reducing the need to perform routine security tasks from the management account. The three bottom decisions are to protect management-account access, delegate supported services where appropriate, and remember that delegation does not transfer ownership of Organizations, consolidated billing or general account moves. This distinction is central to designing a secure enterprise AWS account structure."
     },
     {
       "slide": 4,
       "title": "AWS Control Tower landing zone components",
-      "visual_overview": "Guide through the original diagram, its components and the concrete governance decision depicted.",
+      "visual_overview": "This slide teaches aws control tower landing zone components through its original multi-account architecture and worked policy or governance example.",
       "visual_walkthrough": [
         "Identify the complete architectural goal and main components",
         "Trace the visual boxes, links, examples, alternative paths and guards in their printed order",
         "Explain which policy or service is responsible and why the decision matters"
       ],
-      "visual_example": "Use the specific original slide's pictured account, organizational unit, policy, service and outcome.",
+      "visual_example": "Trace the precise services, account boundaries, permission inheritance and action outcomes displayed on original slide 4.",
       "visual_synthesis": "Choose a governable multi-account architecture that preserves correct permission boundaries and centralized visibility.",
-      "narration": "Control Tower connects workforce access, security accounts, governance controls, account vending, organization-wide logging and compliance visibility around an Organizations foundation."
+      "narration": "The center of this architecture is an AWS Control Tower landing zone built on Organizations. Start there and examine the connected boxes. The security OU on the left contains a log archive account for centralized records and an audit account for security analysis. Below it, governance controls have different jobs: preventive controls block unwanted operations, detective controls report noncompliance, and supported proactive controls validate proposed CloudFormation resources before provisioning. At the top, IAM Identity Center provides workforce access to enrolled accounts. On the right, Account Factory processes requests, provisions new accounts and enrolls eligible accounts into governed OUs. Below it, organization-wide CloudTrail and AWS Config provide an operational audit and configuration baseline. The lower portion shows enrolled production, sandbox and workload accounts alongside compliance dashboards and central log analysis. Control Tower coordinates a repeatable governance foundation, but workload owners still must secure their own resources and confirm that required controls are supported in their regions."
     },
     {
       "slide": 5,
       "title": "Account Factory and account lifecycle",
-      "visual_overview": "Guide through the original diagram, its components and the concrete governance decision depicted.",
+      "visual_overview": "This slide teaches account factory and account lifecycle through its original multi-account architecture and worked policy or governance example.",
       "visual_walkthrough": [
         "Identify the complete architectural goal and main components",
         "Trace the visual boxes, links, examples, alternative paths and guards in their printed order",
         "Explain which policy or service is responsible and why the decision matters"
       ],
-      "visual_example": "Use the specific original slide's pictured account, organizational unit, policy, service and outcome.",
+      "visual_example": "Trace the precise services, account boundaries, permission inheritance and action outcomes displayed on original slide 5.",
       "visual_synthesis": "Choose a governable multi-account architecture that preserves correct permission boundaries and centralized visibility.",
-      "narration": "Five ordered stages show an approved account request becoming a Control Tower-enrolled account with appropriate Identity Center access and ongoing governance."
+      "narration": "This slide follows an account through its governance lifecycle. Read the five steps from left to right. First, a business owner requests an account and identifies its environment, account email, intended OU and cost center. Second, the organization approves the business need, security and compliance requirements, and selected OU. Third, AWS Control Tower Account Factory provisions a new account or enrolls an eligible existing account, applying the supported baseline and guardrails. The OU selection determines which inherited SCPs apply. Fourth, IAM Identity Center assigns permission sets to users or groups for that specific account. Creating an account by itself does not create universal access. Fifth, the organization monitors logs, budgets, compliance and configuration drift, then formally moves or retires the account when appropriate. The lower panels show the account vending interfaces: Service Catalog and an optional Terraform approach. The overall decision is to automate the account lifecycle while retaining approval, access control and compliance review."
     }
   ]
 }
