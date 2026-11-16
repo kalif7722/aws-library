@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "03",
+  "module_title": "Secure and Resilient Architectures — Encryption and Key Management",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-03",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "All original SAP Module 03 diagrams 09-32 individually examined; original numbered WebP files 09-26 and approved -v2 WebPs 27-32.",
+  "part_id": "06",
+  "part_title": "ALB TLS, Mutual Authentication and Certificate Troubleshooting",
+  "output_prefix": "sap-module-03-part-06",
+  "script_revision": "2026-11-17-sap-m03-p06-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 15,
+      "title": "Two TLS legs across an ALB",
+      "visual_overview": "This slide explains two tls legs across an alb by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "On the left, the client negotiates TLS with the Application Load Balancer, which presents its configured listener certificate. That first TLS connection ends at the ALB. The upper-right path depicts an HTTPS target group: the ALB creates a new TLS connection to the backend target. The lower dashed path uses an HTTP target group, leaving that backend leg unencrypted. These are separate trust and transport boundaries; an encrypted front-end connection does not prove every hop is encrypted.",
+        "Distinguish permission, security and operational responsibilities",
+        "Use an HTTPS target group when the design requires backend transport encryption."
+      ],
+      "visual_example": "On the left, the client negotiates TLS with the Application Load Balancer, which presents its configured listener certificate. That first TLS connection ends at the ALB. The upper-right path depicts an HTTPS target group: the ALB creates a new TLS connection to the backend target. The lower dashed path uses an HTTP target group, leaving that backend leg unencrypted. These are separate trust and transport boundaries; an encrypted front-end connection does not prove every hop is encrypted.",
+      "visual_synthesis": "Use an HTTPS target group when the design requires backend transport encryption.",
+      "narration": "This slide explains two tls legs across an alb through the actual architecture shown. On the left, the client negotiates TLS with the Application Load Balancer, which presents its configured listener certificate. That first TLS connection ends at the ALB. The upper-right path depicts an HTTPS target group: the ALB creates a new TLS connection to the backend target. The lower dashed path uses an HTTP target group, leaving that backend leg unencrypted. These are separate trust and transport boundaries; an encrypted front-end connection does not prove every hop is encrypted. Use an HTTPS target group when the design requires backend transport encryption. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 16,
+      "title": "ALB mutual TLS modes",
+      "visual_overview": "This slide explains alb mutual tls modes by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "The left panel shows a client with its own certificate and private key. The ALB presents its server certificate and the client validates it; the client also presents its certificate. In verify mode, the ALB validates the client certificate against a configured trust store and optional supported revocation checks. In passthrough mode, ALB forwards certificate details in HTTP headers for the application to validate, instead of validating them itself. This is not raw TCP passthrough.",
+        "Distinguish permission, security and operational responsibilities",
+        "Client certificate authentication is separate from application-level authorization."
+      ],
+      "visual_example": "The left panel shows a client with its own certificate and private key. The ALB presents its server certificate and the client validates it; the client also presents its certificate. In verify mode, the ALB validates the client certificate against a configured trust store and optional supported revocation checks. In passthrough mode, ALB forwards certificate details in HTTP headers for the application to validate, instead of validating them itself. This is not raw TCP passthrough.",
+      "visual_synthesis": "Client certificate authentication is separate from application-level authorization.",
+      "narration": "This slide explains alb mutual tls modes through the actual architecture shown. The left panel shows a client with its own certificate and private key. The ALB presents its server certificate and the client validates it; the client also presents its certificate. In verify mode, the ALB validates the client certificate against a configured trust store and optional supported revocation checks. In passthrough mode, ALB forwards certificate details in HTTP headers for the application to validate, instead of validating them itself. This is not raw TCP passthrough. Client certificate authentication is separate from application-level authorization. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 17,
+      "title": "Certificate issue, renewal and revocation",
+      "visual_overview": "This slide explains certificate issue, renewal and revocation by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "Read the lifecycle ring clockwise. First, issue and deploy a certificate containing the right hostname, trust chain, endpoint and Region. Second, renew before expiration; maintain DNS validation records where required and replace imported certificates yourself. Third, revoke compromised or untrusted credentials using supported CRL or OCSP workflows and relevant trust-store changes. The lower troubleshooting strip checks hostname, chain, validity and endpoint deployment in that order. Not every service checks revocation the same way.",
+        "Distinguish permission, security and operational responsibilities",
+        "A valid certificate today needs ongoing monitoring, renewal, trust distribution and incident procedures."
+      ],
+      "visual_example": "Read the lifecycle ring clockwise. First, issue and deploy a certificate containing the right hostname, trust chain, endpoint and Region. Second, renew before expiration; maintain DNS validation records where required and replace imported certificates yourself. Third, revoke compromised or untrusted credentials using supported CRL or OCSP workflows and relevant trust-store changes. The lower troubleshooting strip checks hostname, chain, validity and endpoint deployment in that order. Not every service checks revocation the same way.",
+      "visual_synthesis": "A valid certificate today needs ongoing monitoring, renewal, trust distribution and incident procedures.",
+      "narration": "This slide explains certificate issue, renewal and revocation through the actual architecture shown. Read the lifecycle ring clockwise. First, issue and deploy a certificate containing the right hostname, trust chain, endpoint and Region. Second, renew before expiration; maintain DNS validation records where required and replace imported certificates yourself. Third, revoke compromised or untrusted credentials using supported CRL or OCSP workflows and relevant trust-store changes. The lower troubleshooting strip checks hostname, chain, validity and endpoint deployment in that order. Not every service checks revocation the same way. A valid certificate today needs ongoing monitoring, renewal, trust distribution and incident procedures. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    }
+  ]
+}
