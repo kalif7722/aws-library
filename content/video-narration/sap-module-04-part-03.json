@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original Module 04 WebPs 01–08 individually viewed, including the route-selection examples repeated in visuals 07–08.",
+  "part_id": "03",
+  "part_title": "Route Selection Worked Examples",
+  "output_prefix": "sap-module-04-part-03",
+  "script_revision": "2026-11-17-sap-m04-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "VPC longest-prefix route selection",
+      "visual_overview": "This original slide illustrates vpc longest-prefix route selection with AWS network topology and explicit route examples.",
+      "visual_walkthrough": [
+        "Identify VPC and subnet or gateway boundaries",
+        "Start at the left route table: ten dot zero slash sixteen routes locally, the more specific ten dot zero dot twelve slash twenty-four route targets a Transit Gateway, and zero slash zero targets a NAT Gateway. On the right, destination ten dot zero dot twelve dot forty-two matches all three entries, so the slash twenty-four wins. A public destination such as eight dot eight dot eight dot eight matches only the default route, so it goes to NAT. The local route is not automatically preferred over a more specific supported route. The lower cards add that subnet route table association, return routing and security rules also determine end-to-end success.",
+        "Walk through the real CIDRs, next hops and security constraints",
+        "Choose the longest matching prefix and check return route and security filtering."
+      ],
+      "visual_example": "Start at the left route table: ten dot zero slash sixteen routes locally, the more specific ten dot zero dot twelve slash twenty-four route targets a Transit Gateway, and zero slash zero targets a NAT Gateway. On the right, destination ten dot zero dot twelve dot forty-two matches all three entries, so the slash twenty-four wins. A public destination such as eight dot eight dot eight dot eight matches only the default route, so it goes to NAT. The local route is not automatically preferred over a more specific supported route. The lower cards add that subnet route table association, return routing and security rules also determine end-to-end success.",
+      "visual_synthesis": "Choose the longest matching prefix and check return route and security filtering.",
+      "narration": "This slide teaches vpc longest-prefix route selection by following the pictured VPC architecture. Start at the left route table: ten dot zero slash sixteen routes locally, the more specific ten dot zero dot twelve slash twenty-four route targets a Transit Gateway, and zero slash zero targets a NAT Gateway. On the right, destination ten dot zero dot twelve dot forty-two matches all three entries, so the slash twenty-four wins. A public destination such as eight dot eight dot eight dot eight matches only the default route, so it goes to NAT. The local route is not automatically preferred over a more specific supported route. The lower cards add that subnet route table association, return routing and security rules also determine end-to-end success. Choose the longest matching prefix and check return route and security filtering. For a professional architecture decision, inspect the source and destination addresses, the effective route table associated with the subnet, and the security boundaries. A correct route without the right policy or a return path does not prove end-to-end connectivity. Treat the concrete values in the diagram as a worked example of this decision, not as a configuration that every workload must reuse."
+    },
+    {
+      "slide": 8,
+      "title": "Route-selection practice with local and remote destinations",
+      "visual_overview": "This original slide illustrates route-selection practice with local and remote destinations with AWS network topology and explicit route examples.",
+      "visual_walkthrough": [
+        "Identify VPC and subnet or gateway boundaries",
+        "This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior.",
+        "Walk through the real CIDRs, next hops and security constraints",
+        "Use the associated subnet route table and evaluate specificity before considering route type or security rules."
+      ],
+      "visual_example": "This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior.",
+      "visual_synthesis": "Use the associated subnet route table and evaluate specificity before considering route type or security rules.",
+      "narration": "This slide teaches route-selection practice with local and remote destinations by following the pictured VPC architecture. This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior. Use the associated subnet route table and evaluate specificity before considering route type or security rules. For a professional architecture decision, inspect the source and destination addresses, the effective route table associated with the subnet, and the security boundaries. A correct route without the right policy or a return path does not prove end-to-end connectivity. Treat the concrete values in the diagram as a worked example of this decision, not as a configuration that every workload must reuse."
+    }
+  ]
+}
