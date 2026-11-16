@@ -1,0 +1,117 @@
+{
+  "visualStandard": "AIP_AIF_SECURITY_BLEND_V1",
+  "lessons": [
+    {
+      "number": 8,
+      "title": "Cognito group precedence selects the preferred role",
+      "pages": [
+        399
+      ],
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"GROUP PRECEDENCE: LOWER NUMBER WINS\". Premise \"A user can belong to multiple groups; one preferred IAM role can be declared in the ID token.\" Small module label \"AWS SECURITY \u2022 COGNITO GROUPS\", sequence 08. Content: worked example Alice belongs to Readers (precedence 10, ReaderRole) and Editors (precedence 0, EditorRole). Show both group cards feeding a compact priority selector within Cognito USER POOL, selecting EditorRole, output ID token with exact text \"cognito:preferred_role \u2192 EditorRole\" (role names are illustrative, not ARN syntax). Then a separate clear arrow token to \"Cognito identity pool\" to \"Temporary EditorRole credentials\". Emphasize user pool puts role information in token; ID token is not AWS credentials. Lower useful group membership illustration: \"cognito:groups: Readers, Editors\" and \"Both memberships remain; precedence selects the preferred role.\" Separate small note \"IAM policies on the selected role determine AWS API permissions.\" Another small note \"Groups cannot be nested.\" No permissions-union claim, no claim all roles are applied. Avoid code/JSON. Crisp readable exact English, polished integrated modest objects, content-rich but not crowded.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-2958ce0d-f516-4724-8a99-feaccd152cb0.png"
+    },
+    {
+      "number": 9,
+      "title": "Resolve ambiguous Cognito token roles deliberately",
+      "pages": [
+        399
+      ],
+      "layout": "tied group evidence and role resolution decision",
+      "prompt": "Tied precedence with different group role ARNs removes preferred_role; demonstrate CustomRoleArn must be token-authorized, otherwise configured ambiguous-role resolution applies.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-0d3a4f9c-6b73-4fcf-83e4-87b159b9be09.png",
+      "promptRecord": "Content specification reconstructed from original generation and visual review; exact full original prompt is not retained in this file."
+    },
+    {
+      "number": 11,
+      "title": "Constrain Cognito role trust by pool and authentication state",
+      "pages": [
+        389,
+        392
+      ],
+      "layout": "two independent trust checks and negative evidence tests",
+      "prompt": "Show identity-pool token aud and amr checks, Federated principal cognito-identity.amazonaws.com and sts:AssumeRoleWithWebIdentity, with other-pool and guest negative cases.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-d5567143-6fd9-43bd-958a-5fa87ddc52b4.png",
+      "promptRecord": "Content specification reconstructed from original generation and visual review; exact full original prompt is not retained in this file."
+    },
+    {
+      "number": 12,
+      "title": "DynamoDB LeadingKeys isolates each identity's partition",
+      "pages": [
+        395
+      ],
+      "layout": "partition-key dataset and two contrasting GetItem tests",
+      "prompt": "Show condition excerpt dynamodb:LeadingKeys with ForAllValues:StringEquals and ${cognito-identity.amazonaws.com:sub}; table keys match identity-pool IDs; own and other partition tests, distinguish condition match from final authorization.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-b358ec14-4017-4452-9bee-04c744a48979.png",
+      "promptRecord": "Content specification reconstructed from original generation and visual review; exact full original prompt is not retained in this file."
+    },
+    {
+      "number": 13,
+      "title": "Cognito Sync is legacy data synchronization, not sign-in",
+      "pages": [
+        398
+      ],
+      "layout": "legacy and current architecture alternatives",
+      "body": "Title \"COGNITO SYNC: LEGACY DATA, NEW CHOICES\". Premise \"Data synchronization is separate from signing users in or issuing AWS credentials.\" Upper left compact old device pair linked through \"Cognito Sync \u2014 existing implementations\" with app preferences, game state and local offline cache. Status exact \"Closed to new customers; existing customers can continue.\" Do not say service shut down. Right content-driven decision fork \"New application requirements\": \"Real-time shared data \u2192 AWS AppSync / GraphQL APIs\"; \"Profiles, preferences, settings \u2192 DynamoDB / key-value storage\". Do not imply AppSync auto sync offline without client code. Lower migration path old datasets \u2192 \"Transform data/schema\" \u2192 \"Migrate records\" \u2192 \"Update client APIs + test access controls\" \u2192 selected new backend. Distinct concise identity note \"User pool: sign-in tokens \u2022 Identity pool: temporary AWS credentials\". AppSync, DynamoDB clear named service nodes and meaningful document, database, device pictograms. No unsupported quotas, no real-time claim for plain DynamoDB. No exact date needed. Balanced two-way comparison, no generic three-card template.",
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"COGNITO SYNC: LEGACY DATA, NEW CHOICES\". Premise \"Data synchronization is separate from signing users in or issuing AWS credentials.\" Upper left compact old device pair linked through \"Cognito Sync \u2014 existing implementations\" with app preferences, game state and local offline cache. Status exact \"Closed to new customers; existing customers can continue.\" Do not say service shut down. Right content-driven decision fork \"New application requirements\": \"Real-time shared data \u2192 AWS AppSync / GraphQL APIs\"; \"Profiles, preferences, settings \u2192 DynamoDB / key-value storage\". Do not imply AppSync auto sync offline without client code. Lower migration path old datasets \u2192 \"Transform data/schema\" \u2192 \"Migrate records\" \u2192 \"Update client APIs + test access controls\" \u2192 selected new backend. Distinct concise identity note \"User pool: sign-in tokens \u2022 Identity pool: temporary AWS credentials\". AppSync, DynamoDB clear named service nodes and meaningful document, database, device pictograms. No unsupported quotas, no real-time claim for plain DynamoDB. No exact date needed. Balanced two-way comparison, no generic three-card template.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-783665ca-d274-4962-a507-d45762e6d209.png"
+    },
+    {
+      "number": 14,
+      "title": "SAML API access returns credentials to the requesting client",
+      "pages": [
+        400,
+        401,
+        402
+      ],
+      "layout": "client-centered SAML authentication and STS exchange",
+      "body": "Title \"SAML API ACCESS: ASSERTION TO SESSION\". Premise \"The identity provider authenticates the user; AWS STS exchanges the assertion for scoped temporary credentials.\" Use precise sequence with 4 actors: \"Client app\", \"Corporate IdP\", \"AWS STS\", \"Amazon S3\". Corporate directory is attached inside IdP side only. First client\u2192IdP \"Authenticate\"; IdP\u2192client \"SAML assertion\". Then client\u2192STS \"AssumeRoleWithSAML\" with small input labels \"SAML assertion \u2022 RoleArn \u2022 PrincipalArn\". STS\u2192same client \"Access key ID \u2022 Secret access key \u2022 Session token\". Client\u2192S3 \"Signed AWS API request\"; S3\u2192client \"Response\". Place trust check near STS \"Trusted SAML provider + role trust conditions\". Separate role permission document near S3 \"Role permissions scope actions and resources\". Keep arrows to actual requesters, no direct IdP\u2192S3 route or credential response sent to IdP. No fake AWS logo; company workplace can be modest illustration. Distinguish SAML assertion from AWS credentials with separate colors. Short note \"No IAM user is needed for each employee.\" No runnable code or fabricated console UI.",
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"SAML API ACCESS: ASSERTION TO SESSION\". Premise \"The identity provider authenticates the user; AWS STS exchanges the assertion for scoped temporary credentials.\" Use precise sequence with 4 actors: \"Client app\", \"Corporate IdP\", \"AWS STS\", \"Amazon S3\". Corporate directory is attached inside IdP side only. First client\u2192IdP \"Authenticate\"; IdP\u2192client \"SAML assertion\". Then client\u2192STS \"AssumeRoleWithSAML\" with small input labels \"SAML assertion \u2022 RoleArn \u2022 PrincipalArn\". STS\u2192same client \"Access key ID \u2022 Secret access key \u2022 Session token\". Client\u2192S3 \"Signed AWS API request\"; S3\u2192client \"Response\". Place trust check near STS \"Trusted SAML provider + role trust conditions\". Separate role permission document near S3 \"Role permissions scope actions and resources\". Keep arrows to actual requesters, no direct IdP\u2192S3 route or credential response sent to IdP. No fake AWS logo; company workplace can be modest illustration. Distinguish SAML assertion from AWS credentials with separate colors. Short note \"No IAM user is needed for each employee.\" No runnable code or fabricated console UI.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-4ae37f13-9c5c-425d-ad05-f1d445eef44e.png"
+    },
+    {
+      "number": 15,
+      "title": "SAML console federation uses the AWS sign-in endpoint",
+      "pages": [
+        403,
+        404
+      ],
+      "layout": "browser sequence with sign-in service exchange inset",
+      "body": "Title \"SAML CONSOLE ACCESS: THE SIGN-IN HANDOFF\". Premise \"For console SSO, the browser posts the SAML response to AWS Sign-In, which creates the console session.\" Main actors browser (left), corporate IdP (upper middle), AWS Sign-In (right), AWS Management Console (lower right), AWS STS (small attached exchange near AWS Sign-In). Browser\u2192IdP \"Open portal and authenticate\"; IdP\u2192browser \"SAML response\"; browser\u2192AWS Sign-In \"POST SAML response\"; AWS Sign-In\u2192STS \"AssumeRoleWithSAML\"; STS\u2192AWS Sign-In \"Temporary credentials\"; AWS Sign-In\u2192browser \"Console redirect\"; browser\u2192AWS Management Console \"Open federated console session\". Make crisp routing avoid crossing unreadable arrows. Lower explanatory notes \"The browser does not call AssumeRoleWithSAML directly in this console flow.\" \"Role trust checks the SAML provider and intended audience.\" \"Use configured Regional SAML endpoints for resilient federation.\" Short contrast \"API client flow: call STS directly. Console flow: use AWS Sign-In.\" No credentials shown as browser local-storage object. No claim console sign-in bypasses role permissions. No console screenshot as this is mechanism not walkthrough.",
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"SAML CONSOLE ACCESS: THE SIGN-IN HANDOFF\". Premise \"For console SSO, the browser posts the SAML response to AWS Sign-In, which creates the console session.\" Main actors browser (left), corporate IdP (upper middle), AWS Sign-In (right), AWS Management Console (lower right), AWS STS (small attached exchange near AWS Sign-In). Browser\u2192IdP \"Open portal and authenticate\"; IdP\u2192browser \"SAML response\"; browser\u2192AWS Sign-In \"POST SAML response\"; AWS Sign-In\u2192STS \"AssumeRoleWithSAML\"; STS\u2192AWS Sign-In \"Temporary credentials\"; AWS Sign-In\u2192browser \"Console redirect\"; browser\u2192AWS Management Console \"Open federated console session\". Make crisp routing avoid crossing unreadable arrows. Lower explanatory notes \"The browser does not call AssumeRoleWithSAML directly in this console flow.\" \"Role trust checks the SAML provider and intended audience.\" \"Use configured Regional SAML endpoints for resilient federation.\" Short contrast \"API client flow: call STS directly. Console flow: use AWS Sign-In.\" No credentials shown as browser local-storage object. No claim console sign-in bypasses role permissions. No console screenshot as this is mechanism not walkthrough.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-e7c80357-bfb7-43fe-a474-a4b15d8f38cc.png"
+    },
+    {
+      "number": 16,
+      "title": "SAML metadata establishes trust; assertions carry each login",
+      "pages": [
+        408,
+        409,
+        410
+      ],
+      "layout": "configuration/runtime distinction with issuer signing-key example",
+      "body": "Title \"SAML TRUST: METADATA IS NOT A LOGIN\". Premise \"Configure provider trust once; validate signed assertions for individual sessions.\" Two related zones with clean fine separator. Configuration upper: Corporate IdP exports \"IdP metadata\" document with \"Issuer identity \u2022 Signing certificate / public key\" \u2192 upload to \"IAM SAML provider\" \u2192 role trust names \"Federated SAML provider\". Opposite slim arrow AWS service-provider metadata \u2192 Corporate IdP labelled \"Configure relying party / audience\". Do not imply uploading private signing key in ordinary metadata setup. Runtime lower: \"User signs in\" \u2192 IdP issues \"Signed SAML assertion\" \u2192 \"AWS validates signature + assertion conditions\" \u2192 \"Role session if authorized\". Attached conditions \"Intended audience \u2022 Assertion time validity \u2022 Role attributes\". Explicit note \"Metadata supplies verification information; it does not itself authenticate the user.\" Operational note \"Monitor signing-key rotation and update provider metadata.\" Do not say metadata/certificate expiration automatically blocks IAM federation: assertion validity is a distinct check. Make configuration versus runtime visually evident, modest document/certificate/lock pictograms. No exact XML, no unverified signature algorithms.",
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"SAML TRUST: METADATA IS NOT A LOGIN\". Premise \"Configure provider trust once; validate signed assertions for individual sessions.\" Two related zones with clean fine separator. Configuration upper: Corporate IdP exports \"IdP metadata\" document with \"Issuer identity \u2022 Signing certificate / public key\" \u2192 upload to \"IAM SAML provider\" \u2192 role trust names \"Federated SAML provider\". Opposite slim arrow AWS service-provider metadata \u2192 Corporate IdP labelled \"Configure relying party / audience\". Do not imply uploading private signing key in ordinary metadata setup. Runtime lower: \"User signs in\" \u2192 IdP issues \"Signed SAML assertion\" \u2192 \"AWS validates signature + assertion conditions\" \u2192 \"Role session if authorized\". Attached conditions \"Intended audience \u2022 Assertion time validity \u2022 Role attributes\". Explicit note \"Metadata supplies verification information; it does not itself authenticate the user.\" Operational note \"Monitor signing-key rotation and update provider metadata.\" Do not say metadata/certificate expiration automatically blocks IAM federation: assertion validity is a distinct check. Make configuration versus runtime visually evident, modest document/certificate/lock pictograms. No exact XML, no unverified signature algorithms.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-6e7ee663-807a-43f1-a072-304042b4b3f1.png"
+    },
+    {
+      "number": 17,
+      "title": "Direct OIDC federation exchanges a trusted JWT for AWS credentials",
+      "pages": [
+        406,
+        407,
+        408
+      ],
+      "layout": "direct workload OIDC path and app identity decision",
+      "body": "Title \"OIDC FEDERATION: TRUSTED TOKEN, SHORT SESSION\". Premise \"A trusted OIDC token can be exchanged directly with AWS STS for a scoped role session.\" Use contemporary worked example CI job (workload pictogram) obtains OIDC token from \"OIDC provider\" then CI job\u2192AWS STS \"AssumeRoleWithWebIdentity\" with token and target role, STS\u2192same CI job temporary AWS credentials, CI job\u2192S3 \"Signed request\". Provider inside separate external identity boundary, STS/S3 are separate services not inside workload/VPC. Beside STS trust gate list \"Trusted issuer/provider\", \"Expected audience (aud)\", \"Allowed subject (sub)\" and \"Required provider-specific controls\". Explain \"Role permissions define the AWS actions allowed.\" Example compact subject text \"Approved repository + branch\" no runnable IAM policy. Lower decision note \"Direct OIDC suits workload federation. For customer apps needing sign-up, sign-in and identity brokering, consider Amazon Cognito.\" Highlight \"No long-lived AWS keys in the job.\" Do NOT repeat old blanket claim that direct OIDC is unsupported or universally not recommended. No GitHub logo unless accurate; label CI job generic. No IAM Identity Center conflation.",
+      "prompt": "Use case scientific-educational. Create one polished AWS Security teaching slide, 2048x1152 16:9. VISUAL_STANDARD=AIP_AIF_SECURITY_BLEND_V1. Follow reference for style only: near-black navy #020d20, subtle #04152a depth, white readable support text, cyan concept words, restrained fiery orange emphasis, violet identity accents. Modest dimensional pictograms and service objects, thin crisp outlines, no neon bloom, fake AWS logos, empty icon slots, thick glass frames, or decorative photo wallpaper. Header around 60-64px, premise 34px, support 30-32px at target; proportionate title, no huge empty areas. Content determines layout. Explain precisely with clear causal arrows. Do not reuse reference's exact composition or text. No tiny citations, no automatic takeaway strip.\nTitle \"OIDC FEDERATION: TRUSTED TOKEN, SHORT SESSION\". Premise \"A trusted OIDC token can be exchanged directly with AWS STS for a scoped role session.\" Use contemporary worked example CI job (workload pictogram) obtains OIDC token from \"OIDC provider\" then CI job\u2192AWS STS \"AssumeRoleWithWebIdentity\" with token and target role, STS\u2192same CI job temporary AWS credentials, CI job\u2192S3 \"Signed request\". Provider inside separate external identity boundary, STS/S3 are separate services not inside workload/VPC. Beside STS trust gate list \"Trusted issuer/provider\", \"Expected audience (aud)\", \"Allowed subject (sub)\" and \"Required provider-specific controls\". Explain \"Role permissions define the AWS actions allowed.\" Example compact subject text \"Approved repository + branch\" no runnable IAM policy. Lower decision note \"Direct OIDC suits workload federation. For customer apps needing sign-up, sign-in and identity brokering, consider Amazon Cognito.\" Highlight \"No long-lived AWS keys in the job.\" Do NOT repeat old blanket claim that direct OIDC is unsupported or universally not recommended. No GitHub logo unless accurate; label CI job generic. No IAM Identity Center conflation.",
+      "imagePath": "/workspace/scratch/2883f38c28a5/generated_images/exec-3ec78f06-6814-4bff-b10e-304fc47e0ed3.png"
+    }
+  ],
+  "qaCorrections": [
+    "Correct token label to identity-pool token for aud/amr evidence.",
+    "Replace instruction-like footer with CustomRoleArn explanation.",
+    "Correct inherited slide numbers and subject markers.",
+    "Separate AWS Sign-In metadata source from IAM SAML-provider object.",
+    "Clarify that AWS credentials represent a scoped role session."
+  ]
+}
