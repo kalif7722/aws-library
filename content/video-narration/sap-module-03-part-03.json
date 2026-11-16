@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "03",
+  "module_title": "Secure and Resilient Architectures — Encryption and Key Management",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-03",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 03 16:9 WebP visuals 01–08 individually inspected and narration follows exact depicted examples, technical labels and caveats.",
+  "part_id": "03",
+  "part_title": "S3, EBS and RDS Encryption Architecture Choices",
+  "output_prefix": "sap-module-03-part-03",
+  "script_revision": "2026-11-17-sap-m03-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "S3 object encryption choices",
+      "visual_overview": "Three cards compare SSE-S3, SSE-KMS and DSSE-KMS, illustrating service-managed encryption, KMS-backed single-layer encryption and dual-layer KMS-backed encryption.",
+      "visual_walkthrough": [
+        "SSE-S3 is S3-managed server-side encryption",
+        "SSE-KMS uses KMS-backed key permissions, policy auditing and associated request implications",
+        "DSSE-KMS uses dual-layer server-side encryption and KMS integration",
+        "Evaluate KMS request volume, key policy and cross-account access"
+      ],
+      "visual_example": "A regulated data store may require customer managed key authorization and auditing, while default SSE-S3 can suffice for basic managed encryption.",
+      "visual_synthesis": "Choosing KMS encryption adds key authorization, cost and operational trade-offs; two layers are not automatically required for every workload.",
+      "narration": "This slide compares three S3 encryption modes, shown as three buckets. The left bucket uses SSE-S3. S3 manages the server-side encryption keys, and it provides a straightforward default protection option for objects at rest. The center bucket uses SSE-KMS. AWS KMS participates in protecting the encryption keys, enabling key-policy controls, auditing and selected cross-account patterns when a customer managed key is used. But requests that require KMS operations need appropriate permissions, and KMS quotas and costs may matter at scale. The right bucket illustrates DSSE-KMS, which uses two layers of server-side encryption to meet additional protection requirements in supported workloads. The bottom recommendation points to customer managed KMS keys when the architect needs direct key policy control. Do not confuse two layers of server-side encryption with transport protection; TLS still applies in transit. For each S3 architecture, check bucket defaults, bucket policy requirements, object access, KMS permissions and replication or sharing needs. Choose the encryption model based on threat model and compliance requirements, not simply the longest service name."
+    },
+    {
+      "slide": 8,
+      "title": "EBS and RDS encryption: decide before creation",
+      "visual_overview": "Two walkthroughs show migration from unencrypted storage to encrypted EBS volumes and RDS database instances using encrypted snapshots and replacement resources.",
+      "visual_walkthrough": [
+        "EBS path: snapshot existing volume, encrypt through a copied snapshot where required, create encrypted replacement volume and attach",
+        "RDS path: snapshot unencrypted DB, copy snapshot with encryption and restore a new encrypted DB instance",
+        "Encryption cannot simply be toggled in place on existing unencrypted EBS volumes or supported RDS instances",
+        "Plan downtime, backups, IAM/KMS access and application endpoint changes"
+      ],
+      "visual_example": "A production unencrypted RDS instance needs an encrypted snapshot copy and restoration into a new instance, then a controlled application cutover to the new endpoint.",
+      "visual_synthesis": "Treat changing encryption state as a migration with rollback and data-integrity verification, not a routine settings edit.",
+      "narration": "This slide explains why encryption decisions should be made before provisioning persistent storage. On the left is Amazon EBS. An existing unencrypted EBS volume cannot simply have its encryption attribute switched on in place. The pictured process creates a snapshot, obtains an encrypted snapshot copy when necessary, then creates a new encrypted EBS volume and attaches that volume to the intended EC2 instance. Plan data consistency, compatible Availability Zones, application downtime and recovery before the cutover. On the right is Amazon RDS. Similarly, an existing unencrypted RDS DB instance cannot normally be converted to an encrypted instance by toggling one property. The diagram shows taking a database snapshot, creating an encrypted copy using a selected KMS key and restoring a new encrypted DB instance. The operator then validates the data and switches application connectivity to the new endpoint. The icon warning emphasizes that restoration creates a replacement rather than modifying the existing resource in place. Across both workflows, ensure KMS permissions, backup retention and rollback arrangements are adequate. The architectural takeaway is to treat encryption migration as a controlled change with testing and planned recovery."
+    }
+  ]
+}
