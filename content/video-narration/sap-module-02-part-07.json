@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "02",
+  "module_title": "Multi-Account Governance and Landing Zones",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-02",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Inspected and verified committed individual SAP-C03 slides 27-32, matching filenames and topics; follow diagrams and examples shown, with caveats for AWS remediation and SCP policy evaluation.",
+  "part_id": "07",
+  "part_title": "Landing-Zone Drift, StackSets Deployment and Cost Governance",
+  "scenes": [
+    {
+      "slide": 27,
+      "title": "AWS Control Tower — Drift Detection and Remediation",
+      "visual_overview": "Control Tower's approved landing-zone configuration is compared with actual governed-account state, producing a drift finding and a controlled corrective action.",
+      "visual_walkthrough": [
+        "Start at the Control Tower landing-zone baseline, including its deployed controls and governed resources",
+        "Follow the detection path to discover a changed account, control, or managed baseline",
+        "Evaluate the cause and impact before choosing an administrator-led fix or separately configured automation",
+        "Confirm updated configuration and compliant status through the appropriate service"
+      ],
+      "visual_example": "A centrally governed resource has been modified and no longer matches the Control Tower-managed baseline. An operator investigates the detected drift and uses the appropriate repair or reset procedure, then verifies that the governed configuration is restored.",
+      "visual_synthesis": "Drift detection provides visibility; not every drift is automatically repaired, and service-specific remediation must be validated.",
+      "narration": "This slide explains drift detection in a governed AWS landing zone. First, look at AWS Control Tower on the left. It establishes an approved governance baseline, including supported controls and resources managed as part of the landing zone. Follow the arrow to drift detection in the center. Drift means that an account, governed resource, or managed configuration no longer matches the expected state. The detection step tells operators that something has changed, but it does not mean every type of drift is fixed automatically. The next box is remediation. Depending on the drift type, an administrator may need to repair configuration, reset an affected control, re-enroll or update an account, or use an explicitly configured automation. The baseline box beneath the process represents the reference state against which changes are assessed. The teaching point is to identify exactly what drifted, determine why, choose a supported corrective action and then verify the result. Keep AWS Config rule noncompliance and CloudFormation stack drift distinct from Control Tower-specific landing-zone drift; they can be related but are not interchangeable. The architectural objective is reliable governance, not blind automatic rollback."
+    },
+    {
+      "slide": 28,
+      "title": "CloudFormation StackSets Across Accounts and Regions",
+      "visual_overview": "A central CloudFormation StackSets definition distributes stack instances to several AWS accounts and selected Regions.",
+      "visual_walkthrough": [
+        "Identify the shared StackSet template and the organization-level deployment target",
+        "Follow the arrows into Accounts A, B and C",
+        "Compare the target Regions shown below each account",
+        "Recognize centralized update management and organization-wide baseline use"
+      ],
+      "visual_example": "A platform team deploys a standard logging or security-resource template across production, staging and development accounts in selected AWS Regions.",
+      "visual_synthesis": "StackSets replicates managed stack instances across accounts and Regions; service-managed and self-managed permission models have different setup requirements.",
+      "narration": "This slide shows why AWS CloudFormation StackSets is useful in a large multi-account environment. Begin with the StackSets service on the left. A platform team defines one approved CloudFormation template and a set of parameters. Follow the connections toward AWS Organizations and the three target accounts in the center. Each account can receive a stack instance in the specified AWS Regions, illustrated here by the Region labels below the account names. This is how teams deploy consistent baseline resources, such as approved security configurations, monitoring or common IAM infrastructure, without manually copying templates to every account. A StackSet operation can create, update or delete the associated stack instances through a centralized process, subject to permissions and target selection. Two permission models matter for SAP-C03: service-managed permissions integrate with Organizations and support OU targeting and eligible automatic deployments to newly added accounts; self-managed permissions require you to configure the necessary administration and execution roles. Plan rollout concurrency, failure tolerance, drift detection and rollback behavior rather than assuming every target updates successfully. Remember that StackSets provides consistent distribution, while service-specific authorization and configuration remain necessary."
+    },
+    {
+      "slide": 29,
+      "title": "AWS Budgets, Cost Categories and Cost Allocation",
+      "visual_overview": "Production, staging and development account spending feeds consolidated billing, which powers budget thresholds, business cost grouping and tag-based attribution.",
+      "visual_walkthrough": [
+        "Follow account spending into centralized billing",
+        "See Budgets send a threshold alert through notification channels",
+        "See Cost Categories group costs by business unit, product or environment",
+        "See allocation tags attribute resource costs to responsible workloads and teams",
+        "Trace the example from production overspend to FinOps review"
+      ],
+      "visual_example": "A production-account forecast exceeds its configured budget threshold; an email or SNS alert brings the forecast to the FinOps team, which checks usage and decides what to optimize.",
+      "visual_synthesis": "Budgets alerts, Cost Categories groups charges, and activated cost-allocation tags help attribute spending; notifications alone do not optimize resources.",
+      "narration": "This slide introduces three complementary AWS cost-governance capabilities. On the left, separate production, staging and development accounts contribute usage and charges to consolidated billing. Now follow the three arrows on the right. AWS Budgets tracks configured cost or usage thresholds and can send notifications when actual or forecast spending crosses an alert level. Cost Categories provides a business-oriented view of spending by rules, such as product, department or environment. Cost-allocation tags identify resources or workloads so selected costs can be attributed to owners or applications; appropriate tags must be activated for billing and may not apply to every charge. The example at the bottom makes the interaction concrete. A production budget reaches its chosen threshold; an email or SNS alert notifies the FinOps or platform team, which investigates the underlying usage and takes a considered action. A budget warning is not an automatic EC2 resize or a guarantee that future charges stop. For architecture reviews, build useful tagging and grouping conventions early, define accountable budget owners, and verify the visibility required across the organization. Together these tools support financial control without replacing engineering decisions."
+    }
+  ],
+  "output_prefix": "sap-module-02-part-07",
+  "script_revision": "2026-11-17-sap-m02-p07-approved-upload-visualfirst-v1"
+}
