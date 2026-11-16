@@ -8,11 +8,11 @@
   "language": "en-US",
   "voice": "en-US-AndrewNeural",
   "speech_rate": "-3%",
-  "review_basis": "Original Module 04 WebPs 01–08 individually viewed, including the route-selection examples repeated in visuals 07–08.",
+  "review_basis": "Individually inspected SAP Module 04 source images; slide 08 uses the approved -v2 SG/NACL visual instead of a duplicated route diagram.",
   "part_id": "03",
-  "part_title": "Route Selection Worked Examples",
+  "part_title": "Route Selection and Security-Group versus NACL Decisions",
   "output_prefix": "sap-module-04-part-03",
-  "script_revision": "2026-11-17-sap-m04-p03-visualfirst-v1",
+  "script_revision": "2026-11-17-sap-m04-p03-sg-nacl-v2-visualfirst-v2",
   "scenes": [
     {
       "slide": 7,
@@ -30,17 +30,17 @@
     },
     {
       "slide": 8,
-      "title": "Route-selection practice with local and remote destinations",
-      "visual_overview": "This original slide illustrates route-selection practice with local and remote destinations with AWS network topology and explicit route examples.",
+      "title": "Security Groups versus Network ACLs",
+      "visual_overview": "The approved versioned diagram compares resource/ENI security groups with subnet network ACLs, including allow/deny evaluation and return traffic.",
       "visual_walkthrough": [
-        "Identify VPC and subnet or gateway boundaries",
-        "This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior.",
-        "Walk through the real CIDRs, next hops and security constraints",
-        "Use the associated subnet route table and evaluate specificity before considering route type or security rules."
+        "Locate the security group at the resource or ENI and the network ACL at the subnet boundary",
+        "Compare stateful security-group allow rules with numbered NACL allow and deny rules",
+        "Follow an allowed request and return path, checking NACL ephemeral ports and subnet routes",
+        "Conclude that SG statefulness does not establish a network route"
       ],
-      "visual_example": "This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior.",
-      "visual_synthesis": "Use the associated subnet route table and evaluate specificity before considering route type or security rules.",
-      "narration": "This slide teaches route-selection practice with local and remote destinations by following the pictured VPC architecture. This second example reinforces the earlier slide with additional destinations rather than a different routing rule. The left table includes a Transit Gateway route for ten dot forty dot twelve slash twenty-four, a broader ten dot forty slash sixteen route, the VPC local ten dot zero slash sixteen route and a zero slash zero default route through NAT. The right-hand practice questions compare destination ten dot forty dot twelve dot forty-two, which selects the most specific Transit Gateway slash twenty-four; destination ten dot zero dot five dot eight, which selects local slash sixteen; and destination eight dot eight dot eight dot eight, which uses the NAT default route. If static and propagated entries share the same prefix, review documented route-priority behavior. Use the associated subnet route table and evaluate specificity before considering route type or security rules. For a professional architecture decision, inspect the source and destination addresses, the effective route table associated with the subnet, and the security boundaries. A correct route without the right policy or a return path does not prove end-to-end connectivity. Treat the concrete values in the diagram as a worked example of this decision, not as a configuration that every workload must reuse."
+      "visual_example": "An inbound HTTPS request is allowed by the EC2 security group, but the stateless NACL needs appropriately configured inbound and outbound rules including the client's return ephemeral port range.",
+      "visual_synthesis": "The effective route, security group and NACL must all permit the flow; SGs track established connections while NACLs do not.",
+      "narration": "This slide compares security groups and network ACLs, two controls frequently confused in VPC troubleshooting. Begin with the left panel: a security group attaches to a supported resource or elastic network interface, while a network ACL applies at the subnet boundary. These are different enforcement locations, and an allowed route is still required. Move to the central comparison. Security groups contain allow rules and otherwise implicitly deny unmatched traffic; they are stateful, so the response traffic for an allowed connection is normally tracked automatically. Network ACLs have numbered allow and deny rules evaluated in ascending order, and the first matching rule decides the result. They are stateless, so you must explicitly permit the return direction. Look at the right-hand request and response arrows: if a client connects to an HTTPS server, the NACL rules need to account for the actual client ephemeral port range on return traffic. Do not assume every operating system uses identical ephemeral ports. The bottom reminder is the exam decision: stateful connection tracking changes return traffic evaluation but never creates missing routes. Check both rule layers and the full path."
     }
   ]
 }
