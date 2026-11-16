@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "03",
+  "module_title": "Secure and Resilient Architectures — Encryption and Key Management",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-03",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "All original SAP Module 03 diagrams 09-32 individually examined; original numbered WebP files 09-26 and approved -v2 WebPs 27-32.",
+  "part_id": "08",
+  "part_title": "Post-Quantum Cryptography and Migration",
+  "output_prefix": "sap-module-03-part-08",
+  "script_revision": "2026-11-17-sap-m03-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 21,
+      "title": "Post-quantum migration inventory",
+      "visual_overview": "This slide explains post-quantum migration inventory by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "The timeline shows protected traffic captured today, stored over years and potentially targeted by future cryptanalysis. This is the harvest-now-decrypt-later risk for sensitive long-lived information. The four inventory boxes identify TLS endpoints and key exchange, artifact and token signing, stored encrypted data and retention periods, and certificates or devices that are hard to upgrade. The risks differ for public-key algorithms and symmetric encryption, so prioritize data sensitivity and lifetime rather than assuming every algorithm fails identically.",
+        "Distinguish permission, security and operational responsibilities",
+        "Inventory cryptographic dependencies before choosing migration order and test client interoperability."
+      ],
+      "visual_example": "The timeline shows protected traffic captured today, stored over years and potentially targeted by future cryptanalysis. This is the harvest-now-decrypt-later risk for sensitive long-lived information. The four inventory boxes identify TLS endpoints and key exchange, artifact and token signing, stored encrypted data and retention periods, and certificates or devices that are hard to upgrade. The risks differ for public-key algorithms and symmetric encryption, so prioritize data sensitivity and lifetime rather than assuming every algorithm fails identically.",
+      "visual_synthesis": "Inventory cryptographic dependencies before choosing migration order and test client interoperability.",
+      "narration": "This slide explains post-quantum migration inventory through the actual architecture shown. The timeline shows protected traffic captured today, stored over years and potentially targeted by future cryptanalysis. This is the harvest-now-decrypt-later risk for sensitive long-lived information. The four inventory boxes identify TLS endpoints and key exchange, artifact and token signing, stored encrypted data and retention periods, and certificates or devices that are hard to upgrade. The risks differ for public-key algorithms and symmetric encryption, so prioritize data sensitivity and lifetime rather than assuming every algorithm fails identically. Inventory cryptographic dependencies before choosing migration order and test client interoperability. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 22,
+      "title": "ML-KEM encapsulation",
+      "visual_overview": "This slide explains ml-kem encapsulation by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "Alice on the left owns an ML-KEM key pair with a public key that can be shared and a protected private key. Bob on the right uses Alice's public key to encapsulate, producing a ciphertext and his copy of a shared secret. He sends the ciphertext to Alice, who decapsulates it with her private key to derive the same secret. Both copies can then contribute to a secure protocol's key derivation. The banner distinguishes this mechanism from hybrid TLS using classical ECDH plus ML-KEM.",
+        "Distinguish permission, security and operational responsibilities",
+        "ML-KEM establishes a shared secret; it is not a signature or a complete authenticated TLS protocol."
+      ],
+      "visual_example": "Alice on the left owns an ML-KEM key pair with a public key that can be shared and a protected private key. Bob on the right uses Alice's public key to encapsulate, producing a ciphertext and his copy of a shared secret. He sends the ciphertext to Alice, who decapsulates it with her private key to derive the same secret. Both copies can then contribute to a secure protocol's key derivation. The banner distinguishes this mechanism from hybrid TLS using classical ECDH plus ML-KEM.",
+      "visual_synthesis": "ML-KEM establishes a shared secret; it is not a signature or a complete authenticated TLS protocol.",
+      "narration": "This slide explains ml-kem encapsulation through the actual architecture shown. Alice on the left owns an ML-KEM key pair with a public key that can be shared and a protected private key. Bob on the right uses Alice's public key to encapsulate, producing a ciphertext and his copy of a shared secret. He sends the ciphertext to Alice, who decapsulates it with her private key to derive the same secret. Both copies can then contribute to a secure protocol's key derivation. The banner distinguishes this mechanism from hybrid TLS using classical ECDH plus ML-KEM. ML-KEM establishes a shared secret; it is not a signature or a complete authenticated TLS protocol. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 23,
+      "title": "ML-DSA artifact signatures",
+      "visual_overview": "This slide explains ml-dsa artifact signatures by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "Start with the software publisher on the left creating an artifact, such as an installer or container. A protected ML-DSA private key signs the artifact; the artifact and signature travel to the verifier. The verifier uses the matching public key and expected publisher trust to check authenticity and integrity. The green checks mean the signature is valid and the content was not modified. The red warning emphasizes that signature verification does not encrypt the artifact, so its content may remain readable.",
+        "Distinguish permission, security and operational responsibilities",
+        "Plan compatible verifiers and transitional signing; a signature provides authenticity, not confidentiality."
+      ],
+      "visual_example": "Start with the software publisher on the left creating an artifact, such as an installer or container. A protected ML-DSA private key signs the artifact; the artifact and signature travel to the verifier. The verifier uses the matching public key and expected publisher trust to check authenticity and integrity. The green checks mean the signature is valid and the content was not modified. The red warning emphasizes that signature verification does not encrypt the artifact, so its content may remain readable.",
+      "visual_synthesis": "Plan compatible verifiers and transitional signing; a signature provides authenticity, not confidentiality.",
+      "narration": "This slide explains ml-dsa artifact signatures through the actual architecture shown. Start with the software publisher on the left creating an artifact, such as an installer or container. A protected ML-DSA private key signs the artifact; the artifact and signature travel to the verifier. The verifier uses the matching public key and expected publisher trust to check authenticity and integrity. The green checks mean the signature is valid and the content was not modified. The red warning emphasizes that signature verification does not encrypt the artifact, so its content may remain readable. Plan compatible verifiers and transitional signing; a signature provides authenticity, not confidentiality. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    },
+    {
+      "slide": 24,
+      "title": "Post-quantum crypto agility rollout",
+      "visual_overview": "This slide explains post-quantum crypto agility rollout by following the pictured security architecture.",
+      "visual_walkthrough": [
+        "Identify the featured AWS service and the full context",
+        "The four-stage path begins by inventorying TLS, certificates, signatures and key lifetimes. Next, pilot supported hybrid ECDH plus ML-KEM negotiation with selected clients. Then test across proxies, firewalls, load balancers and inspection systems, measuring the algorithms actually negotiated rather than relying on configuration. Finally, expand from canary rollout to wider deployment with monitoring, fallback rules and rollback. The lower lane handles ML-DSA artifact signatures separately, ensuring downstream tooling can verify them.",
+        "Distinguish permission, security and operational responsibilities",
+        "Cryptographic migration must preserve interoperability and availability while changing security algorithms."
+      ],
+      "visual_example": "The four-stage path begins by inventorying TLS, certificates, signatures and key lifetimes. Next, pilot supported hybrid ECDH plus ML-KEM negotiation with selected clients. Then test across proxies, firewalls, load balancers and inspection systems, measuring the algorithms actually negotiated rather than relying on configuration. Finally, expand from canary rollout to wider deployment with monitoring, fallback rules and rollback. The lower lane handles ML-DSA artifact signatures separately, ensuring downstream tooling can verify them.",
+      "visual_synthesis": "Cryptographic migration must preserve interoperability and availability while changing security algorithms.",
+      "narration": "This slide explains post-quantum crypto agility rollout through the actual architecture shown. The four-stage path begins by inventorying TLS, certificates, signatures and key lifetimes. Next, pilot supported hybrid ECDH plus ML-KEM negotiation with selected clients. Then test across proxies, firewalls, load balancers and inspection systems, measuring the algorithms actually negotiated rather than relying on configuration. Finally, expand from canary rollout to wider deployment with monitoring, fallback rules and rollback. The lower lane handles ML-DSA artifact signatures separately, ensuring downstream tooling can verify them. Cryptographic migration must preserve interoperability and availability while changing security algorithms. When deciding what architecture to implement, first identify the caller, resource owner and trust boundary. Check how AWS policy authorization, service configuration and operational recovery interact instead of assuming a single setting makes everything secure. The diagram is a decision aid: follow its arrows from the original actor to the final action, and verify each dependency in the running environment."
+    }
+  ]
+}
