@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 04 WebPs 09–16 inspected individually; approved versioned visuals for 09 and 11. Narration follows slide diagrams, exact service choices, and security and routing caveats.",
+  "part_id": "04",
+  "part_title": "VPC Flow Logs, Private Endpoints and Effective Access",
+  "output_prefix": "sap-module-04-part-04",
+  "script_revision": "2026-11-17-sap-m04-p04-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 9,
+      "title": "VPC Flow Logs: what they show and miss",
+      "visual_overview": "Follow the original architecture for vpc flow logs: what they show and miss, inspecting network, identity and routing boundaries.",
+      "visual_walkthrough": [
+        "Introduce the overall architecture and the service roles",
+        "Walk through the actual numbered panels and arrows",
+        "Explain the depicted CIDRs, endpoints, policies and alternate paths",
+        "Summarize the decision and operational verification"
+      ],
+      "visual_example": "The specific source visual for slide 9 provides the concrete networking and authorization example.",
+      "visual_synthesis": "Trace the path, security controls and return routing in the order represented on the slide.",
+      "narration": "This slide explains how VPC Flow Logs help investigate network connectivity. Start with the three observation scopes on the left: a VPC, subnet, or elastic network interface. Supported traffic-flow metadata can be delivered to CloudWatch Logs or Amazon S3, as the arrows show. Look at the upper-right panel. A record can include source and destination addresses, ports, protocol, packet and byte counts, time range, action and log status. Compare traffic in both directions to locate a possible routing or network-control problem. The lower panel is equally important: Flow Logs are not packet captures and do not reveal application payloads. An ACCEPT action is not evidence that an application completed successfully, while a missing record may mean the flow did not reach the selected observation point or was excluded. Correlate logs with the effective subnet route table, security groups, NACLs and application evidence. The exam decision is to use Flow Logs as network-level observations, not complete end-to-end diagnoses."
+    },
+    {
+      "slide": 10,
+      "title": "Gateway versus interface VPC endpoint",
+      "visual_overview": "Follow the original architecture for gateway versus interface vpc endpoint, inspecting network, identity and routing boundaries.",
+      "visual_walkthrough": [
+        "Introduce the overall architecture and the service roles",
+        "Walk through the actual numbered panels and arrows",
+        "Explain the depicted CIDRs, endpoints, policies and alternate paths",
+        "Summarize the decision and operational verification"
+      ],
+      "visual_example": "The specific source visual for slide 10 provides the concrete networking and authorization example.",
+      "visual_synthesis": "Trace the path, security controls and return routing in the order represented on the slide.",
+      "narration": "This slide compares gateway and interface VPC endpoints through the two architectures displayed. On the left, a gateway endpoint serves Amazon S3 or DynamoDB through route-table entries targeting the service's managed prefix list. It is not an ENI and carries no hourly endpoint charge. This endpoint does not generally support direct access from a remote on-premises network or a different VPC over peering or Transit Gateway. On the right, an interface endpoint creates private-IP ENIs in selected subnets using AWS PrivateLink, with a security group controlling traffic. It supports many AWS APIs and approved private endpoint services; supported private DNS may allow ordinary AWS service names to resolve to its private addresses. Interface endpoints typically have hourly and data-processing charges. With appropriate DNS and routing, supported interface endpoints can also serve hybrid or other connected clients. The bottom guide makes the decision clear: use a gateway endpoint for suitable S3 and DynamoDB access within the VPC; consider interface endpoints when the service, network reachability or private-IP model requires them."
+    },
+    {
+      "slide": 11,
+      "title": "Private DNS for interface endpoints",
+      "visual_overview": "Follow the original architecture for private dns for interface endpoints, inspecting network, identity and routing boundaries.",
+      "visual_walkthrough": [
+        "Introduce the overall architecture and the service roles",
+        "Walk through the actual numbered panels and arrows",
+        "Explain the depicted CIDRs, endpoints, policies and alternate paths",
+        "Summarize the decision and operational verification"
+      ],
+      "visual_example": "The specific source visual for slide 11 provides the concrete networking and authorization example.",
+      "visual_synthesis": "Trace the path, security controls and return routing in the order represented on the slide.",
+      "narration": "This slide traces private DNS resolution for an interface endpoint. Begin on the left with an application using the ordinary AWS service hostname. When supported private DNS is enabled, the DNS resolver in the relevant VPC scope can resolve that name to an endpoint ENI's private IP address. Follow the arrows to the interface endpoint. This changes the destination address that the client uses, not the IAM role's authorization. The upper-right diagram reminds us that clients in other VPCs or on-premises networks need intentional Resolver forwarding, correct VPC DNS settings and supported network paths; creating an endpoint in one VPC does not update DNS everywhere. The lower-right checklist shows the full request: confirm DNS resolution, subnet routing, endpoint security groups, any endpoint policy and the resource and identity policies governing the AWS API. If name resolution succeeds but the API still fails, investigate these additional controls. Private DNS is one part of a working private network path, not proof of connectivity or permission."
+    },
+    {
+      "slide": 12,
+      "title": "VPC endpoint policies and S3 authorization",
+      "visual_overview": "Follow the original architecture for vpc endpoint policies and s3 authorization, inspecting network, identity and routing boundaries.",
+      "visual_walkthrough": [
+        "Introduce the overall architecture and the service roles",
+        "Walk through the actual numbered panels and arrows",
+        "Explain the depicted CIDRs, endpoints, policies and alternate paths",
+        "Summarize the decision and operational verification"
+      ],
+      "visual_example": "The specific source visual for slide 12 provides the concrete networking and authorization example.",
+      "visual_synthesis": "Trace the path, security controls and return routing in the order represented on the slide.",
+      "narration": "This diagram follows an EC2 instance role calling GetObject on a report in Amazon S3 through a gateway endpoint. Begin with identity authorization: the role needs an appropriate S3 action and object ARN, while ListBucket is a distinct bucket-level permission. Next look at the S3 gateway endpoint policy. It acts as an additional filter for which principals, actions and resources can use that endpoint, but it does not grant permissions itself. Continue into the bucket policy. The bucket can require a particular SourceVpce condition, allow supported external principals, or explicitly deny an unacceptable request. The bottom Organizations SCP control may further restrict the member account role's maximum permissions. For same-account access, an additional bucket-policy Allow may not be necessary when IAM already grants the action and no other policy blocks it. Finally, verify that the request actually follows the configured route toward the endpoint. The takeaway is to evaluate all applicable policy layers and routing, rather than granting broad permissions to fix an unidentified AccessDenied error."
+    }
+  ]
+}
