@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "01",
+  "module_title": "IAM Foundations",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-01",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected original SAP Module 01 WebP slides 31–44. Narration follows pictured panels and decisions; slide 45 is unavailable and excluded.",
+  "part_id": "08",
+  "part_title": "Verified Access, IAM Conditions and Least-Privilege Troubleshooting",
+  "output_prefix": "sap-module-01-part-08",
+  "script_revision": "2026-11-16-sap-m01-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "AWS Verified Access: application entry without VPN",
+      "visual_overview": "A remote user's private web-app request goes through Verified Access identity and optional device-context policy; the application still enforces its own authorization.",
+      "visual_walkthrough": [
+        "Inspect the AWS Verified Access: application entry without VPN architecture or decision in its pictured order",
+        "Follow actual flow arrows, policy controls, valid and denied outcomes",
+        "Examine all relevant examples, permissions and caveats shown",
+        "Compare alternatives and conclude with the correct architecture decision"
+      ],
+      "visual_example": "Use the explicitly pictured architecture and example values, distinguishing authorization from authentication and grant from guardrail.",
+      "visual_synthesis": "Trace the caller, trust, effective permissions, contextual conditions and observed evidence before choosing or troubleshooting the design.",
+      "narration": "This architecture shows secure access to a private web application without opening a full network VPN. Start on the left with a corporate laptop and a personal laptop. Both users sign in, but the request is assessed against AWS Verified Access policy. Above the central service, Identity Center or a supported OIDC provider supplies identity context; a supported device trust provider can additionally contribute device posture. Follow the green path: a request that meets the configured policy is forwarded to the private web application inside the VPC. The red request fails the device or other applicable policy check and is blocked. On the right, two separate authorization boxes remain: the application must still enforce user roles and record ownership, and its backend uses an IAM role to access S3 or DynamoDB. The bottom contrasts Verified Access with a network-level VPN and with IAM policies. Verified Access protects application entry, not arbitrary VPC connectivity, and IAM authorizes AWS service APIs. The design decision is to use this pattern for specific private web apps when fine-grained identity-aware access is needed."
+    },
+    {
+      "slide": 32,
+      "title": "IAM policy condition evaluation",
+      "visual_overview": "One S3 GetObject Allow statement requires both a trusted VPC endpoint and a confidential object tag; three sample requests show how missing or mismatched conditions prevent the statement matching.",
+      "visual_walkthrough": [
+        "Inspect the IAM policy condition evaluation architecture or decision in its pictured order",
+        "Follow actual flow arrows, policy controls, valid and denied outcomes",
+        "Examine all relevant examples, permissions and caveats shown",
+        "Compare alternatives and conclude with the correct architecture decision"
+      ],
+      "visual_example": "Use the explicitly pictured architecture and example values, distinguishing authorization from authentication and grant from guardrail.",
+      "visual_synthesis": "Trace the caller, trust, effective permissions, contextual conditions and observed evidence before choosing or troubleshooting the design.",
+      "narration": "This slide demonstrates why an IAM Allow statement can still fail to match an API request. On the left the example permits S3 GetObject on objects in one bucket, but it includes two required conditions: the request's SourceVpce must equal vpce-approved, and the existing object's Classification tag must equal confidential. Look at case A. The assumed role uses the approved endpoint and requests a confidential object, so both comparisons match and this Allow statement can apply, subject to other policies. In case B the endpoint matches but the object tag says public; the tag condition fails. In case C the object has the confidential tag, but SourceVpce is absent from the request context; a normal StringEquals condition cannot match that missing key. Cases B and C therefore receive no Allow from this statement and are denied if no other applicable Allow exists. At the bottom, PrincipalOrgID, MFA and RequestedRegion are other examples, not extra requirements of this sample statement. The final caution mentions IfExists and Null because missing-key behavior changes with the operator. Architecturally, validate the exact condition key and request context rather than assuming network origin or tags are always available."
+    },
+    {
+      "slide": 33,
+      "title": "Least privilege is a repeatable process",
+      "visual_overview": "A five-stage refinement loop combines initial narrow scope, real API usage, policy tightening, validation and ongoing monitoring; before/after S3 statements demonstrate the gain.",
+      "visual_walkthrough": [
+        "Inspect the Least privilege is a repeatable process architecture or decision in its pictured order",
+        "Follow actual flow arrows, policy controls, valid and denied outcomes",
+        "Examine all relevant examples, permissions and caveats shown",
+        "Compare alternatives and conclude with the correct architecture decision"
+      ],
+      "visual_example": "Use the explicitly pictured architecture and example values, distinguishing authorization from authentication and grant from guardrail.",
+      "visual_synthesis": "Trace the caller, trust, effective permissions, contextual conditions and observed evidence before choosing or troubleshooting the design.",
+      "narration": "This visual presents least privilege as continuous improvement rather than a one-time policy-writing task. Follow the numbered loop around the center. First, start with a task-specific IAM policy that grants only the actions a workload needs. Second, observe real API usage with evidence such as CloudTrail, and use IAM Access Analyzer's relevant unused-access insights to identify possible excess. Third, refine actions, resources and conditions, replacing unsupported or unnecessary wildcards where possible. Fourth, validate the proposed policy using policy checks and representative end-to-end tests. Fifth, deploy carefully, monitor AccessDenied events and repeat as the workload evolves. On the right, the red example grants s3 star over all resources, while the green example narrows permission to GetObject under an approved reports prefix. The sculpting picture reinforces reducing excess access. The lower boxes warn that CloudTrail reflects observed usage, not every future requirement, and policy simulators cannot replace realistic tests. A new operation could legitimately need an additional permission. The exam lesson is to combine usage evidence, service authorization references and controlled testing rather than blindly removing every unobserved action."
+    },
+    {
+      "slide": 34,
+      "title": "Troubleshoot AccessDenied systematically",
+      "visual_overview": "The diagram traces a caller through STS AssumeRole to an S3 read, then diagnoses explicit denies, missing allows, trust conditions, endpoint policies and KMS authorization.",
+      "visual_walkthrough": [
+        "Inspect the Troubleshoot AccessDenied systematically architecture or decision in its pictured order",
+        "Follow actual flow arrows, policy controls, valid and denied outcomes",
+        "Examine all relevant examples, permissions and caveats shown",
+        "Compare alternatives and conclude with the correct architecture decision"
+      ],
+      "visual_example": "Use the explicitly pictured architecture and example values, distinguishing authorization from authentication and grant from guardrail.",
+      "visual_synthesis": "Trace the caller, trust, effective permissions, contextual conditions and observed evidence before choosing or troubleshooting the design.",
+      "narration": "This is a practical AccessDenied diagnostic flow, so follow the actual failing request rather than guessing at a service name. The top row shows a source principal calling STS AssumeRole, obtaining a target role session, and then requesting S3 GetObject on a potentially KMS-encrypted object. Step one is to capture the caller, action, resource ARN, Region and request context from the error and CloudTrail. Step two checks for any applicable explicit Deny across identity, Organizations, boundary, session, resource and endpoint policies. The diamond on the right confirms that a matching explicit Deny stops the request. If none exists, step three asks whether an applicable Allow exists at the relevant layers. Missing authorization produces implicit denial. Step four applies action-specific checks. For AssumeRole, verify caller permission and the target role trust policy, including conditions such as ExternalId. For S3 access, verify the active role, object ARN, bucket policy, endpoint conditions and KMS key permission when needed. The bottom examples make this tangible: one caller can request AssumeRole but is absent from trust, while another role can read S3 but cannot decrypt the KMS-encrypted object. Enhanced error messages help, but may not reveal every blocker. Inspect the whole request and all applicable boundaries."
+    }
+  ]
+}
