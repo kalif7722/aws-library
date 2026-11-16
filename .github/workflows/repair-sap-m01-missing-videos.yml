@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        part: ["01","02","03","04","05","06","07","08","09","10","11"]
+        part: ["01","02","03","04","05","06","07","08","09","10","11","12","13"]
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -40,9 +40,9 @@ jobs:
           from pathlib import Path
           part=os.environ["PART"]
           root=Path("content/video-narration")
-          docs=[json.loads((root/f"sap-module-01-part-{p:02}.json").read_text()) for p in range(1,12)]
+          docs=[json.loads((root/f"sap-module-01-part-{p:02}.json").read_text()) for p in range(1,14)]
           all_slides=[s["slide"] for d in docs for s in d["scenes"]]
-          assert all_slides==list(range(1,46)),f"Incomplete/overlapping Module 01 coverage: {all_slides}"
+          assert all_slides==list(range(1,53)),f"Incomplete/overlapping Module 01 coverage: {all_slides}"
           m=docs[int(part)-1]
           assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","01",part)
           assert m["output_prefix"]==f"sap-module-01-part-{part}"
@@ -51,10 +51,10 @@ jobs:
           for scene in m["scenes"]:
               number=scene["slide"]
               path=Path(f"public/course-visuals/sap-c03/module-01/slide-{number:02}.webp")
-              if number==45: path=path.with_name("slide-45-v2.webp")
+              if 45 <= number <= 52: path=path.with_name(f"slide-{number:02}-v2.webp")
               assert path.is_file() and path.stat().st_size>10000,path
               assert path.open("rb").read(4)==b"RIFF",path
-          print(f"PASS: SAP M01 Part {part}, original WebPs, script {m['script_revision']}, entire 45-slide continuity")
+          print(f"PASS: SAP M01 Part {part}, original WebPs, script {m['script_revision']}, entire 52-slide continuity")
           PY
       - name: Determine whether a valid MP4 and matching manifest already exist in R2
         id: gate
