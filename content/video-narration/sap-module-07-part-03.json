@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 07 slides 7-9 individually visually inspected; narration follows numbered panels and diagrams.",
+  "part_id": "03",
+  "part_title": "Spot Recovery, EC2 Tenancy and Placement Groups",
+  "output_prefix": "sap-module-07-part-03",
+  "script_revision": "2026-11-17-sap-m07-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Spot design: expect interruption",
+      "visual_overview": "The approved SAP slide diagrams spot design: expect interruption in four numbered visual sections and a remember takeaway.",
+      "visual_walkthrough": [
+        "Follow Spot capacity request toward multiple instance families and Availability Zones with capacity-aware allocation",
+        "Trace process work to a durable checkpoint, then idempotent retry and draining",
+        "Examine interruption notices and rebalance recommendations as signals, not guaranteed grace periods",
+        "Explain Capacity Rebalancing replacement attempts without assuming replacement capacity"
+      ],
+      "visual_example": "Review a production compute workload against the diagram and evaluate its concrete performance, security and failure requirements.",
+      "visual_synthesis": "The architecture is appropriate only after its operational requirements, limits and failure response are validated.",
+      "narration": "This slide teaches how to build an application that survives EC2 Spot interruption. Begin at the upper-left diagram. An application requests Spot capacity across several instance types and Availability Zones, rather than depending on one narrow capacity pool. A capacity-aware allocation strategy can favor pools with better availability characteristics. Now follow the upper-right sequence from processing work to saving a checkpoint in durable storage, retrying idempotently and draining work where possible. This is the application's recovery design, not a Spot platform guarantee. The lower-left panel shows interruption notices and rebalance recommendations. Those signals can help with planned recovery, but you cannot assume that every interruption offers a reliable grace period. The lower-right panel shows Capacity Rebalancing launching a replacement proactively when risk is detected. It cannot promise a replacement instance will be available, or stop the existing instance from being interrupted. Design task queues, checkpoints, fallbacks and optional On-Demand capacity to fit your recovery requirements. The exam takeaway is that Spot savings are appropriate only when the application is resilient to actual loss of capacity."
+    },
+    {
+      "slide": 8,
+      "title": "EC2 tenancy: isolation versus licensing",
+      "visual_overview": "The approved SAP slide diagrams ec2 tenancy: isolation versus licensing in four numbered visual sections and a remember takeaway.",
+      "visual_walkthrough": [
+        "Read shared tenancy hardware pooling panel",
+        "Compare Dedicated Instances' hardware isolation without host-level placement control",
+        "Explain Dedicated Hosts' physical host allocation and licensing use cases",
+        "Validate licensing terms, supported configuration, host recovery and cost independently"
+      ],
+      "visual_example": "Review a production compute workload against the diagram and evaluate its concrete performance, security and failure requirements.",
+      "visual_synthesis": "The architecture is appropriate only after its operational requirements, limits and failure response are validated.",
+      "narration": "This image separates hardware isolation from software licensing, which are not the same design decision. Start at the top-left blue panel. Shared tenancy places customer instances on AWS shared hardware under the service's isolation controls. Move right to Dedicated Instances, where dedicated underlying physical hardware serves one customer account for applicable tenancy arrangements, but the customer does not obtain the same host placement visibility or control as Dedicated Hosts. The lower-left orange panel shows Dedicated Hosts. They expose physical host allocation and placement controls that can matter for licensing tied to sockets, cores or physical machines, depending on vendor license terms. The central shield puts isolation on one half and licensing on the other. Even a dedicated deployment is not automatically compliant. Finally, the lower-right checklist asks for license rights, supported instance types, recovery arrangements, utilization and cost. A workload may need a Dedicated Host for licensing, or Dedicated Instances for isolation, but the correct answer depends on the actual contract and supported deployment. Validate vendor terms instead of treating the word dedicated as a blanket compliance guarantee."
+    },
+    {
+      "slide": 9,
+      "title": "Placement groups: choose a deliberate failure domain",
+      "visual_overview": "The approved SAP slide diagrams placement groups: choose a deliberate failure domain in four numbered visual sections and a remember takeaway.",
+      "visual_walkthrough": [
+        "Inspect cluster group tightly packed in one AZ for low latency",
+        "Compare spread group instances separated across distinct hardware",
+        "Explain partition group hardware partition separation for distributed systems",
+        "Distinguish placement strategy from data replication and Multi-AZ resilience"
+      ],
+      "visual_example": "Review a production compute workload against the diagram and evaluate its concrete performance, security and failure requirements.",
+      "visual_synthesis": "The architecture is appropriate only after its operational requirements, limits and failure response are validated.",
+      "narration": "This slide compares three placement-group types, each solving a different infrastructure problem. Start on the left. Cluster placement groups place compatible instances close together inside one Availability Zone, useful where low latency and high inter-node throughput outweigh the shared zone failure risk. In the next purple column, spread placement groups aim to separate a limited number of instances across distinct underlying hardware. That reduces correlated host risk for selected critical instances, subject to service limits and supported spread levels. The third orange column shows partition placement groups. Instances are organized into partitions with distinct underlying racks or hardware boundaries, helpful when distributed systems replicate data and need visibility into fault domains. Now read the final column. Placement alone is not database replication, automatic failover or Multi-AZ application recovery. A cluster may perform better but concentrate failure exposure, and partition placement still needs an application replication policy. Match the strategy to whether the problem is inter-node communication, isolated critical nodes or partition-aware distributed data. Check capacity and placement limits before deployment."
+    }
+  ]
+}
