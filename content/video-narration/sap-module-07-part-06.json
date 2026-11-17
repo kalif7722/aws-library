@@ -13,5 +13,48 @@
   "part_title": "Warm Pools, Lifecycle Hooks and Safe Instance Refresh",
   "output_prefix": "sap-module-07-part-06",
   "script_revision": "2026-11-17-sap-m07-p06-visualfirst-v1",
-  "scenes": []
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "Warmup, health grace and warm pools",
+      "visual_overview": "The original SAP slide diagrams warmup, health grace and warm pools using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Explain warmup's effect on scaling metrics",
+        "Distinguish health-check grace period from application readiness",
+        "Describe warm pool pre-prepared EC2 instances and costs",
+        "Use lifecycle hooks and readiness tests before serving"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "This slide compares four mechanisms that may appear similar but solve different problems. The top-left clock represents Auto Scaling instance warmup: a recently launched instance's metrics may not yet reflect steady-state demand, so scaling policies must account for that period. The top-right shield represents a health-check grace period that delays certain unhealthy-replacement decisions during startup. It does not certify that the application is ready. In the lower-left, a warm pool holds prepared instances outside active service to reduce time to useful capacity, with cost and retained-state implications that depend on configuration. The lower-right lifecycle checklist ensures bootstrap tasks and validations are completed. If a warm-pool instance is reused, dependencies and application readiness still need checking. Configure each mechanism independently, then test how long it actually takes from a scale-out decision until requests can be served correctly."
+    },
+    {
+      "slide": 17,
+      "title": "Lifecycle hooks for deliberate transitions",
+      "visual_overview": "The original SAP slide diagrams lifecycle hooks for deliberate transitions using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Walk through launch pause for preparation and registration",
+        "Walk through termination pause for draining and cleanup",
+        "Explain heartbeats, completion and bounded timeout behavior",
+        "State Spot interruption and failure limits"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "On the left side, a new EC2 instance reaches a lifecycle pause before serving traffic. During that pause, launch automation can perform configuration, registration or validation tasks; the three completed bars represent work that must succeed or be handled explicitly. On the right, a termination pause allows time for connection draining, final logs and cleanup before instance removal proceeds. Neither pause lasts indefinitely. The lower-left heartbeat icon indicates that automation must send heartbeats when extra time is needed and signal lifecycle completion, with correctly designed timeout and default outcomes. The lower-right warning matters for interruptible capacity. Hooks cannot prevent Spot interruption, sudden host loss or every forced termination. Any critical state needs durable storage, and cleanup should be bounded and retry-safe. Use lifecycle hooks to orchestrate expected scaling transitions, not as a guarantee that every shutdown finishes gracefully."
+    },
+    {
+      "slide": 18,
+      "title": "Instance refresh and safe deployment",
+      "visual_overview": "The original SAP slide diagrams instance refresh and safe deployment using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Read new launch-template version and replacement path",
+        "Apply healthy-capacity percentages and warmup during refresh",
+        "Use checkpoints, bake time and alarms to catch bad replacements",
+        "Validate rollback prerequisites and separate database changes"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "A new launch-template version is the starting input on the upper-left, not proof that any existing EC2 instances have changed. Follow the arrow into the Auto Scaling instance refresh cycle, which replaces instances using the configured launch definition. The upper-right capacity bar is the safeguard: set appropriate healthy-capacity percentages and warmup so adequate ready capacity remains while old instances are replaced. The lower-left checklist shows optional checkpoints, bake time and alarm-based rollback features that can help catch a faulty rollout. These mechanisms require correctly configured alarms and a realistic readiness criterion. In the lower-right, the gear and database symbols separate compute rollback from application data. Reverting instance configuration does not undo an incompatible database schema migration or reverse writes. Test application compatibility and rollback conditions before refreshing the entire fleet."
+    }
+  ]
 }
