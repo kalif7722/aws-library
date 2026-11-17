@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 04 WebPs 31–35 individually visually inspected, including nested layers, labeled routes, comparison matrices, caveats and example scenarios.",
+  "part_id": "11",
+  "part_title": "IPv6 Address Planning, Dual Stack and Translation",
+  "output_prefix": "sap-module-04-part-11",
+  "script_revision": "2026-11-17-sap-m04-p11-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "IPv6 addressing: plan prefixes, not host counts",
+      "visual_overview": "An example IPv6 /56 VPC prefix is subdivided into separate /64 subnets across Availability Zones with reserved space for growth.",
+      "visual_walkthrough": [
+        "Inspect sample VPC /56 and two active /64s plus spare blocks",
+        "explain distinct IPv4 versus IPv6 address space",
+        "follow ENI allocation and independent routes/security",
+        "relate IPAM and native IPv6 without NAT."
+      ],
+      "visual_example": "A new dual-stack VPC assigns /64 subnets by AZ and preserves spare prefixes for later workload expansion.",
+      "visual_synthesis": "IPv6 address abundance does not create reachability; routes, service compatibility and security must still be designed.",
+      "narration": "On this slide the important planning unit is an address prefix, not a count of individual hosts. In the large left panel, the example VPC uses the documentation IPv6 prefix two thousand one colon d b eight colon one two three four double colon slash fifty six. That example is subdivided into slash sixty four subnets for Availability Zones A and B, with additional slash sixty four ranges held in reserve. This is a common illustration, not a universal allocation size requirement. Workload network interfaces receive IPv6 addresses from the assigned subnet. Now turn to the right-hand callouts. The VPC's IPv6 address space is distinct from IPv4. Each supported service and feature needs to be checked for IPv6 compatibility. IPv6 security group and network ACL rules and routes are separate from IPv4 rules. The lower panels warn that an IPv6 address by itself grants no reachability; native IPv6 communication normally does not need network address translation, but still needs appropriate routing and security. Use IPAM and a consistent allocation scheme to keep growth manageable across Regions and AZs."
+    },
+    {
+      "slide": 32,
+      "title": "Dual-stack rollout: two paths to test",
+      "visual_overview": "The client asks DNS for A and AAAA records, taking independent IPv4 and IPv6 front-door paths into a dual-stack load balancer and compatible backends.",
+      "visual_walkthrough": [
+        "Trace A record via IPv4 cloud and AAAA via IPv6 cloud to front door",
+        "explain compatible target address families without assuming all backends dual stack",
+        "follow four rollout steps and warnings for IPv4 NAT and DNS versus reachability."
+      ],
+      "visual_example": "A team enables IPv6 on an application load balancer and publishes AAAA only after IPv6 routing, firewall and health checks pass end to end.",
+      "visual_synthesis": "Treat IPv4 and IPv6 as separate test cases; DNS publication should follow working connectivity, with rollback ready.",
+      "narration": "This is a rollout checklist for dual-stack applications. Start on the left: a client resolves a service name. DNS can return an A record for IPv4 and an AAAA record for IPv6. Follow the orange route through the IPv4 cloud and the cyan route through the IPv6 cloud. They arrive at the same dual-stack load balancer frontend, but represent independent network paths. The target panels on the right explain that the backend address family depends on the specific load balancer and target group support; do not assume every target needs two addresses or that every combination is supported. The warning strip notes that publishing a DNS record does not prove the path works. An IPv4 NAT route cannot substitute for native IPv6 egress. Now walk through the four rollout boxes along the bottom. Inventory clients, services and SDKs for IPv6 readiness. Configure prefixes, addresses, IPv6 routes and security rules. Publish AAAA only after testing the full path while retaining A records. Finally monitor error rates and latency by address family and preserve a tested rollback. A successful IPv4 test never validates IPv6."
+    },
+    {
+      "slide": 33,
+      "title": "Egress-only internet gateway: IPv6 outbound control",
+      "visual_overview": "The IPv6 workload reaches the internet through an egress-only internet gateway, returns established traffic, and blocks unsolicited new inbound connections.",
+      "visual_walkthrough": [
+        "Follow outbound cyan request through egress-only IGW and back along purple established response",
+        "inspect blocked red unsolicited path",
+        "read ::/0 route, separate SG/NACL policy and contrast with standard IGW."
+      ],
+      "visual_example": "A private IPv6 EC2 instance calls an external HTTPS endpoint without allowing unrelated internet hosts to open new sessions.",
+      "visual_synthesis": "Choose egress-only IGW for outbound-initiated IPv6 without NAT; native inbound connectivity instead needs a standard IGW and suitable security rules.",
+      "narration": "The big central diagram answers a specific question: how can an IPv6 workload initiate internet traffic without permitting unsolicited inbound sessions? On the left, an instance in a VPC subnet has an IPv6 address. The cyan arrow follows its outbound HTTPS request through an egress-only internet gateway toward the IPv6 internet. The purple return arrow is permitted because it belongs to an established outbound connection. At the top, the red dotted inbound arrow is rejected for an unsolicited connection. This is a stateful egress behavior, not address translation. Examine the lower panels. The subnet IPv6 default route, written as double colon slash zero, must target the egress-only gateway. Security groups and network ACLs still apply. If you actually need publicly initiated inbound IPv6, a standard internet gateway and suitable protections are the different design choice. And an IPv4 NAT Gateway does not provide this native IPv6 path. For exams, distinguish outbound-only IPv6 control, IPv4 NAT translation and ordinary bidirectional internet routing."
+    },
+    {
+      "slide": 34,
+      "title": "DNS64 and NAT64: distinct DNS and translation jobs",
+      "visual_overview": "The slide splits DNS64 synthesis by Route 53 Resolver from NAT64 packet translation through NAT Gateway to IPv4-only services.",
+      "visual_walkthrough": [
+        "Trace AAAA question to DNS64 synthesized 64:ff9b::/96 address",
+        "separately follow client IPv6 traffic over corresponding prefix route to NAT Gateway and out as IPv4",
+        "contrast native IPv6 flow and IPv4-literal application caveat."
+      ],
+      "visual_example": "An IPv6-only workload accesses an IPv4-only public service that publishes only an A record, using DNS64 resolution and NAT64 translation.",
+      "visual_synthesis": "DNS64 synthesizes an address response; NAT64 converts application packets; the resolver is not the traffic forwarding hop.",
+      "narration": "The title highlights two separate mechanisms that are often confused. In the left purple panel, an IPv6 client asks Route 53 Resolver for an AAAA record. If the destination has only an IPv4 A record and DNS64 is enabled for the client subnet, the resolver can synthesize an IPv6 answer using the well-known sixty four colon f f nine b double colon slash ninety six prefix. This is DNS processing: the resolver does not carry the eventual application packets. In the right cyan panel, the client sends application traffic to the synthesized IPv6 destination. An appropriately configured route for the translation prefix leads to a NAT Gateway, which performs NAT64 translation and forwards IPv4 traffic toward the IPv4-only service. If it is an internet destination, the public NAT path also needs internet gateway connectivity. Look at the final strip. Native IPv6 traffic uses its own IPv6 route, not the NAT64 route. Applications that use literal IPv4 addresses may need changes because DNS64 cannot synthesize a name lookup that never happened. Remember the two jobs: DNS64 creates the address answer; NAT64 converts network traffic."
+    },
+    {
+      "slide": 35,
+      "title": "IPv6 security: audit both address families",
+      "visual_overview": "Parallel IPv4 and IPv6 security chains each contain routing, security groups/NACLs, inspection and flow logs feeding a central secure posture.",
+      "visual_walkthrough": [
+        "Compare orange IPv4 and cyan IPv6 paths across four controls",
+        "read the bottom four panels for IPv6-specific CIDR rules, ::/0 exposure, required ICMPv6 and security tool capability",
+        "close with independent testing."
+      ],
+      "visual_example": "A team adds AAAA records but forgets IPv6 security group restrictions and accidentally widens access despite restrictive IPv4 rules.",
+      "visual_synthesis": "An IPv4 security test is not evidence of IPv6 protection; separately audit both families and critical ICMPv6 behavior.",
+      "narration": "The top visual shows two parallel security paths joining at a central shield. On the left, IPv4 traffic is governed by VPC routes, security groups and ACLs, inspection controls and monitoring. On the right, IPv6 must pass equivalent controls, but the rule entries and supported routes are different. Walk through the four numbered panels below. First, an IPv4 CIDR security group rule does not automatically allow or deny the corresponding IPv6 traffic. Second, inspect any IPv6 double colon slash zero rules carefully; they can create broad source exposure and should be scoped to least privilege where practical. Third, do not simply block every ICMPv6 message. Some ICMPv6 functions, including path MTU discovery, are critical for healthy IPv6 communication. Fourth, confirm your firewall, WAF front door, DNS and monitoring stack genuinely support the IPv6 path you deployed. Include IPv6 events in network flow logs and alerts. The bottom warning says it plainly: a successful IPv4 connectivity test cannot verify IPv6 reachability, filtering or unintended exposure. Test both families independently."
+    }
+  ]
+}
