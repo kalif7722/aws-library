@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Based on approved individual Module 09 slide specifications and the S3 coverage crosswalk; source WebP existence and rendering are validated by the GitHub workflow. No independent pixel-level narration review claimed.",
+  "part_id": "10",
+  "part_title": "S3 Metadata Indexing, Static Delivery and Failure Recovery",
+  "output_prefix": "sap-module-09-part-10",
+  "script_revision": "2026-11-17-sap-m09-p10-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 29,
+      "title": "Build an object-metadata index for application queries",
+      "visual_overview": "This original lesson uses one central glossy metaphor with three surrounding explanation cards. to teach build an object-metadata index for application queries.",
+      "visual_walkthrough": [
+        "Follow the S3 object payload separately from a DynamoDB metadata item keyed to the tenant and query pattern",
+        "Trace object-change events through a processor that maintains and reconciles the index",
+        "Review duplicate or out-of-order events, access isolation and stale aggregate totals"
+      ],
+      "visual_example": "A multi-tenant image service indexes tenant, upload date and category in DynamoDB while S3 remains the source of object bytes; reconciliation handles missed events.",
+      "visual_synthesis": "A metadata index supports application access patterns only if its update, security and reconciliation workflow is designed.",
+      "narration": "The large center visual separates two responsibilities. S3 stores the object's bytes, while an application-specific index such as DynamoDB holds queryable information like tenant, upload date, category, object size and the S3 key. This allows a user interface to find its objects without scanning object names as if S3 were a relational database. Now follow the update path. An object-created or object-removed event can trigger a processor that writes index changes. But events can arrive more than once, out of order or not be processed successfully, so the processor needs idempotent updates, failure handling and reconciliation against the actual object state. In a multi-tenant service, choose partition and sort keys to support tenant-scoped date or category queries and enforce tenant authorization independently. A customer storage total also requires a reliable aggregate or periodic reconciliation; adding event sizes is not automatically correct when overwrites and deletes occur. S3 is the authoritative payload store. The index is a separate, eventually coordinated application component that must be maintained and repaired."
+    },
+    {
+      "slide": 30,
+      "title": "Keep static delivery separate from dynamic processing",
+      "visual_overview": "This original lesson uses asymmetric two-column layout with three numbered teaching areas and compact illustrative examples. to teach keep static delivery separate from dynamic processing.",
+      "visual_walkthrough": [
+        "Trace static object delivery through a cache or CDN and identify permissions at the origin",
+        "Compare that path with compute, API and database services handling dynamic business behavior",
+        "Explain scoped presigned uploads and validation of method, key, expiry and post-upload processing"
+      ],
+      "visual_example": "A content platform delivers images through CloudFront while the application API authorizes uploads and issues short-lived presigned requests; metadata indexing happens after upload.",
+      "visual_synthesis": "Separate object delivery, dynamic transactions and direct uploads by architectural responsibility.",
+      "narration": "This slide lays out three responsibilities that are easy to mix together. First, follow the static path: images, documents and other suitable immutable assets live as S3 objects and may be cached near users through an appropriate CloudFront origin. The bucket policy and viewer access design must match whether content is public or private. Next, look at the dynamic path. Authentication, business logic and database transactions belong in application compute and managed data services; simply serving a file from S3 does not execute server-side application code. Third, trace an upload. Instead of forwarding every large byte stream through the web server, an authorized application can issue a tightly scoped presigned request with the correct operation, object key and expiration. The client uploads to S3, while the application validates the workflow and performs follow-up processing as needed. A content platform might combine CloudFront for downloads, an API for authorization, and S3 events for indexing. The design principle is to keep each layer responsible for the function it actually performs."
+    },
+    {
+      "slide": 31,
+      "title": "Choose recovery controls for the actual failure",
+      "visual_overview": "This original lesson uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to teach choose recovery controls for the actual failure.",
+      "visual_walkthrough": [
+        "Connect accidental overwrite recovery to retained object versions and authorized restoration",
+        "Contrast malicious deletion protections such as Object Lock, legal holds and independent backup boundaries",
+        "Follow a Region disruption scenario through replica lag, decryption key access and application recovery"
+      ],
+      "visual_example": "During an outage, a replicated bucket exists in another Region, but the restore exercise tests KMS authorization and dependent application routes before treating it as a recovery option.",
+      "visual_synthesis": "Protection must address the expected failure and be proven by a full recovery test.",
+      "narration": "This visual compares failure types rather than presenting a single universal backup feature. In the accidental overwrite case, S3 Versioning can make an earlier object state recoverable, provided the versions have not expired and the restoration principal has permission to retrieve them. The next panel addresses intentional or mistaken deletion. Appropriate Object Lock retention, legal holds and separately administered backup copies can protect against some correlated mistakes or malicious operations, but they require deliberate setup and access boundaries. Finally, the regional failure case highlights a remote replica. Cross-Region Replication helps separate storage failure domains, yet it is asynchronous and the destination depends on readable encryption keys, identity permissions and the rest of the application's architecture. A recovery copy that no one can decrypt, find or serve is not a usable recovery plan. Choose controls against specific failures, define acceptable recovery time and data loss, and test the end-to-end restore procedure before relying on the architecture."
+    }
+  ]
+}
