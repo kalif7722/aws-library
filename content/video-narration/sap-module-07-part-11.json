@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected approved SAP M07 slide-31-v2.webp and slide-32-v2.webp.",
+  "part_id": "11",
+  "part_title": "Spot Fleet Allocation and Full Solution Architecture",
+  "output_prefix": "sap-module-07-part-11",
+  "script_revision": "2026-11-17-sap-m07-p11-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "Spot Fleet: pools, capacity and allocation strategies",
+      "visual_overview": "An EC2 Spot Fleet request sits in the middle, surrounded by eligible capacity pools and labeled allocation strategies: priceCapacityOptimized, capacityOptimized, diversified and lowestPrice.",
+      "visual_walkthrough": [
+        "Start at the central Spot Fleet request and its target capacity, eligible instance types, operating systems, Availability Zones, and optional On-Demand balance",
+        "Trace the capacityOptimized option toward available lower-interruption-risk pools",
+        "Compare priceCapacityOptimized with lowestPrice, emphasizing the slide's recommended capacity-and-price tradeoff",
+        "Read diversified allocation as distribution across named pools and explain why interruption remains possible",
+        "Compare Spot Fleet with an Auto Scaling group mixed-instances policy and weighted useful capacity"
+      ],
+      "visual_example": "An interruption-tolerant batch fleet needs 200 units of capacity across compatible EC2 sizes and AZs; it chooses appropriate pools and checkpoints work rather than assuming all requested Spot instances will launch.",
+      "visual_synthesis": "A Spot Fleet target is a request rather than a guarantee; choose allocation against availability, price and interruption tolerance and verify running capacity.",
+      "narration": "This slide centers on a Spot Fleet request, not a single EC2 instance. Begin in the middle, where a fleet request can specify target capacity across several eligible instance types, operating systems and Availability Zones. The upper-left card also mentions optional On-Demand capacity and weights, so one large instance can represent multiple useful capacity units. Now follow the cyan arrow to capacityOptimized. That strategy favors Spot pools with stronger available capacity, aiming to reduce near-term interruption risk. Move up to the purple priceCapacityOptimized panel. It considers suitable pools with high availability, then factors in price. The slide identifies that as the recommended balance for most Spot workloads. On the right, diversified distributes capacity across the specified pools rather than concentrating on only one source. At the lower left, lowestPrice prioritizes cheaper pools, but that can bring greater interruption risk. None of these strategies can guarantee availability. Finally inspect the bottom-center fleet-manager comparison. Spot Fleet is distinct from an Auto Scaling group with a mixed-instances policy. Auto Scaling generally offers richer continuous fleet-management behavior, while Spot Fleet expresses a capacity request and allocation strategy. For architecture exams, choose a compatible capacity pool strategy, plan for interruptions, and measure healthy running units rather than treating target capacity as fulfilled."
+    },
+    {
+      "slide": 32,
+      "title": "Solution architecture: position compute in the full application",
+      "visual_overview": "Eight labeled architecture panels compare DNS and content delivery, ingress, compute, caching, data services, messaging and workflows, storage, and the final design checklist.",
+      "visual_walkthrough": [
+        "Read the top DNS and delivery panel: Route 53 resolves names while CloudFront caches eligible content near users",
+        "Compare ALB, NLB and API Gateway ingress responsibilities and note that an Elastic IP is not a load balancer",
+        "Inspect EC2, Auto Scaling, Lambda, ECS, EKS, Fargate, Batch and EMR as differing compute models",
+        "Distinguish ElastiCache and DynamoDB DAX caching from transactional, search and analytical data services",
+        "Follow SQS, SNS, Kinesis, MQ and Step Functions for decoupling, then compare S3, EBS, EFS and instance store durability"
+      ],
+      "visual_example": "A web application uses Route 53 and CloudFront for delivery, ALB plus replaceable EC2 instances for requests, durable database state, a queue for asynchronous work and S3 for static assets.",
+      "visual_synthesis": "Choose every component for its specific role and confirm identity, network, data consistency, cost and recovery of the combined architecture.",
+      "narration": "This is a synthesis slide showing how EC2 fits into a wider AWS solution. Start at the upper-left gold panel. Route 53 answers DNS questions, while CloudFront distributes cacheable content nearer users; neither substitutes for the application's actual backend. Move to the upper-right purple panel. An Application Load Balancer, Network Load Balancer and API Gateway meet different ingress needs. An Elastic IP is an address, not a load balancer. Now read the middle-left compute panel. EC2 with Auto Scaling, Lambda, ECS, EKS, Fargate, Batch and EMR are distinct execution models. Choose one from operational requirements, job shape, scaling and runtime constraints. At the middle right, ElastiCache or DynamoDB DAX can reduce repeated data access for supported workloads, but data models and consistency still matter. Move down to the data-services panel. RDS, Aurora and DynamoDB support different transactional access patterns, while OpenSearch and Redshift address search and analytics requirements. In the messaging panel, SQS, SNS, Kinesis, Amazon MQ and Step Functions serve different decoupling, event delivery and workflow needs. Finally, the bottom-left panel distinguishes S3 objects, S3 Glacier storage classes, EBS block volumes, EFS shared files and temporary instance-store data. The final checklist is the real design principle: choose a layer for its responsibility, then verify all dependencies, permissions, network connectivity, cost, data safety and failure behavior together."
+    }
+  ]
+}
