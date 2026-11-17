@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "05",
+  "module_title": "DNS, Route 53 and Hybrid Name Resolution",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected approved SAP module 05 WebPs slides 16–18; diagrams, labels, policy decisions, alternatives and caveats drive each narration.",
+  "part_id": "06",
+  "part_title": "DNS Record Choices, Health Signals and Route 53 Policies",
+  "output_prefix": "sap-module-05-part-06",
+  "script_revision": "2026-11-17-sap-m05-p06-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "Alias, CNAME and delegation: choose the right record",
+      "visual_overview": "Three columns contrast a Route 53 alias to a supported ALB, a CNAME to another hostname and NS delegation from a parent zone to an authoritative child zone.",
+      "visual_walkthrough": [
+        "Inspect alias apex example.com to supported ALB",
+        "Compare CNAME www.example.com to app.example.net and apex restriction",
+        "Trace parent example.com NS delegation to team.example.com child authoritative nameservers",
+        "Distinguish alias target, DNS name redirection and authority delegation"
+      ],
+      "visual_example": "A domain apex points to an ALB through a Route 53 alias, while a subdomain can use CNAME, and a delegated team zone uses NS records.",
+      "visual_synthesis": "Alias, CNAME and NS delegation solve different DNS problems and cannot be treated as interchangeable.",
+      "narration": "This comparison should be read as three different DNS tools. In the orange column, a Route 53 alias record maps a name such as the zone apex example dot com to an eligible AWS target, like a supported Application Load Balancer. Alias is a Route 53 extension and can be used at the apex where an ordinary CNAME cannot. In the cyan center column, a CNAME maps one hostname, for example www dot example dot com, to another canonical hostname such as app dot example dot net. It cannot coexist with other records at the same name and cannot be the apex CNAME in a normal DNS zone. The purple column solves a different concern: authority. The parent example dot com zone delegates team dot example dot com with NS records referencing the child's authoritative nameservers. That child zone then owns its records. Notice the lower caution that public NS delegation is not the same as associating a private hosted zone with VPCs. For the SAP exam, ask whether the requirement is targeting a supported AWS resource, redirecting name resolution to another DNS name, or delegating authority to another team."
+    },
+    {
+      "slide": 17,
+      "title": "Private failover needs a reachable health signal",
+      "visual_overview": "A public Route 53 health checker can test a reachable public endpoint, but a private application needs an internal probe and CloudWatch alarm-based health check.",
+      "visual_walkthrough": [
+        "Contrast the left public endpoint check with inaccessible VPC private IPs",
+        "Follow internal application signal to CloudWatch metric, alarm and Route 53 health check",
+        "Follow primary versus secondary private hosted-zone failover records",
+        "Explain alarm state caveat, real readiness, DNS TTL and session persistence"
+      ],
+      "visual_example": "Private application failover uses an application readiness metric and CloudWatch alarm rather than a public Route 53 probe against an RFC1918 address.",
+      "visual_synthesis": "A Route 53 answer change does not create application readiness, move session state or guarantee immediate cutover.",
+      "narration": "The slide compares two ways to obtain an honest Route 53 health signal. On the left, public Route 53 health checkers can send HTTPS or TCP probes to publicly reachable endpoints. The red warning is critical: those public checkers cannot directly probe an internal private VPC address. Now look at the orange panel. An application in private subnets emits a meaningful readiness metric, or an internal probe evaluates it. That metric feeds CloudWatch, an alarm is configured with suitable thresholds and missing-data treatment, and a Route 53 health check monitors the alarm's metric data. The resulting health status participates in primary and secondary failover record decisions. The lower panels explain important pitfalls. Forcing an alarm state manually does not necessarily force the Route 53 health check's computed outcome. When supported, an alias can use Evaluate Target Health. And the standby system must already have enough healthy capacity and correct data. DNS failover changes future answers, but cached DNS and existing sessions may keep users on an old endpoint. This is why failover testing must include real application state, not just a green alarm icon."
+    },
+    {
+      "slide": 18,
+      "title": "Routing policy: pick the decision you need",
+      "visual_overview": "Six numbered panels compare Route 53 simple, weighted, latency, failover, geolocation and geoproximity routing, with a bottom row for multivalue, health checks and TTL.",
+      "visual_walkthrough": [
+        "Explain simple and weighted record decisions, including 80/20 as approximate DNS weights",
+        "Compare latency routing measurements with geographic location policies",
+        "Trace failover primary and secondary health dependencies",
+        "Explain geolocation versus geoproximity traffic bias and multivalue answers",
+        "Relate TTL and caching to changes in observed client behavior"
+      ],
+      "visual_example": "An architect uses weighted routing for gradual migration, latency routing for responsiveness, and failover when the primary is unhealthy.",
+      "visual_synthesis": "Route 53 policies choose DNS answers, while clients establish application connections independently and cache results.",
+      "narration": "This is an architectural decision table, not a single network path. Begin at the top left. Simple routing answers from one record set without explicit routing-policy health association. Weighted routing, shown with eighty and twenty weights, can gradually shift DNS answer selection, but DNS caching prevents exact per-request percentages. Latency routing chooses a Region according to latency measurement rather than distance alone. On the bottom left, failover routing designates primary and secondary answers based on configured health decisions. Geolocation is based on geographic matching and a default answer for unmatched locations. Geoproximity uses location-based catchments and a configurable bias to move more or less traffic toward resources. The bottom strip adds multivalue answer routing, which can return up to eight healthy records without replacing a load balancer. Health checks and Evaluate Target Health matter where supported, and TTL determines how long clients or recursive resolvers may retain previously selected answers. The most important reminder is that Route 53 returns DNS records. It does not proxy the application connection, instantly migrate live sessions, or guarantee an immediate shift during failure."
+    }
+  ]
+}
