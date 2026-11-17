@@ -47,6 +47,20 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
+      - name: Verify actual renderer resolves both approved slide variants
+        run: |
+          python - <<'PY'
+          import sys, tempfile
+          from pathlib import Path
+          sys.path.insert(0,str(Path("scripts").resolve()))
+          from render_aip_course_video import load_local_slide
+          with tempfile.TemporaryDirectory() as directory:
+              for slide in (31,32):
+                  path,url=load_local_slide("07",slide,"public/course-visuals/sap-c03/module-07",Path(directory),"sap")
+                  assert path.is_file() and path.stat().st_size>10000
+                  assert url.endswith(f"slide-{slide:02}-v2.webp"),url
+                  print(f"PASS: actual renderer loaded approved SAP M07 slide {slide}: {url}")
+          PY
       - name: Render fresh Andrew voice with synchronized chapters and subtitles
         env:
           AIP_TTS_MAX_ATTEMPTS: "15"
@@ -102,7 +116,7 @@ jobs:
                   response=session.get(root+"-manifest.json",params={"check":str(attempt)},timeout=20)
                   response.raise_for_status()
                   m=response.json()
-                  assert m.get("module")=="07" and m.get("part")=="08", "Wrong module/part in public manifest"
+                  assert m.get("module")=="07" and m.get("part")=="11", "Wrong module/part in public manifest"
                   assert [x["slide"] for x in m.get("scenes",[])]==[31,32], "Incorrect public chapter mapping"
                   assert m.get("script_revision")=="2026-11-17-sap-m07-p11-visualfirst-v1", "Stale public revision"
                   video=session.get(root+".mp4",headers={"Range":"bytes=0-1023"},stream=True,timeout=20)
