@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "06",
+  "module_title": "Hybrid Networking, Site-to-Site VPN and Direct Connect",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually reviewed SAP Module 06 original slides 27–30; approved slides 31–41 use v2 artwork.",
+  "part_id": "08",
+  "part_title": "VPN CloudHub, Client VPN Routing and Direct Connect SiteLink",
+  "output_prefix": "sap-module-06-part-08",
+  "script_revision": "2026-11-17-sap-m06-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 27,
+      "title": "VPN CloudHub: remote site mesh through a VGW",
+      "visual_overview": "The original slide explains vpn cloudhub: remote site mesh through a vgw using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Multiple site-to-site VPN connections share one virtual private gateway",
+        "Distinct customer ASNs, BGP and nonoverlapping remote prefixes",
+        "The VGW can re-advertise learned routes among remote sites",
+        "CloudHub does not give VPC peering transit; contrast Transit Gateway"
+      ],
+      "visual_example": "A corporate design joins three remote sites through a central VGW and must explicitly verify learned remote routes and return traffic.",
+      "visual_synthesis": "Validate the vpn cloudhub: remote site mesh through a vgw design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains vpn cloudhub: remote site mesh through a vgw, using the actual architecture and numbered callouts on the screen. Start with the first element: Multiple site-to-site VPN connections share one virtual private gateway. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Distinct customer ASNs, BGP and nonoverlapping remote prefixes. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: The VGW can re-advertise learned routes among remote sites. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: CloudHub does not give VPC peering transit; contrast Transit Gateway. Consider a realistic architecture scenario. A corporate design joins three remote sites through a central VGW and must explicitly verify learned remote routes and return traffic. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 28,
+      "title": "Client VPN: authentication, authorization and routes",
+      "visual_overview": "The original slide explains client vpn: authentication, authorization and routes using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Authenticate with supported certificates, directory, or federated SAML mechanisms",
+        "Define destination authorization rules independently of user authentication",
+        "Associate supported target networks and configure endpoint routes plus destination security",
+        "Design client CIDRs, DNS, logging and redundant target subnet access"
+      ],
+      "visual_example": "A user with valid SAML authentication still cannot access a database until the Client VPN authorization and the network path both permit it.",
+      "visual_synthesis": "Validate the client vpn: authentication, authorization and routes design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains client vpn: authentication, authorization and routes, using the actual architecture and numbered callouts on the screen. Start with the first element: Authenticate with supported certificates, directory, or federated SAML mechanisms. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Define destination authorization rules independently of user authentication. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Associate supported target networks and configure endpoint routes plus destination security. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Design client CIDRs, DNS, logging and redundant target subnet access. Consider a realistic architecture scenario. A user with valid SAML authentication still cannot access a database until the Client VPN authorization and the network path both permit it. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 29,
+      "title": "Client VPN: split tunnel versus full tunnel",
+      "visual_overview": "The original slide explains client vpn: split tunnel versus full tunnel using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Split tunnel installs relevant client routes, leaving other internet traffic outside the VPN",
+        "Full tunnel sends client traffic toward the VPN and requires deliberate internet egress",
+        "Access to peered or on-premises networks needs complete routes, authorization and return path",
+        "Transit Gateway integration follows its supported endpoint-specific model and access limitations"
+      ],
+      "visual_example": "A remote employee should use full tunnel only when centralized internet inspection is required and the VPN-side egress is provisioned.",
+      "visual_synthesis": "Validate the client vpn: split tunnel versus full tunnel design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains client vpn: split tunnel versus full tunnel, using the actual architecture and numbered callouts on the screen. Start with the first element: Split tunnel installs relevant client routes, leaving other internet traffic outside the VPN. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Full tunnel sends client traffic toward the VPN and requires deliberate internet egress. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Access to peered or on-premises networks needs complete routes, authorization and return path. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Transit Gateway integration follows its supported endpoint-specific model and access limitations. Consider a realistic architecture scenario. A remote employee should use full tunnel only when centralized internet inspection is required and the VPN-side egress is provisioned. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 30,
+      "title": "Direct Connect SiteLink: site-to-site transport",
+      "visual_overview": "The original slide explains direct connect sitelink: site-to-site transport using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "SiteLink allows eligible on-premises sites to exchange traffic via Direct Connect locations",
+        "Enable SiteLink on eligible private or transit VIFs attached to the same Direct Connect gateway",
+        "The site-to-site path can bypass Region transit, subject to routing and WAN policy",
+        "SiteLink does not remove last-mile failures or encrypt applications automatically"
+      ],
+      "visual_example": "Two offices in different colocation sites can exchange routes through SiteLink, but must separately secure traffic and protect last-mile access.",
+      "visual_synthesis": "Validate the direct connect sitelink: site-to-site transport design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains direct connect sitelink: site-to-site transport, using the actual architecture and numbered callouts on the screen. Start with the first element: SiteLink allows eligible on-premises sites to exchange traffic via Direct Connect locations. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Enable SiteLink on eligible private or transit VIFs attached to the same Direct Connect gateway. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: The site-to-site path can bypass Region transit, subject to routing and WAN policy. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: SiteLink does not remove last-mile failures or encrypt applications automatically. Consider a realistic architecture scenario. Two offices in different colocation sites can exchange routes through SiteLink, but must separately secure traffic and protect last-mile access. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    }
+  ]
+}
