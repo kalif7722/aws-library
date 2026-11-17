@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected SAP Module 07 slide images 23–24; slide 24 uses approved v2 artwork.",
+  "part_id": "08",
+  "part_title": "Precision-Time Placement and EC2 Observability",
+  "output_prefix": "sap-module-07-part-08",
+  "script_revision": "2026-11-17-sap-m07-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 23,
+      "title": "Precision-time placement and clock accuracy",
+      "visual_overview": "The source slide presents precision-time placement and clock accuracy through its original titled panels, arrows and practical caveats.",
+      "visual_walkthrough": [
+        "Identify precision-time placement group purpose and high-precision time sources",
+        "Explain supported instances and enhanced Amazon Time Sync requirements",
+        "Distinguish clock synchronization from network latency and failure isolation",
+        "Measure actual time offset and retain backup or Multi-AZ resiliency"
+      ],
+      "visual_example": "Apply the visual decisions to a real application capacity or failure scenario and verify the outcome with measured metrics.",
+      "visual_synthesis": "Use the relevant health, placement and observability evidence to prove the architecture works under expected and failure conditions.",
+      "narration": "This slide introduces a specialized EC2 placement requirement: clock precision. In the first panel, a precision-time placement group places supported instances on hardware with access to high-precision time sources. This is different from the normal goal of putting machines close together for low-latency packet exchange. Move to the second purple panel. Enhanced Amazon Time Sync capabilities depend on the actual instance family, Region and configuration; you must verify support rather than assume every EC2 instance gains the same clock accuracy. In the third panel, a clock icon branches into network latency, hardware isolation and clock accuracy. These are three independent concerns. A tightly clustered network might have low latency and still not satisfy precision timestamping requirements. Finally, the fourth panel shows monitoring. Measure synchronization accuracy against the application's tolerances, record clock drift and test your workload's time-dependent behavior. The bottom takeaway warns against treating precision-time placement as a substitute for data replication, backups or Multi-AZ recovery. Choose it when timestamps truly matter, then design reliability separately."
+    },
+    {
+      "slide": 24,
+      "title": "EC2 observability: know the source of every metric",
+      "visual_overview": "The source slide presents ec2 observability: know the source of every metric through its original titled panels, arrows and practical caveats.",
+      "visual_walkthrough": [
+        "Explain CPUUtilization and burstable credit balance, usage and Unlimited surplus signals",
+        "Distinguish NetworkIn and NetworkOut bytes from packet-rate pressure and bandwidth limits",
+        "Compare instance-store disk counters with EBS and Nitro-specific volume metrics",
+        "Use CloudWatch Agent for guest memory and filesystem free space",
+        "Interpret 5-minute basic and eligible 1-minute detailed monitoring without assuming all metric cadences match"
+      ],
+      "visual_example": "Apply the visual decisions to a real application capacity or failure scenario and verify the outcome with measured metrics.",
+      "visual_synthesis": "Use the relevant health, placement and observability evidence to prove the architecture works under expected and failure conditions.",
+      "narration": "This last observability slide makes you check where each metric originates before taking an action. Start at the top-left yellow CPU panel. EC2 publishes CPU utilization, and eligible burstable instances also expose credit balance and usage. Unlimited configurations may include surplus-credit metrics, which explain charges or sustained bursting. Move to the upper-right network panel. NetworkIn and NetworkOut report bytes, while packet metrics and instance-specific network limits help diagnose packet-rate pressure. A high throughput reading does not by itself identify packet drops or application delay. In the lower-left storage panel, local disk counters represent instance-store IO; use EBS volume metrics and supported Nitro EBS metrics for block-volume behavior. Do not mistake one storage metric for another. The lower-right guest panel is especially important: memory utilization and filesystem free space are not standard EC2 host metrics. You need a CloudWatch agent or custom instrumentation. Finally, the bottom-left cadence box distinguishes basic monitoring, generally five-minute intervals, from eligible detailed monitoring at one-minute resolution, while some metric families have their own cadence. Check source, units and sampling before changing instance size or scaling policy."
+    }
+  ]
+}
