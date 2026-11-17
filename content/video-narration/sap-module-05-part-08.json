@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "05",
+  "module_title": "DNS, Route 53 and Hybrid Name Resolution",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected the original numbered WebPs; slides 23-25 use approved v2 assets.",
+  "part_id": "08",
+  "part_title": "Route 53 IP Routing, Health Checks and Traffic Flow",
+  "output_prefix": "sap-module-05-part-08",
+  "script_revision": "2026-11-17-sap-m05-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 23,
+      "title": "IP-based routing and geoproximity answer different questions",
+      "narration": "This slide compares two fundamentally different Route 53 routing inputs. On the left, three clients belong to different known network ranges, with example prefixes two hundred three dot zero dot one thirteen, one hundred ninety eight dot fifty one dot one hundred, and one hundred ninety two dot zero dot two. IP-based routing uses configured CIDR collections and location mappings to choose DNS responses for known client networks. The result depends on what client or resolver network information Route 53 can actually identify, so plan unmatched-location behavior as well. On the right, geoproximity routing does not select based on a known CIDR collection. It considers resource and user geography, with bias adjusting the size of a location's traffic catchment. The map illustrates those changing areas; they are not measured latency routes or country rules. Finally inspect the lower right control-surface panel. Depending on supported configuration, geoproximity records can be managed directly and more complex reusable policies can use Traffic Flow. The exam distinction is to ask whether you want known client network mapping, geographic bias, or measured latency. These are different decisions and should not be confused.",
+      "visual_walkthrough": [
+        "Trace three client CIDR ranges to their matched IP-based routing decisions",
+        "Compare client-network CIDR decisions with geographic catchment and bias controls",
+        "Inspect record configuration and Traffic Flow as different policy control surfaces",
+        "Explain resolver visibility and unmatched CIDR behavior"
+      ],
+      "visual_example": "Apply the slide's architecture and selection checks to a production multi-account AWS DNS scenario.",
+      "visual_synthesis": "IP-based routing and geoproximity answer different questions — validate the actual DNS answer, underlying path and operational policy."
+    },
+    {
+      "slide": 24,
+      "title": "Health checks: endpoint probes, aggregation and private signals",
+      "narration": "This slide shows three approaches to determining whether a Route 53 DNS answer should remain eligible. On the left, public health checkers can contact publicly reachable resources. HTTP or HTTPS checks examine configured application responses, while TCP checks focus on connection establishment. Choose the right hostname, port, request path and optional response-string condition, and allow traffic from the required checkers. The upper-right panel combines several child health checks into a calculated result, using configured thresholds or logical evaluation. Aggregation is not the same as a direct endpoint probe, and supported limits must be checked before designing a large hierarchy. The lower-right panel focuses on private workloads. Public Route 53 health checkers cannot reach private VPC IP addresses directly. For those services, design an internal readiness probe or CloudWatch metric and supported alarm-based signal that a health check can evaluate. Do not assume changing an alarm's displayed state reproduces real metric evidence. The essential takeaway is that health checks should measure the exact failure your routing policy is designed to handle, rather than only whether some network port happens to answer.",
+      "visual_walkthrough": [
+        "Compare public HTTPS/HTTP probes with TCP probes and their endpoint criteria",
+        "Follow multiple child health results into a calculated health check",
+        "Inspect private readiness measurements through CloudWatch metric or alarm data",
+        "Explain monitoring limits and why health evidence must match the failure mode"
+      ],
+      "visual_example": "Apply the slide's architecture and selection checks to a production multi-account AWS DNS scenario.",
+      "visual_synthesis": "Health checks: endpoint probes, aggregation and private signals — validate the actual DNS answer, underlying path and operational policy."
+    },
+    {
+      "slide": 25,
+      "title": "Traffic Flow and DNS caching make changes repeatable",
+      "narration": "This slide teaches the difference between designing a DNS policy and observing how real clients use it. On the left, a Traffic Flow policy definition contains the decision structure. A versioned policy instance applies that definition, and Route 53 creates the relevant DNS records. Those are related but distinct resources, which matters when you change or roll back a policy. The upper-right panel follows client devices to DNS and then to different endpoints. Weighted routing changes the relative selection of DNS answers; geographic bias shifts catchment regions. Neither gives an exact percentage of HTTP requests because recursive resolvers and clients cache results and establish connections independently. The bottom-right panel outlines a careful rollout: review time to live, intended record scope, health-check behavior, cost, and the fallback when all endpoints are unhealthy or no location matches. Verify authoritative responses, then verify actual answers and connections from representative clients. Keep rollback steps and known-good versions ready. The reminder is to test what cached clients actually experience, rather than trusting only the policy editor's intended distribution.",
+      "visual_walkthrough": [
+        "Follow Traffic Flow policy definition into a policy instance and derived DNS records",
+        "Compare geographic bias and weighted DNS-answer choices and their caching effects",
+        "Inspect rollout requirements for TTL, record scope, health, cost and fallback",
+        "Explain how to validate authoritative answers and cached client paths separately"
+      ],
+      "visual_example": "Apply the slide's architecture and selection checks to a production multi-account AWS DNS scenario.",
+      "visual_synthesis": "Traffic Flow and DNS caching make changes repeatable — validate the actual DNS answer, underlying path and operational policy."
+    }
+  ]
+}
