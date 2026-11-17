@@ -1,0 +1,134 @@
+name: Render SAP Module 08 Part 02 — VisualFirst
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/video-narration/sap-module-08-part-02.json"
+      - ".github/workflows/render-sap-m08-part-02.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sap-m08-part-02-visualfirst-v1
+  cancel-in-progress: false
+jobs:
+  render:
+    name: SAP M08 Part 02 — original visuals
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate SAP original slides and visual-first script
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("content/video-narration/sap-module-08-part-02.json")
+          m=json.loads(p.read_text())
+          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","08","02")
+          assert m["output_prefix"]=="sap-module-08-part-02"
+          assert m["script_revision"]=="2026-11-17-sap-m08-p02-visualfirst-v1"
+          assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-08"
+          assert m["voice"]=="en-US-AndrewNeural" and m["speech_rate"]=="-3%"
+          assert [s["slide"] for s in m["scenes"]]==[4,5,6]
+          for s in m["scenes"]:
+              assert len(s["narration"].split())>=95
+              assert s.get("visual_overview") and len(s.get("visual_walkthrough",[]))>=3
+              assert s.get("visual_example") and s.get("visual_synthesis")
+              f=Path(f'public/course-visuals/sap-c03/module-08/slide-{s["slide"]:02}.webp')
+              assert f.is_file() and f.stat().st_size>10000, str(f)
+              assert f.open("rb").read(4)==b"RIFF", str(f)
+          print("PASS: original SAP slides, VisualFirst narration and revision")
+          PY
+      - name: Install narration and video engine
+        run: |
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
+          python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
+      - name: Verify actual renderer resolves both approved slide variants
+        run: |
+          python - <<'PY'
+          import sys, tempfile
+          from pathlib import Path
+          sys.path.insert(0,str(Path("scripts").resolve()))
+          from render_aip_course_video import load_local_slide
+          with tempfile.TemporaryDirectory() as directory:
+              for slide in (31,32):
+                  path,url=load_local_slide("07",slide,"public/course-visuals/sap-c03/module-08",Path(directory),"sap")
+                  assert path.is_file() and path.stat().st_size>10000
+                  assert url.endswith(f"slide-{slide:02}-v2.webp"),url
+                  print(f"PASS: actual renderer loaded approved SAP M08 slide {slide}: {url}")
+          PY
+      - name: Render fresh Andrew voice with synchronized chapters and subtitles
+        env:
+          AIP_TTS_MAX_ATTEMPTS: "15"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "30"
+        run: |
+          python scripts/render_aip_course_video.py --manifest content/video-narration/sap-module-08-part-02.json --output video-output/sap-m08-p02 --width 1920 --height 1080 --fps 24
+      - name: Verify rendered video before publishing
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.aip_media_tools import media_seconds
+          root=Path("video-output/sap-m08-p02")
+          stem="sap-module-08-part-02"
+          m=json.loads((root/f"{stem}-manifest.json").read_text())
+          assert (m["module"],m["part"])==("08","02")
+          assert m["script_revision"]=="2026-11-17-sap-m08-p02-visualfirst-v1"
+          assert [s["slide"] for s in m["scenes"]]==[4,5,6]
+          assert (root/f"{stem}.vtt").read_text().startswith("WEBVTT")
+          assert (root/f"{stem}.srt").is_file() and (root/f"{stem}-transcript.txt").is_file()
+          assert abs(media_seconds(root/f"{stem}.mp4")-m["duration_seconds"])<3.5
+          print("PASS: MP4, chapter sequence, subtitles, transcript and revision")
+          PY
+      - name: Publish verified media and manifest to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          test -n "$AWS_ACCESS_KEY_ID" && test -n "$AWS_SECRET_ACCESS_KEY" && test -n "$R2_ENDPOINT" && test -n "$R2_BUCKET"
+          SRC="video-output/sap-m08-p02"
+          STEM="sap-module-08-part-02"
+          DEST="s3://$R2_BUCKET/aws-course-videos/previews/sap/module-08/part-02"
+          for ext in mp4 vtt srt; do
+            aws s3 cp "$SRC/$STEM.$ext" "$DEST/$STEM.$ext" --endpoint-url "$R2_ENDPOINT" --no-progress
+          done
+          aws s3 cp "$SRC/$STEM-transcript.txt" "$DEST/$STEM-transcript.txt" --endpoint-url "$R2_ENDPOINT" --no-progress
+          aws s3 cp "$SRC/$STEM-manifest.json" "$DEST/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" --no-progress
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-08/part-02/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-08/part-02/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" >/dev/null
+          echo "Uploaded SAP M08 Part 02 media and manifest to R2. Checking public delivery."
+      - name: Verify publicly accessible manifest and playable MP4
+        run: |
+          python - <<'PY'
+          import requests, time
+          root="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/sap/module-08/part-02/sap-module-08-part-02"
+          session=requests.Session()
+          for attempt in range(1,7):
+              try:
+                  response=session.get(root+"-manifest.json",params={"check":str(attempt)},timeout=20)
+                  response.raise_for_status()
+                  m=response.json()
+                  assert m.get("module")=="07" and m.get("part")=="11", "Wrong module/part in public manifest"
+                  assert [x["slide"] for x in m.get("scenes",[])]==[4,5,6], "Incorrect public chapter mapping"
+                  assert m.get("script_revision")=="2026-11-17-sap-m08-p02-visualfirst-v1", "Stale public revision"
+                  video=session.get(root+".mp4",headers={"Range":"bytes=0-1023"},stream=True,timeout=20)
+                  try:
+                      assert video.status_code in (200,206), f"Video returned HTTP {video.status_code}"
+                      assert "video" in video.headers.get("Content-Type","").lower() or "octet-stream" in video.headers.get("Content-Type","").lower(), "Unexpected video content type"
+                  finally:
+                      video.close()
+                  print("PASS: Public manifest and MP4 both accessible; SAP player can discover Part 02.")
+                  break
+              except Exception as exc:
+                  print(f"Public delivery check {attempt}/6 failed: {exc}",flush=True)
+                  if attempt==6:raise
+                  time.sleep(12)
+          PY
