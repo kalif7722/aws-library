@@ -32,8 +32,10 @@
       "title": "Scenario: inspect east-west and outbound",
       "visual_overview": "The upper row inspects traffic between application VPC A and B; the lower row inspects outbound update traffic before NAT and internet access; solutions list TGW routes and stateful symmetry.",
       "visual_walkthrough": [
-        "Follow upper A-to-inspection-to-B route and lower A-to-inspection-to-NAT-to-internet route",
-        "check multi-AZ inspection, appliance mode versus native Network Firewall attachment, policy logging and forbidden bypass tests."
+        "Trace east-west traffic from application VPC A through the inspection path to application VPC B, including the return flow",
+        "Trace outbound software-update traffic through inspection, NAT translation and the internet gateway",
+        "Compare an inspection VPC using Transit Gateway appliance mode with the native TGW-attached Network Firewall option, emphasizing AZ symmetry",
+        "Inspect firewall and VPC flow logs, endpoint health and routes that could bypass inspection"
       ],
       "visual_example": "A regulated workload must retain stateful firewall inspection for internal lateral traffic and approved software updates, even during an Availability Zone failure.",
       "visual_synthesis": "Prove all permitted flows pass inspection in both directions, and test prohibited direct routes as well as healthy connectivity.",
