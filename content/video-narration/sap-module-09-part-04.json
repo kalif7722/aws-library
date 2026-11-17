@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Based on approved Module 09 slide-specific visual copy and layout in docs/sap-c03/module-09-visual-plan.json and technical source crosswalk; direct pixel-level verification remains a separate quality check.",
+  "part_id": "04",
+  "part_title": "Glacier Retrieval, Intelligent-Tiering and Lifecycle Decisions",
+  "output_prefix": "sap-module-09-part-04",
+  "script_revision": "2026-11-17-sap-m09-p04-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 10,
+      "title": "Glacier classes: choose retrieval behavior",
+      "visual_overview": "The original lesson layout presents glacier classes: choose retrieval behavior with three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "visual_walkthrough": [
+        "Compare the three retrieval choices and identify which is immediately readable versus restored asynchronously",
+        "Explain the effect of retrieval-time expectations and minimum-duration charges on an archive policy",
+        "Identify the slow recovery path and the restoration workflow for a time-critical incident"
+      ],
+      "visual_example": "A legal archive that rarely gets read may accept hours of retrieval delay, but a recovery runbook requiring prompt object access cannot blindly select Deep Archive.",
+      "visual_synthesis": "Choose an archive by recovery-time objective, not the headline storage rate.",
+      "narration": "This picture compares three S3 Glacier storage classes, and the question is how quickly the business must read its data again. Start with Glacier Instant Retrieval: rarely used objects remain immediately accessible, although retrieval fees and minimum-duration charges matter. Move to Glacier Flexible Retrieval. Here you request an asynchronous restore and select a suitable retrieval option; that means your application cannot assume an ordinary immediate GET for an archived object. The Deep Archive panel emphasizes long-term retention with longer restoration lead times. Imagine a compliance archive that can wait for restoration versus an operational backup needed during an outage. The cheapest stored gigabyte may be the more expensive architectural mistake if it violates recovery time. Select the archive tier together with restore procedures, cost and the required recovery objective."
+    },
+    {
+      "slide": 11,
+      "title": "Intelligent-Tiering follows changing access",
+      "visual_overview": "The original lesson layout presents intelligent-tiering follows changing access with one central glossy metaphor with three surrounding explanation cards.",
+      "visual_walkthrough": [
+        "Read the central access-pattern illustration as a time-based movement between online tiers",
+        "Differentiate the optional archive tiers from tiers that allow immediate reads",
+        "Review monitoring charges and the small-object eligibility exception"
+      ],
+      "visual_example": "A photo library with unpredictable rereads might benefit from automation, while a large population of tiny thumbnails will not automatically receive the same tiering savings.",
+      "visual_synthesis": "Intelligent-Tiering follows observed access and does not replace lifecycle governance.",
+      "narration": "The center of this slide illustrates access-based tier changes rather than a manually scheduled lifecycle rule. Eligible objects begin in Frequent Access, move toward Infrequent Access after thirty days without access, and toward Archive Instant Access after ninety days. These online tiers remain immediately retrievable. The surrounding explanation distinguishes optional Archive Access and Deep Archive Access: when enabled, they use longer inactivity thresholds and require restoration before reading the object. Now check the small-object exception. Objects below one hundred twenty-eight kilobytes remain in Frequent Access and are not monitored for tier movement or billed the monitoring fee. Eligible objects do incur monitoring and automation charges, so use realistic object sizes and access histories when comparing cost. Intelligent-Tiering reacts to access behavior; it does not determine whether a record should be retained, deleted, or protected under a compliance requirement."
+    },
+    {
+      "slide": 12,
+      "title": "Lifecycle rules manage the whole object history",
+      "visual_overview": "The original lesson layout presents lifecycle rules manage the whole object history with asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "visual_walkthrough": [
+        "Follow the transition decision: choose prefix or tag scope and a valid destination class",
+        "Separate current-object expiration from noncurrent-version expiration and delete-marker cleanup",
+        "Calculate the full storage bill including transition constraints, retrieval fees and archive overhead"
+      ],
+      "visual_example": "A versioned audit bucket might transition older versions while preserving a minimum retention period; an overly broad expiration rule could destroy needed recovery history.",
+      "visual_synthesis": "Lifecycle is a retention and automation policy and should be tested against recovery and legal requirements.",
+      "narration": "This slide follows three decisions in an S3 lifecycle rule. First, select the objects to which a transition applies. Prefix or tag filters matter because a broad rule can change an entire bucket. A transition must also satisfy the eligible storage class and minimum-size constraints. Second, look at the object history. Expiring the current version is not the same operation as expiring noncurrent versions or clearing an expired delete marker. In a versioned bucket those distinctions determine whether recovery copies remain. Third, compare all charges, not merely storage price per gigabyte. Minimum-duration billing, retrieval fees, small-object minimums, and archive metadata can erase a supposed saving. For a regulated bucket, test your lifecycle policy against restoration requirements and Object Lock first. The overall lesson is that lifecycle rules encode data retention decisions, so they deserve the same review discipline as access and encryption policies."
+    }
+  ]
+}
