@@ -49,10 +49,23 @@ jobs:
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
       - name: Render fresh Andrew voice with synchronized chapters and subtitles
         env:
-          AIP_TTS_MAX_ATTEMPTS: "15"
-          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "30"
+          AIP_TTS_MAX_ATTEMPTS: "18"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "45"
+        shell: bash
         run: |
-          python scripts/render_aip_course_video.py --manifest content/video-narration/sap-module-04-part-13.json --output video-output/sap-m04-p13 --width 1920 --height 1080 --fps 24
+          set -o pipefail
+          for attempt in 1 2; do
+            echo "Render attempt $attempt of 2"
+            rm -rf video-output/sap-m04-p13
+            if python -u scripts/render_aip_course_video.py --manifest content/video-narration/sap-module-04-part-13.json --output video-output/sap-m04-p13 --width 1920 --height 1080 --fps 24 2>&1 | tee sap-m04-p13-render.log; then
+              echo "Render successful on attempt $attempt"
+              exit 0
+            fi
+            echo "::warning::SAP M04 Part 13 render attempt $attempt failed."
+            if [ "$attempt" -lt 2 ]; then sleep 20; fi
+          done
+          echo "::error::SAP M04 Part 13 render failed after two attempts. Check uploaded diagnostic log."
+          exit 1
       - name: Verify rendered video before publishing
         run: |
           python - <<'PY'
@@ -91,3 +104,13 @@ jobs:
           aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-04/part-13/$STEM.mp4" --endpoint-url "$R2_ENDPOINT" >/dev/null
           aws s3api head-object --bucket "$R2_BUCKET" --key "aws-course-videos/previews/sap/module-04/part-13/$STEM-manifest.json" --endpoint-url "$R2_ENDPOINT" >/dev/null
           echo "Published verified SAP M04 Part 13 media and manifest."
+      - name: Save Part 13 diagnostics if rendering or publishing fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sap-m04-p13-failure-diagnostics
+          path: |
+            sap-m04-p13-render.log
+            video-output/sap-m04-p13/*-manifest.json
+          if-no-files-found: warn
+          retention-days: 7
