@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "05",
+  "module_title": "DNS, Route 53 and Hybrid Name Resolution",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-05",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected approved SAP module 05 WebPs slides 11–12; diagrams, labels, policy decisions, alternatives and caveats drive each narration.",
+  "part_id": "04",
+  "part_title": "Shared Resolver Rules and Route 53 Profiles",
+  "output_prefix": "sap-module-05-part-04",
+  "script_revision": "2026-11-17-sap-m05-p04-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 11,
+      "title": "Share Resolver rules, keep clear ownership",
+      "visual_overview": "The diagram separates the network account that owns a forwarding rule and outbound Resolver endpoint from workload accounts that consume it through AWS RAM.",
+      "visual_walkthrough": [
+        "Inspect the network owner VPC, corp.example.com forwarding rule and corporate DNS target",
+        "Trace the purple AWS RAM control-plane sharing and rule associations into workload VPC A and B",
+        "Follow orange query arrows and blue response arrows through the owner's outbound endpoint",
+        "Explain which ownership, routing, permissions and DNS services are not implicitly shared"
+      ],
+      "visual_example": "Several application accounts resolve corp.example.com using one shared outbound Resolver endpoint rather than deploying a separate endpoint for each VPC.",
+      "visual_synthesis": "Share DNS forwarding policy centrally but verify rule associations, endpoint reachability and separate network permissions.",
+      "narration": "This diagram explains a centrally owned DNS forwarding model across multiple AWS accounts. Begin on the left with the network account. It owns the outbound Route 53 Resolver endpoint and a forwarding rule for corp dot example dot com, targeting corporate DNS servers. That owner also controls endpoint networking and target addresses. The middle purple block is AWS Resource Access Manager. Its purple arrows show the control plane, where the owner shares the rule with authorized workload accounts. On the right, each workload account associates that shared rule with its own VPC. Now follow the orange arrows rather than the purple ones. Matching DNS queries use the owner's outbound Resolver endpoint to reach corporate DNS, and the dashed cyan arrows show responses coming back. Sharing the rule does not share arbitrary private hosted zone records, nor does it grant application-level access to other VPCs. Notice the bottom responsibility boxes: the owner manages the endpoint, DNS targets and rule; consumers manage associations; network teams still confirm routes, security and port fifty three connectivity to DNS targets. A useful architecture decision is to centralize DNS forwarding without unnecessarily duplicating endpoints in every account."
+    },
+    {
+      "slide": 12,
+      "title": "Route 53 Profiles: distribute a DNS baseline",
+      "visual_overview": "A regional Route 53 Profile bundles private zone associations, Resolver rules, DNS Firewall groups, query logging and other supported DNS settings, then shares them to VPCs across accounts.",
+      "visual_walkthrough": [
+        "Read the central profile's five configuration categories and its regional scope",
+        "Follow AWS RAM sharing toward the three consumer accounts",
+        "Follow VPC associations down to the resulting effective DNS configuration",
+        "Inspect local precedence, optional interface endpoint associations and the networking caveat"
+      ],
+      "visual_example": "A platform team shares a regional DNS baseline to three application accounts, each associating its VPC with one Route 53 Profile.",
+      "visual_synthesis": "Profiles standardize supported DNS configuration, but they do not build network connections or override all local settings.",
+      "narration": "Route 53 Profiles simplify governance when many VPCs should share a consistent DNS configuration. The center purple column shows what can be bundled into one regional Profile: private hosted zone associations, supported Resolver forwarding and delegation rules, DNS Firewall rule groups, query logging settings, and other supported DNS settings. Read the orange Region callout on the far left. A Profile has regional scope, so a global estate must plan the configuration in each relevant Region. Follow the orange arrow to AWS RAM on the right, which shares the Profile with consumer accounts. Those consumers associate approved VPCs, shown by the cyan arrows to VPC one, two and three. The lower destination box reminds us that the VPC receives applicable DNS behavior from the association. The left warning boxes add two important limits: local VPC-specific associations can take precedence, so verify the effective outcome, and a Profile is not a connectivity or IAM authorization solution. The far-right callout also distinguishes optional PrivateLink interface endpoint associations from Resolver inbound or outbound endpoints. The professional-level decision is to centralize supported DNS policy while still testing each VPC's actual resolution behavior."
+    }
+  ]
+}
