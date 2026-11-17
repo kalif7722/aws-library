@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually reviewed SAP Module 09 original WebP slides 1–3 including each panel, diagram, arrows and decision notes.",
+  "part_id": "01",
+  "part_title": "S3 Object Semantics, Consistency and Authorization",
+  "output_prefix": "sap-module-09-part-01",
+  "script_revision": "2026-11-17-sap-m09-p01-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "S3 objects, keys and storage access patterns",
+      "visual_overview": "This original slide explains s3 objects, keys and storage access patterns through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Trace the bucket, objects and key names in the first panel; prefixes are not POSIX directories",
+        "Identify suitable static assets, backups and data-lake workloads while accounting for tiny-object overhead",
+        "Contrast object APIs with block devices and POSIX filesystem semantics"
+      ],
+      "visual_example": "A static website stores independently retrieved images in S3, but an application requiring frequent partial in-place edits needs a different access interface.",
+      "visual_synthesis": "In an architecture exam, select storage semantics before optimizing its class.",
+      "narration": "The three panels introduce S3 by defining the object, its key, metadata and storage class. A key prefix is part of a name, not a conventional directory. In the middle, follow the images, backups and lake data as natural object-store workloads; large numbers of very small objects can raise request and metadata costs. On the right, the code window connects to object storage, file storage and a block device, reminding us that S3 APIs do not offer general POSIX locking or database-style in-place updates. In an architecture exam, select storage semantics before optimizing its class."
+    },
+    {
+      "slide": 2,
+      "title": "Strong S3 consistency and concurrent-write coordination",
+      "visual_overview": "This original slide explains strong s3 consistency and concurrent-write coordination through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Explain strongly consistent GET, PUT, DELETE and LIST operations after successful general-purpose S3 object updates",
+        "Trace the two writers converging on the same key and explain conditional requests or version-aware updates",
+        "Separate storage durability from application mistakes, multi-object atomicity and backup design"
+      ],
+      "visual_example": "Two workers updating the same manifest can conflict even though each completed write becomes consistently visible; conditional writes or an external coordinator avoid lost updates.",
+      "visual_synthesis": "Do not confuse these guarantees in a professional architecture decision.",
+      "narration": "The left panel shows successful writes becoming visible through strongly consistent reads and listings. That is valuable, but the right panel shows two simultaneous writers targeting the same key. Strong consistency does not coordinate those writers or turn multiple objects into one atomic transaction. Use conditional requests or an explicit application coordination mechanism when correctness requires it. The bottom panel depicts durability and deletion: highly durable storage cannot stop an authorized operator from deleting the wrong object. Versioning, retention controls, replication and separate recovery copies address different risks. Do not confuse these guarantees in a professional architecture decision."
+    },
+    {
+      "slide": 3,
+      "title": "S3 identity policy and object ownership",
+      "visual_overview": "This original slide explains s3 identity policy and object ownership through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Follow the private bucket with identity policies, bucket policies and Block Public Access, including explicit deny",
+        "Inspect Bucket owner enforced ownership and explain why disabling ACLs does not automatically grant cross-account users access",
+        "Evaluate principal, action, object ARN, conditions, organization and endpoint restrictions, plus separate KMS permissions"
+      ],
+      "visual_example": "A cross-account role receives s3:GetObject in its identity policy but still gets AccessDenied because the bucket policy or encryption key denies the request.",
+      "visual_synthesis": "When AccessDenied occurs, identify which specific evaluation denied the request rather than making the entire bucket public.",
+      "narration": "The left pane starts with Block Public Access and least privilege. An allow is not sufficient when an applicable explicit deny exists. Next, the ownership pane shows Bucket owner enforced Object Ownership, which disables ACL-based authorization and makes the bucket owner the owner of objects. Cross-account roles still need the required policies and permissions. In the final pane, trace the full authorization request: caller, action, target resource, condition keys, organization controls and VPC endpoint policy where applicable. A KMS-encrypted object introduces key authorization as a separate boundary. When AccessDenied occurs, identify which specific evaluation denied the request rather than making the entire bucket public."
+    }
+  ]
+}

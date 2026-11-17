@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually reviewed SAP Module 09 original WebP slides 7–9 including each panel, diagram, arrows and decision notes.",
+  "part_id": "03",
+  "part_title": "Object Lock, CloudFront Origins and S3 Storage-Class Selection",
+  "output_prefix": "sap-module-09-part-03",
+  "script_revision": "2026-11-17-sap-m09-p03-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 7,
+      "title": "Object Lock retention, governance and compliance modes",
+      "visual_overview": "This original slide explains object lock retention, governance and compliance modes through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Explain Object Lock protection at the version level in a versioned bucket; separate legal hold from expiry-based retention",
+        "In governance mode describe authorized bypass with an explicit request",
+        "In compliance mode explain why protected versions cannot be removed or their retention shortened before expiration"
+      ],
+      "visual_example": "A regulated archive needs fixed WORM retention; compliance mode requires a carefully approved retention duration because even account root cannot shorten it.",
+      "visual_synthesis": "Do not conflate a retention period with a normal lifecycle expiration rule.",
+      "narration": "The left panel shows locked object versions, a clock for retention and a separate legal hold. Object Lock operates on eligible versions in a versioned bucket; a legal hold is independent of a time-based retention period. In the center, governance-mode protection can be bypassed only by an appropriately authorized caller explicitly requesting that action, making permissions important. The right side illustrates compliance mode, where the protected version cannot be deleted or its retention shortened before expiry, even by the account root user. Choose the mode, default duration, administration model and recovery procedures before enabling irreversible protection. Do not conflate a retention period with a normal lifecycle expiration rule."
+    },
+    {
+      "slide": 8,
+      "title": "CloudFront delivery with private S3 bucket origins",
+      "visual_overview": "This original slide explains cloudfront delivery with private s3 bucket origins through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Trace objects in S3 through CloudFront edge caching to desktop and mobile viewers, separate from dynamic application compute",
+        "Use Origin Access Control and a matching bucket policy to prevent direct access to supported S3 bucket origins",
+        "Contrast the regular bucket origin with an S3 static-website endpoint, particularly origin access and viewer HTTPS decisions"
+      ],
+      "visual_example": "A company serves private PDF downloads through CloudFront OAC. The S3 bucket stays nonpublic; the CloudFront distribution receives narrowly authorized origin reads.",
+      "visual_synthesis": "Keep static caching separate from any dynamic compute path, and verify both the origin and the user-facing delivery.",
+      "narration": "The large center diagram starts with static objects in S3 and CloudFront caching them close to the viewers. The upper-right shield adds Origin Access Control and a bucket policy restricting access for a supported S3 bucket origin; distributing a URL alone never makes an exposed bucket private. At lower-left, note the difference between a regular S3 bucket origin and an S3 website endpoint. They have different origin capabilities and security behavior, so do not assume an origin access control configuration for one applies identically to the other. Configure HTTPS to viewers and suitable origin protections for the chosen endpoint. Keep static caching separate from any dynamic compute path, and verify both the origin and the user-facing delivery."
+    },
+    {
+      "slide": 9,
+      "title": "S3 Standard, Standard-IA and One Zone-IA choices",
+      "visual_overview": "This original slide explains s3 standard, standard-ia and one zone-ia choices through the pictured architecture panels, boundaries and examples.",
+      "visual_walkthrough": [
+        "Compare frequently accessed multi-AZ S3 Standard with no minimum storage-duration commitment",
+        "Examine Standard-IA multi-AZ availability, retrieval charges, minimum-duration charges and minimum billable size",
+        "Explain that One Zone-IA stores infrequently accessed data in one AZ and is unsuitable when AZ loss cannot be tolerated"
+      ],
+      "visual_example": "Frequently accessed assets belong in Standard; older recoverable media may fit Standard-IA, while reproducible intermediate data might justify One Zone-IA if the AZ-risk tradeoff is explicit.",
+      "visual_synthesis": "The choice is not simply which price per gigabyte is lowest: availability, recovery requirements, retrieval patterns and minimum charges all matter.",
+      "narration": "This slide compares three online S3 classes using availability and economics. The large left pane presents S3 Standard, a flexible option for frequently accessed objects with multi-Availability-Zone resilience and no minimum storage-duration commitment. In the upper-right, Standard-Infrequent Access still supports fast retrieval and multi-AZ storage, but retrieval, minimum-duration and billable-object-size costs change the calculation. The lower-right isolates One Zone-Infrequent Access. It places data in a single Availability Zone, so it must not be treated as a resilient copy of irreplaceable production records. Consider whether the data is reconstructable or another recoverable copy exists. The choice is not simply which price per gigabyte is lowest: availability, recovery requirements, retrieval patterns and minimum charges all matter."
+    }
+  ]
+}
