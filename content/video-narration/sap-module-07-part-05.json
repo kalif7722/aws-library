@@ -13,5 +13,48 @@
   "part_title": "Target, Step, Scheduled and Predictive Auto Scaling",
   "output_prefix": "sap-module-07-part-05",
   "script_revision": "2026-11-17-sap-m07-p05-visualfirst-v1",
-  "scenes": []
+  "scenes": [
+    {
+      "slide": 13,
+      "title": "Target tracking and per-instance demand",
+      "visual_overview": "The original SAP slide diagrams target tracking and per-instance demand using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Explain the utilization feedback loop and scaling target",
+        "Compare CPU, ALB requests-per-target and proportional custom metrics",
+        "Differentiate raw queue length from backlog per worker",
+        "Discuss warmup, scaling response and real bottlenecks"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "The top-left panel shows Auto Scaling adjusting the number of instances so a utilization metric remains close to a desired target. The upper-right lists CPU usage, ALB requests per target and an appropriate custom utilization metric. Their usefulness depends on whether adding capacity actually decreases the metric. In the lower-left, raw queue length is rejected as a simple per-instance indicator: a growing workload could still show a large queue after adding workers. Backlog per worker can be a better measure when it correlates with processing time. Finally, the lower-right visual includes warmup and scale-in. Startup delays and downstream bottlenecks matter. If the database limits throughput, increasing the instance count does not solve the real problem. Use a proportional metric, check healthy capacity, and confirm the service improves as instances launch."
+    },
+    {
+      "slide": 14,
+      "title": "Step scaling and alarm severity",
+      "visual_overview": "The original SAP slide diagrams step scaling and alarm severity using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Trace metric crossing increasingly high thresholds and the different adjustments",
+        "Contrast simple scaling cooldown with step scaling",
+        "Inspect conflicting scaling actions and excessive scale-in risk",
+        "Test noisy metrics, warmup, threshold sizing and missing observations"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "The left-hand line chart illustrates a workload metric rising across three colored thresholds. Rather than choosing one fixed capacity change, step scaling adjusts the amount of added or removed capacity according to the magnitude of a configured alarm breach. The top-right callout contrasts this with simple scaling, which uses a single adjustment and cooldown; target tracking may be a better choice when proportional utilization is available. The center-right alert warns about conflicting policies and overly aggressive scale-in that removes servers while demand is still rising. Finally, the checklist recommends realistic traffic testing. Check adjustment size, thresholds, warmup timing, noisy or missing metric data, and the difference between desired and actually healthy serving capacity. The correct design keeps performance stable rather than oscillating between too many and too few instances."
+    },
+    {
+      "slide": 15,
+      "title": "Scheduled and predictive scaling",
+      "visual_overview": "The original SAP slide diagrams scheduled and predictive scaling using labeled comparison panels, arrows and a memorable architecture takeaway.",
+      "visual_walkthrough": [
+        "Follow calendar driven scheduled capacity changes",
+        "Follow forecast-based predictive scaling and recurring demand chart",
+        "Combine proactive preparation with reactive dynamic scaling",
+        "Validate time zones, boot time, maximum capacity and forecast limitations"
+      ],
+      "visual_example": "Evaluate a representative fleet during a traffic peak or controlled instance rollout and verify actual serving capacity and dependent services.",
+      "visual_synthesis": "Prove the intended scaling or deployment outcome using health, demand and recovery measurements rather than assuming the controller setting guarantees readiness.",
+      "narration": "This diagram places an Auto Scaling fleet at the center and shows two forms of advance capacity planning. On the upper-left, scheduled actions use a known event time to modify desired capacity or configured capacity bounds. Those events are deterministic rather than predictions. The upper-right forecast graph represents predictive scaling, which can anticipate recurring demand patterns and bring capacity online before the expected increase. It still depends on adequate historical data and is not guaranteed to predict exceptional events. In the lower-left, a dynamic scaling gear supplements either planned approach for unexpected load. In the lower-right, the time-zone and clock icons remind you to account for actual initialization duration, maximum capacity and changed traffic patterns. Measure whether healthy instances become ready before demand, and leave room for reactive scaling. Plan for known peaks without assuming a forecast is infallible."
+    }
+  ]
 }
