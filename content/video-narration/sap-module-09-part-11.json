@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Based on approved individual Module 09 slide specifications and the S3 coverage crosswalk; source WebP existence and rendering are validated by the GitHub workflow. No independent pixel-level narration review claimed.",
+  "part_id": "11",
+  "part_title": "S3 Architecture Decision Framework and Static Delivery Alternatives",
+  "output_prefix": "sap-module-09-part-11",
+  "script_revision": "2026-11-17-sap-m09-p11-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 32,
+      "title": "S3 architecture decisions: fit the access and failure model",
+      "visual_overview": "This original lesson uses one central glossy metaphor with three surrounding explanation cards. to teach s3 architecture decisions: fit the access and failure model.",
+      "visual_walkthrough": [
+        "Choose object storage only after assessing read, write, file-sharing, query and transactional semantics",
+        "Combine access latency, retention, replication, retrieval cost and failure boundaries into a lifecycle decision",
+        "Validate IAM, KMS, network paths, distribution, event handling, indexes and observability as a single system"
+      ],
+      "visual_example": "A media workflow can store original assets in S3, deliver processed files through CloudFront and use a searchable metadata service; a transactional order ledger belongs in a database.",
+      "visual_synthesis": "Good S3 architecture is a whole-system decision across access, security, resilience, performance and cost.",
+      "narration": "This slide brings together the S3 choices from the module. Start with data semantics. Object APIs are excellent for many static assets, backups and data lake objects, but a workload requiring POSIX locking, block-level updates or transactional queries may need another storage or database interface. Next, choose a lifecycle suited to the workload. Frequently read data may justify online storage, while archives must satisfy recovery delay and retrieval economics. Versioning and retention address some deletion risks; replication and separate backups address other failure boundaries. Finally, inspect the complete request path rather than stopping at bucket configuration. Identity policies, KMS keys, private endpoints, CloudFront delivery, event consumers, metadata indexes and monitoring can each become the limiting factor or failure point. Consider a media service: S3 holds original files, a processing tier creates derivatives, CloudFront distributes suitable results and a database supports search. The best architecture is the one whose combined access, security, performance, recovery and cost properties meet the business need."
+    },
+    {
+      "slide": 33,
+      "title": "Static assets: servers, shared files or an object origin?",
+      "visual_overview": "This original lesson uses three generous glossy conceptual comparison vignettes: local server plus disk, web fleet plus shared files, s3 object origin plus delivery globe. no exact topology or copied pdf diagram. to teach static assets: servers, shared files or an object origin?.",
+      "visual_walkthrough": [
+        "Compare serving files from EC2 instances and the operational implications of local disks or EBS",
+        "Explain EFS as shared Linux file semantics for a fleet, including its persistent dependency",
+        "Trace an S3 bucket origin through CloudFront while separating dynamic application behavior"
+      ],
+      "visual_example": "A high-traffic product site moves unchanged product imagery from its EC2 web fleet to S3 and CloudFront, reducing web server coupling while keeping checkout APIs on compute.",
+      "visual_synthesis": "Use server and filesystem layers only when their compute or file semantics are needed.",
+      "narration": "This final comparison visual shows three ways to serve static assets and what each adds to the system. On the left, web instances can host local assets, but then the instance fleet must be scaled, patched and kept consistent. Instance store is ephemeral, and EBS persistence is tied to its volume and Availability Zone characteristics. The center shows a web fleet using EFS for a common Linux file namespace. That can be a good fit for applications that need shared file semantics, but the compute fleet and filesystem remain dependencies with their own performance, security and resilience design. On the right, S3 provides object-native storage and CloudFront can cache and deliver static objects through a correctly protected origin. For unchanged product images or downloadable files, this can remove a web-server layer from the delivery path. It does not replace the dynamic application for user sessions, checkout or server-side business logic. Choose EC2 or EFS when those semantics are truly needed; otherwise prefer the simpler object delivery architecture."
+    }
+  ]
+}
