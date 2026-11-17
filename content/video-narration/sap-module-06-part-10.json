@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "06",
+  "module_title": "Hybrid Networking, Site-to-Site VPN and Direct Connect",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually reviewed SAP Module 06 original slides 35–38; approved slides 31–41 use v2 artwork.",
+  "part_id": "10",
+  "part_title": "Outposts Object Storage and Advanced VPN Connectivity",
+  "output_prefix": "sap-module-06-part-10",
+  "script_revision": "2026-11-17-sap-m06-p10-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 35,
+      "title": "S3 on Outposts: local object boundaries",
+      "visual_overview": "The original slide explains s3 on outposts: local object boundaries using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "S3 on Outposts stores objects locally for supported residency or latency requirements",
+        "Use S3 on Outposts access points and endpoints, with OUTPOSTS storage class",
+        "The slide identifies SSE-S3 default, optional SSE-C and no SSE-KMS support",
+        "Monitor finite local capacity and deliberate DataSync transfer to regional S3"
+      ],
+      "visual_example": "A local factory writes objects to S3 on Outposts but must budget its rack storage and design any replication or transfers explicitly.",
+      "visual_synthesis": "Validate the s3 on outposts: local object boundaries design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains s3 on outposts: local object boundaries, using the actual architecture and numbered callouts on the screen. Start with the first element: S3 on Outposts stores objects locally for supported residency or latency requirements. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Use S3 on Outposts access points and endpoints, with OUTPOSTS storage class. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: The slide identifies SSE-S3 default, optional SSE-C and no SSE-KMS support. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Monitor finite local capacity and deliberate DataSync transfer to regional S3. Consider a realistic architecture scenario. A local factory writes objects to S3 on Outposts but must budget its rack storage and design any replication or transfers explicitly. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 36,
+      "title": "Client VPN: access beyond associated VPC",
+      "visual_overview": "The original slide explains client vpn: access beyond associated vpc using 5 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Associate supported target subnets with nonoverlapping client and destination CIDRs",
+        "Add routes and authorization for peered VPC or on-premises destinations",
+        "Check resource security groups, NACLs, source translation and reverse routing",
+        "For internet access configure an endpoint default route, authorization and NAT or IGW egress",
+        "Ensure equivalent destinations and DNS reachability across all associated subnets"
+      ],
+      "visual_example": "Remote staff connecting to an associated VPC may need extra routes and authorization to reach a peered app, plus a separate internet egress design.",
+      "visual_synthesis": "Validate the client vpn: access beyond associated vpc design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains client vpn: access beyond associated vpc, using the actual architecture and numbered callouts on the screen. Start with the first element: Associate supported target subnets with nonoverlapping client and destination CIDRs. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Add routes and authorization for peered VPC or on-premises destinations. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Check resource security groups, NACLs, source translation and reverse routing. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: For internet access configure an endpoint default route, authorization and NAT or IGW egress. The remaining panel adds a separate requirement: Ensure equivalent destinations and DNS reachability across all associated subnets. Consider a realistic architecture scenario. Remote staff connecting to an associated VPC may need extra routes and authorization to reach a peered app, plus a separate internet egress design. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 37,
+      "title": "Site-to-Site VPN: configure every layer",
+      "visual_overview": "The original slide explains site-to-site vpn: configure every layer using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Customer gateway AWS resource describes a real supported VPN router or software appliance",
+        "Use reachable static public IP or NAT device public address in standard public-IP design",
+        "Configure both IPsec tunnels, IKE parameters, credentials and firewall UDP 500 or 4500 as appropriate",
+        "Configure BGP or static prefixes and both AWS and customer return routes"
+      ],
+      "visual_example": "An established IKE tunnel with no propagated remote prefix still leaves the application unreachable; troubleshoot route and security after tunnel state.",
+      "visual_synthesis": "Validate the site-to-site vpn: configure every layer design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains site-to-site vpn: configure every layer, using the actual architecture and numbered callouts on the screen. Start with the first element: Customer gateway AWS resource describes a real supported VPN router or software appliance. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Use reachable static public IP or NAT device public address in standard public-IP design. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Configure both IPsec tunnels, IKE parameters, credentials and firewall UDP 500 or 4500 as appropriate. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Configure BGP or static prefixes and both AWS and customer return routes. Consider a realistic architecture scenario. An established IKE tunnel with no propagated remote prefix still leaves the application unreachable; troubleshoot route and security after tunnel state. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 38,
+      "title": "Client VPN with Transit Gateway: new endpoint model",
+      "visual_overview": "The original slide explains client vpn with transit gateway: new endpoint model using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Choose VPC subnet association or native TGW association, not both on one endpoint",
+        "Configure network-based authorization and destination routes; do not assume automatic TGW propagation",
+        "Native TGW integration preserves the client source IP and needs Client VPN CIDR return routes",
+        "Check same-Region restriction, nonoverlapping ranges and model-specific authorization limitations"
+      ],
+      "visual_example": "A remote user enters a Client VPN endpoint with TGW integration and reaches multiple VPCs only after explicit routes, policy and return reachability.",
+      "visual_synthesis": "Validate the client vpn with transit gateway: new endpoint model design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains client vpn with transit gateway: new endpoint model, using the actual architecture and numbered callouts on the screen. Start with the first element: Choose VPC subnet association or native TGW association, not both on one endpoint. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Configure network-based authorization and destination routes; do not assume automatic TGW propagation. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Native TGW integration preserves the client source IP and needs Client VPN CIDR return routes. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Check same-Region restriction, nonoverlapping ranges and model-specific authorization limitations. Consider a realistic architecture scenario. A remote user enters a Client VPN endpoint with TGW integration and reaches multiple VPCs only after explicit routes, policy and return reachability. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    }
+  ]
+}
