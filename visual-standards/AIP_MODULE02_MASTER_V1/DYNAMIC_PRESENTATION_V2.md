@@ -49,3 +49,18 @@ A) **S3 public-access decision**, reference #23 (keys flow) + #28 (two outcome m
 B) **KMS decrypt authorization**, reference #33 (selected row→request→response) + #36 (decision/retry) + #38 (architecture): show a legitimate request, key-policy grant mechanism versus IAM identity policy, explicit-deny and grant/role conditions, then success or deny. Do **not** claim IAM and key policy must each grant directly in all KMS scenarios: the key policy can directly authorize, or enable IAM to delegate; cross-account uses additional rules. Verify exact trust evaluation before artwork.
 
 Review these separately with the user; no course mapping, bulk-generation or deployment.
+
+
+## 7. Raster-first illustration requirement — 17 November 2026
+
+**User feedback:** Previous Security mockups accurately matched AIP colors, but their SVG/vector primitive iconography did NOT match the original AIP Module 02 illustration quality. Those previews are **not approved** as the master visual style.
+
+**Hard constraint for future AIP-style course slides:** Do not use programmatic SVG icon galleries, Lucide icon components, primitive-only CSS diagrams, generic vector badges, or simplistic wireframe service symbols as the actual presentation artwork. Avoid replacing visually rich AIP illustrations with SVG-made 'technical diagrams' merely to keep text accurate.
+
+**Preferred production:** Generate original, visually rich **raster** illustrations with image generation, using the approved AIP screenshots as image references, then (when text accuracy needs it) use deterministic raster compositing for *text, tables, arrows and exact labels* with Pillow or equivalent. Use authentic AWS-provided icon assets only when exact official marks are needed. Rasterize any supporting vector source as needed; the **finished deliverable must be 2048×1152 WebP**, not a browser-rendered SVG. Raster output alone does not suffice: the teaching objects must visually resemble AIP originals (colorful databases, devices, access paths, data tables, heatmaps, request graphs, realistic service/data objects, nuanced shading and selective depth).
+
+**Composition target:** The main visual should tell a technical story, not a row of generic cards. Mix meaningful pictograms with content-specific visuals: for S3 use objects/access policy, request path, guardrail interaction and outcome; for KMS use request context, actual key-policy delegation/direct permissions, IAM and cross-account checks as appropriate, plus response or denial. Never manufacture code or assume both policy types must independently contain Allow in every valid case.
+
+**QA additions (mandatory):** (1) AIP illustration fidelity versus multiple nearest reference examples; (2) no generic SVG-like symbol/panel language; (3) text and code exact; (4) correct flow and security semantics; (5) readable 16:9 output at the learner viewport; (6) sufficient topic-specific visual richness without excess decoration. Compare rendered samples side-by-side with the reference screenshots before presenting them as candidates.
+
+No publishing or bulk generation until user acceptance.
