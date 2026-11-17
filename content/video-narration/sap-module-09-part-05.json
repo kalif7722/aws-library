@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Based on approved Module 09 slide-specific visual copy and layout in docs/sap-c03/module-09-visual-plan.json and technical source crosswalk; direct pixel-level verification remains a separate quality check.",
+  "part_id": "05",
+  "part_title": "Replication Architecture, Timing and S3 Event Processing",
+  "output_prefix": "sap-module-09-part-05",
+  "script_revision": "2026-11-17-sap-m09-p05-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 13,
+      "title": "Replication: same Region or another Region?",
+      "visual_overview": "The original lesson layout presents replication: same region or another region? with three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs.",
+      "visual_walkthrough": [
+        "Contrast same-Region replication with destination placement in a second Region",
+        "Check source and destination versioning, role permissions and encryption key authorization",
+        "Explain why destination lifecycle and access decisions remain part of the recovery architecture"
+      ],
+      "visual_example": "A company protecting against a regional outage selects CRR, grants the replication role access to destination encryption keys, and tests that a recovery role can actually read the copy.",
+      "visual_synthesis": "Replication must match the failure boundary and produce a usable destination copy.",
+      "narration": "This slide asks which failure boundary the second S3 copy must survive. Same-Region Replication sends eligible object versions to another bucket in the same AWS Region. Cross-Region Replication moves the destination to a different Region, which can support geographically separated recovery and compliance needs. Follow the replication setup: enable required versioning, configure the replication role and destination permissions, and account for KMS key authorization when encrypted data is involved. A copied object is not operationally useful if the disaster-recovery role cannot decrypt or retrieve it. Also inspect destination storage-class and lifecycle policies rather than assuming that all source-bucket settings are mirrored. In the example of regional recovery, CRR may be appropriate, but only after verifying the destination permissions, keys, freshness and recovery runbook. The architecture decision is not just whether replication is enabled; it is whether the copy remains usable after the intended failure."
+    },
+    {
+      "slide": 14,
+      "title": "Replication timing, existing objects and deletion",
+      "visual_overview": "The original lesson layout presents replication timing, existing objects and deletion with one central glossy metaphor with three surrounding explanation cards.",
+      "visual_walkthrough": [
+        "Separate new live replication from batch processing of objects that predate the rule",
+        "Explain replication-time monitoring and why an SLA percentage is not a per-object guarantee",
+        "Trace delete-marker behavior and immutable recovery requirements"
+      ],
+      "visual_example": "A team configures CRR today but has years of old records: live replication does not by itself promise those historic versions will all be copied. They plan Batch Replication and independent recovery checks.",
+      "visual_synthesis": "Replication is asynchronous and does not replace separate retention or a recovery-point policy.",
+      "narration": "The central concept here is that replication has a timeline and that not all objects enter the pipeline in the same way. Live replication addresses eligible new changes after configuration; existing historical data or repair jobs may require S3 Batch Replication. Next, inspect Replication Time Control. It can help monitor and bound eligible live-replication delays, but its service-credit SLA threshold is not a guarantee that each individual object always arrives inside fifteen minutes. Batch Replication is not covered by the same RTC commitment. Finally, examine deletion behavior. Delete-marker replication is configurable, and permanent version deletions do not simply become equivalent operations everywhere. For disaster recovery, define a recovery point objective, test lag and failure alarms, and protect destination data independently. A replica is a useful additional copy, not a substitute for an intentional backup and retention design."
+    },
+    {
+      "slide": 15,
+      "title": "S3 event notifications: react without coupling",
+      "visual_overview": "The original lesson layout presents s3 event notifications: react without coupling with asymmetric two-column layout with three numbered teaching areas and compact illustrative examples.",
+      "visual_walkthrough": [
+        "Select object-created, removed, restored or replication events using supported prefix and suffix filters",
+        "Trace direct notifications toward Lambda, standard SQS or standard SNS and the associated permissions",
+        "Review retries, out-of-order events, duplicate delivery and accidental invocation loops"
+      ],
+      "visual_example": "An image upload triggers thumbnail generation. The function writes thumbnails under another key prefix and must avoid recursively processing its own output.",
+      "visual_synthesis": "Notifications initiate asynchronous processing; consumers must be idempotent.",
+      "narration": "This slide turns S3 from a storage destination into an event source. First identify the event you need: object creation, removal, restoration and replication events are not interchangeable. The filter is based on supported key prefixes or suffixes, not an arbitrary wildcard search language. Next, examine the direct destination choices. S3 can notify a Lambda function, a standard SQS queue or a standard SNS topic, subject to the relevant configuration and destination permissions. The architecture example is an uploaded image triggering a thumbnail worker. The worker needs an idempotent record of the object or version, because event notifications can be duplicated or arrive out of order. It must also avoid recursive processing when it writes results back to S3. Delivery is generally prompt but may be delayed, so build retries, failure handling and visibility into the consumer. An S3 event signals that work should happen; it is not exactly-once processing."
+    }
+  ]
+}
