@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "06",
+  "module_title": "Hybrid Networking, Site-to-Site VPN and Direct Connect",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually reviewed SAP Module 06 source visuals 1–4, using the pictured comparisons, calls to action, and practical caveats.",
+  "part_id": "01",
+  "part_title": "Hybrid Connectivity Requirements, VPN and Gateway Scope",
+  "output_prefix": "sap-module-06-part-01",
+  "script_revision": "2026-11-17-sap-m06-p01-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Hybrid design: start with requirements",
+      "visual_overview": "This original SAP Module 06 slide visually explains hybrid design: start with requirements with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Introduce the latency and consistency panel and the need to measure round trips and jitter",
+        "Explain capacity and growth, including bursts, migration windows and backup sizing",
+        "Separate security boundaries and encryption endpoints from merely private transport",
+        "Inspect failure domains and the bottom requirement-to-decision validation reminder"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This first slide is a requirements checklist for hybrid networking, before we choose a product. Begin in the upper-left cyan panel: latency and consistency. Some applications need predictable round-trip time and limited jitter, while others can tolerate variation. We should measure those needs instead of guessing. Move right to capacity and growth. Estimate steady-state bandwidth, bursts and migration windows, and size a backup path for critical traffic rather than assuming it can handle the full workload. In the lower-left orange panel, private transport and encryption are separate requirements. A dedicated private circuit is not automatically encrypted, so we must identify where encryption begins and ends. The lower-right failure-domains panel tells us to inspect equipment, circuits, providers, power and physical locations. Two links sharing one provider or router may fail together. Finally, the wide bottom bar turns those choices into an architecture decision: document acceptable interruption, cost and operating effort, then simulate failures and test recovery. VPN, Direct Connect or a hybrid combination should be the consequence of these requirements, not the starting assumption."
+    },
+    {
+      "slide": 2,
+      "title": "VPN and Direct Connect: transport is a design choice",
+      "visual_overview": "This original SAP Module 06 slide visually explains vpn and direct connect: transport is a design choice with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Compare the IPsec encryption and internet-based transport on the Site-to-Site VPN side",
+        "Contrast Direct Connect private dedicated transport and its default lack of encryption",
+        "Follow the three lower choice cards: combine, size backup and verify the whole path",
+        "Clarify dedicated connectivity, encryption and resilience as separate decisions"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This is a comparison slide: the left and right panels are alternatives, not components in a single traffic flow. On the left, AWS Site-to-Site VPN provides IPsec-encrypted tunnels. A common deployment carries those tunnels over the internet, and effective latency or throughput depends on the underlying network and tunnel configuration. On the right, AWS Direct Connect offers dedicated network connectivity into AWS. It can provide a more predictable transport path, but its traffic is not encrypted simply because the circuit is private. If encryption is mandatory, use a supported encryption design, such as an appropriate IPsec overlay or other supported protection. Now read the lower cards. You can combine Direct Connect as a primary path with VPN backup, or use a compatible overlay. The backup must have enough capacity and acceptable recovery time. Finally, verify customer routers, routing policy and shared failure dependencies. A useful exam decision is to ask whether the real requirement is encrypted transport, predictable private connectivity, availability, or all three. Those are distinct concerns that often require a combined design."
+    },
+    {
+      "slide": 3,
+      "title": "VPN resilience: protect both ends",
+      "visual_overview": "This original SAP Module 06 slide visually explains vpn resilience: protect both ends with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Inspect AWS-side two-tunnel design and different Availability Zone endpoints",
+        "Compare single versus independent customer equipment on the right",
+        "Explain the route failover, application session recovery and return-path boxes",
+        "Outline practical tunnel, device and circuit failure tests"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "The headline warns that two VPN tunnels do not eliminate every failure. Look first at the left panel. An AWS Site-to-Site VPN connection normally provides two tunnels, with AWS endpoint redundancy. Both should be configured and monitored so one can carry traffic during maintenance or failure of the other. Now move to the right panel. If both tunnels terminate on one customer router, that router remains a single point of failure. Independent customer devices and connectivity can reduce this risk, but only if power, site and provider dependencies are also examined. The three cards across the bottom add three operational dimensions. Route failover requires correct BGP or static route handling, tunnel monitoring and return-path validation. Even once routing converges, existing application sessions may need to reconnect, so application recovery is a separate measure. Finally, test the design: disable one tunnel, then simulate customer equipment and circuit failures, measuring impact on the business workload. The key takeaway is to count truly independent failure domains rather than simply counting VPN tunnels."
+    },
+    {
+      "slide": 4,
+      "title": "VGW or Transit Gateway: choose the right scope",
+      "visual_overview": "This original SAP Module 06 slide visually explains vgw or transit gateway: choose the right scope with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Contrast the left VGW one-VPC scope with the right regional Transit Gateway hub",
+        "Explain VPN ECMP limitations with VGW and dynamic routing for TGW ECMP",
+        "Review bidirectional route tables, attachment propagation and segmentation",
+        "Inspect customer-side resilience, security and failover testing"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This slide selects the VPN termination architecture based on how many VPCs and networks must be connected. The blue panel on the left shows a virtual private gateway attached to one VPC. It is a managed endpoint for AWS Site-to-Site VPN, and it fits focused hybrid connectivity to that VPC. It does not support VPN equal-cost multipath behavior. Now inspect the purple panel on the right: a Transit Gateway acts as a regional transit hub, connecting several VPCs and on-premises VPN connections. When supported and correctly configured with dynamic routing, Transit Gateway can use VPN ECMP across eligible paths. That does not mean every flow uses every tunnel. At the bottom, the route box asks for VPC subnet routes, the relevant gateway or transit route tables, and the on-premises return route. The segmentation box reminds us that TGW route table association and propagation control reachability while security groups and related controls still enforce policy. The resilience card is deliberately separate: both tunnel configuration and customer equipment matter. Choose the gateway for network scope, then prove routes, permitted traffic and failover end to end."
+    }
+  ]
+}
