@@ -46,7 +46,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
   const ready=result?.status==="ready"?result:null;
   const storageKey=`sap-video-${moduleId}-${active}-position`;
   const completedKey=`sap-video-${moduleId}-${active}-complete`;
-  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
+  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
   const currentIndex=entries.findIndex(x=>x.id===active);
   const previous=entries[currentIndex-1];
   const following=entries[currentIndex+1];
