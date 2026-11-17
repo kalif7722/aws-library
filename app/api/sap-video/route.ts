@@ -22,9 +22,22 @@ export async function GET(request:NextRequest){
    scenes.some((x,i)=>!Number.isInteger(x.slide)||!x.title||!Number.isFinite(x.start_seconds)||!Number.isFinite(x.duration_seconds)||x.duration_seconds<=0||(i>0&&x.slide!==scenes[i-1].slide+1)))return pending();
   const v=`?v=${encodeURIComponent(data.script_revision)}`;
   const videoUrl=`${prefix}.mp4${v}`;
-  const head=await fetch(videoUrl,{method:"HEAD",cache:"no-store",signal:AbortSignal.timeout(6500)});
-  await head.body?.cancel();
-  if(!head.ok)return pending();
+  // Some public object/CDN configurations reject HEAD while allowing video playback.
+  // Fall back to a one-kilobyte ranged GET before reporting a published lecture as processing.
+  let accessible=false;
+  try{
+   const head=await fetch(videoUrl,{method:"HEAD",cache:"no-store",signal:AbortSignal.timeout(6500)});
+   accessible=head.ok;
+   await head.body?.cancel();
+  }catch{/* Probe the actual media path below. */}
+  if(!accessible){
+   try{
+    const probe=await fetch(videoUrl,{method:"GET",headers:{Range:"bytes=0-1023"},cache:"no-store",signal:AbortSignal.timeout(6500)});
+    accessible=probe.status===200||probe.status===206;
+    await probe.body?.cancel();
+   }catch{/* Video is not publicly fetchable yet. */}
+  }
+  if(!accessible)return pending();
   return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="00"&&part==="01"?"SAP-C03 Introduction — Architecture Decisions and Learning Approach":module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":scenes[0].title,
    videoUrl,captionsUrl:`${prefix}.vtt${v}`,transcriptUrl:`${prefix}-transcript.txt${v}`,
    durationSeconds:data.duration_seconds,chapters:scenes.map(s=>({slide:s.slide,title:s.title,startSeconds:s.start_seconds,durationSeconds:s.duration_seconds}))},{headers});
