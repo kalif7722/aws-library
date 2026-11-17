@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Narration written to the approved slide-by-slide visual plan docs/sap-c03/module-09-visual-plan.json, respecting diagram layout, key panels and published technical crosswalk. Workflow validates the source WebPs and media before publication.",
+  "part_id": "07",
+  "part_title": "Incomplete Multipart Cleanup, Byte-Range Reads and Transfer Acceleration",
+  "output_prefix": "sap-module-09-part-07",
+  "script_revision": "2026-11-17-sap-m09-p07-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 19,
+      "title": "Incomplete multipart uploads still consume storage",
+      "visual_overview": "This slide uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to explain incomplete multipart uploads still consume storage.",
+      "visual_walkthrough": [
+        "Separate uploaded multipart parts from a completed visible object",
+        "Inspect upload IDs and abandoned-part listing rather than relying on normal object listing",
+        "Configure lifecycle abort for unfinished multipart uploads after a deliberately chosen period"
+      ],
+      "visual_example": "A mobile application times out during multipart upload and never completes; the parts continue to consume billable storage even though no finished object is listed.",
+      "visual_synthesis": "Aborting an unfinished upload and expiring a complete object are different operations.",
+      "narration": "This slide illustrates a hidden cost of multipart uploads: parts can exist without a completed S3 object. In the first station, a transfer starts and then fails before Complete Multipart Upload runs. Normal completed-object listings are not enough to identify those unfinished uploads, but the parts can still incur storage charges. The second station shows the investigation path: list ongoing multipart uploads, inspect the upload ID and decide whether the client can resume or whether the upload should be aborted. Finally, examine the lifecycle automation. An Abort Incomplete Multipart Upload action can clean up stranded parts after a selected number of days. That action is different from normal current-object expiration or noncurrent-version cleanup. For a data ingestion platform, monitor outstanding transfers and apply a sensible abort window. The important architectural point is that a failed data transfer may leave storage cost behind even when the application sees no finished file."
+    },
+    {
+      "slide": 20,
+      "title": "Byte-range GET: fetch only the needed bytes",
+      "visual_overview": "This slide uses one central glossy metaphor with three surrounding explanation cards. to explain byte-range get: fetch only the needed bytes.",
+      "visual_walkthrough": [
+        "Identify the HTTP Range request selecting a precise byte interval",
+        "Follow parallel range retrieval and reconstruction of a large output",
+        "Explain version-pinning or conditional requests when several ranges must come from the same object state"
+      ],
+      "visual_example": "A media processor retrieves a file header and selected frames without downloading the entire file; a large download retries only the failed byte range.",
+      "visual_synthesis": "Partial retrieval saves work only when clients assemble the correct ranges consistently.",
+      "narration": "The central image uses byte ranges to show that an application need not always download an entire S3 object. An HTTP Range GET requests a selected interval of bytes, which is useful for a file header, a specific segment or parallel download of a large object. Follow the surrounding steps: the client can divide a large download into independent non-overlapping ranges and recombine the returned content in the correct order. If one request fails, only that segment may need a retry. However, careful coordination is essential. When several requests target the same mutable key, pin an object version or use conditional requests where appropriate so the segments represent one consistent object state. A media application might fetch an index and a few needed sections without transferring an entire recording. Byte-range requests optimize selected transfers; they do not automatically make file assembly or change detection correct."
+    },
+    {
+      "slide": 21,
+      "title": "Transfer Acceleration helps distant uploads",
+      "visual_overview": "This slide uses asymmetric two-column layout with three numbered teaching areas and compact illustrative examples. to explain transfer acceleration helps distant uploads.",
+      "visual_walkthrough": [
+        "Trace an upload entering a nearby AWS edge location before reaching the bucket's Region",
+        "Compare improved network routing with independent multipart parallelism",
+        "Review measured throughput, eligibility, client distance and acceleration charges"
+      ],
+      "visual_example": "A user uploading a large file from another continent measures multipart uploads with and without acceleration before enabling it across the application.",
+      "visual_synthesis": "Transfer Acceleration improves the route to one bucket, not replication to another Region.",
+      "narration": "This slide follows an upload from a geographically distant client to an S3 bucket. With Transfer Acceleration, supported requests enter through an AWS edge location and travel across the AWS network toward the bucket's home Region. That can improve throughput for some long-distance network paths, but it does not move the bucket or replicate the object to another Region. The next visual explains how this differs from multipart upload. Multipart divides work into retryable parallel parts, while acceleration changes the network entry and transport path. They can be combined when measurements justify it. Finally, examine economics and eligibility. Distance, object size, existing network quality and client behavior all affect the actual benefit; acceleration also has separate charges. Test real upload paths before turning it on broadly. The architect's decision is whether measured user performance outweighs additional transfer cost, not whether an edge-service label looks faster."
+    }
+  ]
+}
