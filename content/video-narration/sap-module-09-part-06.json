@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Narration written to the approved slide-by-slide visual plan docs/sap-c03/module-09-visual-plan.json, respecting diagram layout, key panels and published technical crosswalk. Workflow validates the source WebPs and media before publication.",
+  "part_id": "06",
+  "part_title": "EventBridge Routing, Prefix Scale and Multipart Uploads",
+  "output_prefix": "sap-module-09-part-06",
+  "script_revision": "2026-11-17-sap-m09-p06-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 16,
+      "title": "EventBridge adds richer event routing",
+      "visual_overview": "This slide uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to explain eventbridge adds richer event routing.",
+      "visual_walkthrough": [
+        "Enable S3 delivery to EventBridge and identify fields suitable for rule matching",
+        "Trace event-pattern filtering from the bucket to specific downstream services",
+        "Check retries, dead-letter delivery, archiving, replay and downstream idempotency"
+      ],
+      "visual_example": "After an object upload, EventBridge matches the object key and type to launch Step Functions; metadata outside the event requires an object lookup.",
+      "visual_synthesis": "EventBridge supports richer filtering and multiple workflows but is not a guarantee of exactly-once processing.",
+      "narration": "This slide extends basic S3 event notifications into a more flexible event routing architecture. Start with the bucket: supported object events are delivered into EventBridge once event delivery is enabled. In the next visual station, event patterns filter on available event fields such as bucket, key, object size or event type. If an application needs custom object metadata that is not included in the event, it must retrieve that information separately. Finally, follow matching events to downstream targets such as Step Functions or a queue. Here the workflow can coordinate several processing stages rather than invoking one hard-coded function. Configure target permissions, retries, dead-letter handling and, when useful, event archives and replay. A replay can generate repeated work, so the consumer must remain idempotent. Choose EventBridge for flexible routing, but remember that richer routing does not eliminate duplicate events or failures in downstream processing."
+    },
+    {
+      "slide": 17,
+      "title": "Scale requests across useful key prefixes",
+      "visual_overview": "This slide uses one central glossy metaphor with three surrounding explanation cards. to explain scale requests across useful key prefixes.",
+      "visual_walkthrough": [
+        "Read the per-prefix baseline and distinguish requests from object count",
+        "Follow parallel request distribution across useful key prefixes",
+        "Identify S3 scaling transients, KMS limits, network and client bottlenecks"
+      ],
+      "visual_example": "Four suitably partitioned prefixes can offer an illustrative GET/HEAD baseline of 22,000 requests per second, provided encryption and clients do not become the limiting factor.",
+      "visual_synthesis": "High S3 capacity is an end-to-end system property, not just a bucket setting.",
+      "narration": "At the center of this visual, S3 object keys are organized into prefixes to illustrate request-rate distribution. The reference baseline is at least three thousand five hundred write-type requests or five thousand five hundred GET and HEAD requests per second per partitioned prefix. A useful example is four independently busy prefixes: their illustrative read baseline totals twenty-two thousand requests per second. This is not a promise that an application instantly reaches that rate. S3 can scale gradually to a new pattern and clients need exponential backoff when transient slowdowns occur. Now inspect the surrounding constraints. KMS request quotas can limit an SSE-KMS workload, and network bandwidth or a slow client may be the real bottleneck. A prefix is simply part of an object key, not a directory that you have to create. Design request parallelism, observe metrics and test the whole data path before declaring the architecture performant."
+    },
+    {
+      "slide": 18,
+      "title": "Multipart upload: parallelize and retry parts",
+      "visual_overview": "This slide uses asymmetric two-column layout with three numbered teaching areas and compact illustrative examples. to explain multipart upload: parallelize and retry parts.",
+      "visual_walkthrough": [
+        "Trace initiate, upload numbered parts and complete operations in sequence",
+        "Explain why parallel parts support focused retries while retaining part metadata",
+        "Distinguish finalization, abandoned parts and checksum validation"
+      ],
+      "visual_example": "An 800-megabyte upload is divided into multiple parts; one network failure requires only the affected part to be retried before the complete request.",
+      "visual_synthesis": "Multipart upload is a managed transfer lifecycle, not merely simultaneous independent PUTs.",
+      "narration": "The numbered flow in this slide shows how a large S3 object is uploaded in stages. First initiate multipart upload to obtain an upload identifier. Next send numbered parts, potentially in parallel, and retain the information required to complete the upload. If a network request fails, retry the affected part rather than restarting the entire large object. Once all required parts are present, issue Complete Multipart Upload so S3 assembles the finished object. An eight-hundred-megabyte file is a practical example: the multipart approach improves recovery from interrupted transfers and can increase throughput. AWS generally recommends considering multipart uploads around one hundred megabytes, and the single PUT limit makes it mandatory for sufficiently large objects. Validate data integrity using suitable checksum behavior; do not assume the final multipart ETag is the whole-object MD5. If the process never completes, uploaded parts can remain billable until they are aborted or cleaned up."
+    }
+  ]
+}
