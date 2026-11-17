@@ -84,6 +84,11 @@ def load_local_slide(module: str, number: int, local_dir: str,
     if source_dir != expected_dir:
         raise ValueError(f"Original source directory mismatches approved {course_slug} module {module}")
     source = source_dir / filename
+    # Audited S3 depth-repair slides and rebuilt EBS lessons use approved v2 media.
+    if course_slug == "sap" and (module == "09" and 34 <= number <= 37 or module == "10" and 1 <= number <= 34):
+        filename = f"slide-{number:02}-v2.webp"
+        source = source_dir / filename
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     # The approved SAP M01 directory/federation lesson is versioned as slide-45-v2.webp.
     # Resolve only this explicitly audited variant; never use a generic visual substitute.
     # SAP M04 approved supplementary slides are available only as audited v2 assets.
