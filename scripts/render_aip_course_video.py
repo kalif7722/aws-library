@@ -91,6 +91,12 @@ def load_local_slide(module: str, number: int, local_dir: str,
         filename = f"slide-{number:02}-v2.webp"
         source = source_dir / filename
         public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
+    # Approved SAP M07 additions use explicitly reviewed versioned originals.
+    if course_slug == "sap" and module == "07" and 25 <= number <= 30:
+        version = "v3" if number == 27 else "v2"
+        filename = f"slide-{number:02}-{version}.webp"
+        source = source_dir / filename
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     # SAP M07 slide 24 exists only as the explicitly approved v2 original.
     if course_slug == "sap" and module == "07" and number == 24:
         filename = "slide-24-v2.webp"
