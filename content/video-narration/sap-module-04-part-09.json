@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually inspected SAP Module 04 original WebP slides 28–29; generated content anchored to depicted architecture, arrows, boundaries, captions and exam choices.",
+  "part_id": "09",
+  "part_title": "AWS WAF, Shield and Edge DDoS Resilience",
+  "output_prefix": "sap-module-04-part-09",
+  "script_revision": "2026-11-17-sap-m04-p09-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 28,
+      "title": "AWS WAF: protect the HTTP request",
+      "visual_overview": "HTTP request attributes pass through a WAF web ACL with managed, custom, rate-based and bot rules; the result either reaches CloudFront or ALB or is blocked.",
+      "visual_walkthrough": [
+        "Start with URI, headers, query parameters and body on the left",
+        "follow to Web ACL rule collections",
+        "distinguish allowed request green arrow from blocked red arrow",
+        "explain rule priority, terminating actions, Count and staged enforcement."
+      ],
+      "visual_example": "An ecommerce website first runs a new SQL injection rule in Count mode to inspect false positives before switching to Block.",
+      "visual_synthesis": "WAF is Layer 7 request filtering; pair it with network controls and tune rules before enforcing.",
+      "narration": "This is a Layer 7 request protection architecture. Begin on the left with an example HTTP request: a GET for products, HTTP headers including Host and User Agent, a query string containing an identifier and a search term, and a possible request body. These are the sorts of fields AWS WAF can inspect, subject to its supported scope and inspection limits. The request enters the WAF web ACL in the middle. The rule list contains managed rule groups, custom rules, rate-based rules and bot controls. These are options for different threat patterns, not an automatic guarantee that every malicious request is recognized. Follow the green arrow to a supported protected application such as CloudFront or an Application Load Balancer: a permitted request proceeds. Follow the red line below: a blocked request terminates and may receive a configured response. The third lower panel explains ordered rule priorities and actions. Allow or Block decisions can terminate evaluation, while Count normally records a match without blocking. The fourth panel is an operational best practice: begin a new rule in Count, examine sampled requests and logs, reduce false positives, then enforce when confident. Security groups, NACLs and Network Firewall protect different layers. When the problem is malicious HTTP requests, start with AWS WAF and protect the origin from bypass."
+    },
+    {
+      "slide": 29,
+      "title": "DDoS resilience starts at the edge",
+      "visual_overview": "Unwanted attack traffic and legitimate users converge on AWS edge protection, then appropriate global edge services, WAF and resilient multi-AZ application backends.",
+      "visual_walkthrough": [
+        "Distinguish red attack arrows and cyan valid traffic",
+        "show Shield Standard/Advanced layers at the edge",
+        "inspect CloudFront, Route 53 and Global Accelerator as workload-specific options rather than a mandatory linear chain",
+        "follow WAF request checks to multi-AZ backends",
+        "explain origin restrictions and incident readiness."
+      ],
+      "visual_example": "A public web application uses CloudFront plus WAF and restricted origin access, with Shield Advanced when additional paid response capabilities are justified.",
+      "visual_synthesis": "Protect origin capacity by combining edge controls, application filtering, redundancy and an incident-response plan.",
+      "narration": "Read this visual from the flood of traffic on the far left. The red arrows represent unwanted denial-of-service traffic and the cyan arrows represent legitimate customers. AWS Shield provides network and transport layer protection at the edge, with Shield Standard included automatically for supported AWS resources and Shield Advanced offering enhanced paid protection and response capabilities for eligible protected resources. The central box names CloudFront, Route 53 and Global Accelerator. Treat them as workload-dependent edge services, not as three devices every request must traverse. CloudFront can distribute web content, Route 53 supplies resilient DNS and routing decisions, and Global Accelerator provides anycast entry points for supported architectures. Continue to the AWS WAF layer. WAF evaluates application-level HTTP requests, including abusive request patterns, and can stop them before they reach an application. On the right, the application has resources across two Availability Zones. That redundancy still matters because an edge service does not replace application capacity planning, operational alarms or incident procedures. The five lower boxes summarize defense in depth: baseline Shield, enhanced Shield Advanced options, edge exposure, web request protection and operations. One extra design decision is essential: restrict direct origin access where practical, otherwise attackers may bypass the protected edge. The exam answer should combine appropriate edge services, Layer 7 protections and resilient backends rather than relying on one product alone."
+    }
+  ]
+}
