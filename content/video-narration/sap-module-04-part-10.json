@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Original SAP Module 04 WebPs 30–30 individually visually inspected, including nested layers, labeled routes, comparison matrices, caveats and example scenarios.",
+  "part_id": "10",
+  "part_title": "Layered Network Segmentation and the Data Perimeter",
+  "output_prefix": "sap-module-04-part-10",
+  "script_revision": "2026-11-17-sap-m04-p10-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 30,
+      "title": "Layered segmentation and the data perimeter",
+      "visual_overview": "The nested diagram surrounds an S3 data resource with organization governance, VPC routes, network security, endpoint access, and IAM/resource policy.",
+      "visual_walkthrough": [
+        "Read the concentric layers from the outer organization boundary toward the S3 bucket",
+        "examine the approved role-through-endpoint path and the two denied paths",
+        "connect policy condition keys and explicit deny to the diagram."
+      ],
+      "visual_example": "A private application role reads a bucket only through an approved VPC endpoint, while another principal and an outside network client are denied.",
+      "visual_synthesis": "Authorization needs identity, resource and network-path controls; a private IP alone does not prove access is safe.",
+      "narration": "This slide is a layered defense diagram rather than a sequence of traffic hops. Start at the outside orange ring: organization and account governance includes service control policies and account boundaries. Move inward to blue VPC and subnet routing, which determines what networks are reachable. Next, security groups, network ACLs and firewalls constrain permitted traffic at the relevant network boundary. An endpoint can provide a private AWS service access path, but that still is not authorization. The next ring contains IAM and resource policies that decide which principal can perform which action against the resource. At the center sits the sensitive S3 bucket. The numbered panels on the right show the control layers separately. The orange condition panel is especially important: keys such as aws:SourceVpce and organization context can restrict paths or account trust where supported; an explicit deny overrides allows. Along the bottom, compare the green approved access from an application role through the endpoint with the denied IAM principal and disallowed outside-network path. Test service-to-service requests carefully to avoid accidental policy lockouts. The architect's lesson is to validate identity, data resource and network path together."
+    }
+  ]
+}
