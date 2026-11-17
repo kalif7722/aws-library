@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Authored against individually numbered S3 approved slide specifications and verified technical coverage crosswalk for slides 22, 23, 24. Renderer checks source original WebP and resulting media.",
+  "part_id": "08",
+  "part_title": "Legacy Select, Storage Class Analysis and Storage Lens Overview",
+  "output_prefix": "sap-module-09-part-08",
+  "script_revision": "2026-11-17-sap-m09-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 22,
+      "title": "Legacy Select: reduce data before transfer",
+      "visual_overview": "The slide uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to present legacy select: reduce data before transfer.",
+      "visual_walkthrough": [
+        "Identify the supported-object filtering idea of returning only selected rows and columns",
+        "Distinguish reduced transfer volume from database indexing and cross-object querying",
+        "Highlight S3 Select availability restrictions and the alternative analytical path"
+      ],
+      "visual_example": "A customer needs to query many current data lake objects. Athena is considered instead of designing a new product around legacy S3 Select.",
+      "visual_synthesis": "A legacy per-object filter is not a modern general-purpose data lake query engine.",
+      "narration": "The first panel illustrates a historical approach to reducing how much object data travels over the network. S3 Select could evaluate a limited SQL-style expression against one supported object's contents and return selected rows or columns rather than transferring the entire object. The second station shows why this mattered: fewer bytes reach the client, so some processing and network costs can be reduced. But this does not turn an S3 bucket into a relational database with arbitrary indexes, transactions or joins across objects. The final panel is especially important for a current architecture decision. S3 Select is no longer available to new customers, although existing customers can continue using it. Glacier Select belongs to historical service context. If you are designing a new analytical pipeline, consider Athena or another currently supported query engine based on formats, scale and access pattern. Do not recommend an unavailable legacy feature merely because an older exam reference mentions it."
+    },
+    {
+      "slide": 23,
+      "title": "Storage Class Analysis informs lifecycle decisions",
+      "visual_overview": "The slide uses one central glossy metaphor with three surrounding explanation cards. to present storage class analysis informs lifecycle decisions.",
+      "visual_walkthrough": [
+        "Read the access-observation stage before making a Standard to Standard-IA decision",
+        "Explain the limited recommendations and separate analysis from lifecycle execution",
+        "Follow daily export to a report or BI visualization and discuss time needed for useful evidence"
+      ],
+      "visual_example": "A backup bucket shows little access in early daily reports, but the architect waits for a meaningful observation period before setting a narrowly scoped transition rule.",
+      "visual_synthesis": "Analytics informs a storage-class decision; lifecycle automation must be configured separately.",
+      "narration": "This visual starts with an observation stage rather than an immediate cost-saving rule. S3 Analytics Storage Class Analysis looks at supported access patterns to help evaluate movement from S3 Standard into Standard Infrequent Access. The central panel emphasizes scope: these recommendations are not a universal answer for One Zone Infrequent Access or every Glacier archival tier. The analysis does not make the transition itself. The reporting panel shows how a daily CSV export can be used with spreadsheets or a business intelligence tool such as QuickSight to identify candidates and validate assumptions. Initial data may become visible after roughly twenty-four to forty-eight hours, but a meaningful recommendation often needs thirty days or more of evidence. Take a bucket with seasonal workloads: low activity this week alone would be a weak reason to apply aggressive expiration or transition rules. Measure the real access pattern, model minimum-duration and retrieval costs, then use a scoped lifecycle policy to execute an approved decision."
+    },
+    {
+      "slide": 24,
+      "title": "Storage Lens: see storage across the organization",
+      "visual_overview": "The slide uses asymmetric two-column layout with three numbered teaching areas and compact illustrative examples. to present storage lens: see storage across the organization.",
+      "visual_walkthrough": [
+        "Trace storage aggregation across organization, account, Region, bucket and supported prefix scopes",
+        "Differentiate the built-in default dashboard from custom dashboards",
+        "Discuss daily exports, permissions and the limit that metrics do not change bucket policies"
+      ],
+      "visual_example": "A central platform team compares storage growth between accounts and exports Storage Lens reports to examine an unexpected increase in noncurrent object bytes.",
+      "visual_synthesis": "Storage Lens shows where to investigate; operational remediations remain separate actions.",
+      "narration": "This slide introduces S3 Storage Lens as a way to understand the storage estate beyond one bucket. Start with the hierarchy of supported views: an organization or account can be examined by Region, bucket and, where supported, prefix. This helps an architect identify where storage grows, where protection settings differ and where access patterns deserve investigation. The second visual separates the default dashboard from a custom dashboard. The default has a preconfigured scope and can be disabled rather than deleted; custom dashboards allow more deliberately chosen coverage and settings. Next, follow the reporting path. Supported daily exports can be written in CSV or Parquet form to a properly authorized destination, enabling separate analysis. For example, a central team might notice a rapid increase in noncurrent-version bytes and inspect affected buckets before modifying their lifecycle rules. Remember that a dashboard is observational. Storage Lens does not automatically repair permissions, remove versions or apply data-retention policies simply because it identifies an anomaly."
+    }
+  ]
+}
