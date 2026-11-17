@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually inspected SAP Module 04 original WebP slides 23–27; generated content anchored to depicted architecture, arrows, boundaries, captions and exam choices.",
+  "part_id": "08",
+  "part_title": "Centralized Ingress, Egress and Stateful Inspection Architectures",
+  "output_prefix": "sap-module-04-part-08",
+  "script_revision": "2026-11-17-sap-m04-p08-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 23,
+      "title": "Centralized ingress and shared services",
+      "visual_overview": "Internet users enter a dedicated ingress VPC through an ALB, which reaches private targets in two application VPCs via a routed hub; shared DNS, directory and logging are in a third VPC.",
+      "visual_walkthrough": [
+        "Trace internet client to ALB and its TLS WAF and listener policy",
+        "follow ALB to Transit Gateway and reachable IP targets in two private application VPCs",
+        "examine shared services",
+        "cover explicit return routes, health checks and failure blast radius."
+      ],
+      "visual_example": "An internet-facing ALB in a central ingress VPC targets private EC2 IP addresses in spoke VPCs over appropriate routed connectivity.",
+      "visual_synthesis": "Central ingress simplifies control but requires proven IP reachability, return routing, AZ availability and controls.",
+      "narration": "This architecture centralizes the application's public entry point without giving the application servers public IPs. Start with internet users entering the ingress VPC. They reach an internet-facing Application Load Balancer spanning multiple Availability Zones. The three boxes beneath it show where TLS termination, AWS WAF and listener policies can be governed in one place. Follow the orange arrow to Transit Gateway and then into application VPC A and application VPC B. The instances sit at private IP addresses and the ALB must use supported IP target groups when registering targets across VPC boundaries. The load balancer cannot simply register those cross-VPC instances by instance ID. The shared-services VPC on the far right houses DNS, directory and logging capabilities needed by applications, but those services need their own correct connectivity. At the bottom, the numbered sections are the design checks. First, centralize ingress policy while considering the blast radius of one shared entry point. Second, prove target IP reachability and health-check connectivity. Third, explicitly configure forward and return routes and corresponding security controls; neither Transit Gateway attachment nor a listener rule installs every route. A central ingress can simplify operations only when the private path stays available and symmetric enough for stateful controls."
+    },
+    {
+      "slide": 24,
+      "title": "Centralized egress: share NAT deliberately",
+      "visual_overview": "Two private spoke VPCs route outbound internet traffic to Transit Gateway, a central egress VPC, NAT Gateway, Internet Gateway and the internet.",
+      "visual_walkthrough": [
+        "Follow private spoke default routes to TGW",
+        "explain TGW default route into egress attachment and egress VPC routes toward NAT",
+        "follow response through NAT and TGW",
+        "read AZ alignment, NAT cost and service endpoint alternatives."
+      ],
+      "visual_example": "Spoke EC2 workloads needing software package downloads can use a central public NAT deployment instead of owning NAT gateways per spoke VPC.",
+      "visual_synthesis": "Central NAT is address translation and a deliberate routing design, not full inspection or threat prevention.",
+      "narration": "Here the arrows point outward rather than inward. Workloads in private subnets of spoke VPC A and B need to reach the internet without exposing inbound access. Each spoke's default route directs traffic to Transit Gateway. The TGW route table points the outbound default path toward an egress VPC attachment. Inside that central VPC, appropriate subnet route tables send the traffic toward a NAT Gateway placed in a public subnet; the public NAT then uses an Internet Gateway to reach the internet. The response arrow is not optional. Traffic must return through the NAT state and back via Transit Gateway to the originating spoke CIDR. Read the three bottom boxes in order. The first makes the spoke and TGW default routes explicit. The second emphasizes routes back to each spoke network. The third asks for a resilient Availability Zone strategy and a real cost calculation: cross-AZ charges, TGW processing, and NAT processing can offset savings from consolidation. AWS service gateway endpoints or interface endpoints may bypass internet NAT for supported services. The warning at the bottom is equally important: NAT performs address translation. It does not inspect malicious application traffic or replace a firewall. For centralized egress, validate both routing directions before adding security inspection as a separate concern."
+    },
+    {
+      "slide": 25,
+      "title": "Stateful inspection needs a symmetric path",
+      "visual_overview": "Two diagrams contrast healthy bidirectional inspection through one firewall with a return path that bypasses the appliance and loses state.",
+      "visual_walkthrough": [
+        "Compare cyan symmetric request/return arrows in the left diagram with red bypass on the right",
+        "show inspection VPC, appliance state and destinations",
+        "explain TGW appliance mode and AZ-aligned routes",
+        "distinguish the newer native Network Firewall TGW attachment."
+      ],
+      "visual_example": "An allowed outbound request passes through a firewall, but its response goes around the firewall and is dropped because no matching state exists.",
+      "visual_synthesis": "Correct both routing directions and stateful inspection placement before editing an otherwise valid allow rule.",
+      "narration": "The entire slide turns on one difference: does the response traverse the same stateful inspection path as the request? Look at the left cyan panel first. A workload in a spoke VPC sends a request through an inspection VPC and firewall endpoint to its destination. The return path comes back through the same inspection path, so the firewall can match the established flow state. Now move to the red panel. The outbound request is permitted, but the response bypasses the firewall or arrives at a different stateful endpoint. That endpoint lacks the original connection state, and the flow can fail despite an apparently valid allow rule. The lower sections explain the architecture remedy. Route spoke traffic intentionally through the inspection attachment. When using an inspection VPC with Transit Gateway, appliance mode helps preserve the required flow symmetry across applicable paths. Plan Availability Zone placement and both forward and return routes; check logs and endpoint health before changing a rule. The final strip notes another option: a native Transit Gateway-attached Network Firewall can provide managed symmetric inspection for supported deployments. The exam lesson is to diagnose asymmetric routing first whenever a stateful firewall intermittently drops return traffic."
+    },
+    {
+      "slide": 26,
+      "title": "Gateway Load Balancer: insert appliances",
+      "visual_overview": "Traffic from workloads is steered by a GWLB endpoint into a Gateway Load Balancer and healthy third-party firewall appliances using GENEVE encapsulation.",
+      "visual_walkthrough": [
+        "Follow workload to Gateway Load Balancer endpoint used as a route target",
+        "trace gateway load balancer selection of healthy firewall appliances",
+        "identify GENEVE UDP 6081 transport and original packet preservation",
+        "trace inspection round trip and final VPC forwarding",
+        "cover AZ symmetry."
+      ],
+      "visual_example": "A shared security team deploys multiple third-party inspection appliances behind GWLB while application VPCs steer selected routes to GWLB endpoints.",
+      "visual_synthesis": "GWLB steers network flows to appliances; it is not HTTP request routing, and appliances still perform inspection.",
+      "narration": "This picture is about transparent placement of third-party network appliances. Start on the left with workload traffic in a VPC. Its route table selects a Gateway Load Balancer endpoint, shown in cyan. The endpoint is the routing target that directs selected flows toward a Gateway Load Balancer service using PrivateLink. The purple load balancer then distributes flows across healthy firewall appliances and performs health checks. Notice the three appliance boxes: they represent scalable capacity rather than three sequential inspection stages. Look up to the orange inset. GWLB wraps the original packet using GENEVE encapsulation over UDP port 6081, allowing the appliance to examine traffic while preserving the original packet inside the tunnel. The small round-trip strip shows the response through the endpoint and load balancer after inspection, before normal VPC routing takes the packet toward its destination. The lower five callouts reinforce distinct responsibilities: GWLB distributes, GWLB endpoints steer, encapsulation preserves packets, symmetry is essential, and healthy appliances must exist across the intended failure domains. A centralized TGW design may also need appliance mode to keep flows on a consistent path. Unlike an Application Load Balancer, GWLB is not deciding HTTP URL rules. Choose this service when the requirement is scaled transparent packet inspection by compatible third-party appliances."
+    },
+    {
+      "slide": 27,
+      "title": "AWS Network Firewall: policy and placement",
+      "visual_overview": "Two deployment alternatives surround a Network Firewall shield: VPC firewall endpoints in subnets versus native Transit Gateway network-function attachment; the lower diagram depicts stateless and stateful policy stages.",
+      "visual_walkthrough": [
+        "Inspect the left dedicated firewall subnet option, the right native TGW attachment option, and their routing boundaries",
+        "follow firewall policy to stateless rules, then stateful inspection and flow/alert logs",
+        "contrast appliance mode requirements and managed symmetry."
+      ],
+      "visual_example": "Security architects can choose routed VPC firewall endpoints for a dedicated inspection VPC or a supported TGW-attached firewall to centrally inspect spoke traffic.",
+      "visual_synthesis": "A firewall rule has effect only if the deployed traffic path traverses the firewall; verify rules, routing symmetry and logs together.",
+      "narration": "This slide compares two placement models for AWS Network Firewall. On the left, firewall endpoints are placed in dedicated subnets within a VPC. That may be the workload VPC or a central inspection VPC, but route tables must explicitly steer the traffic through those endpoints in both directions. On the right, the newer Transit Gateway network function attachment associates Network Firewall with a TGW, reducing the need to construct a conventional inspection VPC path and providing managed traffic symmetry for that attachment model. It still depends on correct TGW routes and supported deployment choices. Now move to the bottom left. A Network Firewall policy links stateless and stateful rule groups. Stateless rules evaluate packets first and can drop, pass, or forward traffic for stateful inspection. The stateful engine tracks connections and applies its configured rule ordering and default behavior. Flow and alert logs provide evidence of how the path behaves. Finally inspect the bottom right, which compares inspection VPC routing with native TGW attachment. For VPC endpoint-based central inspection, check Transit Gateway appliance mode where needed for flow symmetry. With native attachment, the service manages the supported symmetry behavior, but route correctness remains your responsibility. Remember that a beautifully written firewall policy cannot inspect packets that bypass its endpoint. Start with deployment placement, then effective routes, stateful evaluation and logs."
+    }
+  ]
+}
