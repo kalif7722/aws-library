@@ -50,7 +50,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
   const ready=result?.status==="ready"?result:null;
   const storageKey=`sap-video-${moduleId}-${active}-position`;
   const completedKey=`sap-video-${moduleId}-${active}-complete`;
-  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
+  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="10"&&n>=1&&n<=34)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
   const currentIndex=entries.findIndex(x=>x.id===active);
   const previous=entries[currentIndex-1];
   const following=entries[currentIndex+1];
