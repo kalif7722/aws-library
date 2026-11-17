@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "04",
+  "module_title": "VPC Networking, Address Planning and Routing",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-04",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually inspected SAP Module 04 original WebP slides 21–22; generated content anchored to depicted architecture, arrows, boundaries, captions and exam choices.",
+  "part_id": "07",
+  "part_title": "VPC Lattice Service Networks, Authorization and Routing",
+  "output_prefix": "sap-module-04-part-07",
+  "script_revision": "2026-11-17-sap-m04-p07-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 21,
+      "title": "VPC Lattice: services across VPCs",
+      "visual_overview": "The left side shows client VPC A and B attaching to one Lattice service network; on the right Orders and Payments have independently associated services and targets.",
+      "visual_walkthrough": [
+        "Follow both client VPC association arrows into the service network",
+        "trace each listener to rule/default action and target group",
+        "distinguish Orders targets in service VPC A from Payments in service VPC B",
+        "explain service DNS, auth policies and observability."
+      ],
+      "visual_example": "A web application in one account and a separate client VPC can call the Orders and Payments services through the same service network without broadly routing whole VPCs together.",
+      "visual_synthesis": "Use Lattice when the requirement is managed application-to-application service connectivity and policy, not general transit routing.",
+      "narration": "The big diagram places a VPC Lattice service network in the center. It is not a Transit Gateway and should not be interpreted as general VPC routing. Begin at the two clients on the left: Client VPC A hosts a web application while Client VPC B belongs to another account. Both are associated with this service network. Follow the purple arrows to the Orders service and Payments service, which are separately associated with the network. Each service has a listener, rule or default action, and a target group. The Orders targets live in service VPC A; Payments targets live in service VPC B. Those targets might run on EC2, containers or supported Lambda integrations. Clients use each service's DNS name instead of learning the address of every backend. Below the architecture, notice the optional IAM authentication policies. They can limit which identities are permitted to invoke each service; networking associations alone are not the whole authorization decision. Metrics and access logs expose response codes, latency and request details. Finally compare the bottom row. Transit Gateway routes networks, PrivateLink exposes a specific endpoint service, while VPC Lattice adds application-service access, routing and observation across accounts and VPCs. Choose it for governed service-to-service communication."
+    },
+    {
+      "slide": 22,
+      "title": "Lattice: authorize, route and observe",
+      "visual_overview": "The single horizontal request path first checks Lattice authorization, then listener rules, then healthy targets, while dotted paths feed logs and metrics.",
+      "visual_walkthrough": [
+        "Start with signed or unsigned request",
+        "distinguish IAM and NONE auth modes",
+        "follow listener priorities and default action",
+        "track a healthy target in the target group",
+        "use lower callouts to connect service-network and service policies with access logs and CloudWatch metrics."
+      ],
+      "visual_example": "A signed request can be denied by a service authorization policy before routing, whereas a permitted request can still fail because the listener rule has no healthy destination.",
+      "visual_synthesis": "Diagnose Lattice in order: auth mode and policies, listener routing, target health, and observability.",
+      "narration": "This slide expands one request through VPC Lattice. Read the main flow from left to right rather than as unrelated boxes. A client submits a request which may be signed. The first checkpoint is authorization. With AWS IAM authorization, valid SigV4-signed requests and applicable Lattice policies matter. With the NONE mode, Lattice does not perform IAM authorization, so the application may need its own authentication. Service network and service policies can both affect the outcome, and explicit deny is decisive. Once authorized, the request reaches the listener. Its ordered rules select a forwarding action or the configured default behavior. From the listener, follow the cyan arrow to the target group. Only an eligible healthy target should receive the request. Now look at the dotted lines dropping into the bottom center panel: access logs and CloudWatch metrics make it possible to investigate denied requests, latency, failures and routing issues. The four lower callouts separate identity, policy, routing and observation. For troubleshooting, do not jump straight to changing security groups. First verify the auth mode and policies, then listener match and default action, then target registration and health. Use request logs and metrics to tell whether a request failed authorization or failed after it was routed."
+    }
+  ]
+}
