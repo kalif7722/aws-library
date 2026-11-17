@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected original approved SAP M07 slides 25–30; slides 25–26 and 28–30 are v2, slide 27 is v3.",
+  "part_id": "09",
+  "part_title": "EC2 Recovery and HPC Storage and Scheduling",
+  "output_prefix": "sap-module-07-part-09",
+  "script_revision": "2026-11-17-sap-m07-p09-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 25,
+      "title": "EC2 recovery: identity persists, application state does not",
+      "visual_overview": "An EC2 instance and EBS volumes pass through supported recovery, preserving named identity fields while restarting the guest; four bottom panels compare recovery conditions and alternatives.",
+      "visual_walkthrough": [
+        "Start at the instance and EBS identity panel, then follow the large recovery arrow to the restarted server",
+        "Explain supported system-status-check failure triggers versus instance-status-check failures",
+        "Read the preserved-instance identity, IP addressing, EBS and Availability Zone panel, distinguishing the correct recovery mechanism",
+        "Explain lost memory and uptime, and instance-store implications for CloudWatch action-based recovery",
+        "Compare stop/start, ASG replacement and supported EC2 recovery; finish with backup and application restoration"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "This slide explains why EC2 recovery is not the same as replacing an instance. Start at the large server identity card beside the attached EBS volumes. Follow the bright arrow across to the rebooted machine. In a supported EC2 recovery operation, the platform can address certain underlying system-status-check failures while preserving important instance identity: the instance ID, assigned addresses, attached EBS volumes, placement group and Availability Zone, subject to the recovery mechanism and configuration. Now read the lower-left condition panel. An instance-status-check failure by itself is not proof that this system-recovery action will run. Look next at the purple loss panel. Recovery involves a restart, so in-memory work and operating-system uptime do not survive. With CloudWatch action-based recovery, instance-store data can be lost; confirm the actual mechanism before making a data-safety assumption. The right-hand comparison is the exam trap. A stop/start may change an automatically assigned public IPv4 address, while an Auto Scaling group replacement creates a different instance. Neither operation is identical to supported EC2 recovery. Finally read the preparation strip: verify eligibility, configure appropriate monitoring and recovery actions, keep backups, and plan application-level reconnection. Preserving instance identity is valuable, but it does not automatically restore successful application transactions."
+    },
+    {
+      "slide": 26,
+      "title": "HPC storage: access pattern and durability",
+      "visual_overview": "Five colored storage panels compare disposable NVMe instance store, EBS block storage, S3 objects, EFS shared NFS and FSx for Lustre parallel IO.",
+      "visual_walkthrough": [
+        "Inspect NVMe instance-store local scratch, low-latency IO and the need to checkpoint results externally",
+        "Compare EBS durable block volume performance, supported instance throughput and io2 Block Express limits",
+        "Read S3 as durable object storage, not a native POSIX-mounted filesystem",
+        "Follow EFS shared NFS clients and its throughput configuration, distinguishing throughput from provisioned IOPS",
+        "Trace FSx for Lustre parallel IO with S3 staging and export, and discuss persistence and data-movement planning"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "This slide compares storage architectures for high-performance computing, not five devices that should be placed in one path. Begin in the top-left orange panel. Local NVMe instance-store drives can provide extremely low-latency scratch IO on suitable instances, but that local data is temporary. Valuable checkpoints and outputs need durable storage. Move to the cyan EBS block-volume panel. EBS supplies persistent block storage with performance dependent on both volume settings and EC2 limits. The slide highlights io2 Block Express on supported configurations; measure real IOPS and throughput instead of assuming a maximum specification. On the right, S3 is durable object storage for datasets and final results. S3 does not by itself behave like a native POSIX filesystem, so applications may need explicit staging or supported integrations. Now inspect the bottom-left EFS diagram, where multiple clients share managed NFS files. Elastic, Provisioned and Bursting throughput choices are not a way to directly provision individual disk IOPS. Finally, the bottom-right cluster shows FSx for Lustre, designed for demanding parallel file access. Its integration with S3 can stage input and export output, but persistence mode, data synchronization and metadata access still require planning. Match the storage access pattern, durability and data movement to the same workload before sizing compute."
+    },
+    {
+      "slide": 27,
+      "title": "HPC orchestration: jobs versus managed cluster tooling",
+      "visual_overview": "The left side routes jobs through AWS Batch queues and compute environments, while the right provisions a configurable HPC cluster with ParallelCluster; bottom panels contrast independent and tightly coupled jobs.",
+      "visual_walkthrough": [
+        "Trace job submissions through AWS Batch queues, scheduling and suitable managed compute environments",
+        "Inspect coordinated multi-node parallel jobs and the slide's Spot and Fargate restriction",
+        "Follow configuration file into AWS ParallelCluster compute, scheduler, network and shared storage",
+        "Compare independent rendering tasks and tightly coupled MPI-style simulations",
+        "Explain that a managed job service, cluster tool and communication library solve separate concerns"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "This diagram contrasts two operating models for high-performance workloads. Begin on the left with AWS Batch. Jobs enter managed queues with declared resource requirements; a scheduler selects eligible managed compute environments and capacity for execution. This can simplify running many independent tasks without building a complete cluster-management platform yourself. The lower-left panel shows multi-node parallel jobs, where one coordinated job needs several EC2 nodes and suitable inter-node communication. According to the slide, this supported Batch model does not use Spot or Fargate, so the exact job type and compute environment matter. Now move to the right. AWS ParallelCluster is AWS-supported open-source tooling that creates and manages configurable HPC environments from a definition file. The diagram connects compute nodes with a scheduler and shared storage; a supported scheduler such as Slurm can manage cluster jobs. ParallelCluster gives flexibility but also makes cluster configuration and operations part of the design. The bottom strip compares independent rendering tasks that retry separately with a tightly coupled MPI simulation that depends on coordinated nodes. Select orchestration based on scheduling, communication, software and storage needs, rather than assuming one AWS service optimizes every HPC workload."
+    }
+  ]
+}
