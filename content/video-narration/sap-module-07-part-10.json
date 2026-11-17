@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Visually inspected original approved SAP M07 slides 25–30; slides 25–26 and 28–30 are v2, slide 27 is v3.",
+  "part_id": "10",
+  "part_title": "Auto Scaling Process Controls and Safe Deployments",
+  "output_prefix": "sap-module-07-part-10",
+  "script_revision": "2026-11-17-sap-m07-p10-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 28,
+      "title": "Auto Scaling processes: nine independent controls",
+      "visual_overview": "A three-by-three grid labels nine Auto Scaling processes: Launch, Terminate, HealthCheck, ReplaceUnhealthy, AZRebalance, AlarmNotification, ScheduledActions, AddToLoadBalancer and InstanceRefresh.",
+      "visual_walkthrough": [
+        "Read top row Launch, Terminate and HealthCheck, distinguishing instance count and health evaluation",
+        "Read middle row ReplaceUnhealthy, AZRebalance and AlarmNotification",
+        "Read bottom row ScheduledActions, AddToLoadBalancer and InstanceRefresh",
+        "Explain that suspending a process affects only its responsibility, not the entire group",
+        "Apply the grid to diagnosis of unexpected scaling, failures or registration issues"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "This slide is a reference map of nine Auto Scaling processes, each responsible for a different operation. Read the grid left to right. Across the top, Launch creates instances, Terminate removes them, and HealthCheck evaluates supported health sources and marks unhealthy instances. The next row contains ReplaceUnhealthy, which acts on unhealthy capacity; AZRebalance, which adjusts capacity distribution across configured Availability Zones; and AlarmNotification, which processes CloudWatch alarm-driven scaling activity. On the bottom row, ScheduledActions applies configured scheduled capacity changes, AddToLoadBalancer registers new instances with the configured load balancer or target group, and InstanceRefresh replaces instances during an initiated refresh. These names are specific controls, not nine sequential steps every launch performs. Notice the reminder strip: suspending one process does not suspend the entire Auto Scaling group. For example, an instance may be created but fail to register if the load-balancer registration process is suspended. When investigating unexpected behavior, identify the precise suspended process and its side effects, then plan how to resume safely. Do not disable broad Auto Scaling behavior simply to silence an alarm."
+    },
+    {
+      "slide": 29,
+      "title": "Suspended processes: diagnose unexpected side effects",
+      "visual_overview": "Four warning panels illustrate suspended Launch, ReplaceUnhealthy, AddToLoadBalancer and ScheduledActions with bottom checks before resumption and Spot caveat.",
+      "visual_walkthrough": [
+        "Explain Launch suspended: scale-out cannot create replacements even if other processes terminate instances",
+        "Explain ReplaceUnhealthy suspended: unhealthy instances may be marked but replacement waits",
+        "Trace AddToLoadBalancer suspended: launched instances are not automatically registered after resumption",
+        "Explain ScheduledActions suspended: missed schedules are not replayed",
+        "Use bottom checklist to check capacity, health, registrations and Spot interruption risks before resuming"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "The purpose of this slide is to show that suspending Auto Scaling processes can create surprising combinations. Begin with the upper-left warning. When Launch is suspended, a scale-out demand cannot create new instances. If ReplaceUnhealthy remains active, unhealthy instances may still be terminated without replacements arriving, reducing capacity further. The upper-right panel covers the opposite side: ReplaceUnhealthy is suspended, but health checking can still identify unhealthy instances. Automated replacement then waits until that process resumes. Now inspect the lower-left blue panel, AddToLoadBalancer. New instances can launch without being registered with the load balancer, and resuming the process does not automatically register the instances that were missed. Explicitly check registration. In the purple lower-right panel, ScheduledActions misses scheduled changes while suspended, and resuming does not replay those missed actions. The final checklist asks the operator to inspect desired versus healthy capacity, pending replacements, target registration and configuration before restoring processes. The yellow warning is another boundary: suspending Terminate does not prevent the Spot service from interrupting a Spot instance. The SAP takeaway is to understand each process's effect and repair state deliberately, rather than assuming resume catches everything up."
+    },
+    {
+      "slide": 30,
+      "title": "EC2 deployments: rolling refresh versus parallel fleets",
+      "visual_overview": "Three upper architectural options show rolling instance refresh, parallel Auto Scaling groups behind weighted target groups, and separate load balancers selected by weighted Route 53 DNS.",
+      "visual_walkthrough": [
+        "Trace rolling instance refresh from launch-template v1 to v2 with healthy-capacity and warmup safeguards",
+        "Compare parallel ASGs and ALB weighted target groups for measured traffic shifting",
+        "Follow separate load balancers through weighted Route 53 and note DNS caching",
+        "Review isolated testing, rollback, sessions, schema compatibility and spare capacity",
+        "Distinguish restoring previous traffic from reversing data or state changes"
+      ],
+      "visual_example": "Apply the illustrated design to a real AWS workload and verify its permissions, failure behavior, operational limits and data safety.",
+      "visual_synthesis": "Choose the correct service or mechanism for the specific requirement, then validate with application-level evidence.",
+      "narration": "This final slide compares three deployment patterns rather than one workflow. On the left, a rolling instance refresh replaces instances inside a single Auto Scaling group using a new launch-template version. Healthy-capacity percentages, warmup, alarms and checkpoints help constrain rollout risk, but you still need enough usable capacity. In the center, two parallel Auto Scaling groups serve v1 and v2. They can use separate target groups behind one Application Load Balancer, allowing weighted forwarding toward the new version while monitoring its behavior. This is useful when keeping the previous fleet available is important. On the right, each fleet has a separate load balancer and Route 53 weighted records influence which endpoint clients resolve. Unlike ALB target-group weighting, DNS selection is subject to recursive and client caching, so cutover is not instantaneous. The lower panel says to preserve isolated test access, validate long-lived sessions, plan spare capacity and ensure application-to-database compatibility before switching. The reminder closes the real rollback constraint. Sending traffic back to v1 does not undo schema migrations, reverse writes or recover lost application state. Select the rollout architecture that matches blast radius, recovery needs and data compatibility."
+    }
+  ]
+}
