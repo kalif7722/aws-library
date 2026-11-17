@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "09",
+  "module_title": "Amazon S3 Object Storage, Security and Lifecycle Architecture",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-09",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Authored against individually numbered S3 approved slide specifications and verified technical coverage crosswalk for slides 25, 26, 27, 28. Renderer checks source original WebP and resulting media.",
+  "part_id": "09",
+  "part_title": "Storage Lens Cost, Protection, Activity and Metrics Tiers",
+  "output_prefix": "sap-module-09-part-09",
+  "script_revision": "2026-11-17-sap-m09-p09-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 25,
+      "title": "Storage Lens: summary and cost signals",
+      "visual_overview": "The slide uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to present storage lens: summary and cost signals.",
+      "visual_walkthrough": [
+        "Read storage bytes and object counts as footprint indicators over time",
+        "Separate current data from noncurrent-version and unfinished multipart storage",
+        "Translate a cost anomaly into a retention-aware investigation and precise remediation"
+      ],
+      "visual_example": "A bucket's current object count stays steady while noncurrent version bytes climb each week; the team reviews version retention and restores before applying lifecycle cleanup.",
+      "visual_synthesis": "Storage reductions must not sacrifice required retention or recoverability.",
+      "narration": "This slide walks through the cost-oriented signals in S3 Storage Lens. The first station looks at storage bytes and object counts to understand the footprint of a bucket or a larger account over time. Growing size does not necessarily mean more current objects. The second station isolates hidden retained data: noncurrent object versions and incomplete multipart uploads can consume storage even when the normal object listing looks unremarkable. Imagine a configuration bucket with frequent overwrites. The current object count can remain flat while version history grows every day. The final station turns observations into a review process. Locate the affected bucket or prefix, confirm whether old versions must remain recoverable, and evaluate lifecycle transitions or cleanup only after those requirements are established. A seven-day investigation window might help detect recent growth, but it is not a universal automatic deletion period. The architect should reduce unnecessary bytes without quietly deleting a critical recovery copy."
+    },
+    {
+      "slide": 26,
+      "title": "Storage Lens: protection, ownership and event configuration",
+      "visual_overview": "The slide uses one central glossy metaphor with three surrounding explanation cards. to present storage lens: protection, ownership and event configuration.",
+      "visual_walkthrough": [
+        "Explain what bucket-level versioning, MFA Delete, encryption and replication indicators actually measure",
+        "Use Object Ownership indicators to identify bucket-owner enforced configurations",
+        "Distinguish notification configuration counts from successful event processing"
+      ],
+      "visual_example": "A compliance dashboard reports an SSE-KMS-enabled bucket, but the team still checks object key configuration and real decrypt authorization for its recovery role.",
+      "visual_synthesis": "A metric showing configuration presence is not evidence that every recovery or processing operation succeeds.",
+      "narration": "The center of this slide groups protection and configuration indicators in S3 Storage Lens, but the important distinction is what they prove. Start with counts of buckets configured for versioning, MFA Delete, KMS-related encryption or cross-Region replication rules. These tell us about the presence of settings or rules; they do not verify that every object is correctly protected, every replicated copy is current, or every recovery principal can decrypt data. Next, the ownership panel identifies configurations such as bucket owner enforced, which affect how object ownership and access control are managed. Finally, examine event-notification-enabled counts. A bucket with notifications configured has not necessarily delivered every event successfully or processed it exactly once. In a compliance review, use these metrics to locate candidates for deeper checks. Validate effective IAM and KMS authorization, replication outcomes, retention and downstream event execution separately. The architectural takeaway is to treat dashboard counts as evidence of configuration, not proof of end-to-end control effectiveness."
+    },
+    {
+      "slide": 27,
+      "title": "Storage Lens: activity, performance and status codes",
+      "visual_overview": "The slide uses asymmetric two-column layout with three numbered teaching areas and compact illustrative examples. to present storage lens: activity, performance and status codes.",
+      "visual_walkthrough": [
+        "Interpret request counts and downloaded bytes as activity signals separate from stored capacity",
+        "Examine Transfer Acceleration settings without treating them as measured improvement",
+        "Compare 200, 403 and 404 responses as distinct diagnostic paths"
+      ],
+      "visual_example": "An application suddenly shows more 403 responses after a deployment. Investigate IAM, bucket and endpoint policies before changing lifecycle rules or assuming the objects vanished.",
+      "visual_synthesis": "Capacity, workload activity and HTTP outcomes answer different operational questions.",
+      "narration": "This visual separates three types of Storage Lens evidence. In the first panel, request counts such as GET, PUT and LIST, together with bytes downloaded, describe workload behavior. They tell a different story from the total bytes stored. Next, the performance configuration panel helps identify buckets with Transfer Acceleration enabled, but the setting alone does not prove lower latency or higher throughput. A client benchmark is still required. In the final diagnostic view, distinguish successful responses from forbidden and not-found outcomes. A rise in four-hundred-three responses points toward authorization or request-policy problems; a four-hundred-four may reflect an absent key or the visibility and access context. Do not respond to an access error by deleting or transitioning stored objects. An architect correlates request patterns, the deployment timeline, policies and application behavior before deciding what to fix. Storage capacity, activity and successful retrieval must be evaluated as separate dimensions."
+    },
+    {
+      "slide": 28,
+      "title": "Storage Lens: choose the needed metric tier",
+      "visual_overview": "The slide uses three rich conceptual teaching stations with glossy object/service illustrations and readable paragraphs. to present storage lens: choose the needed metric tier.",
+      "visual_walkthrough": [
+        "Compare free daily metrics and their shorter console query window",
+        "Explain added advanced activity and detailed status metrics, with applicable publishing limitations",
+        "Distinguish retained history from the ability to query that history within each tier"
+      ],
+      "visual_example": "A platform owner needing long-term request-level trends assesses advanced features while a small inventory audit may be satisfied by free daily configuration summaries.",
+      "visual_synthesis": "Select the metric tier by the operational question and history required, not by metric quantity alone.",
+      "narration": "This slide is a service-tier decision for S3 Storage Lens. Start with free daily usage and configuration visibility: storage, cost, protection and other supported metrics can answer many basic inventory questions. The free console query window is shorter than the underlying metric retention period. Move to advanced metrics and recommendations when the team needs richer activity, status-code detail, cost and protection insight or supported CloudWatch publishing. Note the important restriction: prefix-level metrics are not published to CloudWatch through that feature. The final station separates retention from query access. Metrics can be retained for fifteen months, while free metrics have a fourteen-day query window and advanced metrics support a longer period. A security team needing historical request investigation should not assume the free dashboard can query the full retention history. Choose the paid scope only where that depth, history or export capability answers a real operational requirement. Paying for more numbers without a clear decision is not a useful observability architecture."
+    }
+  ]
+}
