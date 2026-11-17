@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "07",
+  "module_title": "Compute, EC2 Capacity and Application Resilience",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-07",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually inspected approved SAP Module 07 source slides 4–6; narration anchored to their labeled comparisons, callouts and persistence caveats.",
+  "part_id": "02",
+  "part_title": "Repeatable EC2 Launches, Stateless Design and Capacity Purchasing",
+  "output_prefix": "sap-module-07-part-02",
+  "script_revision": "2026-11-17-sap-m07-p02-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 4,
+      "title": "Repeatable EC2 launches: AMI and Launch Template",
+      "visual_overview": "The slide depicts repeatable ec2 launches: ami and launch template through labeled architecture panels and a visual takeaway.",
+      "visual_walkthrough": [
+        "Compare immutable AMI boot image and versioned launch template settings",
+        "Follow bootstrap user-data and prepared-image choices, including retries and secrets",
+        "Inspect instance profile and IMDSv2 security callout",
+        "Show that template updates require deliberate replacement of running instances"
+      ],
+      "visual_example": "Validate the depicted approach against workload behavior and a representative operational or failure scenario.",
+      "visual_synthesis": "Choose using measurable requirements, explicit data persistence and tested availability, rather than treating a single service setting as proof.",
+      "narration": "This slide is about creating replaceable EC2 instances rather than hand-maintained pets. On the left, an Amazon Machine Image supplies the operating system and initial software configuration. A versioned launch template adds instance type, networking, storage, IAM instance profile and user data settings. The two work together, but they are not the same artifact. Move to the upper-right user data panel. Bootstrap scripts can prepare an instance, but they need retry handling and should not embed long-lived credentials. Repeatable prepared images are another valid approach when startup speed matters. Next, inspect the instance profile and IMDSv2 security panel. Instance roles provide temporary AWS credentials, and requiring IMDSv2 helps protect metadata access where supported. Finally, the bottom-right panel makes a crucial operational point: changing a launch template version does not modify already running EC2 instances. You must roll new replacements, preferably behind health checks, using a suitable deployment or Auto Scaling process. The architectural goal is an auditable baseline and a safe replacement procedure that can be repeated after instance loss."
+    },
+    {
+      "slide": 5,
+      "title": "Stateless compute: make replacement safe",
+      "visual_overview": "The slide depicts stateless compute: make replacement safe through labeled architecture panels and a visual takeaway.",
+      "visual_walkthrough": [
+        "Trace session and durable state moving outside an individual EC2 instance",
+        "Explain shared databases, caches and storage plus their own resilience needs",
+        "Distinguish rebuildable temporary files from irreplaceable local state",
+        "Follow load balancer to multiple AZs and replacement capacity"
+      ],
+      "visual_example": "Validate the depicted approach against workload behavior and a representative operational or failure scenario.",
+      "visual_synthesis": "Choose using measurable requirements, explicit data persistence and tested availability, rather than treating a single service setting as proof.",
+      "narration": "The central orange EC2 instance is surrounded by replacement arrows. Those arrows represent a desired operating property: instances should be disposable without losing important data. Start at the upper-left panel. User sessions and durable business state should not be trapped on one server's local disk or memory. Move to the upper-right, where shared databases, caches and object or file storage can keep state outside the instance. These dependencies require their own durability, resilience, availability and consistency design; moving the data does not automatically make it safe. The lower-left panel distinguishes temporary files and caches that can be rebuilt from irreplaceable application state. If deleting an instance destroys a critical upload or business transaction, replacement is not yet safe. Finally, follow the load balancer in the lower-right panel to workloads across multiple Availability Zones. Multiple instances only help when the common database and dependencies remain available and replacement capacity can launch. The goal is a stateless application tier with deliberate externalized state, not merely more EC2 servers."
+    },
+    {
+      "slide": 6,
+      "title": "EC2 purchasing: separate discount from capacity",
+      "visual_overview": "The slide depicts ec2 purchasing: separate discount from capacity through labeled architecture panels and a visual takeaway.",
+      "visual_walkthrough": [
+        "Contrast flexible On-Demand, Savings Plans and Reserved Instance discounts",
+        "Explain why a regional discount commitment does not necessarily reserve instances",
+        "Inspect zonal capacity reservation and On-Demand Capacity Reservation options",
+        "Discuss interruption tolerance before selecting Spot capacity"
+      ],
+      "visual_example": "Validate the depicted approach against workload behavior and a representative operational or failure scenario.",
+      "visual_synthesis": "Choose using measurable requirements, explicit data persistence and tested availability, rather than treating a single service setting as proof.",
+      "narration": "This is a four-way purchasing decision, but the slide warns us to separate price discounts from guaranteed EC2 capacity. Start at the left. On-Demand suits flexible usage with no long-term commitment, while Savings Plans and eligible Reserved Instances offer discounts in exchange for commitments and matching rules. The next panel is the common mistake: a regional Reserved Instance discount does not by itself guarantee capacity in a specific Availability Zone. The third panel identifies options when capacity assurance matters, such as eligible zonal Reserved Instance reservations and On-Demand Capacity Reservations. These have conditions and costs that must be evaluated independently from the discount. Finally, the orange Spot panel explains the tradeoff of unused capacity at discounted rates: Spot instances can be interrupted, so they suit fault-tolerant work that can checkpoint, retry or redistribute. For exam architecture, assess the workload's tolerance for interruption, its demand predictability and whether it needs assured placement. Then choose the pricing or reservation mechanism that actually meets those requirements, rather than assuming the largest discount provides availability."
+    }
+  ]
+}
