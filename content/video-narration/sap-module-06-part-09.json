@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "06",
+  "module_title": "Hybrid Networking, Site-to-Site VPN and Direct Connect",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually reviewed SAP Module 06 original slides 31–34; approved slides 31–41 use v2 artwork.",
+  "part_id": "09",
+  "part_title": "Shared Hybrid Services, Egress and VPN Path Selection",
+  "output_prefix": "sap-module-06-part-09",
+  "script_revision": "2026-11-17-sap-m06-p09-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 31,
+      "title": "Shared services: replicate, proxy or transit",
+      "visual_overview": "The original slide explains shared services: replicate, proxy or transit using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Replicate local application or data endpoints and assess consistency and lag",
+        "Proxy connection termination opens a distinct connection to an on-premises service",
+        "Use Transit Gateway for routed multi-VPC hybrid access with route isolation",
+        "VPC peering cannot transit another peer's VPN or Direct Connect"
+      ],
+      "visual_example": "An app may query a local replica, call an application proxy, or use a TGW-routed path depending on state and protocol constraints.",
+      "visual_synthesis": "Validate the shared services: replicate, proxy or transit design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains shared services: replicate, proxy or transit, using the actual architecture and numbered callouts on the screen. Start with the first element: Replicate local application or data endpoints and assess consistency and lag. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Proxy connection termination opens a distinct connection to an on-premises service. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Use Transit Gateway for routed multi-VPC hybrid access with route isolation. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: VPC peering cannot transit another peer's VPN or Direct Connect. Consider a realistic architecture scenario. An app may query a local replica, call an application proxy, or use a TGW-routed path depending on state and protocol constraints. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 32,
+      "title": "Hybrid internet egress: select the gateway",
+      "visual_overview": "The original slide explains hybrid internet egress: select the gateway using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Virtual private gateway path does not furnish internet transit through a NAT gateway",
+        "Transit Gateway can route approved traffic to a central egress VPC",
+        "Use public NAT gateway and internet gateway with correct bidirectional routes and AZ design",
+        "Alternative on-premises internet egress depends on customer NAT and firewall"
+      ],
+      "visual_example": "A branch's outbound traffic needs explicit transit and NAT routing rather than assuming a VPN attached to a VGW provides an internet breakout.",
+      "visual_synthesis": "Validate the hybrid internet egress: select the gateway design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains hybrid internet egress: select the gateway, using the actual architecture and numbered callouts on the screen. Start with the first element: Virtual private gateway path does not furnish internet transit through a NAT gateway. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Transit Gateway can route approved traffic to a central egress VPC. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Use public NAT gateway and internet gateway with correct bidirectional routes and AZ design. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Alternative on-premises internet egress depends on customer NAT and firewall. Consider a realistic architecture scenario. A branch's outbound traffic needs explicit transit and NAT routing rather than assuming a VPN attached to a VGW provides an internet breakout. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 33,
+      "title": "VPN over Direct Connect: two addressing models",
+      "visual_overview": "The original slide explains vpn over direct connect: two addressing models using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Public-IP Site-to-Site VPN uses public VIF reachability to AWS public VPN endpoints",
+        "Public VIF is AWS public-prefix transport, not general internet transit",
+        "Private-IP VPN uses transit VIF, Direct Connect gateway and Transit Gateway",
+        "Both models require underlay, IPsec overlay and application-prefix return routes"
+      ],
+      "visual_example": "A regulated hybrid connection chooses the address model of its VPN endpoints, then tests IPsec and data traffic as separate layers.",
+      "visual_synthesis": "Validate the vpn over direct connect: two addressing models design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains vpn over direct connect: two addressing models, using the actual architecture and numbered callouts on the screen. Start with the first element: Public-IP Site-to-Site VPN uses public VIF reachability to AWS public VPN endpoints. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Public VIF is AWS public-prefix transport, not general internet transit. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Private-IP VPN uses transit VIF, Direct Connect gateway and Transit Gateway. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Both models require underlay, IPsec overlay and application-prefix return routes. Consider a realistic architecture scenario. A regulated hybrid connection chooses the address model of its VPN endpoints, then tests IPsec and data traffic as separate layers. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    },
+    {
+      "slide": 34,
+      "title": "Multiple VPNs: active sites versus ECMP",
+      "visual_overview": "The original slide explains multiple vpns: active sites versus ecmp using 4 explicitly labelled visual sections, connections, and practical limits.",
+      "visual_walkthrough": [
+        "Site A and Site B advertise different prefixes and both remain active for their own networks",
+        "Equal destination prefixes on a VGW do not automatically imply equal-cost VPN sharing",
+        "Transit Gateway with compatible dynamic routing and VPN ECMP can share eligible flows",
+        "Test device independence, route withdrawals and stateful return traffic"
+      ],
+      "visual_example": "Two active remote branches is not equivalent to splitting a single application's flows across equal-cost paths.",
+      "visual_synthesis": "Validate the multiple vpns: active sites versus ecmp design with supported network settings, complete traffic paths and its actual failure domains.",
+      "narration": "This lesson explains multiple vpns: active sites versus ecmp, using the actual architecture and numbered callouts on the screen. Start with the first element: Site A and Site B advertise different prefixes and both remain active for their own networks. Notice the depicted connections and boundaries; they illustrate which component owns this responsibility. Next, follow the second section: Equal destination prefixes on a VGW do not automatically imply equal-cost VPN sharing. This changes how the path or control is configured, and should be checked rather than assumed. Move to the third section: Transit Gateway with compatible dynamic routing and VPN ECMP can share eligible flows. For a working design, distinguish a successful control-plane configuration from application-level reachability, security and service readiness. Now inspect the final section: Test device independence, route withdrawals and stateful return traffic. Consider a realistic architecture scenario. Two active remote branches is not equivalent to splitting a single application's flows across equal-cost paths. When troubleshooting, test the forward and return paths, the relevant service-specific limits and actual user traffic, then compare the result with the requirement. The key takeaway is to select the correct model and prove its behaviour under normal operation and failure."
+    }
+  ]
+}
