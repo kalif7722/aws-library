@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "08",
+  "module_title": "Elastic Load Balancing, Routing and Target Health",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-08",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually visually inspected approved original SAP Module 08 WebP slides 1–3.",
+  "part_id": "01",
+  "part_title": "Load Balancer Types, Listener Decisions and Network Boundaries",
+  "output_prefix": "sap-module-08-part-01",
+  "script_revision": "2026-11-17-sap-m08-p01-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Select ALB, NLB or GWLB from the traffic",
+      "visual_overview": "The slide visually compares select alb, nlb or gwlb from the traffic through labeled traffic paths, decisions and operating caveats.",
+      "visual_walkthrough": [
+        "Compare the ALB HTTP Layer 7 request-routing path on the left",
+        "Trace the NLB transport-level TCP, TLS and UDP paths and zonal address requirement",
+        "Follow GWLB interception toward third-party virtual firewalls and other appliances",
+        "Distinguish legacy Classic Load Balancer protocol support from modern options"
+      ],
+      "visual_example": "Apply this design to a production application and confirm request routing, security, health checks and actual backend availability.",
+      "visual_synthesis": "Use the appropriate load-balancing control for the traffic requirement and verify end-to-end application behavior.",
+      "narration": "The central question in this slide is what kind of traffic the system must handle. Begin on the left. An Application Load Balancer understands HTTP requests and can use Layer Seven conditions to select target groups for web applications and APIs, including supported HTTP Two and WebSocket behavior. Follow the arrows from clients through ALB to the separate application targets. Now move to the purple middle panel. A Network Load Balancer distributes transport connections, including supported TCP, TLS and UDP listeners. Its low latency, high throughput and static zonal addresses fit network-level requirements, but it does not interpret URL paths like an ALB. On the right, Gateway Load Balancer inserts compatible virtual security appliances into packet paths, such as firewalls or intrusion-prevention systems. The arrows illustrate inspection rather than application request routing. The bottom strip shows the older Classic Load Balancer and its legacy protocols. For new designs, evaluate the modern choices. The exam decision starts with protocol, routing behavior and inspection requirements, then verifies target compatibility and security, not throughput alone."
+    },
+    {
+      "slide": 2,
+      "title": "Listener, rule and target group: three distinct decisions",
+      "visual_overview": "The slide visually compares listener, rule and target group: three distinct decisions through labeled traffic paths, decisions and operating caveats.",
+      "visual_walkthrough": [
+        "Follow client protocol and port into an HTTPS listener",
+        "Read ordered ALB rule priorities and forward, redirect and fixed response actions",
+        "Trace forwarded requests to target groups with backend ports and health checks",
+        "Explain how one ALB serves several applications but backend readiness remains separate"
+      ],
+      "visual_example": "Apply this design to a production application and confirm request routing, security, health checks and actual backend availability.",
+      "visual_synthesis": "Use the appropriate load-balancing control for the traffic requirement and verify end-to-end application behavior.",
+      "narration": "This diagram splits an incoming request into three decisions. The first panel is the listener. It accepts the client-facing protocol and port, such as HTTPS on four four three. That does not require backend services to use that same port. Next follow the blue arrow to listener rules. ALB evaluates applicable rules in priority order, starting with the lowest numeric priority, and falls through to a default rule if nothing matches. Depending on configuration, an action may forward the request, redirect it, or return a fixed response. Now move to the third panel. A target group defines eligible backend targets, health checks, the backend protocol and port, and appropriate routing attributes. A healthy listener is not proof that all targets in every group are healthy. The lower illustration shows one load balancer splitting several application requests into separate target groups. The guiding mental model is simple: listener accepts, rule selects the action, and target group delivers to the application. Diagnose a failure at the correct one of these boundaries."
+    },
+    {
+      "slide": 3,
+      "title": "Internet-facing entry versus private application access",
+      "visual_overview": "The slide visually compares internet-facing entry versus private application access through labeled traffic paths, decisions and operating caveats.",
+      "visual_walkthrough": [
+        "Trace public internet clients into an internet-facing load balancer and private-address backends",
+        "Compare internal load balancer addresses and reachable private client networks",
+        "Read DNS, routing, address-family, security group and NACL requirements",
+        "Review enabled Availability Zones, registered capacity and identity/authorization boundaries"
+      ],
+      "visual_example": "Apply this design to a production application and confirm request routing, security, health checks and actual backend availability.",
+      "visual_synthesis": "Use the appropriate load-balancing control for the traffic requirement and verify end-to-end application behavior.",
+      "narration": "This slide contrasts a public entrance with a private application. In the left panel, an internet-facing load balancer can be reached through public addresses when public routing and security policy allow it. Follow the orange arrows through the entry point to backend servers, which can still remain on private addresses. Public entry does not imply every target needs a public IP. On the right, an internal load balancer uses private addressing for clients with suitable private reachability, including VPC networks and supported hybrid connectivity through VPN or Direct Connect. Continue to the lower-left controls. DNS returns a name or address, but it does not create a route. Inspect subnet routing, supported address families, security groups and network ACLs on the complete path. Finally, the lower-right panel shows targets across Availability Zones. Enable zones appropriate to the workload and register healthy application capacity in them. An internal load balancer is a reachability mechanism, not an identity or authorization service. Choose the scheme and backends separately, then test genuine client access and failure behavior."
+    }
+  ]
+}
