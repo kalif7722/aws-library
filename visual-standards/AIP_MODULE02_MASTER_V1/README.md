@@ -41,3 +41,8 @@ Reject excessive glossy/3D treatment, glowing neon outlines, thick decorative fr
 ## Application scope
 
 Use this visual language for future slides in Security, SAP, SAA, Developer Associate, AIF and other courses, without rewriting their content or overwriting approved existing visuals. Any preexisting course-specific approved style is a constraint to reconcile, not permission to replace it. This design standard is candidate until user review.
+
+
+## Additional Module 02 reference audit (17 November 2026)
+
+**The 20 original examples are supplemented by 20 more supplied DynamoDB examples (40 images total).** The updated presentation-first guidance is **[DYNAMIC_PRESENTATION_V2.md](./DYNAMIC_PRESENTATION_V2.md)** and its evidence matrix is **[reference-inventory-part2.md](./reference-inventory-part2.md)**. These supersede the initial README when layout, visual depth, text emphasis or educational composition conflicts. Background/color consistency alone is insufficient: every slide must invent a meaningful, content-specific teaching visualization. QA cannot be passed on consistent borders and palette if the educational visual grammar remains generic. Status: review pending, design branch only; no published course slides changed.
