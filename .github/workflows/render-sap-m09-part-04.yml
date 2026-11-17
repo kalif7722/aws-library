@@ -28,7 +28,7 @@ jobs:
           from pathlib import Path
           p=Path("content/video-narration/sap-module-09-part-04.json")
           m=json.loads(p.read_text())
-          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","09","03")
+          assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","09","04")
           assert m["output_prefix"]=="sap-module-09-part-04"
           assert m["script_revision"]=="2026-11-17-sap-m09-p04-visualfirst-v1"
           assert m["slide_local_dir"]=="public/course-visuals/sap-c03/module-09"
@@ -76,7 +76,7 @@ jobs:
           root=Path("video-output/sap-m09-p04")
           stem="sap-module-09-part-04"
           m=json.loads((root/f"{stem}-manifest.json").read_text())
-          assert (m["module"],m["part"])==("09","03")
+          assert (m["module"],m["part"])==("09","04")
           assert m["script_revision"]=="2026-11-17-sap-m09-p04-visualfirst-v1"
           assert [s["slide"] for s in m["scenes"]]==[10,11,12]
           assert (root/f"{stem}.vtt").read_text().startswith("WEBVTT")
@@ -116,7 +116,7 @@ jobs:
                   response=session.get(root+"-manifest.json",params={"check":str(attempt)},timeout=20)
                   response.raise_for_status()
                   m=response.json()
-                  assert m.get("module")=="09" and m.get("part")=="03", "Wrong module/part in public manifest"
+                  assert m.get("module")=="09" and m.get("part")=="04", "Wrong module/part in public manifest"
                   assert [x["slide"] for x in m.get("scenes",[])]==[10,11,12], "Incorrect public chapter mapping"
                   assert m.get("script_revision")=="2026-11-17-sap-m09-p04-visualfirst-v1", "Stale public revision"
                   video=session.get(root+".mp4",headers={"Range":"bytes=0-1023"},stream=True,timeout=20)
