@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "06",
+  "module_title": "Hybrid Networking, Site-to-Site VPN and Direct Connect",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-06",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Individually reviewed SAP Module 06 source visuals 5–8, using the pictured comparisons, calls to action, and practical caveats.",
+  "part_id": "02",
+  "part_title": "VPN Routing and Performance, Direct Connect and VIF Types",
+  "output_prefix": "sap-module-06-part-02",
+  "script_revision": "2026-11-17-sap-m06-p02-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 5,
+      "title": "VPN routing: a tunnel is only the start",
+      "visual_overview": "This original SAP Module 06 slide visually explains vpn routing: a tunnel is only the start with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Compare BGP-advertised dynamic prefixes and explicitly configured static prefixes",
+        "Trace forward route from VPC subnet toward remote network and required return route",
+        "Inspect VGW route propagation versus TGW association and propagation",
+        "Review security policy, CIDR overlap and stateful path symmetry"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This slide is a reminder that a green VPN tunnel indicator does not prove applications can communicate. First, the blue dynamic routing panel shows BGP peers exchanging IP prefixes. BGP can react to routing changes, but the customer gateway must support it and both advertised and received routes need inspection. The purple panel describes static routing, where remote prefixes are configured explicitly. Those routes do not automatically learn new address ranges, so plan changes and failover carefully. The orange panel introduces the forward and return path. A VPC subnet route must direct traffic toward the remote network, and on-premises systems need a valid route back to the VPC. The bottom row specifies which AWS routing layers to check. For a virtual private gateway, inspect propagated or explicit subnet routes. For a Transit Gateway, verify attachment associations, route propagation and the correct transit route table. Once routes are correct, validate security groups, firewalls, non-overlapping prefixes and any stateful symmetry requirements. Do not troubleshoot encryption first when the route table itself is wrong."
+    },
+    {
+      "slide": 6,
+      "title": "VPN performance: three different levers",
+      "visual_overview": "This original SAP Module 06 slide visually explains vpn performance: three different levers with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Inspect per-tunnel bandwidth selection and customer equipment limits",
+        "Explain flow-level ECMP across eligible VPN tunnels using dynamic routing",
+        "Contrast accelerated VPN path optimization with aggregate capacity",
+        "Review feature incompatibilities and load tests including packet size and MTU"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "The three top panels represent three different ways to address VPN performance constraints. In the cyan panel, tunnel capacity is about the throughput available on an individual supported tunnel type. Large Bandwidth Tunnels require a compatible gateway choice, such as supported Transit Gateway or Cloud WAN configurations, and actual throughput depends on traffic, packet size and customer equipment. In the middle, equal-cost multipath routing can distribute different flows across eligible VPN tunnels using Transit Gateway with dynamic routing. That can increase aggregate capacity, but one flow does not automatically use every tunnel. The orange panel is accelerated Site-to-Site VPN. For supported Transit Gateway VPN connections, AWS Global Accelerator can improve the internet path by bringing traffic onto the AWS global network nearer the customer. This does not simply increase the tunnel bandwidth limit and is not compatible with all large-bandwidth options. The bottom panels tell you to verify support constraints and conduct representative measurements of latency, packet size, MTU or MSS, throughput and failover. The architecture choice follows the bottleneck: choose capacity for volume, ECMP for multiple flows and acceleration for an appropriate network path problem."
+    },
+    {
+      "slide": 7,
+      "title": "Direct Connect: physical link, logical reachability",
+      "visual_overview": "This original SAP Module 06 slide visually explains direct connect: physical link, logical reachability with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Compare dedicated Ethernet port and hosted partner connection provisioning",
+        "Follow the VIF creation steps for VLAN, peer addresses, ASN and BGP authentication",
+        "Explain BGP state and prefix advertisement versus a merely UP physical port",
+        "Validate VPC and on-premises routes, security and return connectivity"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This slide separates buying a connection from using it to reach an application. In the blue left panel, a dedicated Direct Connect connection provides a physical Ethernet port at an AWS Direct Connect location. Provisioning involves the facility cross-connect and, where applicable, an LOA-CFA process. In the purple right panel, a hosted connection is provided through a Direct Connect Partner. The customer accepts the offered connection and verifies the partner's supported capacity and resilience. Neither arrangement on its own creates application routes. The bottom three boxes show the logical steps. First, create the correct virtual interface with VLAN tagging and peer configuration, including autonomous system numbers and BGP authentication where configured. Second, establish BGP and inspect the received and advertised network prefixes. A physical port can show up while BGP remains down or routes are missing. Third, test application reachability in both directions with the right AWS and corporate route tables and security controls. Consider delivery time and independent physical paths. The final lesson is to validate physical transport, VIF, BGP and actual application traffic separately."
+    },
+    {
+      "slide": 8,
+      "title": "Direct Connect VIFs: choose what you need to reach",
+      "visual_overview": "This original SAP Module 06 slide visually explains direct connect vifs: choose what you need to reach with separate architecture comparisons and operational callouts.",
+      "visual_walkthrough": [
+        "Inspect private VIF access to private VPC resources and gateway choices",
+        "Compare public VIF to public AWS service IPs without general internet transit",
+        "Trace transit VIF through a Direct Connect gateway to Transit Gateway networks",
+        "Review encryption caveat and BGP route and return-path validation"
+      ],
+      "visual_example": "Apply the slide's architecture criteria to a production hybrid connectivity design, checking both directions of traffic and realistic failure conditions.",
+      "visual_synthesis": "Select the supported design for the workload and validate routing, security, capacity and recovery instead of relying on a healthy status alone.",
+      "narration": "This is a three-column comparison of Direct Connect virtual interface types. On the left, a private VIF supports private-address access to VPC resources through an appropriate virtual private gateway or a Direct Connect gateway with supported VGW associations. An interface endpoint may provide private access to supported AWS services once the relevant networking is designed. In the orange middle column, a public VIF reaches eligible AWS public service endpoints using public IP address routing and advertised AWS prefixes. That is still Direct Connect transport; it is not a general-purpose internet connection. On the right, a transit VIF connects through a Direct Connect gateway toward supported Transit Gateways and their attached VPC or hybrid networks. A private VIF is not a replacement for that Transit Gateway attachment architecture. The bottom boxes reinforce two independent checks. Private addressing and the VIF label do not guarantee encryption; select appropriate protection where required. And whichever VIF you choose, validate gateway associations, BGP advertisements, source and return routes, and the intended application address space. Choose the virtual interface by its destination, not by its name alone."
+    }
+  ]
+}
