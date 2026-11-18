@@ -1,0 +1,57 @@
+name: Review SAP Module 15 Part 03 animation pilot
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/review-sap-m15-p03-animation.yml"
+      - "scripts/render_sap_m15_p03_pilot.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sap-m15-p03-animation-review
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/sap-m15-p03-pilot
+          key: sap-m15-p03-andrew-${{ hashFiles('scripts/render_sap_m15_p03_pilot.py') }}
+          restore-keys: sap-m15-p03-andrew-
+      - name: Install existing narration engine and rendering dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2" "numpy>=1.26,<3"
+          python -m py_compile scripts/render_sap_m15_p03_pilot.py
+      - name: Render and validate original-artwork pilot
+        env:
+          AIP_TTS_MAX_ATTEMPTS: "15"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "20"
+        run: python scripts/render_sap_m15_p03_pilot.py
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .cache/sap-m15-p03-pilot
+          key: sap-m15-p03-andrew-${{ hashFiles('scripts/render_sap_m15_p03_pilot.py') }}-${{ github.run_id }}
+      - name: Retain review deliverables only
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sap-m15-part03-animation-review
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            video-output/sap-m15-p03-pilot/sap-module-15-part-03-animation-pilot.mp4
+            video-output/sap-m15-p03-pilot/captions.vtt
+            video-output/sap-m15-p03-pilot/transcript.txt
+            video-output/sap-m15-p03-pilot/review-report.json
+            video-output/sap-m15-p03-pilot/qa-*.png
+            video-output/sap-m15-p03-pilot/decoded-hold.png
