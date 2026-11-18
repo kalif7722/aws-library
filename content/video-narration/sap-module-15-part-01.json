@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "course_slug": "sap",
+  "course": "AWS Certified Solutions Architect – Professional (SAP-C03)",
+  "module_id": "15",
+  "module_title": "Edge Delivery, Caching and Global Acceleration",
+  "slide_local_dir": "public/course-visuals/sap-c03/module-15",
+  "language": "en-US",
+  "voice": "en-US-AndrewNeural",
+  "speech_rate": "-3%",
+  "review_basis": "Derived from approved Module 15 visual-plan.json source diagrams and lesson theses. Visual and audio output checks occur in render pipeline.",
+  "part_id": "01",
+  "part_title": "Global Accelerator Routing and CloudFront Comparison",
+  "output_prefix": "sap-module-15-part-01",
+  "script_revision": "2026-11-18-sap-m15-p01-visualfirst-v1",
+  "scenes": [
+    {
+      "slide": 1,
+      "title": "Global Accelerator anycast entry and AWS global network",
+      "visual_overview": "Two anycast static IPs route TCP/UDP from nearest edge into the AWS network, then to healthy regional endpoints.",
+      "visual_walkthrough": [
+        "Trace the slide's topology from its starting service or client to the destination",
+        "Draw clients in two geographies -> same two anycast addresses -> edge -> regional ALBs. Distinguish global edge ingress from HTTP content cache.",
+        "The two static anycast IP addresses are identical entry points for clients in different geographies. Requests enter at a nearby edge location and cross the AWS network to an eligible healthy regional endpoint. This is TCP or UDP acceleration, not an HTTP object cache."
+      ],
+      "visual_example": "A global interactive application can keep fixed IP allowlists while shifting eligible new connections away from unhealthy endpoints.",
+      "visual_synthesis": "The global entry path does not automatically replicate application state or create cross-Region data copies.",
+      "narration": "This slide explores global accelerator anycast entry and aws global network, and the key architectural question is which behavior we actually need. The two static anycast IP addresses are identical entry points for clients in different geographies. Requests enter at a nearby edge location and cross the AWS network to an eligible healthy regional endpoint. This is TCP or UDP acceleration, not an HTTP object cache. Consider the example shown by the decision: A global interactive application can keep fixed IP allowlists while shifting eligible new connections away from unhealthy endpoints. Now connect that example to the diagram and its labels. The global entry path does not automatically replicate application state or create cross-Region data copies. The lesson to carry into SAP-C03 architecture questions is this: Static entry points and regional endpoints are separate decisions. Check protocol, access boundaries, health behavior and operational limits before choosing a service, because a similar-looking AWS edge diagram can describe very different responsibilities."
+    },
+    {
+      "slide": 2,
+      "title": "Global Accelerator listener, endpoint groups and health",
+      "visual_overview": "Standard accelerator listener protocol/ports, regional endpoint groups, traffic dials, endpoint weights and health checks.",
+      "visual_walkthrough": [
+        "Trace the slide's annotated topology from its starting service or client to the destination",
+        "Draw listener -> two regional endpoint groups -> ALB/NLB/EC2/EIP. Healthy endpoint selection and failover for new connections; client-IP preservation depends on endpoint type/configuration.",
+        "The listener accepts configured ports and protocol. Regional endpoint groups contain supported load balancers, EC2 instances or elastic IPs. A traffic dial acts on traffic already directed toward a Region, while endpoint weights influence routing inside the group. Health checks affect endpoint selection."
+      ],
+      "visual_example": "A rollout can reduce one regional dial while retaining healthy endpoint choices in the other group.",
+      "visual_synthesis": "Client IP preservation depends on endpoint type and configuration; do not treat a traffic dial as a guaranteed global percentage.",
+      "narration": "This slide explores global accelerator listener, endpoint groups and health, and the key architectural question is which behavior we actually need. The listener accepts configured ports and protocol. Regional endpoint groups contain supported load balancers, EC2 instances or elastic IPs. A traffic dial acts on traffic already directed toward a Region, while endpoint weights influence routing inside the group. Health checks affect endpoint selection. Consider the example shown by the decision: A rollout can reduce one regional dial while retaining healthy endpoint choices in the other group. Now connect that example to the diagram and its labels. Client IP preservation depends on endpoint type and configuration; do not treat a traffic dial as a guaranteed global percentage. The lesson to carry into SAP-C03 architecture questions is this: Traffic dial is a share of traffic already directed to that Region, not a global split. Check protocol, access boundaries, health behavior and operational limits before choosing a service, because a similar-looking AWS edge diagram can describe very different responsibilities."
+    },
+    {
+      "slide": 3,
+      "title": "Global Accelerator versus CloudFront",
+      "visual_overview": "Both enter AWS global edge; CloudFront serves HTTP(S) content and can cache; Global Accelerator proxies TCP/UDP to regional applications with static IPs.",
+      "visual_walkthrough": [
+        "Trace the slide's service comparison table from its starting service or client to the destination",
+        "Large five-row comparison matrix: protocol, cache, endpoint, fixed IP, failover; miniature side-by-side flow below.",
+        "CloudFront and Global Accelerator both use AWS edge infrastructure but have different application contracts. CloudFront delivers HTTP and HTTPS content with potential edge caching and origin fetches. Global Accelerator offers stable anycast IPs and forwards TCP or UDP application connections toward regional endpoints."
+      ],
+      "visual_example": "An image-rich website typically uses CloudFront while a latency-sensitive non-HTTP application needing static IPs may use Global Accelerator.",
+      "visual_synthesis": "An accelerator does not cache HTML or objects, and a CloudFront distribution is not a universal TCP or UDP ingress service.",
+      "narration": "This slide explores global accelerator versus cloudfront, and the key architectural question is which behavior we actually need. CloudFront and Global Accelerator both use AWS edge infrastructure but have different application contracts. CloudFront delivers HTTP and HTTPS content with potential edge caching and origin fetches. Global Accelerator offers stable anycast IPs and forwards TCP or UDP application connections toward regional endpoints. Consider the example shown by the decision: An image-rich website typically uses CloudFront while a latency-sensitive non-HTTP application needing static IPs may use Global Accelerator. Now connect that example to the diagram and its labels. An accelerator does not cache HTML or objects, and a CloudFront distribution is not a universal TCP or UDP ingress service. The lesson to carry into SAP-C03 architecture questions is this: Use Global Accelerator for non-HTTP or static IP/regional failover; CloudFront for HTTP content delivery. Check protocol, access boundaries, health behavior and operational limits before choosing a service, because a similar-looking AWS edge diagram can describe very different responsibilities."
+    }
+  ]
+}
