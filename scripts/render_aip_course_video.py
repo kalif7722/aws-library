@@ -89,6 +89,11 @@ def load_local_slide(module: str, number: int, local_dir: str,
         filename = f"slide-{number:02}-v2.webp"
         source = source_dir / filename
         public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
+    # Recovered and reviewed Module 10 AIP replacements; keep video sources aligned.
+    if course_slug == "sap" and module == "10" and 1 <= number <= 4:
+        filename = f"slide-{number:02}-aip-v3.webp"
+        source = source_dir / filename
+        public_url = f"/course-visuals/sap-c03/module-{module}/{filename}"
     # The approved SAP M01 directory/federation lesson is versioned as slide-45-v2.webp.
     # Resolve only this explicitly audited variant; never use a generic visual substitute.
     # SAP M04 approved supplementary slides are available only as audited v2 assets.
