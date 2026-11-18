@@ -50,8 +50,9 @@ jobs:
           import json
           from pathlib import Path
           from PIL import Image
-          from scripts.render_aip_course_video import load_animated_slide
-          import tempfile
+          import sys, tempfile
+          sys.path.insert(0, str(Path("scripts").resolve()))
+          from render_aip_course_video import load_animated_slide
           source=Path("content/video-narration/sap-module-15-part-01.json")
           m=json.loads(source.read_text(encoding="utf-8"))
           assert (m["course_slug"],m["module_id"],m["part_id"])==("sap","15","01")
