@@ -1,0 +1,65 @@
+name: Review complete SAP Module 15 Part 03 animation
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/review-sap-m15-p03-complete.yml"
+      - "scripts/render_sap_m15_p03_complete.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: sap-m15-p03-complete-review
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/download-artifact@v4
+        with:
+          name: sap-m15-part03-animation-review
+          run-id: 44371675597
+          github-token: ${{ github.token }}
+          path: video-output/approved-slide7
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/sap-m15-p03-pilot
+          key: sap-m15-p03-complete-${{ hashFiles('scripts/render_sap_m15_p03_complete.py') }}
+          restore-keys: |
+            sap-m15-p03-complete-
+            sap-m15-p03-andrew-
+      - name: Install existing narration and video engine
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install "edge-tts>=7,<8" "Pillow>=10,<13" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2" "numpy>=1.26,<3"
+          python -m py_compile scripts/render_sap_m15_p03_complete.py
+      - name: Render slides 8 and 9, assemble approved slide 7, and validate
+        env:
+          AIP_TTS_MAX_ATTEMPTS: "15"
+          AIP_TTS_RETRY_SLEEP_CAP_SECONDS: "20"
+        run: python scripts/render_sap_m15_p03_complete.py
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .cache/sap-m15-p03-pilot
+          key: sap-m15-p03-complete-${{ hashFiles('scripts/render_sap_m15_p03_complete.py') }}-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sap-m15-part03-complete-review
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            video-output/sap-m15-p03-complete/SAP-Module-15-Part-03-AndrewUS-Complete.mp4
+            video-output/sap-m15-p03-complete/captions.vtt
+            video-output/sap-m15-p03-complete/transcript.txt
+            video-output/sap-m15-p03-complete/review-report.json
+            video-output/sap-m15-p03-complete/qa-*.png
+            video-output/sap-m15-p03-complete/decoded-hold-*.png
