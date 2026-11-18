@@ -25,5 +25,10 @@ jobs:
           result={}
           for ext in [".mp4",".vtt",".srt","-transcript.txt","-manifest.json"]:
               result[ext]=c.generate_presigned_url("put_object",Params={"Bucket":os.environ["R2_BUCKET"],"Key":prefix+ext},ExpiresIn=600,HttpMethod="PUT")
-          print("UPLOAD_TARGETS="+json.dumps(result))
+          open("upload-targets.json","w").write(json.dumps(result))
           PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scoped-upload-targets
+          path: upload-targets.json
+          retention-days: 1
