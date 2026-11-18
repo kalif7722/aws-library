@@ -1,12 +1,11 @@
 name: Render SAP Module 15 Part 01 — Animated VisualFirst
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "public/course-visuals/sap-c03/module-15/animated/slide-01-animated.gif"
-      - "public/course-visuals/sap-c03/module-15/animated/slide-02-animated.gif"
-      - "public/course-visuals/sap-c03/module-15/animated/slide-03-animated.gif"
-  workflow_dispatch:
+      - ".github/workflows/render-sap-m15-part-01-animated.yml"
+      - "content/video-narration/sap-module-15-part-01-animated-trigger.json"
 permissions:
   contents: read
 concurrency:
@@ -26,6 +25,25 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --retries 3 --timeout 20 "edge-tts>=7,<8" "Pillow>=10,<13" "requests>=2.31,<3" "imageio-ffmpeg>=0.6,<1" "mutagen>=1.47,<2"
           python -m py_compile scripts/render_aip_course_video.py scripts/aip_tts_reliability.py scripts/aip_media_tools.py
+      - name: Download large original animated GIFs from private Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_EC2_METADATA_DISABLED: "true"
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          test -n "$AWS_ACCESS_KEY_ID" && test -n "$AWS_SECRET_ACCESS_KEY" && test -n "$R2_ENDPOINT" && test -n "$R2_BUCKET"
+          DEST="public/course-visuals/sap-c03/module-15/animated"
+          SRC="s3://$R2_BUCKET/aws-course-videos/animation-inputs/sap/module-15/part-01"
+          mkdir -p "$DEST"
+          for slide in 01 02 03; do
+            filename="slide-$slide-animated.gif"
+            aws s3 cp "$SRC/$filename" "$DEST/$filename" --endpoint-url "$R2_ENDPOINT" --no-progress
+            test -s "$DEST/$filename"
+            echo "Downloaded $filename from private R2 input storage"
+          done
       - name: Validate genuinely animated GIFs and create authoritative render manifest
         run: |
           python - <<'PY'
