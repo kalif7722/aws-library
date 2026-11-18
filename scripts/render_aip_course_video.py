@@ -148,6 +148,35 @@ def load_local_slide(module: str, number: int, local_dir: str,
     return target, public_url
 
 
+def load_animated_slide(module: str, number: int, local_dir: str,
+                        folder: Path, course_slug: str) -> tuple[Path, str]:
+    """Load an actual animated GIF only from the explicitly approved folder."""
+    import shutil
+    root = Path(__file__).resolve().parents[1]
+    source_dir = (root / local_dir).resolve()
+    expected = (root / f"public/course-visuals/sap-c03/module-{module}/animated").resolve()
+    if course_slug != "sap" or source_dir != expected:
+        raise ValueError("Animated source directory must match its SAP module")
+    filename = f"slide-{number:02}-animated.gif"
+    source = source_dir / filename
+    if not source.is_file() or source.stat().st_size < 10000:
+        raise FileNotFoundError(f"Missing approved animated slide: {source}")
+    with Image.open(source) as img:
+        if img.format != "GIF" or img.n_frames < 2:
+            raise ValueError(f"Expected genuine multi-frame GIF: {source}")
+        if img.width < 800 or img.height < 450:
+            raise ValueError(f"Animated source is too small: {source} {img.size}")
+        total_ms = 0
+        for k in range(img.n_frames):
+            img.seek(k)
+            total_ms += max(20, int(img.info.get("duration", 100)))
+        if total_ms < 500:
+            raise ValueError(f"Animation too short: {source}")
+    target = folder / filename
+    shutil.copyfile(source, target)
+    return target, f"/course-visuals/sap-c03/module-{module}/animated/{filename}"
+
+
 def timecode(seconds: float) -> str:
     ms = max(0, round(seconds * 1000))
     hours, ms = divmod(ms, 3_600_000)
@@ -173,6 +202,32 @@ def srt_entries(text: str, start: float, speech_seconds: float) -> list[tuple[fl
 
 def render_clip(image: Path, audio: Path, output: Path, duration: float,
                 width: int, height: int, fps: int) -> None:
+    if image.suffix.lower() == ".gif":
+        # Use the GIF exactly once, stretched to the narration length; hold the final
+        # frame over the 0.85-second post-speech pause. No repetitive looping.
+        with Image.open(image) as animated:
+            total_ms = 0
+            for k in range(animated.n_frames):
+                animated.seek(k)
+                total_ms += max(20, int(animated.info.get("duration", 100)))
+        original_seconds = total_ms / 1000.0
+        animation_seconds = max(1.0, duration - 0.85)
+        factor = animation_seconds / original_seconds
+        animation_filter = (
+            f"setpts=(PTS-STARTPTS)*{factor:.8f},"
+            f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
+            f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=0x111827,"
+            f"setsar=1,fps={fps},tpad=stop_mode=clone:stop_duration=1.5,"
+            f"format=yuv420p"
+        )
+        run(ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
+            "-ignore_loop", "1", "-i", str(image), "-i", str(audio),
+            "-vf", animation_filter, "-af", "apad=pad_dur=1.5",
+            "-t", f"{duration:.3f}",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+            "-pix_fmt", "yuv420p", "-r", str(fps),
+            "-c:a", "aac", "-b:a", "160k", "-ar", "48000", str(output))
+        return
     video_filter = (
         f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
         f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=0x111827,"
@@ -217,7 +272,9 @@ async def build(manifest_path: Path, destination: Path, width: int, height: int,
     # Check ALL slide assets before beginning voice synthesis.
     for scene in scenes:
         index = scene["slide"]
-        if manifest.get("slide_local_dir"):
+        if manifest.get("animated_slide_dir"):
+            file, url = load_animated_slide(manifest["module_id"], index, manifest["animated_slide_dir"], images, manifest.get("course_slug", "aip"))
+        elif manifest.get("slide_local_dir"):
             file, url = load_local_slide(manifest["module_id"], index, manifest["slide_local_dir"], images, manifest.get("course_slug", "aip"))
         else:
             file, url = download_slide(session, manifest["slide_base"], manifest["module_id"], index, images)
