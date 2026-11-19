@@ -416,7 +416,7 @@ function score(item: SearchItem, query: string) {
   return total;
 }
 
-export default function SemanticSearch() {
+export default function SemanticSearch({inHeader=false}:{inHeader?:boolean} = {}) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [launcherVisible, setLauncherVisible] = useState(true);
@@ -562,8 +562,8 @@ export default function SemanticSearch() {
       .filter((entry,index,array) => array.findIndex(other => other.item.title === entry.item.title) === index);
     return diversifyResults(ranked, query, 6);
   }, [searchableItems, query, selectedTypes]);
-  return <div className="semantic-search">
-    {launcherVisible ? <div className="semantic-search-dock">
+  return <div className={inHeader ? "semantic-search portal-header-search" : "semantic-search"}>
+    {inHeader ? <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}><span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search</span><kbd>Ctrl / ⌘ K</kbd></button> : launcherVisible ? <div className="semantic-search-dock">
       <button type="button" className="semantic-search-trigger" aria-expanded={open} onClick={() => setOpen(value => !value)}>
         <span className="semantic-search-icon" aria-hidden="true">⌕</span><span>Search by concept, problem, or service</span><kbd>Ctrl / ⌘ K</kbd>
       </button>

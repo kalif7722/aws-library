@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AthenaLearningDetails from "../components/AthenaLearningDetails";
 import AnalyticsLearningDetails, { analyticsDetailServices } from "../components/AnalyticsLearningDetails";
 import AipServiceLearningDetails, { hasAipLearningDetails } from "../components/AipServiceLearningDetails";
 import CrossCourseLearningDetails from "../components/CrossCourseLearningDetails";
-import "../components/AzureLibrary.css";
+import "./ServiceDirectory.css";
 import { assetUrl } from "../../lib/asset-url";
 
 export const services = [
@@ -354,7 +355,7 @@ const branches = [
 
 const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const catalog = branches.map((branch) => ({ ...branch, items: [...new Set([...Array.from({ length: branch.end - branch.start }, (_, i) => branch.start + i), ...branch.copies])].map((index) => ({ ...services[index], index })).filter((item) => item.name) }));
-const learningCategory = (branch: string) => ({
+const learningCategoryNames: Record<string, string> = {
   "Management & Governance": "Management and Governance",
   "Security, Identity & Compliance": "Security, Identity, and Compliance",
   "Networking & Content Delivery": "Networking and Content Delivery",
@@ -363,45 +364,231 @@ const learningCategory = (branch: string) => ({
   "Application Integration & Media": "Application Integration",
   "Internet of Things": "Internet of Things",
   "Cloud Financial Management": "Cloud Financial Management",
-}[branch] || branch);
+};
+const learningCategory = (branch: string) => learningCategoryNames[branch] ?? branch;
 function SharedAwsServiceDetails({ name, category, summary }: { name: string; category: string; summary: string }) {
   if (name === "Amazon Athena") return <AthenaLearningDetails />;
   if (analyticsDetailServices.has(name)) return <AnalyticsLearningDetails serviceName={name} />;
   if (hasAipLearningDetails(name)) return <AipServiceLearningDetails serviceName={name} summary={summary} />;
   return <CrossCourseLearningDetails serviceName={name} category={category} summary={summary} />;
 }
-export default function ServicesLibrary() {
-  const params = useSearchParams();
-  const [selected, setSelected] = useState(0);
-  const [branchIndex, setBranchIndex] = useState(0);
-  const [query, setQuery] = useState("");
-  const [openedBranches, setOpenedBranches] = useState<number[]>([0]);
-  const [menuCollapsed, setMenuCollapsed] = useState(false);
-  const [visualVisible, setVisualVisible] = useState(true);
-  const [expanded, setExpanded] = useState(false);
-  const service = services[selected];
-  const results = useMemo(() => catalog.flatMap((branch, index) => branch.items.map((item) => ({ item, branch: branch.title, index }))).filter(({item,branch}) => query.trim() && `${item.name} ${item.summary} ${branch}`.toLowerCase().includes(query.toLowerCase())).slice(0, 16), [query]);
+type Service = (typeof services)[number];
+const serviceHref = (name: string) => `/services?service=${encodeURIComponent(name)}`;
+const featuredNames = ["Amazon EC2", "AWS Lambda", "Amazon S3", "Amazon EBS", "Amazon VPC", "AWS IAM"];
+const featured = featuredNames.map((name) => services.find((item) => item.name === name)).filter((item): item is Service => Boolean(item));
+const serviceBySlug = new Map<string, {item: Service; branches: string[]; visuals: Service[]}>();
+const additionalCategories: Record<string, string[]> = {
+  "Databases": ["Amazon Aurora Serverless"],
+  "Application Integration & Media": ["Amazon Managed Workflows for Apache Airflow"],
+  "Management & Governance": ["AWS Support", "AWS Health", "AWS Resilience Hub"],
+  "Other Services": ["AWS Marketplace"],
+};
+const directoryCatalog = catalog.map((branch) => {
+  const additions = new Set(additionalCategories[branch.title] ?? []);
+  return {...branch, items: [
+    ...branch.items,
+    ...services.flatMap((item, index) => additions.has(item.name) ? [{...item, index}] : []),
+  ]};
+});
+for (const item of services) {
+  const slug = normalize(item.name);
+  const entry = serviceBySlug.get(slug);
+  if (!entry) serviceBySlug.set(slug, {item, branches: [], visuals: [item]});
+  else if (!entry.visuals.some((visual) => visual.file === item.file)) entry.visuals.push(item);
+}
+for (const branch of directoryCatalog) {
+  for (const item of branch.items) {
+    const entry = serviceBySlug.get(normalize(item.name));
+    if (entry && !entry.branches.includes(branch.title)) entry.branches.push(branch.title);
+  }
+}
+const categoryItems = (branch: (typeof catalog)[number]) => Array.from(
+  new Map(branch.items.map((item) => [normalize(item.name), serviceBySlug.get(normalize(item.name))!.item])).values(),
+).sort((a, b) => a.name.localeCompare(b.name, "en"));
+const keywordAliases: Record<string, string> = {
+  "amazon-ec2": "virtual machine vm elastic compute cloud",
+  "aws-lambda": "function functions event driven",
+  "amazon-s3": "simple storage service bucket buckets",
+  "amazon-ebs": "elastic block store volume volumes disk snapshots",
+  "amazon-vpc": "virtual private cloud subnet subnets routing",
+  "aws-iam": "identity access management permissions least privilege",
+  "amazon-rds": "relational database service mysql postgresql postgres sql",
+  "amazon-dynamodb": "nosql key value",
+  "amazon-eks": "elastic kubernetes service pods",
+  "amazon-ecs": "elastic container service",
+  "amazon-sqs": "simple queue service messaging",
+  "amazon-sns": "simple notification service pub sub",
+  "amazon-bedrock": "llm genai generative artificial intelligence",
+};
+
+function findAwsDirectoryServices(query: string) {
+  const slug = normalize(query);
+  if (!slug) return [];
+  const terms = slug.split("-");
+  return Array.from(serviceBySlug.entries()).flatMap(([key, entry]) => {
+    const short = key.replace(/^(?:amazon|aws)-/, "");
+    const nameWords = key.split("-");
+    const summaryWords = normalize(`${entry.visuals.map((visual) => visual.summary).join(" ")} ${keywordAliases[key] ?? ""}`).split("-");
+    const categoryWords = normalize(entry.branches.join(" ")).split("-");
+    const words = [...nameWords, ...summaryWords, ...categoryWords];
+    if (!terms.every((term) => words.some((word) => word.startsWith(term)))) return [];
+    const score = key === slug || short === slug ? 100 : key.startsWith(slug) || short.startsWith(slug) ? 50 :
+      terms.reduce((sum, term) => sum + (nameWords.some((word) => word.startsWith(term)) ? 4 :
+        summaryWords.some((word) => word.startsWith(term)) ? 2 : 1), 0);
+    return [{...entry, score}];
+  }).sort((a, b) => b.score - a.score || a.item.name.localeCompare(b.item.name, "en"));
+}
+
+function ServiceLink({ item, category, current, onOpen }: {item: Service; category?: string; current?: boolean; onOpen?: () => void}) {
+  return (
+    <Link className="aws-directory-link" href={serviceHref(item.name)} prefetch={false} scroll={false}
+      aria-current={current ? "page" : undefined}
+      onClick={onOpen ? (event) => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0 && !event.defaultPrevented) onOpen(); } : undefined}>
+      <strong>{item.name}</strong><span>{category ? `${category} · ` : ""}{item.summary}</span>
+    </Link>
+  );
+}
+
+function CategoryNavigation({ active }: {active?: Service}) {
+  const activeSlug = active ? normalize(active.name) : "";
+  const owner = activeSlug ? serviceBySlug.get(activeSlug)?.branches[0] : undefined;
+  const options = owner ? [...directoryCatalog.filter((branch) => branch.title === owner), ...directoryCatalog.filter((branch) => branch.title !== owner)] : directoryCatalog;
+  return (
+    <section aria-labelledby="aws-directory-categories" className="aws-directory-categories" key={activeSlug}>
+      <h2 id="aws-directory-categories">{active ? "Browse other AWS services" : "Browse by category"}</h2>
+      <div className="aws-directory-category-list">
+        {options.map((branch) => {
+          const entries = categoryItems(branch);
+          return (
+            <details key={branch.title} open={branch.title === owner}>
+              <summary>
+                <strong>{branch.title}</strong><span>{entries.length}</span>
+              </summary>
+              <ul>{entries.map((item) => (
+                <li key={item.name}><ServiceLink item={item} current={normalize(item.name) === activeSlug} /></li>
+              ))}</ul>
+            </details>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function OverviewVisual({service, alternate = false}: {service: Service; alternate?: boolean}) {
+  const viewer = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [source, setSource] = useState(() => assetUrl(service.file));
+  const fallback = () => setSource(service.file);
+  const label = `${service.name} ${alternate ? "alternate visual overview" : "visual overview"}`;
+  return (
+    <>
+      <button className="aws-directory-image-button" type="button" ref={trigger}
+        aria-haspopup="dialog" aria-label={`Enlarge ${label}`} onClick={() => viewer.current?.showModal()}>
+        <img src={source} onError={fallback} alt={label} loading={alternate ? "lazy" : "eager"} decoding="async" />
+        <span>Enlarge visual</span>
+      </button>
+      <dialog className="aws-directory-dialog" ref={viewer} aria-label={label}
+        onClose={() => trigger.current?.focus()} onClick={(event) => { if (event.target === event.currentTarget) viewer.current?.close(); }}>
+        <div>
+          <button type="button" onClick={() => viewer.current?.close()} aria-label="Close enlarged visual">Close ×</button>
+          <img src={source} onError={fallback} alt={label} loading="lazy" decoding="async" />
+        </div>
+      </dialog>
+    </>
+  );
+}
+
+function DirectoryContent() {
+  const requested = useSearchParams().get("service");
+  const entry = requested?.trim() ? serviceBySlug.get(normalize(requested)) : undefined;
+  const service = entry?.item;
+  const [searchState, setSearchState] = useState({route: requested, query: "", shown: 24});
+  const {query, shown} = searchState.route === requested ? searchState : {query: "", shown: 24};
+  const updateSearch = (value: string) => setSearchState({route: requested, query: value, shown: 24});
+  const heading = useRef<HTMLHeadingElement>(null);
+  const lastRequest = useRef(requested);
+  const search = useRef<HTMLInputElement>(null);
+  const searching = Boolean(query.trim());
+  const results = useMemo(() => findAwsDirectoryServices(query), [query]);
+
   useEffect(() => {
-    const requested = params.get("service");
-    if (!requested) return;
-    const index = services.findIndex((item) => normalize(item.name) === normalize(requested));
-    if (index >= 0) { setSelected(index); const owner = catalog.findIndex((branch) => branch.items.some((item) => item.index === index)); if (owner >= 0) setBranchIndex(owner); }
-  }, [params]);
-  useEffect(() => { const key = (event: KeyboardEvent) => { if (event.key === "Escape") setExpanded(false); }; window.addEventListener("keydown", key); return () => window.removeEventListener("keydown", key); }, []);
-  const choose = (index: number, branch: number) => { setSelected(index); setBranchIndex(branch); setQuery(""); setOpenedBranches((current) => current.includes(branch) ? current : [...current, branch]); setExpanded(false); setVisualVisible(true); };
-  return <main className="workspace azure-workspace aws-services-library">
-    <nav className="top-nav" aria-label="Primary navigation"><a className="brand-link" href="/">Visual Learning</a><div><a className="home-button" href="/">Home</a><a className="active" aria-current="page" href="/services">AWS services</a><a href="/azure-services">Azure services</a><a href="/gcp-services">GCP services</a><a href="/cloud-comparison">Cloud comparison</a></div></nav>
-    <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
-      <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="AWS service branches">
-        <div className="azure-menu-heading"><span>AWS branches</span><button type="button" aria-label={menuCollapsed ? "Expand branch menu" : "Collapse branch menu"} onClick={() => setMenuCollapsed((value) => !value)}>{menuCollapsed ? "›" : "‹"}</button></div>
-        {!menuCollapsed && <div className="azure-branch-list">{catalog.map((branch, index) => { const expanded = openedBranches.includes(index); return <section className="azure-branch-menu-item" key={branch.title}><button className="azure-branch-trigger" type="button" aria-expanded={expanded} aria-controls={`aws-branch-${index}`} onClick={() => setOpenedBranches((current) => current.includes(index) ? current.filter((item) => item !== index) : [...current, index])}><span>{expanded ? "⌄" : "›"} {branch.title}</span><small>{branch.items.length}</small></button>{expanded && <div className="azure-inline-services" id={`aws-branch-${index}`}>{branch.items.map((item) => <button className={item.index === selected ? "selected" : ""} key={item.index} type="button" aria-current={item.index === selected ? "page" : undefined} onClick={() => choose(item.index, index)}><strong>{item.name}</strong><span>{item.summary}</span></button>)}</div>}</section>; })}</div>}
-      </aside>
-      <section className="azure-main-pane"><header className="azure-toolbar"><div className="service-search azure-search"><span>Search all AWS services</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search service or branch…" aria-label="Search AWS services and branches" />{results.length > 0 && <div className="search-results" role="listbox" aria-label="AWS search results">{results.map(({item,branch,index}) => <button type="button" key={`${branch}-${item.index}`} role="option" onClick={() => choose(item.index,index)}><span>{item.name}</span><small>{branch} · {item.summary}</small></button>)}</div>}</div><div className="progress"><strong>{new Set(services.map((item) => normalize(item.name))).size}</strong><span>unique services mapped</span></div></header>
-        <article className="viewer azure-viewer" style={{ "--service-accent": service.accent } as React.CSSProperties}><div className="viewer-head"><div><p>Selected AWS service</p><h2>{service.name}</h2><small className="azure-branch-context">{catalog[branchIndex].title}</small></div><div className="azure-viewer-actions"><button type="button" className="visual-toggle" onClick={() => setVisualVisible((value) => !value)}>{visualVisible ? "Hide visual ↑" : "Show visual ↓"}</button></div></div>
-          <section className="azure-el10-section" aria-label={`${service.name} EL10 visual`}><div className="azure-el10-heading"><div><p>EL10 SERVICE VISUAL</p><span>Click the visual to open a full-screen study view.</span></div></div>{visualVisible && <button className="image-link" type="button" onClick={() => setExpanded(true)} aria-label={`Open ${service.name} EL10 full view`}><img src={assetUrl(service.file)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = service.file; }} alt={`${service.name} EL10 infographic`} /></button>}</section>
-          <SharedAwsServiceDetails key={service.name} name={service.name} category={learningCategory(catalog[branchIndex].title)} summary={service.summary}/></article>
+    if (lastRequest.current === requested) return;
+    lastRequest.current = requested;
+    heading.current?.focus({preventScroll: true});
+    heading.current?.scrollIntoView({block: "start"});
+  }, [requested]);
+
+  return (
+    <main className="workspace aws-services-library">
+      <header className="aws-directory-header">
+        <nav aria-label="Breadcrumb" className="aws-directory-breadcrumb">
+          <Link href="/">Home</Link>
+          <span aria-hidden="true">/</span>
+          {service ? <Link href="/services" scroll={false}>AWS services</Link> : <span aria-current="page">AWS services</span>}
+          {service && <><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></>}
+        </nav>
+        <div>
+          <p className="aws-directory-kicker">{entry?.branches[0] ?? "Cloud service directory"}</p>
+          <h1 ref={heading} tabIndex={-1}>{service?.name ?? "Explore AWS services"}</h1>
+          {service ? <p className="aws-directory-intro">{service.summary}{/[.!?]$/.test(service.summary) ? "" : "."}</p> :
+            <p className="aws-directory-intro">Start with a familiar service or browse by category. Each guide pairs a visual overview with a closer look at how the service works.</p>}
+        </div>
+      </header>
+      <section className="aws-directory-search" role="search" aria-label="AWS service directory">
+        <label htmlFor="aws-directory-search">Search services, tasks, or categories</label>
+        <div className="aws-directory-search-row">
+          <input ref={search} type="search" id="aws-directory-search" value={query}
+            placeholder="Try EBS, object storage, or private networking"
+            onChange={(event) => updateSearch(event.target.value)} />
+          {query && <button type="button" onClick={() => { updateSearch(""); search.current?.focus(); }}>Clear</button>}
+        </div>
       </section>
-    </div>
-    {expanded && <div className="image-modal" role="dialog" aria-modal="true" aria-label={`${service.name} EL10 full view`} onClick={() => setExpanded(false)}><button className="modal-close" onClick={() => setExpanded(false)}>Close ×</button><img src={assetUrl(service.file)} alt={`${service.name} EL10 infographic full view`} onClick={(event) => event.stopPropagation()}/></div>}
-  </main>;
+      {searching ? (
+        <section className="aws-directory-results" aria-labelledby="aws-directory-search-title">
+          <h2 id="aws-directory-search-title">Search results</h2>
+          <p className="aws-directory-status" role="status">{results.length > 0
+            ? `${results.length} ${results.length === 1 ? "service" : "services"} found.`
+            : `No AWS services match “${query.trim()}”. Try a shorter term such as EBS or storage.`}</p>
+          <ul className="aws-directory-cards">{results.slice(0, shown).map(({item, branches}) => (
+            <li key={item.name}><ServiceLink item={item} category={branches[0]} onOpen={item.name === service?.name ? () => { updateSearch(""); heading.current?.focus(); } : undefined} /></li>
+          ))}</ul>
+          {shown < results.length && <button type="button" className="aws-directory-more" onClick={() => setSearchState({route: requested, query, shown: shown + 24})}>Show more results</button>}
+        </section>
+      ) : service && entry ? (
+        <div className="aws-directory-detail-layout">
+          <article key={service.name} className="aws-directory-detail" style={{"--service-accent": service.accent} as React.CSSProperties}>
+            <section className="aws-directory-overview" aria-labelledby="aws-directory-overview-title">
+              <h2 id="aws-directory-overview-title">Visual overview</h2>
+              <OverviewVisual key={service.file} service={service} />
+              {entry.visuals.length > 1 && <details className="aws-directory-alternates">
+                <summary>More visual overviews for {service.name}</summary>
+                {entry.visuals.slice(1).map((visual) => <OverviewVisual key={visual.file} service={visual} alternate />)}
+              </details>}
+              {service.name === "Amazon EBS" && <p className="aws-directory-course-link">
+                <Link href="/courses/aws-solutions-architect-professional/visual/module-10">Study EBS in SAP-C03 Module 10 →</Link>
+              </p>}
+            </section>
+            <SharedAwsServiceDetails name={service.name} category={learningCategory(entry.branches[0] ?? "")} summary={service.summary} />
+          </article>
+          <CategoryNavigation active={service} />
+        </div>
+      ) : (
+        <>
+          {requested?.trim() && <p role="status" className="aws-directory-status">That service link didn’t match a guide. Search for a service or choose a category.</p>}
+          <section aria-labelledby="aws-directory-featured" className="aws-directory-featured">
+            <h2 id="aws-directory-featured">Start with a core service</h2>
+            <ul className="aws-directory-cards">{featured.map((item) => <li key={item.name}><ServiceLink item={item} /></li>)}</ul>
+          </section>
+          <CategoryNavigation />
+        </>
+      )}
+    </main>
+  );
+}
+
+export default function ServicesLibrary() {
+  return <Suspense fallback={<main className="workspace aws-services-library"><h1>Explore AWS services</h1><p>Loading the service directory…</p></main>}>
+    <DirectoryContent />
+  </Suspense>;
 }
