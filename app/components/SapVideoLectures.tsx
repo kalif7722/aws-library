@@ -77,7 +77,9 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
     const controller=new AbortController();
     let busy=false;
     setChecking(true);
-    setActive("01");
+    // Reviewed remediation links may select a known lecture; never auto-play it.
+    const requestedPart=new URLSearchParams(window.location.search).get("part");
+    setActive((LECTURES[moduleId]??[]).some(part=>part.id===requestedPart)?requestedPart!:"01");
     setResults({});
     setExtraLectures(previous=>({...previous,[moduleId]:[]}));
     const refresh=async()=>{

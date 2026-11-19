@@ -1,0 +1,590 @@
+[
+  {
+    "id": "sap27-original-d1-01",
+    "domain": "1",
+    "module": "04",
+    "concept": "Private service access despite duplicate address space",
+    "stem": "A diagnostics company acquires a laboratory. Both the laboratory VPC and a scoring-provider VPC use 10.44.0.0/16 in the same AWS Region and cannot be renumbered this quarter. Laboratory workers must initiate HTTPS calls only to the provider scoring service, already behind an internal Network Load Balancer. Neither VPC may use a public path or gain general routed access to the other. The provider must explicitly approve the laboratory connection. Which design meets all requirements?",
+    "options": [
+      "Peer the VPCs, add routes to the provider CIDR, and restrict the target security group to TCP 443.",
+      "Publish an NLB-backed endpoint service, allow the laboratory account principal and require acceptance; create interface endpoints in the laboratory VPC, permit worker HTTPS in endpoint security groups, accept the connection, and configure service DNS.",
+      "Attach both VPCs to a transit gateway, propagate both 10.44.0.0/16 routes, and use a port-443 inspection policy.",
+      "Place an internet-facing ALB before the scoring targets and allow only the laboratory NAT public IP."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "A: VPC peering cannot connect overlapping IPv4 CIDRs; a port rule does not fix the address conflict. B: PrivateLink exposes the specific service through consumer-local endpoint interfaces without routing the overlapping networks together. Allowed principals plus required acceptance implement provider approval; endpoint security and DNS complete the client path. C: Propagating duplicate destination prefixes cannot disambiguate the two networks, and general routed VPC connectivity contradicts the service-only boundary. D: IP allowlisting does not make a public ALB path private. It violates the explicit no-public-path requirement.",
+    "flow": [
+      "Lab workers",
+      "Consumer interface endpoint ENIs",
+      "AWS PrivateLink",
+      "Provider internal NLB",
+      "Scoring targets"
+    ],
+    "decision": "Expose a service, not the overlapping network",
+    "tradeoff": "Endpoint ENI/AZ costs and provider target health still need operation; this is not general bidirectional network connectivity.",
+    "optionExplanations": [
+      {
+        "index": 0,
+        "correct": false,
+        "reason": "VPC peering cannot connect overlapping IPv4 CIDRs; a port rule does not fix the address conflict."
+      },
+      {
+        "index": 1,
+        "correct": true,
+        "reason": "PrivateLink exposes the specific service through consumer-local endpoint interfaces without routing the overlapping networks together. Allowed principals plus required acceptance implement provider approval; endpoint security and DNS complete the client path."
+      },
+      {
+        "index": 2,
+        "correct": false,
+        "reason": "Propagating duplicate destination prefixes cannot disambiguate the two networks, and general routed VPC connectivity contradicts the service-only boundary."
+      },
+      {
+        "index": 3,
+        "correct": false,
+        "reason": "IP allowlisting does not make a public ALB path private. It violates the explicit no-public-path requirement."
+      }
+    ],
+    "selectCount": 1,
+    "examSkills": [
+      "1.4.1"
+    ],
+    "teachBack": [
+      {
+        "id": "sap-04-018",
+        "module": "04",
+        "slide": 18,
+        "title": "PrivateLink producer and consumer boundaries",
+        "asset": "/course-visuals/sap-c03/module-04/slide-18.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-04?lesson=sap-04-018"
+      },
+      {
+        "id": "sap-04-019",
+        "module": "04",
+        "slide": 19,
+        "title": "PrivateLink endpoint service and NLB",
+        "asset": "/course-visuals/sap-c03/module-04/slide-19.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-04?lesson=sap-04-019"
+      },
+      {
+        "id": "sap-04-020",
+        "module": "04",
+        "slide": 20,
+        "title": "PrivateLink versus peering versus Transit Gateway",
+        "asset": "/course-visuals/sap-c03/module-04/slide-20.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-04?lesson=sap-04-020"
+      }
+    ],
+    "originality": "Not in existing 28: overlapping CIDRs plus provider approval and service-only exposure. Unlike existing centralized inspection and hybrid DNS questions, route selection is not the solution.",
+    "visualBrief": {
+      "layout": "Two separate VPC islands with the same CIDR label. Large compact service bridge across the middle, not a VPC-to-VPC route. Draw request left-to-right and a thin response on the same connection. Above, a dashed permission/acceptance control line. Below, three small rejected constraints: overlap / public path / broad routing.",
+      "architectureFlow": [
+        "Lab workers",
+        "Consumer interface endpoint ENIs",
+        "AWS PrivateLink",
+        "Provider internal NLB",
+        "Scoring targets"
+      ],
+      "iconNames": [
+        "Amazon EC2",
+        "AWS PrivateLink",
+        "Elastic Load Balancing: Network Load Balancer",
+        "Amazon VPC: Interface endpoint"
+      ],
+      "iconPolicy": "Use unchanged official AWS architecture assets. Names specify services/resources, not invented glyphs. Verify source provenance before image production; asset existence alone is not official-provenance proof.",
+      "lessonIds": [
+        "sap-04-018",
+        "sap-04-019",
+        "sap-04-020"
+      ],
+      "format": "2048x1152 WebP; topic-led AIP presentation, legible explanation, no repeated dashboard/grid, no image generation in this draft."
+    },
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain1.html",
+        "supports": "Domain and skill mapping"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html",
+        "supports": "NLB endpoint service, provider permissions and consumer setup"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/integrate-third-party-services/architecture-1.html",
+        "supports": "PrivateLink supports overlapping CIDR service integration"
+      }
+    ],
+    "reviewStatus": {
+      "content": "source-checked draft; independent review pending",
+      "answerVisual": "not-created",
+      "learnerVisible": false,
+      "mockFormEligible": false
+    }
+  },
+  {
+    "id": "sap27-original-d2-01",
+    "domain": "2",
+    "module": "01",
+    "concept": "Certificate trust is not workload authorization",
+    "stem": "A manufacturer has an established corporate certificate authority used by many systems. An external Linux calibration appliance has a certificate whose subject OU is Calibration. The CA enforces an issuance policy that reserves this OU exclusively for this appliance; no other workload can obtain a certificate with this OU. It must upload reports only under s3://factory-reports/calibration/ using temporary AWS credentials. No IAM-user keys or interactive workforce login are allowed. Other machines with certificates from the same CA must not assume this uploader role. The bucket uses SSE-S3 and has no cross-account or explicit-deny complication. Which TWO actions are required?",
+    "options": [
+      "Create an IAM Roles Anywhere trust anchor for the CA and a profile exposing the uploader role; configure the role trust for Roles Anywhere with the required STS actions and a certificate-subject OU condition that permits the exclusively assigned Calibration OU.",
+      "Trust the corporate CA without certificate-attribute conditions; possession of any certificate from that CA proves that the holder is the calibration appliance.",
+      "Give the uploader role only s3:PutObject on arn:aws:s3:::factory-reports/calibration/*, and have the appliance obtain and refresh temporary sessions using its certificate and private key.",
+      "Store an IAM-user access key in a root-only file and rotate it every day.",
+      "Assign an IAM Identity Center permission set to the appliance and require an employee to sign in before each upload."
+    ],
+    "correct": [
+      0,
+      2
+    ],
+    "explanation": "A: The trust anchor establishes certificate-chain trust, the profile permits the target role, and the role trust condition admits the Calibration OU reserved exclusively for this appliance by the enforced CA issuance policy. Other same-CA workloads have different OU values and cannot satisfy that condition. B: CA trust alone admits other valid certificates under that authority; it does not enforce the specified workload boundary. C: The role policy limits allowed writes to the requested prefix, while certificate-based session renewal avoids long-lived AWS access keys. Session permissions cannot exceed the role permissions. D: File permissions and frequent rotation do not satisfy the prohibition on IAM-user keys or provide certificate-bound temporary role sessions. E: A workforce permission set and repeated employee sign-in do not meet unattended appliance authentication or the no-interactive-login condition.",
+    "flow": [
+      "Appliance certificate + private key",
+      "Roles Anywhere: trust anchor/profile",
+      "Role trust: OU=Calibration",
+      "Temporary role session",
+      "S3 calibration prefix"
+    ],
+    "decision": "Check who can get the role separately from what the role can do",
+    "tradeoff": "Protect and rotate private keys and certificates; temporary AWS credentials do not eliminate PKI operations.",
+    "optionExplanations": [
+      {
+        "index": 0,
+        "correct": true,
+        "reason": "The trust anchor establishes certificate-chain trust, the profile permits the target role, and the role trust condition admits the Calibration OU reserved exclusively for this appliance by the enforced CA issuance policy. Other same-CA workloads have different OU values and cannot satisfy that condition."
+      },
+      {
+        "index": 1,
+        "correct": false,
+        "reason": "CA trust alone admits other valid certificates under that authority; it does not enforce the specified workload boundary."
+      },
+      {
+        "index": 2,
+        "correct": true,
+        "reason": "The role policy limits allowed writes to the requested prefix, while certificate-based session renewal avoids long-lived AWS access keys. Session permissions cannot exceed the role permissions."
+      },
+      {
+        "index": 3,
+        "correct": false,
+        "reason": "File permissions and frequent rotation do not satisfy the prohibition on IAM-user keys or provide certificate-bound temporary role sessions."
+      },
+      {
+        "index": 4,
+        "correct": false,
+        "reason": "A workforce permission set and repeated employee sign-in do not meet unattended appliance authentication or the no-interactive-login condition."
+      }
+    ],
+    "selectCount": 2,
+    "examSkills": [
+      "2.1.5"
+    ],
+    "teachBack": [
+      {
+        "id": "sap-01-025",
+        "module": "01",
+        "slide": 25,
+        "title": "IAM Roles Anywhere for outside workloads",
+        "asset": "/course-visuals/sap-c03/module-01/slide-25.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-01?lesson=sap-01-025"
+      },
+      {
+        "id": "sap-01-026",
+        "module": "01",
+        "slide": 26,
+        "title": "Hybrid and multi-cloud identity trade-offs",
+        "asset": "/course-visuals/sap-c03/module-01/slide-26.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-01?lesson=sap-01-026"
+      }
+    ],
+    "originality": "Not a paraphrase of workforce federation, vendor external IDs or cross-account KMS: tests CA-wide trust versus workload-specific certificate authorization and prefix-limited machine identity.",
+    "visualBrief": {
+      "layout": "Credential exchange loop on left and authorized data path on right. Certificate stays with appliance; credential return arrow points back to appliance. Then signed PutObject goes from appliance to the S3 prefix, NOT through Roles Anywhere. Enlarge two distinct gates: certificate attribute and role policy.",
+      "architectureFlow": [
+        "Appliance certificate + private key",
+        "Roles Anywhere: trust anchor/profile",
+        "Role trust: OU=Calibration",
+        "Temporary role session",
+        "S3 calibration prefix"
+      ],
+      "iconNames": [
+        "AWS Identity and Access Management",
+        "Amazon Simple Storage Service (Amazon S3)"
+      ],
+      "iconPolicy": "Use unchanged official AWS architecture assets. Names specify services/resources, not invented glyphs. Verify source provenance before image production; asset existence alone is not official-provenance proof.",
+      "lessonIds": [
+        "sap-01-025",
+        "sap-01-026"
+      ],
+      "format": "2048x1152 WebP; topic-led AIP presentation, legible explanation, no repeated dashboard/grid, no image generation in this draft."
+    },
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain2.html",
+        "supports": "Domain and skill mapping"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/rolesanywhere/latest/userguide/authentication.html",
+        "supports": "Certificate proof, trust chain, role trust STS actions and attribute conditions"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/rolesanywhere/latest/userguide/trust-model.html",
+        "supports": "Role trust and certificate principal attributes"
+      }
+    ],
+    "reviewStatus": {
+      "content": "source-checked draft; independent review pending",
+      "answerVisual": "not-created",
+      "learnerVisible": false,
+      "mockFormEligible": false
+    }
+  },
+  {
+    "id": "sap27-original-d3-01",
+    "domain": "3",
+    "module": "10",
+    "concept": "Buy throughput instead of unnecessary block capacity",
+    "stem": "A report-processing EC2 instance uses a 200-GiB gp3 data volume. A sustained benchmark requires 2,000 IOPS with 256-KiB I/O, approximately 500 MiB/s, but throughput plateaus near 125 MiB/s. Capacity usage is 120 GiB. Volume settings are 3,000 IOPS and 125 MiB/s; the instance EBS limits and application parallelism have been verified sufficient. The workload needs neither sub-millisecond latency nor Multi-Attach. Which change most directly meets the measured demand without paying for unnecessary capacity or IOPS?",
+    "options": [
+      "Increase the volume from 200 GiB to 2 TiB, keeping the same gp3 IOPS and throughput settings.",
+      "Keep 200 GiB and raise provisioned IOPS to 6,000 while keeping throughput at 125 MiB/s.",
+      "Keep 200 GiB and 3,000 IOPS; provision 500 MiB/s of throughput and repeat the sustained benchmark.",
+      "Replace the volume with io2 provisioned for 16,000 IOPS solely to fix the measured throughput plateau."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A: gp3 capacity is not the throughput control; unchanged 125 MiB/s remains the bottleneck and the extra capacity is unused. B: Higher IOPS does not raise the explicitly provisioned 125 MiB/s throughput cap. C: 2,000 times 256 KiB equals 500 MiB/s. The existing 3,000 IOPS exceeds the measured request rate, and 500 MiB/s is within the gp3 throughput-to-IOPS constraint at that setting. Benchmarking confirms the end-to-end result. D: The scenario gives no io2-specific latency or other requirement. A much higher provisioned IOPS tier changes more than the demonstrated bottleneck and incurs unnecessary provisioning compared with adjusting gp3 throughput.",
+    "flow": [
+      "EC2 application: 2,000 IOPS \u00d7 256 KiB",
+      "Instance EBS path: verified sufficient",
+      "gp3 throughput gate: 125 \u2192 500 MiB/s",
+      "200 GiB and 3,000 IOPS unchanged"
+    ],
+    "decision": "Find the limiting dimension before changing the storage tier",
+    "tradeoff": "Provisioning is not a latency guarantee; measure the actual workload and instance path after the change.",
+    "optionExplanations": [
+      {
+        "index": 0,
+        "correct": false,
+        "reason": "gp3 capacity is not the throughput control; unchanged 125 MiB/s remains the bottleneck and the extra capacity is unused."
+      },
+      {
+        "index": 1,
+        "correct": false,
+        "reason": "Higher IOPS does not raise the explicitly provisioned 125 MiB/s throughput cap."
+      },
+      {
+        "index": 2,
+        "correct": true,
+        "reason": "2,000 times 256 KiB equals 500 MiB/s. The existing 3,000 IOPS exceeds the measured request rate, and 500 MiB/s is within the gp3 throughput-to-IOPS constraint at that setting. Benchmarking confirms the end-to-end result."
+      },
+      {
+        "index": 3,
+        "correct": false,
+        "reason": "The scenario gives no io2-specific latency or other requirement. A much higher provisioned IOPS tier changes more than the demonstrated bottleneck and incurs unnecessary provisioning compared with adjusting gp3 throughput."
+      }
+    ],
+    "selectCount": 1,
+    "examSkills": [
+      "3.4.2"
+    ],
+    "teachBack": [
+      {
+        "id": "sap-10-003",
+        "module": "10",
+        "slide": 3,
+        "title": "gp2 and gp3 separate capacity from performance differently",
+        "asset": "/course-visuals/sap-c03/module-10/slide-03-aip-v3.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-10?lesson=sap-10-003"
+      },
+      {
+        "id": "sap-23-023",
+        "module": "23",
+        "slide": 23,
+        "title": "EBS and EFS storage economics",
+        "asset": "/course-visuals/sap-c03/module-23/slide-23.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-23?lesson=sap-23-023"
+      }
+    ],
+    "originality": "Adds quantitative I/O-size reasoning and independent throughput provisioning, unlike existing storage lifecycle, commitments, NAT cost and DynamoDB projection questions.",
+    "visualBrief": {
+      "layout": "One dimensional EBS volume on right, EC2/data stream on left, a narrow 125 MiB/s throttle expanded to 500. Three distinct dials beneath the volume: capacity 200 fixed, IOPS 3000 fixed, throughput 125\u2192500. Put the arithmetic beside the stream, not in a dense comparison table.",
+      "architectureFlow": [
+        "EC2 application: 2,000 IOPS \u00d7 256 KiB",
+        "Instance EBS path: verified sufficient",
+        "gp3 throughput gate: 125 \u2192 500 MiB/s",
+        "200 GiB and 3,000 IOPS unchanged"
+      ],
+      "iconNames": [
+        "Amazon EC2",
+        "Amazon Elastic Block Store (Amazon EBS)"
+      ],
+      "iconPolicy": "Use unchanged official AWS architecture assets. Names specify services/resources, not invented glyphs. Verify source provenance before image production; asset existence alone is not official-provenance proof.",
+      "lessonIds": [
+        "sap-10-003",
+        "sap-23-023"
+      ],
+      "format": "2048x1152 WebP; topic-led AIP presentation, legible explanation, no repeated dashboard/grid, no image generation in this draft."
+    },
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain3.html",
+        "supports": "Domain and skill mapping"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+        "supports": "gp3 independent capacity/IOPS/throughput and throughput ratio"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-io-characteristics.html",
+        "supports": "I/O size determines throughput at a given IOPS rate"
+      }
+    ],
+    "reviewStatus": {
+      "content": "source-checked draft; independent review pending",
+      "answerVisual": "not-created",
+      "learnerVisible": false,
+      "mockFormEligible": false
+    }
+  },
+  {
+    "id": "sap27-original-d4-01",
+    "domain": "4",
+    "module": "24",
+    "concept": "A file-copy success is not permission to cut over",
+    "stem": "A design studio is migrating an on-premises NFS share to Amazon EFS with a configured DataSync Basic-mode task. Repeated incremental copies are complete. No manifest or filters restrict the task. The approved cutover window is long enough for a final delta transfer and full verification. The application owner requires a single writable authority and evidence that the entire source and destination are synchronized before users resume writes. Which TWO actions should the cutover runbook include?",
+    "options": [
+      "Keep source and destination writable during the final copy; DataSync will automatically reconcile concurrent application writes in both directions.",
+      "Quiesce source application writes, keep destination client writes disabled, run the final delta copy, and preserve that freeze until verification and the endpoint switch complete.",
+      "Use VerifyMode=NONE because a successful transfer proves the entire pre-existing destination is synchronized.",
+      "Run final verification over the entire task source/destination scope with POINT_IN_TIME_CONSISTENT, resolve errors before proceeding, then switch clients to EFS and permit writes only there while keeping the old source fenced.",
+      "Switch clients as soon as the first file arrives in EFS, then use a DNS rollback to the old writable share if any mismatch is found."
+    ],
+    "correct": [
+      1,
+      3
+    ],
+    "explanation": "A: DataSync is a transfer service, not an application-level active-active conflict resolver. Concurrent independent writes break the single-authority requirement. B: Quiescing and fencing establish a stable source and stop divergent destination writes during the final synchronization and verification interval. C: NONE still checks data integrity during transfer, but omits the additional end-of-transfer verification and does not establish full source/destination synchronization. D: Basic-mode full verification checks the entire task source/destination scope. The stated no-manifest/no-filter scope matters. Resume writes only after success and the controlled switch; application acceptance checks are still required. E: Early switching exposes an incomplete destination. Once new writes occur there, pointing back to an unfenced stale source is not a data reconciliation strategy.",
+    "flow": [
+      "Initial incremental copies",
+      "Fence both client write paths",
+      "Final delta transfer",
+      "Full verification gate",
+      "Client endpoint switch",
+      "EFS sole writer"
+    ],
+    "decision": "Freeze, synchronize, verify, then change the writer",
+    "tradeoff": "Verification time must be included in the window; rollback after new writes requires reconciliation, not merely DNS reversal.",
+    "optionExplanations": [
+      {
+        "index": 0,
+        "correct": false,
+        "reason": "DataSync is a transfer service, not an application-level active-active conflict resolver. Concurrent independent writes break the single-authority requirement."
+      },
+      {
+        "index": 1,
+        "correct": true,
+        "reason": "Quiescing and fencing establish a stable source and stop divergent destination writes during the final synchronization and verification interval."
+      },
+      {
+        "index": 2,
+        "correct": false,
+        "reason": "NONE still checks data integrity during transfer, but omits the additional end-of-transfer verification and does not establish full source/destination synchronization."
+      },
+      {
+        "index": 3,
+        "correct": true,
+        "reason": "Basic-mode full verification checks the entire task source/destination scope. The stated no-manifest/no-filter scope matters. Resume writes only after success and the controlled switch; application acceptance checks are still required."
+      },
+      {
+        "index": 4,
+        "correct": false,
+        "reason": "Early switching exposes an incomplete destination. Once new writes occur there, pointing back to an unfenced stale source is not a data reconciliation strategy."
+      }
+    ],
+    "selectCount": 2,
+    "examSkills": [
+      "4.1.3"
+    ],
+    "teachBack": [
+      {
+        "id": "sap-24-009",
+        "module": "24",
+        "slide": 9,
+        "title": "Select the right data transfer path",
+        "asset": "/course-visuals/sap-c03/module-24/slide-09.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-24?lesson=sap-24-009"
+      },
+      {
+        "id": "sap-24-023",
+        "module": "24",
+        "slide": 23,
+        "title": "Migration decision table",
+        "asset": "/course-visuals/sap-c03/module-24/slide-23.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-24?lesson=sap-24-023"
+      }
+    ],
+    "originality": "Different from relational DMS CDC cutover in sap27-21: NFS-to-EFS consistency boundary, Basic-mode full-scope verification and sole-writer handoff rather than database log replication.",
+    "visualBrief": {
+      "layout": "Timeline across the top with a visibly bounded write-freeze window. Below, on-prem NFS\u2192DataSync\u2192EFS with a final-delta arrow, then a verification bracket spanning both stores. Client write arrow pivots only after the green gate; old-source write path remains barred. Label DataSync transfer separately from client traffic.",
+      "architectureFlow": [
+        "Initial incremental copies",
+        "Fence both client write paths",
+        "Final delta transfer",
+        "Full verification gate",
+        "Client endpoint switch",
+        "EFS sole writer"
+      ],
+      "iconNames": [
+        "AWS DataSync",
+        "Amazon Elastic File System (Amazon EFS)"
+      ],
+      "iconPolicy": "Use unchanged official AWS architecture assets. Names specify services/resources, not invented glyphs. Verify source provenance before image production; asset existence alone is not official-provenance proof.",
+      "lessonIds": [
+        "sap-24-009",
+        "sap-24-023"
+      ],
+      "format": "2048x1152 WebP; topic-led AIP presentation, legible explanation, no repeated dashboard/grid, no image generation in this draft."
+    },
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain4.html",
+        "supports": "Domain and skill mapping"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/datasync/latest/userguide/configure-data-verification-options.html",
+        "supports": "Full verification scope, Basic-versus-Enhanced limitation, NONE distinction"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/datasync/latest/apireference/API_Options.html",
+        "supports": "POINT_IN_TIME_CONSISTENT and manifest caveat"
+      }
+    ],
+    "reviewStatus": {
+      "content": "source-checked draft; independent review pending",
+      "answerVisual": "not-created",
+      "learnerVisible": false,
+      "mockFormEligible": false
+    }
+  },
+  {
+    "id": "sap27-original-d5-01",
+    "domain": "5",
+    "module": "20",
+    "concept": "Enforce the same policy when developers bypass CI",
+    "stem": "A platform team permits approved CloudFormation changes through either its pipeline or a directly executed change set. Both use a centrally controlled deployment role; application developers cannot alter governance controls or create the protected resources directly. Every new or updated AWS::RDS::DBInstance must pass a tested encryption-and-backup property policy before that resource operation. A pipeline linter already exists, but a direct change set bypasses it. Which design closes the gap while retaining both deployment entry points?",
+    "options": [
+      "Run the existing linter only in CodeBuild and require developers to read the lint report before a direct change-set execution.",
+      "Use AWS Config to detect noncompliant databases after creation and automatically delete them.",
+      "Activate the tested CloudFormation Hook in each target account and Region with RESOURCE targets scoped to AWS::RDS::DBInstance, pre-create and pre-update invocation points, no unintended exclusions, enabled invocation, and FAIL mode for noncompliance.",
+      "Activate the same Hook in WARN mode so it reports the violation, then allow provisioning to continue and open a ticket."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A: This preserves the bypass: a report outside the mandatory resource operation path does not enforce direct change-set execution. B: Post-creation detection is too late for the before-operation requirement, and deleting a database is not an acceptable substitute for rejecting a noncompliant proposal. C: The Hook enforces at the CloudFormation resource-operation boundary shared by both entry points. Account/Region activation, enabled RESOURCE targets for AWS::RDS::DBInstance pre-create/pre-update, correct filters and FAIL mode are all necessary; the centrally protected governance role prevents bypass by editing the control. D: WARN intentionally allows the operation to continue after failed validation. Reporting is not preventive enforcement.",
+    "flow": [
+      "Pipeline or direct change set",
+      "CloudFormation operation",
+      "Enabled scoped Hook: FAIL",
+      "Pass \u2192 DBInstance operation / Fail \u2192 blocked target"
+    ],
+    "decision": "Place a preventive gate on the shared execution boundary",
+    "tradeoff": "A resource Hook is not a transaction guaranteeing that no other resource has changed, nor a universal interceptor for unrelated direct service APIs.",
+    "optionExplanations": [
+      {
+        "index": 0,
+        "correct": false,
+        "reason": "This preserves the bypass: a report outside the mandatory resource operation path does not enforce direct change-set execution."
+      },
+      {
+        "index": 1,
+        "correct": false,
+        "reason": "Post-creation detection is too late for the before-operation requirement, and deleting a database is not an acceptable substitute for rejecting a noncompliant proposal."
+      },
+      {
+        "index": 2,
+        "correct": true,
+        "reason": "The Hook enforces at the CloudFormation resource-operation boundary shared by both entry points. Account/Region activation, enabled RESOURCE targets for AWS::RDS::DBInstance pre-create/pre-update, correct filters and FAIL mode are all necessary; the centrally protected governance role prevents bypass by editing the control."
+      },
+      {
+        "index": 3,
+        "correct": false,
+        "reason": "WARN intentionally allows the operation to continue after failed validation. Reporting is not preventive enforcement."
+      }
+    ],
+    "selectCount": 1,
+    "examSkills": [
+      "5.1.2"
+    ],
+    "teachBack": [
+      {
+        "id": "sap-20-018",
+        "module": "20",
+        "slide": 18,
+        "title": "Validate policy before execution",
+        "asset": "/course-visuals/sap-c03/module-20/slide-18.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-20?lesson=sap-20-018"
+      },
+      {
+        "id": "sap-20-020",
+        "module": "20",
+        "slide": 20,
+        "title": "Hooks enforce at the stack boundary",
+        "asset": "/course-visuals/sap-c03/module-20/slide-20.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-20?lesson=sap-20-020"
+      },
+      {
+        "id": "sap-20-025",
+        "module": "20",
+        "slide": 25,
+        "title": "Policy controls act at different boundaries",
+        "asset": "/course-visuals/sap-c03/module-20/slide-25.webp",
+        "href": "/courses/aws-solutions-architect-professional/visual/module-20?lesson=sap-20-025"
+      }
+    ],
+    "originality": "Unlike sap27-23 drift remediation, this asks where preventive policy must run across two valid deployment entry paths. It does not repeat reconcile-live-versus-template decisions.",
+    "visualBrief": {
+      "layout": "Two upper entry ramps merge into one CloudFormation path. A central gate forks rejected red proposal to a stop and accepted green proposal to RDS. Show validation BEFORE the target operation. Small footer boundary: account/Region + create/update + FAIL. Do not imply all stack resources roll back atomically.",
+      "architectureFlow": [
+        "Pipeline or direct change set",
+        "CloudFormation operation",
+        "Enabled scoped Hook: FAIL",
+        "Pass \u2192 DBInstance operation / Fail \u2192 blocked target"
+      ],
+      "iconNames": [
+        "AWS CloudFormation",
+        "Amazon RDS",
+        "AWS CodeBuild"
+      ],
+      "iconPolicy": "Use unchanged official AWS architecture assets. Names specify services/resources, not invented glyphs. Verify source provenance before image production; asset existence alone is not official-provenance proof.",
+      "lessonIds": [
+        "sap-20-018",
+        "sap-20-020",
+        "sap-20-025"
+      ],
+      "format": "2048x1152 WebP; topic-led AIP presentation, legible explanation, no repeated dashboard/grid, no image generation in this draft."
+    },
+    "sources": [
+      {
+        "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03-domain5.html",
+        "supports": "Domain and skill mapping"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html",
+        "supports": "Hook target boundaries, pre-operation checks, WARN versus FAIL"
+      },
+      {
+        "url": "https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hook-configuration-schema.html",
+        "supports": "Invocation status and target/failure configuration"
+      }
+    ],
+    "reviewStatus": {
+      "content": "source-checked draft; independent review pending",
+      "answerVisual": "not-created",
+      "learnerVisible": false,
+      "mockFormEligible": false
+    }
+  }
+]
