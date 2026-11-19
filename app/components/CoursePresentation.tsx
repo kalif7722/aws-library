@@ -30,6 +30,7 @@ function moduleIcon(title:string){
 }
 export default function CoursePresentation({children}:{children:React.ReactNode}){
  const pathname=usePathname();const parts=pathname.split('/').filter(Boolean);const root=parts.length===2;const slug=parts[1];const course=(catalog as Record<string,Course>)[slug];
+ if(!slug)return <>{children}</>;
  const domains=course?.cloud==='GCP'?(gcpOfficialExamDomains as Record<string,{name:string;weight:string;groups:{name:string}[]}[]>)[course.code]||[]:[];
  const modules=domains.length?domains.map(d=>({title:d.name,description:d.groups.map(g=>g.name).join(' · ')})):course?.modules||[];
  const serviceTarget=course?.cloud==='AWS'?'course-services':'curriculum';

@@ -96,7 +96,11 @@ function shuffled(data, seed) {
 }
 
 function fingerprint(q) {
-  const material = JSON.stringify([q.id,q.domain,q.stem,q.options,[...q.correct].sort((a,b)=>a-b),q.explanation,q.image,q.revision??null]);
+  const core=[q.id,q.domain,q.stem,q.options,[...q.correct].sort((a,b)=>a-b),q.explanation,q.image,q.revision??null];
+  // Preserve previously issued descriptor signatures for original banks; pin feedback
+  // too when a richer bank supplies it.
+  if (Array.isArray(q.optionReasons) || q.references || q.sources) core.push(q.optionReasons??null,q.references??null,q.sources??null);
+  const material = JSON.stringify(core);
   return [hash(material),hash(material,3372634263)].map(n => n.toString(16).padStart(8,'0')).join('');
 }
 const identityOrder = q => q.options.map((_,i) => i);
@@ -122,7 +126,8 @@ export function createDiagnosticForm(questions, mode) {
   return hydrateForm(buildDescriptor('diagnostic',mode,mode==='exam'?DIAGNOSTIC_MINUTES:null,bank,null,null),bank);
 }
 
-export function createFullMockForm(bank, seed) {
+export function createFullMockForm(bank, seed, mode='exam') {
+  if (!['exam','practice'].includes(mode)) throw new Error('Invalid full mock mode.');
   if (!nonempty(seed)) throw new Error('Provide a non-empty seed for the new attempt.');
   if (!assessFullMock(bank).available) throw new Error('The full mock is not ready: more reviewed questions are required.');
   const eligible = cleanMockBank(bank).sort(stableSortById);
@@ -130,13 +135,13 @@ export function createFullMockForm(bank, seed) {
   const scoredIds = new Set(scored.map(q=>q.id));
   const unscored = shuffled(eligible.filter(q => !scoredIds.has(q.id)),JSON.stringify([seed,'extra'])).slice(0,FULL_MOCK_COUNT-FULL_MOCK_SCORED);
   const questions = shuffled([...scored,...unscored],JSON.stringify([seed,'form']));
-  return hydrateForm(buildDescriptor('full-mock','exam',FULL_MOCK_MINUTES,questions,seed,scoredIds),bank);
+  return hydrateForm(buildDescriptor('full-mock',mode,mode==='exam'?FULL_MOCK_MINUTES:null,questions,seed,scoredIds),bank);
 }
 
 export function hydrateForm(descriptor, bank) {
   const isFull = descriptor?.kind === 'full-mock';
   const isLegacy = descriptor?.kind === 'diagnostic';
-  const validMode = descriptor?.mode === 'exam' || isLegacy && descriptor?.mode === 'practice';
+  const validMode = descriptor?.mode === 'exam' || descriptor?.mode === 'practice';
   const timed = descriptor?.mode === 'exam';
   const duration = !timed ? null : (isFull?FULL_MOCK_MINUTES:DIAGNOSTIC_MINUTES)*minute;
   if (descriptor?.version!==1 || !validMode || !isFull&&!isLegacy || descriptor.durationMs!==duration ||
@@ -157,7 +162,7 @@ export function hydrateForm(descriptor, bank) {
     seen.add(q.id);
     if (slot.scored) counts[q.domain]++;
     const correct = order.flatMap((source,displayed) => q.correct.includes(source)?[displayed]:[]);
-    return {...q,options:order.map(i=>q.options[i]),correct};
+    return {...q,options:order.map(i=>q.options[i]),correct,...(Array.isArray(q.optionReasons)?{optionReasons:order.map(i=>q.optionReasons[i])}:{})};
   });
   if (isFull && domains.some(d => counts[d]!==FULL_MOCK_QUOTAS[d])) throw new Error('Saved form does not meet the scored-domain quotas.');
   return {descriptor, questions};

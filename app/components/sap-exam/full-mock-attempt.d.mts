@@ -1,0 +1,10 @@
+import type {FormQuestion,FormMode,Form,FormAttempt} from './forms.mjs';
+export const FULL_MOCK_STORAGE:string;
+export type FullSession<T extends FormQuestion>={quiz:Form<T>;attempt:FormAttempt;index:number};
+export type FullEvent={type:'navigate';index:number}|{type:'answer';values:number[]}|{type:'flag'|'submit'|'check'};
+export function beginFullMock<T extends FormQuestion>(bank:readonly T[],seed:string,mode:FormMode,now?:number):FullSession<T>;
+export function encodeFullMock<T extends FormQuestion>(session:FullSession<T>):string;
+export function restoreFullMock<T extends FormQuestion>(payload:string,bank:readonly T[],now?:number):FullSession<T>;
+export function tickFullMock<T extends FormQuestion>(session:FullSession<T>,now?:number):FullSession<T>;
+export function canReviewFullMock<T extends FormQuestion>(session:FullSession<T>,id:string):boolean;
+export function actFullMock<T extends FormQuestion>(session:FullSession<T>,event:FullEvent,now?:number):FullSession<T>;
