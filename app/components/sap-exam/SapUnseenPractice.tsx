@@ -51,6 +51,7 @@ export default function SapUnseenPractice(){
    <ol type="A">{question.optionExplanations.map(option=><li key={option.index}><strong>{option.correct?'Fits:':'Doesn’t fit:'}</strong> {option.reason}</li>)}</ol>
    <h4>Go back to the SAP lessons</h4>
    <ul>{question.teachBack.map(lesson=><li key={lesson.id}><a href={lesson.href}>Module {lesson.module} · Slide {lesson.slide}: {lesson.title}</a></li>)}</ul>
+   <details><summary>Official AWS references</summary><ul>{question.sources.map(source=><li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.supports}</a></li>)}</ul></details>
    <button type="button" onClick={reset}>Try again</button>
    {index<cases.length-1&&<button type="button" onClick={()=>move(index+1)}>Continue to next case</button>}
   </section>}
