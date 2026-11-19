@@ -1,0 +1,89 @@
+name: Encrypted approved SAP M10 corrected staging
+on:
+  push:
+    branches: [stage/sap-m10-encrypted-20261119]
+    paths: [.github/workflows/stage-sap-m10-encrypted-20261119.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m10-encrypted-20261119
+  cancel-in-progress: false
+jobs:
+  envelope:
+    if: github.ref == 'refs/heads/stage/sap-m10-encrypted-20261119'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install official SDK
+        run: python -m pip install boto3
+      - name: Write public encryption recipient
+        run: |
+          cat > recipient.crt <<'CERT'
+          -----BEGIN CERTIFICATE-----
+          MIIEIzCCAougAwIBAgIUCLYxu6oOoFHYn1Sd15eihLNC3IEwDQYJKoZIhvcNAQEL
+          BQAwITEfMB0GA1UEAwwWU0FQLU0xMC1vbmUtdGltZS1zdGFnZTAeFw0yNjExMTkx
+          NTA2MzJaFw0yNjExMjAxNTA2MzJaMCExHzAdBgNVBAMMFlNBUC1NMTAtb25lLXRp
+          bWUtc3RhZ2UwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQCkDqvLqq3C
+          YzzP8nRVL/mHGHmvz738akGrRGKLYwbmUrHyH+jYf3tTmRN7QQGNkGbWeCYuODS2
+          dvODzDZK2eSQbOYIClj+2NpHpfW4uB4v52WXfVesY15VSs5SrcgtVcy6104pNv+m
+          O8hOo8O7prnCGVAkQM159/MDhe9/geJ/2uNaXtN+q5JUaOYBHjeJwQwS2co4jwIM
+          I9uvs9AnqbTswZT19+otWwXIA2qbvC3yA3qtwIxxKqJbj9WSLWMwlKsDDOjUwCEg
+          TzSowiaPjlRj+ycTbZfoij54cTjzlB9SGWOKkbhwfvUWahDOL+XMfyasqZMCyTVi
+          7haHrzegm2n6i76u3giqq09PTpZFZS1+amw1Rxwpj2b3MrvBXeo84h0nRaKSrC83
+          LqmPBKA/ptQqUxzxnN8nDgWliO2umteGHlsEl+35yD0spUGGC2VmYiTM0FGefx5X
+          VRXjqxu7R5+cDTYyyVKr3ihUaysbOP6pXmBkbEXkgUzmDCYb/m7M05MCAwEAAaNT
+          MFEwHQYDVR0OBBYEFM8+uD0kPlubi3M3I8TemtPIpW67MB8GA1UdIwQYMBaAFM8+
+          uD0kPlubi3M3I8TemtPIpW67MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQEL
+          BQADggGBAD0crakjjta4fBgppLFRviwlQlffiVlumq5IRpNdZyssPN3Ub+k4dMrx
+          a0RAAbt/dJd/jQdPqYtxK0lqouo+uaW4aNSA1KlxTHEuxRsLtf4cK3FJjBU55Gfd
+          ZMhT3v90NLGxw6VbwH6mG7K1EfxCz35C9xc0ll/1pUOK5FOrp5SPzLWKY7BgFTl3
+          qTSty8a/QlLQ/dylodoRKvu7ucE/Pe9E/RpTILgUx3I77JnNEyuaXo/2HEywjhgq
+          aISmAy0uID8O4/QIjVRxucyHT+eDPPq8GB1MEGfmlUy9QtphAuf/soOI9v9sXXom
+          7O5mMNA0bhorPipw7y9INNUgvhna9YzT0Vrwq+LiHHnw/59QoodvEI7qgnne6VL+
+          5bqcv2m4qH7P/iYtjiguXkFJEGBXzCbYwGmwUi2QzQSyMWm8/pT9s9Hn7F07OE1U
+          RaadLn9i1cdcHj3DGk2QMXK42HR+KX+gNMnagJmuhFekjqq+2E7hIrUa0vdHaV/x
+          SPgl68Orcg==
+          -----END CERTIFICATE-----
+          CERT
+      - name: Encrypt short-lived exact-object handoff in memory
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PYCODE'
+          import os,json,subprocess,sys,time,urllib.parse
+          import boto3
+          from botocore.config import Config
+          from botocore.exceptions import ClientError
+          try:
+              endpoint=os.environ['R2_ENDPOINT']
+              u=urllib.parse.urlsplit(endpoint)
+              assert u.scheme=='https' and u.hostname.endswith('.r2.cloudflarestorage.com') and not u.query
+              c=boto3.client('s3',endpoint_url=endpoint,region_name='auto',config=Config(signature_version='s3v4'))
+              items=[{'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-p02-corrected-v4/part-02/sap-module-10-part-02.mp4', 'sha256': '8ce411f8fe85772ee1a912ade784551adf58781eda6cdcc80038fb5442c5d0ae', 'size': 23679665, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-p02-corrected-v4/part-02/sap-module-10-part-02.vtt', 'sha256': '50bef926050979df17014d0bbcb862cb0fb8f434e3bd8fd1bd6da6c495b1c736', 'size': 5774, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-p02-corrected-v4/part-02/sap-module-10-part-02.srt', 'sha256': '4d21d203d6c58dffda8711d33f3d15819598cb1d93bccfb84bd63a9ceda524df', 'size': 5766, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-p02-corrected-v4/part-02/sap-module-10-part-02-transcript.txt', 'sha256': '240c537a7b096075b0de5a3a4cfa2f904f099530db7d69b68ac128b293f4f06e', 'size': 5180, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-p02-corrected-v4/part-02/sap-module-10-part-02-manifest.json', 'sha256': 'eb6c09e20d3f58846d0dd3139691123e0eb1941c2f32ebc3b56ede34f9ae170b', 'size': 1837, 'content_type': 'application/json'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-03/sap-module-10-part-03.mp4', 'sha256': '9554d2bd3a38df2959a47f748577d81f5dcb32b068e3e465c5b0b28b13a3d71c', 'size': 14369729, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-03/sap-module-10-part-03.vtt', 'sha256': '21f21c328ca2aec86b8f146ac6f13e1ac179622d092b25623afc59a74c1f97b5', 'size': 3559, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-03/sap-module-10-part-03.srt', 'sha256': '62ec1233b38c14f6f87486019c02ca4fd137c4bbb6bf07d2fc21682521dbc73c', 'size': 3551, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-03/sap-module-10-part-03-transcript.txt', 'sha256': 'df8ca0b1de504f4c6ee876ffa53652a59197d8005118db1cab57201fe42aa92b', 'size': 3196, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-03/sap-module-10-part-03-manifest.json', 'sha256': '9a7c831d65ad3b0339d432996e7326c249a7577776752638bea8a261548b8737', 'size': 1750, 'content_type': 'application/json'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-04/sap-module-10-part-04.mp4', 'sha256': '7f443acff09dc02c10f5e94995ddf1d090083a99f4bd9b91abc4f1d3acc632b5', 'size': 8126677, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-04/sap-module-10-part-04.vtt', 'sha256': '901393d198d271b553255ad69546178d6a852834f810adf3a331b26362e435b1', 'size': 1612, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-04/sap-module-10-part-04.srt', 'sha256': '972dd5f440ed04b7c7713a920e148da1662a31718772009a202de5e6e1113d97', 'size': 1604, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-04/sap-module-10-part-04-transcript.txt', 'sha256': '685914de4d9e82e7699cc6a75badadd46d0a119b5a52e1050fd30368ac77b6e8', 'size': 1443, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-04/sap-module-10-part-04-manifest.json', 'sha256': '9b37ce9c697779f6a3a2a26e323b2cd0e14726b3b8146ec61ad6bfa24ac18253', 'size': 1251, 'content_type': 'application/json'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-05/sap-module-10-part-05.mp4', 'sha256': 'bb475c88ea302471947603e16e97964184a71052653bc8ce46c7dcc800df5886', 'size': 9003700, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-05/sap-module-10-part-05.vtt', 'sha256': 'a6a3902d8e29b25e066d0a43a42274ee651f1255844bc0d5f52e60fc70645a99', 'size': 2027, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-05/sap-module-10-part-05.srt', 'sha256': 'da11d403b9e245ced0b28aa41ec65412adf76481961a44995c73d923bd7c42bc', 'size': 2019, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-05/sap-module-10-part-05-transcript.txt', 'sha256': '1486d7aa8c599c615e0a8d9b097cb46c9efc5dbc635b57c68721e7403fd1c16d', 'size': 1826, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-05/sap-module-10-part-05-manifest.json', 'sha256': '369ebc8a215cd5c99182838f7083c9a639790fdd1d43d242a64a122b8bf9a1d9', 'size': 1173, 'content_type': 'application/json'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-06/sap-module-10-part-06.mp4', 'sha256': '27bc299eb5caee7d0c03cfb296ca50b556d4d290687de1ca7ab4a484514bf1b5', 'size': 23410513, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-06/sap-module-10-part-06.vtt', 'sha256': '3ed8ced3bf722a7ac01e8e3c974443c16c604693d4c5dbf47adc51f3bc926fa4', 'size': 5366, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-06/sap-module-10-part-06.srt', 'sha256': '8248f0a7bf3cb08a5b70df8c21369a1374dc52d6ca129953a9dd5519de03511e', 'size': 5358, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-06/sap-module-10-part-06-transcript.txt', 'sha256': 'be1e7138ccfd0feb021d4513402b03dc485ad7877435bd47a52a25935f4bab20', 'size': 4871, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-topic-led-p03-p06-v2/part-06/sap-module-10-part-06-manifest.json', 'sha256': 'ffcc4495e60527095d26c79e5b8cb482cfb859eeefd5482b0b2bd1b605d77bff', 'size': 2259, 'content_type': 'application/json'}]
+              for x in items:
+                  try: c.head_object(Bucket=os.environ['R2_BUCKET'],Key=x['key'])
+                  except ClientError as e:
+                      if str(e.response['Error']['Code']) not in ('404','NoSuchKey','NotFound'): raise RuntimeError('Storage existence check failed') from None
+                  else: raise RuntimeError('Version object already exists; refusing overwrite')
+              for x in items:
+                  p={'Bucket':os.environ['R2_BUCKET'],'Key':x['key']}
+                  x['put_url']=c.generate_presigned_url('put_object',Params={**p,'ContentType':x['content_type'],'Metadata':{'sha256':x['sha256']}},ExpiresIn=900,HttpMethod='PUT')
+                  x['get_url']=c.generate_presigned_url('get_object',Params=p,ExpiresIn=900,HttpMethod='GET')
+              payload=json.dumps({'expires_at':int(time.time())+900,'objects':items}).encode()
+              os.makedirs('encrypted',exist_ok=True)
+              r=subprocess.run(['openssl','cms','-encrypt','-binary','-aes-256-cbc','-outform','DER','-out','encrypted/targets.cms','recipient.crt'],input=payload,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+              if r.returncode: raise RuntimeError('Envelope encryption failed')
+              print('Encrypted 25 object-bound staging capabilities; 900 second expiry; no plaintext artifact.')
+          except Exception:
+              print('Staging envelope preparation failed; no capability details emitted.',file=sys.stderr)
+              sys.exit(1)
+          PYCODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m10-encrypted-object-handoff
+          path: encrypted/targets.cms
+          retention-days: 1
+          if-no-files-found: error
