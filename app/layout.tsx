@@ -6,6 +6,7 @@ import "./components/ServiceLearningGridAlignment.css";
 import "./components/AthenaThemePolish.css";
 import "./components/ServiceTypographyPolish.css";
 import PortalChrome from "./components/PortalChrome";
+import "./components/PortalContentPolish.css";
 import ArchitectureTooltip from "./components/ArchitectureTooltip";
 import CourseReturnLink from "./components/CourseReturnLink";
 
