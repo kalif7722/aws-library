@@ -25,10 +25,15 @@ const M10_RELEASES:Record<string,{release:string;revision:string}>={
   "06": {
     "release": "2026-11-19-topic-led-p03-p06-v2",
     "revision": "2026-11-19-topic-led-p03-p06-v2"
-  }
+  },
+  "07": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"},
+  "08": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"},
+  "09": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"},
+  "10": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"},
+  "11": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"}
 };
 type Scene={slide:number;title:string;start_seconds:number;duration_seconds:number};
-type Manifest={module?:string;part?:string;script_revision?:string;duration_seconds?:number;scenes?:Scene[]};
+type Manifest={module?:string;part?:string;script_revision?:string;title?:string;duration_seconds?:number;scenes?:Scene[]};
 const headers={"Cache-Control":"no-store, max-age=0"};
 const pending=()=>Response.json({status:"processing"},{headers});
 export async function GET(request:NextRequest){
@@ -69,7 +74,8 @@ export async function GET(request:NextRequest){
    }catch{/* Video is not publicly fetchable yet. */}
   }
   if(!accessible)continue;
-  return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="00"&&part==="01"?"SAP-C03 Introduction — Architecture Decisions and Learning Approach":module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":scenes[0].title,
+  const approvedTopicTitle=module==="10"&&revision==="2026-11-19-topic-led-p07-p11-v1"&&typeof data.title==="string"?data.title.trim():"";
+  return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="00"&&part==="01"?"SAP-C03 Introduction — Architecture Decisions and Learning Approach":module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":approvedTopicTitle||scenes[0].title,
    videoUrl,captionsUrl:`${prefix}.vtt${v}`,transcriptUrl:`${prefix}-transcript.txt${v}`,
    durationSeconds:data.duration_seconds,chapters:scenes.map(s=>({slide:s.slide,title:s.title,startSeconds:s.start_seconds,durationSeconds:s.duration_seconds}))},{headers});
  }catch{/* Try legacy only when an approved candidate is unavailable. */}
