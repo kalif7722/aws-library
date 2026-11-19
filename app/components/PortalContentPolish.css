@@ -1,0 +1,51 @@
+/* Optional import AFTER PortalNavigation.css. Content-only, no header/home rules. */
+.portal-page:has(.portal-filters) {
+  --content-surface: #13243b;
+  --content-edge: #3a4d68;
+  --content-copy: #c0cee2;
+}
+.portal-page:has(.portal-filters) > .portal-section { padding-top: clamp(26px, 4vw, 48px); }
+.portal-page:has(.portal-filters) h1 { font-size: clamp(2rem, 4.2vw, 3.4rem); letter-spacing: -.04em; line-height: 1.12; }
+.portal-page:has(.portal-filters) .portal-lede { color: var(--content-copy); max-width: 68ch; }
+.portal-page:has(.portal-filters) .portal-filters {
+  padding: 18px;
+  gap: 14px;
+  border-color: var(--content-edge);
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 100% 0%, #59467b24, transparent 65%), var(--content-surface);
+}
+.portal-page:has(.portal-filters) .portal-filters :is(legend, label) { color: var(--content-copy); font-size: .88rem; }
+.portal-page:has(.portal-filters) .portal-filters :is(input, select, button) { min-height: 44px; font-size: .95rem; }
+.portal-page:has(.portal-filters) .portal-filters label { flex: 1 1 140px; min-width: 0; }
+.portal-page:has(.portal-filters) .portal-filters label:first-of-type { flex-basis: 240px; }
+.portal-page:has(.portal-filters) .portal-result-count { color: var(--content-copy); margin-block: 18px; }
+.portal-page:has(.portal-filters) .portal-card-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 255px), 1fr)); gap: 15px; }
+.portal-page:has(.portal-filters) .portal-card-grid article {
+  padding: 20px;
+  border-radius: 14px;
+  border-color: var(--content-edge);
+  background: linear-gradient(140deg, #1b2d47, var(--content-surface));
+  box-shadow: 0 7px 20px #00000012;
+}
+.portal-page:has(.portal-filters) .portal-card-grid article h2 { font-size: 1.12rem; line-height: 1.4; margin-block: 9px; }
+.portal-page:has(.portal-filters) .portal-card-grid article small { font-size: .75rem; line-height: 1.55; }
+.portal-page:has(.portal-filters) .portal-card-grid article p { color: var(--content-copy); font-size: .94rem; line-height: 1.6; }
+.portal-page:has(.portal-filters) .portal-card-grid article .portal-course-status { font-size: .83rem; padding-top: 10px; margin-top: 12px; border-top: 1px solid var(--content-edge); }
+.portal-page:has(.portal-filters) .portal-card-grid article:focus-within { border-color: var(--portal-accent); }
+/* Comparison remains a data table: improve reading, never turn cells into cards. */
+.comparison-page .comparison-head p { max-width: 68ch; line-height: 1.7; }
+.comparison-page .comparison-recommendation p,
+.comparison-page .comparison-difference p { line-height: 1.7; }
+.comparison-page .comparison-feature-wrap { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.comparison-page .comparison-feature-table :is(th, td) { line-height: 1.65; padding-block: 14px; }
+.comparison-page .comparison-limit-sources { line-height: 1.8; overflow-wrap: anywhere; }
+.comparison-page .comparison-limit-sources a { text-decoration: underline; text-underline-offset: 3px; }
+.comparison-page :is(a, button, input, [tabindex]):focus-visible { outline: 2px solid #f3bd70; outline-offset: 3px; }
+html[data-theme="light"] .portal-page:has(.portal-filters) { --content-surface: #fff; --content-edge: #c6d3e3; --content-copy: #455b75; }
+html[data-theme="light"] .portal-page:has(.portal-filters) .portal-filters { background: linear-gradient(120deg, #eef4fc, #f9fbff); }
+html[data-theme="light"] .portal-page:has(.portal-filters) .portal-card-grid article { background: linear-gradient(140deg, #f3f7fc, #fff); box-shadow: 0 6px 18px #243b5308; }
+html[data-theme="light"] .comparison-page :is(a, button, input, [tabindex]):focus-visible { outline-color: #8c510e; }
+@media (max-width: 560px) {
+  .portal-page:has(.portal-filters) .portal-filters { padding: 14px; }
+  .portal-page:has(.portal-filters) .portal-card-grid article { padding: 17px; }
+}

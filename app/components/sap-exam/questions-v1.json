@@ -1,0 +1,712 @@
+[
+  {
+    "id": "sap27-01",
+    "domain": "1",
+    "module": "14",
+    "concept": "Ordered payments without duplicate charges",
+    "stem": "A payment platform receives account events from several producers. Events for one account must be processed in order, retries must never charge twice, and unrelated accounts should process concurrently. The team wants managed messaging with minimal consumer coordination. Which design best meets the requirements?",
+    "options": [
+      "Use one SQS standard queue and set visibility timeout above the expected processing duration; rely on receive order and delete after charging.",
+      "Use one FIFO message group for the entire platform and use the SQS deduplication window as the sole duplicate-charge protection.",
+      "Publish to SNS standard topics and give each consumer a separate subscription, then use CloudWatch alarms to detect out-of-order charges.",
+      "Use an SQS FIFO queue with account ID as the message group ID, a stable business event ID for deduplication, and an idempotent payment write in the consumer."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "FIFO message groups preserve order within each account while allowing groups to progress independently. Queue deduplication has a bounded interval and does not replace a durable idempotency key at the payment boundary. Standard SQS does not promise ordering.",
+    "flow": [
+      "Producers",
+      "SQS FIFO · group=accountId",
+      "Idempotent consumer",
+      "Payment ledger"
+    ],
+    "decision": "Order by account and deduplicate at the business write",
+    "tradeoff": "A single message group serializes all customers; queue deduplication alone cannot prevent every repeated charge."
+  },
+  {
+    "id": "sap27-02",
+    "domain": "1",
+    "module": "18",
+    "concept": "Tenant isolation across pooled services",
+    "stem": "A SaaS application pools API and database infrastructure for hundreds of tenants. Regulators require that a request authenticated for tenant A cannot read tenant B's rows, even if an application query omits a filter. The platform team also needs tenant-aware audit records. Which combination is strongest? Select TWO.",
+    "options": [
+      "Cache cross-tenant query results under a shared key to reduce database load.",
+      "Derive tenant context from a verified identity token and propagate it to the data access layer and audit trail.",
+      "Let the browser provide a tenantId header and trust that header for row filtering and audit attribution.",
+      "Enforce row-level security or an equivalent database-side tenant boundary using the verified tenant context.",
+      "Use separate CloudWatch log groups per tenant but retain one unrestricted database role for all requests."
+    ],
+    "correct": [
+      1,
+      3
+    ],
+    "explanation": "The tenant identity must come from authenticated claims, and a data-side boundary protects against missing application predicates. Audit records should carry the same verified tenant context. A caller-controlled header and unrestricted database role are inadequate isolation controls.",
+    "flow": [
+      "Verified identity",
+      "Tenant context",
+      "Database RLS",
+      "Tenant audit"
+    ],
+    "decision": "Enforce identity and row boundaries independently",
+    "tradeoff": "Application WHERE clauses alone can be accidentally omitted."
+  },
+  {
+    "id": "sap27-03",
+    "domain": "1",
+    "module": "06",
+    "concept": "Hybrid DNS with conditional forwarding",
+    "stem": "A company uses a private hosted zone for app.corp.internal in AWS. On-premises clients must resolve that name through their existing DNS servers. AWS workloads must also resolve legacy.corp.internal on premises. The network path already exists over Direct Connect. What should the architect configure?",
+    "options": [
+      "Only a Route 53 health check and failover records for both namespaces.",
+      "A Route 53 Resolver inbound endpoint for on-premises forwarding to the private zone, and an outbound endpoint plus forwarding rule for the legacy namespace.",
+      "A public hosted zone for both private namespaces and conditional forwarding from the VPC DHCP option set.",
+      "Only a Resolver inbound endpoint; it also forwards AWS queries toward on-premises DNS automatically."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "On-premises resolvers forward AWS private-zone queries to the inbound endpoint. AWS-side queries for the legacy namespace use a forwarding rule through an outbound endpoint. Connectivity and appropriate security rules must permit DNS traffic in both directions.",
+    "flow": [
+      "On-prem DNS",
+      "Resolver inbound",
+      "Private hosted zone",
+      "Resolver outbound → legacy DNS"
+    ],
+    "decision": "Use endpoint direction that matches each query origin",
+    "tradeoff": "An inbound endpoint does not replace outbound forwarding."
+  },
+  {
+    "id": "sap27-04",
+    "domain": "1",
+    "module": "05",
+    "concept": "Centralized inspection and return paths",
+    "stem": "Three application VPCs in separate accounts must reach the internet through a central inspection VPC. Stateful firewalls must see both directions of each connection, and teams must avoid asymmetric paths as additional VPCs join. Which architecture is most appropriate?",
+    "options": [
+      "Attach one Gateway Load Balancer endpoint to the central VPC only and allow direct application VPC internet routes.",
+      "Use Network ACLs in every application subnet and send only ingress through the central firewall.",
+      "Connect VPCs to Transit Gateway, steer egress through a dedicated inspection attachment with appliance mode where needed, and route return traffic through the same inspection path.",
+      "Peer every application VPC with every other VPC and add an internet gateway to each private subnet."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A hub attachment and explicit route tables provide a scalable inspection path. Appliance mode supports flow symmetry for stateful inspection across AZs where applicable. Both forward and return routes must traverse the inspection service.",
+    "flow": [
+      "Application VPCs",
+      "Transit Gateway",
+      "Inspection VPC",
+      "Internet egress"
+    ],
+    "decision": "Preserve symmetric firewall flow",
+    "tradeoff": "One-way inspection or direct return routes can break stateful sessions."
+  },
+  {
+    "id": "sap27-05",
+    "domain": "1",
+    "module": "23",
+    "concept": "Governed cross-account data lake",
+    "stem": "Several producer accounts write curated S3 datasets. Analysts in separate accounts need table-level access with centrally managed permissions, while the producers retain ownership of their buckets. Which design best fits?",
+    "options": [
+      "Copy every dataset to each analyst account and grant s3:* on all destination buckets.",
+      "Publish public S3 URLs and use CloudFront signed cookies as the only table permission control.",
+      "Give analysts direct administrator roles in every producer account so they can create their own catalog entries.",
+      "Catalog the data with AWS Glue, govern table and column permissions through Lake Formation, and use supported cross-account sharing with the required S3 and KMS access."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Glue provides metadata while Lake Formation can centrally grant governed data permissions across accounts. The underlying S3 location and encryption permissions must also be aligned; catalog grants alone do not bypass storage or KMS controls.",
+    "flow": [
+      "Producer S3",
+      "Glue catalog",
+      "Lake Formation grants",
+      "Analyst accounts"
+    ],
+    "decision": "Separate metadata governance from underlying data access",
+    "tradeoff": "A catalog share alone does not grant object or key access."
+  },
+  {
+    "id": "sap27-06",
+    "domain": "1",
+    "module": "18",
+    "concept": "Current source answers in a RAG application",
+    "stem": "A support assistant uses Bedrock Knowledge Bases over manuals stored in S3. Updated manuals must appear in answers within a defined refresh window, and users must see citations. Model fine-tuning is prohibited. Which approach is most appropriate?",
+    "options": [
+      "Run and monitor data-source synchronization after changes, test retrieval of the updated passage, and generate grounded answers with source citations.",
+      "Raise model temperature so it is more likely to use the latest manual and infer citations from the prompt.",
+      "Increase output tokens and keep the old vector index until the next model release.",
+      "Put the complete manual in a permanent system prompt and rely on the model to notice S3 updates."
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "The retrieval index must ingest changed source content before the application can retrieve it. Verify the sync result and retrieved chunk, then test grounded generation and citations. Generation controls cannot make an unsynchronized index current.",
+    "flow": [
+      "Updated S3 manual",
+      "Data-source sync",
+      "Retrieve current chunk",
+      "Grounded answer + citation"
+    ],
+    "decision": "Measure freshness at retrieval, not just generation",
+    "tradeoff": "An answer can sound current while citing stale indexed content."
+  },
+  {
+    "id": "sap27-07",
+    "domain": "1",
+    "module": "17",
+    "concept": "Read scale versus recovery requirements",
+    "stem": "An Aurora PostgreSQL workload has heavy read traffic across two Regions. The secondary Region must serve local reads; after a regional outage it must be promotable with a low recovery point objective. Writes normally occur in one Region. Which design is most suitable?",
+    "options": [
+      "Use an EBS snapshot copied daily and assume zero data loss at failover.",
+      "Use Aurora Global Database with a secondary Region for local reads and an explicit regional failover procedure.",
+      "Use one Multi-AZ DB instance and direct cross-Region reads to its standby.",
+      "Use an RDS read replica in the same AZ as the writer and rely on it for regional disaster recovery."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Aurora Global Database provides cross-Region read capability and a managed replication topology appropriate for regional recovery planning. Multi-AZ standby is for availability within a Region, not cross-Region reads. Recovery objectives still require testing and application routing design.",
+    "flow": [
+      "Primary Region writer",
+      "Global replication",
+      "Secondary Region readers",
+      "Regional promotion"
+    ],
+    "decision": "Match global reads and regional recovery to one topology",
+    "tradeoff": "Daily snapshots cannot support a low RPO."
+  },
+  {
+    "id": "sap27-08",
+    "domain": "2",
+    "module": "08",
+    "concept": "Workforce federation at organization scale",
+    "stem": "A multinational company wants employees to use its existing identity provider to access many AWS accounts. Joiners and leavers must be provisioned centrally, and permission sets should be assigned by job function. Which solution best fits?",
+    "options": [
+      "Use a single shared root user and an external password manager for all workforce access.",
+      "Issue one IAM role to all staff and encode job function only in CloudTrail tags.",
+      "Integrate IAM Identity Center with the external identity provider using SAML for sign-in and SCIM for provisioning, then assign permission sets to groups across accounts.",
+      "Create matching IAM users and long-term access keys in each account and synchronize passwords nightly."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "IAM Identity Center centralizes workforce access across accounts. SAML supports federated authentication, SCIM can provision identities, and group permission-set assignments provide scalable authorization. Long-term per-account IAM users create lifecycle and credential risk.",
+    "flow": [
+      "Corporate IdP",
+      "SAML + SCIM",
+      "IAM Identity Center",
+      "Account permission sets"
+    ],
+    "decision": "Centralize workforce lifecycle and authorization",
+    "tradeoff": "Authentication federation alone does not automate user provisioning."
+  },
+  {
+    "id": "sap27-09",
+    "domain": "2",
+    "module": "08",
+    "concept": "Cross-account third-party access",
+    "stem": "A vendor must read one S3 report prefix in a customer account. The vendor uses its own AWS account, and the customer wants to prevent another vendor customer from causing a confused-deputy access path. Which controls are required? Select TWO.",
+    "options": [
+      "Create a customer-account role whose trust policy names the vendor principal and requires a unique external ID supplied for this customer.",
+      "Grant that role only the required S3 object actions and scope the resource to the report prefix.",
+      "Put the customer's root access key in the vendor secret store and rotate it annually.",
+      "Allow sts:AssumeRole from every AWS account because the external ID alone identifies the vendor.",
+      "Use a public bucket policy and hide the object URLs from other customers."
+    ],
+    "correct": [
+      0,
+      1
+    ],
+    "explanation": "The customer role's trust boundary restricts the vendor principal and uses a unique external ID for the third-party confused-deputy case. Its permissions policy limits access to the required objects. External ID is not a substitute for principal restriction.",
+    "flow": [
+      "Vendor principal",
+      "AssumeRole + external ID",
+      "Scoped customer role",
+      "Report prefix"
+    ],
+    "decision": "Constrain both trust and permissions",
+    "tradeoff": "A trust policy without scoped S3 permissions is incomplete."
+  },
+  {
+    "id": "sap27-10",
+    "domain": "2",
+    "module": "10",
+    "concept": "Data perimeter across accounts",
+    "stem": "An organization permits workloads in member accounts to access approved S3 buckets. A new policy must prevent exfiltration to buckets outside the organization while allowing supported AWS service-to-service calls. Which approach is most appropriate?",
+    "options": [
+      "Use an organization-level data-perimeter strategy with condition keys such as aws:ResourceOrgID where supported, and explicitly handle AWS service principals and documented exceptions.",
+      "Use an SCP that denies all S3 requests unless the destination bucket name starts with the company prefix.",
+      "Rely only on private subnets and block public IP assignment to prevent S3 data exfiltration.",
+      "Turn on S3 Block Public Access and assume it prevents authorized principals from writing to external buckets."
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "Organization-aware condition keys can define a resource perimeter where supported. Policy design must account for AWS service calls and exceptions, and should be tested with actual access paths. Private networking and Block Public Access do not by themselves restrict writes to external buckets.",
+    "flow": [
+      "Member workload",
+      "Org perimeter policy",
+      "Approved bucket",
+      "Service-call exceptions"
+    ],
+    "decision": "Constrain destination resources without breaking service integrations",
+    "tradeoff": "A naming convention is not an authorization boundary."
+  },
+  {
+    "id": "sap27-11",
+    "domain": "2",
+    "module": "10",
+    "concept": "Encrypted cross-account object access",
+    "stem": "An application role in account B is allowed by an S3 bucket policy in account A to read objects encrypted with a customer managed KMS key in account A, but GetObject still fails with KMS AccessDenied. What should be checked first?",
+    "options": [
+      "Whether the key alias name is identical in both accounts; aliases automatically share key permissions.",
+      "The KMS key policy or grant in account A and the role's IAM permission in account B for the required decrypt operation on that key.",
+      "Only the S3 bucket's Block Public Access setting because KMS permission follows the bucket policy.",
+      "The Lambda timeout in account B because a decrypt denial is always a network retry."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "S3 authorization and KMS authorization are separate. Cross-account use of a customer managed key needs key-side permission and appropriate caller-side IAM permission. A bucket allow does not grant kms:Decrypt.",
+    "flow": [
+      "Role in B",
+      "S3 allow in A",
+      "KMS key allow in A",
+      "Decrypt object"
+    ],
+    "decision": "Validate both the storage and key boundaries",
+    "tradeoff": "S3 success does not imply KMS access."
+  },
+  {
+    "id": "sap27-12",
+    "domain": "2",
+    "module": "03",
+    "concept": "Organizational guardrails and delegated access",
+    "stem": "A platform team administers dozens of member accounts. They want to prohibit disabling CloudTrail organization trails while letting workload teams manage their own application IAM roles within approved boundaries. Which combination is best?",
+    "options": [
+      "Use a resource-based policy on each CloudTrail trail as the only guardrail for every member account.",
+      "Create a single IAM user in the management account and share its access key with workload teams.",
+      "Use an SCP guardrail for the prohibited organization action, and permissions boundaries or scoped role policies for delegated IAM administration.",
+      "Put an administrator policy on every developer role and rely on CloudTrail to detect trail deletion afterward."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "An SCP limits the maximum permissions available to principals in member accounts, subject to its documented scope. A permissions boundary can limit delegated role creation and modification. SCPs do not themselves grant permissions.",
+    "flow": [
+      "Organization SCP",
+      "Member account",
+      "Delegated IAM boundary",
+      "Workload roles"
+    ],
+    "decision": "Use guardrails for maximum permissions and IAM for grants",
+    "tradeoff": "Detection after deletion is weaker than preventive control."
+  },
+  {
+    "id": "sap27-13",
+    "domain": "2",
+    "module": "21",
+    "concept": "Secrets rotation without embedded credentials",
+    "stem": "An application stores a database password in its container image. The database password must rotate automatically with minimal deployment interruption. Which design should replace the current approach?",
+    "options": [
+      "Move the password to a plaintext environment variable in the task definition and redeploy once a year.",
+      "Store it in a public S3 object encrypted only in transit and have the container download it at start.",
+      "Use an IAM access key as the database password and rotate the key in IAM.",
+      "Store the credential in AWS Secrets Manager, configure a supported rotation workflow, allow the task role to retrieve it, and make the application refresh cached connections after rotation."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Secrets Manager supports controlled retrieval and rotation. The runtime role needs least-privilege secret access, and the application must handle refreshed credentials and connections. A rotation schedule alone does not fix indefinitely cached credentials.",
+    "flow": [
+      "Secrets Manager",
+      "Rotation workflow",
+      "Task role retrieval",
+      "Connection refresh"
+    ],
+    "decision": "Design both secret lifecycle and application refresh",
+    "tradeoff": "Moving a password to an environment variable does not deliver rotation."
+  },
+  {
+    "id": "sap27-14",
+    "domain": "2",
+    "module": "11",
+    "concept": "Edge protection for a public API",
+    "stem": "A public HTTPS API behind CloudFront and an ALB faces a layer 7 request flood with repeated abusive paths. The application must remain reachable to normal users, and the security team needs centrally managed rules. Which controls are most suitable? Select TWO.",
+    "options": [
+      "Associate AWS WAF with the public entry point and use managed rules plus a scoped rate-based rule informed by observed traffic.",
+      "Use AWS Shield protections appropriate to the exposure and monitor attack telemetry while preserving legitimate traffic.",
+      "Replace the ALB security group with a rule allowing only one office IP for all global customers.",
+      "Use only a subnet network ACL to inspect HTTP paths and client behavior.",
+      "Disable all CloudFront caching permanently to ensure every request reaches the ALB."
+    ],
+    "correct": [
+      0,
+      1
+    ],
+    "explanation": "AWS WAF evaluates application-layer request characteristics and can apply rate-based controls. Shield contributes DDoS protection and visibility. Network ACLs do not parse HTTP paths, and a single office CIDR would block customers.",
+    "flow": [
+      "Internet clients",
+      "CloudFront + Shield",
+      "AWS WAF",
+      "ALB + API"
+    ],
+    "decision": "Apply layer 7 controls at the edge",
+    "tradeoff": "Rate rules need tuning to avoid blocking legitimate bursts."
+  },
+  {
+    "id": "sap27-15",
+    "domain": "3",
+    "module": "22",
+    "concept": "NAT cost attribution and S3 endpoint",
+    "stem": "A private analytics fleet transfers large S3 objects from several AZs through a NAT gateway in one AZ. NAT data-processing and inter-AZ transfer charges are rising. The fleet needs private S3 access and should avoid a broad internet route change. What should the architect do first?",
+    "options": [
+      "Add an interface endpoint for every AWS service in all AZs without measuring usage or endpoint costs.",
+      "Attribute NAT bytes with Cost Explorer and flow logs, then add an S3 gateway endpoint to the affected route tables and verify S3 traffic bypasses NAT.",
+      "Delete the NAT gateway immediately; S3 will automatically switch to private access in every subnet.",
+      "Move all instances into the public subnet and assign public IPs to avoid NAT processing fees."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Measure which traffic causes the cost, then use the regional S3 gateway endpoint route in selected VPC route tables. Verify traffic and later billing intervals. NAT may remain necessary for other destinations; endpoint and cross-AZ economics should be compared.",
+    "flow": [
+      "Private analytics",
+      "S3 gateway endpoint",
+      "S3 regional service",
+      "NAT for other egress"
+    ],
+    "decision": "Remove proven S3 bytes from the NAT path",
+    "tradeoff": "Deleting NAT breaks unrelated outbound dependencies."
+  },
+  {
+    "id": "sap27-16",
+    "domain": "3",
+    "module": "22",
+    "concept": "Compute commitments for mixed usage",
+    "stem": "A company runs stable EC2 and Fargate baseline usage but also has short seasonal bursts. It wants to reduce compute cost without losing the ability to change instance families for the baseline. What purchasing approach is most appropriate?",
+    "options": [
+      "Use Spot Instances for the stateful baseline that cannot tolerate interruption, without a fallback.",
+      "Commit to the theoretical annual maximum immediately and review utilization only after the year ends.",
+      "Use a Compute Savings Plan for a measured baseline commitment and keep uncertain bursts on demand.",
+      "Buy Standard Reserved Instances for the entire peak size in one fixed instance family."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A measured Compute Savings Plan can cover eligible EC2 and Fargate usage with more flexibility than a narrow instance reservation. Size the hourly commitment to a reliable baseline; uncertain spikes should not be committed without evidence.",
+    "flow": [
+      "Usage history",
+      "Stable baseline",
+      "Compute Savings Plan",
+      "On-demand bursts"
+    ],
+    "decision": "Commit to a durable floor, not a seasonal peak",
+    "tradeoff": "Overcommitment can erase expected savings."
+  },
+  {
+    "id": "sap27-17",
+    "domain": "3",
+    "module": "09",
+    "concept": "Storage lifecycle with restore constraints",
+    "stem": "A compliance archive in S3 is rarely read, but auditors may request any object within minutes. Object sizes vary and the retention period is seven years. Which lifecycle design should be evaluated against the restore-time requirement?",
+    "options": [
+      "Transition everything to S3 Glacier Deep Archive and promise immediate access without a restore operation.",
+      "Keep all objects in S3 Standard and ignore access-pattern and minimum-duration economics.",
+      "Move objects to local instance store and back them up only at the end of the retention period.",
+      "Transition eligible objects to S3 Glacier Instant Retrieval or another class that meets the measured retrieval SLA and cost profile, with lifecycle and retention controls tested."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "The retrieval SLA rules out classes whose restore workflow exceeds the required access time. Compare storage, retrieval, request, object-size, and minimum-duration costs before selecting lifecycle transitions; retention controls are a separate requirement.",
+    "flow": [
+      "S3 archive",
+      "Lifecycle evaluation",
+      "Instant retrieval class",
+      "Auditor request"
+    ],
+    "decision": "Start from restore time and total cost",
+    "tradeoff": "Deep Archive's restore process cannot guarantee immediate reads."
+  },
+  {
+    "id": "sap27-18",
+    "domain": "3",
+    "module": "17",
+    "concept": "DynamoDB cost versus access pattern",
+    "stem": "An on-demand DynamoDB table stores event records for 90 days. Most queries fetch a customer's newest 20 events; a proposed GSI projects every attribute and duplicates a large payload. The team wants lower cost without losing the query. What should be changed?",
+    "options": [
+      "Design the GSI key for customer and time, project only attributes needed by the listing query, and fetch the full item only when requested.",
+      "Keep a full projection and run a table Scan for each customer's latest events.",
+      "Remove the partition key and use only a timestamp sort key for all customers.",
+      "Increase the on-demand maximum throughput to reduce GSI storage charges."
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "A targeted index supports the access pattern while reducing replicated index storage and write cost from unnecessary projected payload. Full-item fetches can be reserved for detail views. Scan and a single hot partition do not meet the efficiency goal.",
+    "flow": [
+      "Customer query",
+      "Customer/time GSI",
+      "Small projection",
+      "Optional detail fetch"
+    ],
+    "decision": "Index the query, not every attribute",
+    "tradeoff": "A full projection increases index size and write work."
+  },
+  {
+    "id": "sap27-19",
+    "domain": "4",
+    "module": "25",
+    "concept": "Regional recovery with explicit RPO",
+    "stem": "A transactional workload requires recovery from complete regional loss with an RPO measured in seconds and an RTO measured in minutes. The application must continue serving reads near users in both Regions. Which combination should the architect evaluate?",
+    "options": [
+      "An EBS volume copied manually after the primary Region is unavailable.",
+      "Aurora Global Database with a secondary Region, regional application infrastructure, routing failover, and rehearsed promotion and reconciliation procedures.",
+      "A single Multi-AZ DB instance and an ALB in one Region, because Multi-AZ covers a Region outage.",
+      "Nightly database snapshots copied cross-Region with no application environment in the recovery Region."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "A global database topology and warm application stack support low cross-Region recovery objectives and local reads. Promotion, DNS/routing, dependencies, and data reconciliation must be practiced. Multi-AZ protects within a Region.",
+    "flow": [
+      "Primary Region",
+      "Global replication",
+      "Secondary read stack",
+      "Rehearsed promotion"
+    ],
+    "decision": "Match RPO and RTO to data and application paths",
+    "tradeoff": "A replicated database without an application path does not meet RTO."
+  },
+  {
+    "id": "sap27-20",
+    "domain": "4",
+    "module": "25",
+    "concept": "Immutable cross-account backup",
+    "stem": "A company wants ransomware-resistant recovery copies of critical EBS and RDS resources. An attacker who gains administrative access to the workload account must not be able to delete the recovery copies during retention. Which design is strongest? Select TWO.",
+    "options": [
+      "Grant the workload administrator permission to shorten backup retention during incidents.",
+      "Rely only on EBS Multi-AZ placement to recover deleted snapshots.",
+      "Use AWS Backup cross-account copy into a dedicated backup account with appropriately configured vault access and key permissions.",
+      "Apply a supported AWS Backup Vault Lock retention configuration in the backup account and test recovery.",
+      "Store all backups only in the workload account under an administrator-owned vault policy."
+    ],
+    "correct": [
+      2,
+      3
+    ],
+    "explanation": "A separate backup account reduces the blast radius of workload-account compromise. Vault Lock can enforce retention according to its configured mode and lifecycle; cross-account KMS and copy permissions must be designed. Recovery tests prove the copies are usable.",
+    "flow": [
+      "Workload backups",
+      "Cross-account copy",
+      "Locked backup vault",
+      "Recovery test"
+    ],
+    "decision": "Separate custody and enforce retention",
+    "tradeoff": "A copy that cannot be restored is not a proven recovery plan."
+  },
+  {
+    "id": "sap27-21",
+    "domain": "4",
+    "module": "24",
+    "concept": "Database migration with controlled cutover",
+    "stem": "A large on-premises relational database must move to AWS with only a short write outage. The source can remain online for weeks while the target is validated. What migration sequence is most appropriate?",
+    "options": [
+      "Take one initial dump, keep the source writable for weeks, and switch DNS without transferring later changes.",
+      "Stop all writes at the start of the project and keep the application offline until all validation finishes.",
+      "Use AWS DataSync alone as a database transaction replication service and skip schema assessment.",
+      "Assess compatibility, load existing data, use AWS DMS change data capture for ongoing changes, validate target consistency, then pause writes and cut over after lag reaches an acceptable threshold."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "Initial load plus CDC narrows the final cutover window while source writes continue. Schema compatibility, target validation, lag monitoring, and a rollback decision are essential. File transfer does not replace transaction-aware change capture.",
+    "flow": [
+      "Source DB",
+      "Initial load + CDC",
+      "Validated target",
+      "Controlled cutover"
+    ],
+    "decision": "Keep changes flowing until the final write freeze",
+    "tradeoff": "A snapshot alone becomes stale while source writes continue."
+  },
+  {
+    "id": "sap27-22",
+    "domain": "4",
+    "module": "25",
+    "concept": "Resilience test and recovery evidence",
+    "stem": "A team has a written regional failover runbook but has never executed it. The application has regional databases and infrastructure templates. Leadership asks for evidence that the stated RTO can be met. What should the architect prioritize?",
+    "options": [
+      "Run a controlled game day with measurable failover start and user-visible recovery times, verify data consistency, record gaps, and update the runbook.",
+      "Report the database replication lag as the entire RTO and declare the application recovered.",
+      "Count successful CloudFormation stack creation as proof that all user transactions work after failover.",
+      "Increase the RTO target until it exceeds the last manual deployment duration without running a test."
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "RTO is measured from disruption to restored service, not just database promotion or infrastructure readiness. A game day validates routing, dependencies, data, operations, and user-visible transactions against the target.",
+    "flow": [
+      "Inject failure",
+      "Promote and route",
+      "User transaction test",
+      "Measure RTO + RPO"
+    ],
+    "decision": "Measure recovery end to end",
+    "tradeoff": "Green component status does not prove the service is restored."
+  },
+  {
+    "id": "sap27-23",
+    "domain": "5",
+    "module": "20",
+    "concept": "CloudFormation drift and safe remediation",
+    "stem": "A production security group was edited directly in the console, but its CloudFormation template still contains the old rule. The team must restore controlled deployments without accidentally removing a legitimate emergency exception. What should happen first?",
+    "options": [
+      "Ignore the template permanently because the console state is always authoritative.",
+      "Detect and review drift, reconcile the approved exception into the template or revert it through change control, then use a change set to review the next stack update.",
+      "Run an immediate stack update without reviewing the drift or resource replacement implications.",
+      "Delete the stack and recreate it from the original template to clear the drift flag."
+    ],
+    "correct": [
+      1
+    ],
+    "explanation": "Drift detection reveals the difference; the architect must decide the intended state before a deployment. A change set exposes proposed changes. Deleting a stack or blindly applying an old template risks removing approved access or replacing resources.",
+    "flow": [
+      "Detect drift",
+      "Decide intended state",
+      "Update template",
+      "Review change set"
+    ],
+    "decision": "Reconcile intent before automation acts",
+    "tradeoff": "A drift flag alone does not identify which state is correct."
+  },
+  {
+    "id": "sap27-24",
+    "domain": "5",
+    "module": "20",
+    "concept": "Safe ECS deployment rollback",
+    "stem": "An ECS service update deploys a new task revision. Targets fail the health check and the service rolls back. The new tasks are running briefly, so the team assumes the revision is healthy. Which evidence and action are most useful?",
+    "options": [
+      "Increase desired count indefinitely so at least one task might pass by chance.",
+      "Treat the rollback as a CloudWatch display issue and close the incident without checking user traffic.",
+      "Inspect stopped-task reasons and target health, correct the mismatch in the task or target-group configuration, then deploy with circuit-breaker rollback and verify a real request.",
+      "Disable all health checks and force the new revision to stay running."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A running task can still fail application health. Stopped reasons, service events, and target status locate the failure. A controlled redeployment should keep rollback protection and validate actual traffic.",
+    "flow": [
+      "Service event",
+      "Target health",
+      "Correct mismatch",
+      "Redeploy + request test"
+    ],
+    "decision": "Use deployment evidence, not transient running state",
+    "tradeoff": "Disabling checks hides failure from the control plane."
+  },
+  {
+    "id": "sap27-25",
+    "domain": "5",
+    "module": "26",
+    "concept": "Trace an API failure to the database boundary",
+    "stem": "An API Gateway route starts returning 504 after a network change. Lambda logs for the same request show a PostgreSQL connection timeout. RDS is Available, and the Lambda security group is sg-app-lambda. The RDS security group permits TCP 5432 only from a bastion group. What is the narrowest corrective change?",
+    "options": [
+      "Add an inbound 0.0.0.0/0 rule on the Lambda security group for port 5432.",
+      "Increase API Gateway timeout without testing the database network path.",
+      "Change the RDS endpoint and restore a snapshot because the DB shows Available.",
+      "Add an inbound PostgreSQL TCP 5432 rule on the RDS security group with sg-app-lambda as source, then verify a data-backed API request and error rate."
+    ],
+    "correct": [
+      3
+    ],
+    "explanation": "The database security group is the ingress boundary. A source security-group reference allows the application function on the database port without public exposure. Verify the actual API flow; a direct Lambda test alone is insufficient.",
+    "flow": [
+      "API Gateway 504",
+      "Lambda DB timeout",
+      "RDS SG ingress",
+      "API request 200"
+    ],
+    "decision": "Change the DB ingress source to the application SG",
+    "tradeoff": "Increasing timeout cannot open a blocked network path."
+  },
+  {
+    "id": "sap27-26",
+    "domain": "5",
+    "module": "21",
+    "concept": "Missing logs after a Lambda invocation",
+    "stem": "Lambda invocation metrics increase, but a new function has no CloudWatch log group. The execution role lacks CloudWatch Logs actions. What is the most targeted next step?",
+    "options": [
+      "Add the appropriate basic logging permissions to the function execution role, invoke the function again, and inspect the new log stream in the correct Region.",
+      "Grant the function role administrator access to every AWS service and assume logging will appear without another invocation.",
+      "Change the function's memory setting because log groups require at least 1 GB.",
+      "Create an S3 bucket for logs and disable CloudWatch metrics."
+    ],
+    "correct": [
+      0
+    ],
+    "explanation": "The execution role needs permission to create log groups and streams and put log events. Reinvoke to produce fresh logs, and verify the Region and group name. Broad administrator access is unnecessary.",
+    "flow": [
+      "Invocation metric",
+      "Execution role",
+      "Logs permissions",
+      "New log stream"
+    ],
+    "decision": "Repair the logging permission boundary",
+    "tradeoff": "No log group does not mean the function never ran."
+  },
+  {
+    "id": "sap27-27",
+    "domain": "5",
+    "module": "20",
+    "concept": "Quota-aware scaling rollout",
+    "stem": "A service must double its ECS task count across multiple AZs during a product launch. Load tests show CPU headroom, but deployments sometimes stall because new tasks cannot obtain IPs in one private subnet. Which preparations matter most? Select TWO.",
+    "options": [
+      "Disable deployment rollback so a partially placed release remains active.",
+      "Check subnet free IP capacity and plan additional appropriately routed address space or subnets for task ENIs.",
+      "Check relevant ECS, networking, and load-balancer quotas and rehearse scale-out before launch.",
+      "Increase only the CloudWatch alarm threshold so failed placements do not trigger alerts.",
+      "Place all tasks in the single subnet with the least available addresses to simplify routing."
+    ],
+    "correct": [
+      1,
+      2
+    ],
+    "explanation": "Fargate/awsvpc tasks consume network interfaces and private addresses. Subnet capacity and applicable service quotas must support the desired scale, and a rehearsal catches placement constraints before peak traffic.",
+    "flow": [
+      "Target capacity",
+      "Subnet IP inventory",
+      "Quota check",
+      "Scale rehearsal"
+    ],
+    "decision": "Check infrastructure capacity as well as CPU",
+    "tradeoff": "An alarm change cannot create subnet addresses."
+  },
+  {
+    "id": "sap27-28",
+    "domain": "5",
+    "module": "26",
+    "concept": "Proving a troubleshooting fix",
+    "stem": "An ALB target group becomes Healthy after an operator changes its health-check path. Five minutes later users still report failed checkout requests. What should the architect do to decide whether the incident is resolved?",
+    "options": [
+      "Disable the checkout route so the remaining healthy endpoints make the ALB metric green.",
+      "Increase the healthy threshold to make target status more stable and report recovery.",
+      "Trace a representative checkout request through the ALB and application dependencies, compare error and latency metrics with the preincident baseline, and continue investigating until the user transaction succeeds.",
+      "Close the incident because green target health proves that every business path works."
+    ],
+    "correct": [
+      2
+    ],
+    "explanation": "A health endpoint tests only the configured check. Recovery requires a user-visible transaction and supporting metrics across the application path. The green target icon is evidence about one boundary, not proof of complete service restoration.",
+    "flow": [
+      "Healthy target",
+      "Checkout transaction",
+      "Dependency metrics",
+      "Observed recovery"
+    ],
+    "decision": "Verify the user's path, not just component status",
+    "tradeoff": "Health checks can pass while a database-backed action fails."
+  }
+]

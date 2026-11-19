@@ -1,2 +1,5 @@
 import CoursePresentation from '../components/CoursePresentation';
-export default function CoursesLayout({children}:{children:React.ReactNode}) { return <CoursePresentation>{children}</CoursePresentation>; }
+import UniformCourseNav from '../components/UniformCourseNav';
+export default function CoursesLayout({children}:{children:React.ReactNode}) {
+ return <><UniformCourseNav/><CoursePresentation>{children}</CoursePresentation></>;
+}
