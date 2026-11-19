@@ -1,0 +1,49 @@
+name: Stage approved SAP M10 Parts 01 and 02 exact videos
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/stage-sap-m10-approved-20261119.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: stage-sap-m10-approved-20261119
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: pip install boto3
+      - name: Prepare scoped new-version uploads only
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PY'
+          import boto3, os, json
+          from botocore.config import Config
+          from botocore.exceptions import ClientError
+          c=boto3.client("s3",endpoint_url=os.environ["R2_ENDPOINT"],region_name="auto",config=Config(signature_version="s3v4"))
+          items=[{'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-01/sap-module-10-part-01.mp4', 'sha256': '77cfdca1521f061399bfb0d69e258fbb1082f08fd26165ff2b8d56cdf408a024', 'size': 21657438, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-01/sap-module-10-part-01.vtt', 'sha256': '3f6ec4842a5d9eec7cac95e38b92c160d20eb0c7e60c80df6bbbf06545088947', 'size': 4651, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-01/sap-module-10-part-01.srt', 'sha256': '8fde707f7e45759b9309b4f9038d2756984fcb3c8cf0dbe67d19a470ab494c83', 'size': 4643, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-01/sap-module-10-part-01-transcript.txt', 'sha256': '0c6981d0e2607b746913da8c56e08d1a75fb040c0b5803dd1caf826e68750fa1', 'size': 4123, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-01/sap-module-10-part-01-manifest.json', 'sha256': 'ca6a43bb5e94d491aeec7d8a6e1397f0c1d466989af54433d932fbb655b8d8b9', 'size': 1007, 'content_type': 'application/json'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-02/sap-module-10-part-02.mp4', 'sha256': '4fb673a24272e52107a9339800ce936ecb75de53ae012373bc4505c09a794e8d', 'size': 22780251, 'content_type': 'video/mp4'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-02/sap-module-10-part-02.vtt', 'sha256': '54da696adae5961b8d819ed64af47de6d2366fb7e7e722e1aaecff2ceec5d2b9', 'size': 5509, 'content_type': 'text/vtt'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-02/sap-module-10-part-02.srt', 'sha256': '4cff8ae17c2c6064b9618810928eb647f07cbf6c574bd6767885cdb27b0b31c3', 'size': 5501, 'content_type': 'application/x-subrip'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-02/sap-module-10-part-02-transcript.txt', 'sha256': '87106c284839a984f7a067e735b79b94e214adcc1b2f2e772ff46c2be1768a6c', 'size': 4915, 'content_type': 'text/plain'}, {'key': 'aws-course-videos/previews/sap/module-10/releases/2026-11-19-approved-direct-v1/part-02/sap-module-10-part-02-manifest.json', 'sha256': 'cf92dd7133354dc3b8ffd30d67079e3e2a3ac6574fa3087f7892106df7621ccf', 'size': 988, 'content_type': 'application/json'}]
+          for x in items:
+              try:
+                  c.head_object(Bucket=os.environ["R2_BUCKET"],Key=x["key"])
+              except ClientError as e:
+                  if str(e.response["Error"]["Code"]) not in ("404","NoSuchKey","NotFound"): raise
+              else:
+                  raise RuntimeError("New version key already exists; refusing replacement")
+          for x in items:
+              p={"Bucket":os.environ["R2_BUCKET"],"Key":x["key"]}
+              x["put_url"]=c.generate_presigned_url("put_object",Params={**p,"ContentType":x["content_type"],"Metadata":{"sha256":x["sha256"]}},ExpiresIn=1800,HttpMethod="PUT")
+              x["get_url"]=c.generate_presigned_url("get_object",Params=p,ExpiresIn=1800,HttpMethod="GET")
+          open("upload-targets.json","w").write(json.dumps(items))
+          print("Prepared 10 object-specific upload and verification targets; existing objects untouched.")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m10-approved-scoped-targets
+          path: upload-targets.json
+          retention-days: 1
+
