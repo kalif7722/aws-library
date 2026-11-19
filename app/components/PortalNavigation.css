@@ -1,7 +1,12 @@
 :root{--portal-bg:#0a1729;--portal-panel:#10233a;--portal-line:#30445d;--portal-text:#f2f6fc;--portal-muted:#bfcddd;--portal-accent:#ffcb7a;--portal-action:#0b1726}
 html[data-theme="light"]{--portal-bg:#f5f8fb;--portal-panel:#fff;--portal-line:#cbd9e6;--portal-text:#132943;--portal-muted:#4a6179;--portal-accent:#925000;--portal-action:#fff}
 .portal-site-header{position:relative;z-index:81;background:var(--portal-bg);color:var(--portal-text);border-bottom:1px solid var(--portal-line)}
-.portal-header-inner,.portal-page{width:min(1240px,calc(100% - 48px));margin-inline:auto}
+/* One content edge for site chrome, home sections, and the course catalogue. */
+:root {
+  --portal-shell-gutter:clamp(14px,2vw,40px);
+  --portal-shell-width:min(1760px,calc(100% - var(--portal-shell-gutter) - var(--portal-shell-gutter)));
+}
+.portal-header-inner,.portal-page{width:var(--portal-shell-width);min-width:0;margin-inline:auto}
 .portal-header-inner{min-height:66px;display:flex;justify-content:space-between;align-items:center;gap:18px}
 .portal-brand{display:flex;align-items:center;gap:9px;font-size:.97rem;font-weight:815;letter-spacing:-.025em;text-decoration:none;white-space:nowrap}
 .portal-brand>span{display:grid;place-items:center;width:33px;height:33px;background:var(--portal-accent);color:var(--portal-action);border-radius:8px;font-size:.72rem;letter-spacing:.04em}
@@ -49,7 +54,7 @@ html[data-theme="light"]{--portal-bg:#f5f8fb;--portal-panel:#fff;--portal-line:#
 .portal-filters label:first-of-type{flex:1 1 185px}
 .portal-filters input,.portal-filters select{min-width:0;min-height:42px;padding:7px;color:var(--portal-text);background:var(--portal-bg);border:1px solid var(--portal-line);border-radius:6px;font:inherit;font-size:.9rem}
 .portal-filters button{cursor:pointer}
-@media(max-width:780px){.portal-header-inner,.portal-page{width:calc(100% - 28px)}.portal-header-inner{gap:7px}.portal-desktop-nav{display:none}.portal-menu{display:block}.portal-header-actions{gap:5px}.portal-site-header .portal-header-search kbd{display:none}.portal-home-hero{grid-template-columns:1fr}.portal-home-hero>div{max-width:630px}}
+@media(max-width:780px){.portal-header-inner{gap:7px}.portal-desktop-nav{display:none}.portal-menu{display:block}.portal-header-actions{gap:5px}.portal-site-header .portal-header-search kbd{display:none}.portal-home-hero{grid-template-columns:1fr}.portal-home-hero>div{max-width:630px}}
 @media(max-width:365px){.portal-brand{font-size:.8rem;gap:5px}.portal-brand>span{width:26px;height:26px}.portal-site-header .portal-header-search .semantic-search-trigger{padding-inline:5px;gap:4px}.portal-menu summary{padding-inline:5px}.portal-site-header .site-theme-toggle.portal-theme-button{width:32px;height:32px}}
 .portal-library-providers{display:flex;align-items:center;flex-wrap:wrap;gap:7px;padding:3px 0 10px}
 .portal-library-providers a{display:inline-flex;padding:7px 11px;min-height:36px;align-items:center;border:1px solid var(--portal-line);border-radius:6px;color:var(--portal-text);font-size:.85rem;font-weight:650;text-decoration:none}
@@ -114,9 +119,9 @@ html[data-theme="light"] .portal-home-shell {
     linear-gradient(170deg,#f6f8fe,#f9fbff 65%,#f0f4fc);
 }
 .portal-home .portal-home-hero {
-  grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr);
-  gap: clamp(26px,5.3vw,78px);
-  padding-block: clamp(38px,6.8vw,94px);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,76px);
+  padding-block:clamp(36px,4.2vw,76px);
 }
 .portal-home .portal-home-intro {min-width:0}
 .portal-home .portal-kicker {letter-spacing:.12em}
@@ -260,6 +265,7 @@ html[data-theme="light"] .portal-home-shell {
 }
 .portal-home .portal-route-card {display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px;min-height:144px}
 .portal-home .portal-route-card .portal-pathway-mark {margin-top:2px}
+.portal-home .portal-route-card p {max-width:60ch}
 .portal-home .portal-service-links {
   display:flex;
   flex-wrap:wrap;
@@ -293,14 +299,15 @@ html[data-theme="light"] .portal-home .portal-pathway-mark {background:color-mix
   .portal-home .portal-button,.portal-home .portal-pathway-card {transition:none}
 }
 
-/* Give certification titles room on wide displays without widening the hero
-   or reference panels. Natural wrap remains available at narrow widths/zoom. */
+/* Use title-sized cards when the shared shell has wide desktop space.
+   Keep normal wrapping available when fonts or zoom need more room. */
 @media (min-width:87.5rem) {
-  .portal-page.portal-home {width:min(1760px,calc(100% - 48px))}
-  .portal-home > :is(.portal-home-hero,.portal-home-reference,.portal-footer) {
-    width:min(100%,1240px);
-    margin-inline:auto;
-  }
   .portal-home .portal-pathway-grid {display:flex;flex-wrap:wrap}
   .portal-home .portal-pathway-card {flex:1 1 max-content;height:auto}
+  .portal-home h1 {max-width:16ch}
+  .portal-home .portal-lede {max-width:52ch}
+
+  /* These visual routes share the same main wrapper and keep their own
+     section/player sizing. Leave the legacy full-bleed labs alone. */
+  body > main.aif-course {width:var(--portal-shell-width);max-width:none;padding-inline:0}
 }
