@@ -1,6 +1,7 @@
 "use client";
 import {useCallback,useEffect,useRef,useState,type PointerEvent,type KeyboardEvent} from "react";
 import CourseVideoCaptions from "./CourseVideoCaptions";
+import {discoveryPartIds,discoveredLectures,readyRequestedPart} from "./sap-video-discovery.mjs";
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
@@ -24,11 +25,12 @@ const LECTURES:Record<string,Lecture[]>={
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
 
-export default function SapVideoLectures({moduleId}:{moduleId:string}){
-  const [extraLectures,setExtraLectures]=useState<Record<string,Lecture[]>>({});
-  const entries=[...(LECTURES[moduleId]??[]),...(extraLectures[moduleId]??[])];
-  const [active,setActive]=useState("01");
-  const [results,setResults]=useState<Record<string,Result>>({});
+export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string;slideAssets?:Readonly<Record<number,string>>}){
+  const [activeId,setActive]=useState("01");
+  const [discovery,setDiscovery]=useState<{moduleId:string;results:Record<string,Result>}>({moduleId,results:{}});
+  const results=discovery.moduleId===moduleId?discovery.results:{};
+  const entries=discoveredLectures(LECTURES[moduleId]??[],results);
+  const pendingRequestedPart=useRef<string|null>(null);
   const [checking,setChecking]=useState(true);
   const [playing,setPlaying]=useState(false);
   const [speed,setSpeed]=useState(1);
@@ -46,13 +48,14 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
   const videoRef=useRef<HTMLVideoElement>(null);
   const stageRef=useRef<HTMLDivElement>(null);
   const hudTimeout=useRef<ReturnType<typeof setTimeout>|null>(null);
-  const selected=entries.find(x=>x.id===active)??entries[0];
+  const selected=entries.find(x=>x.id===activeId)??entries[0];
+  const active=selected?.id??activeId;
   const result=results[active];
   const readyCount=entries.filter(lecture=>results[lecture.id]?.status==="ready").length;
   const ready=result?.status==="ready"?result:null;
   const storageKey=`sap-video-${moduleId}-${active}-position`;
   const completedKey=`sap-video-${moduleId}-${active}-complete`;
-  const source=(n:number)=>`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="10"&&n>=1&&n<=34)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
+  const source=(n:number)=>moduleId==="10"?slideAssets?.[n]:`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
   const currentIndex=entries.findIndex(x=>x.id===active);
   const previous=entries[currentIndex-1];
   const following=entries[currentIndex+1];
@@ -75,23 +78,24 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
 
   useEffect(()=>{
     const controller=new AbortController();
-    let busy=false;
-    setChecking(true);
-    // Reviewed remediation links may select a known lecture; never auto-play it.
+    const known=LECTURES[moduleId]??[];
     const requestedPart=new URLSearchParams(window.location.search).get("part");
-    setActive((LECTURES[moduleId]??[]).some(part=>part.id===requestedPart)?requestedPart!:"01");
-    setResults({});
-    setExtraLectures(previous=>({...previous,[moduleId]:[]}));
+    const parts=discoveryPartIds(moduleId,known,requestedPart);
+    const knownRequest=known.find(item=>item.id===requestedPart);
+    // Remediation links may select a familiar lecture immediately, or a
+    // discovered lecture once ready. Neither path auto-plays.
+    setActive(knownRequest?.id??known[0]?.id??"01");
+    setAutoPlayPart(null);
+    pendingRequestedPart.current=!knownRequest&&requestedPart&&parts.includes(requestedPart)?requestedPart:null;
+    setDiscovery({moduleId,results:{}});
+    setChecking(true);
+    const alreadyReady:Record<string,Ready>={};
+    let busy=false;
     const refresh=async()=>{
       if(busy || controller.signal.aborted)return;
       busy=true;
       try{
-        const known=LECTURES[moduleId]??[];
-        const lastPart=Math.max(0,...known.map(x=>Number(x.id)));
-        // Probe upcoming consecutive part IDs, so newly rendered parts appear
-        // without adding a lecture to source code or redeploying the site.
-        const parts=[...known.map(x=>x.id),...Array.from({length:6},(_,i)=>String(lastPart+i+1).padStart(2,"0"))];
-        const found=await Promise.all(parts.map(async id=>{
+        const found=await Promise.all(parts.filter(id=>!alreadyReady[id]).map(async id=>{
           try{
             const res=await fetch(`/api/sap-video?module=${moduleId}&part=${id}`,
               {cache:"no-store",signal:controller.signal});
@@ -100,15 +104,13 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
           }catch{return [id,{status:"processing"} as Result] as const;}
         }));
         if(controller.signal.aborted)return;
-        setResults(Object.fromEntries(found));
-        const extras:Lecture[]=found.filter(([id,value])=>Number(id)>lastPart&&value.status==="ready")
-          .map(([id,value])=>{
-            const ready=value as Ready;
-            return {id,title:ready.title,
-              start:ready.chapters[0].slide,
-              end:ready.chapters[ready.chapters.length-1].slide};
-          }).sort((a,b)=>Number(a.id)-Number(b.id));
-        setExtraLectures(previous=>({...previous,[moduleId]:extras}));
+        // The M10 approved release objects are immutable. Poll only its
+        // missing parts on this page; other modules keep their prior polling.
+        if(moduleId==="10")for(const [id,value] of found)if(value.status==="ready")alreadyReady[id]=value;
+        const nextResults:Record<string,Result>={...alreadyReady,...Object.fromEntries(found)};
+        setDiscovery({moduleId,results:nextResults});
+        const fromLink=readyRequestedPart(pendingRequestedPart.current,discoveredLectures(known,nextResults),nextResults);
+        if(fromLink){pendingRequestedPart.current=null;setActive(fromLink);}
         setChecking(false);
       }finally{busy=false;}
     };
@@ -181,6 +183,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
     }catch{setNotice("This browser could not open fullscreen navigation.");}
   };
   const choose=(id:string,autoPlay=false)=>{
+    pendingRequestedPart.current=null;
     setActive(id);setNotice("");
     if(autoPlay){
       // Keyed video remount is needed; playback begins after canplay on the newly selected video.
@@ -314,7 +317,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
         <div className="sap-video-main">
           <div className="sap-video-main-top">
             <div>
-              <small>PART {selected.id} OF {String(entries.length).padStart(2,"0")} · SLIDES {selected.start}–{selected.end}</small>
+              <small>PART {selected.id}{entries.length===Number(entries[entries.length-1].id)?` OF ${String(entries.length).padStart(2,"0")}`:""} · SLIDES {selected.start}–{selected.end}</small>
               <h3>{selected.title}</h3>
               <small>Visual-first, architect-focused guided explanation</small>
             </div>
@@ -326,7 +329,7 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
             onPointerDown={e=>{if(fullscreen&&e.pointerType==="touch")revealHud(4000);}}
             onFocus={()=>{if(fullscreen)revealHud(4000);}} onKeyDown={handleKeyboard}>
             <video key={ready.videoUrl} ref={videoRef} controls={false} playsInline preload="metadata"
-              poster={source(selected.start)} aria-label="Narrated lecture video. Use the player controls below."
+              poster={source(moduleId==="10"?(ready.chapters[0]?.slide??selected.start):selected.start)} aria-label="Narrated lecture video. Use the player controls below."
               onClick={togglePlay} onDoubleClick={()=>void toggleFullscreen()}
               onError={()=>setMediaError(true)}
               onLoadedMetadata={e=>{
@@ -376,13 +379,13 @@ export default function SapVideoLectures({moduleId}:{moduleId:string}){
           {notice&&<p role="status" style={{color:"#91551b"}}>{notice}</p>}
           <details className="sap-video-chapters"><summary>Chapters — jump to any slide explanation</summary>
             <div className="sap-video-chapter-grid">
-              {ready.chapters.map(ch=><div key={ch.slide} className="sap-video-chapter">
+              {ready.chapters.map(ch=>{const slideUrl=source(ch.slide);return <div key={ch.slide} className="sap-video-chapter">
                 <button type="button" onClick={()=>{seek(ch.startSeconds);void videoRef.current?.play().catch(()=>{});}}
                   >
                   {formatVideoTime(ch.startSeconds)} · {String(ch.slide).padStart(2,"0")} · {ch.title}
                 </button>
-                <a href={source(ch.slide)} target="_blank" rel="noopener noreferrer"  aria-label={`Open original slide ${ch.slide}`}>Slide ↗</a>
-              </div>)}
+                {slideUrl&&<a href={slideUrl} target="_blank" rel="noopener noreferrer"  aria-label={`Open original slide ${ch.slide}`}>Slide ↗</a>}
+              </div>;})}
             </div>
           </details>
         </div>:<div role="status" className="sap-video-empty">
