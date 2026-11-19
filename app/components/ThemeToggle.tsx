@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 type Theme = "dark" | "light";
 
-export default function ThemeToggle(){
+export default function ThemeToggle({inHeader=false}:{inHeader?:boolean}){
   const [theme,setTheme]=useState<Theme>("dark");
   const [visible,setVisible]=useState(true);
   const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
@@ -32,5 +32,5 @@ export default function ThemeToggle(){
     reveal();
   };
   const target=theme==="dark"?"light":"dark";
-  return <button className={`site-theme-toggle ${visible?"visible":"hidden"}`} onClick={toggle} onFocus={reveal} onMouseEnter={reveal} aria-label={`Switch to ${target} mode`} title={`Switch to ${target} mode`}><span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span></button>;
+  return <button className={`site-theme-toggle ${inHeader?"portal-theme-button":visible?"visible":"hidden"}`} onClick={toggle} onFocus={reveal} onMouseEnter={reveal} aria-label={`Switch to ${target} mode`} title={`Switch to ${target} mode`}><span aria-hidden="true">{theme==="dark"?"☀":"☾"}</span></button>;
 }

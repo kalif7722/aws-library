@@ -6,6 +6,7 @@ const siteUrl = "https://aws-library.kalifs.workers.dev";
 // Include only public pages intended for search indexing.
 const publicPaths = [
   "/",
+  "/courses",
   "/services",
   "/azure-services",
   "/gcp-services",

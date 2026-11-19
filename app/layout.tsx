@@ -5,9 +5,8 @@ import "./components/ServiceLearningReadability.css";
 import "./components/ServiceLearningGridAlignment.css";
 import "./components/AthenaThemePolish.css";
 import "./components/ServiceTypographyPolish.css";
-import ThemeToggle from "./components/ThemeToggle";
+import PortalChrome from "./components/PortalChrome";
 import ArchitectureTooltip from "./components/ArchitectureTooltip";
-import SemanticSearch from "./components/SemanticSearch";
 import CourseReturnLink from "./components/CourseReturnLink";
 
 export const metadata: Metadata = {
@@ -47,7 +46,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="antialiased"><ThemeToggle/>{children}<CourseReturnLink/><SemanticSearch/><ArchitectureTooltip/></body>
+      <body className="antialiased"><PortalChrome/>{children}<CourseReturnLink/><ArchitectureTooltip/></body>
     </html>
   );
 }
