@@ -222,3 +222,24 @@ html[data-theme="light"] .aws-services-library {
   .aws-services-library .aws-directory-category-list,
   .aws-services-library .aws-directory-detail-layout .aws-directory-category-list { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Keep existing deep-dive layouts within the directory viewport on narrow screens. */
+@media (max-width: 640px) {
+  .aws-services-library .aws-directory-detail > .service-knowledge,
+  .aws-services-library .aws-directory-detail .knowledge-grid,
+  .aws-services-library .aws-directory-detail .knowledge-intro {
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+  .aws-services-library .aws-directory-detail .service-knowledge > *,
+  .aws-services-library .aws-directory-detail .knowledge-card {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .aws-services-library .aws-directory-detail .knowledge-jumps,
+  .aws-services-library .aws-directory-detail pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
