@@ -1,13 +1,14 @@
 "use client";
-import {ArrowRight, BookOpen, Database, Network, Shield, Sparkles} from "lucide-react";
+import {ArrowRight, BookOpen} from "lucide-react";
 import "./PortalCourseDirectory.css";
-import {useState} from "react";
+import {useState,type CSSProperties} from "react";
+import PortalCertificationBadge from "./PortalCertificationBadge";
+import {portalExamCode,portalCertificationHue} from "./portalCertificationAssets";
 import {useSearchParams} from "next/navigation";
 import {courseDirectory, providers} from "../courses/catalog";
 import {PortalResume} from "./PortalChrome";
 const levels=Array.from(new Set(courseDirectory.map(c=>c.level)));
 const subjects=Array.from(new Set(courseDirectory.map(c=>c.subject))).sort();
-const subjectIcons: Record<string, typeof BookOpen> = {"AI & machine learning":Sparkles,"Security & networking":Shield,"Data & analytics":Database,"Architecture & foundations":Network};
 export default function CourseDirectory(){
  const params=useSearchParams();
  const requested=params.get("cloud")||"";
@@ -30,8 +31,8 @@ export default function CourseDirectory(){
   if(!courses.length) return null;
   return <section key={provider.key} className={`catalog-provider-section catalog-${provider.key}`} aria-labelledby={`catalog-${provider.key}-title`}>
    <header className="catalog-provider-heading"><div><p className="catalog-provider-eyebrow">{provider.short} certification paths</p><h2 id={`catalog-${provider.key}-title`}>{provider.name}</h2></div><p>{courses.length} {courses.length===1?"course":"courses"}{cloud||level||subject||query?" matching your filters":" to explore"}</p></header>
-   <div className="catalog-course-grid">{courses.map(c=>{const Icon=subjectIcons[c.subject]||BookOpen;return <article className="catalog-course-card" key={c.href}>
-    <div className="catalog-course-mark"><Icon size={23} aria-hidden="true"/><span>{c.level}</span></div>
+   <div className="catalog-course-grid">{courses.map(c=>{const code=portalExamCode(c.title);return <article className="catalog-course-card portal-certification-tile" style={{"--cert-hue":portalCertificationHue(code)} as CSSProperties} key={c.href}>
+    <div className="catalog-course-mark"><PortalCertificationBadge cloud={c.cloud} code={code}/><span className="catalog-course-level">{c.level}</span></div>
     <h3><a href={c.href}>{c.title}<ArrowRight size={17} aria-hidden="true"/></a></h3><p className="catalog-course-subject">{c.subject}</p>
     <p className="catalog-course-availability">{c.featured?"Reviewed visual lessons available":"See course page for available content"}</p>
    </article>})}</div>

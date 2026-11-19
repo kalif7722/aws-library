@@ -1,7 +1,10 @@
 import type {Metadata} from "next";
-import {ArrowRight, BookOpen, Cloud, Eye, GraduationCap, Network, Sparkles} from "lucide-react";
+import type {CSSProperties} from "react";
+import {ArrowRight, Cloud, Eye, Network} from "lucide-react";
 import {PortalResume} from "./components/PortalChrome";
 import {courseDirectory} from "./courses/catalog";
+import PortalCertificationBadge from "./components/PortalCertificationBadge";
+import {portalExamCode,portalCertificationHue} from "./components/portalCertificationAssets";
 
 export const metadata: Metadata = {
   title: "AWS, Azure & Google Cloud Certification Learning",
@@ -9,13 +12,6 @@ export const metadata: Metadata = {
 };
 
 const featured = courseDirectory.filter(course=>course.featured).slice(0,5);
-const courseArtwork = [
-  {icon:Sparkles,tone:"violet"},
-  {icon:Network,tone:"cyan"},
-  {icon:BookOpen,tone:"rose"},
-  {icon:GraduationCap,tone:"amber"},
-  {icon:Sparkles,tone:"violet"},
-] as const;
 const providers = [
   {label:"AWS",key:"aws",services:"/services"},
   {label:"Azure",key:"azure",services:"/azure-services"},
@@ -47,10 +43,10 @@ export default function LearningHome(){
         <div><p className="portal-kicker">Certification pathways</p><h2 id="portal-pathways-title">Find a course that fits your goal</h2></div>
         <a className="portal-home-text-link" href="/courses">All courses <ArrowRight size={16} aria-hidden="true"/></a>
       </div>
-      <div className="portal-card-grid portal-pathway-grid">{featured.map((course,index)=>{
-        const {icon:Icon,tone} = courseArtwork[index];
-        return <a className={`portal-pathway-card portal-tone-${tone}`} href={course.href} key={course.href}>
-          <div className="portal-pathway-mark"><Icon size={21} aria-hidden="true"/><ArrowRight className="portal-pathway-arrow" size={17} aria-hidden="true"/></div>
+      <div className="portal-card-grid portal-pathway-grid">{featured.map(course=>{
+        const code=portalExamCode(course.title);
+        return <a className="portal-pathway-card portal-certification-tile" style={{"--cert-hue":portalCertificationHue(code)} as CSSProperties} href={course.href} key={course.href}>
+          <div className="portal-certification-head"><PortalCertificationBadge cloud={course.cloud} code={code}/><ArrowRight className="portal-pathway-arrow" size={17} aria-hidden="true"/></div>
           <small>{course.cloudName} · {course.level}</small>
           <h3>{course.title}</h3><p>{course.subject}</p>
         </a>;
