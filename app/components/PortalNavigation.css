@@ -292,3 +292,15 @@ html[data-theme="light"] .portal-home .portal-pathway-mark {background:color-mix
 @media (prefers-reduced-motion:reduce) {
   .portal-home .portal-button,.portal-home .portal-pathway-card {transition:none}
 }
+
+/* Give certification titles room on wide displays without widening the hero
+   or reference panels. Natural wrap remains available at narrow widths/zoom. */
+@media (min-width:87.5rem) {
+  .portal-page.portal-home {width:min(1760px,calc(100% - 48px))}
+  .portal-home > :is(.portal-home-hero,.portal-home-reference,.portal-footer) {
+    width:min(100%,1240px);
+    margin-inline:auto;
+  }
+  .portal-home .portal-pathway-grid {display:flex;flex-wrap:wrap}
+  .portal-home .portal-pathway-card {flex:1 1 max-content;height:auto}
+}

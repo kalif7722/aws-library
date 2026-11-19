@@ -28204,10 +28204,11 @@
           "Remember takeaway"
         ],
         "learningNotes": [
-          "Transformation and failure paths"
-        ],
-        "decisionCue": "Transformation and failure paths",
-        "asset": "/course-visuals/sap-c03/module-16/slide-12.webp",
+        "Firehose invokes Lambda on batches. Each record returns Ok, Dropped or ProcessingFailed: Dropped is intentional filtering and counts as successfully processed, not a failure.",
+        "Invocation failures such as timeouts or throttling can trigger batch retries. Unsuccessfully processed records go to the S3 processing-failed location; optional source-record backup is separate."
+      ],
+        "decisionCue": "Separate intentional Dropped records from ProcessingFailed records and invocation failures; do not route Dropped records into the failure path.",
+        "asset": "/course-visuals/sap-c03/module-16/slide-12-aip-correction-v1.webp",
         "status": "qa-passed",
         "draftAsset": null,
         "qa": {
@@ -38635,10 +38636,12 @@
           "Remember takeaway"
         ],
         "learningNotes": [
-          "Private subnet reaches S3 or service via gateway/interface endpoint versus NAT Gateway internet path; show endpoint hourly/data processing considerations and routing; select by service and traffic."
-        ],
-        "decisionCue": "Private subnet reaches S3 or service via gateway/interface endpoint versus NAT Gateway internet path; show endpoint hourly/data processing considerations and routing; select by service and traffic.",
-        "asset": "/course-visuals/sap-c03/module-23/slide-12.webp",
+        "Gateway endpoints route S3 and DynamoDB traffic using service prefix-list routes and have no additional endpoint charge.",
+        "Interface endpoints use private ENIs for supported services; private DNS, when enabled, resolves service names to endpoint IPs. Check endpoint security-group access. Interface endpoints and NAT gateways have distinct hourly and data-processing costs.",
+        "For public IPv4 egress, a private subnet routes to a public NAT gateway in a public subnet, whose route reaches the internet gateway."
+      ],
+        "decisionCue": "Choose by service, routing and traffic: gateway endpoint for supported S3/DynamoDB access, interface endpoint for supported private service access, or public NAT plus an internet gateway for public IPv4 egress.",
+        "asset": "/course-visuals/sap-c03/module-23/slide-12-aip-correction-v1.webp",
         "status": "qa-passed",
         "draftAsset": null,
         "qa": {

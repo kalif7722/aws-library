@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import ServiceProviderNav from "../components/ServiceProviderNav";
 import { gcpAssetReady, gcpAssetUrl, gcpCategories, gcpContent, gcpIcons, gcpServices, gcpSourceUrl, type GcpContent } from "../gcp-data";
 import "../components/GcpLibrary.css";
 import "../components/GcpLibraryOverrides.css";
@@ -75,7 +76,7 @@ export default function GcpServicesPage() {
   </div> : null;
 
   return <main className="workspace gcp-workspace">
-    <nav className="portal-library-providers" aria-label="Service libraries"><a href="/services">AWS services</a><a href="/azure-services">Azure services</a><a className="active" aria-current="page" href="/gcp-services">GCP services</a></nav>
+    <ServiceProviderNav current="gcp"/>
     <header className="gcp-heading"><div><p className="course-kicker">Google Cloud service library</p><h1>Explore Google Cloud, service by service.</h1><p>Browse the official product categories. Study guides and visuals are being prepared.</p></div><a href={gcpSourceUrl} target="_blank" rel="noreferrer">Official product catalog ↗</a></header>
     <div className={"gcp-shell" + (railCollapsed ? " gcp-collapsed" : "")}>
       <aside className="gcp-rail" aria-label="Google Cloud categories"><div className="gcp-rail-title">{!railCollapsed && <strong>Service categories</strong>}<button type="button" onClick={() => setRailCollapsed(value => !value)} aria-expanded={!railCollapsed} aria-label={railCollapsed ? "Expand categories" : "Collapse categories"}>{railCollapsed ? "›" : "‹"}</button></div>

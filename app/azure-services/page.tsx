@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import ServiceProviderNav from "../components/ServiceProviderNav";
 import { assetUrl } from "../../lib/asset-url";
 import "../components/AzureLibrary.css";
 import AzureServiceLearningDetails, { azureServiceSummary } from "../components/AzureServiceLearningDetails";
@@ -92,7 +93,7 @@ export default function AzureServicesPage() {
   const chooseSearchResult = (entry: SearchEntry) => choose(entry.service, entry.branchIndex);
 
   return <main className="workspace azure-workspace">
-    <nav className="portal-library-providers" aria-label="Service libraries"><a href="/services">AWS services</a><a className="active" aria-current="page" href="/azure-services">Azure services</a><a href="/gcp-services">GCP services</a></nav>
+    <ServiceProviderNav current="azure"/>
 
     <div className={"azure-shell" + (menuCollapsed ? " rail-collapsed" : "")}>
       <aside className={"azure-branch-rail" + (menuCollapsed ? " collapsed" : "")} aria-label="Azure service branches">

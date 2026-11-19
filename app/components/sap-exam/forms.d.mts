@@ -10,6 +10,7 @@ export type FormQuestion = {
   reviewStatus?: string;
   revision?: string;
   preserveChoiceOrder?: boolean;
+  optionReasons?: string[];
 };
 export type FormMode = 'practice' | 'exam';
 export type FormSlot = {id:string; revision:string; choiceOrder:number[]; scored:boolean};
@@ -31,7 +32,7 @@ export const FULL_MOCK_MINUTES: 180;
 export const FULL_MOCK_QUOTAS: Readonly<Record<SapDomain, number>>;
 export function assessFullMock(bank: unknown): MockReadiness;
 export function createDiagnosticForm<T extends FormQuestion>(questions:readonly T[],mode:FormMode):Form<T>;
-export function createFullMockForm<T extends FormQuestion>(bank:readonly T[],seed:string):Form<T>;
+export function createFullMockForm<T extends FormQuestion>(bank:readonly T[],seed:string,mode?:FormMode):Form<T>;
 export function hydrateForm<T extends FormQuestion>(descriptor:unknown,bank:readonly T[]):Form<T>;
 export function startFormAttempt<T extends FormQuestion>(form:Form<T>,now?:number):FormAttempt;
 export function scoreForm<T extends FormQuestion>(attempt:Pick<FormAttempt,'mode'|'submittedAt'|'questionIds'|'answers'> & Partial<Pick<FormAttempt,'form'>>,form:Form<T>):{

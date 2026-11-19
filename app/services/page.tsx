@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import ServiceProviderNav from "../components/ServiceProviderNav";
 import AthenaLearningDetails from "../components/AthenaLearningDetails";
 import AnalyticsLearningDetails, { analyticsDetailServices } from "../components/AnalyticsLearningDetails";
 import AipServiceLearningDetails, { hasAipLearningDetails } from "../components/AipServiceLearningDetails";
@@ -534,6 +535,7 @@ function DirectoryContent() {
           {service ? <p className="aws-directory-intro">{service.summary}{/[.!?]$/.test(service.summary) ? "" : "."}</p> :
             <p className="aws-directory-intro">Start with a familiar service or browse by category. Each guide pairs a visual overview with a closer look at how the service works.</p>}
         </div>
+        <ServiceProviderNav current="aws"/>
       </header>
       <section className="aws-directory-search" role="search" aria-label="AWS service directory">
         <label htmlFor="aws-directory-search">Search services, tasks, or categories</label>
