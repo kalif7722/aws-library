@@ -74,6 +74,12 @@ const M02_ADDITIONS:Lesson[]=[
   {id:'sap-02-031',title:'Control Tower — Landing-Zone Updates and Account Enrollment'},
   {id:'sap-02-032',title:'Multi-Account Governance — Troubleshooting Example'}
 ].map((x,i)=>({...x,moduleId:'02',sequence:i+27,asset:`/course-visuals/sap-c03/module-02/slide-${i+27}.webp`,status:'qa-passed',learningNotes:[],decisionCue:'Follow the pictured governance architecture and validate its effective controls.',examSkills:[]}));
+const M02_VERSIONED_ASSETS:Record<string,string>={
+ 'sap-02-008':'/course-visuals/sap-c03/module-02/slide-08-aip-v2.webp',
+ 'sap-02-016':'/course-visuals/sap-c03/module-02/slide-16-aip-v2.webp',
+ 'sap-02-020':'/course-visuals/sap-c03/module-02/slide-20-aip-v2.webp',
+ 'sap-02-032':'/course-visuals/sap-c03/module-02/slide-32-aip-v2.webp'
+};
 export function publishedModuleLessons(moduleId:string):Lesson[]{
  const existing=lessonsByModule[moduleId]||[];
  if(moduleId==='08')return [...existing.map(l=>l.sequence<=24?{...l,asset:`/course-visuals/sap-c03/module-08/slide-${String(l.sequence).padStart(2,'0')}-aip-v1.webp`,status:'qa-passed'}:l),...M08_FOUNDATIONS].sort((a,b)=>a.sequence-b.sequence);
@@ -91,6 +97,6 @@ export function publishedModuleLessons(moduleId:string):Lesson[]{
    const old=bySequence.get(addition.sequence);
    if(!old||!old.asset||old.status!=='qa-passed')bySequence.set(addition.sequence,addition);
  }
- return [...bySequence.values()].sort((a,b)=>a.sequence-b.sequence);
+ return [...bySequence.values()].sort((a,b)=>a.sequence-b.sequence).map(l=>M02_VERSIONED_ASSETS[l.id]?{...l,asset:M02_VERSIONED_ASSETS[l.id]}:l);
 }
 
