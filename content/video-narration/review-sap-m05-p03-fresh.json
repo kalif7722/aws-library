@@ -1,0 +1,119 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "revision": "2026-11-20-m05p03-fresh-v1",
+  "units": [
+    {
+      "id": "m05p03-s07-c1-e84e94aa34d3",
+      "slide": 7,
+      "text": "Start on the left. The corporate client asks its DNS server for the private application name. The conditional forwarder sends matching queries toward the inbound endpoint addresses.",
+      "text_sha256": "e84e94aa34d30b0a72cd61f2b2005aa361dcb2da0e9f9df2b365636e4d5c2991",
+      "asset_sha256": "2c004ff9e425824b0b620e58c1bd0f8aa45e04ef31bbb0ef31858c1f189823d1"
+    },
+    {
+      "id": "m05p03-s07-c2-68338c664e9e",
+      "slide": 7,
+      "text": "Follow the query across the private connection into the endpoint VPC. The two endpoint interfaces provide addresses in different Availability Zones; configure the corporate forwarder to use both.",
+      "text_sha256": "68338c664e9ef28745c73fc25f73c5c09eb4d278c1c9643ff9dfc75471e2e7c9",
+      "asset_sha256": "2c004ff9e425824b0b620e58c1bd0f8aa45e04ef31bbb0ef31858c1f189823d1"
+    },
+    {
+      "id": "m05p03-s07-c3-37d61498dd71",
+      "slide": 7,
+      "text": "Move to the right. Resolver answers using the private hosted zone associated with the endpoint VPC. The response goes back to the corporate DNS server and then the client.",
+      "text_sha256": "37d61498dd71fad6d2893498dcfc82e446c2ae3eae5d738291e966c888d28643",
+      "asset_sha256": "2c004ff9e425824b0b620e58c1bd0f8aa45e04ef31bbb0ef31858c1f189823d1"
+    },
+    {
+      "id": "m05p03-s07-c4-28d044033fbc",
+      "slide": 7,
+      "text": "With the full diagram visible, check private connectivity and both TCP and UDP port fifty-three. Remote forwarders target inbound endpoint addresses, not the VPC base plus two resolver address.",
+      "text_sha256": "28d044033fbcbfbc02790e216dd9d05da8e5c266583de65e1da5cea7b113994e",
+      "asset_sha256": "2c004ff9e425824b0b620e58c1bd0f8aa45e04ef31bbb0ef31858c1f189823d1"
+    },
+    {
+      "id": "m05p03-s08-c1-2699bfff185e",
+      "slide": 8,
+      "text": "Begin with the AWS workload and VPC Resolver on the left. A query for the corporate namespace matches a forwarding rule associated with the client's VPC.",
+      "text_sha256": "2699bfff185e98e8f199aefab476a494659e6457b7b831968b32e69eb412c523",
+      "asset_sha256": "1d35ab1c70958bc6fbc1b0aa6c0c66c4955dedc8f373176920aa662fdc04e9e2"
+    },
+    {
+      "id": "m05p03-s08-c2-f81abfa43b5d",
+      "slide": 8,
+      "text": "Read the rule box above the arrow. It specifies the domain suffix, outbound endpoint and target DNS addresses. The most specific matching suffix selects the forwarding rule.",
+      "text_sha256": "f81abfa43b5d832132ca6649eeff289797e3b327e20b4bc7366396fa84cdf71b",
+      "asset_sha256": "1d35ab1c70958bc6fbc1b0aa6c0c66c4955dedc8f373176920aa662fdc04e9e2"
+    },
+    {
+      "id": "m05p03-s08-c3-25c71cfe0cc7",
+      "slide": 8,
+      "text": "Follow the arrow through the outbound endpoint to corporate DNS. Routes and endpoint security must permit the query and its response across the connection to the target servers.",
+      "text_sha256": "25c71cfe0cc7af1eeab8244326d256d7caeb621f421c5212f4499d568bd3eeb7",
+      "asset_sha256": "1d35ab1c70958bc6fbc1b0aa6c0c66c4955dedc8f373176920aa662fdc04e9e2"
+    },
+    {
+      "id": "m05p03-s08-c4-1cc0673cf977",
+      "slide": 8,
+      "text": "Return to the full slide. Outbound describes the query direction from AWS. Check reverse lookup rules separately, and verify the complete DNS path before testing the application connection.",
+      "text_sha256": "1cc0673cf977d1e2f2c5e5dc17dd440179dc2e8fe4717f838bd2f0cb9304b5d9",
+      "asset_sha256": "1d35ab1c70958bc6fbc1b0aa6c0c66c4955dedc8f373176920aa662fdc04e9e2"
+    },
+    {
+      "id": "m05p03-s09-c1-0ede6556fc9d",
+      "slide": 9,
+      "text": "Trace the upper row. Corporate DNS forwards the AWS private namespace to an inbound endpoint. The private hosted zone is the authority for that namespace in this design.",
+      "text_sha256": "0ede6556fc9da140c1bbeafbd358e1511ccd28ce3332e4fab5ad1f152f696520",
+      "asset_sha256": "a31553f6a2c1b4bbbec26fb57eb0abce2d684d839499a088dc8bb0e803dec3ec"
+    },
+    {
+      "id": "m05p03-s09-c2-3a4f0eeb0d96",
+      "slide": 9,
+      "text": "Now trace the lower row. An AWS client uses an associated forwarding rule and outbound endpoint to reach the corporate authority for the corporate namespace.",
+      "text_sha256": "3a4f0eeb0d9674d24db294ef2593588714341a93282dabc9f9bcb9bd19a76655",
+      "asset_sha256": "a31553f6a2c1b4bbbec26fb57eb0abce2d684d839499a088dc8bb0e803dec3ec"
+    },
+    {
+      "id": "m05p03-s09-c3-c166e91dfce1",
+      "slide": 9,
+      "text": "Inspect the warnings at the bottom. Forwarding the same suffix back and forth creates a loop. Namespace delegation follows an authority chain and requires the appropriate endpoint and rule configuration.",
+      "text_sha256": "c166e91dfce17cedebc5609dc421aae382650197342d3fecc8c284a0cf1a1e9d",
+      "asset_sha256": "a31553f6a2c1b4bbbec26fb57eb0abce2d684d839499a088dc8bb0e803dec3ec"
+    },
+    {
+      "id": "m05p03-s09-c4-f9589da791fe",
+      "slide": 9,
+      "text": "With both directions visible, explain who owns each suffix before choosing a rule. Validate the query and response paths, and avoid broad forwarding that unexpectedly captures your private names.",
+      "text_sha256": "f9589da791fead2d1a513978147882eeda6bcd0f8359ad9782dcd311b2d0ef9e",
+      "asset_sha256": "a31553f6a2c1b4bbbec26fb57eb0abce2d684d839499a088dc8bb0e803dec3ec"
+    },
+    {
+      "id": "m05p03-s10-c1-253c6272af6c",
+      "slide": 10,
+      "text": "Compare the two upper panels. The inbound endpoint receives queries from corporate forwarders; the outbound endpoint sends queries to corporate DNS targets. Each design spreads endpoint addresses across Availability Zones.",
+      "text_sha256": "253c6272af6c00e1ddd140528eec9ccd85939aee7a52c74ba37ccf9a8cc3232d",
+      "asset_sha256": "04367a2175f957bc0bd94746d8b7fa08facce02f967e0d01d6634b3df344bb68"
+    },
+    {
+      "id": "m05p03-s10-c2-d349d92e3204",
+      "slide": 10,
+      "text": "Read the security cards below. For the port fifty-three design shown, inbound rules allow approved forwarders, and outbound rules allow the target DNS servers. Security groups track return traffic.",
+      "text_sha256": "d349d92e3204f2fefbf9be4abc0510bee749a64d623db49de225e27315659097",
+      "asset_sha256": "04367a2175f957bc0bd94746d8b7fa08facce02f967e0d01d6634b3df344bb68"
+    },
+    {
+      "id": "m05p03-s10-c3-9f14503c4206",
+      "slide": 10,
+      "text": "Move to the network and resilience cards. Stateless network ACLs need query and response paths, including ephemeral ports. Provide routing, multiple endpoint addresses and target servers, and monitor capacity.",
+      "text_sha256": "9f14503c420620b744e5b7d693c1b86e8c7ccd3fa7ff971b2705f39d1879d189",
+      "asset_sha256": "04367a2175f957bc0bd94746d8b7fa08facce02f967e0d01d6634b3df344bb68"
+    },
+    {
+      "id": "m05p03-s10-c4-411e7d33d06c",
+      "slide": 10,
+      "text": "Review the whole slide. These security group controls apply to endpoint network interfaces. Test both TCP and UDP DNS, and distinguish endpoint access from the Amazon-provided VPC resolver.",
+      "text_sha256": "411e7d33d06c2c22ae9bbeaff9bebede368c574048895b8bec567f3357a6b77b",
+      "asset_sha256": "04367a2175f957bc0bd94746d8b7fa08facce02f967e0d01d6634b3df344bb68"
+    }
+  ]
+}
