@@ -77,8 +77,7 @@ const M02_ADDITIONS:Lesson[]=[
 const M02_VERSIONED_ASSETS:Record<string,string>={
  'sap-02-008':'/course-visuals/sap-c03/module-02/slide-08-aip-v2.webp',
  'sap-02-016':'/course-visuals/sap-c03/module-02/slide-16-aip-v2.webp',
- 'sap-02-020':'/course-visuals/sap-c03/module-02/slide-20-aip-v2.webp',
- 'sap-02-032':'/course-visuals/sap-c03/module-02/slide-32-aip-v2.webp'
+ 'sap-02-020':'/course-visuals/sap-c03/module-02/slide-20-aip-v2.webp'
 };
 export function publishedModuleLessons(moduleId:string):Lesson[]{
  const existing=lessonsByModule[moduleId]||[];
