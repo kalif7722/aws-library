@@ -1,4 +1,5 @@
 import {NextRequest} from "next/server";
+import {reviewedSapCaption,servePinnedCaption} from "./reviewed-sap-captions.mjs";
 
 // Same-origin proxy for the published AIP/AIF WebVTT tracks. No arbitrary URL fetching.
 const ROOT="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
@@ -7,6 +8,8 @@ const PATH=/^\/aws-course-videos\/previews\/(aip|aif)\/module-\d{2}(?:\/part-\d{
 export async function GET(request:NextRequest){
   const raw=request.nextUrl.searchParams.get("src");
   if(!raw)return Response.json({error:"Missing caption source"},{status:400});
+  const reviewed=reviewedSapCaption(raw);
+  if(reviewed)return servePinnedCaption(reviewed);
   let source:URL;
   try{source=new URL(raw);}catch{return Response.json({error:"Invalid caption URL"},{status:400});}
   if(source.origin!==ROOT||!PATH.test(source.pathname)||source.username||source.password)
