@@ -1,0 +1,91 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "revision": "2026-11-20-m04p13-fresh-v1",
+  "units": [
+    {
+      "id": "m04p13-s38-c1-2442c37448f9",
+      "slide": 38,
+      "text": "Start with the three accounts on the left. Production and development each connect to Transit Gateway so they can reach shared DNS and directory services while remaining isolated from one another.",
+      "text_sha256": "2442c37448f9700adb543055b43783f773ff92b10f53994d76cadbfb365c8cd4",
+      "asset_sha256": "10707223274c9445a4c30da65b076a9036f8c9cfc7718074d9c8ce8276a0bf3a"
+    },
+    {
+      "id": "m04p13-s38-c2-0f4a82d21266",
+      "slide": 38,
+      "text": "Read the first three rows of the access matrix. Both application networks may reach shared services, but production-to-development traffic is denied. Use separate route table associations and controlled propagation to implement that requirement.",
+      "text_sha256": "0f4a82d212661474cf37cf854ec8929a15ce14498a1827b72d54b437ee777e57",
+      "asset_sha256": "10707223274c9445a4c30da65b076a9036f8c9cfc7718074d9c8ce8276a0bf3a"
+    },
+    {
+      "id": "m04p13-s38-c3-bf0081349980",
+      "slide": 38,
+      "text": "Now follow the S3 rows and the local endpoint symbols. Each VPC has its own gateway endpoint. Do not send traffic through Transit Gateway expecting to reuse another VPC's S3 gateway endpoint.",
+      "text_sha256": "bf00813499807de6d50d979b6f6a754f7f5523bf2f3f27fe5315a3964529fac4",
+      "asset_sha256": "10707223274c9445a4c30da65b076a9036f8c9cfc7718074d9c8ce8276a0bf3a"
+    },
+    {
+      "id": "m04p13-s38-c4-6297265bf4a3",
+      "slide": 38,
+      "text": "With the complete slide visible, validate routes in both directions, endpoint and resource policies, and approved outbound inspection. Test forbidden paths as well as successful connections; an attachment alone does not establish permitted access.",
+      "text_sha256": "6297265bf4a3b18f4d4697acf332478ba9fdae41a548d23bfe03e68144acf3fa",
+      "asset_sha256": "10707223274c9445a4c30da65b076a9036f8c9cfc7718074d9c8ce8276a0bf3a"
+    },
+    {
+      "id": "m04p13-s39-c1-8b48f7306435",
+      "slide": 39,
+      "text": "Trace the upper path from application VPC A through inspection to application VPC B. Route tables must select inspection in both directions, with no direct route that silently bypasses the firewall.",
+      "text_sha256": "8b48f7306435cddf2453180ca55d137cbc2a5f05b9c9ee1a33f1625a01ea6d2a",
+      "asset_sha256": "cbd84977a6a1934987a8ecf7157469c1e1b4b1821e32b1cdc6b9d7437a12102a"
+    },
+    {
+      "id": "m04p13-s39-c2-671f9bc93931",
+      "slide": 39,
+      "text": "Compare the inspection choices in the right panel. An inspection VPC requires the appropriate Transit Gateway appliance mode and endpoint routing. Native Transit Gateway-attached Network Firewall offers a separate managed attachment option.",
+      "text_sha256": "671f9bc93931ca3efbdffd6c68d221b62771f95fb96c21f48ee14f3bba92e8dc",
+      "asset_sha256": "cbd84977a6a1934987a8ecf7157469c1e1b4b1821e32b1cdc6b9d7437a12102a"
+    },
+    {
+      "id": "m04p13-s39-c3-219372ebff6a",
+      "slide": 39,
+      "text": "Follow the lower outbound path. In this illustrated architecture, inspection enforces policy and NAT supplies IPv4 translation before internet access. Configure the return path and the logging needed to observe denied traffic.",
+      "text_sha256": "219372ebff6a408977e2257ce58b3e648c353cdf07317ab7ed04ef83ad6f5ebe",
+      "asset_sha256": "cbd84977a6a1934987a8ecf7157469c1e1b4b1821e32b1cdc6b9d7437a12102a"
+    },
+    {
+      "id": "m04p13-s39-c4-0343d4a6219e",
+      "slide": 39,
+      "text": "With the original slide fully visible, test both directions, endpoint health and an Availability Zone failure. A working direct route is still a failure if it violates the inspection requirement.",
+      "text_sha256": "0343d4a6219e12a09d4a55f691727ef25ff68198be65019040ca00c3d45dfef5",
+      "asset_sha256": "cbd84977a6a1934987a8ecf7157469c1e1b4b1821e32b1cdc6b9d7437a12102a"
+    },
+    {
+      "id": "m04p13-s40-c1-a7e3ab4e5926",
+      "slide": 40,
+      "text": "Read the first three design cards. Plan nonoverlapping address space, choose connectivity for the required network or service relationship, then select internet access for the address family and direction.",
+      "text_sha256": "a7e3ab4e59268d599998d6f078101bea7961eea392659e94dffeae72f750dc68",
+      "asset_sha256": "9a522a07374f238537a1c522148551ce0f7e6ec1a2a322383ad0665a31b151e1"
+    },
+    {
+      "id": "m04p13-s40-c2-65b2e229b455",
+      "slide": 40,
+      "text": "Move to security, resilience and evidence. Place controls at the correct boundary, preserve required route symmetry, and collect DNS, routing and log evidence for the complete path.",
+      "text_sha256": "65b2e229b4550bcf82817a1f5b2737615d18f0a18bf3552c1425f421c48d1874",
+      "asset_sha256": "9a522a07374f238537a1c522148551ce0f7e6ec1a2a322383ad0665a31b151e1"
+    },
+    {
+      "id": "m04p13-s40-c3-a7c8be2cf1bd",
+      "slide": 40,
+      "text": "Follow the reasoning sequence below. Begin with requirements, define allowed and denied traffic, choose the architecture, compare failure and cost tradeoffs, and validate the result.",
+      "text_sha256": "a7c8be2cf1bd7c4441a21cd75de5fea19163b0be0879076473e4cc33b17c0050",
+      "asset_sha256": "9a522a07374f238537a1c522148551ce0f7e6ec1a2a322383ad0665a31b151e1"
+    },
+    {
+      "id": "m04p13-s40-c4-c9d9b083e224",
+      "slide": 40,
+      "text": "With all six cards visible, trace identity, DNS, the source route, inspection, destination and return. Accept the design only when both the permitted behavior and the required isolation are demonstrated.",
+      "text_sha256": "c9d9b083e2245350970b1e019aee9007df823702db7542be760807b45460308a",
+      "asset_sha256": "9a522a07374f238537a1c522148551ce0f7e6ec1a2a322383ad0665a31b151e1"
+    }
+  ]
+}
