@@ -1,5 +1,5 @@
-import {NextRequest} from "next/server";
-const ROOT="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/sap";
+import type {NextRequest} from "next/server";
+import {exactSapVideoRelease,sapVideoReleasePrefix,SAP_MEDIA_ROOT as ROOT} from "../../lib/sap-exact-video-releases";
 // Exact approved M10 releases only; delete this map to roll back.
 const M10_RELEASES:Record<string,{release:string;revision:string}>={
   "01": {
@@ -48,8 +48,8 @@ export async function GET(request:NextRequest){
  if(!/^\d{2}$/.test(module)||!/^\d{2}$/.test(part))return Response.json({error:"Invalid module or part"},{status:400,headers});
  const stem=`sap-module-${module}-part-${part}`;
  const legacyPrefix=`${ROOT}/module-${module}/part-${part}/${stem}`;
- const approved=module==="10"?M10_RELEASES[part]:module==="02"?M02_RELEASES[part]:undefined;
- const candidates=approved?[{prefix:`${ROOT}/module-${module}/releases/${approved.release}/part-${part}/${stem}`,revision:approved.revision},{prefix:legacyPrefix,revision:undefined}]:[{prefix:legacyPrefix,revision:undefined}];
+ const approved=exactSapVideoRelease(module,part)??(module==="10"?M10_RELEASES[part]:module==="02"?M02_RELEASES[part]:undefined);
+ const candidates=approved?[{prefix:sapVideoReleasePrefix(module,part,approved.release),revision:approved.revision},{prefix:legacyPrefix,revision:undefined}]:[{prefix:legacyPrefix,revision:undefined}];
  for(const {prefix,revision} of candidates){
  try{
   const res=await fetch(`${prefix}-manifest.json?check=${Date.now()}`,{cache:"no-store",signal:AbortSignal.timeout(6500)});
