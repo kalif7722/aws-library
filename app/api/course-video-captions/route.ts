@@ -1,7 +1,7 @@
-import {NextRequest} from "next/server";
+import type {NextRequest} from "next/server";
+import {COURSE_MEDIA_ORIGIN as ROOT,isExactSapCaptionSource} from "../../lib/sap-exact-video-releases";
 
-// Same-origin proxy for the published AIP/AIF WebVTT tracks. No arbitrary URL fetching.
-const ROOT="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
+// Same-origin proxy for AIP/AIF WebVTT tracks and exact approved SAP release tracks.
 const PATH=/^\/aws-course-videos\/previews\/(aip|aif)\/module-\d{2}(?:\/part-\d{2})?\/(?:aip|aif)-module-\d{2}(?:-part-\d{2})?\.vtt$/;
 
 export async function GET(request:NextRequest){
@@ -9,10 +9,12 @@ export async function GET(request:NextRequest){
   if(!raw)return Response.json({error:"Missing caption source"},{status:400});
   let source:URL;
   try{source=new URL(raw);}catch{return Response.json({error:"Invalid caption URL"},{status:400});}
-  if(source.origin!==ROOT||!PATH.test(source.pathname)||source.username||source.password)
+  const exactSap=isExactSapCaptionSource(source);
+  if(source.origin!==ROOT||(!PATH.test(source.pathname)&&!exactSap)||source.username||source.password)
     return Response.json({error:"Unsupported caption source"},{status:400});
   try{
-    const response=await fetch(source.toString(),{cache:"no-store",signal:AbortSignal.timeout(8000)});
+    // An approved SAP path must not redirect outside the exact allowlist.
+    const response=await fetch(source.toString(),{cache:"no-store",signal:AbortSignal.timeout(8000),...(exactSap?{redirect:"error" as const}:{})});
     if(!response.ok)return Response.json({error:"Caption track unavailable"},{status:response.status===404?404:502});
     const content=await response.text();
     if(!content.trimStart().startsWith("WEBVTT"))return Response.json({error:"Invalid caption track"},{status:502});
