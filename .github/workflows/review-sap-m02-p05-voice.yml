@@ -1,0 +1,42 @@
+name: Review fresh SAP M02 Part05 Andrew US narration
+on:
+  push:
+    branches: [review/sap-m02-p05-voice-20261120]
+    paths:
+      - .github/workflows/review-sap-m02-p05-voice.yml
+      - scripts/review_sap_m02_p05_voice.py
+      - content/video-narration/review-sap-m02-p05-fresh.json
+permissions:
+  contents: read
+concurrency:
+  group: review-sap-m02-p05-voice-20261120
+  cancel-in-progress: false
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m02_p05_voice.py
+            content/video-narration/review-sap-m02-p05-fresh.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established speech engine
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install 'edge-tts==7.3.1'
+      - name: Smoke gate and fresh source-pinned narration
+        run: python scripts/review_sap_m02_p05_voice.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sap-m02-p05-fresh-andrew-voice-review
+          path: voice-review/
+          retention-days: 3
+          if-no-files-found: warn
