@@ -1,0 +1,112 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "revision": "2026-11-20-fresh-preparation-v1",
+  "units": [
+    {
+      "id": "m03p04-s9-c1-5d9fd48f3d24",
+      "slide": 9,
+      "text": "Begin in the owner account on the left. The S3 object is encrypted using the customer managed KMS key shown beneath the bucket.",
+      "text_sha256": "5d9fd48f3d243581760c80020754ed2932b70dda16a9403f7371fcbe75931e87",
+      "asset_sha256": "11148dfa272854bd0cff2bd7eef9133431829719e6e9357a2d36ad271038532c"
+    },
+    {
+      "id": "m03p04-s9-c2-1e54762e0542",
+      "slide": 9,
+      "text": "The upper gate is S3 access. The bucket policy in Account A and identity permissions in Account B must authorize the intended object read.",
+      "text_sha256": "1e54762e05420d47e3600765a20715773336812ed2766181d67c212e9402d38a",
+      "asset_sha256": "11148dfa272854bd0cff2bd7eef9133431829719e6e9357a2d36ad271038532c"
+    },
+    {
+      "id": "m03p04-s9-c3-3920c87871ae",
+      "slide": 9,
+      "text": "The lower gate is KMS decryption. Follow the key policy in the owner account and the reader role permissions in the other account.",
+      "text_sha256": "3920c87871ae82b48fb2bf6afff16bf671b3f348a4ab602d1b42b9d36cdb0054",
+      "asset_sha256": "11148dfa272854bd0cff2bd7eef9133431829719e6e9357a2d36ad271038532c"
+    },
+    {
+      "id": "m03p04-s9-c4-bc85e3016790",
+      "slide": 9,
+      "text": "The reader role on the right participates in both checks. Permission to read an S3 object does not by itself authorize use of its KMS key.",
+      "text_sha256": "bc85e3016790ad15e7b553b29117dd3d3fa80c54be35fe83d7380ea00b051c2e",
+      "asset_sha256": "11148dfa272854bd0cff2bd7eef9133431829719e6e9357a2d36ad271038532c"
+    },
+    {
+      "id": "m03p04-s9-c5-904f0101ad78",
+      "slide": 9,
+      "text": "The complete diagram has two gates, and both must allow the request. Explicit denies can still block access even when these individual permissions appear present.",
+      "text_sha256": "904f0101ad780ee4c937ac2dbe00882f3679433a75c378d57d07c4d252f8227b",
+      "asset_sha256": "11148dfa272854bd0cff2bd7eef9133431829719e6e9357a2d36ad271038532c"
+    },
+    {
+      "id": "m03p04-s10-c1-0bd6bbb4da22",
+      "slide": 10,
+      "text": "Start at step one on the upper left. Create a pending credential and store that version with the pending staging label.",
+      "text_sha256": "0bd6bbb4da22f07b5797949347db33f72db28a874485799facb1cfcddbed3997",
+      "asset_sha256": "c6827b6e9b7c3c83e2fff4f3f05b5f3a6b2ca3add9dfbc6185b7af0b509df1bd"
+    },
+    {
+      "id": "m03p04-s10-c2-02ed2b1b4740",
+      "slide": 10,
+      "text": "Follow step two on the right. The target service must be updated to recognize the pending credential; changing only the stored secret is insufficient.",
+      "text_sha256": "02ed2b1b4740c308b21bc3eb77ab62265851708a96f091d1d6b0c9e5ce5ba95f",
+      "asset_sha256": "c6827b6e9b7c3c83e2fff4f3f05b5f3a6b2ca3add9dfbc6185b7af0b509df1bd"
+    },
+    {
+      "id": "m03p04-s10-c3-573a475c5448",
+      "slide": 10,
+      "text": "Step three tests the pending credential against the target service. Verify that it works before promoting it for normal use.",
+      "text_sha256": "573a475c5448ecf6a9aeb65f5c2f8ece0ea44502f9057396c1dac9d11abfb9f1",
+      "asset_sha256": "c6827b6e9b7c3c83e2fff4f3f05b5f3a6b2ca3add9dfbc6185b7af0b509df1bd"
+    },
+    {
+      "id": "m03p04-s10-c4-9ea11b12ce67",
+      "slide": 10,
+      "text": "At step four, promote the tested version to current. The previous version can be retained, while rollback still needs deliberate operational handling.",
+      "text_sha256": "9ea11b12ce674e69751b7e1c78ea77285266bf27ea1dacf71b45a0bbdc7f0a33",
+      "asset_sha256": "c6827b6e9b7c3c83e2fff4f3f05b5f3a6b2ca3add9dfbc6185b7af0b509df1bd"
+    },
+    {
+      "id": "m03p04-s10-c5-bc697daa182d",
+      "slide": 10,
+      "text": "Follow the whole loop, then read the footer. Verify application retrieval and rollback behavior. Rotation must be configured, and plaintext credentials must stay out of logs.",
+      "text_sha256": "bc697daa182d89bb05206d71dc8aeecd33b5d327838352fbe6d5d1a1875f6bd2",
+      "asset_sha256": "c6827b6e9b7c3c83e2fff4f3f05b5f3a6b2ca3add9dfbc6185b7af0b509df1bd"
+    },
+    {
+      "id": "m03p04-s11-c1-79aaa545912a",
+      "slide": 11,
+      "text": "Begin with Parameter Store on the left. Hierarchical names organize configuration values by application, environment, and other operational boundaries.",
+      "text_sha256": "79aaa545912ad865fed4e09e207bc1d5f0056679f08cebcc8b5709aab31703ac",
+      "asset_sha256": "b6497b3156dd68f9caaa8d9a9ea14de533f79cbc92b47e5e84acc89ab8a17a1d"
+    },
+    {
+      "id": "m03p04-s11-c2-49d878d31be9",
+      "slide": 11,
+      "text": "Its SecureString option encrypts sensitive configuration with KMS. That encryption does not automatically rotate the underlying credential.",
+      "text_sha256": "49d878d31be93e3ac1f0645aed755e7504c0bf1e74a6d8d2e0bd1fc61e46d0de",
+      "asset_sha256": "b6497b3156dd68f9caaa8d9a9ea14de533f79cbc92b47e5e84acc89ab8a17a1d"
+    },
+    {
+      "id": "m03p04-s11-c3-2a9c6dc8e269",
+      "slide": 11,
+      "text": "The central question is what kind of value this is and how the application uses it. Configuration settings and managed credentials have different lifecycle needs.",
+      "text_sha256": "2a9c6dc8e2693eafdb26ca6e5a28f7c9f1c91a719a43dd65387b1309a669281a",
+      "asset_sha256": "b6497b3156dd68f9caaa8d9a9ea14de533f79cbc92b47e5e84acc89ab8a17a1d"
+    },
+    {
+      "id": "m03p04-s11-c4-7052e7656087",
+      "slide": 11,
+      "text": "On the right, Secrets Manager focuses on credentials and other secrets. Its rotation and replication capabilities still need service-specific configuration and testing.",
+      "text_sha256": "7052e76560870381077ca49e9e1b8ab249383f364041c5bc4299f35fb3ba898e",
+      "asset_sha256": "b6497b3156dd68f9caaa8d9a9ea14de533f79cbc92b47e5e84acc89ab8a17a1d"
+    },
+    {
+      "id": "m03p04-s11-c5-e85b6bc30ec9",
+      "slide": 11,
+      "text": "With both choices visible, select the service by the required lifecycle. Keep encryption, retrieval permissions, rotation, and recovery as separate design decisions.",
+      "text_sha256": "e85b6bc30ec9251ab69f8290161951195e928331b1f90ef00f6acd3203a4a4ad",
+      "asset_sha256": "b6497b3156dd68f9caaa8d9a9ea14de533f79cbc92b47e5e84acc89ab8a17a1d"
+    }
+  ]
+}
