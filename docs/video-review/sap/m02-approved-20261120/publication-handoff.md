@@ -1,30 +1,25 @@
-# SAP Module 02 approved review publication — blocked before upload
+# SAP Module 02 approved review publication — staged, not activated
 
-Scope: Parts 01, 02, 04 and 07 only. User approved these exact narrated reviews. Do not merge this draft until the versioned objects are uploaded and independently verified.
+Scope: reviewed Parts 01, 02, 04 and 07 only. No rerendering or speech synthesis. Keep this PR unmerged until public verification succeeds.
 
-## Verified existing GitHub path
-- Successful publishing run: https://github.com/kalif7722/aws-library/actions/runs/44382463403
-- Workflow: .github/workflows/publish-sap-m15-p04-approved.yml
-- Source review run: 44378467686; source commit: 052b93a6079b498da9321acb628006eb7df40e6c.
-- Artifact: sap-m15-part04-complete-review, ID 14464715370, ZIP digest sha256:913e5067d09c0bbd3c81f65189e0565ece67d4d09adff5bd5b94eadc982dd99a.
-- Publication job 135078135561 succeeded and recorded public checksum, chapter, caption and transcript verification.
-- The workflow has workflow_dispatch with no inputs; run-id and artifact name are hardcoded for Module 15. Running it cannot publish Module 02.
-- Module 02 render workflows also have workflow_dispatch with no inputs. They synthesize and rerender older scripts, then overwrite legacy keys. Do not run them for these approved replacements.
+## Correct Module 10 precedent
+- Initial M10 Parts 01/02: commit 9518b083a7d0d5c4239973adc78fef34b5035eaa; workflow .github/workflows/stage-sap-m10-approved-20261119.yml; successful run 44520852997; artifact sap-m10-approved-scoped-targets (14527887388). Trigger: push to main affecting that workflow; no dispatch inputs. It generated object-specific temporary upload/verification links, not an MP4 artifact or fresh render.
+- Corrected M10 Part 02: commit d18a1450f1a2defd09e73d026fdbbe5ae61d27f9; .github/workflows/stage-sap-m10-encrypted-20261119.yml; successful run 44551270459; artifact sap-m10-encrypted-object-handoff (14543955793). Trigger: push to stage/sap-m10-encrypted-20261119 affecting that workflow; no dispatch inputs. It encrypted a 900-second exact-object handoff.
+- Mapping commit c05d3293e18cecef35fab3d8895d866a1a146167 selected M10 Part 01 release 2026-11-19-approved-direct-v1 and Part 02 release 2026-11-19-approved-p02-corrected-v4.
+- This corrects the initial handoff's artifact-ingress prerequisite. The M10 staging method can transfer approved local bytes without an MP4 Actions artifact.
 
-## Artifact ingress blocker
-All 127 repository Actions artifacts were listed on 2026-11-20. None is a Module 02 review artifact; the newest artifact is dated 2026-11-19. The four approved files were produced locally and have no source Actions run ID.
-All 276 workflow records were inspected for staging/publication/upload paths. No existing workflow accepts local reviewed MP4 files. The newer Module 10 staging workflows create encrypted, short-lived direct R2 upload links; that route is explicitly excluded from this task.
+## M02 execution and evidence
+- Stage branch: stage/sap-m02-approved-four-20261120
+- Commit: bcbd51442cefd87077b99fff029fd35bf71fc061
+- Workflow: .github/workflows/stage-sap-m02-approved-four-20261120.yml
+- Successful run: https://github.com/kalif7722/aws-library/actions/runs/44708316991
+- Artifact: sap-m02-approved-four-encrypted-upload-handoff, ID 14615204780; ZIP SHA256 4196f9002e30d911670cd47ded626b452137ed6fbde78d71bab4eee79b18cc6d.
+- The trusted job used existing repository secrets and fixed 20-object metadata. It generated encrypted 15-minute upload permissions with signed content length, content type, checksum metadata and If-None-Match:*.
+- No secrets changed, no public media binaries committed, no private media-source URLs passed to GitHub, no resynthesis, no rerendering, no signed download permissions generated.
+- All 20 create-only uploads returned success: four exact approved MP4s and matching VTT, SRT, transcript and chapter manifests.
+- Public read of the first staged MP4 returned HTTP 403. Verification stopped without retries or alternate access routes. Zero remote public hashes verified. Upload success does not establish public playback.
 
-There is no existing Run workflow selection or set of inputs that uploads these four local files. The minimum missing prerequisite is an approved GitHub-hosted ingress for the exact files, producing an immutable artifact ID/run ID and matching checksums, followed by a narrowly scoped publisher consuming that artifact. It must not execute code from the media package, accept private download URLs, put binaries in main, or rerender media. No new ingress workflow is included or triggered here.
+## Local checks and remaining gate
+Approved MP4 SHA256 values were rechecked before transfer. H.264/AAC compatibility, ordered chapters and all 165 caption texts/timestamps matched the reviewed files and embedded captions. The patch scope check confirmed only four M02 selections are added; M10 selections and other source logic remain unchanged except the module-aware release prefix.
 
-## Draft contents and activation gate
-The inventory records 20 exact objects: unchanged approved MP4/VTT plus matching SRT, transcript and chapter manifest for each part. Local checks reconfirmed approved MP4 checksums, H.264/AAC compatibility, ordered chapters and all 165 caption texts/timestamps against embedded subtitles.
-
-The route draft selects versioned media only for M02 Parts 01/02/04/07; all legacy fallbacks and M10 selections remain intact. Before merging:
-1. Verify approved artifact provenance and every item hash against the inventory.
-2. Upload new versioned keys through the trusted GitHub publisher without overwriting existing keys.
-3. Verify remote bytes, sizes, MIME, MP4 access, VTT and chapter manifests.
-4. Recheck current main, run focused mapping checks and deploy to the existing production target.
-5. Verify each learner API and playback/caption controls; distinguish deployment from playback if access is blocked.
-
-No media, credentials, private URLs, executable workflow or production change is included in this draft.
+Keep live mappings unchanged. Public storage access must work through the normal route before verifying all remote sizes, SHA256 values, MIME types, VTT and manifests. Then recheck current main, activate the four-part mapping through the existing Workers build and verify learner playback/captions. No production deployment has been made by this release.
