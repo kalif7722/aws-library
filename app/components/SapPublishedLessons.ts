@@ -99,3 +99,8 @@ export function publishedModuleLessons(moduleId:string):Lesson[]{
  return [...bySequence.values()].sort((a,b)=>a.sequence-b.sequence).map(l=>M02_VERSIONED_ASSETS[l.id]?{...l,asset:M02_VERSIONED_ASSETS[l.id]}:l);
 }
 
+
+/** Resolve the browser URL used by the published SAP gallery. */
+export function publishedSapImageUrl(moduleId:string, asset:string):string {
+ return moduleId==='08'&&asset.includes('-aip-v1.webp')?`${asset}?v=sap-m08-aip-batch3`:moduleId==='09'&&asset.includes('-aip-v')?`${asset}?v=sap-m09-aip-batch4`:moduleId==='00'?`${asset}?v=sap-m00-cover-v2`:moduleId==='02'?`${asset}?v=sap-m02-approved-32`:moduleId==='10'&&asset.includes('/foundation-')?`${asset}?v=sap-m10-foundation-v2`:moduleId==='10'&&asset.includes('-aip-v4.webp')?`${asset}?v=sap-m10-final-corrections`:moduleId==='11'&&asset.includes('-aip-v')?`${asset}?v=sap-m11-aip-batch6`:moduleId==='12'&&asset.includes('-aip-v')?`${asset}?v=sap-m12-aip-batch8`:moduleId==='13'&&asset.includes('-aip-v')?`${asset}?v=sap-m13-aip-batch11`:moduleId==='14'&&asset.includes('-aip-v')?`${asset}?v=sap-m14-aip-batch13`:moduleId==='17'&&asset.includes('-aip-v')?`${asset}?v=sap-m17-aip-batch16`:moduleId==='18'&&asset.includes('-aip-v')?`${asset}?v=sap-m18-aip-batch17`:asset;
+}
