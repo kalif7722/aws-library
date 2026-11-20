@@ -32,6 +32,12 @@ const M10_RELEASES:Record<string,{release:string;revision:string}>={
   "10": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"},
   "11": {"release": "2026-11-19-topic-led-p07-p11-v1", "revision": "2026-11-19-topic-led-p07-p11-v1"}
 };
+const M02_RELEASES:Record<string,{release:string;revision:string}>={
+  "01": {release:"2026-11-20-approved-animation-v1",revision:"2026-11-20-approved-animation-v1"},
+  "02": {release:"2026-11-20-approved-animation-v1",revision:"2026-11-20-approved-animation-v1"},
+  "04": {release:"2026-11-20-approved-animation-v1",revision:"2026-11-20-approved-animation-v1"},
+  "07": {release:"2026-11-20-approved-animation-v1",revision:"2026-11-20-approved-animation-v1"},
+};
 type Scene={slide:number;title:string;start_seconds:number;duration_seconds:number};
 type Manifest={module?:string;part?:string;script_revision?:string;title?:string;duration_seconds?:number;scenes?:Scene[]};
 const headers={"Cache-Control":"no-store, max-age=0"};
@@ -42,8 +48,8 @@ export async function GET(request:NextRequest){
  if(!/^\d{2}$/.test(module)||!/^\d{2}$/.test(part))return Response.json({error:"Invalid module or part"},{status:400,headers});
  const stem=`sap-module-${module}-part-${part}`;
  const legacyPrefix=`${ROOT}/module-${module}/part-${part}/${stem}`;
- const approved=module==="10"?M10_RELEASES[part]:undefined;
- const candidates=approved?[{prefix:`${ROOT}/module-10/releases/${approved.release}/part-${part}/${stem}`,revision:approved.revision},{prefix:legacyPrefix,revision:undefined}]:[{prefix:legacyPrefix,revision:undefined}];
+ const approved=module==="10"?M10_RELEASES[part]:module==="02"?M02_RELEASES[part]:undefined;
+ const candidates=approved?[{prefix:`${ROOT}/module-${module}/releases/${approved.release}/part-${part}/${stem}`,revision:approved.revision},{prefix:legacyPrefix,revision:undefined}]:[{prefix:legacyPrefix,revision:undefined}];
  for(const {prefix,revision} of candidates){
  try{
   const res=await fetch(`${prefix}-manifest.json?check=${Date.now()}`,{cache:"no-store",signal:AbortSignal.timeout(6500)});
