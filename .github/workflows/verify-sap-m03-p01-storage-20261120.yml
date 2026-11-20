@@ -1,0 +1,60 @@
+name: Verify exact SAP M03 Part 01 staged storage
+on:
+  push:
+    branches: [review/verify-sap-m03-p01-storage-20261120]
+    paths: [.github/workflows/verify-sap-m03-p01-storage-20261120.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - run: python -m pip install --disable-pip-version-check boto3
+      - name: Read only five pinned objects through existing storage authorization
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PY'
+          import os,json,re,urllib.parse,hashlib
+          import boto3
+          from botocore.exceptions import ClientError
+          from botocore.config import Config
+          try:
+              endpoint=os.environ["R2_ENDPOINT"]; u=urllib.parse.urlsplit(endpoint)
+              assert u.scheme=="https" and re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com",u.hostname or "") and u.netloc==u.hostname and u.path in ("","/") and not u.query and not u.fragment
+              bucket=os.environ["R2_BUCKET"]
+              api=boto3.client("s3",endpoint_url=endpoint,region_name="auto",config=Config(signature_version="s3v4",retries={"total_max_attempts":1},s3={"addressing_style":"path"}))
+              items=json.loads("[{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01.mp4\",\"bytes\":26248297,\"sha256\":\"0aca674641c0a64857d84b8bfbe400a71a1e59f27592bfa0f6dc6ff177daf10b\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01.vtt\",\"bytes\":2531,\"sha256\":\"8b4492490d76d63b89cee5cc3975cb28eba473d74b784ae12bddf40f83895494\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01.srt\",\"bytes\":2556,\"sha256\":\"dbc715cdc353bfe9e7a0def7bce79e839689cfb61026ef21a747cd49c46f9b97\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01-transcript.txt\",\"bytes\":2101,\"sha256\":\"ae1ed763ca21cb520287a701fddd64de598c774f70fb996eef14a1e7c0aca451\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01-manifest.json\",\"bytes\":839,\"sha256\":\"29b7bd164cdf78d956faa669734368c5dd3710ed8a128173ce07e336588094f7\",\"content_type\":\"application/json\"}]")
+              assert len(items)==5
+              results=[]
+              for x in items:
+                  assert re.fullmatch(r"aws-course-videos/previews/sap/module-03/releases/2026-11-20-m03p01-approved-animation-v1/part-01/sap-module-03-part-01(\.mp4|\.vtt|\.srt|-transcript\.txt|-manifest\.json)",x["key"])
+                  try: h=api.head_object(Bucket=bucket,Key=x["key"])
+                  except ClientError as e:
+                      if str(e.response["Error"]["Code"]) not in ("404","NoSuchKey","NotFound"): raise
+                      results.append({"pass":False,"missing":True,"bytes":x["bytes"],"sha256":x["sha256"]});continue
+                  assert h["ContentLength"]==x["bytes"] and h["ContentType"]==x["content_type"]
+                  assert h["Metadata"]["sha256"]==x["sha256"]
+                  r=api.get_object(Bucket=bucket,Key=x["key"])
+                  digest=hashlib.sha256();size=0
+                  for block in r["Body"].iter_chunks(chunk_size=1024*1024): digest.update(block);size+=len(block)
+                  r["Body"].close()
+                  assert size==x["bytes"] and digest.hexdigest()==x["sha256"]
+                  results.append({"pass":True,"bytes":size,"sha256":digest.hexdigest()})
+                  print(json.dumps(results[-1]),flush=True)
+              open("storage-verification.json","w").write(json.dumps(results,indent=2))
+              print("Exact objects present:",sum(x["pass"] for x in results),"of 5")
+          except Exception:
+              print("FAIL: exact-object storage verification stopped; no retry or sensitive details emitted.")
+              raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m03-p01-storage-verification
+          path: storage-verification.json
+          retention-days: 7
+          if-no-files-found: error
