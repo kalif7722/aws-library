@@ -1,0 +1,121 @@
+{
+  "module": "06",
+  "part": "03",
+  "revision": "2026-11-20-m06p03-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m06p03-s9-c1-a55a6485c58a",
+      "slide": 9,
+      "text": "Start with the virtual private gateway association on the left. Allowed prefixes filter VPC advertisements. The allowed range must contain the entire VPC CIDR; a broader entry does not create an advertised summary.",
+      "text_sha256": "a55a6485c58a04f75e5292b3cab17955c21277ce841e03d768aa5874e612fb49",
+      "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+    },
+    {
+      "id": "m06p03-s9-c2-bcbf2e912f73",
+      "slide": 9,
+      "text": "Compare the Transit Gateway association on the right. Its configured allowed prefixes are advertised from the Direct Connect gateway autonomous system. Receiving that advertisement does not prove a working route to the destination.",
+      "text_sha256": "bcbf2e912f73e119fb153c60a712421e0ec5de59f57146a335879ece233b4f45",
+      "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+    },
+    {
+      "id": "m06p03-s9-c3-45cbd55bfe49",
+      "slide": 9,
+      "text": "Read the lower row. Cross-account association requires proposal and acceptance. Use a compatible virtual interface and gateway model, and prevent overlapping allowed prefixes across Transit Gateway associations on the same Direct Connect gateway.",
+      "text_sha256": "45cbd55bfe49967975f3f1f83774ffe8331065911dbd33fe859026f1de4c4882",
+      "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+    },
+    {
+      "id": "m06p03-s9-c4-602c9d5c8daa",
+      "slide": 9,
+      "text": "Return to the full slide. The same prefix-list field has different behavior: it filters VPC advertisements for virtual private gateways, but defines advertised prefixes for Transit Gateway associations. Validate forwarding independently.",
+      "text_sha256": "602c9d5c8daa6594ef917b9653af8ee4f1111e1bb9f886d34fb3de430db44431",
+      "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+    },
+    {
+      "id": "m06p03-s10-c1-1fb3df3c0577",
+      "slide": 10,
+      "text": "Follow the first column. Direct Connect and the transit virtual interface carry the connection and establish BGP. Verify the exchanged prefixes before treating the transport as ready for application traffic.",
+      "text_sha256": "1fb3df3c05778708534beb5e6188f067e6fc27b4f81189b70ea2be07774f4592",
+      "asset_sha256": "41617b275536f97f9557ca65fea90dc939446f6bc1c90c882be98fe9ca42b3c7"
+    },
+    {
+      "id": "m06p03-s10-c2-2817618a479f",
+      "slide": 10,
+      "text": "Move to the middle column. Associate the Transit Gateway with the Direct Connect gateway, configure allowed prefixes, and use compatible autonomous system numbers. An association is only one part of the route.",
+      "text_sha256": "2817618a479f498608a6afd5c3c9432eb7b6c1743586c48e8fb6b6f49b5cc90b",
+      "asset_sha256": "41617b275536f97f9557ca65fea90dc939446f6bc1c90c882be98fe9ca42b3c7"
+    },
+    {
+      "id": "m06p03-s10-c3-a6c61cb3ae9b",
+      "slide": 10,
+      "text": "Continue to the right and lower panels. Transit Gateway route-table association and propagation control reachability. VPC subnet routes and the on-premises return route must complete the path.",
+      "text_sha256": "a6c61cb3ae9bfca767d6876eeb05e7aa32c23f0829953573b522807266745b28",
+      "asset_sha256": "41617b275536f97f9557ca65fea90dc939446f6bc1c90c882be98fe9ca42b3c7"
+    },
+    {
+      "id": "m06p03-s10-c4-2ce6fa9d2210",
+      "slide": 10,
+      "text": "Review the original full slide. Shared connectivity does not mean every attached network should communicate. Choose segmentation deliberately and validate each Region's associations, forward routes and return routes independently.",
+      "text_sha256": "2ce6fa9d2210245a567b74a9c4e1709f7663b2dc94f18851a89ec705bb9b7622",
+      "asset_sha256": "41617b275536f97f9557ca65fea90dc939446f6bc1c90c882be98fe9ca42b3c7"
+    },
+    {
+      "id": "m06p03-s11-c1-6ab1079c5ee7",
+      "slide": 11,
+      "text": "Start with the top row and opposing arrows. Your router selects the path toward AWS. AWS selects paths toward the networks you advertise. These are independent routing decisions.",
+      "text_sha256": "6ab1079c5ee7fff694d040f4b791c4e0ed76387f64c03271b679b0acdeb5f87e",
+      "asset_sha256": "429df5a2ed3dbb3e988ff703dbb1ceb4b93b8366b3b2ddf88fa526b4da0793b4"
+    },
+    {
+      "id": "m06p03-s11-c2-b485d40a878d",
+      "slide": 11,
+      "text": "Read the second row. For equal-length prefixes on private and transit virtual interfaces, supported local-preference communities influence AWS path choice toward your network. Use the documented communities for that direction.",
+      "text_sha256": "b485d40a878d77d0cfa3b85c5a514fbc52ae4678741fe9b312a6ee8c2ddd46e5",
+      "asset_sha256": "429df5a2ed3dbb3e988ff703dbb1ceb4b93b8366b3b2ddf88fa526b4da0793b4"
+    },
+    {
+      "id": "m06p03-s11-c3-d57e55592847",
+      "slide": 11,
+      "text": "Inspect the third row. Longest-prefix matching comes first. A more-specific route can defeat the intended preference for a less-specific backup, even when autonomous-system path policy appears to favor another link.",
+      "text_sha256": "d57e5559284710f48c6ba85a8f85820d6d3e487777e7357b71cc04b9a37fb3b0",
+      "asset_sha256": "429df5a2ed3dbb3e988ff703dbb1ceb4b93b8366b3b2ddf88fa526b4da0793b4"
+    },
+    {
+      "id": "m06p03-s11-c4-3d95ee2f9e22",
+      "slide": 11,
+      "text": "With the complete slide visible, test both traffic directions and failure recovery. Do not assume symmetry. Verify the received routes and actual application path rather than relying only on the intended BGP configuration.",
+      "text_sha256": "3d95ee2f9e22a0ea2c8160fafa45d8d675a7ecd4c9b2da196ff75c5f0f593f7b",
+      "asset_sha256": "429df5a2ed3dbb3e988ff703dbb1ceb4b93b8366b3b2ddf88fa526b4da0793b4"
+    },
+    {
+      "id": "m06p03-s12-c1-6feb166dea80",
+      "slide": 12,
+      "text": "Begin with the upper-left panel. Separate customer routers, power and access circuits. Redundant connections cannot protect the workload if both depend on the same failed equipment or facility.",
+      "text_sha256": "6feb166dea80a1b16dfd164fb0e720a164d8b3cb89cbe121d1555430eb4d7395",
+      "asset_sha256": "ce0d8d9565696e7dcb2e7e80c514aa6d435e77f9d1d9605a770adfa436dc93af"
+    },
+    {
+      "id": "m06p03-s12-c2-dda11a95278a",
+      "slide": 12,
+      "text": "Move to the upper right. Independent AWS devices address device failure; multiple Direct Connect locations address location failure. Choose the diversity required by the workload's recovery target.",
+      "text_sha256": "dda11a95278a9dc3ba339e9febe3e6ee7844b6b59de439d09e877dedb56c01a2",
+      "asset_sha256": "ce0d8d9565696e7dcb2e7e80c514aa6d435e77f9d1d9605a770adfa436dc93af"
+    },
+    {
+      "id": "m06p03-s12-c3-09d04d93d437",
+      "slide": 12,
+      "text": "Inspect the lower-left conduit. Two circuits through the same provider path can fail together. Ask about physical routing and shared dependencies instead of counting circuit names alone.",
+      "text_sha256": "09d04d93d437dca29bd972b772708cca24f25c857d6f3391cbea37c913881a0f",
+      "asset_sha256": "ce0d8d9565696e7dcb2e7e80c514aa6d435e77f9d1d9605a770adfa436dc93af"
+    },
+    {
+      "id": "m06p03-s12-c4-147e3590d2ed",
+      "slide": 12,
+      "text": "Return to the full slide and the lower-right checklist. Test device, circuit and location loss, then measure surviving capacity. Resilience requires both an available path and enough capacity for critical traffic.",
+      "text_sha256": "147e3590d2ed0b0938519cf459191042f3c464fddb78439ae4f9f29f96690cb1",
+      "asset_sha256": "ce0d8d9565696e7dcb2e7e80c514aa6d435e77f9d1d9605a770adfa436dc93af"
+    }
+  ]
+}
