@@ -1,0 +1,55 @@
+name: Verify exact SAP M02 Part 05 staged storage
+on:
+  push:
+    branches: [review/verify-sap-m02-p05-storage-20261120]
+    paths: [.github/workflows/verify-sap-m02-p05-storage-20261120.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - run: python -m pip install --disable-pip-version-check boto3
+      - name: Read only five pinned objects through existing storage authorization
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PY'
+          import os,json,re,urllib.parse,hashlib
+          import boto3
+          from botocore.config import Config
+          try:
+              endpoint=os.environ["R2_ENDPOINT"]; u=urllib.parse.urlsplit(endpoint)
+              assert u.scheme=="https" and re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com",u.hostname or "") and u.netloc==u.hostname and u.path in ("","/") and not u.query and not u.fragment
+              bucket=os.environ["R2_BUCKET"]
+              api=boto3.client("s3",endpoint_url=endpoint,region_name="auto",config=Config(signature_version="s3v4",retries={"total_max_attempts":1},s3={"addressing_style":"path"}))
+              items=json.loads("[{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05.mp4\",\"bytes\":67919001,\"sha256\":\"5f0b673badd310b2f81280631ff57b9bfcc39fb6a1ee973298bd186b97444fdf\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05.vtt\",\"bytes\":6911,\"sha256\":\"54fa959648870fcf4eff4d0ec4f9d0179811861f0913c49ca362125cb1fdb0a2\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05.srt\",\"bytes\":7002,\"sha256\":\"89464756e247fb888d3fe18549dff0bd8111fd4e7f0af843d8eb513c092f45e4\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05-transcript.txt\",\"bytes\":5822,\"sha256\":\"dd94ece57126b92fa20c1bac7b782fe38172f2f97e2468a7c42d5a601d116fa2\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05-manifest.json\",\"bytes\":1365,\"sha256\":\"6b47a36f2b6b57faab68316fac44f66ff57fbfb286e8f054ab39d7862c1bfa7b\",\"content_type\":\"application/json\"}]")
+              assert len(items)==5
+              results=[]
+              for x in items:
+                  assert re.fullmatch(r"aws-course-videos/previews/sap/module-02/releases/2026-11-20-m02p05-fresh-animation-v1/part-05/sap-module-02-part-05(\.mp4|\.vtt|\.srt|-transcript\.txt|-manifest\.json)",x["key"])
+                  h=api.head_object(Bucket=bucket,Key=x["key"])
+                  assert h["ContentLength"]==x["bytes"] and h["ContentType"]==x["content_type"]
+                  assert h["Metadata"]["sha256"]==x["sha256"]
+                  r=api.get_object(Bucket=bucket,Key=x["key"])
+                  digest=hashlib.sha256();size=0
+                  for block in r["Body"].iter_chunks(chunk_size=1024*1024): digest.update(block);size+=len(block)
+                  r["Body"].close()
+                  assert size==x["bytes"] and digest.hexdigest()==x["sha256"]
+                  results.append({"pass":True,"bytes":size,"sha256":digest.hexdigest()})
+                  print(json.dumps(results[-1]),flush=True)
+              open("storage-verification.json","w").write(json.dumps(results,indent=2))
+          except Exception:
+              print("FAIL: exact-object storage verification stopped; no retry or sensitive details emitted.")
+              raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m02-p05-storage-verification
+          path: storage-verification.json
+          retention-days: 7
+          if-no-files-found: error
