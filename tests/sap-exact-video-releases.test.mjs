@@ -90,7 +90,7 @@ test("exact SAP tracks pass the proxy, with redirects disallowed and VTT returne
     const src=prefix(row)+".vtt?v="+revision;
     const vtt=vttFixture(`sap-module-${module}-part-${part}`);
     const fetch=t.mock.method(globalThis,"fetch",async (raw,init)=>{
-      assert.equal(raw,src);assert.equal(init.redirect,"error");
+      assert.equal(raw,src);assert.equal(init.redirect,"manual");
       return new Response(vtt);
     });
     const response=await captions(request("course-video-captions",{src}));
@@ -117,11 +117,11 @@ test("invalid SAP caption variations are not fetched",async t=>{
   assert.equal(fetch.mock.callCount(),0);
 });
 
-test("caption route keeps prior AIP/AIF support, rejects invalid payload and handles upstream redirect error",async t=>{
+test("caption route keeps prior AIP/AIF support, rejects invalid payload and refuses upstream redirects without following them",async t=>{
   const fetch=t.mock.method(globalThis,"fetch",async (raw,init)=>{
     if(raw.includes("/sap/")){
-      assert.equal(init.redirect,"error");
-      throw new TypeError("redirect not allowed");
+      assert.equal(init.redirect,"manual");
+      return new Response("Redirect",{status:302,headers:{Location:"https://not-allowed.test/no-fetch.vtt"}});
     }
     assert.equal(init.redirect,undefined);
     return new Response(raw.includes("/aif/")?"Not WebVTT":"WEBVTT\n\n");
@@ -129,6 +129,8 @@ test("caption route keeps prior AIP/AIF support, rejects invalid payload and han
   const call=src=>captions(request("course-video-captions",{src}));
   assert.equal((await call(origin+"/aws-course-videos/previews/aip/module-01/aip-module-01.vtt")).status,200);
   assert.equal((await call(origin+"/aws-course-videos/previews/aif/module-01/part-02/aif-module-01-part-02.vtt")).status,502);
-  assert.equal((await call(prefix(rows[0])+".vtt?v="+rows[0][2])).status,502);
+  const redirected=await call(prefix(rows[0])+".vtt?v="+rows[0][2]);
+  assert.equal(redirected.status,502);
+  assert.deepEqual(await redirected.json(),{error:"Caption redirect not allowed"});
   assert.equal(fetch.mock.callCount(),3);
 });

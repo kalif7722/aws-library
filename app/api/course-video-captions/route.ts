@@ -13,8 +13,13 @@ export async function GET(request:NextRequest){
   if(source.origin!==ROOT||(!PATH.test(source.pathname)&&!exactSap)||source.username||source.password)
     return Response.json({error:"Unsupported caption source"},{status:400});
   try{
-    // An approved SAP path must not redirect outside the exact allowlist.
-    const response=await fetch(source.toString(),{cache:"no-store",signal:AbortSignal.timeout(8000),...(exactSap?{redirect:"error" as const}:{})});
+    // Cloudflare Workers supports manual redirects, not Fetch redirect "error".
+    // Keep SAP upstream redirects unfollowed and reject the response.
+    const response=await fetch(source.toString(),{cache:"no-store",signal:AbortSignal.timeout(8000),...(exactSap?{redirect:"manual" as const}:{})});
+    if(exactSap&&response.status>=300&&response.status<400){
+      await response.body?.cancel();
+      return Response.json({error:"Caption redirect not allowed"},{status:502});
+    }
     if(!response.ok)return Response.json({error:"Caption track unavailable"},{status:response.status===404?404:502});
     const content=await response.text();
     if(!content.trimStart().startsWith("WEBVTT"))return Response.json({error:"Invalid caption track"},{status:502});
