@@ -1,0 +1,41 @@
+name: Repair only missing SAP M03 P08 cue4 sentence
+on:
+  push:
+    branches: [review/sap-m03-p08-cue4-repair-20261120]
+    paths: [.github/workflows/review-sap-m03-p08-cue4-repair.yml, scripts/review_sap_m03_p08_cue4_repair.py, content/video-narration/review-sap-m03-p08-cue4-repair.json]
+permissions:
+  contents: read
+concurrency:
+  group: sap-fresh-andrew-review
+  cancel-in-progress: false
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m03_p08_cue4_repair.py
+            content/video-narration/review-sap-m03-p08-cue4-repair.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established speech engine
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install 'edge-tts==7.3.1'
+      - name: One missing sentence with complete text coverage
+        run: python scripts/review_sap_m03_p08_cue4_repair.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sap-m03-p08-cue4-repair
+          path: voice-review/
+          retention-days: 3
+          if-no-files-found: warn
