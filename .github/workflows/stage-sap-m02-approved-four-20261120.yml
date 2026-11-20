@@ -1,0 +1,90 @@
+name: Stage exact approved SAP M02 four-part release
+on:
+  push:
+    branches: [stage/sap-m02-approved-four-20261120]
+    paths: [.github/workflows/stage-sap-m02-approved-four-20261120.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m02-approved-four-20261120
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/stage/sap-m02-approved-four-20261120'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install official SDK
+        run: python -m pip install --disable-pip-version-check boto3
+      - name: Write public encryption recipient
+        run: |
+          cat > recipient.crt <<'CERT'
+          -----BEGIN CERTIFICATE-----
+          MIIELTCCApWgAwIBAgIUZboFT3hUZCmlET8NhRoLTDUWZncwDQYJKoZIhvcNAQEL
+          BQAwJjEkMCIGA1UEAwwbU0FQLU0wMi1hcHByb3ZlZC1mb3VyLXN0YWdlMB4XDTI2
+          MTEyMDA5MDgzM1oXDTI2MTEyMTA5MDgzM1owJjEkMCIGA1UEAwwbU0FQLU0wMi1h
+          cHByb3ZlZC1mb3VyLXN0YWdlMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKC
+          AYEAwTuc6p5QdcLFNjkWdkYbzf5A8aFekOYYXfu9f27r1kcucBE/N5kAoDhtysET
+          /qJ6Z+I7mKMUHNFFh7wh1eJu6f5s1LzHT/JN4fXvdm0M2SPoi10SqP9El6S1of65
+          Tw/UgL2x++1jnahIGPSysIP3wDlbv/EDOEDfzQP9oZvrfO6MnosWYKHBDytSo7pa
+          vLPu3xCmBnjw4ODj8qNH+/4vbtavHd9cSOC+YvjmZxGuN/EHSv7d/oxfgkRSjD85
+          Ouo/mf5+jGaabvdBPtN6w+spJmaoPgbEBsnwciAS/oO3geGfyfjA31EHbrL6ZAsq
+          qtKqXQV3nsTds5WSsBUYSJS7bhp0ongcfHxDLLU6n436pbDHiGYqGkTpEgtZ3O0R
+          sNQNdbQ8ln5yDlkABDIIaIj0loGzCoIdyhkPvriOT2hthDq3oOJKnfLuJ45CLbQm
+          3jZQrr8ow35LbuIiRdfgYg5XxbGOMIzc19HO2NYW8XgWaIbaOin258aU0IEJyYnR
+          k3d3AgMBAAGjUzBRMB0GA1UdDgQWBBQiaREso8A+llq3vumUGGNWzSw9/zAfBgNV
+          HSMEGDAWgBQiaREso8A+llq3vumUGGNWzSw9/zAPBgNVHRMBAf8EBTADAQH/MA0G
+          CSqGSIb3DQEBCwUAA4IBgQCvCu6WSLYTxrCpoIVLaPhdygwkn0N8vKinMTDWQwbv
+          GO/tHwCLdzoJRFUOhUr75yHMIXVxlmqI470QdFlIBNeJDFqaPE0JdQVLg2aliCoi
+          qhKxT+Z4oIzQFaKjG7yihvYnuSwtTbXH9p/YSRskzzvtjv5xu6zWRGIGHuCoU8UX
+          fpe8M6aIPcZaPumfvrhp3HZhX9RfFv6yGS+XJmTZC26d/lfps/Dn8EnS3PmMM9ok
+          Te5Q/iwDdVExOoqWM8090zkVI6yu+FzlpqB6d9RfIU3y0wdE3sBRbto5k9pkfjOp
+          YWeNjo12j7+tkcR2kuCLzaPNSmZvH1pA+Ab7a4+vuwHBTU3WCYpwePT/Rv7L5KqN
+          c8m1IjCKD4Z8QLVdnPGNtKFppj+x7gNYGwaeVPMyj9j4T1TCThy0GetvEKwhfN9b
+          vaNXY3EAsbo1yO+3kiLdfDcj/YevMZVnp/d/dvpsyDQ+Yt7S7P0xffcN4eT1Uj4N
+          sv7MtHt98CabthrRh9v8EDc=
+          -----END CERTIFICATE-----
+          CERT
+      - name: Prepare encrypted create-only handoff using existing repository secrets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PY'
+          import os,json,subprocess,time,re,urllib.parse
+          import boto3
+          from botocore.config import Config
+          from botocore.exceptions import ClientError
+          try:
+              endpoint=os.environ["R2_ENDPOINT"]; u=urllib.parse.urlsplit(endpoint)
+              assert u.scheme=="https" and re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com",u.hostname or "") and u.netloc==u.hostname and u.path in ("","/") and not u.query and not u.fragment
+              bucket=os.environ["R2_BUCKET"]
+              assert re.fullmatch(r"[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]",bucket)
+              api=boto3.client("s3",endpoint_url=endpoint,region_name="auto",config=Config(signature_version="s3v4",s3={"addressing_style":"path"},request_checksum_calculation="when_required",response_checksum_validation="when_required"))
+              items=json.loads("[{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-01/sap-module-02-part-01.mp4\",\"bytes\":40039724,\"sha256\":\"027c5921d02755acf73faad8a50a309db5009a212ad9c16ce4e1e6d459fdce04\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-01/sap-module-02-part-01.vtt\",\"bytes\":7079,\"sha256\":\"6c7d12c95d773e741c939981eeeb39ae26cdbde409935e115e09bda70a7b837d\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-01/sap-module-02-part-01.srt\",\"bytes\":7071,\"sha256\":\"ee0ce0942df7d3a10b0ab0ebc872125bcac3aa843b3b26a836ed2e2c8c27b514\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-01/sap-module-02-part-01-transcript.txt\",\"bytes\":5463,\"sha256\":\"ed40cdacc2620ad255ab47f6a588fd17140006119db0811643455bed868cec3c\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-01/sap-module-02-part-01-manifest.json\",\"bytes\":2018,\"sha256\":\"661e08acfe9836dceda77fc5c7667df81ab9a741a644815a2a8251653b6d3570\",\"content_type\":\"application/json\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-02/sap-module-02-part-02.mp4\",\"bytes\":24968670,\"sha256\":\"8ee641e740cfb69b0d915d0225f8b36f542c749dbd1fc3ef6ca9971c32d943db\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-02/sap-module-02-part-02.vtt\",\"bytes\":5431,\"sha256\":\"33b34cb1649f8c7f1ff144cda79947cb4dd788b2e80daa7e3ac978b9e4e23eb5\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-02/sap-module-02-part-02.srt\",\"bytes\":5423,\"sha256\":\"ed7a9c7d2055210a0e98d24ca08b9adcef99bbe4c2324eca20806ee4b3646893\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-02/sap-module-02-part-02-transcript.txt\",\"bytes\":3947,\"sha256\":\"b3ca4706ab605b06b02ee28e6561ccc9c139160acca505f300e5cb3529fde040\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-02/sap-module-02-part-02-manifest.json\",\"bytes\":1336,\"sha256\":\"2814979842a7edbd5dc4b10bf3c41f05664b45d9c6f544212dbf9bf723638956\",\"content_type\":\"application/json\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-04/sap-module-02-part-04.mp4\",\"bytes\":17722083,\"sha256\":\"46bb856f9393bd8fc3657cc1f993dc61a30ff5f210794f8387bb0f81f0b55139\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-04/sap-module-02-part-04.vtt\",\"bytes\":4243,\"sha256\":\"004ebd58a326a9b468c060104c619b290e45792eaad01f2c7eff185dbf9b94f5\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-04/sap-module-02-part-04.srt\",\"bytes\":4235,\"sha256\":\"99183e805ba5c245491f3931e7e5ac860446a4a660b359787e3703f1aba701dd\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-04/sap-module-02-part-04-transcript.txt\",\"bytes\":2990,\"sha256\":\"0121017a513cef4778ab70c73d4edcf7bd2a4d2f9d44c90fd3fa6bef9ff73705\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-04/sap-module-02-part-04-manifest.json\",\"bytes\":1025,\"sha256\":\"651c015e0e129eb838561512ee1358b8b886fd288962c013fbc563e3c9927f08\",\"content_type\":\"application/json\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-07/sap-module-02-part-07.mp4\",\"bytes\":27688425,\"sha256\":\"6d737d9bf13bfe0987655ca75e4ab80c111a2646fbaee8b1e70be1a15b80d422\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-07/sap-module-02-part-07.vtt\",\"bytes\":5000,\"sha256\":\"a10da6e780ff18b96907c955041e3074356b3d62c72b1b035d192961f7e8315f\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-07/sap-module-02-part-07.srt\",\"bytes\":4992,\"sha256\":\"8872e04c135e5b9ce9297e88e3e7dd0a5c54a208681e231265698774ff4216c3\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-07/sap-module-02-part-07-transcript.txt\",\"bytes\":3912,\"sha256\":\"6f90f544211ba0e2f6c431f1fd020670cddfeaea44c2584e7e4456b6d50c276a\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-07/sap-module-02-part-07-manifest.json\",\"bytes\":1371,\"sha256\":\"3718f6891fb9c919a6f428668caa7fc8b1a760597a51ad88c5423440878008b5\",\"content_type\":\"application/json\"}]")
+              assert len(items)==20 and len({x["key"] for x in items})==20
+              for x in items:
+                  assert re.fullmatch(r"aws-course-videos/previews/sap/module-02/releases/2026-11-20-approved-animation-v1/part-(01|02|04|07)/sap-module-02-part-(01|02|04|07)(\.mp4|\.vtt|\.srt|-transcript\.txt|-manifest\.json)",x["key"])
+                  try: api.head_object(Bucket=bucket,Key=x["key"])
+                  except ClientError as e:
+                      if str(e.response["Error"]["Code"]) not in ("404","NoSuchKey","NotFound"): raise RuntimeError()
+                  else: raise RuntimeError()
+              assert "IfNoneMatch" in api.meta.service_model.operation_model("PutObject").input_shape.members
+              for x in items:
+                  x["put_url"]=api.generate_presigned_url("put_object",Params={"Bucket":bucket,"Key":x["key"],"ContentType":x["content_type"],"ContentLength":x["bytes"],"Metadata":{"sha256":x["sha256"]},"IfNoneMatch":"*"},ExpiresIn=900,HttpMethod="PUT")
+              payload=json.dumps({"expires_at":int(time.time())+900,"objects":items}).encode()
+              os.makedirs("encrypted",exist_ok=True)
+              subprocess.run(["openssl","cms","-encrypt","-binary","-aes-256-cbc","-outform","DER","-out","encrypted/targets.cms","recipient.crt"],input=payload,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+              print("Prepared encrypted 15-minute create-only upload handoff for 20 approved M02 objects. No download permissions generated.")
+          except Exception:
+              print("Staging failed; no permission or credential details emitted.")
+              raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m02-approved-four-encrypted-upload-handoff
+          path: encrypted/targets.cms
+          retention-days: 1
+          if-no-files-found: error
