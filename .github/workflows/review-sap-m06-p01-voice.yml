@@ -1,0 +1,41 @@
+name: Review SAP M06 Part01 fresh Andrew narration
+on:
+  push:
+    branches: [review/sap-m06-p01-voice-20261120]
+    paths: [.github/workflows/review-sap-m06-p01-voice.yml, scripts/review_sap_m06_p01_voice.py, content/video-narration/review-sap-m06-p01-fresh.json]
+permissions:
+  contents: read
+concurrency:
+  group: sap-fresh-andrew-review
+  cancel-in-progress: false
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m06_p01_voice.py
+            content/video-narration/review-sap-m06-p01-fresh.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established speech engine
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install 'edge-tts==7.3.1'
+      - name: Fresh narration with complete cue text coverage
+        run: python scripts/review_sap_m06_p01_voice.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sap-m06-p01-fresh-andrew-review
+          path: voice-review/
+          retention-days: 3
+          if-no-files-found: warn
