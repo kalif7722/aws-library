@@ -1,0 +1,112 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "revision": "2026-11-20-m03p06-fresh-v1",
+  "units": [
+    {
+      "id": "m03p06-s15-c1-e37940e07d48",
+      "slide": 15,
+      "text": "Follow the blue connection from the client to the Application Load Balancer. This first TLS connection terminates at the load balancer, which presents its server certificate.",
+      "text_sha256": "e37940e07d48f339ff2c5902359200760542844fc5e3742623b19f36bf28d343",
+      "asset_sha256": "850f8950a49b6bbfa4010dff92369c9b0c8e6c2306ce63b379d43c76a6798916"
+    },
+    {
+      "id": "m03p06-s15-c2-57c3e2ae7fb2",
+      "slide": 15,
+      "text": "Follow the yellow connection next. An HTTPS target group creates a separate TLS connection from the load balancer to the target, using the certificate installed on that target.",
+      "text_sha256": "57c3e2ae7fb210aa9af2ed28184f2eb7e3aaf7bac0d89fc0ee8f7993753fe5c5",
+      "asset_sha256": "850f8950a49b6bbfa4010dff92369c9b0c8e6c2306ce63b379d43c76a6798916"
+    },
+    {
+      "id": "m03p06-s15-c3-7d80f6bf8f74",
+      "slide": 15,
+      "text": "Compare the dashed lower path. With an HTTP target group, the backend connection is unencrypted, even when the client used HTTPS.",
+      "text_sha256": "7d80f6bf8f74952914a39b860923eb1f3c5a31b8eff3bbc8784723200a0613f4",
+      "asset_sha256": "850f8950a49b6bbfa4010dff92369c9b0c8e6c2306ce63b379d43c76a6798916"
+    },
+    {
+      "id": "m03p06-s15-c4-c927a4431ee0",
+      "slide": 15,
+      "text": "The target certificate supports encryption on this second leg. An Application Load Balancer does not validate the target certificate, so this is not the same certificate-validation boundary as the client connection.",
+      "text_sha256": "c927a4431ee0383e7d98b0e0d57fa44f797ed309acdc8bbc78f09077c95e39bd",
+      "asset_sha256": "850f8950a49b6bbfa4010dff92369c9b0c8e6c2306ce63b379d43c76a6798916"
+    },
+    {
+      "id": "m03p06-s15-c5-2c2dcdf05c28",
+      "slide": 15,
+      "text": "Return to the complete picture. There are two independent connections. Choose an HTTPS target group when encryption must continue from the load balancer to the target.",
+      "text_sha256": "2c2dcdf05c28f405e586f67010d5c3a1d8153a289f6d9486b735f60c317cdfb9",
+      "asset_sha256": "850f8950a49b6bbfa4010dff92369c9b0c8e6c2306ce63b379d43c76a6798916"
+    },
+    {
+      "id": "m03p06-s16-c1-29325f93b4b2",
+      "slide": 16,
+      "text": "Start with the left side. The load balancer presents its server certificate, and the client validates it during the TLS handshake.",
+      "text_sha256": "29325f93b4b28bd305f98187476055a2b8f74b7ca353ceb86e718176b28b1219",
+      "asset_sha256": "833c5d32b072e388e941faf83ac5784a80b805928172cde85d64af56e170eaec"
+    },
+    {
+      "id": "m03p06-s16-c2-51856bd24789",
+      "slide": 16,
+      "text": "Follow the lower arrow toward the load balancer. Mutual TLS also asks the client to prove its identity with a certificate and the corresponding private key.",
+      "text_sha256": "51856bd247893e5d2562e8b62cffb738a97efb8e126dfeee3376d54c3b709cdf",
+      "asset_sha256": "833c5d32b072e388e941faf83ac5784a80b805928172cde85d64af56e170eaec"
+    },
+    {
+      "id": "m03p06-s16-c3-28dd75b38983",
+      "slide": 16,
+      "text": "The upper branch is verify mode. The load balancer checks the client certificate against its configured trust store. Certificate revocation lists can provide optional revocation checks.",
+      "text_sha256": "28dd75b38983dcfcbb055cc08103a7fa5ea72c35b9e36b66007307aee637dc5c",
+      "asset_sha256": "833c5d32b072e388e941faf83ac5784a80b805928172cde85d64af56e170eaec"
+    },
+    {
+      "id": "m03p06-s16-c4-7df3a6775752",
+      "slide": 16,
+      "text": "The lower branch is passthrough mode. The load balancer forwards the client certificate chain in HTTP headers, and the application must validate it. This is not transparent TCP passthrough.",
+      "text_sha256": "7df3a6775752a6c15c4855f1f82750a0874b3d9a2c131fb121f301872f63b654",
+      "asset_sha256": "833c5d32b072e388e941faf83ac5784a80b805928172cde85d64af56e170eaec"
+    },
+    {
+      "id": "m03p06-s16-c5-9832f4133258",
+      "slide": 16,
+      "text": "Read the footer with both modes visible. Certificate authentication establishes identity. The application still decides which actions that identity is authorized to perform.",
+      "text_sha256": "9832f41332587d99e953715b16cc217dbfe86bbdb28da3dbc1de432115262bde",
+      "asset_sha256": "833c5d32b072e388e941faf83ac5784a80b805928172cde85d64af56e170eaec"
+    },
+    {
+      "id": "m03p06-s17-c1-ed54b1f7b54e",
+      "slide": 17,
+      "text": "Begin with issue and deploy on the left. Check the domain name, the certificate chain, and the endpoint and Region where the certificate is installed.",
+      "text_sha256": "ed54b1f7b54e207cc955d5315e2c589eab7b62091ab228fea85960b7449ac6a1",
+      "asset_sha256": "cc477cb306ba1efe0422475824f85a0ed2ed899a1446d2b36e5ec76aff250104"
+    },
+    {
+      "id": "m03p06-s17-c2-e0b85626adcc",
+      "slide": 17,
+      "text": "Move to renewal on the right. Monitor expiry and maintain required validation records. An imported ACM certificate must be replaced through your own renewal process.",
+      "text_sha256": "e0b85626adccabf9b7b75f1f5f84bc417f40c261a30a9305851b805b0cb94a02",
+      "asset_sha256": "cc477cb306ba1efe0422475824f85a0ed2ed899a1446d2b36e5ec76aff250104"
+    },
+    {
+      "id": "m03p06-s17-c3-48b07010b96e",
+      "slide": 17,
+      "text": "The lower panel covers revocation. Use the revocation mechanisms supported by the actual client or service. A revocation record is useful only when the relying party checks it.",
+      "text_sha256": "48b07010b96e2110a7e4fdbbd4976d0a58e437b5fac1524824e82a01c30df635",
+      "asset_sha256": "cc477cb306ba1efe0422475824f85a0ed2ed899a1446d2b36e5ec76aff250104"
+    },
+    {
+      "id": "m03p06-s17-c4-7f5e94df3e2c",
+      "slide": 17,
+      "text": "Follow the troubleshooting strip: hostname, trust chain, validity dates, and endpoint configuration. Treat these as separate checks so a certificate problem does not become a guessing exercise.",
+      "text_sha256": "7f5e94df3e2c4cdb52a538cec6d49b51432c6217b4b8495da72f322700cc2037",
+      "asset_sha256": "cc477cb306ba1efe0422475824f85a0ed2ed899a1446d2b36e5ec76aff250104"
+    },
+    {
+      "id": "m03p06-s17-c5-33f875f9c655",
+      "slide": 17,
+      "text": "Review the complete lifecycle. Issue and deploy correctly, renew before expiry, and test how clients respond to revoked certificates. Changes to a trust anchor can affect many certificates, so assess that scope before updating a trust store.",
+      "text_sha256": "33f875f9c655944b57c4ea478e4f85a217b4bb2691cda04ea7ae112c65d48616",
+      "asset_sha256": "cc477cb306ba1efe0422475824f85a0ed2ed899a1446d2b36e5ec76aff250104"
+    }
+  ]
+}
