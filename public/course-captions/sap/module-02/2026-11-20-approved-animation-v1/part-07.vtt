@@ -1,0 +1,133 @@
+WEBVTT
+
+1
+00:00:02.050 --> 00:00:06.871
+This slide explains drift detection in a governed AWS landing zone.
+
+2
+00:00:06.871 --> 00:00:10.260
+First, look at AWS Control Tower on the left.
+
+3
+00:00:10.260 --> 00:00:18.534
+It establishes an approved governance baseline, including supported controls and resources managed as part of the landing zone.
+
+4
+00:00:18.534 --> 00:00:21.613
+Follow the arrow to drift detection in the center.
+
+5
+00:00:21.613 --> 00:00:28.830
+Drift means that an account, governed resource, or managed configuration no longer matches the expected state.
+
+6
+00:00:28.830 --> 00:00:36.227
+The detection step tells operators that something has changed, but it does not mean every type of drift is fixed automatically.
+
+7
+00:00:36.227 --> 00:00:38.430
+The next box is remediation.
+
+8
+00:00:38.554 --> 00:00:50.527
+Depending on the drift type, an administrator may need to repair configuration, reset an affected control, re-enroll or update an account, or use an explicitly configured automation.
+
+9
+00:00:50.527 --> 00:00:56.661
+The baseline box beneath the process represents the reference state against which changes are assessed.
+
+10
+00:00:56.661 --> 00:01:05.192
+The teaching point is to identify exactly what drifted, determine why, choose a supported corrective action and then verify the result.
+
+11
+00:01:05.192 --> 00:01:16.184
+Keep AWS Config rule noncompliance and CloudFormation stack drift distinct from Control Tower-specific landing-zone drift; they can be related but are not interchangeable.
+
+12
+00:01:16.306 --> 00:01:21.875
+The architectural objective is reliable governance, not blind automatic rollback.
+
+13
+00:01:28.008 --> 00:01:34.866
+This slide shows why AWS CloudFormation StackSets is useful in a large multi-account environment.
+
+14
+00:01:34.866 --> 00:01:37.533
+Begin with the StackSets service on the left.
+
+15
+00:01:37.533 --> 00:01:43.023
+A platform team defines one approved CloudFormation template and a set of parameters.
+
+16
+00:01:43.023 --> 00:01:48.860
+Follow the connections toward AWS Organizations and the three target accounts in the center.
+
+17
+00:01:48.860 --> 00:01:57.469
+Each account can receive a stack instance in the specified AWS Regions, illustrated here by the Region labels below the account names.
+
+18
+00:01:57.576 --> 00:02:09.936
+This is how teams deploy consistent baseline resources, such as approved security configurations, monitoring or common IAM infrastructure, without manually copying templates to every account.
+
+19
+00:02:09.936 --> 00:02:19.910
+A StackSet operation can create, update or delete the associated stack instances through a centralized process, subject to permissions and target selection.
+
+20
+00:02:19.910 --> 00:02:38.789
+Two permission models matter for SAP-C03: service-managed permissions integrate with Organizations and support OU targeting and eligible automatic deployments to newly added accounts; self-managed permissions require you to configure the necessary administration and execution roles.
+
+21
+00:02:38.904 --> 00:02:47.514
+Plan rollout concurrency, failure tolerance, drift detection and rollback behavior rather than assuming every target updates successfully.
+
+22
+00:02:47.514 --> 00:02:55.942
+Remember that StackSets provides consistent distribution, while service-specific authorization and configuration remain necessary.
+
+23
+00:03:02.092 --> 00:03:07.647
+This slide introduces three complementary AWS cost-governance capabilities.
+
+24
+00:03:07.647 --> 00:03:15.122
+On the left, separate production, staging and development accounts contribute usage and charges to consolidated billing.
+
+25
+00:03:15.122 --> 00:03:17.390
+Now follow the three arrows on the right.
+
+26
+00:03:17.390 --> 00:03:26.939
+AWS Budgets tracks configured cost or usage thresholds and can send notifications when actual or forecast spending crosses an alert level.
+
+27
+00:03:26.939 --> 00:03:34.297
+Cost Categories provides a business-oriented view of spending by rules, such as product, department or environment.
+
+28
+00:03:34.420 --> 00:03:48.004
+Cost-allocation tags identify resources or workloads so selected costs can be attributed to owners or applications; appropriate tags must be activated for billing and may not apply to every charge.
+
+29
+00:03:48.004 --> 00:03:51.548
+The example at the bottom makes the interaction concrete.
+
+30
+00:03:51.548 --> 00:04:03.584
+A production budget reaches its chosen threshold; an email or SNS alert notifies the FinOps or platform team, which investigates the underlying usage and takes a considered action.
+
+31
+00:04:03.584 --> 00:04:10.014
+A budget warning is not an automatic EC2 resize or a guarantee that future charges stop.
+
+32
+00:04:10.132 --> 00:04:21.138
+For architecture reviews, build useful tagging and grouping conventions early, define accountable budget owners, and verify the visibility required across the organization.
+
+33
+00:04:21.138 --> 00:04:26.692
+Together these tools support financial control without replacing engineering decisions.

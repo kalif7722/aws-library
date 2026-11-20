@@ -1,3 +1,4 @@
+import {reviewedM02Caption} from "../../components/reviewed-m02-captions.mjs";
 import {NextRequest} from "next/server";
 const ROOT="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev/aws-course-videos/previews/sap";
 // Exact approved M10 releases only; delete this map to roll back.
@@ -82,7 +83,7 @@ export async function GET(request:NextRequest){
   if(!accessible)continue;
   const approvedTopicTitle=module==="10"&&revision==="2026-11-19-topic-led-p07-p11-v1"&&typeof data.title==="string"?data.title.trim():"";
   return Response.json({status:"ready",module,part,revision:data.script_revision,title:module==="00"&&part==="01"?"SAP-C03 Introduction — Architecture Decisions and Learning Approach":module==="01"&&part==="01"?"AWS Request Principals, Credentials and Authorization":approvedTopicTitle||scenes[0].title,
-   videoUrl,captionsUrl:`${prefix}.vtt${v}`,transcriptUrl:`${prefix}-transcript.txt${v}`,
+   videoUrl,captionsUrl:reviewedM02Caption(module,part,revision,videoUrl)??`${prefix}.vtt${v}`,transcriptUrl:`${prefix}-transcript.txt${v}`,
    durationSeconds:data.duration_seconds,chapters:scenes.map(s=>({slide:s.slide,title:s.title,startSeconds:s.start_seconds,durationSeconds:s.duration_seconds}))},{headers});
  }catch{/* Try legacy only when an approved candidate is unavailable. */}
  }

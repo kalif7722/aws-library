@@ -1,0 +1,197 @@
+WEBVTT
+
+1
+00:00:02.050 --> 00:00:09.887
+This slide introduces a landing zone as the governance foundation established before application teams deploy workloads.
+
+2
+00:00:09.887 --> 00:00:13.211
+Begin with AWS Organizations in the middle.
+
+3
+00:00:13.211 --> 00:00:28.134
+Its hierarchy separates a Security OU containing log archive and audit accounts, an infrastructure and shared services OU for networking, identity and reusable capabilities, and a Workloads OU dividing nonproduction from production.
+
+4
+00:00:28.134 --> 00:00:32.116
+Follow the dotted arrow to AWS Control Tower on the right.
+
+5
+00:00:32.116 --> 00:00:44.436
+Control Tower helps orchestrate an opinionated multi-account setup with identity integration, networking patterns, centralized logging, encryption standards, preventive policies, and account vending.
+
+6
+00:00:44.554 --> 00:00:49.775
+These are baseline capabilities rather than automatic security for every application.
+
+7
+00:00:49.775 --> 00:00:59.182
+At the bottom, the three benefits are consistent account security foundations, application team autonomy within guardrails, and standardized audit evidence.
+
+8
+00:00:59.182 --> 00:01:03.396
+A landing zone isn't merely a VPC or an account structure.
+
+9
+00:01:03.396 --> 00:01:10.071
+It is the governed operating model for how new AWS accounts enter the organization and stay compliant.
+
+10
+00:01:16.217 --> 00:01:23.628
+This diagram shows how AWS Organizations arranges its root, organizational units and member accounts.
+
+11
+00:01:23.628 --> 00:01:29.143
+Start at the top with the root of the organization, and notice the management account beside it.
+
+12
+00:01:29.143 --> 00:01:36.076
+That account retains organization administration and billing and is not restricted by service control policies.
+
+13
+00:01:36.076 --> 00:01:42.301
+Follow the hierarchy downward to the Security OU, Workloads OU and Sandbox OU.
+
+14
+00:01:42.301 --> 00:01:45.819
+Security contains log archive and audit accounts.
+
+15
+00:01:45.819 --> 00:01:52.777
+Workloads branches into production and nonproduction OUs; each contains its own app or data accounts.
+
+16
+00:01:52.777 --> 00:01:56.540
+The dashed boundaries illustrate inherited SCPs.
+
+17
+00:01:56.657 --> 00:02:04.944
+The baseline attached to the root applies to member accounts, and the stricter production OU policy further restricts accounts beneath it.
+
+18
+00:02:04.944 --> 00:02:12.663
+On the right, the slide emphasizes that SCPs set maximum permission boundaries and do not grant IAM permissions.
+
+19
+00:02:12.663 --> 00:02:22.019
+An OU is only an organizational container, not a separately authenticated AWS account or an IAM Identity Center assignment target.
+
+20
+00:02:22.019 --> 00:02:27.870
+When you move an account between OUs, review inherited guardrails before and after the move.
+
+21
+00:02:34.008 --> 00:02:40.208
+This diagram separates ownership of the organization from supported delegated security administration.
+
+22
+00:02:40.208 --> 00:02:45.556
+On the left, the AWS Organizations management account is the organization owner.
+
+23
+00:02:45.556 --> 00:02:51.755
+It handles consolidated billing, policy administration, and the account and OU lifecycle.
+
+24
+00:02:51.755 --> 00:02:56.626
+The tree underneath shows production, development and shared-services OUs.
+
+25
+00:02:56.626 --> 00:02:59.951
+Follow the arrow toward the security account on the right.
+
+26
+00:02:59.951 --> 00:03:10.299
+The management account can register a member account as delegated administrator for supported services such as Security Hub, GuardDuty, Firewall Manager and Inspector.
+
+27
+00:03:10.416 --> 00:03:20.779
+That security account can operate service-level organization features within the allowed scope, reducing the need to perform routine security tasks from the management account.
+
+28
+00:03:20.779 --> 00:03:34.864
+The three bottom decisions are to protect management-account access, delegate supported services where appropriate, and remember that delegation does not transfer ownership of Organizations, consolidated billing or general account moves.
+
+29
+00:03:34.864 --> 00:03:40.353
+This distinction is central to designing a secure enterprise AWS account structure.
+
+30
+00:03:46.467 --> 00:03:52.770
+The center of this architecture is an AWS Control Tower landing zone built on Organizations.
+
+31
+00:03:52.770 --> 00:03:55.708
+Start there and examine the connected boxes.
+
+32
+00:03:55.708 --> 00:04:03.453
+The security OU on the left contains a log archive account for centralized records and an audit account for security analysis.
+
+33
+00:04:03.453 --> 00:04:18.247
+Below it, governance controls have different jobs: preventive controls block unwanted operations, detective controls report noncompliance, and supported proactive controls validate proposed CloudFormation resources before provisioning.
+
+34
+00:04:18.247 --> 00:04:23.363
+At the top, IAM Identity Center provides workforce access to enrolled accounts.
+
+35
+00:04:23.475 --> 00:04:31.827
+On the right, Account Factory processes requests, provisions new accounts and enrolls eligible accounts into governed OUs.
+
+36
+00:04:31.827 --> 00:04:39.971
+Below it, organization-wide CloudTrail and AWS Config provide an operational audit and configuration baseline.
+
+37
+00:04:39.971 --> 00:04:48.708
+The lower portion shows enrolled security, workload and sandbox accounts alongside compliance dashboards and central log analysis.
+
+38
+00:04:48.708 --> 00:05:00.035
+Control Tower coordinates a repeatable governance foundation, but workload owners still must secure their own resources and confirm that required controls are supported in their regions.
+
+39
+00:05:06.175 --> 00:05:09.785
+This slide follows an account through its governance lifecycle.
+
+40
+00:05:09.785 --> 00:05:12.130
+Read the five steps from left to right.
+
+41
+00:05:12.130 --> 00:05:20.403
+First, a business owner requests an account and identifies its environment, account email, intended OU and cost center.
+
+42
+00:05:20.403 --> 00:05:27.414
+Second, the organization approves the business need, security and compliance requirements, and selected OU.
+
+43
+00:05:27.414 --> 00:05:38.058
+Third, AWS Control Tower Account Factory provisions a new account or enrolls an eligible existing account, applying the supported baseline and guardrails.
+
+44
+00:05:38.058 --> 00:05:41.847
+The OU selection determines which inherited SCPs apply.
+
+45
+00:05:41.959 --> 00:05:48.455
+Fourth, IAM Identity Center assigns permission sets to users or groups for that specific account.
+
+46
+00:05:48.455 --> 00:05:52.540
+Creating an account by itself does not create universal access.
+
+47
+00:05:52.540 --> 00:06:02.528
+Fifth, the organization monitors logs, budgets, compliance and configuration drift, then formally moves or retires the account when appropriate.
+
+48
+00:06:02.528 --> 00:06:09.306
+The lower panels show the account vending interfaces: Service Catalog and an optional Terraform approach.
+
+49
+00:06:09.306 --> 00:06:17.128
+The overall decision is to automate the account lifecycle while retaining approval, access control and compliance review.
