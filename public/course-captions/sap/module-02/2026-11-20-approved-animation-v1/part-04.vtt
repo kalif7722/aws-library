@@ -1,0 +1,153 @@
+WEBVTT
+
+1
+00:00:02.050 --> 00:00:09.448
+This diagram shows how AWS Resource Access Manager shares supported resources without transferring ownership.
+
+2
+00:00:09.448 --> 00:00:11.716
+Begin in Account A on the left.
+
+3
+00:00:11.716 --> 00:00:19.461
+It owns a Transit Gateway or a subnet and remains responsible for configuration, lifecycle and operational management.
+
+4
+00:00:19.461 --> 00:00:22.954
+Follow the existing arrow into the RAM resource share.
+
+5
+00:00:22.954 --> 00:00:29.268
+The owner selects the resource, the consumers, and the managed permissions governing allowed actions.
+
+6
+00:00:29.268 --> 00:00:33.791
+On the upper right, Accounts B and C are in the same organization.
+
+7
+00:00:33.791 --> 00:00:40.080
+They gain permitted use, never ownership; the diagram assumes organization sharing is enabled.
+
+8
+00:00:40.234 --> 00:00:43.199
+The dashed lower branch is for an external account.
+
+9
+00:00:43.199 --> 00:00:48.663
+Invitation acceptance and resource-type support for external sharing are required.
+
+10
+00:00:48.663 --> 00:00:55.828
+In the subnet example below, the VPC owner controls the VPC, subnets and route lifecycle.
+
+11
+00:00:55.828 --> 00:01:03.393
+The participant can launch and manage its own approved resources in the shared subnet, but does not gain VPC administration.
+
+12
+00:01:03.393 --> 00:01:08.470
+The lower-left note separates RAM share permission from the participant’s IAM permission.
+
+13
+00:01:08.470 --> 00:01:09.488
+Both matter.
+
+14
+00:01:09.488 --> 00:01:16.370
+The remaining notes require organization sharing to be enabled and warn that billing depends on service and usage.
+
+15
+00:01:16.370 --> 00:01:18.496
+The owner retains operations.
+
+16
+00:01:18.610 --> 00:01:20.416
+Return to the full diagram.
+
+17
+00:01:20.416 --> 00:01:27.001
+Share access intentionally, and keep resource ownership and operational responsibilities explicit.
+
+18
+00:01:33.133 --> 00:01:38.547
+This slide separates sharing a Transit Gateway from configuring a working network path.
+
+19
+00:01:38.547 --> 00:01:45.107
+AWS RAM shares the gateway; VPC owners still attach and route their own networks.
+
+20
+00:01:45.107 --> 00:01:48.083
+Start with the network account above the gateway.
+
+21
+00:01:48.083 --> 00:01:49.900
+It owns the Transit Gateway.
+
+22
+00:01:49.900 --> 00:01:57.594
+The purple sharing rail reaches the two VPC owner accounts; sharing grants attachment access, not ready-made routes.
+
+23
+00:01:57.709 --> 00:02:03.780
+On the left, App A is in the ten dot zero dot zero dot zero slash sixteen VPC.
+
+24
+00:02:03.780 --> 00:02:12.634
+Its VPC route sends traffic for the ten dot one dot zero dot zero slash sixteen destination network toward the Transit Gateway.
+
+25
+00:02:12.634 --> 00:02:17.646
+Follow the existing amber path through the A attachment into the Transit Gateway.
+
+26
+00:02:17.646 --> 00:02:23.059
+The receiving attachment association selects the inbound Transit Gateway route table.
+
+27
+00:02:23.059 --> 00:02:26.164
+Look below the gateway at the route lookup example.
+
+28
+00:02:26.164 --> 00:02:32.505
+The destination ten dot one dot zero dot zero slash sixteen points to the B attachment.
+
+29
+00:02:32.629 --> 00:02:38.275
+Continue along the amber path through the B attachment to App B in the right-hand VPC.
+
+30
+00:02:38.275 --> 00:02:40.427
+Now follow the cyan path back.
+
+31
+00:02:40.427 --> 00:02:47.721
+VPC B also needs a route for VPC A through the gateway, and the gateway needs the corresponding return route.
+
+32
+00:02:47.721 --> 00:02:50.041
+A forward path alone is not enough.
+
+33
+00:02:50.041 --> 00:02:56.548
+The lower-left note assigns VPC attachments and VPC routes to the VPC owners.
+
+34
+00:02:56.653 --> 00:03:02.686
+The next notes assign attachment associations and route propagation to the Transit Gateway owner.
+
+35
+00:03:02.686 --> 00:03:11.449
+Association selects the route table for incoming traffic; propagation advertises VPC address ranges into configured tables.
+
+36
+00:03:11.449 --> 00:03:17.351
+The bottom line reminds us that security groups, network ACLs and DNS still apply.
+
+37
+00:03:17.351 --> 00:03:19.335
+Return to the full architecture.
+
+38
+00:03:19.335 --> 00:03:24.696
+Sharing, attachment ownership, route lookup and the return path are separate checks.

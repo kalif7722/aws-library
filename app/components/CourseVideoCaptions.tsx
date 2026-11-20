@@ -1,4 +1,5 @@
 "use client";
+import {courseCaptionRequestUrl} from "./reviewed-m02-captions.mjs";
 import {useEffect,useMemo,useState} from "react";
 
 type Cue={start:number;end:number;text:string};
@@ -31,7 +32,7 @@ export default function CourseVideoCaptions({src,position,enabled}:{src:string;p
   useEffect(()=>{
     const controller=new AbortController();
     setCues([]);setError(false);
-    fetch("/api/course-video-captions?src="+encodeURIComponent(src),{signal:controller.signal})
+    fetch(courseCaptionRequestUrl(src),{signal:controller.signal})
       .then(r=>{if(!r.ok)throw Error("captions unavailable");return r.text();})
       .then(data=>{if(!controller.signal.aborted)setCues(parseCourseVideoVtt(data));})
       .catch(()=>{if(!controller.signal.aborted)setError(true);});

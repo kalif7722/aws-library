@@ -1,0 +1,181 @@
+WEBVTT
+
+1
+00:00:02.050 --> 00:00:06.369
+This slide compares three governance controls by the point at which they act.
+
+2
+00:00:06.369 --> 00:00:17.851
+On the left, a preventive AWS Organizations SCP denies a disallowed API call before a resource can be changed, illustrated by protecting mandatory security logging.
+
+3
+00:00:17.851 --> 00:00:28.714
+In the middle, a proactive Control Tower control validates a proposed CloudFormation resource against a supported requirement and can block provisioning of an invalid resource.
+
+4
+00:00:28.714 --> 00:00:36.588
+On the right, a detective AWS Config rule evaluates a deployed resource and marks it noncompliant after the fact.
+
+5
+00:00:36.588 --> 00:00:43.559
+That finding alone does not undo the change or automatically block it; remediation is another step.
+
+6
+00:00:43.559 --> 00:00:50.157
+The bottom warning states that SCPs define the maximum allowed permissions but do not grant actions.
+
+7
+00:00:50.157 --> 00:00:54.848
+It also reminds us that control support varies by Region and resource.
+
+8
+00:00:54.848 --> 00:01:06.742
+Choose preventive enforcement when an action must never happen, proactive checks when a proposed configuration must be rejected, and detection when ongoing compliance visibility is needed.
+
+9
+00:01:12.883 --> 00:01:19.496
+This architecture explains why an IAM Allow does not automatically mean an API request succeeds.
+
+10
+00:01:19.603 --> 00:01:23.252
+Start with the AWS Organizations root in the middle.
+
+11
+00:01:23.252 --> 00:01:30.790
+It has a FullAWSAccess SCP baseline; that baseline does not itself grant IAM permissions.
+
+12
+00:01:30.907 --> 00:01:40.677
+Beneath it, the production OU policy denies the EC2 TerminateInstances action, with a tightly controlled administrator exception noted on the slide.
+
+13
+00:01:40.795 --> 00:01:48.052
+In the member account, the role has an identity policy allowing EC2 start, stop and terminate actions.
+
+14
+00:01:48.163 --> 00:01:51.348
+Follow those actions into the results at the far right.
+
+15
+00:01:51.348 --> 00:01:55.588
+Starting and stopping remain allowed if no other control blocks them.
+
+16
+00:01:55.699 --> 00:02:02.312
+For a request covered by the production OU Deny, terminating is denied despite the IAM Allow.
+
+17
+00:02:02.312 --> 00:02:06.010
+Do not assume the administrator exception applies to this caller.
+
+18
+00:02:06.115 --> 00:02:13.501
+The lower-left panel describes a deny-list strategy: keep the broad baseline and add targeted Deny statements.
+
+19
+00:02:13.603 --> 00:02:23.193
+Next to it, the allow-list strategy needs the required Allow at every applicable hierarchy level: root, organizational units and account.
+
+20
+00:02:23.299 --> 00:02:32.463
+The management-account panel on the left is an exception: the organization’s SCPs do not restrict that account, although IAM policies still apply.
+
+21
+00:02:32.563 --> 00:02:37.075
+At the lower right, service-linked roles are not restricted by SCPs.
+
+22
+00:02:37.075 --> 00:02:40.026
+The root user in a member account is affected.
+
+23
+00:02:40.147 --> 00:02:42.314
+Return to the complete architecture.
+
+24
+00:02:42.314 --> 00:02:46.695
+SCPs set maximum permissions; they never grant access.
+
+25
+00:02:46.695 --> 00:02:52.121
+Evaluate the applicable policy and the actual caller before deciding the result.
+
+26
+00:02:58.258 --> 00:03:03.002
+This slide shows why a bucket policy Allow can still end in a blocked request.
+
+27
+00:03:03.002 --> 00:03:09.665
+Keep the whole diagram in view as we follow the request from the external principal to the resource-side guardrail.
+
+28
+00:03:09.778 --> 00:03:10.953
+Start on the left.
+
+29
+00:03:10.953 --> 00:03:18.118
+A principal outside the organization sends an S3 GetObject request toward a bucket in a member account.
+
+30
+00:03:18.118 --> 00:03:21.932
+On the right, the bucket policy allows that external principal.
+
+31
+00:03:21.932 --> 00:03:25.630
+That Allow is only one part of the authorization decision.
+
+32
+00:03:25.630 --> 00:03:27.628
+Now look at the RCP shield.
+
+33
+00:03:27.628 --> 00:03:35.965
+In this example, the resource control policy explicitly denies access when the principal is outside the trusted organization.
+
+34
+00:03:35.965 --> 00:03:42.435
+The red Blocked result shows the outcome: the explicit Deny wins despite the bucket policy Allow.
+
+35
+00:03:42.562 --> 00:03:48.672
+Above the shield, follow the existing arrows from Root through Workloads OU to the member account.
+
+36
+00:03:48.672 --> 00:03:51.056
+They show the policy inheritance path.
+
+37
+00:03:51.056 --> 00:03:54.523
+The two lines below the diagram compare the boundaries.
+
+38
+00:03:54.523 --> 00:03:58.195
+SCPs set a ceiling on member-account principals.
+
+39
+00:03:58.195 --> 00:04:05.103
+RCPs set a resource-side ceiling on supported resources, including relevant external requests.
+
+40
+00:04:05.103 --> 00:04:08.505
+The takeaway states that neither policy grants access.
+
+41
+00:04:08.505 --> 00:04:15.631
+RCPFullAWSAccess is the pass-through baseline; an explicit Deny narrows the permitted scope.
+
+42
+00:04:15.631 --> 00:04:20.902
+Read the bottom caveat before generalizing: support depends on service and action.
+
+43
+00:04:20.902 --> 00:04:26.198
+Management-account resources and service-linked-role calls are outside RCP scope.
+
+44
+00:04:26.198 --> 00:04:28.195
+Return to the complete diagram.
+
+45
+00:04:28.195 --> 00:04:32.950
+The bucket policy Allow does not override the applicable RCP Deny.
