@@ -18,9 +18,17 @@ const vite = await createServer({configFile:false,server:{middlewareMode:true,hm
 after(() => vite.close());
 const {resolveSapReuseAssets} = await vite.ssrLoadModule('/app/components/SapReuseAssets.ts');
 const {publishedModuleLessons,publishedSapImageUrl} = await vite.ssrLoadModule('/app/components/SapPublishedLessons.ts');
-const lookup = (module,id) => publishedModuleLessons(module).find(l => l.id === id);
-const pathOnly = url => url.split('?')[0];
-const normalize = path => pathOnly(path).replace(/-(?:aip-)?(?:correction-)?v\d+\.(?=(webp|png)$)/,'.');
+const saaLinksById = new Map(Object.values(links.saa).flatMap(module => Object.entries(module)));
+function expectedSource(lesson) {
+ const declared = lesson.sourceLessonId;
+ if (declared?.startsWith('sap-')) return [declared.split('-')[1], declared];
+ if (declared && saaLinksById.has(declared)) return saaLinksById.get(declared);
+ // Legacy consumers without source metadata retain their original numbered SAP
+ // path as fallback. Read that consumer-side evidence, never the current
+ // canonical filename. The stable SAP ID survives a descriptive rename.
+ const slot = /^\/course-visuals\/sap-c03\/module-(\d{2})\/slide-(\d+)/.exec(lesson.asset);
+ return slot && [slot[1], `sap-${slot[1]}-${slot[2].padStart(3,'0')}`];
+}
 
 test('every SAP reuse in effective learner maps links to exactly one published SAP lesson; native rows stay untouched', () => {
  for(const {course,id,visuals} of courses){
@@ -30,9 +38,12 @@ test('every SAP reuse in effective learner maps links to exactly one published S
   assert.deepEqual(Object.keys(mapped).sort(),reused.map(l=>l.id).sort(),`${course} module ${id}`);
   assert.deepEqual(Object.keys(resolved).sort(),Object.keys(mapped).sort(),`${course} module ${id}`);
   for(const lesson of reused){
-   const [module,sourceId] = mapped[lesson.id], source = lookup(module,sourceId);
-   assert.equal(source.status,'qa-passed',`${course}:${lesson.id}`);
-   assert.equal(normalize(source.asset), normalize(lesson.asset), `${course}:${lesson.id} has no matching source asset lineage`);
+   const [module,sourceId] = mapped[lesson.id];
+   const label = `${course}:${lesson.id}`;
+   assert.deepEqual(mapped[lesson.id],expectedSource(lesson),`${label} has the wrong stable source ID`);
+   const candidates = publishedModuleLessons(module).filter(l => l.id===sourceId && l.status==='qa-passed' && l.asset);
+   assert.equal(candidates.length,1,label);
+   const [source] = candidates;
    assert.equal(resolved[lesson.id],publishedSapImageUrl(module,source.asset));
   }
  }
@@ -46,6 +57,27 @@ test('one canonical asset correction propagates to all 763 linked placements wit
    assert.equal(resolved[consumerId], publishedSapImageUrl(sourceModule,`/sap-reuse-test/${sourceId}/new-name.png`));
   }
  }
+});
+
+test('renaming and changing the format of an actual SAP source changes only its linked placements', () => {
+ const sourceModule='10', sourceId='sap-10-001';
+ const oldAsset='/course-visuals/sap-c03/module-10/slide-01-fixture.webp';
+ const newAsset='/course-visuals/sap-c03/module-10/ebs-volume-availability-zone-fixture.png';
+ const withAsset = asset => module => publishedModuleLessons(module).map(l=>l.id===sourceId?{...l,asset}:l);
+ const touchedCourses=new Set();
+ for (const {course,id,visuals} of courses) {
+  const before=resolveSapReuseAssets(course,id,visuals,withAsset(oldAsset));
+  const after=resolveSapReuseAssets(course,id,visuals,withAsset(newAsset));
+  assert.deepEqual(Object.keys(after),Object.keys(before));
+  for (const [consumerId,[module,stableId]] of Object.entries(links[course][id] ?? {})) {
+   if (module===sourceModule && stableId===sourceId) {
+    touchedCourses.add(course);
+    assert.notEqual(after[consumerId],before[consumerId]);
+    assert.equal(after[consumerId],publishedSapImageUrl(sourceModule,newAsset));
+   } else assert.equal(after[consumerId],before[consumerId]);
+  }
+ }
+ assert.deepEqual([...touchedCourses].sort(),['dva','saa']);
 });
 
 test('native replacements, removed rows, and withdrawn SAP sources retain their existing behavior', () => {
