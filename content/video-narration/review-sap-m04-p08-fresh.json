@@ -1,0 +1,147 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "revision": "2026-11-20-m04p08-fresh-v1",
+  "units": [
+    {
+      "id": "m04p08-s23-c1-172b9379e1a2",
+      "slide": 23,
+      "text": "Trace the orange path from internet requests into the ingress VPC. An internet-facing Application Load Balancer provides the shared entry point and spans multiple Availability Zones.",
+      "text_sha256": "172b9379e1a2e85696c3c8628ee4ac76c1bb0e52da52cda8790bce7eee2a33d1",
+      "asset_sha256": "63118bb00c3c8d0209db2e419a9294c03be511857f4694c35e7ae6929bd2b850"
+    },
+    {
+      "id": "m04p08-s23-c2-d0d6c21fcae0",
+      "slide": 23,
+      "text": "Follow the path through Transit Gateway to the application VPCs. Register reachable, supported private IP targets; instance identifiers cannot register targets across VPCs.",
+      "text_sha256": "d0d6c21fcae053a410f82824f6e60c4c2b2189120f7d0ab2009394012a6ecbe2",
+      "asset_sha256": "63118bb00c3c8d0209db2e419a9294c03be511857f4694c35e7ae6929bd2b850"
+    },
+    {
+      "id": "m04p08-s23-c3-41642e14828b",
+      "slide": 23,
+      "text": "The three lower panels connect centralized TLS and WAF controls with target health checks, forward and return routes, and security groups and network access lists.",
+      "text_sha256": "41642e14828bfc7b1f06925ffd2e97ee6ce418b615021d8cc19334b59b833e42",
+      "asset_sha256": "63118bb00c3c8d0209db2e419a9294c03be511857f4694c35e7ae6929bd2b850"
+    },
+    {
+      "id": "m04p08-s23-c4-9f2706e091a6",
+      "slide": 23,
+      "text": "With the full architecture visible, separate a shared entry point from proven application reachability. Centralized policy succeeds only when requests and responses can traverse the complete path.",
+      "text_sha256": "9f2706e091a60d22bb435aae7fbc515adc3cf95d29682a693a905340fd8cd73a",
+      "asset_sha256": "63118bb00c3c8d0209db2e419a9294c03be511857f4694c35e7ae6929bd2b850"
+    },
+    {
+      "id": "m04p08-s24-c1-70f27e54e64b",
+      "slide": 24,
+      "text": "Start with the two spoke VPCs on the left. Their private workloads send internet-bound traffic through Transit Gateway toward the centralized egress VPC.",
+      "text_sha256": "70f27e54e64bf9fb60fc910470d7fd3a0f4b2d1e3e56aa18de3ab12ae66335d0",
+      "asset_sha256": "23f4152ff8dba394ce1b59bb5465918732763b9a32189bfc7a32ce4740c81379"
+    },
+    {
+      "id": "m04p08-s24-c2-c16600527a8c",
+      "slide": 24,
+      "text": "Inside the egress VPC, trace traffic from the Transit Gateway attachment through the public NAT gateway and internet gateway. Responses must return to the originating spoke.",
+      "text_sha256": "c16600527a8cd32228cac10764d9d2acdf51e0f5229348c99b6bfec13062d886",
+      "asset_sha256": "23f4152ff8dba394ce1b59bb5465918732763b9a32189bfc7a32ce4740c81379"
+    },
+    {
+      "id": "m04p08-s24-c3-e29bfccfa1c0",
+      "slide": 24,
+      "text": "Read the three lower panels together: configure default routes toward egress, add return routes for spoke address ranges, and compare Availability Zone resilience with processing costs.",
+      "text_sha256": "e29bfccfa1c0faa685f858ba06df949fe5883aadbb89f80e3d6eccd07613aa76",
+      "asset_sha256": "23f4152ff8dba394ce1b59bb5465918732763b9a32189bfc7a32ce4740c81379"
+    },
+    {
+      "id": "m04p08-s24-c4-9dc127075076",
+      "slide": 24,
+      "text": "The complete slide highlights a deliberate tradeoff. Centralized NAT can consolidate egress, but it requires correct return routing and does not provide deep packet inspection.",
+      "text_sha256": "9dc1270750760b3ad4e17dea1cc3a360b91475bba4342df5df151d7e9b5fe844",
+      "asset_sha256": "23f4152ff8dba394ce1b59bb5465918732763b9a32189bfc7a32ce4740c81379"
+    },
+    {
+      "id": "m04p08-s25-c1-fd421830c0d9",
+      "slide": 25,
+      "text": "Compare the two central diagrams. On the left, request and response cross the same firewall endpoint or appliance, allowing it to track the connection state.",
+      "text_sha256": "fd421830c0d9ff7c7b812a1923ad7cdaad01c25015fe3b537965116fd4b178af",
+      "asset_sha256": "31d4bd0b55bab695b2c9666a75e2c272859fae93c39172bba659b72873aac3af"
+    },
+    {
+      "id": "m04p08-s25-c2-b701c0c11076",
+      "slide": 25,
+      "text": "On the right, the response bypasses inspection or uses a different endpoint. An allow rule cannot restore connection state that the returning traffic never reaches.",
+      "text_sha256": "b701c0c110765111bcb41471e71582d1966da46f32439aeed255e491c4a99abb",
+      "asset_sha256": "31d4bd0b55bab695b2c9666a75e2c272859fae93c39172bba659b72873aac3af"
+    },
+    {
+      "id": "m04p08-s25-c3-4489f73f17e6",
+      "slide": 25,
+      "text": "The lower panels show the inspection VPC pattern: route through firewall endpoints, enable appliance mode on the Transit Gateway inspection attachment, and verify both directions and Availability Zone paths.",
+      "text_sha256": "4489f73f17e6f2fbd9f176aa2513220f2b37eb6e3083a72e1a76fdae14587089",
+      "asset_sha256": "31d4bd0b55bab695b2c9666a75e2c272859fae93c39172bba659b72873aac3af"
+    },
+    {
+      "id": "m04p08-s25-c4-ab83887b1442",
+      "slide": 25,
+      "text": "Return to the complete comparison. A native Transit Gateway attached Network Firewall offers managed symmetry, while a dedicated inspection VPC remains another deployment option.",
+      "text_sha256": "ab83887b144241207c4807e7099a4d149e2ed69c2156f0426600caea680641ce",
+      "asset_sha256": "31d4bd0b55bab695b2c9666a75e2c272859fae93c39172bba659b72873aac3af"
+    },
+    {
+      "id": "m04p08-s26-c1-5fd1dab5a51e",
+      "slide": 26,
+      "text": "Follow traffic from the workload to the Gateway Load Balancer endpoint. The endpoint is the route table target that inserts inspection into the traffic path.",
+      "text_sha256": "5fd1dab5a51e5066075d2c6f83d2ae95cecf17e756a1e9027e76d95a040607d4",
+      "asset_sha256": "3ff36e32c5a2897840b7d989bc3c358658dbc1bbd4888bd301d0a7d4059bc13f"
+    },
+    {
+      "id": "m04p08-s26-c2-3de292347ff3",
+      "slide": 26,
+      "text": "The Gateway Load Balancer distributes flows to healthy appliances. The highlighted packet uses GENEVE encapsulation on UDP port sixty eighty-one while preserving the original packet for inspection.",
+      "text_sha256": "3de292347ff37d74e8039088b7854eecc9313be8e2b3db55eb38a7a0548a7a7e",
+      "asset_sha256": "3ff36e32c5a2897840b7d989bc3c358658dbc1bbd4888bd301d0a7d4059bc13f"
+    },
+    {
+      "id": "m04p08-s26-c3-3bc25666feae",
+      "slide": 26,
+      "text": "Trace the inspection round trip back through the load balancer and endpoint. VPC routing then forwards the packet; forward and return traffic must preserve the required symmetry.",
+      "text_sha256": "3bc25666feae6fafe4e87baf49841c7a189141b78c4d6a089c1e61c619909c89",
+      "asset_sha256": "3ff36e32c5a2897840b7d989bc3c358658dbc1bbd4888bd301d0a7d4059bc13f"
+    },
+    {
+      "id": "m04p08-s26-c4-93e274dd78f8",
+      "slide": 26,
+      "text": "With the full slide visible, distinguish traffic steering from inspection. Gateway Load Balancer distributes network flows, while the appliances perform the inspection and require their own health and capacity planning.",
+      "text_sha256": "93e274dd78f8305211ea7c9c0fe01c39ec25d88d245532935099085aa7e122f6",
+      "asset_sha256": "3ff36e32c5a2897840b7d989bc3c358658dbc1bbd4888bd301d0a7d4059bc13f"
+    },
+    {
+      "id": "m04p08-s27-c1-a6a687b3878d",
+      "slide": 27,
+      "text": "Compare the deployment panels. The left places firewall endpoints in dedicated VPC subnets, supporting distributed deployments or a centralized inspection VPC.",
+      "text_sha256": "a6a687b3878d686ab99e1d74842486342f58b6d7918b5c940b11fba3bdd311fc",
+      "asset_sha256": "47eadbcb10b164f405a33a967995e11c0a690dc4a11a6415fb1462738d4dac7c"
+    },
+    {
+      "id": "m04p08-s27-c2-c3e893e1ed69",
+      "slide": 27,
+      "text": "The right attaches Network Firewall directly to Transit Gateway through a managed network function attachment. This model manages the attachment across Availability Zones and preserves traffic symmetry.",
+      "text_sha256": "c3e893e1ed69f7b122ea3b269d4d1addefbe0ba2fe2858c36df722d3231061c4",
+      "asset_sha256": "47eadbcb10b164f405a33a967995e11c0a690dc4a11a6415fb1462738d4dac7c"
+    },
+    {
+      "id": "m04p08-s27-c3-a1c2aad2040c",
+      "slide": 27,
+      "text": "Read the lower-left policy sequence. Stateless rules run first and can drop, pass, or forward traffic to stateful inspection; flow and alert logs help validate the configured behavior.",
+      "text_sha256": "a1c2aad2040ca96fc855cec8a6f293b627cdadba2fcd8d2355e08a8ed8604792",
+      "asset_sha256": "47eadbcb10b164f405a33a967995e11c0a690dc4a11a6415fb1462738d4dac7c"
+    },
+    {
+      "id": "m04p08-s27-c4-213f20c0c5ed",
+      "slide": 27,
+      "text": "The complete slide connects policy with placement. Route traffic through the chosen firewall path; native Transit Gateway attachments use static routes and have appliance mode enabled automatically.",
+      "text_sha256": "213f20c0c5ed250d48cc2240aba83b4fa9ffe76e4140447f41b301744355fa38",
+      "asset_sha256": "47eadbcb10b164f405a33a967995e11c0a690dc4a11a6415fb1462738d4dac7c"
+    }
+  ]
+}
