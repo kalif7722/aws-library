@@ -1,0 +1,90 @@
+name: Stage exact approved SAP M03 Part 08 release
+on:
+  push:
+    branches: [stage/sap-m03-approved-p08-20261121]
+    paths: [.github/workflows/stage-sap-m03-approved-p08-20261121.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m03-approved-p08-20261121
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/stage/sap-m03-approved-p08-20261121'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Install official SDK
+        run: python -m pip install --disable-pip-version-check boto3
+      - name: Write public encryption recipient
+        run: |
+          cat > recipient.crt <<'CERT'
+          -----BEGIN CERTIFICATE-----
+          MIIEKzCCApOgAwIBAgIUAjWdzRDEtLfx3DoYioZ1Q5+/E+IwDQYJKoZIhvcNAQEL
+          BQAwJTEjMCEGA1UEAwwaU0FQLU0wMy1QMDgtYXBwcm92ZWQtc3RhZ2UwHhcNMjYx
+          MTIxMDEwMTAwWhcNMjYxMTIzMDEwMTAwWjAlMSMwIQYDVQQDDBpTQVAtTTAzLVAw
+          OC1hcHByb3ZlZC1zdGFnZTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGB
+          ANAbUA6/G+oXT5ZQZ8hLEDsx2XJlDVaUIclSuvr+Fup4Dk4G0O/ZvVkyfbjbhLSw
+          KlXb1a1pAa+Huqb1gUH9DNG0NaOIDNPnzy3VuAcWqOz/on/N1nZLQlvX7FDHba6r
+          A275v81/dPjAXy9dfPYyQ9zh1dOygq1Z+ezavM9Vyg8LT52OOPX1bgicNWIvOr65
+          gEEYW96+XR3hcOwkrhJ+avn3/XfELdmGvP5PAaVOhEbgoIQFOKkWt1hgqXRbr1zm
+          6grownKFh/+qmDM7qPHHc41ontBtp7oBsUUc7s/lRZmPVRwTORHe7UH30Wqhww4S
+          F+9IotNYOniVAvQNC82rIbJOw95Eac0v7XZ8tmTBaH+G3nPIuqZTBd7vXCCz2SGO
+          h6le+WEZcIcksNwt+X0cCBCjz4ZHzMK2V82HUL84H8xxVnjWyZVaIeLwOtiYF1DJ
+          imK6LV2Yoxmbpzx49wP8XLykvEqPan4pHMuwT+tMTGodPc5s8/uke0zGVvf6Uo0i
+          nQIDAQABo1MwUTAdBgNVHQ4EFgQUcXLDQm7TpwtLhPAe4UWq5mDqaM8wHwYDVR0j
+          BBgwFoAUcXLDQm7TpwtLhPAe4UWq5mDqaM8wDwYDVR0TAQH/BAUwAwEB/zANBgkq
+          hkiG9w0BAQsFAAOCAYEAFpQfY8ibNBxY0xDK/J3H0VtOiZpjed8W5298gsZG5KbS
+          L8MKHBtbdUEzGu77VAgTJsl0snK7WssoyxHvL2WhXS5RhPxV+OwbPOHD8xEmM/ZS
+          6rT+QTlZIf81N9scrJOj0pI30Q0mk+gL6f2d+fOcPD4cQ3xwB6nqfXFhfRNoFT+d
+          R9rzv6ADEhekO5itjWRP2F8AspH1XWFZGktH86dOsnziM+BYDFaTGAE8aSTtRldS
+          WU9SN/mOB15rsw8AhPe6NZ2eyJ+UZeHNU8w4cxcCXvVKNaJ9sikJ/4QJA8sj7ioD
+          NlZGBw2yPrRCfdTPRmLo5gAYAs7AYalJI7aqQY0aaHglai0OYRfEMj+Lj9zmlwjk
+          eJiCouj+6/CDfYH4G86d5r9GyAhFlLkzW6tpdh203DDYS5RL5WrQ9iiXXQcs1N0U
+          2Nj37Bc+mUmQ0YLIsimPySJBoj0w107TlFiEvIEfrRwd0lzZ3XT8mNu65Ds1paO8
+          bDuETsTcQQbBmVyDZExi
+          -----END CERTIFICATE-----
+          CERT
+      - name: Prepare encrypted create-only handoff using existing repository secrets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          python - <<'PY'
+          import os,json,subprocess,time,re,urllib.parse
+          import boto3
+          from botocore.config import Config
+          from botocore.exceptions import ClientError
+          try:
+              endpoint=os.environ["R2_ENDPOINT"]; u=urllib.parse.urlsplit(endpoint)
+              assert u.scheme=="https" and re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com",u.hostname or "") and u.netloc==u.hostname and u.path in ("","/") and not u.query and not u.fragment
+              bucket=os.environ["R2_BUCKET"]
+              assert re.fullmatch(r"[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]",bucket)
+              api=boto3.client("s3",endpoint_url=endpoint,region_name="auto",config=Config(signature_version="s3v4",s3={"addressing_style":"path"},request_checksum_calculation="when_required",response_checksum_validation="when_required"))
+              items=json.loads("[{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.mp4\",\"bytes\":33134693,\"sha256\":\"e244c0358529a0be8e68890a54a88f9c6673b35d310c312df62a343cc7a7f518\",\"content_type\":\"video/mp4\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.vtt\",\"bytes\":3160,\"sha256\":\"4160e20d70c58e7ea4446c0de38cd77ac4d25b64a62007fbf144a199e30507de\",\"content_type\":\"text/vtt\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.srt\",\"bytes\":3191,\"sha256\":\"5bc5ba71369ffd0e65506b7cee0814891d5c79179c544aad1478d50cf02b19ee\",\"content_type\":\"application/x-subrip\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08-transcript.txt\",\"bytes\":2671,\"sha256\":\"79ebf333bf3fca7553a2e6e73916ccaeae7e88eeb39e9bd33e7ccbeed21feb22\",\"content_type\":\"text/plain\"},{\"key\":\"aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08-manifest.json\",\"bytes\":982,\"sha256\":\"3b1a04b49a1b3d01535e466abf2ef3add7b0bac0d8e9d5276faad969af4a7c5a\",\"content_type\":\"application/json\"}]")
+              assert len(items)==5 and len({x["key"] for x in items})==5
+              for x in items:
+                  assert x["key"] in ["aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.mp4","aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.vtt","aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08.srt","aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08-transcript.txt","aws-course-videos/previews/sap/module-03/releases/2026-11-21-m03p08-approved-animation-v1/part-08/sap-module-03-part-08-manifest.json"]
+                  try: api.head_object(Bucket=bucket,Key=x["key"])
+                  except ClientError as e:
+                      if str(e.response["Error"]["Code"]) not in ("404","NoSuchKey","NotFound"): raise RuntimeError()
+                  else: raise RuntimeError()
+              assert "IfNoneMatch" in api.meta.service_model.operation_model("PutObject").input_shape.members
+              for x in items:
+                  x["put_url"]=api.generate_presigned_url("put_object",Params={"Bucket":bucket,"Key":x["key"],"ContentType":x["content_type"],"ContentLength":x["bytes"],"Metadata":{"sha256":x["sha256"]},"IfNoneMatch":"*"},ExpiresIn=900,HttpMethod="PUT")
+              payload=json.dumps({"expires_at":int(time.time())+900,"objects":items}).encode()
+              os.makedirs("encrypted",exist_ok=True)
+              subprocess.run(["openssl","cms","-encrypt","-binary","-aes-256-cbc","-outform","DER","-out","encrypted/targets.cms","recipient.crt"],input=payload,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+              print("Prepared encrypted 15-minute create-only upload handoff for 5 approved M03 Part 08 objects. No download permissions generated.")
+          except Exception:
+              print("Staging failed; no permission or credential details emitted.")
+              raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m03-approved-p08-encrypted-upload-handoff
+          path: encrypted/targets.cms
+          retention-days: 1
+          if-no-files-found: error
