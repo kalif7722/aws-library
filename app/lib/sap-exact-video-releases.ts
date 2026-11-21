@@ -10,6 +10,7 @@ const EXACT_RELEASES:Readonly<Record<string,ExactRelease>>={
   "03/01":{release:"2026-11-20-m03p01-approved-animation-v1",revision:"2026-11-20-m03p01-approved-animation-v1"},
   "03/04":{release:"2026-11-20-m03p04-approved-animation-v1",revision:"2026-11-20-m03p04-approved-animation-v1"},
   "03/06":{release:"2026-11-20-m03p06-approved-animation-v1",revision:"2026-11-20-m03p06-approved-animation-v1"},
+  "03/08":{release:"2026-11-21-m03p08-approved-animation-v1",revision:"2026-11-21-m03p08-approved-animation-v1"},
 };
 
 export function exactSapVideoRelease(moduleId:string,part:string):ExactRelease|undefined{

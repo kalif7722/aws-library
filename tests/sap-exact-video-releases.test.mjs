@@ -16,6 +16,7 @@ const rows=[
   ["03","01","2026-11-20-m03p01-approved-animation-v1",1,3,165.75],
   ["03","04","2026-11-20-m03p04-approved-animation-v1",9,11,172.5],
   ["03","06","2026-11-20-m03p06-approved-animation-v1",15,17,196.04166666666669],
+  ["03","08","2026-11-21-m03p08-approved-animation-v1",21,24,213.5],
 ];
 const fixtureDir=process.env.SAP_RELEASE_FIXTURE_DIR;
 const vttFixture=s=>fixtureDir?readFileSync(join(fixtureDir,`${s}.vtt`),"utf8"):"WEBVTT\n\n00:00:00.000 --> 00:00:03.000\nSpoken cue\n";
@@ -133,4 +134,16 @@ test("caption route keeps prior AIP/AIF support, rejects invalid payload and ref
   assert.equal(redirected.status,502);
   assert.deepEqual(await redirected.json(),{error:"Caption redirect not allowed"});
   assert.equal(fetch.mock.callCount(),3);
+});
+
+test("M03 Part 08 is exact and does not approve adjacent revisions or captions",async t=>{
+  const row=rows.at(-1), good=prefix(row)+".vtt?v="+row[2];
+  const fetch=t.mock.method(globalThis,"fetch",async ()=>assert.fail("nonexact P08 track reached fetch"));
+  const invalid=[
+    good.replaceAll("part-08","part-09"),
+    good.replace("?v="+row[2],"?v=legacy"),
+    good.replace("-animation-v1","-animation-v2"),
+  ];
+  for(const src of invalid) assert.equal((await captions(request("course-video-captions",{src}))).status,400);
+  assert.equal(fetch.mock.callCount(),0);
 });
