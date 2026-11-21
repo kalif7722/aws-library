@@ -1,0 +1,93 @@
+{
+  "module": "07",
+  "part": "05",
+  "revision": "2026-11-21-m07p05-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m07p05-s13-c1-4b3fb31d6321",
+      "slide": 13,
+      "text": "Start with the controller. Target tracking adjusts capacity to keep an appropriate utilization metric near a target. Adding healthy instances must reduce the load represented by that metric.",
+      "text_sha256": "4b3fb31d6321701b5149355d843a7864d0f31a82d1e7316444af97ba2d8656d3",
+      "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+    },
+    {
+      "id": "m07p05-s13-c2-42a4b32b9bd4",
+      "slide": 13,
+      "text": "Compare metric choices. CPU fits CPU-bound work; requests per target can fit balanced request processing. Average network bytes may fit network-bound workloads. Choose a metric that reflects the bottleneck additional instances can relieve.",
+      "text_sha256": "42a4b32b9bd4cfb583a7cec2f5d915c4993f2243af2ba3e48d9b21c3f33b1cf0",
+      "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+    },
+    {
+      "id": "m07p05-s13-c3-893fd58f793e",
+      "slide": 13,
+      "text": "Look at the queue example. Raw queue length ignores the number of workers. Backlog per worker expresses demand relative to capacity; choose the acceptable backlog using processing time and the latency requirement.",
+      "text_sha256": "893fd58f793e8b82bdb695fb1c2a67cd56dd19342c8bb31d3570795a07e4c7f3",
+      "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+    },
+    {
+      "id": "m07p05-s13-c4-d2251b1a7b31",
+      "slide": 13,
+      "text": "With the full slide visible, coordinate readiness and policies. Allow instance warmup. With multiple target-tracking policies, any policy can request scale-out, but all policies with scale-in enabled must agree before scale-in. Verify this behavior under changing demand.",
+      "text_sha256": "d2251b1a7b3101799b1fad1aab074cdedfe47c0f61e0561fe0ea67f3a31ec030",
+      "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+    },
+    {
+      "id": "m07p05-s14-c1-20cb0624d002",
+      "slide": 14,
+      "text": "Follow the threshold illustration. Step scaling selects an adjustment according to how far the metric breaches the configured alarm threshold. Different breach ranges can produce different capacity changes.",
+      "text_sha256": "20cb0624d002fbe84f4fca3cc6c4e36e48f0b49fb368c8ca3de96e3c72becbac",
+      "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+    },
+    {
+      "id": "m07p05-s14-c2-529779758eca",
+      "slide": 14,
+      "text": "Compare simple scaling on the right. It uses one adjustment with cooldown behavior. Target tracking or step scaling is usually a better fit when the controller needs to respond to changing load more continuously.",
+      "text_sha256": "529779758ecab0ab4bf7ed8ac6db49d4e0d64e7f88748604b2b9689676ecb4cf",
+      "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+    },
+    {
+      "id": "m07p05-s14-c3-49d92e029dbc",
+      "slide": 14,
+      "text": "Move to policy interactions. Conflicting actions and overly aggressive scale-in can remove capacity while demand is still high. Leave suitable separation between scale-out and scale-in thresholds to reduce repeated reversals.",
+      "text_sha256": "49d92e029dbc323790a0e31ddd7db9dbcf7809aee0dcafe8983cf10ea8549083",
+      "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+    },
+    {
+      "id": "m07p05-s14-c4-dff89bf06ad9",
+      "slide": 14,
+      "text": "With the full slide restored, test the tuning. Use realistic bursts to evaluate thresholds, adjustment sizes and warmup. Include noisy or missing metrics and check application readiness, not just the count of instances.",
+      "text_sha256": "dff89bf06ad95cb8e47b7510e6fa86c8ef2f575297ea787f16d2c9c729bc7266",
+      "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+    },
+    {
+      "id": "m07p05-s15-c1-e8f222e7099e",
+      "slide": 15,
+      "text": "Begin with the calendar. Scheduled actions adjust capacity bounds or desired capacity at known times. They fit events whose timing is known in advance, provided the fleet has time to become ready.",
+      "text_sha256": "e8f222e7099eb52fd4140d9f74d704cd084d4453236273146d57daa750c92646",
+      "asset_sha256": "691f2683fc5b3cc71404c22aaa254c156a0fa3ea18af349abbca679a4dde6eda"
+    },
+    {
+      "id": "m07p05-s15-c2-6d2f26a07c49",
+      "slide": 15,
+      "text": "Compare the forecast. Predictive scaling uses recurring demand patterns to prepare capacity before an expected increase. A forecast is an estimate, so review its behavior against the workload's actual demand.",
+      "text_sha256": "6d2f26a07c49a85ae89742954182a105a478e8feeb1c4bdc6102ae13c9bbaada",
+      "asset_sha256": "691f2683fc5b3cc71404c22aaa254c156a0fa3ea18af349abbca679a4dde6eda"
+    },
+    {
+      "id": "m07p05-s15-c3-4176c56edb5a",
+      "slide": 15,
+      "text": "Look at the combined approach. Proactive capacity handles expected demand, while dynamic scaling responds to unexpected changes. Neither a schedule nor a forecast guarantees that sufficient healthy capacity will be available.",
+      "text_sha256": "4176c56edb5a863f41f3ae0bc96434e2a63261f9ca2d31650fa68d8749e01984",
+      "asset_sha256": "691f2683fc5b3cc71404c22aaa254c156a0fa3ea18af349abbca679a4dde6eda"
+    },
+    {
+      "id": "m07p05-s15-c4-446bbf9da0b2",
+      "slide": 15,
+      "text": "With the original slide restored, check the operational details. Account for time zones, startup time, capacity limits and changing workload patterns. Test readiness before the event and keep monitoring when reality differs from the forecast.",
+      "text_sha256": "446bbf9da0b2f91df51d11c7417d58f6f86776efdfb8aa34892c07298381381e",
+      "asset_sha256": "691f2683fc5b3cc71404c22aaa254c156a0fa3ea18af349abbca679a4dde6eda"
+    }
+  ]
+}
