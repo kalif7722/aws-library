@@ -1,0 +1,128 @@
+{
+  "module": "07",
+  "part": "09",
+  "revision": "2026-11-21-m07p09-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m07p09-s25-c1-edb9ba33a5f9",
+      "slide": 25,
+      "text": "Start with the recovery trigger at the upper left. Supported automatic recovery responds to an underlying system-status-check failure. An instance-status-check failure by itself does not trigger this recovery mechanism.",
+      "text_sha256": "edb9ba33a5f971646cafd5c97b995c4b428b2c6e86ddf7bf1b96b7a59e99a739",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s25-c2-37531c568ec2",
+      "slide": 25,
+      "text": "Move to the identity panel. A recovered instance retains its instance ID, addresses, metadata, placement group, attached EBS volumes and Availability Zone. Recovery attempts to restore the same instance on healthy infrastructure.",
+      "text_sha256": "37531c568ec223245d46e03dc553fdd3b05fe7a72e06f3420c0565056a5b3c2c",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s25-c3-30734afc42c3",
+      "slide": 25,
+      "text": "Now inspect what is lost. Recovery appears as an unplanned restart: memory contents disappear and operating-system uptime resets. CloudWatch action-based recovery also loses instance-store data. Verify the selected mechanism and supported instance configuration.",
+      "text_sha256": "30734afc42c34b66e629639e25062260f937fea6366877d7463465c0dd222def",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s25-c4-75b453cefefd",
+      "slide": 25,
+      "text": "Compare the alternatives on the right. Stop and start can change an automatically assigned public IPv4 address. An Auto Scaling replacement launches a different instance. Neither operation is identical to recovering the original instance.",
+      "text_sha256": "75b453cefefd817def2dd1c4ab87dc58b5d8fc1c550d28fe20ab70be8be719e9",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s25-c5-46fff45a01e2",
+      "slide": 25,
+      "text": "Prepare before failure, as the lower panel shows. Verify simplified automatic recovery or configure a supported CloudWatch recovery action. Monitor outcomes and retain backups and application recovery procedures.",
+      "text_sha256": "46fff45a01e2b21ca7193f9147d747834b9b0cfc14109011b192148d2a263b4d",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s25-c6-a97deafe9620",
+      "slide": 25,
+      "text": "With the full slide visible, separate preserved identity from preserved application state. Automatic recovery does not restore work held only in memory and does not guarantee that the application recovers successfully.",
+      "text_sha256": "a97deafe9620d6185194e74ef7a96d15fa9535ab1cc18d831083ab71e8fc8c73",
+      "asset_sha256": "49907e634438c614c568e560b5a8169c049c451ceb93e06f74a99498e952ef42"
+    },
+    {
+      "id": "m07p09-s26-c1-1a9e98059e15",
+      "slide": 26,
+      "text": "Start with local scratch storage. Instance-store NVMe can provide very low latency and high input and output rates on suitable instances. Treat the data as temporary and checkpoint valuable results elsewhere.",
+      "text_sha256": "1a9e98059e15900ce6260632d8558c3bd25da17020e87a5590facc265fb7af6a",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s26-c2-fa9a2283e28d",
+      "slide": 26,
+      "text": "Move to persistent block storage. EBS performance depends on both the volume and the instance. Supported io2 Block Express configurations can provide up to 256,000 IOPS, but provisioned capacity still needs workload testing.",
+      "text_sha256": "fa9a2283e28dc07f40a39492eb945127c2280b5ff203cd0f06ee423a24516bd5",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s26-c3-a7f6347f574b",
+      "slide": 26,
+      "text": "The S3 panel represents durable objects. S3 is not a native POSIX file system. Stage the dataset or choose a supported integration when the application expects file access.",
+      "text_sha256": "a7f6347f574b8b1ac4323304642246b3cf2b3d9f7dc628dda6ddc16bcc77b1d5",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s26-c4-7786c7cb5509",
+      "slide": 26,
+      "text": "The lower-left panel adds shared file access through EFS. Its throughput modes are Elastic, Provisioned and Bursting. Throughput configuration and input and output operations per second are different measurements.",
+      "text_sha256": "7786c7cb5509b9166c4dc5c353b9171ed651243f3dfee005606809dc3ff5cf42",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s26-c5-c011bcb22317",
+      "slide": 26,
+      "text": "The lower-right panel shows FSx for Lustre for parallel file access. Supported S3 integration can import datasets and export results. Choose persistence and data movement deliberately instead of assuming every file is already durable in S3.",
+      "text_sha256": "c011bcb22317cb35223ffb5e927b21362eb797cfe1be8c26b63a22ffbff52857",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s26-c6-92dff4317a72",
+      "slide": 26,
+      "text": "Use the full comparison to match storage to the job. Local scratch, persistent block, durable objects and shared file systems solve different access patterns. Measure throughput, metadata operations and recovery needs together.",
+      "text_sha256": "92dff4317a7266684b70e80ea81dac2256f492de8d8956e4058e558f54e299f0",
+      "asset_sha256": "3e47f437f202d18efea84cffc9b444cda797c0ac32b4ae1a109188ae235fc03d"
+    },
+    {
+      "id": "m07p09-s27-c1-55c3166b2830",
+      "slide": 27,
+      "text": "Begin with AWS Batch. Submit jobs with their resource requirements, and use queues, scheduling and managed compute environments to provide eligible capacity for execution.",
+      "text_sha256": "55c3166b2830f3f827dd7580e3006ed6b98d4a0015c284985fd62235394c29d6",
+      "asset_sha256": "8077a3c72f75a8cd19e205854461db0bd53834d06da0298e7c5163c3d0f8730b"
+    },
+    {
+      "id": "m07p09-s27-c2-ba0c09f9052c",
+      "slide": 27,
+      "text": "On the right, AWS ParallelCluster provisions and manages a configurable HPC cluster. Its configuration brings together compute, networking, a supported scheduler such as Slurm, and shared storage.",
+      "text_sha256": "ba0c09f9052c39bd399d365534c92d3f03138bc2c2e60f0e0eec73900b3593ee",
+      "asset_sha256": "8077a3c72f75a8cd19e205854461db0bd53834d06da0298e7c5163c3d0f8730b"
+    },
+    {
+      "id": "m07p09-s27-c3-b6faf3795e1c",
+      "slide": 27,
+      "text": "The multi-node panel describes one coordinated job across multiple EC2 nodes. AWS Batch multi-node parallel jobs require supported compute environments. They do not support Spot capacity or Fargate.",
+      "text_sha256": "b6faf3795e1c0cc9e212b8330befe01debc8dac627981a81065ef72251c5b89b",
+      "asset_sha256": "8077a3c72f75a8cd19e205854461db0bd53834d06da0298e7c5163c3d0f8730b"
+    },
+    {
+      "id": "m07p09-s27-c4-90c643640e46",
+      "slide": 27,
+      "text": "Choose the operating model before the tool. Batch fits managed job execution. ParallelCluster fits a configurable cluster and scheduler workflow. Neither choice removes the need to design storage and application communication.",
+      "text_sha256": "90c643640e4628e8e60ba502cef6f080fb7f8e4c231835c051daac9f8e31e526",
+      "asset_sha256": "8077a3c72f75a8cd19e205854461db0bd53834d06da0298e7c5163c3d0f8730b"
+    },
+    {
+      "id": "m07p09-s27-c5-573de6f0ca15",
+      "slide": 27,
+      "text": "Compare the workload examples on the full slide. Independent rendering tasks can retry separately. A multi-node MPI simulation needs coordinated nodes and suitable communication. Scheduling, cluster provisioning and communication libraries remain distinct responsibilities.",
+      "text_sha256": "573de6f0ca151ec747f29d462def96c31692769d0d9bc4cc2b02436dd11f33d0",
+      "asset_sha256": "8077a3c72f75a8cd19e205854461db0bd53834d06da0298e7c5163c3d0f8730b"
+    }
+  ]
+}
