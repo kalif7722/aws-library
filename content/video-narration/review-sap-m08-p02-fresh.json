@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "02",
+  "revision": "2026-11-21-m08p02-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p02-s04-c1-ef22862f77c3",
+      "slide": 4,
+      "text": "Compare the enabled case on the left. With cross-zone balancing, a load balancer node can route to eligible healthy targets across enabled Availability Zones. This lets available target capacity serve traffic received by nodes in another enabled zone.",
+      "text_sha256": "ef22862f77c34d956f667e6a64e8380f3307b9c35204784cc887e0d4b1dc4d08",
+      "asset_sha256": "c3ebfb26b5549f1221b29acb8e47f905469e076f1c2185b3ea9d722ce27e719c"
+    },
+    {
+      "id": "m08p02-s04-c2-e045c395b81b",
+      "slide": 4,
+      "text": "The disabled case on the right keeps each node using targets in its own zone. Each zone therefore needs enough healthy capacity for the traffic it receives. A balanced DNS answer does not guarantee an equal amount of work per target.",
+      "text_sha256": "e045c395b81b46787cf53c0a187605bf21397e0c7118ba6e38d47cdc6233ea37",
+      "asset_sha256": "c3ebfb26b5549f1221b29acb8e47f905469e076f1c2185b3ea9d722ce27e719c"
+    },
+    {
+      "id": "m08p02-s04-c3-5b066ebd7dae",
+      "slide": 4,
+      "text": "Read the defaults and controls separately. Application Load Balancer enables cross-zone balancing at the load balancer level, while eligible target groups can disable it. Network and Gateway Load Balancers default to disabled. Classic Load Balancer defaults depend on the creation method.",
+      "text_sha256": "5b066ebd7dae900b98a1f086fb36c2147e5991748689d172c14099ed08de8bbc",
+      "asset_sha256": "c3ebfb26b5549f1221b29acb8e47f905469e076f1c2185b3ea9d722ce27e719c"
+    },
+    {
+      "id": "m08p02-s04-c4-0e780b85b01a",
+      "slide": 4,
+      "text": "The availability and cost panel adds two checks. Cross-zone target routing is different from DNS routing. Check the current inter-zone transfer charges and capacity requirements for the selected load balancer service.",
+      "text_sha256": "0e780b85b01a67a325acd45a0aa22235811efc61e7e23f40d2d1f3a00764b6b0",
+      "asset_sha256": "c3ebfb26b5549f1221b29acb8e47f905469e076f1c2185b3ea9d722ce27e719c"
+    },
+    {
+      "id": "m08p02-s04-c5-63f21f8ec9dc",
+      "slide": 4,
+      "text": "Return to the full comparison and test the loss of one Availability Zone. Sharing targets across zones does not eliminate the need for surviving capacity, healthy applications and a recovery plan.",
+      "text_sha256": "63f21f8ec9dc10b27d20b5279e5132d0202ab592e21a3e7e6c364e26fa386ad7",
+      "asset_sha256": "c3ebfb26b5549f1221b29acb8e47f905469e076f1c2185b3ea9d722ce27e719c"
+    },
+    {
+      "id": "m08p02-s05-c1-d6bf08294f8a",
+      "slide": 5,
+      "text": "Begin with a meaningful target-group probe. Configure the supported protocol, port, path, success matcher, interval and thresholds. A listening socket alone can hide a broken application, so choose a probe that reflects the readiness the routing decision needs.",
+      "text_sha256": "d6bf08294f8a42c3f3508b058ef24352239e2daf5b16b7de6aa2db3adec3b187",
+      "asset_sha256": "5c1d5d6b9cc272e155d5e39602eb249093037cbb2f5e7e57a774d89ba88f4643"
+    },
+    {
+      "id": "m08p02-s05-c2-a0f8d73d4da6",
+      "slide": 5,
+      "text": "Read the reason code before changing infrastructure. A timeout, response-code mismatch, failed check and unused target state point to different causes. Use the target health evidence to narrow the fault.",
+      "text_sha256": "a0f8d73d4da6efec5139785429f72e600cb7e13c9f6dee7263700cbd958a74f5",
+      "asset_sha256": "5c1d5d6b9cc272e155d5e39602eb249093037cbb2f5e7e57a774d89ba88f4643"
+    },
+    {
+      "id": "m08p02-s05-c3-b7cc890669d0",
+      "slide": 5,
+      "text": "The lower-left panel warns about a shared dependency. If every readiness check fails whenever one shared database or service fails, the entire target fleet can be removed at once. Design dependency checks deliberately to avoid a cascading outage.",
+      "text_sha256": "b7cc890669d0e238d4384ec66ab1f269b304d05804358568deddb4a0671adb6c",
+      "asset_sha256": "5c1d5d6b9cc272e155d5e39602eb249093037cbb2f5e7e57a774d89ba88f4643"
+    },
+    {
+      "id": "m08p02-s05-c4-7338466c1716",
+      "slide": 5,
+      "text": "The lower-right panel explains Application Load Balancer fail-open behavior. If a target group has only unhealthy targets across its enabled zones, traffic can be sent to those targets regardless of their health state. Unhealthy is not a guaranteed traffic block.",
+      "text_sha256": "7338466c17169c1336c15b35f37a19511c22521bff0a65dacc24954d5726be40",
+      "asset_sha256": "5c1d5d6b9cc272e155d5e39602eb249093037cbb2f5e7e57a774d89ba88f4643"
+    },
+    {
+      "id": "m08p02-s05-c5-ca35634f05b4",
+      "slide": 5,
+      "text": "With the full slide visible, use health checks to guide routing and diagnosis. They do not repair the application or replace network and identity security controls. Test both normal failure isolation and shared-dependency failures.",
+      "text_sha256": "ca35634f05b4ebbc66b2b46aee7ddae8daef10c820fc5edfac854e6b5c65d15d",
+      "asset_sha256": "5c1d5d6b9cc272e155d5e39602eb249093037cbb2f5e7e57a774d89ba88f4643"
+    },
+    {
+      "id": "m08p02-s06-c1-3fde865e4017",
+      "slide": 6,
+      "text": "Start with request matching at the upper left. Application Load Balancer conditions can inspect host, path, HTTP headers, request method, query strings and source IP. Place specific rules ahead of broader matches using the intended priority order.",
+      "text_sha256": "3fde865e401738d7b2e481187e451245acbc8c974d6e5e0b099aa7e1f5254b2b",
+      "asset_sha256": "c09e6f7392a51539954c9a6efc2f7b7455baff94db2a8110fc7f2a5f9098da05"
+    },
+    {
+      "id": "m08p02-s06-c2-4ae0f59abb07",
+      "slide": 6,
+      "text": "The upper-right panel chooses the response. Forward to a target group, redirect the client, or return a fixed response. The default rule handles requests that match none of the earlier rules.",
+      "text_sha256": "4ae0f59abb07ab1136494bf96d34b43e9cde4dec4d1903d486274aad5fafe85d",
+      "asset_sha256": "c09e6f7392a51539954c9a6efc2f7b7455baff94db2a8110fc7f2a5f9098da05"
+    },
+    {
+      "id": "m08p02-s06-c3-679a3739e5fa",
+      "slide": 6,
+      "text": "The lower-left panel adds protocol behavior. Application Load Balancer supports HTTP/2 and WebSocket upgrades. After a WebSocket upgrade, messages use the established connection to the selected target rather than making a fresh routing decision for every message.",
+      "text_sha256": "679a3739e5fa748ec60f2c0f89c86b3ab5daea40e11816b1ce8c64fc131d31bd",
+      "asset_sha256": "c09e6f7392a51539954c9a6efc2f7b7455baff94db2a8110fc7f2a5f9098da05"
+    },
+    {
+      "id": "m08p02-s06-c4-f347a46e3429",
+      "slide": 6,
+      "text": "Follow the example at the lower right. A host and checkout path can select the checkout service, while a catalog path selects another target group behind the same public load balancer. Match the rule conditions to the application boundary.",
+      "text_sha256": "f347a46e34297e52a107252848192247f2f3a0d247103456fa8240c6baf1249f",
+      "asset_sha256": "c09e6f7392a51539954c9a6efc2f7b7455baff94db2a8110fc7f2a5f9098da05"
+    },
+    {
+      "id": "m08p02-s06-c5-e96a75494858",
+      "slide": 6,
+      "text": "With the complete slide visible, separate routing from permission. Selecting the correct destination does not authorize the caller to use it. Keep authentication, authorization and backend readiness alongside the routing configuration.",
+      "text_sha256": "e96a754948580c8b534ffc1e975176578516ccc0072855f291f6c8a3ba07666f",
+      "asset_sha256": "c09e6f7392a51539954c9a6efc2f7b7455baff94db2a8110fc7f2a5f9098da05"
+    }
+  ]
+}
