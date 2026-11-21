@@ -1,0 +1,107 @@
+{
+  "module": "07",
+  "part": "10",
+  "revision": "2026-11-21-m07p10-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m07p10-s28-c1-e69fe9684eb7",
+      "slide": 28,
+      "text": "Read the top row as three separate controls. Launch adds instances, Terminate removes instances, and HealthCheck evaluates managed health signals and marks unhealthy instances. Suspending one control does not automatically suspend the other two.",
+      "text_sha256": "e69fe9684eb735fcf2964f0578f5680bbaa5cc6dfc52181270c3658cfa795873",
+      "asset_sha256": "cdbca274e7311e63be3bbcb26d03c51d9ddb3d08a5bf20c8794ccb670b2c943a"
+    },
+    {
+      "id": "m07p10-s28-c2-8e12665ec408",
+      "slide": 28,
+      "text": "The middle row covers replacement, distribution and alarms. ReplaceUnhealthy replaces instances marked unhealthy. AZRebalance redistributes capacity across configured Availability Zones. AlarmNotification responds to CloudWatch alarms associated with scaling policies.",
+      "text_sha256": "8e12665ec4087126525e8d340ba9be8eeaa1dfc689bc58065dcc92e0a8c9ed41",
+      "asset_sha256": "cdbca274e7311e63be3bbcb26d03c51d9ddb3d08a5bf20c8794ccb670b2c943a"
+    },
+    {
+      "id": "m07p10-s28-c3-c3405b142fe4",
+      "slide": 28,
+      "text": "The bottom row covers scheduled changes, registration and refresh. ScheduledActions runs scheduled capacity changes. AddToLoadBalancer registers new instances with the configured load balancer or target group. InstanceRefresh replaces instances during a configured refresh.",
+      "text_sha256": "c3405b142fe461607213db32050aa50686756204c174821c2b54ac1c354b67b2",
+      "asset_sha256": "cdbca274e7311e63be3bbcb26d03c51d9ddb3d08a5bf20c8794ccb670b2c943a"
+    },
+    {
+      "id": "m07p10-s28-c4-5893f1d96607",
+      "slide": 28,
+      "text": "With all nine controls visible, identify the process that causes the behavior you want to pause. Suspending one process does not freeze the whole Auto Scaling group. Check interactions before changing the controls.",
+      "text_sha256": "5893f1d9660700e42366412d71333edec62ecd2f06f5e293d130a05846e84d23",
+      "asset_sha256": "cdbca274e7311e63be3bbcb26d03c51d9ddb3d08a5bf20c8794ccb670b2c943a"
+    },
+    {
+      "id": "m07p10-s29-c1-e59ecd59c76e",
+      "slide": 29,
+      "text": "Start with Launch suspended. Scale-out cannot add instances. ReplaceUnhealthy can still terminate unhealthy instances, but replacements cannot launch while Launch is suspended. Capacity can therefore fall.",
+      "text_sha256": "e59ecd59c76e9a160c8849d99a256f1eb00b97b6cd657c40429f96bb1492a74d",
+      "asset_sha256": "055011c7cc46c7460d69f4f3773423ef5e3aab79624b0484aa1a1091a4791a94"
+    },
+    {
+      "id": "m07p10-s29-c2-659fd280eb33",
+      "slide": 29,
+      "text": "Contrast that with ReplaceUnhealthy suspended. Managed health checks can still mark an instance unhealthy, but replacement waits for the process to resume. Detection and replacement are separate steps.",
+      "text_sha256": "659fd280eb332c50d35fc7c35b271977894500c2f7eb767ff09f96392b8a0ea6",
+      "asset_sha256": "055011c7cc46c7460d69f4f3773423ef5e3aab79624b0484aa1a1091a4791a94"
+    },
+    {
+      "id": "m07p10-s29-c3-da75cfa3cb5b",
+      "slide": 29,
+      "text": "At the lower left, AddToLoadBalancer suspension allows new instances to launch without registration. Resuming the process does not register the instances missed during suspension. Register those targets explicitly.",
+      "text_sha256": "da75cfa3cb5bdb9e030a35e782972b4d7cbd2951d4b860a7359b385f76a64678",
+      "asset_sha256": "055011c7cc46c7460d69f4f3773423ef5e3aab79624b0484aa1a1091a4791a94"
+    },
+    {
+      "id": "m07p10-s29-c4-ea9763ba8144",
+      "slide": 29,
+      "text": "At the lower right, ScheduledActions suspension skips actions scheduled during the suspension period. Resuming does not replay the missed schedules. Review the desired capacity that should apply now.",
+      "text_sha256": "ea9763ba8144e2c2f668d826f71c836612b49c5b7cfc605e990a17535b8d82c5",
+      "asset_sha256": "055011c7cc46c7460d69f4f3773423ef5e3aab79624b0484aa1a1091a4791a94"
+    },
+    {
+      "id": "m07p10-s29-c5-41d238b6048f",
+      "slide": 29,
+      "text": "Use the full slide before resuming. Inspect capacity, health, registration and pending work because resumption can trigger replacement or rebalancing. Suspending Terminate does not prevent the Spot service from interrupting Spot instances.",
+      "text_sha256": "41d238b6048fdb78db1426435db10249b1a83fe6514d0a159642f178fd14a4aa",
+      "asset_sha256": "055011c7cc46c7460d69f4f3773423ef5e3aab79624b0484aa1a1091a4791a94"
+    },
+    {
+      "id": "m07p10-s30-c1-f66277f1cde2",
+      "slide": 30,
+      "text": "Start with rolling instance refresh. Replace instances inside an Auto Scaling group using the desired launch-template version. Control healthy capacity and warmup, monitor the rollout and validate rollback support before starting.",
+      "text_sha256": "f66277f1cde24856451f531cd8d3de8ec8b0286ada84ccd31972985ce73bfd4d",
+      "asset_sha256": "845f3a6a3014f90a058d970560c64fd17718f74375f954c37fab2d14ba6f4c34"
+    },
+    {
+      "id": "m07p10-s30-c2-b26436d5febf",
+      "slide": 30,
+      "text": "The middle option keeps old and new fleets in separate Auto Scaling groups and target groups. An Application Load Balancer can distribute requests using target-group weights. Test the new version before increasing its share.",
+      "text_sha256": "b26436d5febf6d13f1507ed930339b6634608e8e891922bcb1169fc9e79aed74",
+      "asset_sha256": "845f3a6a3014f90a058d970560c64fd17718f74375f954c37fab2d14ba6f4c34"
+    },
+    {
+      "id": "m07p10-s30-c3-a438bb44f928",
+      "slide": 30,
+      "text": "The right option gives each fleet its own load balancer and uses weighted Route 53 records. DNS caching means a weight change is not an instantaneous change for every client. Plan the cutover around that delay.",
+      "text_sha256": "a438bb44f928a44f72e6f855dd3a1dc1df20bce633c759113b0931c15202e57e",
+      "asset_sha256": "845f3a6a3014f90a058d970560c64fd17718f74375f954c37fab2d14ba6f4c34"
+    },
+    {
+      "id": "m07p10-s30-c4-8477581ea732",
+      "slide": 30,
+      "text": "Keep the test and rollback path shown below. Use isolated tests or shadow load before cutover. Plan session handling, schema compatibility, spare capacity and how long to retain the old fleet.",
+      "text_sha256": "8477581ea73247b3a487cf7fa7488a8995925f948574458bfac13ca101b4ab55",
+      "asset_sha256": "845f3a6a3014f90a058d970560c64fd17718f74375f954c37fab2d14ba6f4c34"
+    },
+    {
+      "id": "m07p10-s30-c5-f3a75c5469c3",
+      "slide": 30,
+      "text": "Return to the full comparison and choose the smallest safe deployment boundary. Reverting traffic does not undo a database migration or recover lost application state. Application compatibility and data recovery need their own plan.",
+      "text_sha256": "f3a75c5469c34a97c2eb75d78314352229872a74c4293d2167a980ad4676119b",
+      "asset_sha256": "845f3a6a3014f90a058d970560c64fd17718f74375f954c37fab2d14ba6f4c34"
+    }
+  ]
+}
