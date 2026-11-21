@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "06",
+  "revision": "2026-11-21-m08p06-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p06-s16-c1-3cc5eaafe0ea",
+      "slide": 16,
+      "text": "Start at the private-service panel. An endpoint service backed by a Network Load Balancer lets consumers connect through interface endpoints. Configure the allowed principals and whether connection requests require acceptance.",
+      "text_sha256": "3cc5eaafe0ea3b136b8fa4891fb927bf38b66f7c49b0ec4fa44f287e8c8aa8b1",
+      "asset_sha256": "fdf5434438803c41e72f60df8bb19cb63ff53a775833493a571db9125ddd54d1"
+    },
+    {
+      "id": "m08p06-s16-c2-9a2b83a41279",
+      "slide": 16,
+      "text": "The upper-right panel keeps the boundary narrow. PrivateLink exposes a service; it does not create full network peering between the provider and consumer. Routing, endpoint access and application policy still need to agree.",
+      "text_sha256": "9a2b83a412795c6a9904799cc96469395ac8eef5c7d7dfc349ff865fb3ae0c5a",
+      "asset_sha256": "fdf5434438803c41e72f60df8bb19cb63ff53a775833493a571db9125ddd54d1"
+    },
+    {
+      "id": "m08p06-s16-c3-8b2cfe0c0be1",
+      "slide": 16,
+      "text": "Follow the lower-left composition. A Network Load Balancer can target an Application Load Balancer, combining static entry addresses or PrivateLink with HTTP routing. Use that extra layer when the requirements actually need both sets of features.",
+      "text_sha256": "8b2cfe0c0be18b8e0fce59f487f701b82814808c292f27973349deabc363e7cb",
+      "asset_sha256": "fdf5434438803c41e72f60df8bb19cb63ff53a775833493a571db9125ddd54d1"
+    },
+    {
+      "id": "m08p06-s16-c4-a19deb326202",
+      "slide": 16,
+      "text": "The lower-right panel checks the constraints. Both load balancers must be in the same VPC and account. Use a target group of type ALB with TCP, a port matching an ALB listener, and suitable health checks.",
+      "text_sha256": "a19deb3262029ea1938158d930bb6f8a315f5aadc457ad1f514d5e6d3f839a45",
+      "asset_sha256": "fdf5434438803c41e72f60df8bb19cb63ff53a775833493a571db9125ddd54d1"
+    },
+    {
+      "id": "m08p06-s16-c5-3f860ae9fa04",
+      "slide": 16,
+      "text": "With the full slide visible, justify every additional component by a requirement. Composition adds cost, configuration and another failure surface, so verify the service boundary and both load balancer paths together.",
+      "text_sha256": "3f860ae9fa04376bee9cc1eaa785d7f7a7f195f12dc66349ee7534a7f6b7d2e8",
+      "asset_sha256": "fdf5434438803c41e72f60df8bb19cb63ff53a775833493a571db9125ddd54d1"
+    },
+    {
+      "id": "m08p06-s17-c1-43cad5fefb25",
+      "slide": 17,
+      "text": "Start with inspection at Layer three. Gateway Load Balancer distributes IP traffic across compatible virtual firewalls, intrusion detection systems and other appliances. The appliance performs the inspection and enforces its security policy.",
+      "text_sha256": "43cad5fefb25259e34d3311c4a38430f01eb4fa1296fe107456bbdc04432406a",
+      "asset_sha256": "671392e7794a6cfacbf6595edd330f1faea5ce48ad91398a55c61b201be4e611"
+    },
+    {
+      "id": "m08p06-s17-c2-8d45c613198e",
+      "slide": 17,
+      "text": "The upper-right panel shows the appliance contract. Traffic uses GENEVE encapsulation on UDP port 6081. Register supported instances or eligible private IP targets, and confirm that the appliance supports that encapsulation.",
+      "text_sha256": "8d45c613198e9c8eef3ec837f81e86bd724b3cc4fe77ac9b1670f4ccb1bb9aa1",
+      "asset_sha256": "671392e7794a6cfacbf6595edd330f1faea5ce48ad91398a55c61b201be4e611"
+    },
+    {
+      "id": "m08p06-s17-c3-231fbe6104e2",
+      "slide": 17,
+      "text": "The lower-left panel connects consumer and provider. Gateway Load Balancer endpoints carry traffic to the inspection service. The Gateway Load Balancer and appliance fleet reside on the service-provider side.",
+      "text_sha256": "231fbe6104e2eb504e7b2dc1284eb350207e4d07719bd6c8d21f77cadc03ad0c",
+      "asset_sha256": "671392e7794a6cfacbf6595edd330f1faea5ce48ad91398a55c61b201be4e611"
+    },
+    {
+      "id": "m08p06-s17-c4-f09388a36a5e",
+      "slide": 17,
+      "text": "The lower-right panel makes routing explicit. Route tables must steer the intended traffic through inspection and support the return path. Creating an endpoint alone does not cause every packet in the VPC to be inspected.",
+      "text_sha256": "f09388a36a5e979d9d06a2b954d29ca698fa56bc6382229f98d0fe88d37091fc",
+      "asset_sha256": "671392e7794a6cfacbf6595edd330f1faea5ce48ad91398a55c61b201be4e611"
+    },
+    {
+      "id": "m08p06-s17-c5-74dfacc1ec38",
+      "slide": 17,
+      "text": "Return to the full slide and trace the complete packet path in both directions. Gateway Load Balancer distributes inspection traffic; the appliance supplies the policy. Endpoint placement, route tables and appliance compatibility make that design work.",
+      "text_sha256": "74dfacc1ec38943012f2fe78d79a692d6851405ed4deb11d090b94b625dcd520",
+      "asset_sha256": "671392e7794a6cfacbf6595edd330f1faea5ce48ad91398a55c61b201be4e611"
+    },
+    {
+      "id": "m08p06-s18-c1-f13ee6542de3",
+      "slide": 18,
+      "text": "Start with flow consistency at the upper left. The default five-tuple includes source and destination addresses, ports and protocol. Configurable three-tuple or two-tuple stickiness supports particular appliance requirements; choose the setting deliberately.",
+      "text_sha256": "f13ee6542de351662e90571ce9a356c28a05184ac71cef53d92f17658a9fd34f",
+      "asset_sha256": "5cb2b2b90d4df14d23fda1e29c846adab448ca1b373f0b063ce53545007d8e51"
+    },
+    {
+      "id": "m08p06-s18-c2-d0681e119a59",
+      "slide": 18,
+      "text": "The upper-right panel preserves symmetry. A stateful appliance needs the relevant forward and return traffic. Validate route tables and any required appliance mode when other network services are involved.",
+      "text_sha256": "d0681e119a59ead12f45f4a91d2a981e5945ef89cd0f121c9182327424177415",
+      "asset_sha256": "5cb2b2b90d4df14d23fda1e29c846adab448ca1b373f0b063ce53545007d8e51"
+    },
+    {
+      "id": "m08p06-s18-c3-2cf9aee38926",
+      "slide": 18,
+      "text": "The lower-left panel separates target health from session recovery. Health checks identify available appliances, but handling existing flows depends on configured failover behavior. A replacement appliance may not have the session state held by the failed one.",
+      "text_sha256": "2cf9aee389261383229f5010d6f3c95cb42f7bc092e24e635393c15eb5e30c14",
+      "asset_sha256": "5cb2b2b90d4df14d23fda1e29c846adab448ca1b373f0b063ce53545007d8e51"
+    },
+    {
+      "id": "m08p06-s18-c4-cbb490c4d297",
+      "slide": 18,
+      "text": "The lower-right panel scales with evidence. Monitor appliance capacity, health and flow behavior, then test draining, failure and recovery under realistic traffic. Healthy replacement capacity alone does not prove that existing sessions survive.",
+      "text_sha256": "cbb490c4d2973e377b829dc634f10f7e824bc895346b445e743a050f063c856f",
+      "asset_sha256": "5cb2b2b90d4df14d23fda1e29c846adab448ca1b373f0b063ce53545007d8e51"
+    },
+    {
+      "id": "m08p06-s18-c5-cc07b1c232e7",
+      "slide": 18,
+      "text": "With the original slide fully visible, review flow affinity, symmetric routing and failure behavior together. The goal is not merely to find a healthy appliance, but to preserve the inspection behavior the application depends on.",
+      "text_sha256": "cc07b1c232e7134210806c7c73b783906da9cb6418c0f3a79f476e7cf081ce0c",
+      "asset_sha256": "5cb2b2b90d4df14d23fda1e29c846adab448ca1b373f0b063ce53545007d8e51"
+    }
+  ]
+}
