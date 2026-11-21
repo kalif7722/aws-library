@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "05",
+  "revision": "2026-11-21-m08p05-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p05-s13-c1-0a61ce3f2d0e",
+      "slide": 13,
+      "text": "Start with the transport listener panel. Network Load Balancer supports TCP, TLS, UDP and combined TCP and UDP listeners. QUIC and combined TCP and QUIC are also supported, with specific configuration restrictions. Match the listener to the traffic your application actually uses.",
+      "text_sha256": "0a61ce3f2d0e024a543831f7ff33c5fa7b925c301fd67d40968f4aaa7ba7d123",
+      "asset_sha256": "4d6af47de9f1ce0bb9e241fd9b646b955e6ee42e9b648847440de7f88f54f96e"
+    },
+    {
+      "id": "m08p05-s13-c2-eeddd02d8c28",
+      "slide": 13,
+      "text": "The upper-right panel separates TLS termination from passthrough. A TLS listener terminates client TLS and requires a certificate. A TCP listener on port 443 can carry encrypted TLS unchanged so the target application terminates it.",
+      "text_sha256": "eeddd02d8c2890c29865cfbbbe664a99f9eb1f788694d72fba13860d147aaac0",
+      "asset_sha256": "4d6af47de9f1ce0bb9e241fd9b646b955e6ee42e9b648847440de7f88f54f96e"
+    },
+    {
+      "id": "m08p05-s13-c3-53ea7c3168e9",
+      "slide": 13,
+      "text": "The lower-left panel lists compatible target types: instances, eligible private IP addresses, or an Application Load Balancer. Public IP targets are not supported. Match listener and target protocols; an Application Load Balancer target uses a TCP target group.",
+      "text_sha256": "53ea7c3168e96ecb6c4b9cc3e35bca2cbd41e8e2613d1cb3d3e730a743cc9f61",
+      "asset_sha256": "4d6af47de9f1ce0bb9e241fd9b646b955e6ee42e9b648847440de7f88f54f96e"
+    },
+    {
+      "id": "m08p05-s13-c4-b47f7e367ab5",
+      "slide": 13,
+      "text": "The lower-right panel rejects performance shortcuts. Network Load Balancer serves demanding transport workloads, but a fixed latency comparison or a promise of unlimited connections is not an architecture guarantee. Test the complete path under realistic load.",
+      "text_sha256": "b47f7e367ab5d73097cac1c351071ea3b3a6f84aa1d67a293a9db97c8939e397",
+      "asset_sha256": "4d6af47de9f1ce0bb9e241fd9b646b955e6ee42e9b648847440de7f88f54f96e"
+    },
+    {
+      "id": "m08p05-s13-c5-bd0ed83672f9",
+      "slide": 13,
+      "text": "With the whole slide visible, decide which component terminates TLS, then select compatible listener and target settings. The protocol contract and security boundary come before assumptions about performance.",
+      "text_sha256": "bd0ed83672f97d14acc39ce2c5454bb8bb87f42c50483f46be7734c37cc9b705",
+      "asset_sha256": "4d6af47de9f1ce0bb9e241fd9b646b955e6ee42e9b648847440de7f88f54f96e"
+    },
+    {
+      "id": "m08p05-s14-c1-21ebeac7def4",
+      "slide": 14,
+      "text": "Start with the static addresses on the left. Network Load Balancer provides a static address for each enabled zone. An internet-facing IPv4 deployment can use an Elastic IP in each zone when clients need address allowlists.",
+      "text_sha256": "21ebeac7def4fcd2180bf74a53969a8d39282a9b4313b5380c73eed9cfaa1683",
+      "asset_sha256": "d3ae2b5e687fea86ba35b20546f469c7febf9ce5148c61b8127f41f48dbbe018"
+    },
+    {
+      "id": "m08p05-s14-c2-11618a737d3b",
+      "slide": 14,
+      "text": "The middle panel compares regional and zonal DNS. A regional name can return healthy node addresses across zones. A zonal name selects one zone's node, so the client or application must account for the resilience implications of that choice.",
+      "text_sha256": "11618a737d3b8fc397731fa7073e2230d7c9574d9d3f37f374281a65b8ee644c",
+      "asset_sha256": "d3ae2b5e687fea86ba35b20546f469c7febf9ce5148c61b8127f41f48dbbe018"
+    },
+    {
+      "id": "m08p05-s14-c3-1d6b79828467",
+      "slide": 14,
+      "text": "The right panel carries client identity to the target. Client IP preservation depends on protocol and target settings. Proxy Protocol version two can carry connection metadata, but the receiving application must understand and correctly process it.",
+      "text_sha256": "1d6b79828467aae10a1270d67765c7699bbc7d2826296ed0151f848523f2e509",
+      "asset_sha256": "d3ae2b5e687fea86ba35b20546f469c7febf9ce5148c61b8127f41f48dbbe018"
+    },
+    {
+      "id": "m08p05-s14-c4-cbd695d9ac72",
+      "slide": 14,
+      "text": "Follow the lower path from client through DNS to targets. DNS zonal affinity affects which load balancer node a client reaches. Cross-zone balancing affects which target that node selects. These are different locality decisions.",
+      "text_sha256": "cbd695d9ac72b975f81899c8e30ef8e5b5e5afd19919138c55a176f1441ecc26",
+      "asset_sha256": "d3ae2b5e687fea86ba35b20546f469c7febf9ce5148c61b8127f41f48dbbe018"
+    },
+    {
+      "id": "m08p05-s14-c5-ca6c3cc793bf",
+      "slide": 14,
+      "text": "Return to the full slide and plan for loss of a zone. A fixed address belongs to a zone; resilient clients need a strategy that can use other zones. Confirm DNS behavior, target routing and client metadata together.",
+      "text_sha256": "ca6c3cc793bfd252c945737b44863402ee8c72f2859092d7a53a4e3b1e96d70d",
+      "asset_sha256": "d3ae2b5e687fea86ba35b20546f469c7febf9ce5148c61b8127f41f48dbbe018"
+    },
+    {
+      "id": "m08p05-s15-c1-dadcc029f3ac",
+      "slide": 15,
+      "text": "Follow flow selection at the upper left. Network Load Balancer uses protocol, addresses and ports to choose a target; TCP selection also uses the sequence number. An established flow stays with its selected target rather than being redistributed message by message.",
+      "text_sha256": "dadcc029f3ac5b0d204a120acb6de8db10e2f36fdac67381dbd1f2268b03201d",
+      "asset_sha256": "200f391ea06aa488dae8455e5d14e37b9537f731613487cfef9a8128c4e84921"
+    },
+    {
+      "id": "m08p05-s15-c2-5b5009f81aaa",
+      "slide": 15,
+      "text": "The upper-right panel checks the service behind the transport port. Active checks support TCP, HTTP or HTTPS. A UDP application needs a suitable non-UDP endpoint whose health reflects the UDP service, rather than merely proving that another process is listening.",
+      "text_sha256": "5b5009f81aaa76dbac75660da9dfcf30740a6d490073cc33a24eb44f61278d1b",
+      "asset_sha256": "200f391ea06aa488dae8455e5d14e37b9537f731613487cfef9a8128c4e84921"
+    },
+    {
+      "id": "m08p05-s15-c3-81f88303b328",
+      "slide": 15,
+      "text": "The lower-left panel separates DNS removal from fail-open behavior. Unhealthy zonal capacity can remove a node's address from DNS. If all targets fail, or a target group is empty, Network Load Balancer can fail open. Health failure is not a guaranteed traffic block.",
+      "text_sha256": "81f88303b32893fa1c53f8fa489537938f7b7bc3b3e8ab0bd2f847680e89d950",
+      "asset_sha256": "200f391ea06aa488dae8455e5d14e37b9537f731613487cfef9a8128c4e84921"
+    },
+    {
+      "id": "m08p05-s15-c4-21576af759d0",
+      "slide": 15,
+      "text": "The lower-right panel keeps connection handling explicit. Idle timeouts, target termination and unhealthy-target behavior can affect existing flows. Adding healthy targets does not transparently move an established TCP connection to a different server.",
+      "text_sha256": "21576af759d0d056d55859beba005ce619b12145ca31457a80806c6d6d1ab297",
+      "asset_sha256": "200f391ea06aa488dae8455e5d14e37b9537f731613487cfef9a8128c4e84921"
+    },
+    {
+      "id": "m08p05-s15-c5-0c1754192f25",
+      "slide": 15,
+      "text": "With the original slide fully visible, test new connections and established connections separately. Load balancing connections is different from balancing every application message, and both health checks and application recovery must respect that boundary.",
+      "text_sha256": "0c1754192f25a2a3d270868473392b9b1570b0c1d0da292a66e041674144be12",
+      "asset_sha256": "200f391ea06aa488dae8455e5d14e37b9537f731613487cfef9a8128c4e84921"
+    }
+  ]
+}
