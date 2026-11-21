@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "03",
+  "revision": "2026-11-21-m08p03-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p03-s07-c1-98d4f5daefba",
+      "slide": 7,
+      "text": "Start at the upper-left panel. An instance target registration sends traffic to the instance's primary private address. IP target groups use eligible private IP ranges, including supported reachable hybrid targets. Public IP addresses are not supported targets.",
+      "text_sha256": "98d4f5daefbace5bec03ece3dc2fa5c900d624ab57bb374d8d42f0063f17bd1d",
+      "asset_sha256": "dbcb0682ab29a050e5021c164621b9f276814705bed2553cc2bc91ab4a4cdb91"
+    },
+    {
+      "id": "m08p03-s07-c2-4f4993a58e1e",
+      "slide": 7,
+      "text": "Follow the container port-mapping diagram at the upper right. With ECS on EC2 and bridge networking, identical container ports can map to different host ports. ECS registers the appropriate host and port so the load balancer reaches the intended task.",
+      "text_sha256": "4f4993a58e1e4327bbfcb7056fd559261280371a84d5c87cf5e25c995e85ed9e",
+      "asset_sha256": "dbcb0682ab29a050e5021c164621b9f276814705bed2553cc2bc91ab4a4cdb91"
+    },
+    {
+      "id": "m08p03-s07-c3-0d716b647c29",
+      "slide": 7,
+      "text": "The lower-left panel shows Fargate and tasks using awsvpc networking. Each task has its own network interface and private address. Use IP target groups to register that task address rather than the underlying host instance.",
+      "text_sha256": "0d716b647c29e2d1a186e6ebcfed1434ce0ad803a99218e37be9cca5baa03e6b",
+      "asset_sha256": "dbcb0682ab29a050e5021c164621b9f276814705bed2553cc2bc91ab4a4cdb91"
+    },
+    {
+      "id": "m08p03-s07-c4-e874c2f888dc",
+      "slide": 7,
+      "text": "Follow the Lambda panel from the HTTP request to the function and back. Application Load Balancer creates a JSON event and converts the function response into an HTTP response. The function must follow the supported event and response contract.",
+      "text_sha256": "e874c2f888dc03772af3ec43fe8313faa54bdb3dbab60928fa4cbdd879d95b57",
+      "asset_sha256": "dbcb0682ab29a050e5021c164621b9f276814705bed2553cc2bc91ab4a4cdb91"
+    },
+    {
+      "id": "m08p03-s07-c5-7158dc68d43c",
+      "slide": 7,
+      "text": "With the full slide visible, match registration to the component that receives traffic. Instance addresses, task interfaces and Lambda invocation each represent a different target contract. Then verify health and connectivity for the selected type.",
+      "text_sha256": "7158dc68d43cf4b8de5654056a118524b2b8cd89bc80076c3b9071d164dfd90d",
+      "asset_sha256": "dbcb0682ab29a050e5021c164621b9f276814705bed2553cc2bc91ab4a4cdb91"
+    },
+    {
+      "id": "m08p03-s08-c1-f24e1a5447cf",
+      "slide": 8,
+      "text": "Follow the leftmost card for the client connection. An HTTPS listener requires a server certificate and a security policy. Server Name Indication lets the listener select a certificate for the hostname requested by the client.",
+      "text_sha256": "f24e1a5447cfe2ef539217664948bd5f2b7188ff3a49659e096de3d689bbcdd7",
+      "asset_sha256": "2c673beb9c03368cd5fc279a8b94b64ababcfae8890b27da1a6dddcdd6c22a50"
+    },
+    {
+      "id": "m08p03-s08-c2-e45f3ab8b0c0",
+      "slide": 8,
+      "text": "The second card separates the backend connection. Choose HTTP or HTTPS for the target group independently of the client listener. HTTPS encrypts the backend leg, but Application Load Balancer does not validate the target certificate.",
+      "text_sha256": "e45f3ab8b0c0039664134dce29d29959c2eda121a48e71b3178178bed026899e",
+      "asset_sha256": "2c673beb9c03368cd5fc279a8b94b64ababcfae8890b27da1a6dddcdd6c22a50"
+    },
+    {
+      "id": "m08p03-s08-c3-1c989e62cd46",
+      "slide": 8,
+      "text": "The third card introduces client identity. In mutual TLS verify mode, the load balancer authenticates client certificates using its trust store. In passthrough mode, the certificate chain is forwarded in HTTP headers for the application to verify.",
+      "text_sha256": "1c989e62cd46833cfde31509e0f5a6a81b11337362b1b180a47d3c01aa607c54",
+      "asset_sha256": "2c673beb9c03368cd5fc279a8b94b64ababcfae8890b27da1a6dddcdd6c22a50"
+    },
+    {
+      "id": "m08p03-s08-c4-ab3fa03f64ad",
+      "slide": 8,
+      "text": "The rightmost card explains two meanings of passthrough. A Network Load Balancer TCP listener can pass encrypted TLS bytes to the target. Application Load Balancer mutual TLS passthrough still terminates TLS at the load balancer and forwards certificate information.",
+      "text_sha256": "ab3fa03f64adf4c5d654d194263c70b5ea282280dd9f316af1ab0cdeea5e993b",
+      "asset_sha256": "2c673beb9c03368cd5fc279a8b94b64ababcfae8890b27da1a6dddcdd6c22a50"
+    },
+    {
+      "id": "m08p03-s08-c5-4f44870e61af",
+      "slide": 8,
+      "text": "Return to the complete diagram and identify both connections. Encryption, server identity and client identity are separate requirements. Specify where TLS terminates and which component verifies each identity before choosing the listener and target configuration.",
+      "text_sha256": "4f44870e61afc2c2d1dc0eb607cbce64b3527e3fbcbde1208e3f5ea653389fdf",
+      "asset_sha256": "2c673beb9c03368cd5fc279a8b94b64ababcfae8890b27da1a6dddcdd6c22a50"
+    },
+    {
+      "id": "m08p03-s09-c1-e368ebb8658a",
+      "slide": 9,
+      "text": "Start at the sign-in panel on the left. Application Load Balancer HTTPS listener authentication supports OpenID Connect providers or Amazon Cognito user pools. Cognito can federate corporate and social identities into that login journey.",
+      "text_sha256": "e368ebb8658a3e6c42223f350c5b898f1ddcc115fdac185352fefee38a2a54cc",
+      "asset_sha256": "a35a9b60be981de37b930052d212f4ad7ffada8927ab0c9e271ee55ac72ec3e2"
+    },
+    {
+      "id": "m08p03-s09-c2-17d274302831",
+      "slide": 9,
+      "text": "The second panel follows the login journey. Configure callback URLs, client credentials, scopes and connectivity to the identity provider. An internal load balancer can still need outbound connectivity to the provider's endpoints.",
+      "text_sha256": "17d274302831e146640188e3d6ff6c446d36ebafcffc192e92d24b6ddec8dea6",
+      "asset_sha256": "a35a9b60be981de37b930052d212f4ad7ffada8927ab0c9e271ee55ac72ec3e2"
+    },
+    {
+      "id": "m08p03-s09-c3-3eced7a9f9a9",
+      "slide": 9,
+      "text": "The third panel protects the backend trust boundary. Before relying on identity headers, validate the load balancer's signed claims and expected signer. Also prevent clients from bypassing the load balancer and reaching the application directly.",
+      "text_sha256": "3eced7a9f9a9441fec9977594116d3eaeb900e753e8926d84f6d9c54b5785c21",
+      "asset_sha256": "a35a9b60be981de37b930052d212f4ad7ffada8927ab0c9e271ee55ac72ec3e2"
+    },
+    {
+      "id": "m08p03-s09-c4-f819dfa5b0df",
+      "slide": 9,
+      "text": "The final panel keeps authorization in the application. A successful login establishes an identity; it does not grant permission to every record or action. Enforce resource-level permissions for the operation being requested.",
+      "text_sha256": "f819dfa5b0dfe58e9cc401267ee42889f1df2d7e61e56b7126db1cec0c5e09f3",
+      "asset_sha256": "a35a9b60be981de37b930052d212f4ad7ffada8927ab0c9e271ee55ac72ec3e2"
+    },
+    {
+      "id": "m08p03-s09-c5-fe5e6419e3be",
+      "slide": 9,
+      "text": "With the full slide visible, trace sign-in, callback, verified claims and the application's permission check. Authentication identifies the user. Authorization decides what that user may do, and the backend must enforce that decision.",
+      "text_sha256": "fe5e6419e3bee4a4765830c8dae7d23060a465338d82eeff903e67ce28fd87d2",
+      "asset_sha256": "a35a9b60be981de37b930052d212f4ad7ffada8927ab0c9e271ee55ac72ec3e2"
+    }
+  ]
+}
