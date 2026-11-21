@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "04",
+  "revision": "2026-11-21-m08p04-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p04-s10-c1-8a7d3e579d30",
+      "slide": 10,
+      "text": "Start with round robin at the upper left. It is the default target-group algorithm and distributes requests sequentially across healthy targets. It fits workloads where request complexity and target processing capability are similar.",
+      "text_sha256": "8a7d3e579d30f9a7c1a6680232c4bfada8a24049ac4278dbe7b439f81b76da0d",
+      "asset_sha256": "58f4eeb958aed55c93831c27008199e3e16685fd680b3419be3f7d9e7e47f0e0"
+    },
+    {
+      "id": "m08p04-s10-c2-fdf320bf549b",
+      "slide": 10,
+      "text": "The upper-right panel chooses the target with the fewest outstanding requests. This can help when processing times or target capabilities differ. Count work still in progress rather than assuming every incoming request has the same cost.",
+      "text_sha256": "fdf320bf549bf0f5386ff53d54ab317522924406ed6aacf4e0c734a43a919c50",
+      "asset_sha256": "58f4eeb958aed55c93831c27008199e3e16685fd680b3419be3f7d9e7e47f0e0"
+    },
+    {
+      "id": "m08p04-s10-c3-cf4d1c4dbcd5",
+      "slide": 10,
+      "text": "The lower-left panel introduces weighted random routing and optional Automatic Target Weights anomaly mitigation. Weighted random cannot be combined with sticky sessions or slow start. Check those compatibility limits before changing the algorithm.",
+      "text_sha256": "cf4d1c4dbcd5c46025ee21b07aceb79f233f2cf67017a2e1f7df3b4e7c7b7e05",
+      "asset_sha256": "58f4eeb958aed55c93831c27008199e3e16685fd680b3419be3f7d9e7e47f0e0"
+    },
+    {
+      "id": "m08p04-s10-c4-8180cb1b4f69",
+      "slide": 10,
+      "text": "The lower-right panel separates session stickiness from warm-up. Cookies can keep a client on one target and create imbalance. Slow start gradually increases a new target's traffic share, but it requires a compatible routing algorithm.",
+      "text_sha256": "8180cb1b4f69327b37e2037f1a685fd1a7c21857eb7cbf1f34eeb935b8a37985",
+      "asset_sha256": "58f4eeb958aed55c93831c27008199e3e16685fd680b3419be3f7d9e7e47f0e0"
+    },
+    {
+      "id": "m08p04-s10-c5-66d437385712",
+      "slide": 10,
+      "text": "With the whole slide visible, distinguish choosing a target within a group from assigning weights between groups. Select the algorithm for the workload, then check session behavior and warm-up requirements together.",
+      "text_sha256": "66d437385712d764f106263725a7663e4082335bf7d6c69a639f9549095ef4cd",
+      "asset_sha256": "58f4eeb958aed55c93831c27008199e3e16685fd680b3419be3f7d9e7e47f0e0"
+    },
+    {
+      "id": "m08p04-s11-c1-fca7292fae44",
+      "slide": 11,
+      "text": "Start at the draining diagram on the upper left. Deregistration stops new requests from being sent to the target while giving existing work time to finish. The target enters draining before it becomes unused.",
+      "text_sha256": "fca7292fae44a8b028afb4f88e30f2d05f267b90821a93df286076e21415d584",
+      "asset_sha256": "56ff42a24ddbd19817550cb8fb4908c9ab110b01b72e0efa274e8d04a39a4f4d"
+    },
+    {
+      "id": "m08p04-s11-c2-ca2f722c320d",
+      "slide": 11,
+      "text": "The timer panel shows the Application Load Balancer setting for instance and IP targets. Deregistration delay defaults to 300 seconds and can range from zero to 3,600 seconds. Choose a value that reflects the requests your application actually serves.",
+      "text_sha256": "ca2f722c320d3291da297339f9e164ae794bb025d8ba7b9c2dbd7faf7e707d6f",
+      "asset_sha256": "56ff42a24ddbd19817550cb8fb4908c9ab110b01b72e0efa274e8d04a39a4f4d"
+    },
+    {
+      "id": "m08p04-s11-c3-b92ba70f7a2b",
+      "slide": 11,
+      "text": "The lower-left panel coordinates the application shutdown. Container or process grace periods must allow for long requests and active connections. A process that exits too early can break requests even when the load balancer is still draining.",
+      "text_sha256": "b92ba70f7a2b82e33e4d0c361786fccbe4bb13c3d53f09dde171f1c1a7ff5015",
+      "asset_sha256": "56ff42a24ddbd19817550cb8fb4908c9ab110b01b72e0efa274e8d04a39a4f4d"
+    },
+    {
+      "id": "m08p04-s11-c4-fd09d48553ed",
+      "slide": 11,
+      "text": "Follow the rollout sequence at the lower right. Start replacement capacity, wait for readiness, shift traffic, drain the old targets and then terminate them. Include health observations and a rollback decision in that sequence.",
+      "text_sha256": "fd09d48553ede3cb6aa57f3be09f7847bdff9c93c7c8047f6680dce27def8df7",
+      "asset_sha256": "56ff42a24ddbd19817550cb8fb4908c9ab110b01b72e0efa274e8d04a39a4f4d"
+    },
+    {
+      "id": "m08p04-s11-c5-562b84a095a3",
+      "slide": 11,
+      "text": "With the original slide fully visible, treat deregistration delay as an opportunity to finish work, not a survival guarantee. Verify load balancer settings and application shutdown behavior together under realistic traffic.",
+      "text_sha256": "562b84a095a31bd9d99c93baef7f74238f11fe8eaad20a11bcb7e89f1417aeaf",
+      "asset_sha256": "56ff42a24ddbd19817550cb8fb4908c9ab110b01b72e0efa274e8d04a39a4f4d"
+    },
+    {
+      "id": "m08p04-s12-c1-8ad51453a0f7",
+      "slide": 12,
+      "text": "Follow the version comparison and the first card. An Application Load Balancer forward action gives relative weights to target groups. A 90-to-10 split expresses an intended traffic share; a small sample will not necessarily match that ratio exactly.",
+      "text_sha256": "8ad51453a0f71a92ba597ec8246bcea7ebb67a7e6b730b7aace0174f8f7adc79",
+      "asset_sha256": "7e539cd574614f8fdaed4ebe3b3ec1fec78ce3abe335a9f75c29640f51c30684"
+    },
+    {
+      "id": "m08p04-s12-c2-4062c73bfa03",
+      "slide": 12,
+      "text": "The second card accounts for existing sessions. Target-group stickiness can keep a client in its selected group. Changing the weights may therefore affect new routing decisions before it affects established sticky sessions.",
+      "text_sha256": "4062c73bfa037a7dd4a4b29be008ca6e656d53255810b425774dd88bd9f098ab",
+      "asset_sha256": "7e539cd574614f8fdaed4ebe3b3ec1fec78ce3abe335a9f75c29640f51c30684"
+    },
+    {
+      "id": "m08p04-s12-c3-4f7c0a95a744",
+      "slide": 12,
+      "text": "The warning card is a separate failure rule. If a weighted group is empty or contains only unhealthy targets, Application Load Balancer does not automatically shift its assigned traffic to another healthy group. Build explicit release monitoring and recovery decisions.",
+      "text_sha256": "4f7c0a95a744326699eb9a206c701da26735bff5f6301555061123d69d166555",
+      "asset_sha256": "7e539cd574614f8fdaed4ebe3b3ec1fec78ce3abe335a9f75c29640f51c30684"
+    },
+    {
+      "id": "m08p04-s12-c4-e86bfd694049",
+      "slide": 12,
+      "text": "The final card makes rollback practical. Observe errors, latency and business outcomes while adjusting traffic. Restoring weights does not undo database or schema changes, so compatible state needs its own rollback plan.",
+      "text_sha256": "e86bfd694049f2f3f4e8ee7a856b34ade83e0fbe28330ed14a7d99b521a18cb4",
+      "asset_sha256": "7e539cd574614f8fdaed4ebe3b3ec1fec78ce3abe335a9f75c29640f51c30684"
+    },
+    {
+      "id": "m08p04-s12-c5-e1572d5ad7ba",
+      "slide": 12,
+      "text": "Return to the full slide. Weighted forwarding controls traffic share between versions; it is not a complete deployment safety system. Combine deliberate weights, health signals, session behavior and compatible application state.",
+      "text_sha256": "e1572d5ad7ba71f917b74a51e2eb4044809c6e812a8d11fe88bce39f8811ef0f",
+      "asset_sha256": "7e539cd574614f8fdaed4ebe3b3ec1fec78ce3abe335a9f75c29640f51c30684"
+    }
+  ]
+}
