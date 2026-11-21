@@ -1,0 +1,114 @@
+{
+  "module": "08",
+  "part": "01",
+  "revision": "2026-11-21-m08p01-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m08p01-s01-c1-2d46769fddbf",
+      "slide": 1,
+      "text": "Start with the Application Load Balancer panel on the left. It routes HTTP requests at the application layer for websites and APIs. Rules select target groups using request properties. HTTP/2 and WebSocket support are useful protocol features, not substitutes for application design.",
+      "text_sha256": "2d46769fddbfa81c750bdb68ebde4450d6cbe1428f1254aa401bcbd2665f2da6",
+      "asset_sha256": "a867963b5071cba0f8fca10324c7b0e2cc358d39215decddbe3ed77d182653bb"
+    },
+    {
+      "id": "m08p01-s01-c2-0ec92756d1ed",
+      "slide": 1,
+      "text": "The Network Load Balancer panel focuses on transport flows and static zonal addresses. Choose compatible TCP, TLS or UDP listeners for the workload. The decision depends on protocol and connection requirements as well as throughput and latency.",
+      "text_sha256": "0ec92756d1ede5516b3116d3017337ae0d45797f88e85a2dd505d33dfe7388ae",
+      "asset_sha256": "a867963b5071cba0f8fca10324c7b0e2cc358d39215decddbe3ed77d182653bb"
+    },
+    {
+      "id": "m08p01-s01-c3-448b1c280c3c",
+      "slide": 1,
+      "text": "On the right, Gateway Load Balancer inserts virtual appliances into an IP traffic path. Typical appliances provide firewall, intrusion detection or deep-packet inspection. This is a different responsibility from routing a web request to an application target.",
+      "text_sha256": "448b1c280c3c65d1b8b18193c89194e626a8e0a0eee18ae4f3239307f32c860f",
+      "asset_sha256": "a867963b5071cba0f8fca10324c7b0e2cc358d39215decddbe3ed77d182653bb"
+    },
+    {
+      "id": "m08p01-s01-c4-d59eb548a190",
+      "slide": 1,
+      "text": "The lower strip provides legacy context. Classic Load Balancer supports HTTP, HTTPS, TCP and SSL. For a new architecture, evaluate the modern load balancer types against the actual traffic and security requirements.",
+      "text_sha256": "d59eb548a190c07f6dc56d0853e4546b53d21e372b2676d326835033be403590",
+      "asset_sha256": "a867963b5071cba0f8fca10324c7b0e2cc358d39215decddbe3ed77d182653bb"
+    },
+    {
+      "id": "m08p01-s01-c5-3be7324abc35",
+      "slide": 1,
+      "text": "With the full comparison visible, begin with the protocol, routing decision and inspection requirement. High performance alone does not tell you whether you need an Application, Network or Gateway Load Balancer.",
+      "text_sha256": "3be7324abc3598465c0e47579aa313808ec428008ea8df433c21d0f71fa38674",
+      "asset_sha256": "a867963b5071cba0f8fca10324c7b0e2cc358d39215decddbe3ed77d182653bb"
+    },
+    {
+      "id": "m08p01-s02-c1-3e92bdef68df",
+      "slide": 2,
+      "text": "Follow the path from the listener on the left. The listener accepts client connections on a configured protocol and port, such as HTTPS on port 443. The client-facing port does not by itself define the application backend port.",
+      "text_sha256": "3e92bdef68dff9df1a975e2404fec8962ffb46d0a5a69b441e2e5d1f1ecdd45f",
+      "asset_sha256": "ae2863f566f01a131a08a07c87d657c24dc2766512bcc2420243f4596d12757c"
+    },
+    {
+      "id": "m08p01-s02-c2-d9b8a131a061",
+      "slide": 2,
+      "text": "The middle panel makes the routing decision. Application Load Balancer evaluates rules from the lowest numeric priority upward, then uses the default rule if no earlier rule matches. Actions can forward, redirect or return a fixed response.",
+      "text_sha256": "d9b8a131a06159bf9bb4c1d9a2edc978592bda878a5cefca163a997f0936a2c4",
+      "asset_sha256": "ae2863f566f01a131a08a07c87d657c24dc2766512bcc2420243f4596d12757c"
+    },
+    {
+      "id": "m08p01-s02-c3-cc8d348efb2d",
+      "slide": 2,
+      "text": "The target group on the right defines eligible targets, backend protocol and port, health checks and supported routing attributes. A rule selects the destination group; the group provides the configured target behavior.",
+      "text_sha256": "cc8d348efb2d793c5cbd57ef77238cbcbb1903cd062daa2e1424d51014dc3c87",
+      "asset_sha256": "ae2863f566f01a131a08a07c87d657c24dc2766512bcc2420243f4596d12757c"
+    },
+    {
+      "id": "m08p01-s02-c4-43512988706d",
+      "slide": 2,
+      "text": "The lower diagram shows one load balancer serving multiple applications through different target groups. Keep these boundaries clear when troubleshooting. A reachable listener does not prove that every target application is ready.",
+      "text_sha256": "43512988706dea41648db87e4d9388123f9952a29fc8df70de601dc8ae98d75a",
+      "asset_sha256": "ae2863f566f01a131a08a07c87d657c24dc2766512bcc2420243f4596d12757c"
+    },
+    {
+      "id": "m08p01-s02-c5-749611ecdb43",
+      "slide": 2,
+      "text": "Read the full path once more: the listener accepts traffic, the rule decides the action, and the target group reaches the application. Check each boundary separately instead of treating the load balancer as a single configuration setting.",
+      "text_sha256": "749611ecdb435247f44760adbd918e6a3efa38ec4c3ec1668f624c84b784821d",
+      "asset_sha256": "ae2863f566f01a131a08a07c87d657c24dc2766512bcc2420243f4596d12757c"
+    },
+    {
+      "id": "m08p01-s03-c1-d438e5f69b32",
+      "slide": 3,
+      "text": "Start with the internet-facing scheme at the upper left. Public addresses accept internet traffic when routing and security controls permit it. The application targets can still use private addresses; they do not need public addresses simply because the entry point is public.",
+      "text_sha256": "d438e5f69b329de575bd5998859b4044da8d8de897fc51f34446108c9ea84a27",
+      "asset_sha256": "6188c086fa9ff79c96261560bc93c69367aedbfde50db0e98cfe2445e5062b98"
+    },
+    {
+      "id": "m08p01-s03-c2-0198e38e8199",
+      "slide": 3,
+      "text": "The internal scheme uses private addresses for reachable clients. Connectivity can come through the VPC, peering, VPN or Direct Connect, subject to routing and other controls. Internal does not mean that every private client is automatically authorized.",
+      "text_sha256": "0198e38e819964fe584121a71dcde10e2a507ec3c3ddb012e631fda5840890c9",
+      "asset_sha256": "6188c086fa9ff79c96261560bc93c69367aedbfde50db0e98cfe2445e5062b98"
+    },
+    {
+      "id": "m08p01-s03-c3-f7c5401fa02a",
+      "slide": 3,
+      "text": "The lower-left panel explains why DNS resolution is not enough. Check routes, address families, security groups and network ACLs. A name can resolve successfully even when a required network path or rule prevents traffic.",
+      "text_sha256": "f7c5401fa02a5eee00ebef8734a3a475a16506f9cbcfabac843cbf81fd49008b",
+      "asset_sha256": "6188c086fa9ff79c96261560bc93c69367aedbfde50db0e98cfe2445e5062b98"
+    },
+    {
+      "id": "m08p01-s03-c4-5d7dfce0f634",
+      "slide": 3,
+      "text": "Design for resilience in the lower-right panel. Enable suitable Availability Zones and register capacity in them. The load balancer scheme determines reachability; authentication and authorization still belong in the appropriate identity and application controls.",
+      "text_sha256": "5d7dfce0f63412bc796afd1bd08cec907090a8f4ba8992406c3463ff96799b7e",
+      "asset_sha256": "6188c086fa9ff79c96261560bc93c69367aedbfde50db0e98cfe2445e5062b98"
+    },
+    {
+      "id": "m08p01-s03-c5-b1e56275063d",
+      "slide": 3,
+      "text": "With the original slide fully visible, trace both the client path and the target path. Public entry points can protect private application tiers, but reachability, access policy and failure handling must all agree.",
+      "text_sha256": "b1e56275063d84972bced8dc996e79cc7fc8261028144f0a72b12159b3f2f14b",
+      "asset_sha256": "6188c086fa9ff79c96261560bc93c69367aedbfde50db0e98cfe2445e5062b98"
+    }
+  ]
+}
