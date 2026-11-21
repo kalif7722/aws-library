@@ -1,0 +1,121 @@
+{
+  "module": "06",
+  "part": "09",
+  "revision": "2026-11-21-m06p09-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m06p09-s31-c1-c28499c3c48a",
+      "slide": 31,
+      "text": "Start with replicas on the left. Consumers access a local application or data copy in the shared-services VPC. Account for replication lag, consistency, licensing and operating cost.",
+      "text_sha256": "c28499c3c48a33a63c1db40921e50bba77dd9a03bf48983876534e44ebf19d4e",
+      "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+    },
+    {
+      "id": "m06p09-s31-c2-8cee109f54a4",
+      "slide": 31,
+      "text": "Move to the proxy in the center. It terminates the consumer connection and opens a separate connection to the on-premises service. Plan proxy availability, scaling, authentication and protocol support.",
+      "text_sha256": "8cee109f54a471ef24aa4e0e2808b986e637c660eb854396f9d3bebe906edd6e",
+      "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+    },
+    {
+      "id": "m06p09-s31-c3-a1ccdf917fdf",
+      "slide": 31,
+      "text": "Follow the Transit Gateway path on the right. Use routed connectivity when workloads need access to on-premises networks. Define isolation and return routes for the complete path.",
+      "text_sha256": "a1ccdf917fdfd1d52c7bca2b5ee8d198ce29f3d55345b211005bec2a5542a202",
+      "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+    },
+    {
+      "id": "m06p09-s31-c4-4f9ef5fe1c6e",
+      "slide": 31,
+      "text": "With the full slide visible, compare the mechanisms. A replica serves a local copy, a proxy creates another connection, and a transit hub forwards routed traffic. VPC peering cannot borrow a peer's VPN or Direct Connect connection.",
+      "text_sha256": "4f9ef5fe1c6ea752eddb4f257dedf80ed19c27bfba9111fda6a2cd7935c0338c",
+      "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+    },
+    {
+      "id": "m06p09-s32-c1-ee5e9484dffa",
+      "slide": 32,
+      "text": "Inspect the virtual private gateway restriction on the left. On-premises traffic arriving through that gateway cannot use a NAT gateway for internet egress. Gateway choice changes which architecture is supported.",
+      "text_sha256": "ee5e9484dffaf29aaeb9da26bf2cd3253ad834f8bc2c6000ee1a03245c7dc3dd",
+      "asset_sha256": "da57ed0c602ab68e425abaea76eab0f41adea481c91e92339e0f3648a37772a0"
+    },
+    {
+      "id": "m06p09-s32-c2-6b72ac16e57d",
+      "slide": 32,
+      "text": "Move to the Transit Gateway option. Route through an egress VPC with a public NAT gateway and an internet gateway. Configure routes in both directions so responses return to the originating network.",
+      "text_sha256": "6b72ac16e57dff05adc67d4e728b10953131aa96410df1af61f71aedd4954dc8",
+      "asset_sha256": "da57ed0c602ab68e425abaea76eab0f41adea481c91e92339e0f3648a37772a0"
+    },
+    {
+      "id": "m06p09-s32-c3-8f5774e4b399",
+      "slide": 32,
+      "text": "Look at the on-premises alternative. VPC traffic can reach customer equipment over VPN or Direct Connect, and that equipment provides internet egress. Include its capacity, security controls and availability in the design.",
+      "text_sha256": "8f5774e4b39968642e47bfc87e9c94a8fdc52e7a2e750c9f284fb717e4cbb6bb",
+      "asset_sha256": "da57ed0c602ab68e425abaea76eab0f41adea481c91e92339e0f3648a37772a0"
+    },
+    {
+      "id": "m06p09-s32-c4-fde774cadb2b",
+      "slide": 32,
+      "text": "Return to the complete slide and the implementation checklist. Keep the NAT and internet gateways in the egress VPC and plan independent availability-zone paths. A private NAT gateway does not provide internet access through an internet gateway.",
+      "text_sha256": "fde774cadb2bbfa34e883f7781fed7164e9545a5f6ca0bc8be157bc0fa0d5800",
+      "asset_sha256": "da57ed0c602ab68e425abaea76eab0f41adea481c91e92339e0f3648a37772a0"
+    },
+    {
+      "id": "m06p09-s33-c1-079d391b45c7",
+      "slide": 33,
+      "text": "Start with the public-IP model on the left. A public virtual interface reaches AWS public VPN endpoints over Direct Connect. Site-to-Site VPN then protects the carried traffic with IPsec.",
+      "text_sha256": "079d391b45c7d5239984ad4282a6e2bf17098f4b01ae5867cbf1047564790436",
+      "asset_sha256": "8cb7d7fba782a03b5e64eabbb41e09cb798ea1295b43127045d6353bf138225c"
+    },
+    {
+      "id": "m06p09-s33-c2-ae628a3329fb",
+      "slide": 33,
+      "text": "Move to the private-IP model on the right. It uses a transit virtual interface, a Direct Connect gateway and Transit Gateway. Private endpoint addressing changes the VPN transport design.",
+      "text_sha256": "ae628a3329fbcdcd04f2fcc401492936ec0a615e722132749c46174ab192f55d",
+      "asset_sha256": "8cb7d7fba782a03b5e64eabbb41e09cb798ea1295b43127045d6353bf138225c"
+    },
+    {
+      "id": "m06p09-s33-c3-de7e00e5e052",
+      "slide": 33,
+      "text": "Inspect the lower-left underlay and overlay reminder. The Direct Connect path carries the encrypted tunnel; VPN routing carries the application networks. Verify both layers and their return routes.",
+      "text_sha256": "de7e00e5e0525d0e846fa2a04a69bc4b69968a0df8aaccffb131494432b60951",
+      "asset_sha256": "8cb7d7fba782a03b5e64eabbb41e09cb798ea1295b43127045d6353bf138225c"
+    },
+    {
+      "id": "m06p09-s33-c4-d3d6e9040b3a",
+      "slide": 33,
+      "text": "With the full slide restored, keep two limits clear. A public virtual interface is not general internet transit, and Direct Connect is not encrypted by default. IPsec supplies encryption without removing VPN tunnel capacity limits.",
+      "text_sha256": "d3d6e9040b3a9940f9396258e3b16a1a432d91c3e14066fc8d56fec79f60298d",
+      "asset_sha256": "8cb7d7fba782a03b5e64eabbb41e09cb798ea1295b43127045d6353bf138225c"
+    },
+    {
+      "id": "m06p09-s34-c1-2a3e36ea7b10",
+      "slide": 34,
+      "text": "Begin with the two sites and their distinct prefixes. Both VPN connections can carry traffic to their respective destinations. Two active sites do not necessarily mean traffic is shared for one destination.",
+      "text_sha256": "2a3e36ea7b10120cbab0939ba329341b033eab58078c96675a63df86cb1367d5",
+      "asset_sha256": "35448b430c7588817e40c7f5f87ebc61cb489b53934d087d3c0f29d64e751f83"
+    },
+    {
+      "id": "m06p09-s34-c2-974da43f2260",
+      "slide": 34,
+      "text": "Inspect the second panel on the right. Advertising the same prefix over two connections does not create equal-cost load sharing on a virtual private gateway. Separate route selection from the presence of multiple connections.",
+      "text_sha256": "974da43f2260db72d081f5366ba9b36682d0a7b4b2c2065e88791cf79de16a99",
+      "asset_sha256": "35448b430c7588817e40c7f5f87ebc61cb489b53934d087d3c0f29d64e751f83"
+    },
+    {
+      "id": "m06p09-s34-c3-37e4d239d864",
+      "slide": 34,
+      "text": "Move down to Transit Gateway ECMP. Use supported dynamic BGP routing, enable VPN equal-cost multipath and advertise eligible equal-cost routes. Static VPN routing does not provide this ECMP behavior.",
+      "text_sha256": "37e4d239d864a653fc5a1c4aeb30ca4e5d0f80c638e89c5a98d25032990945a1",
+      "asset_sha256": "35448b430c7588817e40c7f5f87ebc61cb489b53934d087d3c0f29d64e751f83"
+    },
+    {
+      "id": "m06p09-s34-c4-e7a4135a6d0c",
+      "slide": 34,
+      "text": "Return to the full slide and the recovery checklist. Use independent devices and circuits, then test route withdrawal, alternate reachability and stateful firewall behavior. Measure application recovery rather than relying on tunnel status alone.",
+      "text_sha256": "e7a4135a6d0c3bf9e83e0414d117ff4b3ce9325f2e21eabd7e7ff9c130107e50",
+      "asset_sha256": "35448b430c7588817e40c7f5f87ebc61cb489b53934d087d3c0f29d64e751f83"
+    }
+  ]
+}
