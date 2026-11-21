@@ -1,0 +1,93 @@
+{
+  "module": "07",
+  "part": "02",
+  "revision": "2026-11-21-m07p02-fresh-v1",
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "units": [
+    {
+      "id": "m07p02-s04-c1-573a736d76af",
+      "slide": 4,
+      "text": "Start with the image and template on the left. The AMI provides the boot image, while a versioned launch template records the instance settings. Together they define a repeatable starting point.",
+      "text_sha256": "573a736d76afc3738eb4087e9f7c1c4209636380e4bf6dc0ebee4d80396b716e",
+      "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+    },
+    {
+      "id": "m07p02-s04-c2-98179af9629b",
+      "slide": 4,
+      "text": "Move to bootstrapping. Use prepared images or user data to configure the application. Make scripts safe to retry, and avoid embedding long-lived credentials in the image or launch settings.",
+      "text_sha256": "98179af9629b14594ef17f138ba758491e3282cdd55553147735eaf622d7b951",
+      "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+    },
+    {
+      "id": "m07p02-s04-c3-08dbf8597894",
+      "slide": 4,
+      "text": "Inspect the instance profile. Give the workload an appropriate IAM role through that profile, and require version two of the Instance Metadata Service where supported. Access should follow the workload's actual needs.",
+      "text_sha256": "08dbf8597894931ae4ac12dc6881acd1c47b8007f53e7033923ce46b2c16f663",
+      "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+    },
+    {
+      "id": "m07p02-s04-c4-d5de6f9ce18c",
+      "slide": 4,
+      "text": "With the original slide restored, distinguish configuration from deployment. A new launch-template version does not change running instances. Roll out replacements with health checks, confirming that the new instances can serve traffic before retiring healthy capacity.",
+      "text_sha256": "d5de6f9ce18cb62700f020aa0d53f86d4f45a3f4ccb2683a2d9861d868900e84",
+      "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+    },
+    {
+      "id": "m07p02-s05-c1-daf79544cb44",
+      "slide": 5,
+      "text": "Start with the first panel. Keep sessions and durable application data outside an individual EC2 instance. Replacing a server should not erase the state needed by the next request.",
+      "text_sha256": "daf79544cb44838e35c0fcdcb8f5f57356c5a7ad167d00ad8d9373c7fa8c0126",
+      "asset_sha256": "9b6ab21c351b49de58cd8afb6fda8e452bf32100332390cf5e44f4425c7c6058"
+    },
+    {
+      "id": "m07p02-s05-c2-aa2c797273a7",
+      "slide": 5,
+      "text": "Compare the shared services on the right. Databases, caches and storage each need their own resilience and consistency design. Moving data off the instance is only the first step toward surviving a failure.",
+      "text_sha256": "aa2c797273a7dd9ea02d83ffd121a5b849a8d53e737df08b031cea63151a2b8b",
+      "asset_sha256": "9b6ab21c351b49de58cd8afb6fda8e452bf32100332390cf5e44f4425c7c6058"
+    },
+    {
+      "id": "m07p02-s05-c3-035d688049e4",
+      "slide": 5,
+      "text": "Look at temporary local state. Caches and scratch files can remain on the instance when losing or rebuilding them is safe. Classify data by what must survive before choosing where it belongs.",
+      "text_sha256": "035d688049e4a036491192d8b8d55dfbe9a508f6bfb7f7f5b19f760bba317086",
+      "asset_sha256": "9b6ab21c351b49de58cd8afb6fda8e452bf32100332390cf5e44f4425c7c6058"
+    },
+    {
+      "id": "m07p02-s05-c4-9b14a25b07b0",
+      "slide": 5,
+      "text": "With the full slide visible, follow the load balancer across Availability Zones. Multiple instances improve availability only when dependencies survive and replacement capacity is available. Test that another healthy instance can complete the same user request.",
+      "text_sha256": "9b14a25b07b08146d276ae0232ba9a26581b9a2e7e869502b6bb6f0a31089855",
+      "asset_sha256": "9b6ab21c351b49de58cd8afb6fda8e452bf32100332390cf5e44f4425c7c6058"
+    },
+    {
+      "id": "m07p02-s06-c1-1ac96302c571",
+      "slide": 6,
+      "text": "Begin with On-Demand and Spot. On-Demand avoids a long-term commitment, while Spot uses spare capacity that can be interrupted. The application's tolerance for interruption must guide that choice.",
+      "text_sha256": "1ac96302c571f4cc2d171cb8974f2e40f397141d5e0e3365c0c13cf4a8049b31",
+      "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+    },
+    {
+      "id": "m07p02-s06-c2-1e0d18e277ee",
+      "slide": 6,
+      "text": "Move to Savings Plans. You commit eligible usage spend for a discount. That billing commitment does not itself reserve capacity, so a lower price and an available instance are separate questions.",
+      "text_sha256": "1e0d18e277ee348a43d8b072c411112c82e26afe6c7f337f72b559f8384c348d",
+      "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+    },
+    {
+      "id": "m07p02-s06-c3-dbe5de3f4850",
+      "slide": 6,
+      "text": "Compare Reserved Instances and payment choices. Standard and Convertible offerings have different exchange flexibility. Upfront payment can affect the discount, but the commitment's payment obligations remain even when the expected usage does not occur.",
+      "text_sha256": "dbe5de3f4850038e067843cee0b97dec53876e455fdc8606291d14905fcdc3f4",
+      "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+    },
+    {
+      "id": "m07p02-s06-c4-8a58cd60ea2d",
+      "slide": 6,
+      "text": "With the full slide restored, inspect the capacity row. Regional Reserved Instances provide a billing benefit without reserving capacity. Matching zonal reservations can reserve capacity, while On-Demand Capacity Reservations can incur charges when unused. Match commitment, flexibility and capacity assurance independently.",
+      "text_sha256": "8a58cd60ea2d7fe8838a196d9f9a9e4105c6d4555c637cb87296c8d8c1c842cf",
+      "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+    }
+  ]
+}
