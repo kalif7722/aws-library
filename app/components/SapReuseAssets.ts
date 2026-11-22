@@ -1,4 +1,5 @@
 import sourceLinks from './SapReuseSourceLinks.json';
+import protectedAssets from './SapReuseProtectedAssets.json';
 import {publishedModuleLessons, publishedSapImageUrl} from './SapPublishedLessons';
 
 type Course = keyof typeof sourceLinks;
@@ -11,6 +12,7 @@ type ConsumerVisual = {id: string; asset: string | null};
 type PublishedModule = (moduleId: string) => readonly SapVisual[];
 // Retain reviewed artwork where a newer canonical revision changes the learner objective.
 // Only the exact existing receiver, source and fallback may match this exception.
+const priorRestorePins: Record<string, {sourceModule:string;sourceId:string;fallback:string;asset:string}> = protectedAssets;
 const retainedArt: Record<string, readonly [string, string, string]> = {
  'saa:18:saa-18-reuse-06-37': ['06', 'sap-06-037', '/course-visuals/sap-c03/module-06/slide-37-v2.webp'],
  'saa:01:sap01-07': ['01', 'sap-01-007', '/course-visuals/sap-c03/module-01/slide-07.webp']
@@ -44,7 +46,10 @@ export function resolveSapReuseAssets(
   if (source?.status === 'qa-passed' && source.asset) {
    const pin = retainedArt[`${course}:${moduleId}:${consumerId}`];
    const keep = pin && pin[0] === sourceModule && pin[1] === sourceId && pin[2] === currentAssets.get(consumerId);
-   resolved.push([consumerId, keep ? pin[2] : publishedSapImageUrl(sourceModule, source.asset)]);
+   const restored = priorRestorePins[`${course}:${moduleId}:${consumerId}`];
+   const keepRestore = restored && restored.sourceModule === sourceModule && restored.sourceId === sourceId &&
+    restored.fallback === currentAssets.get(consumerId);
+   resolved.push([consumerId, keep ? pin[2] : keepRestore ? restored.asset : publishedSapImageUrl(sourceModule, source.asset)]);
   }
  }
  return Object.fromEntries(resolved);

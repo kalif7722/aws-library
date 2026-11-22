@@ -13,7 +13,9 @@ const retainedArt = {
  'saa:18:saa-18-reuse-06-37': '/course-visuals/sap-c03/module-06/slide-37-v2.webp',
  'saa:01:sap01-07': '/course-visuals/sap-c03/module-01/slide-07.webp'
 };
-const receiverPin = (course, id, lesson) => retainedArt[`${course}:${id}:${lesson}`];
+const restorePins = read('../app/components/SapReuseProtectedAssets.json');
+assert.equal(Object.keys(restorePins).length,35);
+const receiverPin = (course, id, lesson) => retainedArt[`${course}:${id}:${lesson}`] ?? restorePins[`${course}:${id}:${lesson}`]?.asset;
 const courses = Object.entries(plans).flatMap(([course,plan]) => plan.modules.map(module => ({
  course, id:module.id, visuals:course === 'scs'
   ? module.slides.map(slide => ({...slide,id:slide.lessonId ?? `scs-${module.id}-${slide.number}`,asset:slide.src}))
@@ -54,7 +56,7 @@ test('every SAP reuse in effective learner maps links to exactly one published S
  }
 });
 
-test('canonical corrections propagate except for two receiving lessons retaining existing teaching artwork', () => {
+test('canonical corrections propagate except for reviewed receiving lessons retaining existing teaching artwork', () => {
  const update = module => publishedModuleLessons(module).map(lesson => ({...lesson,asset:lesson.asset? `/sap-reuse-test/${lesson.id}/new-name.png` : null}));
  for (const {course,id,visuals} of courses) {
   const resolved = resolveSapReuseAssets(course,id,visuals,update);
