@@ -79,7 +79,7 @@ const M02_VERSIONED_ASSETS:Record<string,string>={
  'sap-02-016':'/course-visuals/sap-c03/module-02/slide-16-aip-v2.webp',
  'sap-02-020':'/course-visuals/sap-c03/module-02/slide-20-aip-v2.webp'
 };
-export function publishedModuleLessons(moduleId:string):Lesson[]{
+function baselinePublishedModuleLessons(moduleId:string):Lesson[]{
  const existing=lessonsByModule[moduleId]||[];
  if(moduleId==='08')return [...existing.map(l=>l.sequence<=24?{...l,asset:`/course-visuals/sap-c03/module-08/slide-${String(l.sequence).padStart(2,'0')}-aip-v1.webp`,status:'qa-passed'}:l),...M08_FOUNDATIONS].sort((a,b)=>a.sequence-b.sequence);
  if(moduleId==='09')return [...existing.map(l=>l.sequence<=37?{...l,asset:`/course-visuals/sap-c03/module-09/slide-${String(l.sequence).padStart(2,'0')}-aip-v${l.sequence===16?3:l.sequence===35?2:1}.webp`,status:'qa-passed'}:l),...M09_FOUNDATIONS].sort((a,b)=>a.sequence-b.sequence);
@@ -103,4 +103,15 @@ export function publishedModuleLessons(moduleId:string):Lesson[]{
 /** Resolve the browser URL used by the published SAP gallery. */
 export function publishedSapImageUrl(moduleId:string, asset:string):string {
  return moduleId==='08'&&asset.includes('-aip-v1.webp')?`${asset}?v=sap-m08-aip-batch3`:moduleId==='09'&&asset.includes('-aip-v')?`${asset}?v=sap-m09-aip-batch4`:moduleId==='00'?`${asset}?v=sap-m00-cover-v2`:moduleId==='02'?`${asset}?v=sap-m02-approved-32`:moduleId==='10'&&asset.includes('/foundation-')?`${asset}?v=sap-m10-foundation-v2`:moduleId==='10'&&asset.includes('-aip-v4.webp')?`${asset}?v=sap-m10-final-corrections`:moduleId==='11'&&asset.includes('-aip-v')?`${asset}?v=sap-m11-aip-batch6`:moduleId==='12'&&asset.includes('-aip-v')?`${asset}?v=sap-m12-aip-batch8`:moduleId==='13'&&asset.includes('-aip-v')?`${asset}?v=sap-m13-aip-batch11`:moduleId==='14'&&asset.includes('-aip-v')?`${asset}?v=sap-m14-aip-batch13`:moduleId==='17'&&asset.includes('-aip-v')?`${asset}?v=sap-m17-aip-batch16`:moduleId==='18'&&asset.includes('-aip-v')?`${asset}?v=sap-m18-aip-batch17`:asset;
+}
+
+// Apply only approved stable-ID replacements to the effective published source.
+// Match the old path so unrelated changes cannot silently inherit a stale override.
+const approvedById: Record<string,{old:string;asset:string}> = plan.approvedAssetOverrides;
+export function publishedModuleLessons(moduleId:string):Lesson[]{
+ return baselinePublishedModuleLessons(moduleId).map(lesson=>{
+  const approved=approvedById[lesson.id];
+  return approved && lesson.status==='qa-passed' && lesson.asset===approved.old
+   ? {...lesson,asset:approved.asset} : lesson;
+ });
 }

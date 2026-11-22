@@ -96,9 +96,15 @@ test('course pages use resolved assets in lesson cards and full screen without c
   const page=text(`../app/courses/${slugs[course]}/visual/[moduleId]/page.tsx`);
   const component=text(`../app/components/${comp}.tsx`);
   assert.ok(page.includes(`sapReuse={resolveSapReuseAssets('${course}', id,`));
-  assert.ok(component.includes('src={sapReuse[l.id]??l.asset}'));
-  assert.ok(component.includes('src={sapReuse[lessons[active].id]??lessons[active].asset}'));
-  assert.ok(component.includes("sapReuse[l.id]?' · Reused from SAP':''"));
+  if (course==='dva') {
+   assert.ok(component.includes('src={sapReuse[l.id]??saaReuse[l.id]??l.asset}'));
+   assert.ok(component.includes('src={sapReuse[lessons[active].id]??saaReuse[lessons[active].id]??lessons[active].asset}'));
+   assert.ok(component.includes("sapReuse[l.id]?' · Reused from SAP':saaReuse[l.id]?' · Reused from SAA':''"));
+  } else {
+   assert.ok(component.includes('src={sapReuse[l.id]??l.asset}'));
+   assert.ok(component.includes('src={sapReuse[lessons[active].id]??lessons[active].asset}'));
+   assert.ok(component.includes("sapReuse[l.id]?' · Reused from SAP':''"));
+  }
  }
 });
 
