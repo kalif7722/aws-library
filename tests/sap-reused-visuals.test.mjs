@@ -9,6 +9,11 @@ const slugs = {saa:'aws-solutions-architect-associate',dva:'aws-developer-associ
 const plans = Object.fromEntries(Object.entries(slugs).map(([course,slug]) => [course,read(`../app/courses/${slug}/visual-plan.json`)]));
 const links = read('../app/components/SapReuseSourceLinks.json');
 const sapPrefix = '/course-visuals/sap-c03/';
+const retainedArt = {
+ 'saa:18:saa-18-reuse-06-37': '/course-visuals/sap-c03/module-06/slide-37-v2.webp',
+ 'saa:01:sap01-07': '/course-visuals/sap-c03/module-01/slide-07.webp'
+};
+const receiverPin = (course, id, lesson) => retainedArt[`${course}:${id}:${lesson}`];
 const courses = Object.entries(plans).flatMap(([course,plan]) => plan.modules.map(module => ({
  course, id:module.id, visuals:course === 'scs'
   ? module.slides.map(slide => ({...slide,id:slide.lessonId ?? `scs-${module.id}-${slide.number}`,asset:slide.src}))
@@ -44,17 +49,17 @@ test('every SAP reuse in effective learner maps links to exactly one published S
    const candidates = publishedModuleLessons(module).filter(l => l.id===sourceId && l.status==='qa-passed' && l.asset);
    assert.equal(candidates.length,1,label);
    const [source] = candidates;
-   assert.equal(resolved[lesson.id],publishedSapImageUrl(module,source.asset));
+   assert.equal(resolved[lesson.id],receiverPin(course,id,lesson.id) ?? publishedSapImageUrl(module,source.asset));
   }
  }
 });
 
-test('one canonical asset correction propagates to all 763 linked placements without consumer edits', () => {
+test('canonical corrections propagate except for two receiving lessons retaining existing teaching artwork', () => {
  const update = module => publishedModuleLessons(module).map(lesson => ({...lesson,asset:lesson.asset? `/sap-reuse-test/${lesson.id}/new-name.png` : null}));
  for (const {course,id,visuals} of courses) {
   const resolved = resolveSapReuseAssets(course,id,visuals,update);
   for (const [consumerId,[sourceModule,sourceId]] of Object.entries(links[course][id] ?? {})) {
-   assert.equal(resolved[consumerId], publishedSapImageUrl(sourceModule,`/sap-reuse-test/${sourceId}/new-name.png`));
+   assert.equal(resolved[consumerId], receiverPin(course,id,consumerId) ?? publishedSapImageUrl(sourceModule,`/sap-reuse-test/${sourceId}/new-name.png`));
   }
  }
 });

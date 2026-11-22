@@ -22464,13 +22464,13 @@
         "id": "sap-13-018",
         "moduleId": "13",
         "sequence": 18,
-        "title": "Current Lambda offerings have different execution contracts",
+        "title": "Lambda: what runs, and for how long?",
         "visualType": "conceptual-explainer",
         "examSkills": [
           "1.1.2",
           "1.1.4"
         ],
-        "imageBrief": "Module09 style. Keep the standard scope: The course core uses standard event-driven Lambda functions. Its ordinary per-invocation duration, memory and concurrency limits must be labelled with that scope. Recognize supported exceptions: Lambda Managed Instances uses supported EC2 capacity with Lambda-managed operations. Eligible asynchronous and event-source-mapping invocations can run up to 90 minutes, with source exceptions. Separate durable orchestration: Durable functions checkpoint and resume supported multi-step code; wall-clock workflow duration is not one uninterrupted invocation. Newer Lambda offerings require their own current compatibility and quota check. Diagram: Three separate cards: standard event function 15-min invocation; ManagedInstances eligible90-min; durable checkpoints+wait+resume. Label supplementary current-AWS context.",
+        "imageBrief": "Compare Lambda invocation methods, deployment options, durable execution and per-request Web Function limits through worked examples.",
         "visualElements": [
           "Module09 panel style",
           "Named teaching sections",
@@ -22479,9 +22479,10 @@
           "Remember takeaway"
         ],
         "learningNotes": [
-          "Keep the standard scope: The course core uses standard event-driven Lambda functions. Its ordinary per-invocation duration, memory and concurrency limits must be labelled with that scope.",
-          "Recognize supported exceptions: Lambda Managed Instances uses supported EC2 capacity with Lambda-managed operations. Eligible asynchronous and event-source-mapping invocations can run up to 90 minutes, with source exceptions.",
-          "Separate durable orchestration: Durable functions checkpoint and resume supported multi-step code; wall-clock workflow duration is not one uninterrupted invocation. Newer Lambda offerings require their own current compatibility and quota check."
+          "Synchronous callers wait for a result. With direct asynchronous invocation Lambda accepts and queues an event; an event source mapping polls a queue or stream and invokes with records.",
+          "On-demand Event Functions have a configurable timeout up to 30 minutes. Lambda Managed Instances run on customer-account EC2 capacity managed by Lambda: up to 30 minutes synchronous or 90 minutes for asynchronous and eligible mappings. Amazon MQ and Amazon DocumentDB mappings remain limited to 15 minutes.",
+          "Durable execution checkpoints completed steps and can suspend and resume across invocations. Direct async workflows can span up to a year; direct sync is capped at 30 minutes or less and an event source mapping applies its own applicable timeout to the entire execution.",
+          "Web Functions route HTTP requests to the application server; the per-request limit is up to 15 minutes. Check external caller and integration timeouts independently."
         ],
         "decisionCue": "Do not turn a standard-function limit into a universal Lambda claim.",
         "asset": "/course-visuals/sap-c03/module-13/slide-18.webp",
@@ -22496,8 +22497,12 @@
           "publicationFormat": true
         },
         "sources": [
-          "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html",
-          "https://docs.aws.amazon.com/lambda/latest/dg/images-create.html"
+          "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html",
+          "https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html",
+          "https://docs.aws.amazon.com/lambda/latest/dg/lambda-managed-instances-best-practices.html",
+          "https://docs.aws.amazon.com/lambda/latest/dg/durable-invoking.html",
+          "https://docs.aws.amazon.com/lambda/latest/dg/durable-invoking-esm.html",
+          "https://docs.aws.amazon.com/lambda/latest/dg/web-functions-how-it-works.html"
         ],
         "sourcePdfPages": [
           229
@@ -28204,9 +28209,9 @@
           "Remember takeaway"
         ],
         "learningNotes": [
-        "Firehose invokes Lambda on batches. Each record returns Ok, Dropped or ProcessingFailed: Dropped is intentional filtering and counts as successfully processed, not a failure.",
-        "Invocation failures such as timeouts or throttling can trigger batch retries. Unsuccessfully processed records go to the S3 processing-failed location; optional source-record backup is separate."
-      ],
+          "Firehose invokes Lambda on batches. Each record returns Ok, Dropped or ProcessingFailed: Dropped is intentional filtering and counts as successfully processed, not a failure.",
+          "Invocation failures such as timeouts or throttling can trigger batch retries. Unsuccessfully processed records go to the S3 processing-failed location; optional source-record backup is separate."
+        ],
         "decisionCue": "Separate intentional Dropped records from ProcessingFailed records and invocation failures; do not route Dropped records into the failure path.",
         "asset": "/course-visuals/sap-c03/module-16/slide-12-aip-correction-v1.webp",
         "status": "qa-passed",
@@ -38636,10 +38641,10 @@
           "Remember takeaway"
         ],
         "learningNotes": [
-        "Gateway endpoints route S3 and DynamoDB traffic using service prefix-list routes and have no additional endpoint charge.",
-        "Interface endpoints use private ENIs for supported services; private DNS, when enabled, resolves service names to endpoint IPs. Check endpoint security-group access. Interface endpoints and NAT gateways have distinct hourly and data-processing costs.",
-        "For public IPv4 egress, a private subnet routes to a public NAT gateway in a public subnet, whose route reaches the internet gateway."
-      ],
+          "Gateway endpoints route S3 and DynamoDB traffic using service prefix-list routes and have no additional endpoint charge.",
+          "Interface endpoints use private ENIs for supported services; private DNS, when enabled, resolves service names to endpoint IPs. Check endpoint security-group access. Interface endpoints and NAT gateways have distinct hourly and data-processing costs.",
+          "For public IPv4 egress, a private subnet routes to a public NAT gateway in a public subnet, whose route reaches the internet gateway."
+        ],
         "decisionCue": "Choose by service, routing and traffic: gateway endpoint for supported S3/DynamoDB access, interface endpoint for supported private service access, or public NAT plus an internet gateway for public IPv4 egress.",
         "asset": "/course-visuals/sap-c03/module-23/slide-12-aip-correction-v1.webp",
         "status": "qa-passed",
@@ -42137,8 +42142,8 @@
       "old": "/course-visuals/sap-c03/module-01/slide-45-v2.webp"
     },
     "sap-01-046": {
-      "asset": "/course-visuals/sap-c03/module-01/slide-46-choose-directory-integration-aip-v1-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-01/slide-46-v2.webp"
+      "old": "/course-visuals/sap-c03/module-01/slide-46-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-046-reviewed-2954c59226b8.webp"
     },
     "sap-01-047": {
       "asset": "/course-visuals/sap-c03/module-01/slide-47-managed-microsoft-ad-availability-aip-v2-20261121.webp",
@@ -42153,8 +42158,8 @@
       "old": "/course-visuals/sap-c03/module-01/slide-49-v2.webp"
     },
     "sap-01-050": {
-      "asset": "/course-visuals/sap-c03/module-01/slide-50-iam-condition-operators-aip-v2-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-01/slide-50-v2.webp"
+      "old": "/course-visuals/sap-c03/module-01/slide-50-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-050-reviewed-94aeac814794.webp"
     },
     "sap-01-051": {
       "asset": "/course-visuals/sap-c03/module-01/slide-51-iam-required-tag-keys-aip-v2-20261121.webp",
@@ -42269,8 +42274,8 @@
       "old": "/course-visuals/sap-c03/module-03/slide-27-v2.webp"
     },
     "sap-03-028": {
-      "asset": "/course-visuals/sap-c03/module-03/slide-28-parameter-tier-policy-lifecycle-aip-v2-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-03/slide-28-v2.webp"
+      "old": "/course-visuals/sap-c03/module-03/slide-28-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-03/sap-03-028-reviewed-fa40007a9532.webp"
     },
     "sap-03-029": {
       "asset": "/course-visuals/sap-c03/module-03/slide-29-cloudformation-secret-reference-rotation-aip-v1-20261121.webp",
@@ -42281,8 +42286,8 @@
       "old": "/course-visuals/sap-c03/module-03/slide-30-v2.webp"
     },
     "sap-03-031": {
-      "asset": "/course-visuals/sap-c03/module-03/slide-31-kms-key-material-origin-aip-v2-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-03/slide-31-v2.webp"
+      "old": "/course-visuals/sap-c03/module-03/slide-31-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-03/sap-03-031-reviewed-24c75bd2858c.webp"
     },
     "sap-03-032": {
       "asset": "/course-visuals/sap-c03/module-03/slide-32-cloudhsm-tls-offload-aip-v1-20261121.webp",
@@ -42341,8 +42346,8 @@
       "old": "/course-visuals/sap-c03/module-04/slide-40.webp"
     },
     "sap-04-041": {
-      "asset": "/course-visuals/sap-c03/module-04/slide-41-nat-instance-forwarding-aip-v2-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-04/slide-41-v2.webp"
+      "old": "/course-visuals/sap-c03/module-04/slide-41-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-041-reviewed-1c8283ed4410.webp"
     },
     "sap-04-042": {
       "asset": "/course-visuals/sap-c03/module-04/slide-42-flow-logs-nat-observation-aip-v3-20261121.webp",
@@ -42361,8 +42366,8 @@
       "old": "/course-visuals/sap-c03/module-05/slide-24-v2.webp"
     },
     "sap-05-025": {
-      "asset": "/course-visuals/sap-c03/module-05/slide-25-route53-traffic-policy-versions-aip-v1-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-05/slide-25-v2.webp"
+      "old": "/course-visuals/sap-c03/module-05/slide-25-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-05/sap-05-025-reviewed-e14ed5e51cdc.webp"
     },
     "sap-06-001": {
       "asset": "/course-visuals/sap-c03/module-06/slide-01-hybrid-network-requirements-aip-v2-20261122.webp",
@@ -42401,12 +42406,12 @@
       "old": "/course-visuals/sap-c03/module-06/slide-10.webp"
     },
     "sap-06-011": {
-      "asset": "/course-visuals/sap-c03/module-06/slide-11-bgp-direction-policy-aip-v2-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-06/slide-11.webp"
+      "old": "/course-visuals/sap-c03/module-06/slide-11.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-011-reviewed-31d577e1506e.webp"
     },
     "sap-06-012": {
-      "asset": "/course-visuals/sap-c03/module-06/slide-12-direct-connect-failure-domains-aip-v2-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-06/slide-12.webp"
+      "old": "/course-visuals/sap-c03/module-06/slide-12.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-012-reviewed-9d8d761d5e70.webp"
     },
     "sap-06-014": {
       "asset": "/course-visuals/sap-c03/module-06/slide-14-direct-connect-vpn-recovery-mode-aip-v2-20261122.webp",
@@ -42417,8 +42422,8 @@
       "old": "/course-visuals/sap-c03/module-06/slide-15.webp"
     },
     "sap-06-018": {
-      "asset": "/course-visuals/sap-c03/module-06/slide-18-hybrid-transfer-mtu-mss-aip-v1-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-06/slide-18.webp"
+      "old": "/course-visuals/sap-c03/module-06/slide-18.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-018-reviewed-c9d6d6b7d915.webp"
     },
     "sap-06-019": {
       "asset": "/course-visuals/sap-c03/module-06/slide-19-compute-placement-constraints-aip-v1-20261121.webp",
@@ -42429,8 +42434,8 @@
       "old": "/course-visuals/sap-c03/module-06/slide-24.webp"
     },
     "sap-06-025": {
-      "asset": "/course-visuals/sap-c03/module-06/slide-25-outposts-disconnect-dependencies-aip-v1-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-06/slide-25.webp"
+      "old": "/course-visuals/sap-c03/module-06/slide-25.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-025-reviewed-0de778f5b976.webp"
     },
     "sap-06-026": {
       "asset": "/course-visuals/sap-c03/module-06/slide-26-hybrid-factory-recovery-path-aip-v1-20261121.webp",
@@ -42445,8 +42450,8 @@
       "old": "/course-visuals/sap-c03/module-07/slide-05.webp"
     },
     "sap-07-011": {
-      "asset": "/course-visuals/sap-c03/module-07/slide-11-hpc-mpi-parallelcluster-aip-v1-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-07/slide-11-v4.webp"
+      "old": "/course-visuals/sap-c03/module-07/slide-11-v4.webp",
+      "asset": "/course-visuals/sap-c03/module-07/sap-07-011-reviewed-00ea3c660923.webp"
     },
     "sap-07-012": {
       "asset": "/course-visuals/sap-c03/module-07/slide-12-auto-scaling-capacity-range-aip-v1-20261122.webp",
@@ -42457,8 +42462,8 @@
       "old": "/course-visuals/sap-c03/module-07/slide-15.webp"
     },
     "sap-07-019": {
-      "asset": "/course-visuals/sap-c03/module-07/slide-19-alb-asg-health-check-response-aip-v2-20261122.webp",
-      "old": "/course-visuals/sap-c03/module-07/slide-19-v2.webp"
+      "old": "/course-visuals/sap-c03/module-07/slide-19-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-07/sap-07-019-reviewed-c5ab5526638e.webp"
     },
     "sap-07-021": {
       "asset": "/course-visuals/sap-c03/module-07/slide-21-mixed-instance-capacity-units-aip-v1-20261121.webp",
@@ -42477,8 +42482,8 @@
       "old": "/course-visuals/sap-c03/module-07/slide-28-v2.webp"
     },
     "sap-07-032": {
-      "asset": "/course-visuals/sap-c03/module-07/slide-32-orders-system-request-path-aip-v1-20261121.webp",
-      "old": "/course-visuals/sap-c03/module-07/slide-32-v2.webp"
+      "old": "/course-visuals/sap-c03/module-07/slide-32-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-07/sap-07-032-reviewed-271f37f20498.webp"
     },
     "sap-08-020": {
       "asset": "/course-visuals/sap-c03/module-08/slide-24-alb-503-ingress-diagnosis-aip-v2-20261122.webp",
@@ -42495,6 +42500,186 @@
     "sap-09-036": {
       "asset": "/course-visuals/sap-c03/module-09/slide-37-s3-presigned-repeat-not-onetime-aip-v2-20261122.webp",
       "old": "/course-visuals/sap-c03/module-09/slide-36-aip-v1.webp"
+    },
+    "sap-13-018": {
+      "old": "/course-visuals/sap-c03/module-13/slide-18-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-13/sap-13-018-reviewed-2254431eb911.webp"
+    },
+    "sap-01-001": {
+      "old": "/course-visuals/sap-c03/module-01/slide-01.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-001-reviewed-fd9155b52c1c.webp"
+    },
+    "sap-01-013": {
+      "old": "/course-visuals/sap-c03/module-01/slide-13.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-013-reviewed-766503bd4b26.webp"
+    },
+    "sap-04-020": {
+      "old": "/course-visuals/sap-c03/module-04/slide-20.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-020-reviewed-865dc4505327.webp"
+    },
+    "sap-11-001": {
+      "old": "/course-visuals/sap-c03/module-11/slide-01-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-001-reviewed-7faccaf17c3f.webp"
+    },
+    "sap-00-002": {
+      "old": "/course-visuals/sap-c03/module-00/slide-03.webp",
+      "asset": "/course-visuals/sap-c03/module-00/sap-00-002-reviewed-923b2608cc66.webp"
+    },
+    "sap-00-003": {
+      "old": "/course-visuals/sap-c03/module-00/slide-04.webp",
+      "asset": "/course-visuals/sap-c03/module-00/sap-00-003-reviewed-f97f7f64184f.webp"
+    },
+    "sap-06-036": {
+      "old": "/course-visuals/sap-c03/module-06/slide-36-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-036-reviewed-81b336651962.webp"
+    },
+    "sap-10-007": {
+      "old": "/course-visuals/sap-c03/module-10/slide-07-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-007-reviewed-5b7ef79716d4.webp"
+    },
+    "sap-10-030": {
+      "old": "/course-visuals/sap-c03/module-10/slide-30-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-030-reviewed-099cf172dc3e.webp"
+    },
+    "sap-11-018": {
+      "old": "/course-visuals/sap-c03/module-11/slide-18-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-018-reviewed-e48b4c415e85.webp"
+    },
+    "sap-01-003": {
+      "old": "/course-visuals/sap-c03/module-01/slide-03.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-003-reviewed-2135417c97d2.webp"
+    },
+    "sap-01-007": {
+      "old": "/course-visuals/sap-c03/module-01/slide-07.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-007-reviewed-e762a10ee3d1.webp"
+    },
+    "sap-01-008": {
+      "old": "/course-visuals/sap-c03/module-01/slide-08.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-008-reviewed-dd679bcd8ec1.webp"
+    },
+    "sap-01-009": {
+      "old": "/course-visuals/sap-c03/module-01/slide-09.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-009-reviewed-29dbfca79e84.webp"
+    },
+    "sap-01-010": {
+      "old": "/course-visuals/sap-c03/module-01/slide-10.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-010-reviewed-a2bc06147250.webp"
+    },
+    "sap-01-012": {
+      "old": "/course-visuals/sap-c03/module-01/slide-12.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-012-reviewed-f966da1bc62a.webp"
+    },
+    "sap-03-002": {
+      "old": "/course-visuals/sap-c03/module-03/slide-02.webp",
+      "asset": "/course-visuals/sap-c03/module-03/sap-03-002-reviewed-b7f9426d9f12.webp"
+    },
+    "sap-03-006": {
+      "old": "/course-visuals/sap-c03/module-03/slide-06.webp",
+      "asset": "/course-visuals/sap-c03/module-03/sap-03-006-reviewed-800519cef1ac.webp"
+    },
+    "sap-04-002": {
+      "old": "/course-visuals/sap-c03/module-04/slide-02.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-002-reviewed-0896979ef204.webp"
+    },
+    "sap-04-007": {
+      "old": "/course-visuals/sap-c03/module-04/slide-07.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-007-reviewed-093a1110760c.webp"
+    },
+    "sap-04-012": {
+      "old": "/course-visuals/sap-c03/module-04/slide-12.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-012-reviewed-66d72c568926.webp"
+    },
+    "sap-04-019": {
+      "old": "/course-visuals/sap-c03/module-04/slide-19.webp",
+      "asset": "/course-visuals/sap-c03/module-04/sap-04-019-reviewed-2c98474d70fd.webp"
+    },
+    "sap-06-017": {
+      "old": "/course-visuals/sap-c03/module-06/slide-17.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-017-reviewed-230ea929aabb.webp"
+    },
+    "sap-06-032": {
+      "old": "/course-visuals/sap-c03/module-06/slide-32-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-032-reviewed-87733007b6b2.webp"
+    },
+    "sap-06-033": {
+      "old": "/course-visuals/sap-c03/module-06/slide-33-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-033-reviewed-4fefc2831879.webp"
+    },
+    "sap-06-034": {
+      "old": "/course-visuals/sap-c03/module-06/slide-34-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-034-reviewed-8effe0a42daf.webp"
+    },
+    "sap-06-037": {
+      "old": "/course-visuals/sap-c03/module-06/slide-37-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-06/sap-06-037-reviewed-28a65e5c8769.webp"
+    },
+    "sap-10-foundation-ebs": {
+      "old": "/course-visuals/sap-c03/module-10/foundation-ebs.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-foundation-ebs-reviewed-516826adf505.webp"
+    },
+    "sap-10-012": {
+      "old": "/course-visuals/sap-c03/module-10/slide-12-aip-v4.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-012-reviewed-91be4f6d9792.webp"
+    },
+    "sap-10-019": {
+      "old": "/course-visuals/sap-c03/module-10/slide-19-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-019-reviewed-11860b989601.webp"
+    },
+    "sap-10-031": {
+      "old": "/course-visuals/sap-c03/module-10/slide-31-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-031-reviewed-18f20c996fe3.webp"
+    },
+    "sap-10-036": {
+      "old": "/course-visuals/sap-c03/module-10/slide-36-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-036-reviewed-17d882e1b9ef.webp"
+    },
+    "sap-11-007": {
+      "old": "/course-visuals/sap-c03/module-11/slide-07-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-007-reviewed-e7b525f79059.webp"
+    },
+    "sap-11-011": {
+      "old": "/course-visuals/sap-c03/module-11/slide-11-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-011-reviewed-55d3d536d8d7.webp"
+    },
+    "sap-11-012": {
+      "old": "/course-visuals/sap-c03/module-11/slide-12-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-012-reviewed-b7ea1e62b288.webp"
+    },
+    "sap-11-014": {
+      "old": "/course-visuals/sap-c03/module-11/slide-14-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-11/sap-11-014-reviewed-116a4c4b2341.webp"
+    },
+    "sap-13-foundation-lambda": {
+      "old": "/course-visuals/sap-c03/module-13/foundation-lambda-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-13/sap-13-foundation-lambda-reviewed-eda09f8926c8.webp"
+    },
+    "sap-13-009": {
+      "old": "/course-visuals/sap-c03/module-13/slide-09-aip-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-13/sap-13-009-reviewed-d221090bf096.webp"
+    },
+    "sap-13-012": {
+      "old": "/course-visuals/sap-c03/module-13/slide-12-aip-v1.webp",
+      "asset": "/course-visuals/sap-c03/module-13/sap-13-012-reviewed-a5342bf3273b.webp"
+    },
+    "sap-01-004": {
+      "old": "/course-visuals/sap-c03/module-01/slide-04.webp",
+      "asset": "/course-visuals/sap-c03/module-01/sap-01-004-reviewed-24bde0e061ff.webp"
+    },
+    "sap-02-019": {
+      "old": "/course-visuals/sap-c03/module-02/slide-19.webp",
+      "asset": "/course-visuals/sap-c03/module-02/sap-02-019-reviewed-45109fbb5749.webp"
+    },
+    "sap-02-021": {
+      "old": "/course-visuals/sap-c03/module-02/slide-21.webp",
+      "asset": "/course-visuals/sap-c03/module-02/sap-02-021-reviewed-7ac0f56c7599.webp"
+    },
+    "sap-03-005": {
+      "old": "/course-visuals/sap-c03/module-03/slide-05.webp",
+      "asset": "/course-visuals/sap-c03/module-03/sap-03-005-reviewed-101be6505c95.webp"
+    },
+    "sap-10-008": {
+      "old": "/course-visuals/sap-c03/module-10/slide-08-v2.webp",
+      "asset": "/course-visuals/sap-c03/module-10/sap-10-008-reviewed-5f7df13fe58e.webp"
     }
   }
 }
