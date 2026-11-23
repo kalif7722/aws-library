@@ -1,0 +1,541 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "01",
+      "part": "11",
+      "revision": "2026-11-23-m01p11-approved-aip-wave02-draft-v1",
+      "approved_assets": {
+        "45": "3a32c3fb5e403050badc0f8ea7343b1affa172966d603c4855555b25b6be286c"
+      },
+      "units": [
+        {
+          "id": "m01p11-s45-c1-81122ddc2be3",
+          "slide": 45,
+          "text": "Active Directory Domain Services stores users, groups, and computers. Follow the employee to Active Directory Federation Services, which authenticates the employee against that directory.",
+          "text_sha256": "81122ddc2be3f3e9383ddafc03dcdcf244b1c02bd77479f86dab249fcda11720",
+          "asset_sha256": "3a32c3fb5e403050badc0f8ea7343b1affa172966d603c4855555b25b6be286c"
+        },
+        {
+          "id": "m01p11-s45-c2-17172f7a48cc",
+          "slide": 45,
+          "text": "Federation Services issues a SAML assertion. The relying party uses it to recognize the signed-in user. This passes an assertion across the trust boundary, not a copied directory account.",
+          "text_sha256": "17172f7a48cc2008a44ec19266dab08b73f757aa60a13c198e63f64c4b2382cb",
+          "asset_sha256": "3a32c3fb5e403050badc0f8ea7343b1affa172966d603c4855555b25b6be286c"
+        },
+        {
+          "id": "m01p11-s45-c3-8a0f8f88a62e",
+          "slide": 45,
+          "text": "For AWS access, follow the lower path. IAM uses a configured SAML provider and role trust. S T S exchanges the valid assertion for a temporary role session.",
+          "text_sha256": "8a0f8f88a62eb6d3000e65181feaa63c8c6a35b2693a7b42ab84faf168214ac8",
+          "asset_sha256": "3a32c3fb5e403050badc0f8ea7343b1affa172966d603c4855555b25b6be286c"
+        },
+        {
+          "id": "m01p11-s45-c4-594265f300a9",
+          "slide": 45,
+          "text": "The assertion is not an AWS access key. The role’s permissions still govern which AWS actions are allowed after the session starts.",
+          "text_sha256": "594265f300a9c7143a92f42052d877a22e21f105112d54adec7eb36bda7e2e60",
+          "asset_sha256": "3a32c3fb5e403050badc0f8ea7343b1affa172966d603c4855555b25b6be286c"
+        }
+      ]
+    },
+    {
+      "module": "01",
+      "part": "12",
+      "revision": "2026-11-23-m01p12-approved-aip-wave02-draft-v1",
+      "approved_assets": {
+        "46": "2954c59226b82aef1099df8f58f4dc7e38848dc63ab16f6a6943917fea099be6",
+        "47": "db775c2446c06fe8ebbe9acf52e8002014e9b73d0490b1df8dde50179fdb716e",
+        "48": "36374b3f929480421cc16e3b0cb51d510b5cf4f4e9c334f9dae84e54d5db4e66"
+      },
+      "units": [
+        {
+          "id": "m01p12-s46-c1-fdcba8728199",
+          "slide": 46,
+          "text": "Choose by the directory features the workload actually needs. The two main paths on this slide either give you a managed Microsoft directory or connect back to an existing one.",
+          "text_sha256": "fdcba8728199ae597f9d1299d36b6559470eb368571d67cadd2689210c626650",
+          "asset_sha256": "2954c59226b82aef1099df8f58f4dc7e38848dc63ab16f6a6943917fea099be6"
+        },
+        {
+          "id": "m01p12-s46-c2-3b1caf66ab4f",
+          "slide": 46,
+          "text": "On the left, AWS runs the domain controllers for Managed Microsoft A D, while you manage your identities and permissions. The file server illustrates a domain join. Choose this approach when a supported native trust is required.",
+          "text_sha256": "3b1caf66ab4f280dbb642e89b9357b4b451e017428ca66919037e8caade043f6",
+          "asset_sha256": "2954c59226b82aef1099df8f58f4dc7e38848dc63ab16f6a6943917fea099be6"
+        },
+        {
+          "id": "m01p12-s46-c3-1644dcfded75",
+          "slide": 46,
+          "text": "On the right, WorkSpaces signs in through A D Connector to the existing directory. The connector proxies requests; it does not replicate the directory. Losing connectivity to that directory can interrupt sign-in.",
+          "text_sha256": "1644dcfded75652e9ce3636936cc4ef08eb72fd9d909b961c12e346af852abcf",
+          "asset_sha256": "2954c59226b82aef1099df8f58f4dc7e38848dc63ab16f6a6943917fea099be6"
+        },
+        {
+          "id": "m01p12-s46-c4-751326b2a69a",
+          "slide": 46,
+          "text": "Simple A D is the basic Samba-based option shown below. Do not assume native trusts, multi-factor authentication, or application compatibility. It is closed to new customers. Match the choice to the workload before committing.",
+          "text_sha256": "751326b2a69a00701a57fbf302654de301634b9a8afc1d12e49d79bf426c0d84",
+          "asset_sha256": "2954c59226b82aef1099df8f58f4dc7e38848dc63ab16f6a6943917fea099be6"
+        },
+        {
+          "id": "m01p12-s47-c1-faa937660d09",
+          "slide": 47,
+          "text": "The primary Region shows AWS Managed Microsoft A D with domain controllers in separate Availability Zones. This adds directory resilience inside the Region without making your application highly available by itself.",
+          "text_sha256": "faa937660d09c11caeaab799b451632771d5aac330e014b33ec552f82672bad8",
+          "asset_sha256": "db775c2446c06fe8ebbe9acf52e8002014e9b73d0490b1df8dde50179fdb716e"
+        },
+        {
+          "id": "m01p12-s47-c2-b66c10c57c4c",
+          "slide": 47,
+          "text": "The right-hand example is optional multi-Region replication with Enterprise Edition. It extends the same managed directory into a supported second Region; it does not create a trust between separate directories.",
+          "text_sha256": "b66c10c57c4c7e051d6dfb08246a7e14787562e07168db3e97fe97ed80eb8fcb",
+          "asset_sha256": "db775c2446c06fe8ebbe9acf52e8002014e9b73d0490b1df8dde50179fdb716e"
+        },
+        {
+          "id": "m01p12-s47-c3-a2ffe1973cb9",
+          "slide": 47,
+          "text": "In the lower-left path, verify private connectivity and D N S before domain-joining EC2 or integrating a supported managed service. Sharing can make the directory available to eligible accounts; it does not remove those prerequisites.",
+          "text_sha256": "a2ffe1973cb91e71efded93754d9f8b5302f6ff3ba3aa09ef9663d13caf1840c",
+          "asset_sha256": "db775c2446c06fe8ebbe9acf52e8002014e9b73d0490b1df8dde50179fdb716e"
+        },
+        {
+          "id": "m01p12-s47-c4-7357d165fae6",
+          "slide": 47,
+          "text": "AWS handles domain-controller operations and backups. You still need to check the application's own recovery design, supported regional integrations, and multi-factor authentication requirements.",
+          "text_sha256": "7357d165fae658c76ee1e66d844a0f519cde597bf941b7cd7923de1927c9300e",
+          "asset_sha256": "db775c2446c06fe8ebbe9acf52e8002014e9b73d0490b1df8dde50179fdb716e"
+        },
+        {
+          "id": "m01p12-s48-c1-e5ecc63eee57",
+          "slide": 48,
+          "text": "Trust and replication solve different problems. In the top example, the AWS resource forest trusts the corporate forest. The arrows show that corporate users can authenticate to the AWS-hosted application.",
+          "text_sha256": "e5ecc63eee57e62b9f788fdc36a9e6c418d019ee13aa21056b7556e9ece99f30",
+          "asset_sha256": "36374b3f929480421cc16e3b0cb51d510b5cf4f4e9c334f9dae84e54d5db4e66"
+        },
+        {
+          "id": "m01p12-s48-c2-f010b2386eee",
+          "slide": 48,
+          "text": "Notice that the user accounts stay in the corporate directory. Trust accepts authentication from that forest. The Windows application still decides which of those users may access its resources.",
+          "text_sha256": "f010b2386eee6cdd95771ad484d477caa4409d3f577378b37c2e990b4e36bbfd",
+          "asset_sha256": "36374b3f929480421cc16e3b0cb51d510b5cf4f4e9c334f9dae84e54d5db4e66"
+        },
+        {
+          "id": "m01p12-s48-c3-27cc764034ea",
+          "slide": 48,
+          "text": "In the lower example, a self-managed domain controller on EC2 is part of the existing on-premises domain. It replicates directory data rather than merely accepting another forest’s users. Your team operates that domain controller.",
+          "text_sha256": "27cc764034ea4c005cc4b9b88f605d070d915558e9d701cc6a626ae3e9413c16",
+          "asset_sha256": "36374b3f929480421cc16e3b0cb51d510b5cf4f4e9c334f9dae84e54d5db4e66"
+        },
+        {
+          "id": "m01p12-s48-c4-049c89508cab",
+          "slide": 48,
+          "text": "Choose trust to cross an identity boundary, or replication when you need a synchronized controller in the same domain. Validate private routing and D N S; a proxy like A D Connector still depends on connectivity.",
+          "text_sha256": "049c89508cab06f014acead3f60b5342e85c1fc98410a6e238d4324267b85884",
+          "asset_sha256": "36374b3f929480421cc16e3b0cb51d510b5cf4f4e9c334f9dae84e54d5db4e66"
+        }
+      ]
+    },
+    {
+      "module": "01",
+      "part": "13",
+      "revision": "2026-11-23-m01p13-approved-aip-wave02-draft-v1",
+      "approved_assets": {
+        "49": "5d6786279d72ceaf617dd7675d1cbd2d2946ba544879148f2cc003ceaf8f4364",
+        "50": "94aeac814794678ca13c6837d818151bb63c86659b8ff8c9ec0ed9f1bfad048c",
+        "51": "679568d0f052c40775c0ff9e7ea95fcf4a1714e67fae8ed455171e43daf6fbe0",
+        "52": "d2f07109a83433cc3f5c0fb674695c99261fb024721c383b29f716485b405772"
+      },
+      "units": [
+        {
+          "id": "m01p13-s49-c1-38d06c195e6f",
+          "slide": 49,
+          "text": "All these operations return temporary credentials, but the session identity depends on what the caller presents. Follow an existing AWS principal to Assume Role: it receives a role session only when the relevant authorization and trust checks pass.",
+          "text_sha256": "38d06c195e6f7d96aa53ca7986fc77189d847ef1907ea093745ebeeb7c1bbf28",
+          "asset_sha256": "5d6786279d72ceaf617dd7675d1cbd2d2946ba544879148f2cc003ceaf8f4364"
+        },
+        {
+          "id": "m01p13-s49-c2-57fec92b83cf",
+          "slide": 49,
+          "text": "A SAML assertion follows Assume Role With SAML. An O I D C token follows Assume Role With Web Identity. These federation calls use assertions or tokens instead of existing AWS credentials. IAM validates the provider and required claims.",
+          "text_sha256": "57fec92b83cfe70b78189b3416e0732febbd03577698564b8a1393dea4f23ff9",
+          "asset_sha256": "5d6786279d72ceaf617dd7675d1cbd2d2946ba544879148f2cc003ceaf8f4364"
+        },
+        {
+          "id": "m01p13-s49-c3-99e57aae73cc",
+          "slide": 49,
+          "text": "Get Session Token returns temporary credentials for the IAM user; the slide shows an M F A example. Get Federation Token instead returns a federated-user session, shown here for an IAM-user broker.",
+          "text_sha256": "99e57aae73cce2ab5738e0290aa2d6aea6ea7979c01c5fb053e99e333f6bbad2",
+          "asset_sha256": "5d6786279d72ceaf617dd7675d1cbd2d2946ba544879148f2cc003ceaf8f4364"
+        },
+        {
+          "id": "m01p13-s49-c4-f079d5aebc03",
+          "slide": 49,
+          "text": "Start with the caller’s proof, then identify the resulting session. Check issuer, audience or subject where applicable, and do not assume all temporary sessions have the same permissions.",
+          "text_sha256": "f079d5aebc0325296020d33410350483c92eaf6e88d9d73e247d6426f64a8d66",
+          "asset_sha256": "5d6786279d72ceaf617dd7675d1cbd2d2946ba544879148f2cc003ceaf8f4364"
+        },
+        {
+          "id": "m01p13-s50-c1-10c2f3f2bbe9",
+          "slide": 50,
+          "text": "This S3 Put Object example checks the source V P C endpoint. Choose the condition operator for the actual key and value type, then ask what happens if the request does not include that key.",
+          "text_sha256": "10c2f3f2bbe92a5601890710d87078dbb0503cb9e0044a82262897afcb26ed45",
+          "asset_sha256": "94aeac814794678ca13c6837d818151bb63c86659b8ff8c9ec0ed9f1bfad048c"
+        },
+        {
+          "id": "m01p13-s50-c2-fa7e3a716d67",
+          "slide": 50,
+          "text": "Read the three rows. With String Equals in an Allow, only the approved endpoint matches. With String Not Equals If Exists in a Deny, a different endpoint and a missing key both trigger explicit denial in this example.",
+          "text_sha256": "fa7e3a716d67179151673c94e2f582368b38af333c2931a9f2bf13bf8800ea20",
+          "asset_sha256": "94aeac814794678ca13c6837d818151bb63c86659b8ff8c9ec0ed9f1bfad048c"
+        },
+        {
+          "id": "m01p13-s50-c3-3c7d1846a6c9",
+          "slide": 50,
+          "text": "A nonmatching Allow is not itself a final denial. Other applicable statements may still grant access. Use the Null operator when you need an explicit presence check.",
+          "text_sha256": "3c7d1846a6c9768703e5bbc0fc657cdb0428ee7beb3ebb709a9c9b5722446544",
+          "asset_sha256": "94aeac814794678ca13c6837d818151bb63c86659b8ff8c9ec0ed9f1bfad048c"
+        },
+        {
+          "id": "m01p13-s50-c4-a5ffb915dd8f",
+          "slide": 50,
+          "text": "Test the approved path, the wrong path, and the missing-key case. Context varies with the caller: for example, AWS user name is absent for role sessions.",
+          "text_sha256": "a5ffb915dd8f09067533cb00f670b0e4c427129a9bdf4eb3b36e076638063f6a",
+          "asset_sha256": "94aeac814794678ca13c6837d818151bb63c86659b8ff8c9ec0ed9f1bfad048c"
+        },
+        {
+          "id": "m01p13-s51-c1-3acc72f03439",
+          "slide": 51,
+          "text": "This launch example has two separate controls. The allowed list says which tag keys can be sent. The required-tag check makes sure both Environment and Owner are actually present.",
+          "text_sha256": "3acc72f03439bc1ceb272e243375720fca4e274bc13529c50e909f643a658b8d",
+          "asset_sha256": "679568d0f052c40775c0ff9e7ea95fcf4a1714e67fae8ed455171e43daf6fbe0"
+        },
+        {
+          "id": "m01p13-s51-c2-449840b7b6bf",
+          "slide": 51,
+          "text": "Read the rows. Both allowed keys pass both checks. Environment alone passes the list but fails the Owner requirement. Adding Extra passes presence but fails the allowed list.",
+          "text_sha256": "449840b7b6bf0270a3730cc343a11166ef1e502fde824323d97785c37c2d321c",
+          "asset_sha256": "679568d0f052c40775c0ff9e7ea95fcf4a1714e67fae8ed455171e43daf6fbe0"
+        },
+        {
+          "id": "m01p13-s51-c3-64d1bdd6c61b",
+          "slide": 51,
+          "text": "For All Values can match when the context key is missing; it does not prove tag presence. For Any Value checks for at least one match, not all required keys. Check request tags separately and account for Create Tags authorization and later tag changes.",
+          "text_sha256": "64d1bdd6c61bc8b415f47f57824258aa13f2752569118fcce4bb2c9e013bf054",
+          "asset_sha256": "679568d0f052c40775c0ff9e7ea95fcf4a1714e67fae8ed455171e43daf6fbe0"
+        },
+        {
+          "id": "m01p13-s52-c1-b9fa863a8537",
+          "slide": 52,
+          "text": "An Allow with Not Action selects actions outside its exceptions. In this Power User example, the statement selects an EC2 describe operation, but it does not grant IAM Create User.",
+          "text_sha256": "b9fa863a8537559c1f029ec2ae8460941377504d051d9b735832e3a979b7281f",
+          "asset_sha256": "d2f07109a83433cc3f5c0fb674695c99261fb024721c383b29f716485b405772"
+        },
+        {
+          "id": "m01p13-s52-c2-428860685aee",
+          "slide": 52,
+          "text": "Read the gray and blue results together. Not granted by this statement is not an explicit deny. A separate applicable Allow might permit the action if the rest of the policy evaluation allows it.",
+          "text_sha256": "428860685aeecd7712e901898ac69532960ad834a101cd3773983d91bca2862a",
+          "asset_sha256": "d2f07109a83433cc3f5c0fb674695c99261fb024721c383b29f716485b405772"
+        },
+        {
+          "id": "m01p13-s52-c3-49f1fa3b227f",
+          "slide": 52,
+          "text": "Now read the barrier below. An applicable explicit service control policy Deny blocks the member-account request even if Administrator Access grants the action.",
+          "text_sha256": "49f1fa3b227fd45e2f2bc6ba245282fd901f2dc33cd9479b228d535dda6eeadb",
+          "asset_sha256": "d2f07109a83433cc3f5c0fb674695c99261fb024721c383b29f716485b405772"
+        },
+        {
+          "id": "m01p13-s52-c4-6177aa733f7d",
+          "slide": 52,
+          "text": "Check the current managed-policy document; the name is not proof of access. Decide whether the action is allowed, simply not selected, or explicitly denied.",
+          "text_sha256": "6177aa733f7d9a8592a4bf64a39280b3d63039522918b172fc42d753b163ec34",
+          "asset_sha256": "d2f07109a83433cc3f5c0fb674695c99261fb024721c383b29f716485b405772"
+        }
+      ]
+    },
+    {
+      "module": "02",
+      "part": "03",
+      "revision": "2026-11-23-m02p03-approved-aip-wave02-draft-v1",
+      "approved_assets": {
+        "9": "6f9a97e21263c69987fef5a7bc736ffca583c1bd1eef5d1204603264a6be593d",
+        "10": "76ed7ad87d1fa029af384f1f30de2a50fa84ce2c8ac83c08e9a32eb47d0bf859",
+        "11": "eae7b0d28f86af51c7bda53e538b3c0d617ca587c5f27d0156707f1364627b23",
+        "12": "87b0e0357e4e96c993c054cfe3c2edb8db6a0c8f76cf19fb7c48cb665ca42560",
+        "13": "f5e476f2d77c50940bb8e49ade1ba1290c595e4e26d8a5b681e2848ced5d7699",
+        "14": "2407c118d57337033d013ad42f842d912a3dae1622fa83042acccf2242f926ad"
+      },
+      "units": [
+        {
+          "id": "m02p03-s09-c1-9adadd223ade",
+          "slide": 9,
+          "text": "Start at the organization root. Its example service control policy denies changes that would disable CloudTrail for governed member-account principals. The production organizational unit inherits that baseline and adds a Region restriction. Sandbox inherits the baseline, not the production-only restriction.",
+          "text_sha256": "9adadd223ade25a84bf0bd01366a56b15b41c8b200550d3f7902649b59a41e92",
+          "asset_sha256": "6f9a97e21263c69987fef5a7bc736ffca583c1bd1eef5d1204603264a6be593d"
+        },
+        {
+          "id": "m02p03-s09-c2-e9ffd88f074b",
+          "slide": 9,
+          "text": "The red callout is the decision: a lower-level Allow cannot override an inherited explicit Deny. The management account and service-linked roles are outside S C P restrictions. For a legitimate requirement, take the narrowly scoped design back to the policy owner for review at the source.",
+          "text_sha256": "e9ffd88f074be8a73bb34e04f4886c4f512b28473335e855f969d4a5650354fd",
+          "asset_sha256": "6f9a97e21263c69987fef5a7bc736ffca583c1bd1eef5d1204603264a6be593d"
+        },
+        {
+          "id": "m02p03-s09-c3-97a6b25afb3e",
+          "slide": 9,
+          "text": "Use the bottom strip as a validation checklist. Analyze the policy, validate allowed and denied cases in a representative controlled account, check the recorded activity, and obtain security approval before rollout.",
+          "text_sha256": "97a6b25afb3e5485ad11d164a00a71f004a37ea8b11a6f1989c5151c8264d980",
+          "asset_sha256": "6f9a97e21263c69987fef5a7bc736ffca583c1bd1eef5d1204603264a6be593d"
+        },
+        {
+          "id": "m02p03-s10-c1-f59ff1356bfe",
+          "slide": 10,
+          "text": "At the upper left, the management or delegated CloudTrail administrator configures an organization trail. It covers current and future member accounts. Use a multi-Region trail for broad coverage. Configure management events and selectively enable data events, such as relevant S three object calls.",
+          "text_sha256": "f59ff1356bfedaf248682f49cc1b62cd0cffde1bc45a399d4909b393550f35cb",
+          "asset_sha256": "76ed7ad87d1fa029af384f1f30de2a50fa84ce2c8ac83c08e9a32eb47d0bf859"
+        },
+        {
+          "id": "m02p03-s10-c2-a9cad70b2b55",
+          "slide": 10,
+          "text": "Follow the lines into the central S three archive. Restrict delivery and read access, configure the K M S key policy where applicable, and consider versioning and Object Lock for retention. The member-account operator should not control this archive.",
+          "text_sha256": "a9cad70b2b5508c6333243d14a8769c95d0375460ea93afded33b32eb9aa2077",
+          "asset_sha256": "76ed7ad87d1fa029af384f1f30de2a50fa84ce2c8ac83c08e9a32eb47d0bf859"
+        },
+        {
+          "id": "m02p03-s10-c3-594a223de982",
+          "slide": 10,
+          "text": "Compare the bottom boxes. Event History is a recent account-level view of management events; the organization trail delivers durable evidence to the archive. Monitor delivery separately. A trail can help explain an action, but does not prevent it.",
+          "text_sha256": "594a223de98221457385274689431a3662c2ef1f4cabddb62bac6483deaffe4d",
+          "asset_sha256": "76ed7ad87d1fa029af384f1f30de2a50fa84ce2c8ac83c08e9a32eb47d0bf859"
+        },
+        {
+          "id": "m02p03-s11-c1-9d3528c947a8",
+          "slide": 11,
+          "text": "The left side shows Config recorders in member accounts across two Regions. Those recorders capture supported configurations; rules evaluate them. The cyan lines carry configuration and compliance metadata to the organization aggregator. The central view does not create those recorders.",
+          "text_sha256": "9d3528c947a8b6bcfeab3ed613729117b917ca971812e10a13879590bc767a94",
+          "asset_sha256": "eae7b0d28f86af51c7bda53e538b3c0d617ca587c5f27d0156707f1364627b23"
+        },
+        {
+          "id": "m02p03-s11-c2-a41d6fa9a248",
+          "slide": 11,
+          "text": "In the delegated administrator view, find the example noncompliant S three bucket. Its account and Region tell the team where to investigate. The aggregator shows the result; it neither changes the bucket nor performs remediation.",
+          "text_sha256": "a41d6fa9a2488c5a27ee43687b9d84def8f81a0dc9fcee8a2b6455d732b903d0",
+          "asset_sha256": "eae7b0d28f86af51c7bda53e538b3c0d617ca587c5f27d0156707f1364627b23"
+        },
+        {
+          "id": "m02p03-s11-c3-77a7da5e4a09",
+          "slide": 11,
+          "text": "The dashed path to S three is a separate delivery channel for configuration history. The lower-right path is also separate: an authorized team investigates and corrects the resource, then checks a new evaluation. The aggregator does not read from that archive or run that fix.",
+          "text_sha256": "77a7da5e4a09d93468c61e3779c028b81ef71e1edf8621daf0ba398c6b1b3fb2",
+          "asset_sha256": "eae7b0d28f86af51c7bda53e538b3c0d617ca587c5f27d0156707f1364627b23"
+        },
+        {
+          "id": "m02p03-s12-c1-4e69de09ab76",
+          "slide": 12,
+          "text": "Follow the two account and Region examples into GuardDuty. GuardDuty uses supported signals to detect potential threats. Coverage is configured per account and Region, and optional protections such as S three or E K S are not a blanket assumption.",
+          "text_sha256": "4e69de09ab760c6645a41487ed27ff1cf162c08ed317a954090c207deef5c635",
+          "asset_sha256": "87b0e0357e4e96c993c054cfe3c2edb8db6a0c8f76cf19fb7c48cb665ca42560"
+        },
+        {
+          "id": "m02p03-s12-c2-f7f3fae266a1",
+          "slide": 12,
+          "text": "Security Hub C S P M collects integrated findings and evaluates enabled security controls. To bring findings from other Regions into the home Region, configure the linked Regions. A posture control result is not the same thing as a threat detection.",
+          "text_sha256": "f7f3fae266a1e6d00a5ef5fff433dc574f5df634c633d8215d3480f770a68b4b",
+          "asset_sha256": "87b0e0357e4e96c993c054cfe3c2edb8db6a0c8f76cf19fb7c48cb665ca42560"
+        },
+        {
+          "id": "m02p03-s12-c3-1f2b4fb74c55",
+          "slide": 12,
+          "text": "EventBridge routes selected findings to a ticket or an authorized Lambda response. Creating the finding does not perform a fix. Assign coverage and response permissions deliberately, rather than assuming every member account and Region is monitored.",
+          "text_sha256": "1f2b4fb74c5507da8ea195001063bc8f823cd4ae7a2e93c239b59f6729268b8b",
+          "asset_sha256": "87b0e0357e4e96c993c054cfe3c2edb8db6a0c8f76cf19fb7c48cb665ca42560"
+        },
+        {
+          "id": "m02p03-s13-c1-46197e7f30ad",
+          "slide": 13,
+          "text": "Trace the four sources on the left. CloudTrail supplies API activity, V P C Flow Logs supply network metadata, Resolver logs supply D N S queries, and Security Hub supplies findings. Security Lake normalizes supported records into O C S F and stores them in Regional S three lakes.",
+          "text_sha256": "46197e7f30ad0e9ba73a84aeb4d8bf7d1cfa5fd50aea5292f57d4a26083be9ca",
+          "asset_sha256": "f5e476f2d77c50940bb8e49ade1ba1290c595e4e26d8a5b681e2848ced5d7699"
+        },
+        {
+          "id": "m02p03-s13-c2-443fdb2f1916",
+          "slide": 13,
+          "text": "On the right, choose query access for approved analysts querying Lake Formation tables with Athena. Choose data access when an approved external analytics system needs authorized S three objects; configured new-object notifications can tell it that new data is available.",
+          "text_sha256": "443fdb2f191697fec88da38f1e2e5dddd2e555fde23006d93b47546baec1d536",
+          "asset_sha256": "f5e476f2d77c50940bb8e49ade1ba1290c595e4e26d8a5b681e2848ced5d7699"
+        },
+        {
+          "id": "m02p03-s13-c3-e66c341af9aa",
+          "slide": 13,
+          "text": "Choose the sources, accounts, Regions, encryption, retention, and access. The lake makes evidence reachable in a common format. It complements the services that make threat or posture findings; it does not replace them.",
+          "text_sha256": "e66c341af9aaaad261dbc942b3a158a57b204edab0985fc909ee9a28fcc4476d",
+          "asset_sha256": "f5e476f2d77c50940bb8e49ade1ba1290c595e4e26d8a5b681e2848ced5d7699"
+        },
+        {
+          "id": "m02p03-s14-c1-9b735be01b44",
+          "slide": 14,
+          "text": "A workload sends one Invoke Model request. The application log at left can record its own request identifier, the model, and deliberately redacted business context. That context explains the workload's intent without requiring it to store the full prompt.",
+          "text_sha256": "9b735be01b44e67e350cf110f284ccb025364b82fd69d624a8693bc960afe59f",
+          "asset_sha256": "2407c118d57337033d013ad42f842d912a3dae1622fa83042acccf2242f926ad"
+        },
+        {
+          "id": "m02p03-s14-c2-3bc3f86b5ae6",
+          "slide": 14,
+          "text": "The middle panel is Bedrock model invocation logging. It is off by default; when enabled for supported calls it can capture configured inputs and outputs as well as metadata, to CloudWatch Logs or S three in the same account and Region.",
+          "text_sha256": "3bc3f86b5ae653eebef32c3661e5a736d23074454a4322d29d3b24916dac4edb",
+          "asset_sha256": "2407c118d57337033d013ad42f842d912a3dae1622fa83042acccf2242f926ad"
+        },
+        {
+          "id": "m02p03-s14-c3-73fff3105821",
+          "slide": 14,
+          "text": "CloudTrail supplies the Invoke Model API event with caller, time, and Region, not the prompt or response body. Use identifiers your app actually records and documented request identifiers where available. Do not assume the example identifiers are identical. Minimize sensitive logging and scope access, encryption, and retention.",
+          "text_sha256": "73fff3105821b98bb534574ead004ba845518fb679d2ae26864ca6acae0e349d",
+          "asset_sha256": "2407c118d57337033d013ad42f842d912a3dae1622fa83042acccf2242f926ad"
+        }
+      ]
+    },
+    {
+      "module": "02",
+      "part": "05",
+      "revision": "2026-11-23-m02p05-approved-aip-wave02-draft-v1",
+      "approved_assets": {
+        "17": "d6a20cb580be97eaff12d99c3478728d5be13b79f09498365e1054509ed0f30e",
+        "18": "7f791c971ece7ac21a916169ab3ec0f1dcf8e508325e2552581d06983232d94b",
+        "19": "45109fbb5749a476747c2c42959585d083d20a5b1b3879a313a0ceb28d33ac3b",
+        "20": "4b87bf8c0f8bba95f58b18595854444c1cf9486fa31d10448735167b34d1ed1c",
+        "21": "7ac0f56c75999ffd7af9b01f0e3f8ca9c8e4477ca5d1b35c5d8888e0ec69a0db",
+        "22": "a55704da8f104962da9fc6893191676881d7c76d25ba90d58ed7b7c5ce32aeeb"
+      },
+      "units": [
+        {
+          "id": "m02p05-s17-c1-4b1df73d7256",
+          "slide": 17,
+          "text": "The top lane shows how a conformance pack groups managed or custom Config rules and optional remediation definitions. Deploy the pack to the intended accounts for each relevant Region. A pack standardizes the rules; it does not itself prevent resource changes.",
+          "text_sha256": "4b1df73d725624aee6e68ae5470aaf8b6de19eb9ab70f53425f2fc2406c7d61f",
+          "asset_sha256": "d6a20cb580be97eaff12d99c3478728d5be13b79f09498365e1054509ed0f30e"
+        },
+        {
+          "id": "m02p05-s17-c2-57416230d42a",
+          "slide": 17,
+          "text": "Below, the recorder captures supported configurations. A rule checks an S three bucket or E B S volume after a relevant change or on a schedule. A noncompliant result reaches the organization view independently of any fix. The aggregator collects results without enabling recording.",
+          "text_sha256": "57416230d42aeb993449ebc2e2a0942b0c815fbec21a0e358fc1921aef53909a",
+          "asset_sha256": "d6a20cb580be97eaff12d99c3478728d5be13b79f09498365e1054509ed0f30e"
+        },
+        {
+          "id": "m02p05-s17-c3-acc83345a03c",
+          "slide": 17,
+          "text": "If remediation is configured, a separately authorized Systems Manager Automation can address the finding. It is an optional branch, not a prerequisite for the aggregator or a guarantee that a noncompliant change was blocked.",
+          "text_sha256": "acc83345a03c7f24e1ef0fdc2ae28385a56e2e9db750faffdb909a1e7713f032",
+          "asset_sha256": "d6a20cb580be97eaff12d99c3478728d5be13b79f09498365e1054509ed0f30e"
+        },
+        {
+          "id": "m02p05-s18-c1-f4ff0eb4cdf8",
+          "slide": 18,
+          "text": "Development, test, and production report into Security Hub C S P M. Follow the highlighted development result to the S three public access posture finding. Its account and control context tell the responsible owner where to triage.",
+          "text_sha256": "f4ff0eb4cdf8619a0c6d795dee9a06feb718e8bebc7d34a08d5dd227dc447f8c",
+          "asset_sha256": "7f791c971ece7ac21a916169ab3ec0f1dcf8e508325e2552581d06983232d94b"
+        },
+        {
+          "id": "m02p05-s18-c2-dd632d1bc3a0",
+          "slide": 18,
+          "text": "The right side shows an operator correcting the approved configuration, then checking the result in the development account. The finding did not itself stop the original change or automatically make the correction.",
+          "text_sha256": "dd632d1bc3a0924e50db2c643f02e91e719225670c9878de9937f3c50af2e735",
+          "asset_sha256": "7f791c971ece7ac21a916169ab3ec0f1dcf8e508325e2552581d06983232d94b"
+        },
+        {
+          "id": "m02p05-s18-c3-c60cf66af8ba",
+          "slide": 18,
+          "text": "Read the final comparison. C S P M checks configuration posture against enabled standards. A GuardDuty finding indicates a potential threat. Pair the right signal with a responsible owner and a verified response.",
+          "text_sha256": "c60cf66af8ba9f403344be92f4c8a358c49810de2b6b19658626824f298e01d6",
+          "asset_sha256": "7f791c971ece7ac21a916169ab3ec0f1dcf8e508325e2552581d06983232d94b"
+        },
+        {
+          "id": "m02p05-s19-c1-8bda0f3a49e8",
+          "slide": 19,
+          "text": "Across the top, Inspector reports for enabled, eligible E C two, E C R, and Lambda coverage. An organization delegated administrator can coordinate that coverage. Inspector finds and reports; the workload team is responsible for updating and deploying its software.",
+          "text_sha256": "8bda0f3a49e8942c456dd25cd8842f32cdd7a8b9da523b90e66aae6c148fa131",
+          "asset_sha256": "45109fbb5749a476747c2c42959585d083d20a5b1b3879a313a0ceb28d33ac3b"
+        },
+        {
+          "id": "m02p05-s19-c2-3775137539aa",
+          "slide": 19,
+          "text": "Follow the E C R example below. Inspector finds a vulnerable package in an image. The workload team updates the dependency or base image, then rebuilds and pushes a new image digest. The original deployed image has not changed just because a new digest exists.",
+          "text_sha256": "3775137539aa159e029c44cf93f0b8655c93145a9c5d1aa0b9c494d7ace380c2",
+          "asset_sha256": "45109fbb5749a476747c2c42959585d083d20a5b1b3879a313a0ceb28d33ac3b"
+        },
+        {
+          "id": "m02p05-s19-c3-bbb3324b9e60",
+          "slide": 19,
+          "text": "Read the last two steps. Verify an eligible scan of the new digest and confirm that the same finding is resolved there before deploying that verified digest. If scan coverage or the result is missing, do not treat silence as a successful fix.",
+          "text_sha256": "bbb3324b9e603af6d4a7c2b7cd5ca1a64b7e53ae85baec763a0c5e2214d794f6",
+          "asset_sha256": "45109fbb5749a476747c2c42959585d083d20a5b1b3879a313a0ceb28d33ac3b"
+        },
+        {
+          "id": "m02p05-s20-c1-80888fbcc67e",
+          "slide": 20,
+          "text": "At the top, the baseline determines which patches qualify; the maintenance window or patch policy controls when and how they run. Move through development, test, and production in waves rather than assuming one simultaneous fleet change.",
+          "text_sha256": "80888fbcc67ebde61aaf00fd283e2c58b2f5638bbe507fd80e13f75f21298ffd",
+          "asset_sha256": "4b87bf8c0f8bba95f58b18595854444c1cf9486fa31d10448735167b34d1ed1c"
+        },
+        {
+          "id": "m02p05-s20-c2-a441f4de15a8",
+          "slide": 20,
+          "text": "Trace one node: scan, install approved patches, reboot if required, and verify the application and reported state. The agent, permissions, and network connectivity must support the operation. A successful installation alone does not prove application health.",
+          "text_sha256": "a441f4de15a8731af2d7e4e716e983da748c8d0b9690b6565829141cbbf4ea3a",
+          "asset_sha256": "4b87bf8c0f8bba95f58b18595854444c1cf9486fa31d10448735167b34d1ed1c"
+        },
+        {
+          "id": "m02p05-s20-c3-6a0430d152fc",
+          "slide": 20,
+          "text": "On the right, distinguish a fresh scan result from a reported missing patch or an uncovered node with no current report. Investigate that gap separately. Inspector reports vulnerabilities; Patch Manager applies approved patches.",
+          "text_sha256": "6a0430d152fcf5a3d9670bb55c64188e507941d92986aa28ed8740f3e52a085e",
+          "asset_sha256": "4b87bf8c0f8bba95f58b18595854444c1cf9486fa31d10448735167b34d1ed1c"
+        },
+        {
+          "id": "m02p05-s21-c1-53707a5752ca",
+          "slide": 21,
+          "text": "The platform team provisions a common baseline through Account Factory. Inside the Organizations boundary, workload teams deploy in their assigned accounts using scoped roles. That division lets one hundred accounts use the same baseline without centralizing every application change.",
+          "text_sha256": "53707a5752ca1d89abfcae7d7d7a7bc3a7439db76c51520d6d52ef848658050f",
+          "asset_sha256": "7ac0f56c75999ffd7af9b01f0e3f8ca9c8e4477ca5d1b35c5d8888e0ec69a0db"
+        },
+        {
+          "id": "m02p05-s21-c2-da381de49961",
+          "slide": 21,
+          "text": "The policy lane constrains governed member-account actions. A service control policy can deny covered CloudTrail changes, but it neither creates accounts nor grants permissions. Follow the separate organization trail to the central S three log archive for evidence.",
+          "text_sha256": "da381de4996102f567f3b281f739bcc6fba432f1e2225883e9fdf201cd6ad313",
+          "asset_sha256": "7ac0f56c75999ffd7af9b01f0e3f8ca9c8e4477ca5d1b35c5d8888e0ec69a0db"
+        },
+        {
+          "id": "m02p05-s21-c3-13b5e69b4ae3",
+          "slide": 21,
+          "text": "Use the right-hand checklist to divide responsibility. Review evidence centrally, let workload teams make authorized fixes, and give an approved exception a narrow scope and an expiry. Check that teams can do their assigned work while the baseline remains in force.",
+          "text_sha256": "13b5e69b4ae3c3c8f444f08e675cdeb3fb54735e63adb7ddf03f77b9aa480012",
+          "asset_sha256": "7ac0f56c75999ffd7af9b01f0e3f8ca9c8e4477ca5d1b35c5d8888e0ec69a0db"
+        },
+        {
+          "id": "m02p05-s22-c1-00e0b8cf1946",
+          "slide": 22,
+          "text": "Read the upper branches around Organizations. Control Tower and Account Factory provide an account baseline. Service control policies limit covered member principals and resource control policies limit access to supported member resources. Neither policy grants permission.",
+          "text_sha256": "00e0b8cf19468947279e88c79d99ee16fdf7442ed470137444b76528cc73a9f6",
+          "asset_sha256": "a55704da8f104962da9fc6893191676881d7c76d25ba90d58ed7b7c5ce32aeeb"
+        },
+        {
+          "id": "m02p05-s22-c2-9527cba5acea",
+          "slide": 22,
+          "text": "The lower-left branch gives three evidence sources: activity in CloudTrail, configuration in Config, and normalized security data in Security Lake. On the right, GuardDuty detects threats, Security Hub assesses posture, Inspector reports vulnerabilities, and Systems Manager supports patch operations.",
+          "text_sha256": "9527cba5aceac5964f343d7bb03c52471632e5ed56210a89852e62ed357098c9",
+          "asset_sha256": "a55704da8f104962da9fc6893191676881d7c76d25ba90d58ed7b7c5ce32aeeb"
+        },
+        {
+          "id": "m02p05-s22-c3-0a331ee0d0ac",
+          "slide": 22,
+          "text": "The center and bottom bring the design together. Resource Access Manager shares supported resources without transferring ownership. Platform teams own the baseline, security teams own controls and evidence, and workload teams own application access and approved fixes.",
+          "text_sha256": "0a331ee0d0ac3c11756b19c7364436e8330ece4ba38a036015f7c4db051ccc78",
+          "asset_sha256": "a55704da8f104962da9fc6893191676881d7c76d25ba90d58ed7b7c5ce32aeeb"
+        }
+      ]
+    }
+  ]
+}
