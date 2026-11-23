@@ -1,0 +1,48 @@
+name: SAP tail-native-fit opener audio only
+on:
+  push:
+    branches: [review/sap-openers-tail-native-fit]
+    paths: [.github/workflows/review-sap-openers-tail-native-fit.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-openers-tail-native-fit-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.ref == 'refs/heads/review/sap-openers-tail-native-fit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [M03P07-B, M03P09-A, M03P09-B, M05P02-A, M05P02-B, M06P06-A, M06P06-B, M07P01-A, M07P01-B, M07P02-A, M07P02-B, M07P04-A, M07P04-B, M07P07-A, M07P07-B, M07P10-A, M07P10-B, M07P11-A, M07P11-B, M08P01-A, M08P01-B, M08P02-A, M08P02-B, M08P03-A, M08P03-B, M08P05-A, M08P05-B]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_openers_tail_native_fit.py
+            content/video-narration/review-sap-openers-tail-native-fit.json
+            content/video-narration/review-sap-openers-tail-native-fit.sha256
+          sparse-checkout-cone-mode: false
+      - run: python3 scripts/review_sap_openers_tail_native_fit.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+      - run: python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - run: python scripts/review_sap_openers_tail_native_fit.py synthesize "$PART"
+        env:
+          PART: ${{ matrix.part }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-opener-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
