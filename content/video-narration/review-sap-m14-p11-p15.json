@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "14",
+      "part": "11",
+      "revision": "2026-11-23-m14p11-m14-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "caf36c23f53d4b4ee5e5c8b9984281c00782ff97dbda00c948aaf3d41d4cce62",
+        "2": "57ac6ed0596eff5a999155ce80cb5ca105bbafca37b49f0b8ac6c1159c3b1a10",
+        "3": "4e62e58d86e743fdb8d4b1470eb458649513170d2244ea73dcf11c67ec122db6",
+        "4": "de0a4c7635773e5dc621f6d86e72782f1965efd0261f2e1ac4dba98f0d3cdedb"
+      },
+      "units": [
+        {
+          "id": "m14p11-eventbridge-c1-b14f81574a75",
+          "slide": 1,
+          "text": "In this video, you'll route an event to the right target and find where delivery failed. An event bus receives a record, a rule matches its fields, and targets receive the matching event. In the example, an order-created event reaches the fulfillment queue.",
+          "text_sha256": "b14f81574a75522dbee5c6a636aab899075860f4e2b15986ff391213feae3602",
+          "canonical_text_sha256": "b14f81574a75522dbee5c6a636aab899075860f4e2b15986ff391213feae3602",
+          "asset_sha256": "caf36c23f53d4b4ee5e5c8b9984281c00782ff97dbda00c948aaf3d41d4cce62"
+        },
+        {
+          "id": "m14p11-eventbridge-c2-33b08a829d64",
+          "slide": 1,
+          "text": "The bus routes events; it does not remember whether the order was billed or shipped. Use a workflow when the design needs durable state and explicit steps. Give a target only the permissions it needs for its part of the work.",
+          "text_sha256": "33b08a829d646df62ce221fdf375501acaf1d60c0aebd58fa708e800efec51ac",
+          "canonical_text_sha256": "33b08a829d646df62ce221fdf375501acaf1d60c0aebd58fa708e800efec51ac",
+          "asset_sha256": "caf36c23f53d4b4ee5e5c8b9984281c00782ff97dbda00c948aaf3d41d4cce62"
+        },
+        {
+          "id": "m14p11-026-c1-3194073b462c",
+          "slide": 2,
+          "text": "A rule only sees events that reach its bus. Put the chosen producer on the appropriate default, custom or partner bus, then match fields such as source and detail type. This rule matches an order-created application event, not the E C two state-change event beside it.",
+          "text_sha256": "3194073b462c09a128a4f2db19ab8b40a50ae64eeb279941eb73e894267467fb",
+          "canonical_text_sha256": "76be323431b0351d01436f7dbc5f8801aeab38f7214fadc24f1374bf9d3e925c",
+          "asset_sha256": "57ac6ed0596eff5a999155ce80cb5ca105bbafca37b49f0b8ac6c1159c3b1a10"
+        },
+        {
+          "id": "m14p11-026-c2-4580a12810a6",
+          "slide": 2,
+          "text": "A matching event can be sent to several configured targets, like Lambda and S Q S here. Test a matching sample and a nonmatching sample before assuming delivery. Matching a rule and successfully invoking its target are separate checks.",
+          "text_sha256": "4580a12810a6f342985138e46005504805ffa52dc6ad73682a66f6a91b1dfa7d",
+          "canonical_text_sha256": "6069c69496553910580b3ad74658d588f6b84557be97aef04c770bcc6dafc7c3",
+          "asset_sha256": "57ac6ed0596eff5a999155ce80cb5ca105bbafca37b49f0b8ac6c1159c3b1a10"
+        },
+        {
+          "id": "m14p11-027-c1-5d4ead4eec39",
+          "slide": 3,
+          "text": "A retryable failure to deliver to the target uses the configured retry attempts and event age. A configured target dead-letter queue can retain an event with failure metadata when delivery fails. In a missing-permission case, EventBridge can send the event directly to that queue without retrying.",
+          "text_sha256": "5d4ead4eec39c20f87de7be34d3c4a12132a8e44c8d8a3b6f16fc4e563ba9213",
+          "canonical_text_sha256": "5d4ead4eec39c20f87de7be34d3c4a12132a8e44c8d8a3b6f16fc4e563ba9213",
+          "asset_sha256": "4e62e58d86e743fdb8d4b1470eb458649513170d2244ea73dcf11c67ec122db6"
+        },
+        {
+          "id": "m14p11-027-c2-65707d9da2e6",
+          "slide": 3,
+          "text": "Success here means the target accepted the invocation. If a Lambda handler later fails, diagnose the Lambda processing path and its own failure handling. The EventBridge target dead-letter queue is not a recording of every downstream error.",
+          "text_sha256": "65707d9da2e6849892bd510290445753f5ed2207c3da00f34bebd601fe37935c",
+          "canonical_text_sha256": "65707d9da2e6849892bd510290445753f5ed2207c3da00f34bebd601fe37935c",
+          "asset_sha256": "4e62e58d86e743fdb8d4b1470eb458649513170d2244ea73dcf11c67ec122db6"
+        },
+        {
+          "id": "m14p11-028-c1-0e7ec441a3f5",
+          "slide": 4,
+          "text": "Sending directly to a bus in another account requires permissions on both sides. The application in account A needs permission to put events on the intended bus, and the receiving bus policy in account B must allow that principal or approved scope.",
+          "text_sha256": "0e7ec441a3f55e21dc8a2da9be2a5c541c2ce64344e43b44693ffa2f419f3736",
+          "canonical_text_sha256": "0e7ec441a3f55e21dc8a2da9be2a5c541c2ce64344e43b44693ffa2f419f3736",
+          "asset_sha256": "de0a4c7635773e5dc621f6d86e72782f1965efd0261f2e1ac4dba98f0d3cdedb"
+        },
+        {
+          "id": "m14p11-028-c2-0a1e8c7321e9",
+          "slide": 4,
+          "text": "The rule in account B still decides whether the event matches, and its local target has a separate delivery authorization check. In this direct put events pattern, don't confuse the sending application's permission with a role used by a rule that forwards between buses.",
+          "text_sha256": "0a1e8c7321e96320ca616e1abce9d616946c0a8612fe528f9831f7296f644639",
+          "canonical_text_sha256": "2bd3a54587a58ad6c2756839851461c8fecf38141ed32728731f7066db4d9353",
+          "asset_sha256": "de0a4c7635773e5dc621f6d86e72782f1965efd0261f2e1ac4dba98f0d3cdedb"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "12",
+      "revision": "2026-11-23-m14p12-m14-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "42b355de2fc97947e1a188470ca974262acea5b951442ebb6903d8faebf04e36",
+        "2": "2c7a36f0e304d3af3cadd9b77e64fda25ca71f0646883106a3d50f2e9f05748d",
+        "3": "37b088496625f7a31460079f46fe477c7a281cf84932264a3a92739559a44f04",
+        "4": "40f7dc2e27978e15b18b7362f84b7fb38d3f09d4ad23c5f9aca3b917468654d5"
+      },
+      "units": [
+        {
+          "id": "m14p12-029-c1-e256018a78b4",
+          "slide": 1,
+          "text": "In this video, you'll choose between retaining events for replay, documenting their data shape, scheduling calls, and connecting a source directly to a target. An archive captures matching events from one bus for a retention period. Later, replay returns selected events to that same source bus.",
+          "text_sha256": "e256018a78b4971a483b3a55ea007f1dec6de48bd12c92f7fbb170b34ee9a2c9",
+          "canonical_text_sha256": "e256018a78b4971a483b3a55ea007f1dec6de48bd12c92f7fbb170b34ee9a2c9",
+          "asset_sha256": "42b355de2fc97947e1a188470ca974262acea5b951442ebb6903d8faebf04e36"
+        },
+        {
+          "id": "m14p12-029-c2-78d228cde43b",
+          "slide": 1,
+          "text": "Replay can cause a business action to run again and does not guarantee original delivery order. Choose the event window and eligible rules deliberately, and have consumers recognize work already applied before replaying production events.",
+          "text_sha256": "78d228cde43bc87d86b1b52157f6b3a81082e10f5221d76ca12eee95df4f81f8",
+          "canonical_text_sha256": "78d228cde43bc87d86b1b52157f6b3a81082e10f5221d76ca12eee95df4f81f8",
+          "asset_sha256": "42b355de2fc97947e1a188470ca974262acea5b951442ebb6903d8faebf04e36"
+        },
+        {
+          "id": "m14p12-030-c1-3a165aa078e2",
+          "slide": 2,
+          "text": "A schema describes an event's structure. Discovery and registry versions can help generate bindings or document a contract. In the example, the order identifier and amount are application fields. A registry entry does not replace validation in the producer or consumer.",
+          "text_sha256": "3a165aa078e2611a4f8c1aa4a005a2b088cf7e7832492780d485dee25b7eaeb1",
+          "canonical_text_sha256": "3a165aa078e2611a4f8c1aa4a005a2b088cf7e7832492780d485dee25b7eaeb1",
+          "asset_sha256": "2c7a36f0e304d3af3cadd9b77e64fda25ca71f0646883106a3d50f2e9f05748d"
+        },
+        {
+          "id": "m14p12-030-c2-4a128e44e301",
+          "slide": 2,
+          "text": "The runtime delivery path remains separate from the registry. Keep consumers compatible with new optional fields, and plan an explicit migration when a required field changes. Verify the subscriber behavior with real representative events.",
+          "text_sha256": "4a128e44e301005fbcc78e748bfa4a15cf02f048cac241c3e2561aefa262a229",
+          "canonical_text_sha256": "4a128e44e301005fbcc78e748bfa4a15cf02f048cac241c3e2561aefa262a229",
+          "asset_sha256": "2c7a36f0e304d3af3cadd9b77e64fda25ca71f0646883106a3d50f2e9f05748d"
+        },
+        {
+          "id": "m14p12-031-c1-33b0114704ed",
+          "slide": 3,
+          "text": "Use Scheduler when time, rather than event content, triggers work. A cron or rate schedule can recur; a one-time schedule invokes an eligible target for a specific time. Check the configured time zone when local clock time matters.",
+          "text_sha256": "33b0114704ed41b0e9b58a7fc29c9ab83a1d233708caca3185ce1d5b2a992f70",
+          "canonical_text_sha256": "33b0114704ed41b0e9b58a7fc29c9ab83a1d233708caca3185ce1d5b2a992f70",
+          "asset_sha256": "37b088496625f7a31460079f46fe477c7a281cf84932264a3a92739559a44f04"
+        },
+        {
+          "id": "m14p12-031-c2-557f370268c5",
+          "slide": 3,
+          "text": "Choose the flexible time window, retry and dead-letter options to match the workload. A schedule invokes its own target; it does not need to be a matching event-pattern rule on a bus.",
+          "text_sha256": "557f370268c5f0ee00b9a899dc5997f8632a771bb51ee9e85cabb94b908ede03",
+          "canonical_text_sha256": "557f370268c5f0ee00b9a899dc5997f8632a771bb51ee9e85cabb94b908ede03",
+          "asset_sha256": "37b088496625f7a31460079f46fe477c7a281cf84932264a3a92739559a44f04"
+        },
+        {
+          "id": "m14p12-032-c1-40a15a27762a",
+          "slide": 4,
+          "text": "Use a Pipe to connect one supported source to one supported target. Here, the pipe polls S Q S, filters entries, optionally enriches them through Lambda and starts an eligible Step Functions workflow. Filtering decides which records proceed before enrichment.",
+          "text_sha256": "40a15a27762a0b1eaf57e44ba5032785b66373a11758982e6ac00e704fdf398e",
+          "canonical_text_sha256": "6f9fe0c6113663c68fbfffbf979ea281cf998bcbd0eb158b8651669de4fd45db",
+          "asset_sha256": "40f7dc2e27978e15b18b7362f84b7fb38d3f09d4ad23c5f9aca3b917468654d5"
+        },
+        {
+          "id": "m14p12-032-c2-bb4849dd6b66",
+          "slide": 4,
+          "text": "Scope the pipe execution role to its source, enrichment and target actions. The filter and enrichment are optional, and the pipe is not a general broadcast rule on an event bus. Validate the payload shape on both sides.",
+          "text_sha256": "bb4849dd6b66cf54de21293117202e43dc0adeaa06c9756ac5b6fd82dd062d9d",
+          "canonical_text_sha256": "bb4849dd6b66cf54de21293117202e43dc0adeaa06c9756ac5b6fd82dd062d9d",
+          "asset_sha256": "40f7dc2e27978e15b18b7362f84b7fb38d3f09d4ad23c5f9aca3b917468654d5"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "13",
+      "revision": "2026-11-23-m14p13-m14-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c",
+        "2": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+      },
+      "units": [
+        {
+          "id": "m14p13-033-c1-bdf2cd5fc889",
+          "slide": 1,
+          "text": "In this video, you'll choose whether events or a central workflow coordinate the order, then select the matching messaging service. With choreography, an order-created event triggers independent inventory and billing reactions. There is no central step recording whether both finished.",
+          "text_sha256": "bdf2cd5fc88987ccb44c05c3c521fb5f6303dc77095681b106dc938179c6f6a2",
+          "canonical_text_sha256": "bdf2cd5fc88987ccb44c05c3c521fb5f6303dc77095681b106dc938179c6f6a2",
+          "asset_sha256": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c"
+        },
+        {
+          "id": "m14p13-033-c2-d579ab7883eb",
+          "slide": 1,
+          "text": "Choose orchestration when inventory must be reserved before charging and failure needs an explicit compensation path. Step Functions can show the sequence, retry and business outcome. It is a different responsibility from simply routing an event.",
+          "text_sha256": "d579ab7883ebe4691ed138f1e056b4800e024673c1289ec0872c018bf0a0e06e",
+          "canonical_text_sha256": "d579ab7883ebe4691ed138f1e056b4800e024673c1289ec0872c018bf0a0e06e",
+          "asset_sha256": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c"
+        },
+        {
+          "id": "m14p13-034-c1-ce9e766bfb9a",
+          "slide": 2,
+          "text": "Use S Q S to buffer worker tasks, S N S to push to subscribers, EventBridge to route by content, and Amazon M Q when existing broker protocols matter. S Q S is normally a competing-consumer queue, but a delivery can be seen again, so the row does not imply exactly-once processing.",
+          "text_sha256": "ce9e766bfb9a96f07483098ecb78876e000f06f7b594370b264b4a3a1d0dbc14",
+          "canonical_text_sha256": "730fb65da9344bf6822af13eef2689c8e447765a8070b41f91bedd5cd69a12f2",
+          "asset_sha256": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+        },
+        {
+          "id": "m14p13-034-c2-d283b22b9064",
+          "slide": 2,
+          "text": "The example combines services without making the chain mandatory. Use routing only when rules add value, fan out only if more than one subscription needs a copy, and add a queue where a receiver needs independent durable backlog.",
+          "text_sha256": "d283b22b906428479031824f2b16d03c19ba401247b24a8bf7504d70c47c579f",
+          "canonical_text_sha256": "d283b22b906428479031824f2b16d03c19ba401247b24a8bf7504d70c47c579f",
+          "asset_sha256": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "14",
+      "revision": "2026-11-23-m14p14-m14-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f",
+        "2": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+      },
+      "units": [
+        {
+          "id": "m14p14-035-c1-33a0115602ab",
+          "slide": 1,
+          "text": "In this video, you'll trace two S Q S outcomes: a poison message that needs recovery and independent queues that let subscribers proceed at different speeds. In the first walkthrough, a repeated failure reaches the source queue's configured receive threshold and is isolated in a dead-letter queue.",
+          "text_sha256": "33a0115602abf1008bebf236d384a9dc045057159378ecdc8df8d1176e655d89",
+          "canonical_text_sha256": "ff8667631754ee3138a3ce36f0ab9a194252346177c68fdbb987ff0bdfeb9a8a",
+          "asset_sha256": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f"
+        },
+        {
+          "id": "m14p14-035-c2-3dfb1718572d",
+          "slide": 1,
+          "text": "Inspect the failure, such as a missing intended downstream permission, and fix it before redrive. Reprocess deliberately from the dead-letter queue and verify the successful write. Do not assume that moving the message alone fixes or rolls back earlier work.",
+          "text_sha256": "3dfb1718572d2a699f6a7615d11dd9772657e9c5d2fd18ed1aac5532eba7ca6f",
+          "canonical_text_sha256": "3dfb1718572d2a699f6a7615d11dd9772657e9c5d2fd18ed1aac5532eba7ca6f",
+          "asset_sha256": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f"
+        },
+        {
+          "id": "m14p14-036-c1-a77d5068e830",
+          "slide": 2,
+          "text": "Publish OrderCreated once to the S N S topic. Its two subscribers receive their own copies. Fulfillment can have twelve waiting while analytics has two and keeps processing; neither worker owns the other queue's backlog.",
+          "text_sha256": "a77d5068e8305e12a4ee3197a90aad0fe5464c4d8c6d390f75a1e0fba510285f",
+          "canonical_text_sha256": "849f6681df1b18ed852895070f8af4ce8d59f6a6e4c82d700cb58bb0b623ecaf",
+          "asset_sha256": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+        },
+        {
+          "id": "m14p14-036-c2-1da814cafe52",
+          "slide": 2,
+          "text": "Each queue policy allows the intended S N S topic to send, and each worker reads and deletes from its own queue. Verify both subscriptions and their independent work separately; a successful S N S publish is not proof that either worker finished.",
+          "text_sha256": "1da814cafe52118415be672134096586d054c654ca10e959da84f539360a41db",
+          "canonical_text_sha256": "b1a5c63c9bf537758e82e4b19bf20b518f8ff050209ac845d2f93bd819bce59f",
+          "asset_sha256": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "15",
+      "revision": "2026-11-23-m14p15-m14-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e",
+        "2": "43b173c3c941dd783e9099136c610604654b94525200dce3bd8c669b931fd661"
+      },
+      "units": [
+        {
+          "id": "m14p15-037-c1-b949a2c1ba13",
+          "slide": 1,
+          "text": "In this video, you'll distinguish workflow retries and compensation from EventBridge delivery retries. Start with order 1001: reserve inventory, charge payment, then confirm the order. A configured retry with backoff handles a transient payment error; use idempotency so retries cannot charge twice.",
+          "text_sha256": "b949a2c1ba1362450c2be6cc8a24791889e2edefb33bf9302ce4404678f56a60",
+          "canonical_text_sha256": "b949a2c1ba1362450c2be6cc8a24791889e2edefb33bf9302ce4404678f56a60",
+          "asset_sha256": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e"
+        },
+        {
+          "id": "m14p15-037-c2-e143a57d5162",
+          "slide": 1,
+          "text": "If the payment still fails, execute the modeled release of inventory. That is an explicit business compensation, not an automatic rollback of every service. If the payment outcome is uncertain, reconcile it before releasing or starting another charge.",
+          "text_sha256": "e143a57d51628097419452933cd990c104c9c1cc8d4bdafe838020f834d62695",
+          "canonical_text_sha256": "e143a57d51628097419452933cd990c104c9c1cc8d4bdafe838020f834d62695",
+          "asset_sha256": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e"
+        },
+        {
+          "id": "m14p15-038-c1-00de69a25c08",
+          "slide": 2,
+          "text": "The custom rule matches OrderCreated and attempts to invoke Lambda. Retryable throttling uses the target retry policy. Missing target permissions are different: EventBridge can send the event straight to a configured target dead-letter queue without retries.",
+          "text_sha256": "00de69a25c08dda9b539c16c10735722ca15756a2087240ce005f402407756df",
+          "canonical_text_sha256": "00de69a25c08dda9b539c16c10735722ca15756a2087240ce005f402407756df",
+          "asset_sha256": "43b173c3c941dd783e9099136c610604654b94525200dce3bd8c669b931fd661"
+        },
+        {
+          "id": "m14p15-038-c2-4d4d60349af9",
+          "slide": 2,
+          "text": "If Lambda accepts the invocation but its code fails later, use the Lambda failure path, not the EventBridge rule queue. If EventBridge did not deliver, inspect the retained event and failure details, fix the issue, then deliberately reprocess with idempotency.",
+          "text_sha256": "4d4d60349af9b2e71ce466a6fa10838e4308ed013faea0b97745e32a40d0aa86",
+          "canonical_text_sha256": "4d4d60349af9b2e71ce466a6fa10838e4308ed013faea0b97745e32a40d0aa86",
+          "asset_sha256": "43b173c3c941dd783e9099136c610604654b94525200dce3bd8c669b931fd661"
+        }
+      ]
+    }
+  ]
+}
