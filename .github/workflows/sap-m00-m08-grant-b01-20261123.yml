@@ -1,0 +1,38 @@
+name: SAP exact M00-M08 grant B01
+on:
+  push:
+    branches: ['stage/sap-m00-m08-grant-b01-20261123']
+    paths: ['.github/workflows/sap-m00-m08-grant-b01-20261123.yml']
+permissions:
+  contents: read
+concurrency:
+  group: sap-m00-m08-grant-b01-20261123
+  cancel-in-progress: false
+jobs:
+  scoped_storage:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/stage/sap-m00-m08-grant-b01-20261123' && github.repository == 'kalif7722/aws-library'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python -m pip install --disable-pip-version-check boto3
+      - name: Process only exact pinned candidate keys
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          AWS_EC2_METADATA_DISABLED: 'true'
+          APPROVED_PLAN_SHA256: 'e6d91ea992589ce49ef29066cb5c720dc2302e0948b0dc9a4adf48e77daca473'
+          APPROVED_CERT_SHA256: '2f90268fb28b055256594da9bd44e924224ef7be0c95d385665aded7621e7fc1'
+          APPROVED_MODE: 'grant'
+          APPROVED_BATCH: '01'
+        run: python staging/runner.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m00-m08-grant-b01-20261123
+          path: result/targets.cms
+          retention-days: 1
+          if-no-files-found: error
