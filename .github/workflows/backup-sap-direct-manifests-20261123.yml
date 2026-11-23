@@ -1,0 +1,88 @@
+name: Back up approved SAP manifest scope (read only)
+on:
+  push:
+    branches: ['review/backup-sap-direct-manifests-20261123']
+    paths: ['.github/workflows/backup-sap-direct-manifests-20261123.yml']
+permissions:
+  contents: read
+jobs:
+  backup:
+    if: github.ref == 'refs/heads/review/backup-sap-direct-manifests-20261123' && github.repository == 'kalif7722/aws-library'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - run: python -m pip install --disable-pip-version-check boto3
+      - name: Verify old digests and seal exact originals
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          AWS_EC2_METADATA_DISABLED: 'true'
+        run: |
+          cat > recipient.crt <<'CERT'
+          -----BEGIN CERTIFICATE-----
+          MIIENTCCAp2gAwIBAgIUaRZss+Lq+1gQsD9IBwCVmFhv6v4wDQYJKoZIhvcNAQEL
+          BQAwKjEoMCYGA1UEAwwfU0FQLTQ5LWRpcmVjdC1tYW5pZmVzdC1yZWNvdmVyeTAe
+          Fw0yNjExMjMyMTE4MTNaFw0yNjExMjUyMTE4MTNaMCoxKDAmBgNVBAMMH1NBUC00
+          OS1kaXJlY3QtbWFuaWZlc3QtcmVjb3ZlcnkwggGiMA0GCSqGSIb3DQEBAQUAA4IB
+          jwAwggGKAoIBgQCKomi9xf8MCMmGkLEzFwVzW9MfdIh7A2C6YzNN/1ilDOuLn5UK
+          7z495cz5+7WouBgIwlQSOm8na7h/5X+ZLiIsJitNAAxP4Q5W59L/56ArP1wutbFj
+          R+XKP86Qdi4IIaD/ATmnprZLKRVGp9w+7rRFFRym/wLMpD19MBUZ6KTd07ZyZLMO
+          RHITY8fFhslBYryZ7wcXRduvm9MWc5uao9n6/AyuTOIWmMdaYkC8ZHGVE4mPzUHz
+          jZ/44rAIcmqTJYL4k6PZ1f90qekm+orE32S6udaZYe2o3M/ebRckylcTr8+/vsrm
+          ZGu6XsmgakZTSeHgLljl+sY63BUKGm0RD6/eQVbnhXlqoljK/XeMnQ6Jy20siYsM
+          HzNp5JO3wBaSwmgXA02GyM8iAvkRBZ2h1ZTl+oihyAxIYfcM25AL2kga8x6Di+t0
+          4mQ2NXEVjXmmBemXpIOkB2Q8LGxKaep0m7W6OtI3bx8asBvJf9OeA/+c0Z3TmBfz
+          cLXJBx9UyGMK9lUCAwEAAaNTMFEwHQYDVR0OBBYEFCix9oAh6Zqmj4rHanvPpZgb
+          d3F8MB8GA1UdIwQYMBaAFCix9oAh6Zqmj4rHanvPpZgbd3F8MA8GA1UdEwEB/wQF
+          MAMBAf8wDQYJKoZIhvcNAQELBQADggGBAFRHwMbgBlWEjyFMwvuPuutD0bA3VsYw
+          qku570e5VE+6RVR64TrG3t+u4n9vIjg/gzS+R7UhuledrBpJryoIAnSKEUofBD8R
+          RO2dffcHiNfcLyWt0+Nl3Jnbz4H1uqCIktcVUBa2kYx30Pm4QetUb7Q7qH+jpUBX
+          WUid4jKnKG5P9nwIXUCEMrMyD1XnVMZvfRk9NjmwZy4s90hZb5j9UYaZWOqkZkqK
+          xBZ/6SlDkYtEdJypmr7+pWPuA3vsdICJLznNL+TOmYSeOeziSEkoP6TF9BYcv9tQ
+          mVT34JjkfP6AZWF0ixb8+mMrr9tDQq8C9ON2fwvXeJr1TXWI6czswotz9tsEbIBq
+          DdFP21sjh4HgjnyEyGLLPLQUGr9UvAooOFTSx6R8N5ZOjuDZVzpMrORW2RnYsjPx
+          zF8dBSdJ22On4Yib8IVolAhvqewO7X7UdEi5IfdHQFMcuz1uOBR3MZXkAPcI5Kbk
+          2wZAs/kRS8HxpM+q3cStWw8IsfN/8NewiA==
+          -----END CERTIFICATE-----
+          CERT
+          python - <<'PY'
+          import base64,hashlib,json,os,re,subprocess,urllib.parse,contextlib
+          import boto3
+          from botocore.config import Config
+          pins=[["M00P01","fcb99e0685bf4ee498a12db9a98e38737660436b51e260a4c90a6464eb0400ed",2094],["M01P01","1858d1ec2372ef4c0a2dad7d9ef306513512fafeb57f39bb059d6a1bed29421a",1753],["M01P02","3d185e4dcf5c24ab9194d8c35eeb9660b1a7b609dd3ae6612672aa15904ce188",1747],["M01P03","2d1cb51acde3d8acdb107100798d832f89c5081af8fa49d38c652e6117bf6a00",2029],["M01P07","210511912b705f035abbb41b6da2a0afcb4a269e64356d987b42d028b9280e7a",1807],["M01P11","3bfc7602da4a497d1af94b3396ef152380bd37dc717b6ee1f36cfcad3f66ee60",902],["M01P12","f3572b5c0b8cbcd5ba4125d9c4a1fdfe12410e72f058820e46ff00ea6a953756",1541],["M01P13","226d076010c15499ce5bdda593fc10bce8188cdc123b7e2867d491c648c535f6",1842],["M02P03","1a8c1de29df69584f716c83fea728adc4f937e880d6cf163caf8265f21006d09",2375],["M02P05","917112c6d77fd26a156323029c58d3e2509cc4d1215ce805a97ae61bff65d883",2369],["M02P06","4fe50fa3593fa8db1f1061b75614cb70127b797d57e366f54af5618d27cfa5f9",1863],["M02P07","fcb22a713be375957819e5fe5b190dede3ee43cb607f33dc4b22f8a1d62b1ccc",1514],["M02P08","022df5681ed40c8ac5fa7cbb02d51c2527b3f527b6044049e64c60f5f83517f7",1504],["M03P01","782814b4f6f6cdc133dee9b94c3084495a955c003a0ea2764d86d5be9247c480",1480],["M03P02","f7d14e646cf947e6c28757d8a2ac5b629c85fab6dcbb0badfe2260ff15619c6a",1476],["M03P03","ebc8b2f6e86b23cf0d6515907b94b209b3f486c38548b144692eaefb6c1ec898",1159],["M03P07","f0cccccb81de74a549727bc05046a04ddbb20f2dbf586cd6e042f6a6293f60d9",1436],["M03P09","e398701066de652680c40cf7f55326e9928844fddfb17906c789157bfca4d0cf",1163],["M03P10","96b55d75319ab65e2bce5725a083349e6dd1b420516d49a05698e6f73170b972",1763],["M03P11","cbfec93389775638344565f7b930f4c30ec611682b5cd05aaa27f98af814f343",1166],["M04P01","8b149ff225bc12c7908b9e19a48bcefa4a46a3dfa7545d9de1da1a9e56dd04f4",1461],["M04P03","ba0df1a793c1cbf6b0818eef1e69e347cda91eed25570ed5c0fdfce15ab9d922",1168],["M04P04","e560b0a91c8d2a886716ec41b21edd7dd756ccc12bd9f24e0e91cfcdb7fd8899",1745],["M04P06","cd41d64e4bfe30fef22f99c4e7b5c5807cf606f662265260f0c02d2f618436d8",1785],["M04P14","327802591fadf0072ad04a1e9c472d5d9c6fe1140d5a35cb174cf3dc1495f731",1200],["M05P02","e0725a7e6c8e995378e9c39c100708e9fa42be7f1b447da7f596c4b91919cf6b",1459],["M05P08","a6ca0232fe0e18846fef635a99a0369206cd031704ee10fdd883879bb6629283",1528],["M06P03","9e4669c96df57955acfdb3152c64c639599c6b3d052c83ba575ce14d308b96c7",1775],["M06P05","40ebd7c06bdd9fedb5e105aff0d86d049c66babd1fed0d8e9a787dfff5fe4cb0",1191],["M06P06","1d9edd8136c475fafeb6f7749a3aa0eb641c54cf127960a8ea1120148080b2cf",1806],["M06P08","5fa0eb45ef5bef1ea7aa8fc9962f3c019121e5c467ce24d30448dfd02834d48f",1787],["M07P01","067f9a1ea922cac0b5b32417d1dce5f9d8a99b04d8432e5e9624b95abaa5aad8",1461],["M07P02","6a89971fe1b2e08c5534ad49e98cc8df383522d66f202d7936ee6e167af0f94e",1470],["M07P03","ad7ed2edd5aff990565e99799f2c05ea04bc593086f417d9b0b7cd947d84a34a",1465],["M07P04","28d760aa0c7ee1f90173cc3dc59b3683ce08c3ba63d3797f9cc0588f8a448472",1454],["M07P05","7178c7440a951edf9a955b41ea49175331d363b5af4ea502733b8bb5d3afcb56",1444],["M07P07","0ca7b10680a7fd79d30430e8f30313d43c81dcd47ada11ec113ef60a0484d243",1773],["M07P08","3bdfd437f7ac71cd17d140940047a9cb51943234ed586b250e66b78e7a7974d3",1183],["M07P09","f55219b708a75a034cce808b2a7e4d7e6093604981a709bf9bfd6aee7e091b4c",1509],["M07P10","de8672b5a3e37305e7851c8aaefc5576391a55c38e186b2482bd133f770efefe",1510],["M07P11","d5217440dba87a1e99345b1deb8ff114fdcf952b13bb150a5dbae81f74b9e1b4",1211],["M08P01","820ce01b6c6eb1282f7e878ed9b00e49543fcf259107419e89688bcc64243724",1494],["M08P02","d951ad9a1b17a2b360fab60ba24fdd825cc60d0b139bc41f3dd50850a98dd8d8",1492],["M08P03","10eb407e266d02b9e8c60eb1a71c1c4d0dd727a440817c5e130962af22ba1448",1502],["M08P04","506e5be28c6c2c8712164532839f9da07e6604ac27d809fc428af59df669f498",1506],["M08P05","edd60df84af1607e37151402b2b651f70b9be311f02ed4e4d51a7cb6df13358d",1478],["M08P06","c866d018ccd44495a6b116ef26535c7aa43a959c511453aef2d5e352ba759062",1499],["M08P07","8ec12523d006b161701b72baaba637ec282506b03b674cb9f1e1b82682eabc56",1458],["M08P08","394f66bf32c7285fff6767bc0dab2dabe7a44869792e558a5ddd503cdcfad68a",1516]]
+          def main():
+           assert len(pins)==len({x[0] for x in pins})==49
+           u=urllib.parse.urlsplit(os.environ['R2_ENDPOINT'])
+           assert u.scheme=='https' and re.fullmatch(r'[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com',u.hostname or '') and u.netloc==u.hostname and u.path in ('','/') and not u.query and not u.fragment
+           api=boto3.client('s3',endpoint_url=u.geturl(),region_name='auto',config=Config(signature_version='s3v4',connect_timeout=8,read_timeout=12,retries={'total_max_attempts':1},s3={'addressing_style':'path'}))
+           rows=[]
+           for part,sha,n in pins:
+            m=re.fullmatch(r'M(0[0-8])P(\d\d)',part)
+            assert m and part not in {'M06P04','M06P07','M06P09','M06P10'}
+            a,b=m.groups();k=f'aws-course-videos/previews/sap/module-{a}/part-{b}/sap-module-{a}-part-{b}-manifest.json'
+            r=api.get_object(Bucket='aws-el10-images',Key=k)
+            with contextlib.closing(r['Body']) as body: bytes_=body.read(n+1)
+            assert len(bytes_)==r['ContentLength']==n and hashlib.sha256(bytes_).hexdigest()==sha and re.fullmatch(r'"[0-9a-f-]+"',r['ETag'])
+            js=json.loads(bytes_); assert (js['module'],js['part'])==(a,b)
+            headers={key:r[key] for key in ('ContentType','CacheControl','ContentDisposition','ContentEncoding','ContentLanguage','Metadata') if key in r}
+            if r.get('Expires') is not None:headers['Expires']=r['Expires'].isoformat()
+            rows.append(dict(part=part,key=k,etag=r['ETag'],bytes=n,sha256=sha,headers=headers,raw_b64=base64.b64encode(bytes_).decode()))
+           blob=json.dumps(dict(bucket='aws-el10-images',parts=rows),separators=(',',':')).encode()
+           digest=hashlib.sha256(blob).hexdigest()
+           subprocess.run(['openssl','cms','-encrypt','-binary','-aes-256-cbc','-outform','DER','-out','manifests.cms','recipient.crt'],input=blob,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+           open('receipt.json','w').write(json.dumps(dict(count=len(rows),plaintext_sha256=digest)))
+           print('Sealed 49 exact old manifests and ETags. No storage writes.')
+          try:main()
+          except Exception:
+           print('FAILED: not all pinned old manifests and ETags could be sealed. Sensitive details suppressed.')
+           raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-direct-manifest-rollback-sealed
+          path: |
+            manifests.cms
+            receipt.json
+          retention-days: 7
+          if-no-files-found: error
