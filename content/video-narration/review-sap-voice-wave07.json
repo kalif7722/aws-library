@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "06",
+      "part": "03",
+      "revision": "2026-11-23-m06p03-approved-aip-wave07-draft-v1",
+      "approved_assets": {
+        "9": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999",
+        "10": "584c002da9bba6f5f5ba17761411122059faf845563877bfb0396bd6795e717b",
+        "11": "31d577e1506e6047b124601d1e52e024a5a3bf36604d7771eea0b9a2085b6f06",
+        "12": "9d8d761d5e705f5b13d5e039a19578a2bba3bd2d6bea16ae74f9492519b652b6"
+      },
+      "units": [
+        {
+          "id": "m06p03-s09-c1-11d81aa2ee97",
+          "slide": 9,
+          "text": "The same allowed-prefix list has different meanings on a Direct Connect gateway. For a virtual private gateway, the left panel shows a filter. The configured range must contain the full V P C range. Making the filter wider does not create a summary advertisement: AWS still advertises the actual V P C range.",
+          "text_sha256": "11d81aa2ee974de65415ce4ff0c2fa87daef4c12ba15564e654ad8bf16a05518",
+          "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+        },
+        {
+          "id": "m06p03-s09-c2-9f647310aad8",
+          "slide": 9,
+          "text": "For a Transit Gateway, AWS advertises the configured allowed prefixes to on-premises, originating from the Direct Connect gateway's autonomous system number. That advertisement does not prove the destination actually has a working route.",
+          "text_sha256": "9f647310aad8b08c850476a2c99e93e27758bc2349a705c20835b7a7fe36d892",
+          "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+        },
+        {
+          "id": "m06p03-s09-c3-57b4ab4b3e47",
+          "slide": 9,
+          "text": "In a cross-account association, the associated gateway owner proposes it, and the Direct Connect gateway owner accepts it and can adjust prefixes. Use the compatible virtual interface. Don't mix virtual private gateway and Transit Gateway associations on this Direct Connect gateway, or overlap the advertised ranges across its Transit Gateway associations.",
+          "text_sha256": "57b4ab4b3e47878dc10042426d3d8bc73c9c3b19d7fb18b2466fc9c083a05a27",
+          "asset_sha256": "7566ee2616335e0c8605cc6064d994161e3b783565275bd4300087917ebe5999"
+        },
+        {
+          "id": "m06p03-s10-c1-282a2e3f6be3",
+          "slide": 10,
+          "text": "Start on premises at the left. A Direct Connect transit virtual interface reaches a Direct Connect gateway, which is associated with the Transit Gateway. The Transit Gateway has separate attachments for Payments and Orders.",
+          "text_sha256": "282a2e3f6be32e5efdd60587dfd9df7c603fc29c46218402d0942bf59004b765",
+          "asset_sha256": "584c002da9bba6f5f5ba17761411122059faf845563877bfb0396bd6795e717b"
+        },
+        {
+          "id": "m06p03-s10-c2-317bd0702272",
+          "slide": 10,
+          "text": "The Direct Connect gateway advertises the allowed AWS prefixes. In the AWS forwarding direction, the Transit Gateway table associated with the Direct Connect attachment selects the destination V P C attachment. Check that Payments and Orders select their intended paths.",
+          "text_sha256": "317bd0702272b346d96e9680ccdecffe22ce679d9966c05dd177f13b0fa28b7f",
+          "asset_sha256": "584c002da9bba6f5f5ba17761411122059faf845563877bfb0396bd6795e717b"
+        },
+        {
+          "id": "m06p03-s10-c3-f3cb1b76500e",
+          "slide": 10,
+          "text": "On the return, the workload subnet routes the corporate range to Transit Gateway. The table associated with that V P C attachment must then reach the Direct Connect attachment. Verify B G P advertisements and application reachability separately, in both directions.",
+          "text_sha256": "f3cb1b76500ec07da0a3b036fc1761e4676bce43aa16f66ed45627c136644900",
+          "asset_sha256": "584c002da9bba6f5f5ba17761411122059faf845563877bfb0396bd6795e717b"
+        },
+        {
+          "id": "m06p03-s11-c1-76c0d7d7b513",
+          "slide": 11,
+          "text": "The picture uses the same prefixes on two private virtual interfaces. A is preferred and B is standby. Although the diagram looks symmetric, routing policy is chosen separately for traffic leaving the customer and traffic leaving AWS.",
+          "text_sha256": "76c0d7d7b51355253f29adbf7cbac4125ed8c581f5680a415e69bd3636aa9f07",
+          "asset_sha256": "31d577e1506e6047b124601d1e52e024a5a3bf36604d7771eea0b9a2085b6f06"
+        },
+        {
+          "id": "m06p03-s11-c2-ac3f24b68ff1",
+          "slide": 11,
+          "text": "On the customer router, set the higher local preference on routes learned over A, two hundred versus one hundred. For traffic from AWS, tag customer prefixes advertised over A with community seven two two four colon seven three zero zero; tag B with seven two two four colon seven one zero zero.",
+          "text_sha256": "ac3f24b68ff168c2eb7d7d57e9060965844023e0a7310833b141e8754d7b9c69",
+          "asset_sha256": "31d577e1506e6047b124601d1e52e024a5a3bf36604d7771eea0b9a2085b6f06"
+        },
+        {
+          "id": "m06p03-s11-c3-6f7f1f5ea786",
+          "slide": 11,
+          "text": "Longest prefix still comes first. A route for ten dot forty dot eight dot zero slash twenty-four is more specific than slash sixteen. In an approved failover test, take A out of service and verify B carries traffic in both directions.",
+          "text_sha256": "6f7f1f5ea78641587a13216bbb33d6f38a80bdf0c7b9c796e2adab85de5de67f",
+          "asset_sha256": "31d577e1506e6047b124601d1e52e024a5a3bf36604d7771eea0b9a2085b6f06"
+        },
+        {
+          "id": "m06p03-s12-c1-fe8618f491e3",
+          "slide": 12,
+          "text": "Trace the two paths from the customer site. Separate power, routers, circuits, Direct Connect locations, and AWS devices reduce shared points of failure. In the illustration, the top location fails while the lower circuit is still available.",
+          "text_sha256": "fe8618f491e3f5f9422cc605bfc1e4cb4a703b3c8726a9e484d7de856452d8dc",
+          "asset_sha256": "9d8d761d5e705f5b13d5e039a19578a2bba3bd2d6bea16ae74f9492519b652b6"
+        },
+        {
+          "id": "m06p03-s12-c2-05f1ab5957e8",
+          "slide": 12,
+          "text": "If the workload needs six hundred megabits per second during failure, assess what the surviving path can actually carry. The combined healthy capacity does not answer that question.",
+          "text_sha256": "05f1ab5957e8cc8bb4effcb7f814d94d85f874aea8df113c990660d01f5dde02",
+          "asset_sha256": "9d8d761d5e705f5b13d5e039a19578a2bba3bd2d6bea16ae74f9492519b652b6"
+        },
+        {
+          "id": "m06p03-s12-c3-0f3da59a28d7",
+          "slide": 12,
+          "text": "Under an approved test, check router, circuit and location loss separately. Confirm routing convergence, bidirectional application recovery and measured throughput on the surviving path.",
+          "text_sha256": "0f3da59a28d71232cdc12f2369bbc2496e8fab43d3553e92fc412a5943a185ff",
+          "asset_sha256": "9d8d761d5e705f5b13d5e039a19578a2bba3bd2d6bea16ae74f9492519b652b6"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "04",
+      "revision": "2026-11-23-m06p04-approved-aip-wave07-draft-v1",
+      "approved_assets": {
+        "13": "34d961e9d6e53cbc72ba1f00633f4be82bacce21d697eb392fe1a3c29ad65728",
+        "14": "8687af2d29ca1339360d323ec800977e4329c98659d36be121c9b67a1dafde21",
+        "15": "1c1165705e3f548906b84be0d8471a54fa7228c11337e7e47b78979275aaa20a",
+        "16": "7723eb87a2664fdbf71fa32bf020d384c89bc6d61acf07de74aa9cdfe8314f7c"
+      },
+      "units": [
+        {
+          "id": "m06p04-s13-c1-340b3fec4a32",
+          "slide": 13,
+          "text": "A link aggregation group bundles dedicated connections at the same Direct Connect endpoint into one logical interface. Link Aggregation Control Protocol manages member links. This improves total capacity and link redundancy, but the members still share endpoint failure exposure.",
+          "text_sha256": "340b3fec4a32e86b22689931b6bce42cb83773fccc9481e5fb5ae61ca732d4eb",
+          "asset_sha256": "34d961e9d6e53cbc72ba1f00633f4be82bacce21d697eb392fe1a3c29ad65728"
+        },
+        {
+          "id": "m06p04-s13-c2-193a0a7e5cf1",
+          "slide": 13,
+          "text": "The minimum active-links setting determines when the group stays up. Multiple flows can use different members. Do not promise that one flow gets the combined bandwidth.",
+          "text_sha256": "193a0a7e5cf10d0b2cf308092d68fc6af5e4d39f173857963d004c0b15b3442b",
+          "asset_sha256": "34d961e9d6e53cbc72ba1f00633f4be82bacce21d697eb392fe1a3c29ad65728"
+        },
+        {
+          "id": "m06p04-s13-c3-2c5d9d37793b",
+          "slide": 13,
+          "text": "Choose aggregation to address total capacity or individual member failure at one endpoint. If the requirement is to survive loss of a location, use independently routed connections at separate locations instead.",
+          "text_sha256": "2c5d9d37793b7d28be3d90fe879a237acbb60c9dfcf0bf8afbb8c7abad60a56a",
+          "asset_sha256": "34d961e9d6e53cbc72ba1f00633f4be82bacce21d697eb392fe1a3c29ad65728"
+        },
+        {
+          "id": "m06p04-s14-c1-dc5827327389",
+          "slide": 14,
+          "text": "Follow the upper line for primary Direct Connect and the lower line for a separate internet I P sec V P N. The second path is for recovery, so don't assume it has the same capacity or shares the same failure boundary.",
+          "text_sha256": "dc5827327389145f7b80fa58b6c498d50de11ab68359e4b4ad62c440ddad5ee6",
+          "asset_sha256": "8687af2d29ca1339360d323ec800977e4329c98659d36be121c9b67a1dafde21"
+        },
+        {
+          "id": "m06p04-s14-c2-e2e3c6c9f9c7",
+          "slide": 14,
+          "text": "The slide budgets three hundred megabits per second for V P N recovery. That is an example, not a service limit. Keep inventory transactions flowing and pause bulk exports. Budget against required workload traffic and verify the backup can carry it.",
+          "text_sha256": "e2e3c6c9f9c71a55aa024d7f83f8d8469e6d2a3d795cc72bc40aac287422ef45",
+          "asset_sha256": "8687af2d29ca1339360d323ec800977e4329c98659d36be121c9b67a1dafde21"
+        },
+        {
+          "id": "m06p04-s14-c3-ae027e9e3826",
+          "slide": 14,
+          "text": "Validate selected prefixes and routes in both directions on each path. In the approved failover drill, measure routing convergence and how long the application takes to reconnect. A backup route alone does not establish recovery time.",
+          "text_sha256": "ae027e9e3826b893a61944afb7e39b825b7282cc49cf62e1bc1ed28bd40d5535",
+          "asset_sha256": "8687af2d29ca1339360d323ec800977e4329c98659d36be121c9b67a1dafde21"
+        },
+        {
+          "id": "m06p04-s15-c1-158841c2073f",
+          "slide": 15,
+          "text": "Read these bars as different protection boundaries. Application T L S protects the connection between the client application and the endpoint terminating T L S, the server application in this example.",
+          "text_sha256": "158841c2073fc77a80a799fc3d8cdb7f5b319842b2aca0bf3c2bc31c19c8b6aa",
+          "asset_sha256": "1c1165705e3f548906b84be0d8471a54fa7228c11337e7e47b78979275aaa20a"
+        },
+        {
+          "id": "m06p04-s15-c2-19d6a605e008",
+          "slide": 15,
+          "text": "Site-to-Site I P sec protects packets between the V P N gateways. Its protection ends at those gateways. It doesn't, by itself, protect every application hop outside that tunnel.",
+          "text_sha256": "19d6a605e008a25cb451df968127d13e45ca7c001911bc8923e02c8e6bbfe133",
+          "asset_sha256": "1c1165705e3f548906b84be0d8471a54fa7228c11337e7e47b78979275aaa20a"
+        },
+        {
+          "id": "m06p04-s15-c3-fa91b3286117",
+          "slide": 15,
+          "text": "The lower inset is MACsec. When supported and configured, it encrypts the physical Direct Connect link between the customer edge and the Direct Connect location. Pick the layer that meets the boundary in the requirement; these layers can be combined.",
+          "text_sha256": "fa91b3286117b7b0a9fef830ed11780ffd0b9412071798f34750e53953ac0b30",
+          "asset_sha256": "1c1165705e3f548906b84be0d8471a54fa7228c11337e7e47b78979275aaa20a"
+        },
+        {
+          "id": "m06p04-s16-c1-219abd4909ee",
+          "slide": 16,
+          "text": "A private I P Site-to-Site V P N can run over Direct Connect. In this picture, a transit virtual interface and Direct Connect gateway connect to the Transit Gateway, giving the private V P N endpoints a transport path. The I P sec overlay protects workload traffic through the tunnel.",
+          "text_sha256": "219abd4909eedf9b8d08f2c6d938764c62a43a87e5a558bfe360213666f8efb6",
+          "asset_sha256": "7723eb87a2664fdbf71fa32bf020d384c89bc6d61acf07de74aa9cdfe8314f7c"
+        },
+        {
+          "id": "m06p04-s16-c2-8c49279dd531",
+          "slide": 16,
+          "text": "The underlay routes packets between the V P N endpoints. The overlay advertises application prefixes through the tunnel. Keep those jobs distinct; the endpoints must still be reachable without relying on the tunnel they establish.",
+          "text_sha256": "8c49279dd531e3fe17475fd89840a2f49ab8448393b3ddfac0ebab954aa3cb63",
+          "asset_sha256": "7723eb87a2664fdbf71fa32bf020d384c89bc6d61acf07de74aa9cdfe8314f7c"
+        },
+        {
+          "id": "m06p04-s16-c3-53152f2489ba",
+          "slide": 16,
+          "text": "For a private transport requirement and encrypted gateway-to-gateway traffic, this is the combined design. Validate underlay reachability, overlay route exchange, capacity and application recovery under an approved failover test.",
+          "text_sha256": "53152f2489bac0f2b56fb61e6b53dd598a93fa2738c6c962e01448502697033d",
+          "asset_sha256": "7723eb87a2664fdbf71fa32bf020d384c89bc6d61acf07de74aa9cdfe8314f7c"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "05",
+      "revision": "2026-11-23-m06p05-approved-aip-wave07-draft-v1",
+      "approved_assets": {
+        "17": "230ea929aabb5a5346c7e2e9e788ae70e3e8bd12d2a40e9e475d460d0428ba33",
+        "18": "c9d6d6b7d9159eafae0d052f39352d7806d72cd543d4c9c7d7d9b05e622436d0"
+      },
+      "units": [
+        {
+          "id": "m06p05-s17-c1-47e37c28dd1e",
+          "slide": 17,
+          "text": "Follow the two software-defined W A N appliances in the V P C. Each has a Transit Gateway Connect peer, and the dashed box represents the existing V P C attachment that supplies transport. An eligible Direct Connect attachment can supply the transport in a different design.",
+          "text_sha256": "47e37c28dd1ee54a3ce098e04724ab8e33fdbc43875c2ef3f25c0041e60d9537",
+          "asset_sha256": "230ea929aabb5a5346c7e2e9e788ae70e3e8bd12d2a40e9e475d460d0428ba33"
+        },
+        {
+          "id": "m06p05-s17-c2-e28b438730b3",
+          "slide": 17,
+          "text": "G R E carries packets and does not encrypt them. B G P exchanges routes. Each Connect peer supports two B G P sessions for redundancy. The two peers in this drawing also give the appliance design independent paths.",
+          "text_sha256": "e28b438730b32b72d6a3185916ab2c2c386dbc833bd3498a10e49a3cb10e2520",
+          "asset_sha256": "230ea929aabb5a5346c7e2e9e788ae70e3e8bd12d2a40e9e475d460d0428ba33"
+        },
+        {
+          "id": "m06p05-s17-c3-82057997f12c",
+          "slide": 17,
+          "text": "If encryption is required, protect the transport separately with a compatible option. In a planned lab or approved drill, remove one appliance path and test that both directions still work through the other. Check routing and application outcome separately.",
+          "text_sha256": "82057997f12c29a9580b4a6012d2992356adea008231ada91b7218d366881d4e",
+          "asset_sha256": "230ea929aabb5a5346c7e2e9e788ae70e3e8bd12d2a40e9e475d460d0428ba33"
+        },
+        {
+          "id": "m06p05-s18-c1-0544d47fc351",
+          "slide": 18,
+          "text": "The link, virtual interface and B G P are up, but that doesn't prove usable application traffic. The small IPv4 packet with Don't Fragment set passes, the larger one doesn't get a reply, and the HTTPS upload stalls. That size pattern makes a path M T U issue plausible, not proven.",
+          "text_sha256": "0544d47fc3516778bb9187e87e7f06a946588c39d944b03a492b2d710e08e22e",
+          "asset_sha256": "c9d6d6b7d9159eafae0d052f39352d7806d72cd543d4c9c7d7d9b05e622436d0"
+        },
+        {
+          "id": "m06p05-s18-c2-ff6670410da8",
+          "slide": 18,
+          "text": "Trace the local network through Direct Connect to the V P C. Check effective path M T U and the feedback needed for discovery. Compare T C P maximum segment size and retransmissions with overhead from any encapsulation that is actually present. Retest the same upload.",
+          "text_sha256": "ff6670410da8d2f009cf64b9e3cb516f01d371471d5371060b32546d2c4c7d66",
+          "asset_sha256": "c9d6d6b7d9159eafae0d052f39352d7806d72cd543d4c9c7d7d9b05e622436d0"
+        },
+        {
+          "id": "m06p05-s18-c3-38f065886ab9",
+          "slide": 18,
+          "text": "Test failover with a realistic workload, not just small probes. Record convergence, loss and time to recovery, and check that the real application resumes with acceptable impact.",
+          "text_sha256": "38f065886ab9e1bf24eba52b5c0e0c41aeb55f1d31b040d6e1e5019651e711f4",
+          "asset_sha256": "c9d6d6b7d9159eafae0d052f39352d7806d72cd543d4c9c7d7d9b05e622436d0"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "06",
+      "revision": "2026-11-23-m06p06-approved-aip-wave07-draft-v1",
+      "approved_assets": {
+        "19": "b581af2b3f4d08132399281094a1ac026d1e8f9c6f391fe33630a4a508411c0c",
+        "20": "d4bed3df34e2709c2cbf3a3a6124aee87237c2f972d82c023fce042e1104509e",
+        "21": "377bcca9aaa7114d1b86357fe0d34d161441b81b8dfea478550d52ea32596a38",
+        "22": "4ac027b297f9b42429d67d994edee8923a2d6e30890a709e3cc40bf20a46731e"
+      },
+      "units": [
+        {
+          "id": "m06p06-s19-c1-c08316a3a8c0",
+          "slide": 19,
+          "text": "Follow the camera, local processor and reject gate. The line cannot wait for a round trip to a Region. Keep this inspection loop on site. That constraint comes before choosing a service.",
+          "text_sha256": "c08316a3a8c06d7144b8d5e70d6e200291544bfa726415a51a3df1f04931f1bf",
+          "asset_sha256": "b581af2b3f4d08132399281094a1ac026d1e8f9c6f391fe33630a4a508411c0c"
+        },
+        {
+          "id": "m06p06-s19-c2-9e7ee6f56a47",
+          "slide": 19,
+          "text": "An Outposts rack gives you supported AWS infrastructure on site, but you still need to check its service link and application dependencies. If local control is paramount and you need to operate the entire stack yourself, customer-managed infrastructure is the other option.",
+          "text_sha256": "9e7ee6f56a47e3ba2624f9ecd32a57e5bf5c471b123f239e202a2010d3b8466f",
+          "asset_sha256": "b581af2b3f4d08132399281094a1ac026d1e8f9c6f391fe33630a4a508411c0c"
+        },
+        {
+          "id": "m06p06-s19-c3-b8f1a0279a20",
+          "slide": 19,
+          "text": "The lower examples solve different problems. A supported Local Zone places resources nearer users in a metro area. An AWS Region is the starting point when broad service choice matters more than local proximity.",
+          "text_sha256": "b8f1a0279a20024e4b2015f79ad3e1d398c2f1c0f29fb3c68a15f52c16e9b3c5",
+          "asset_sha256": "b581af2b3f4d08132399281094a1ac026d1e8f9c6f391fe33630a4a508411c0c"
+        },
+        {
+          "id": "m06p06-s20-c1-87980b9ef6be",
+          "slide": 20,
+          "text": "The first two panels separate responsibility and placement. AWS supplies and manages supported Outposts infrastructure; the customer provides site power, space and connectivity. Run supported workloads near local systems and data without assuming the Outpost is an independent Region.",
+          "text_sha256": "87980b9ef6be424d1f881ae8d4fc9177156fc87e718338ce5e2d65a8fbd7c9d8",
+          "asset_sha256": "d4bed3df34e2709c2cbf3a3a6124aee87237c2f972d82c023fce042e1104509e"
+        },
+        {
+          "id": "m06p06-s20-c2-19a17481baeb",
+          "slide": 20,
+          "text": "Follow the connection in the third panel. The service link connects the Outpost back to its parent Region for management and service communication. That link is a dependency even when the application itself is physically nearby.",
+          "text_sha256": "19a17481baebbf3c84e1801234cb9a781706309ac4521f1aae6b64c52c22b350",
+          "asset_sha256": "d4bed3df34e2709c2cbf3a3a6124aee87237c2f972d82c023fce042e1104509e"
+        },
+        {
+          "id": "m06p06-s20-c3-0269c12019d3",
+          "slide": 20,
+          "text": "The crossed link at the right shows why local compute is not a guarantee of offline operation. Some existing workloads can continue locally. Regional dependencies and management operations can still be impaired. Validate what your exact workload needs.",
+          "text_sha256": "0269c12019d36e80b80e4826720a658f1aabba6135070427dbeeaa3988c1f15a",
+          "asset_sha256": "d4bed3df34e2709c2cbf3a3a6124aee87237c2f972d82c023fce042e1104509e"
+        },
+        {
+          "id": "m06p06-s21-c1-69aba779154a",
+          "slide": 21,
+          "text": "At the left, the service link reaches the parent Region and carries control-plane connectivity. It is not the route that connects the rack's workload subnets to the local facility network.",
+          "text_sha256": "69aba779154aca34d3f416429fcfd34289a6dab7bbf0d961ab615ed8cc4fbc96",
+          "asset_sha256": "377bcca9aaa7114d1b86357fe0d34d161441b81b8dfea478550d52ea32596a38"
+        },
+        {
+          "id": "m06p06-s21-c2-c045c45266df",
+          "slide": 21,
+          "text": "For an Outposts rack, the local gateway connects rack subnets to the on-premises network. Check addressing, supported route modes and B G P with the customer's network. Treat this path and the service link as separate design checks.",
+          "text_sha256": "c045c45266df84269605176c672bfa3e6b162f2ceb26609f3d3b8a1b4adce651",
+          "asset_sha256": "377bcca9aaa7114d1b86357fe0d34d161441b81b8dfea478550d52ea32596a38"
+        },
+        {
+          "id": "m06p06-s21-c3-1a83b54dcac4",
+          "slide": 21,
+          "text": "The last panel is deliberately separate. Outposts servers use local network interfaces to reach the local network rather than this rack local-gateway model. Identify the form factor before applying the routing design.",
+          "text_sha256": "1a83b54dcac483318dbf3fdca85e44af0de1f69b1b9be59c23e0aced541611e5",
+          "asset_sha256": "377bcca9aaa7114d1b86357fe0d34d161441b81b8dfea478550d52ea32596a38"
+        },
+        {
+          "id": "m06p06-s22-c1-26c31111f593",
+          "slide": 22,
+          "text": "Enable the supported Local Zone and create a subnet there as an extension of your V P C. Place supported compute or storage nearer the users. It is still part of a design tied to a parent Region.",
+          "text_sha256": "26c31111f5930019822f909feb06f4f00ba0b06f1413651bdde2cc199ca5bfca",
+          "asset_sha256": "4ac027b297f9b42429d67d994edee8923a2d6e30890a709e3cc40bf20a46731e"
+        },
+        {
+          "id": "m06p06-s22-c2-8261b30924b9",
+          "slide": 22,
+          "text": "Check which services and instance types are offered in that specific location. If the application still calls a Regional database or service for each request, the full request path may not benefit as much as the user-facing connection.",
+          "text_sha256": "8261b30924b922fd28e8734fb3a17a79e0f1f753b87e43cf98b6ecfd1d9fbda2",
+          "asset_sha256": "4ac027b297f9b42429d67d994edee8923a2d6e30890a709e3cc40bf20a46731e"
+        },
+        {
+          "id": "m06p06-s22-c3-59a1c6a0c649",
+          "slide": 22,
+          "text": "The lower-right panel asks you to include regional dependencies, data transfer, availability and recovery in the decision. Measure the whole workload path and account for cost, rather than choosing proximity from a map alone.",
+          "text_sha256": "59a1c6a0c6497dfd2037ad7c1465811a1924292b04db1314058f0d056caf575a",
+          "asset_sha256": "4ac027b297f9b42429d67d994edee8923a2d6e30890a709e3cc40bf20a46731e"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "07",
+      "revision": "2026-11-23-m06p07-approved-aip-wave07-draft-v1",
+      "approved_assets": {
+        "23": "dfccd509ff3078b1e25d83f863d54840e03c3201a4f59e8e66eac6d5b54c4e83",
+        "24": "687be4ffab2cb9b3d0fce53b292f7126f4e6e38ed24c1d805c93436891b60051",
+        "25": "0de778f5b97634a11bca09467fae3d48368984d6ba9098180c1afc36185dbf9d",
+        "26": "cff7c6e0ea4ffa25e1f8127f1e2ff7b550e3bc64f1b15d3f06bdc6b48d76197c"
+      },
+      "units": [
+        {
+          "id": "m06p07-s23-c1-d9eace6ef985",
+          "slide": 23,
+          "text": "On the left, E K S Anywhere runs Kubernetes locally. Your team operates the control plane, worker nodes and networking. That includes the day-two work: upgrades, storage, and backups.",
+          "text_sha256": "d9eace6ef98518c5591fdb37dfc93e8e2efe00bc107fbd82c39e364f533b8823",
+          "asset_sha256": "dfccd509ff3078b1e25d83f863d54840e03c3201a4f59e8e66eac6d5b54c4e83"
+        },
+        {
+          "id": "m06p07-s23-c2-fc091f229f36",
+          "slide": 23,
+          "text": "The checklist shows what a local cluster still needs. Plan registries and package access, identity and D N S. Verify those dependencies alongside the cluster itself before claiming the application will continue without a remote connection.",
+          "text_sha256": "fc091f229f3695697602cef5bbd6a81cfe0a68cde34af0fa0ee300cb198fa288",
+          "asset_sha256": "dfccd509ff3078b1e25d83f863d54840e03c3201a4f59e8e66eac6d5b54c4e83"
+        },
+        {
+          "id": "m06p07-s23-c3-40f0a130c35e",
+          "slide": 23,
+          "text": "On the right, E K S with Hybrid Nodes retains its managed control plane in AWS, even when workers run at your site. E K S Anywhere has a customer-operated local control plane. Choose by control-plane placement and which team can operate it.",
+          "text_sha256": "40f0a130c35e1a55115d64138d165fec28d37c71658ed3c9b0356598f8537087",
+          "asset_sha256": "dfccd509ff3078b1e25d83f863d54840e03c3201a4f59e8e66eac6d5b54c4e83"
+        },
+        {
+          "id": "m06p07-s24-c1-f8d3b36ce827",
+          "slide": 24,
+          "text": "The regional services are above. Systems Manager supports registration of the external Linux host, and the E C S agent communicates with Amazon E C S for orchestration. The inventory task and its customer-managed local storage stay on the warehouse host.",
+          "text_sha256": "f8d3b36ce827a7b423ef91227584ff68708225219b5f8c8b3bf55706e6b9a472",
+          "asset_sha256": "687be4ffab2cb9b3d0fce53b292f7126f4e6e38ed24c1d805c93436891b60051"
+        },
+        {
+          "id": "m06p07-s24-c2-8c9ec3aa0ac7",
+          "slide": 24,
+          "text": "Follow the gold line. Warehouse clients reach a customer-operated reverse proxy, then a published host port for the bridge-mode inventory task. The diagram does not use an E C S service load balancer or service discovery.",
+          "text_sha256": "8c9ec3aa0ac733c72348508c057c434cb89bf251ce270e6c3b59323bc1ec0cdb",
+          "asset_sha256": "687be4ffab2cb9b3d0fce53b292f7126f4e6e38ed24c1d805c93436891b60051"
+        },
+        {
+          "id": "m06p07-s24-c3-367de3660974",
+          "slide": 24,
+          "text": "External Linux tasks can use bridge, host, or none, not A W S V P C mode. A connection loss can disrupt orchestration or other dependencies. Test the actual local application behavior instead of assuming it runs independently.",
+          "text_sha256": "367de36609746f564c8d131764a41dbbeb0b537472b774bb4c1612f3dc61a274",
+          "asset_sha256": "687be4ffab2cb9b3d0fce53b292f7126f4e6e38ed24c1d805c93436891b60051"
+        },
+        {
+          "id": "m06p07-s25-c1-58a91b5875f7",
+          "slide": 25,
+          "text": "The local rack and gateway are still at the warehouse, but the red service link is down. Existing workloads can keep writing only while their local storage, D N S and authentication still work. Later, a token that depends on regional refresh can expire and stop the application.",
+          "text_sha256": "58a91b5875f7d1786040f9902ab434e7a28c1f6eb06902c92730626ddd6c15d5",
+          "asset_sha256": "0de778f5b97634a11bca09467fae3d48368984d6ba9098180c1afc36185dbf9d"
+        },
+        {
+          "id": "m06p07-s25-c2-3af04b71bb66",
+          "slide": 25,
+          "text": "Work across the dependencies below: D N S, identity, secrets, registries, databases, and external A P Is. Cache only within security and freshness limits. Do not rely on new instance launches or control-plane changes during the disconnect.",
+          "text_sha256": "3af04b71bb66f21e07f10abd36a5308c752668ab2975c3e856c81324b04dd954",
+          "asset_sha256": "0de778f5b97634a11bca09467fae3d48368984d6ba9098180c1afc36185dbf9d"
+        },
+        {
+          "id": "m06p07-s25-c3-350a5af80013",
+          "slide": 25,
+          "text": "When the link returns, safely replay buffered writes, deduplicate and reconcile. Your outage exercise should verify both which work survived the disconnect and how you restore consistent data once connectivity is back.",
+          "text_sha256": "350a5af800130e193b81a1969ac922fbddcf9d4d3bcd656347dfd4f0eb82f1c2",
+          "asset_sha256": "0de778f5b97634a11bca09467fae3d48368984d6ba9098180c1afc36185dbf9d"
+        },
+        {
+          "id": "m06p07-s26-c1-3ef16f185521",
+          "slide": 26,
+          "text": "Follow the top lane. Camera traffic crosses the factory network and local gateway to the inspection instance on Outposts. Local results stay on site. Design the T L S endpoints and local dependencies for the inspection path separately.",
+          "text_sha256": "3ef16f1855214b0ba0dc71c39c510a2fe758e58bd3a8eacc2c951ca15610b2d3",
+          "asset_sha256": "cff7c6e0ea4ffa25e1f8127f1e2ff7b550e3bc64f1b15d3f06bdc6b48d76197c"
+        },
+        {
+          "id": "m06p07-s26-c2-288e8cc179ee",
+          "slide": 26,
+          "text": "The second lane sends approved summaries through the factory router. Direct Connect is primary; an I P sec V P N is the backup route to the regional pipeline and recovery replica. Use T L S for application and ingestion traffic. A private circuit does not by itself provide that encryption.",
+          "text_sha256": "288e8cc179ee076a244af5484058ec3273e0dac6e09f04f4fe31dfcf3fb2fd8f",
+          "asset_sha256": "cff7c6e0ea4ffa25e1f8127f1e2ff7b550e3bc64f1b15d3f06bdc6b48d76197c"
+        },
+        {
+          "id": "m06p07-s26-c3-a882b19b41f4",
+          "slide": 26,
+          "text": "Test loss of the primary circuit and measure what the backup can carry. Then test Outposts service-link loss separately. Those failures exercise different paths. The customer still owns the site network and the backup routing design.",
+          "text_sha256": "a882b19b41f42a1f4be59e92642436625c74669fa3c0ee6a7225e38d0bafc6f4",
+          "asset_sha256": "cff7c6e0ea4ffa25e1f8127f1e2ff7b550e3bc64f1b15d3f06bdc6b48d76197c"
+        }
+      ]
+    }
+  ]
+}
