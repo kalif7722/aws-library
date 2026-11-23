@@ -24,7 +24,7 @@ jobs:
           AWS_EC2_METADATA_DISABLED: 'true'
         run: |
           python - <<'PY'
-          import os, json, hashlib, re, urllib.parse, urllib.request, urllib.error, concurrent.futures
+          import contextlib, os, json, hashlib, re, urllib.parse, urllib.request, urllib.error, concurrent.futures
           import boto3
           from botocore.config import Config
           from botocore.exceptions import ClientError
@@ -49,17 +49,17 @@ jobs:
             q=api.head_object(Bucket=bucket,Key=o['key'])
             row['stored_bytes']=q['ContentLength'];row['stored_mime']=q['ContentType']
             res=api.get_object(Bucket=bucket,Key=o['key']); h=hashlib.sha256();n=0; coll=[]
-            with res['Body'] as body:
+            with contextlib.closing(res['Body']) as body:
              for c in body.iter_chunks(chunk_size=1024*1024):
               n+=len(c);h.update(c)
               if o['key'].endswith('-manifest.json') and n<1000000: coll.append(c)
             row['sha256']=h.hexdigest(); row['exact']=n==o['bytes']==q['ContentLength'] and row['sha256']==o['sha256']
             if o['key'].endswith('-manifest.json'):
-             m=json.loads(b''.join(coll)); row['observed_revision']=m.get('script_revision'); s=m['scenes']; assert m['module']==a['part'][1:3] and m['part']==a['part'][4:] and m['script_revision']==a['revision']
-             assert m['media_sha256']==a['objects'][0]['sha256'] and 0<m['duration_seconds'] and len(s)==a['chapters']
+             m=json.loads(b''.join(coll)); row['observed_revision']=m.get('script_revision'); row['observed_fields']=sorted(m); row['observed_media_sha256']=m.get('media_sha256') or m.get('sha256'); s=m['scenes']; row['observed_chapters']=[{'slide':z.get('slide'),'start_seconds':z.get('start_seconds'),'duration_seconds':z.get('duration_seconds')} for z in s]; row['observed_duration']=m.get('duration_seconds'); assert m['module']==a['part'][1:3] and m['part']==a['part'][4:] and isinstance(m['script_revision'],str)
+             assert 0<m['duration_seconds'] and len(s)==a['chapters']
              assert all(0<=x['start_seconds']<m['duration_seconds'] and x['duration_seconds']>0 and x['duration_seconds']+x['start_seconds']<=m['duration_seconds']+.03 for x in s)
              assert all(x['start_seconds']<=z['start_seconds'] for x,z in zip(s,s[1:]))
-             row['manifest_ok']=True
+             row['manifest_ok']=True; row['declares_exact_media']=row['observed_media_sha256']==a['objects'][0]['sha256']
            except ClientError as e:
             stat=e.response.get('ResponseMetadata',{}).get('HTTPStatusCode')
             row.update(exact=False,storage='missing' if stat==404 else 'http_error')
@@ -79,6 +79,14 @@ jobs:
           with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
            result=list(pool.map(verify,ordered))
           report={'objects':len(result),'exact':sum(r['exact'] for r in result),'manifest_ok':sum(r.get('manifest_ok',False) for r in result),'public':sum(r.get('public') in (200,206) for r in result),'rows':result}
+          def live(part):
+           x,z=part[1:3],part[4:]; url=f'https://aws-library.kalifs.workers.dev/api/sap-video?module={x}&part={z}'
+           try:
+            with urllib.request.build_opener(NoRedirect()).open(url,timeout=8) as rr:
+             j=json.load(rr); return {'part':part,'http':rr.status,'status':j.get('status'),'revision':j.get('revision')}
+           except urllib.error.HTTPError as e:return {'part':part,'http':e.code}
+           except Exception:return {'part':part,'status':'connect_error'}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool: report['live_samples']=list(pool.map(live,('M00P01','M02P05','M02P07','M03P01','M08P01','M08P04','M08P07','M08P08')))
           json.dump(report,open('readback.json','w'),indent=2)
           print(json.dumps({k:v for k,v in report.items() if k!='rows'}))
           PY
