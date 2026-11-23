@@ -5,7 +5,7 @@ import {discoveryPartIds,discoveredLectures,readyRequestedPart} from "./sap-vide
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
-type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;durationSeconds:number;chapters:Chapter[]};
+type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;posterUrl?:string;durationSeconds:number;chapters:Chapter[]};
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
@@ -329,7 +329,7 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
             onPointerDown={e=>{if(fullscreen&&e.pointerType==="touch")revealHud(4000);}}
             onFocus={()=>{if(fullscreen)revealHud(4000);}} onKeyDown={handleKeyboard}>
             <video key={ready.videoUrl} ref={videoRef} controls={false} playsInline preload="metadata"
-              poster={source(moduleId==="10"?(ready.chapters[0]?.slide??selected.start):selected.start)} aria-label="Narrated lecture video. Use the player controls below."
+              poster={moduleId==="08"&&active==="01"&&ready.posterUrl?ready.posterUrl:source(moduleId==="10"?(ready.chapters[0]?.slide??selected.start):selected.start)} aria-label="Narrated lecture video. Use the player controls below."
               onClick={togglePlay} onDoubleClick={()=>void toggleFullscreen()}
               onError={()=>setMediaError(true)}
               onLoadedMetadata={e=>{
