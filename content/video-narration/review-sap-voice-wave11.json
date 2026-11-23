@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "08",
+      "part": "03",
+      "revision": "2026-11-23-m08p03-approved-aip-wave11-draft-v1",
+      "approved_assets": {
+        "7": "cddbcffb5767060941cdf49f4cbc55be81041b0ed0e63e60f20361e3a4051c04",
+        "8": "595bb0133a0cddbfb812b2733233fd1ba3277e1b4e41e6d97991620df39cecea",
+        "9": "97460defee6f74ac7750010477009b048ecfa243dabf49119d3a6bc052ab20cd"
+      },
+      "units": [
+        {
+          "id": "m08p03-s07-c1-49e2efcc2b66",
+          "slide": 7,
+          "text": "The listener rule forwards to a target group. At the top, the instance target group registers an E C 2 instance ID and sends traffic to its primary private address. Use the instance type when you manage the backend by instance identity.",
+          "text_sha256": "49e2efcc2b6636a3323b63a2f94f5a2c9c34d7bf95441f99ceba40d1780a5ffb",
+          "asset_sha256": "cddbcffb5767060941cdf49f4cbc55be81041b0ed0e63e60f20361e3a4051c04"
+        },
+        {
+          "id": "m08p03-s07-c2-70f5c07addb1",
+          "slide": 7,
+          "text": "An I P target group registers permitted private addresses directly. The examples show an E C S task and a private on-premises target reachable over private connectivity. You cannot register publicly routable I P addresses here.",
+          "text_sha256": "70f5c07addb1951ad5ee40d9c48a3caa290de881e646fccff67e1d0b0053466a",
+          "asset_sha256": "cddbcffb5767060941cdf49f4cbc55be81041b0ed0e63e60f20361e3a4051c04"
+        },
+        {
+          "id": "m08p03-s07-c3-f12e2c04c0f5",
+          "slide": 7,
+          "text": "The Lambda target group registers one function. The load balancer invokes it with an H T T P request event and needs invocation permission. Lambda target health checks are off by default. Choose the target type when you create the group; do not mix target types in one group.",
+          "text_sha256": "f12e2c04c0f5ace48a62d908a7e59047318e5c0a1649d5c610b800e82c7e5cc4",
+          "asset_sha256": "cddbcffb5767060941cdf49f4cbc55be81041b0ed0e63e60f20361e3a4051c04"
+        },
+        {
+          "id": "m08p03-s08-c1-1f91ea846959",
+          "slide": 8,
+          "text": "Follow the client on the left to the Application Load Balancer's H T T P S listener. The listener presents its certificate, negotiates under its T L S policy, and terminates the client connection. Everything after that is a separate connection.",
+          "text_sha256": "1f91ea8469594d991eff6e5926b0a83863200e4b5c874978142bfcdb797469a8",
+          "asset_sha256": "595bb0133a0cddbfb812b2733233fd1ba3277e1b4e41e6d97991620df39cecea"
+        },
+        {
+          "id": "m08p03-s08-c2-e9262e7465b1",
+          "slide": 8,
+          "text": "For the top target group, the load balancer sends plaintext H T T P on port eighty eighty in this example. The lower group uses a new T L S connection on port eighty-four forty-three. The target presents a certificate, but the Application Load Balancer does not validate that target certificate.",
+          "text_sha256": "e9262e7465b13c5bdc0e2a29432880acf03ecb58380e8c255543d65d59cc1de8",
+          "asset_sha256": "595bb0133a0cddbfb812b2733233fd1ba3277e1b4e41e6d97991620df39cecea"
+        },
+        {
+          "id": "m08p03-s08-c3-f8a3af766276",
+          "slide": 8,
+          "text": "If the requirement is to pass the client's original encrypted stream to the backend without terminating it at the load balancer, consider a Network Load Balancer with a T C P listener. Backend H T T P S on an Application Load Balancer is re-encryption, not passthrough.",
+          "text_sha256": "f8a3af7662763e7344b550cf7b508679a920aa440e67de32d6c09e14b8c6e9af",
+          "asset_sha256": "595bb0133a0cddbfb812b2733233fd1ba3277e1b4e41e6d97991620df39cecea"
+        },
+        {
+          "id": "m08p03-s09-c1-f3b5b80ae222",
+          "slide": 9,
+          "text": "The browser sends an H T T P S request. The Application Load Balancer's authentication action works with either a Cognito user pool or an Open I D Connect provider. These are alternatives. Successful sign-in establishes a load balancer session.",
+          "text_sha256": "f3b5b80ae222bb3f0e0a255d75e046b80dc19b4675452aa52342974e78db3221",
+          "asset_sha256": "97460defee6f74ac7750010477009b048ecfa243dabf49119d3a6bc052ab20cd"
+        },
+        {
+          "id": "m08p03-s09-c2-b670ac4ce313",
+          "slide": 9,
+          "text": "On an authenticated request the load balancer forwards signed user claims. The application validates the signature and that the expected load balancer signed them, then checks whether this identity may perform the requested business operation.",
+          "text_sha256": "b670ac4ce3132ec5c98d7be3a8d0cc8cd3e87ac2b0c3d87e93c7d0e11caf5434",
+          "asset_sha256": "97460defee6f74ac7750010477009b048ecfa243dabf49119d3a6bc052ab20cd"
+        },
+        {
+          "id": "m08p03-s09-c3-755f5f7de99b",
+          "slide": 9,
+          "text": "Compare the two outcomes for the same authenticated viewer. Reading the order is allowed, but deleting it is forbidden. Authentication answers who the user is. The application's authorization rules answer what the user can do.",
+          "text_sha256": "755f5f7de99bfae34929f9e420a2631946e90e8e791808cf0524290e0f5f65df",
+          "asset_sha256": "97460defee6f74ac7750010477009b048ecfa243dabf49119d3a6bc052ab20cd"
+        }
+      ]
+    },
+    {
+      "module": "08",
+      "part": "04",
+      "revision": "2026-11-23-m08p04-approved-aip-wave11-draft-v1",
+      "approved_assets": {
+        "10": "bacc42679b9ca2b052c8071377e624a5616cfe76b786f289838e7b926bfe4563",
+        "11": "00cd54a7b89b6c5a25d6cf4ce1c30fe316a9fd80e09c057ff4c09b2e3f203772",
+        "12": "7e62cbd02c12c6b8006db133d3c4a514dc7b688deca9d8e15c1d937b301d5c62"
+      },
+      "units": [
+        {
+          "id": "m08p04-s10-c1-3d9e47d1d681",
+          "slide": 10,
+          "text": "Once a target group is selected, its routing algorithm picks a target. Round robin cycles through healthy targets: request one to A, request two to B, and request three to C in this simplified example.",
+          "text_sha256": "3d9e47d1d681718be9b1c566ed03ef176e7122b5707a56824e8f5b2aba4b4735",
+          "asset_sha256": "bacc42679b9ca2b052c8071377e624a5616cfe76b786f289838e7b926bfe4563"
+        },
+        {
+          "id": "m08p04-s10-c2-6710eb0eb8ef",
+          "slide": 10,
+          "text": "Least outstanding requests favors a target with fewer requests still in flight. A has eight, B has one, and C has four. B is selected in this example; this can suit workloads with different request durations.",
+          "text_sha256": "6710eb0eb8eff5557d66725d38515dd87bfe7d4f1fa8d9fdae786f52720d8d93",
+          "asset_sha256": "bacc42679b9ca2b052c8071377e624a5616cfe76b786f289838e7b926bfe4563"
+        },
+        {
+          "id": "m08p04-s10-c3-09216083d12b",
+          "slide": 10,
+          "text": "Weighted random can select healthy targets with unequal probability; optional anomaly mitigation can reduce traffic to anomalous targets. That is target selection within a group, not the listener's weights across target groups. Sticky sessions are another setting; weighted random is not compatible with target stickiness.",
+          "text_sha256": "09216083d12bdc61659630ddeb63121eb4fe07e8d1903bb13a67cda09d8c8e0c",
+          "asset_sha256": "bacc42679b9ca2b052c8071377e624a5616cfe76b786f289838e7b926bfe4563"
+        },
+        {
+          "id": "m08p04-s11-c1-f2c55e5a1b42",
+          "slide": 11,
+          "text": "Start with a healthy registered target. When the operator deregisters it, the load balancer stops sending it new requests and the target drains. This is intentional removal from service, not a health-check repair.",
+          "text_sha256": "f2c55e5a1b42eff69a5535c7f86a0507d33fe2cd396ccafa3714180786d1cc3e",
+          "asset_sha256": "00cd54a7b89b6c5a25d6cf4ce1c30fe316a9fd80e09c057ff4c09b2e3f203772"
+        },
+        {
+          "id": "m08p04-s11-c2-4a5362bfd44d",
+          "slide": 11,
+          "text": "Existing requests can finish during the deregistration delay. After deregistration the target becomes unused. A long request can be cut off if it outlasts the delay or the application shuts down before it finishes.",
+          "text_sha256": "4a5362bfd44d5e7dafcbea62e98d9b598b13f5bea27dd7e2040232a0c0ac5846",
+          "asset_sha256": "00cd54a7b89b6c5a25d6cf4ce1c30fe316a9fd80e09c057ff4c09b2e3f203772"
+        },
+        {
+          "id": "m08p04-s11-c3-98e7c72b9525",
+          "slide": 11,
+          "text": "The default delay is three hundred seconds, configurable from zero to thirty-six hundred. Choose the delay and application shutdown grace period together. Test that new requests go elsewhere and in-flight work completes before removing capacity.",
+          "text_sha256": "98e7c72b952541c15301846516f1beebb42a8f119c5214e608cf7aedaa04aa1d",
+          "asset_sha256": "00cd54a7b89b6c5a25d6cf4ce1c30fe316a9fd80e09c057ff4c09b2e3f203772"
+        },
+        {
+          "id": "m08p04-s12-c1-5aaf9134c034",
+          "slide": 12,
+          "text": "The listener rule starts with weights ninety for the stable group and ten for the candidate. That is a relative traffic split; exactly one out of every ten requests isn't guaranteed.",
+          "text_sha256": "5aaf9134c0341fc44d56af74a0e56e304167ac5a1e4b3d65545d605cee2d8313",
+          "asset_sha256": "7e62cbd02c12c6b8006db133d3c4a514dc7b688deca9d8e15c1d937b301d5c62"
+        },
+        {
+          "id": "m08p04-s12-c2-8cfbf8a50923",
+          "slide": 12,
+          "text": "Use target health and application evidence, including errors and latency, before increasing the candidate share. This example advances to fifty-fifty, then to all traffic on version two only after the checks pass.",
+          "text_sha256": "8cfbf8a50923cbb4a60d549d60a3e2f1664ddc7b8ac8e4349ecc0ea1b2e72105",
+          "asset_sha256": "7e62cbd02c12c6b8006db133d3c4a514dc7b688deca9d8e15c1d937b301d5c62"
+        },
+        {
+          "id": "m08p04-s12-c3-d1143ae7e913",
+          "slide": 12,
+          "text": "Weighted forwarding does not automatically shift traffic away from an unhealthy weighted group. Keep the stable group ready, watch the same health signals, and explicitly roll back the weights if the candidate doesn't meet the release criteria.",
+          "text_sha256": "d1143ae7e91347aa50e74035982d84b700e1a3bdd14fdbbf7643e6522c733f1d",
+          "asset_sha256": "7e62cbd02c12c6b8006db133d3c4a514dc7b688deca9d8e15c1d937b301d5c62"
+        }
+      ]
+    },
+    {
+      "module": "08",
+      "part": "05",
+      "revision": "2026-11-23-m08p05-approved-aip-wave11-draft-v1",
+      "approved_assets": {
+        "13": "87a285f5ac668732fcdc6aa169ef0eefc9228c86780cba8408b57543a1daa605",
+        "14": "c2fec33856e9b8916a8817c4a1987b554c4d5e6045b45dd15382925a1e73030d",
+        "15": "11d8dbf3f87e298db46c48cac7f31e56540f722b1fcad5b534c167e42019542c"
+      },
+      "units": [
+        {
+          "id": "m08p05-s13-c1-a0017dd79ab5",
+          "slide": 13,
+          "text": "Follow the top path. The client starts T L S on port four forty-three. The Network Load Balancer has a T L S listener and certificate, so it terminates the client connection. In this example it opens a separate plaintext T C P connection to the target on port eighty eighty.",
+          "text_sha256": "a0017dd79ab53e2ba4cbeb148cd59e1c5eea80bfb094e02b7daaf9950798cd4b",
+          "asset_sha256": "87a285f5ac668732fcdc6aa169ef0eefc9228c86780cba8408b57543a1daa605"
+        },
+        {
+          "id": "m08p05-s13-c2-405b74359495",
+          "slide": 13,
+          "text": "The lower path uses a T C P listener on the same client port. The load balancer forwards the encrypted flow without decrypting it; the target server presents the certificate and terminates T L S. Choose this when the server needs to handle the client handshake.",
+          "text_sha256": "405b74359495989e9d9b66b21936ce41b409fc4c99095313d50bf4be15072191",
+          "asset_sha256": "87a285f5ac668732fcdc6aa169ef0eefc9228c86780cba8408b57543a1daa605"
+        },
+        {
+          "id": "m08p05-s13-c3-73aaad10cdcd",
+          "slide": 13,
+          "text": "The port number did not decide where encryption ends. The listener and target protocols did. Other transports have their own supported combinations. Do not expect a Network Load Balancer to inspect H T T P hosts or paths.",
+          "text_sha256": "73aaad10cdcdab69003b1ce372ef8d4b57eff069dd5c326012481098b79b42b6",
+          "asset_sha256": "87a285f5ac668732fcdc6aa169ef0eefc9228c86780cba8408b57543a1daa605"
+        },
+        {
+          "id": "m08p05-s14-c1-cdfc9abb9f4d",
+          "slide": 14,
+          "text": "Read the two addresses in the middle. This internet-facing Network Load Balancer has a zonal address in each enabled Availability Zone. The client resolves the name and connects to one address. An Elastic I P can be assigned per enabled subnet when needed.",
+          "text_sha256": "cdfc9abb9f4d28d24927f3224afa07880ab87872a6cd7a6cafc0ceb1403b775b",
+          "asset_sha256": "c2fec33856e9b8916a8817c4a1987b554c4d5e6045b45dd15382925a1e73030d"
+        },
+        {
+          "id": "m08p05-s14-c2-7eeb50278eb3",
+          "slide": 14,
+          "text": "The client connects to a zonal address, but that is not the same as preserving the client source address at the backend. Check the target type and protocol settings. If you need Proxy Protocol version two, use it only with a backend that understands its header.",
+          "text_sha256": "7eeb50278eb313bd6649dc46eed682f54c1cde06e38941fd5a2e13126298baff",
+          "asset_sha256": "c2fec33856e9b8916a8817c4a1987b554c4d5e6045b45dd15382925a1e73030d"
+        },
+        {
+          "id": "m08p05-s14-c3-e5338a0469ad",
+          "slide": 14,
+          "text": "Zonal health can remove an unhealthy zonal address from new D N S responses. Clients already caching that address may still try it. Keep zonal health and the client's address-selection behavior separate when diagnosing connectivity.",
+          "text_sha256": "e5338a0469ada9f29d9a9e43b58128130cf6f6c1404f5085fddca348f9c83f97",
+          "asset_sha256": "c2fec33856e9b8916a8817c4a1987b554c4d5e6045b45dd15382925a1e73030d"
+        },
+        {
+          "id": "m08p05-s15-c1-deca53e5c31a",
+          "slide": 15,
+          "text": "Follow the two connections from the same client. Their source ports differ, and a flow hash selects a healthy target for each. In this example one goes to A and the other to B. Subsequent packets in the same connection keep going to the selected target.",
+          "text_sha256": "deca53e5c31a0a8161e15ce9254a15666b08ce3814c9a3fb299e77f319df1570",
+          "asset_sha256": "11d8dbf3f87e298db46c48cac7f31e56540f722b1fcad5b534c167e42019542c"
+        },
+        {
+          "id": "m08p05-s15-c2-93c6db20a4c6",
+          "slide": 15,
+          "text": "The dashed probes check target health separately. If B is unhealthy, new flows normally avoid it. An established connection to B does not transparently migrate to A; it may be reset, depending on the unhealthy-target behavior and whether fail-open applies.",
+          "text_sha256": "93c6db20a4c69bb7978ab8f915820a33961ade17f98def72c1e1108fe96e0c6f",
+          "asset_sha256": "11d8dbf3f87e298db46c48cac7f31e56540f722b1fcad5b534c167e42019542c"
+        },
+        {
+          "id": "m08p05-s15-c3-a604bba6c3ac",
+          "slide": 15,
+          "text": "The bottom warning gives two different outcomes. If every target fails health checks across enabled zones, the balancer can fail open and route despite unhealthy status. A zone can also be withdrawn from D N S when another healthy zone remains. Neither means an existing connection was moved.",
+          "text_sha256": "a604bba6c3acb8de08cd2e34a8ddf30fa6d2f16f235fb3f859558fb74ca2ce50",
+          "asset_sha256": "11d8dbf3f87e298db46c48cac7f31e56540f722b1fcad5b534c167e42019542c"
+        }
+      ]
+    }
+  ]
+}
