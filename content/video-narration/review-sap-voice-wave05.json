@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "04",
+      "part": "01",
+      "revision": "2026-11-23-m04p01-approved-aip-wave05-draft-v1",
+      "approved_assets": {
+        "1": "a9cbee7c869656bd3d3cf21ee20a65cf3268950b3979f55d138b9376fd162fbe",
+        "2": "0896979ef204cff20078d67f50ced1a89e85dd1db8c90a90c4c78b28db878e4b",
+        "3": "2af8e6c57e3f1bc5c9276cfad4797aac5d66d5f09decba6d1c489728e5e0a074"
+      },
+      "units": [
+        {
+          "id": "m04p01-s01-c1-b01f3b727a0a",
+          "slide": 1,
+          "text": "Start at the outline on the left. This V P C has address space ten dot twenty dot zero dot zero slash sixteen. Within it, each slash twenty-four subnet is a smaller range assigned to just one Availability Zone.",
+          "text_sha256": "b01f3b727a0a14dbc995cd9846e37a6dbb9444fa30a1f8dc27a36cd77cf3ceae",
+          "asset_sha256": "a9cbee7c869656bd3d3cf21ee20a65cf3268950b3979f55d138b9376fd162fbe"
+        },
+        {
+          "id": "m04p01-s01-c2-38846d05d4b7",
+          "slide": 1,
+          "text": "The two zones each contain a public and a private subnet. The four ranges don't overlap. That lets us place separate tiers across zones without pretending any one subnet spans both.",
+          "text_sha256": "38846d05d4b77bafec22dcf3fe6b5d045cc0ac83b98d16986636d082e8681732",
+          "asset_sha256": "a9cbee7c869656bd3d3cf21ee20a65cf3268950b3979f55d138b9376fd162fbe"
+        },
+        {
+          "id": "m04p01-s01-c3-595994559755",
+          "slide": 1,
+          "text": "On the right, the route table maps a destination to a next hop. In this example V P C traffic uses the local route and the default points to an internet gateway. A matching route and permission through the relevant security controls are separate checks.",
+          "text_sha256": "595994559755884ed7bf92651541d75d9f26727561e4f8700ac7efbda56dfc57",
+          "asset_sha256": "a9cbee7c869656bd3d3cf21ee20a65cf3268950b3979f55d138b9376fd162fbe"
+        },
+        {
+          "id": "m04p01-s02-c1-602628b8f690",
+          "slide": 2,
+          "text": "Read each subnet's associated route table, not just its name. At the top, the public subnet's default route goes directly to the internet gateway. For an E C 2 instance to use that path directly over IPv4 it also needs a public IPv4 address and appropriate security rules.",
+          "text_sha256": "602628b8f690c7eb64e7dea83117d0becc763e18b8d40ffefa8ad1f172a0ecaa",
+          "asset_sha256": "0896979ef204cff20078d67f50ced1a89e85dd1db8c90a90c4c78b28db878e4b"
+        },
+        {
+          "id": "m04p01-s02-c2-c9c316b3d289",
+          "slide": 2,
+          "text": "The private instance instead sends default IPv4 traffic to a public NAT gateway. Follow the pictured zonal NAT in a public subnet out through the internet gateway. Replies can return to an initiated connection; the NAT is not an entry point for unsolicited inbound connections.",
+          "text_sha256": "c9c316b3d28973e913e0d0732d55f3daced2beee0e62f5f0d0f7cbb4ce5767bf",
+          "asset_sha256": "0896979ef204cff20078d67f50ced1a89e85dd1db8c90a90c4c78b28db878e4b"
+        },
+        {
+          "id": "m04p01-s02-c3-ff808ba26d49",
+          "slide": 2,
+          "text": "The isolated row has no internet route, but the app can still reach R D S over local routing if allowed. At the bottom, distinguish a public zonal NAT placed in a public subnet, commonly deployed per zone for resilience, from a Regional NAT that uses one ID across zones without a hosting public subnet.",
+          "text_sha256": "ff808ba26d4968b0cb71ecb75bf5c2f97e0ff4c733452e0b35e84f65e115c3d0",
+          "asset_sha256": "0896979ef204cff20078d67f50ced1a89e85dd1db8c90a90c4c78b28db878e4b"
+        },
+        {
+          "id": "m04p01-s03-c1-d3dc61f5b14b",
+          "slide": 3,
+          "text": "For direct public IPv4, follow the top arrows. The instance has a public IPv4 address, and the subnet's default route points to the internet gateway. The route alone doesn't open an inbound port; security rules still need to allow the intended traffic.",
+          "text_sha256": "d3dc61f5b14b36b9739397b2303bb58590def373073b1d964d9588e2ad102c05",
+          "asset_sha256": "2af8e6c57e3f1bc5c9276cfad4797aac5d66d5f09decba6d1c489728e5e0a074"
+        },
+        {
+          "id": "m04p01-s03-c2-c477b623e977",
+          "slide": 3,
+          "text": "For private IPv4 outbound, the middle route points first to a public NAT gateway, then out through the internet gateway. A zonal public NAT sits in a public subnet and favors same-zone routing. A Regional NAT in automatic mode can expand across zones without a hosting public subnet.",
+          "text_sha256": "c477b623e9773cea45672ba6889c7d34f32937e983ff66fe050e4b544ea0272a",
+          "asset_sha256": "2af8e6c57e3f1bc5c9276cfad4797aac5d66d5f09decba6d1c489728e5e0a074"
+        },
+        {
+          "id": "m04p01-s03-c3-367e87c80a92",
+          "slide": 3,
+          "text": "For native IPv6 outbound only, the bottom default route, double colon slash zero, points to an egress-only internet gateway. It lets responses return without unsolicited inbound traffic and doesn't translate IPv6. Match the exit to the traffic family and the requirement.",
+          "text_sha256": "367e87c80a928d7d3940894ac9802c0000979a14b79aa795d3b8be6f49d4d61d",
+          "asset_sha256": "2af8e6c57e3f1bc5c9276cfad4797aac5d66d5f09decba6d1c489728e5e0a074"
+        }
+      ]
+    },
+    {
+      "module": "04",
+      "part": "03",
+      "revision": "2026-11-23-m04p03-approved-aip-wave05-draft-v1",
+      "approved_assets": {
+        "7": "093a1110760c442b4fabf737181b22273ddd3cde8f8c7e6353e57b908e62559b",
+        "8": "573b1a4a33d8f51ace5fb41e843c836fbeddced3a32f34d2c3bebeba32a37a36"
+      },
+      "units": [
+        {
+          "id": "m04p03-s07-c1-19be0ed7e22c",
+          "slide": 7,
+          "text": "Start with the route table associated with the source subnet. Look for every matching destination and pick the most specific prefix. The local route covers the V P C address range. The slash-zero route is the fallback, not the first choice.",
+          "text_sha256": "19be0ed7e22cd13549f91687c08120936521ff90a73962ef6315b0bfd14e8e93",
+          "asset_sha256": "093a1110760c442b4fabf737181b22273ddd3cde8f8c7e6353e57b908e62559b"
+        },
+        {
+          "id": "m04p03-s07-c2-d8f78c01ed3e",
+          "slide": 7,
+          "text": "Both examples start with one seven two dot one six. For dot twelve dot forty-two, the slash twenty-four is more specific and points to peering. Dot thirty dot forty-two isn't in that slash twenty-four, so the slash sixteen Transit Gateway route applies.",
+          "text_sha256": "d8f78c01ed3ea45e31ab23ee6c1b435092ce95095365c1261d87d6fcef1a079e",
+          "asset_sha256": "093a1110760c442b4fabf737181b22273ddd3cde8f8c7e6353e57b908e62559b"
+        },
+        {
+          "id": "m04p03-s07-c3-3ccf206c5c11",
+          "slide": 7,
+          "text": "With equal prefixes in this V P C subnet table, a static route takes precedence over a V P N route propagated via a virtual private gateway. A more-specific middlebox route within the local range must match a whole subnet range and use an eligible target. Check the return route and security separately.",
+          "text_sha256": "3ccf206c5c11f4eb272fd5a355627f178eca669f1be462eb95513df21d448979",
+          "asset_sha256": "093a1110760c442b4fabf737181b22273ddd3cde8f8c7e6353e57b908e62559b"
+        },
+        {
+          "id": "m04p03-s08-c1-1f727da9b9bc",
+          "slide": 8,
+          "text": "Follow this one HTTPS connection. The client uses port five one five one four to connect to the server on four four three. The reply reverses the two endpoints and is addressed to the client's original temporary port.",
+          "text_sha256": "1f727da9b9bc2e7ecd875452f4bdae1d0672e0b989f4722e2202003de9ce3673",
+          "asset_sha256": "573b1a4a33d8f51ace5fb41e843c836fbeddced3a32f34d2c3bebeba32a37a36"
+        },
+        {
+          "id": "m04p03-s08-c2-a904a1a0bc12",
+          "slide": 8,
+          "text": "The network access control list is stateless. On the server subnet in this example, allow the request on four four three and the reply to the client's temporary port. Rules can allow or deny, and the lowest numbered matching rule wins.",
+          "text_sha256": "a904a1a0bc12739f013aa25f31da473e08877e0cca3468da87158f4211bb5571",
+          "asset_sha256": "573b1a4a33d8f51ace5fb41e843c836fbeddced3a32f34d2c3bebeba32a37a36"
+        },
+        {
+          "id": "m04p03-s08-c3-81af657fd594",
+          "slide": 8,
+          "text": "The instance security group is stateful and has allow rules only. The permitted inbound connection's tracked reply is allowed. A separately initiated reverse connection is different. Verify routing too, and size network A C L rules for the actual client port range, not just the example port.",
+          "text_sha256": "81af657fd5944e203073bde6116ea229475d59f4ff2229d2809db21289930379",
+          "asset_sha256": "573b1a4a33d8f51ace5fb41e843c836fbeddced3a32f34d2c3bebeba32a37a36"
+        }
+      ]
+    },
+    {
+      "module": "04",
+      "part": "04",
+      "revision": "2026-11-23-m04p04-approved-aip-wave05-draft-v1",
+      "approved_assets": {
+        "9": "8479b394c63cc3b88ced56aaa01decc461c0c3a4e20cc49cb93da47a1dab8e50",
+        "10": "c80e1ebaa00c516a1913d305785ff5db05f58402549a5bee085bd8166fce1bf7",
+        "11": "ae0b3135932e632c5db1016e2472e6ed785c589604d1e3b36767c5af52d945ac",
+        "12": "66d72c5689261bdfc269057c0dc2e415dceb278050f89c9119d3e30c500ac43a"
+      },
+      "units": [
+        {
+          "id": "m04p04-s09-c1-6f9b34b89c1d",
+          "slide": 9,
+          "text": "Start at the server network interface. The flow log records network metadata at an observation point, not what the web application saw. Here the client sends HTTPS to destination port four four three.",
+          "text_sha256": "6f9b34b89c1dd24207359da771f385061b4d6641d779bc992666fddb4785b14c",
+          "asset_sha256": "8479b394c63cc3b88ced56aaa01decc461c0c3a4e20cc49cb93da47a1dab8e50"
+        },
+        {
+          "id": "m04p04-s09-c2-0ab69ef6152f",
+          "slide": 9,
+          "text": "The request row says Accept, but the return direction to the client's temporary port says Reject. Both log status entries are O K. Check return-direction rules, including the network A C L, but don't treat Reject as proof of which rule caused it.",
+          "text_sha256": "0ab69ef6152f19572f20d5c8695a90ffcdc7e20aa75fdb48b156856248d8cc24",
+          "asset_sha256": "8479b394c63cc3b88ced56aaa01decc461c0c3a4e20cc49cb93da47a1dab8e50"
+        },
+        {
+          "id": "m04p04-s09-c3-6aef19f6a351",
+          "slide": 9,
+          "text": "You can enable logs at V P C, subnet, or interface scope and send them to a destination such as CloudWatch Logs or S3. Skip Data means records were skipped. There is no payload, and Accept does not prove the application succeeded.",
+          "text_sha256": "6aef19f6a3516865c4f94515c1b3a8ce04f7b40c2963fcb65c1ad85f2f4f7816",
+          "asset_sha256": "8479b394c63cc3b88ced56aaa01decc461c0c3a4e20cc49cb93da47a1dab8e50"
+        },
+        {
+          "id": "m04p04-s10-c1-48f614996103",
+          "slide": 10,
+          "text": "On the left, use a gateway endpoint for S3 or DynamoDB traffic from workloads in the same V P C. The associated route table selects an AWS service prefix-list destination; it is not an endpoint network interface. There's no hourly charge for the gateway endpoint itself.",
+          "text_sha256": "48f614996103255347efd00df2bf51e11c20e9bdc67777be12a3191a7bcbc802",
+          "asset_sha256": "c80e1ebaa00c516a1913d305785ff5db05f58402549a5bee085bd8166fce1bf7"
+        },
+        {
+          "id": "m04p04-s10-c2-3b9c1d6d51eb",
+          "slide": 10,
+          "text": "The interface endpoint on the right creates network interfaces with private addresses in selected subnets. A security group controls access and private D N S is available for supported services. Hourly and data processing charges can apply.",
+          "text_sha256": "3b9c1d6d51ebb87cbfb5ac3e79f2b529d8830533e9a5691b9db9ec726e80c980",
+          "asset_sha256": "c80e1ebaa00c516a1913d305785ff5db05f58402549a5bee085bd8166fce1bf7"
+        },
+        {
+          "id": "m04p04-s10-c3-dbb47064f946",
+          "slide": 10,
+          "text": "Don't extend a gateway endpoint directly to an on-premises client, peered V P C, or Transit Gateway. For a supported service, evaluate an interface endpoint for those access patterns, and plan the required routing and D N S.",
+          "text_sha256": "dbb47064f94600fbb6092693b7016696516e61ab5546f77c1bfda4cb11a3d6ed",
+          "asset_sha256": "c80e1ebaa00c516a1913d305785ff5db05f58402549a5bee085bd8166fce1bf7"
+        },
+        {
+          "id": "m04p04-s11-c1-5f6f3d7167ee",
+          "slide": 11,
+          "text": "The EC2 client queries the V P C resolver for the normal Secrets Manager service name. The on-premises resolver instead uses a conditional forwarder to the Route Fifty-Three Resolver inbound endpoint. Both paths can return a private endpoint interface address in this example.",
+          "text_sha256": "5f6f3d7167eeb35a3d2f0fd2414ef6b02879c8648fbd10fa13ba52e5bababe68",
+          "asset_sha256": "ae0b3135932e632c5db1016e2472e6ed785c589604d1e3b36767c5af52d945ac"
+        },
+        {
+          "id": "m04p04-s11-c2-1803e705c4b4",
+          "slide": 11,
+          "text": "Resolving that private address is only the first check. Trace the separate HTTPS data path to the endpoint. Check routing and confirm that the endpoint security group allows TCP four four three from the authorized source.",
+          "text_sha256": "1803e705c4b44fec39b52fe01b3a01a3fc3bb899910ab4528d74e8dc089e4c84",
+          "asset_sha256": "ae0b3135932e632c5db1016e2472e6ed785c589604d1e3b36767c5af52d945ac"
+        },
+        {
+          "id": "m04p04-s11-c3-f7e514f91e72",
+          "slide": 11,
+          "text": "For private resolution, check V P C D N S support, hostnames, endpoint private D N S, and conflicting private zones. If D N S and transport work but the application is denied, review caller and applicable endpoint and resource policies. A private answer isn't authorization.",
+          "text_sha256": "f7e514f91e72219be201f0837cccec7742c9d51480831ad874b35b7bf9f36c07",
+          "asset_sha256": "ae0b3135932e632c5db1016e2472e6ed785c589604d1e3b36767c5af52d945ac"
+        },
+        {
+          "id": "m04p04-s12-c1-4d79aa4f1ad5",
+          "slide": 12,
+          "text": "Follow the E C 2 role's request through the S3 gateway endpoint to the reports bucket. Verify the route table. The role's Get Object permission names the object; if the workload also lists objects, List Bucket instead names the bucket.",
+          "text_sha256": "4d79aa4f1ad5ffc9ab2a0bfc5fff9256dd4ba4dd7a0835708d6b5fd3f14a503a",
+          "asset_sha256": "66d72c5689261bdfc269057c0dc2e415dceb278050f89c9119d3e30c500ac43a"
+        },
+        {
+          "id": "m04p04-s12-c2-4b9f88ba3532",
+          "slide": 12,
+          "text": "The endpoint policy is an additional filter for requests that use that endpoint. It must permit the request, but it cannot grant S3 access by itself. The bucket policy can also restrict access, for example to the approved endpoint.",
+          "text_sha256": "4b9f88ba3532cd1e63c00b8de9f9880db379c5b8ae051a31426781182e23e7ab",
+          "asset_sha256": "66d72c5689261bdfc269057c0dc2e415dceb278050f89c9119d3e30c500ac43a"
+        },
+        {
+          "id": "m04p04-s12-c3-4bb280ede4d1",
+          "slide": 12,
+          "text": "In the same account an effective identity Allow may suffice without an extra bucket Allow, subject to the applicable controls. A service control policy sets a ceiling, not a grant. Verify the endpoint allows the request and that S3 authorization is effective with no applicable explicit Deny.",
+          "text_sha256": "4bb280ede4d18d7053af533f8e2e685178473051f375e8b3593da4274a49756c",
+          "asset_sha256": "66d72c5689261bdfc269057c0dc2e415dceb278050f89c9119d3e30c500ac43a"
+        }
+      ]
+    },
+    {
+      "module": "04",
+      "part": "06",
+      "revision": "2026-11-23-m04p06-approved-aip-wave05-draft-v1",
+      "approved_assets": {
+        "17": "035e953d71a2b42d08733287e84d6ec0a32b0b9ce617109d37cb730b79b57a61",
+        "18": "b32c965d8c8681bf04239ab5bdff1abb7ddf3fe3fd38178923a2f181d3a1a7b8",
+        "19": "2c98474d70fdbcf6747b44f494065772575f803b721b76a24b012a6139c9cc07",
+        "20": "865dc45053274e3501b203afa1bcf0973f3c7a25c9c771bf19d41ea9ebad55e3"
+      },
+      "units": [
+        {
+          "id": "m04p06-s17-c1-37c3c54c53da",
+          "slide": 17,
+          "text": "Start in the middle. Cloud WAN has one centrally managed core network policy. It defines segments, maps attachments, and controls routing behavior. This is a way to keep policy consistent across Regions without making production and development one flat network.",
+          "text_sha256": "37c3c54c53da8417fc20c9675a2766f36735d8ae93871541ef4c236d49e606a9",
+          "asset_sha256": "035e953d71a2b42d08733287e84d6ec0a32b0b9ce617109d37cb730b79b57a61"
+        },
+        {
+          "id": "m04p06-s17-c2-1f227c67ee92",
+          "slide": 17,
+          "text": "Follow the dotted links out to the regional edges. Both examples have production, development, and shared segments. V P Cs attach to the right segments, and an on-premises network can attach through V P N. The same logical segment can span Regions.",
+          "text_sha256": "1f227c67ee928d2afa15ba0ae66ec8edf2790a206e3fe7e2ab90bb90f944a0f3",
+          "asset_sha256": "035e953d71a2b42d08733287e84d6ec0a32b0b9ce617109d37cb730b79b57a61"
+        },
+        {
+          "id": "m04p06-s17-c3-f29788734617",
+          "slide": 17,
+          "text": "Compare the bottom panels. A Transit Gateway is a regional routing hub; Cloud WAN fits many networks that need a shared global policy. Cloud WAN does not automatically share routes between separate segments. Check that the policy explicitly allows the necessary sharing and that the relevant attachments exist.",
+          "text_sha256": "f297887346175e9e091da5789287ddca0e391d0a697202e994cd7aa6f0e30a24",
+          "asset_sha256": "035e953d71a2b42d08733287e84d6ec0a32b0b9ce617109d37cb730b79b57a61"
+        },
+        {
+          "id": "m04p06-s18-c1-9f89cf4c987d",
+          "slide": 18,
+          "text": "Start with the two matching address ranges. Both sides use ten dot ten dot zero dot zero slash sixteen. The app connects to a private interface endpoint in its own V P C, then travels through PrivateLink to the provider's load balancer and targets. The V P Cs do not exchange C I D R routes.",
+          "text_sha256": "9f89cf4c987d173f633e979dc1884bec92f44063d86cdc28ee738805cba5be43",
+          "asset_sha256": "b32c965d8c8681bf04239ab5bdff1abb7ddf3fe3fd38178923a2f181d3a1a7b8"
+        },
+        {
+          "id": "m04p06-s18-c2-554496add933",
+          "slide": 18,
+          "text": "The provider controls which principals can create connections and whether acceptance is required. The consumer configures the endpoint's private interfaces and security group to allow its clients on the service port. Neither side gains general network reachability to the other's V P C.",
+          "text_sha256": "554496add93329c0ec81877472aa523e94e5938f3aec13aa2422c8dc12044664",
+          "asset_sha256": "b32c965d8c8681bf04239ab5bdff1abb7ddf3fe3fd38178923a2f181d3a1a7b8"
+        },
+        {
+          "id": "m04p06-s18-c3-09e7c3d0b144",
+          "slide": 18,
+          "text": "Choose this for access to one private internal or software service, including when network ranges overlap. Factor in interface endpoint hourly and data processing charges. Choose a routing solution instead if the actual requirement is broader network connectivity.",
+          "text_sha256": "09e7c3d0b14436e72be9d4ed3304ae237e7acf0a4a65af0d420afcbb2ebce670",
+          "asset_sha256": "b32c965d8c8681bf04239ab5bdff1abb7ddf3fe3fd38178923a2f181d3a1a7b8"
+        },
+        {
+          "id": "m04p06-s19-c1-c44df571909a",
+          "slide": 19,
+          "text": "The client looks up the endpoint's generated hostname or its enabled private D N S name. Traffic enters the interface endpoint in a selected Availability Zone, and its security group must permit the client on the service port.",
+          "text_sha256": "c44df571909ace4ab6db1ad2d455b7df4fcf39b1403b6d5f123e5a3fa88e6605",
+          "asset_sha256": "2c98474d70fdbcf6747b44f494065772575f803b721b76a24b012a6139c9cc07"
+        },
+        {
+          "id": "m04p06-s19-c2-65b4fc99c13b",
+          "slide": 19,
+          "text": "The endpoint service authorizes the consumer principal and may require connection acceptance. On the provider side, the Network Load Balancer listener and target group direct requests to the service. Check the target health and usable Availability Zones; this publishes the service, not the whole V P C.",
+          "text_sha256": "65b4fc99c13ba4f298e33baf97bf1f236be55ebe2715f24dd938e30b07c83cc0",
+          "asset_sha256": "2c98474d70fdbcf6747b44f494065772575f803b721b76a24b012a6139c9cc07"
+        },
+        {
+          "id": "m04p06-s19-c3-32e60dc7f7d2",
+          "slide": 19,
+          "text": "The dotted return is a response over the same connection, not provider-initiated access. If an approved request fails, the provider checks principals, acceptance and target health. The consumer checks endpoint state, the hostname and the endpoint security group.",
+          "text_sha256": "32e60dc7f7d296093e7e6effc771ed6b3d83ef1aa4f8778f39962ef2d25ffd74",
+          "asset_sha256": "2c98474d70fdbcf6747b44f494065772575f803b721b76a24b012a6139c9cc07"
+        },
+        {
+          "id": "m04p06-s20-c1-925ae003a6e1",
+          "slide": 20,
+          "text": "The app needs just one software service, and both V P Cs use ten dot zero dot zero dot zero slash sixteen. Follow the middle path: the consumer connects to a local interface endpoint, and the provider exposes the A P I behind its endpoint service. No V P C to V P C routing is required.",
+          "text_sha256": "925ae003a6e15ef3c78ae1892b8ff798fc54a1039efaf957a2c91582c87ef0d2",
+          "asset_sha256": "865dc45053274e3501b203afa1bcf0973f3c7a25c9c771bf19d41ea9ebad55e3"
+        },
+        {
+          "id": "m04p06-s20-c2-7566b99c3ca9",
+          "slide": 20,
+          "text": "The top-right alternative is V P C peering. It suits direct routing between two nonoverlapping V P Cs with routes configured on both sides. It does not route through a third V P C, and it cannot solve this overlapping-address case.",
+          "text_sha256": "7566b99c3ca977eda1cb71f3d9b8a922ce00421cfa1795d08221b447fdc385df",
+          "asset_sha256": "865dc45053274e3501b203afa1bcf0973f3c7a25c9c771bf19d41ea9ebad55e3"
+        },
+        {
+          "id": "m04p06-s20-c3-176325b4eaf6",
+          "slide": 20,
+          "text": "The lower panel shows Transit Gateway for many V P Cs and on-premises networks. Central route tables let you control which attachments can communicate. Overlapping V P C ranges are not propagated as usable routes for this scenario. Choose PrivateLink because the scope is one service.",
+          "text_sha256": "176325b4eaf66ef830c018329674c5fc80d8091bb04d394b26bc69a397b476a5",
+          "asset_sha256": "865dc45053274e3501b203afa1bcf0973f3c7a25c9c771bf19d41ea9ebad55e3"
+        }
+      ]
+    },
+    {
+      "module": "04",
+      "part": "14",
+      "revision": "2026-11-23-m04p14-approved-aip-wave05-draft-v1",
+      "approved_assets": {
+        "41": "1c8283ed441008cc4ced25d04988af85d16632c04710df7c815c2655de5e3b3e",
+        "42": "22f605394907e6be6ae0cbbca2453b38b5901d9c1edc465c3890ec37b5139704"
+      },
+      "units": [
+        {
+          "id": "m04p14-s41-c1-8dcc98a8ea0c",
+          "slide": 41,
+          "text": "Follow the blue path. A private instance with no public I P sends an update request along its default route to the N A T instance in the public subnet. The public subnet's default route leads to the internet gateway, and replies return through the same forwarding host.",
+          "text_sha256": "8dcc98a8ea0cec0135084e40ebdd136dbbc7787d3014a8d036856c0e3fee7dc1",
+          "asset_sha256": "1c8283ed441008cc4ced25d04988af85d16632c04710df7c815c2655de5e3b3e"
+        },
+        {
+          "id": "m04p14-s41-c2-894fd96e67ea",
+          "slide": 41,
+          "text": "The N A T instance needs a public address, shown here as an Elastic I P, and must be configured to forward packets and do source N A T. Its source and destination check is disabled because it handles packets addressed to other hosts.",
+          "text_sha256": "894fd96e67eae6e86f5eae25cc7684e8f56a067943c966d58568889dccc06b5a",
+          "asset_sha256": "1c8283ed441008cc4ced25d04988af85d16632c04710df7c815c2655de5e3b3e"
+        },
+        {
+          "id": "m04p14-s41-c3-ec5f666ae67c",
+          "slide": 41,
+          "text": "If this host stops, private I P version four egress fails in this design. There is no automatic failover here. With an instance, you own patching, sizing, security and recovery. A managed N A T gateway shifts service operations to AWS, but you still design for resilience.",
+          "text_sha256": "ec5f666ae67cc84441827a1deeccf58c64828b1867a7e5a4cd2791e02ea77e64",
+          "asset_sha256": "1c8283ed441008cc4ced25d04988af85d16632c04710df7c815c2655de5e3b3e"
+        },
+        {
+          "id": "m04p14-s42-c1-7cd2a1e93c3c",
+          "slide": 42,
+          "text": "The record is from ingress to this zonal N A T gateway's network interface. Read the path left to right: a private instance reaches the gateway on the way to the example internet host. Start by naming the interface and direction before reading the fields.",
+          "text_sha256": "7cd2a1e93c3cc0338049437a603a5a9291d14e284ae36fc150b29dd8779cf154",
+          "asset_sha256": "22f605394907e6be6ae0cbbca2453b38b5901d9c1edc465c3890ec37b5139704"
+        },
+        {
+          "id": "m04p14-s42-c2-7a6b8b02edea",
+          "slide": 42,
+          "text": "In this record, the destination address field shows the N A T interface, ten dot zero dot zero dot two hundred twenty. The packet destination field shows the final internet host, two hundred three dot zero dot one hundred thirteen dot five. Those fields answer different questions for this observation point.",
+          "text_sha256": "7a6b8b02edea7dc10aae87557a8d30a5d19626d86bd2f0848c23b17a8c628947",
+          "asset_sha256": "22f605394907e6be6ae0cbbca2453b38b5901d9c1edc465c3890ec37b5139704"
+        },
+        {
+          "id": "m04p14-s42-c3-0c99058a654e",
+          "slide": 42,
+          "text": "Flow logs are aggregated metadata, not a packet payload. Do not infer the root cause from Accept or Reject alone. Compare both directions with routes, applicable controls, and application logs. Records can arrive late or be skipped.",
+          "text_sha256": "0c99058a654e18b401c5c407b12429267e24c158494a56bbcdc15c7a6a54774b",
+          "asset_sha256": "22f605394907e6be6ae0cbbca2453b38b5901d9c1edc465c3890ec37b5139704"
+        }
+      ]
+    }
+  ]
+}
