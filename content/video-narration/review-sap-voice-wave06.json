@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "05",
+      "part": "02",
+      "revision": "2026-11-23-m05p02-approved-aip-wave06-draft-v1",
+      "approved_assets": {
+        "4": "b243e8f054e5bd517fca331b134a8ed32157fa6e7e6b11b967fd1c8f3288d4ea",
+        "5": "dd8980dfb5fb6ddf4a77618d048ca5fc1747a1a9c2913bb956765e7a0a1514b8",
+        "6": "a40e7024736400f1635ac733ab52eb093c715bf1482b76558b69a629ff66e032"
+      },
+      "units": [
+        {
+          "id": "m05p02-s04-c1-3d021cf54383",
+          "slide": 4,
+          "text": "Start with the E C two client. Its D H C P options can point it to Amazon Provided D N S, or to custom servers. A custom server must forward the relevant AWS private namespace correctly. Changing a record will not help if the client is asking a resolver that cannot see it.",
+          "text_sha256": "3d021cf543834f9a57b2fd4909214878ceb3820faaab2d0f30290748f8d6217d",
+          "asset_sha256": "b243e8f054e5bd517fca331b134a8ed32157fa6e7e6b11b967fd1c8f3288d4ea"
+        },
+        {
+          "id": "m05p02-s04-c2-e0a2c39b9783",
+          "slide": 4,
+          "text": "The lower panels separate the settings. Enable D N S Support controls Amazon-provided resolution. Enable D N S Hostnames controls hostname assignment for eligible instances. Enable both for private hosted zones and supported private D N S features.",
+          "text_sha256": "e0a2c39b978368cb785b90e395bfbdcc60f261075328673f4f7a5979c9cc7636",
+          "asset_sha256": "b243e8f054e5bd517fca331b134a8ed32157fa6e7e6b11b967fd1c8f3288d4ea"
+        },
+        {
+          "id": "m05p02-s04-c3-2c33f987a4a8",
+          "slide": 4,
+          "text": "The V P C Resolver is available at the V P C base address plus two and at the listed link-local address. Do not point on-premises forwarding directly at base plus two; use a Route fifty-three Resolver inbound endpoint. Check the client resolver and V P C attributes before changing records.",
+          "text_sha256": "2c33f987a4a84b605e980660006c25fde5e9ad88e1d0cfb9fab6116a61ff9e7e",
+          "asset_sha256": "b243e8f054e5bd517fca331b134a8ed32157fa6e7e6b11b967fd1c8f3288d4ea"
+        },
+        {
+          "id": "m05p02-s05-c1-45677e649a72",
+          "slide": 5,
+          "text": "On the diagram, V P C A and cross-account V P C B are associated with the private zone, so their V P C Resolvers can see its records. V P C C is in the same account as B, but has no association and does not automatically see the zone.",
+          "text_sha256": "45677e649a72bfb16e22a5363b843015428a42722c26e5da04f3dc2d80958e9b",
+          "asset_sha256": "dd8980dfb5fb6ddf4a77618d048ca5fc1747a1a9c2913bb956765e7a0a1514b8"
+        },
+        {
+          "id": "m05p02-s05-c2-01c386c33e0d",
+          "slide": 5,
+          "text": "For direct association, the zone owner authorizes it and the V P C owner associates the V P C. Profiles can provide a shared association pattern where supported. On-premises clients can query through an inbound Resolver endpoint in a V P C associated with the zone.",
+          "text_sha256": "01c386c33e0d8514d0c42090e3ebc0c76c57f3f1589be66b11d003f4921b39ad",
+          "asset_sha256": "dd8980dfb5fb6ddf4a77618d048ca5fc1747a1a9c2913bb956765e7a0a1514b8"
+        },
+        {
+          "id": "m05p02-s05-c3-a5354e2359c4",
+          "slide": 5,
+          "text": "Peering or Transit Gateway does not automatically share private-zone visibility. Conversely, the zone association does not make the returned address reachable. Check the association, both V P C D N S attributes, and the separate network path.",
+          "text_sha256": "a5354e2359c476366ed4154f1f789364dc0c701bac92a47335006bac7683f5d9",
+          "asset_sha256": "dd8980dfb5fb6ddf4a77618d048ca5fc1747a1a9c2913bb956765e7a0a1514b8"
+        },
+        {
+          "id": "m05p02-s06-c1-52100d5a41ad",
+          "slide": 6,
+          "text": "Which private zone answers A P I dot dev dot example dot com? The selected zone is dev dot example dot com, because it has the longest matching suffix. Its records, not a less-specific private zone's records, are checked for that name.",
+          "text_sha256": "52100d5a41adaa1e9f90b52ab5c7c25ae11aaf447cd993e32380e72b0b484baf",
+          "asset_sha256": "a40e7024736400f1635ac733ab52eb093c715bf1482b76558b69a629ff66e032"
+        },
+        {
+          "id": "m05p02-s06-c2-656de36fbdc1",
+          "slide": 6,
+          "text": "In the middle, the private zone is checked first. A missing name returns N X Domain by default. Only if the selected private zone is Advanced tier and public fallback is explicitly enabled can a missing name retry public D N S. If the name exists but the requested type is absent, the result is No Data, with no public retry.",
+          "text_sha256": "656de36fbdc103c4ff10f7ac852b352825781b302425fc656367aaab9ee7197b",
+          "asset_sha256": "a40e7024736400f1635ac733ab52eb093c715bf1482b76558b69a629ff66e032"
+        },
+        {
+          "id": "m05p02-s06-c3-1bcced13e58c",
+          "slide": 6,
+          "text": "On the right, a forwarding rule for the exact same domain takes precedence over the private zone, so the rule's target handles the query. The reverse D N S strip is separate: P T R uses in-addr dot arpa for I P version four and I P six dot arpa for version six. Check the matching resolver rules.",
+          "text_sha256": "1bcced13e58c86d59c5786d628d04e15a1d9bcf3b7ccedad5173e6a053102472",
+          "asset_sha256": "a40e7024736400f1635ac733ab52eb093c715bf1482b76558b69a629ff66e032"
+        }
+      ]
+    },
+    {
+      "module": "05",
+      "part": "08",
+      "revision": "2026-11-23-m05p08-approved-aip-wave06-draft-v1",
+      "approved_assets": {
+        "23": "66fcd1033ce560aeca592410b1cd2de20238a2a75a47f243d5d66e247a674887",
+        "24": "cb447d65ed03b2aa6bfba5b849e308d67f50354ab036950ae32f4d513c6ae0e4",
+        "25": "e14ed5e51cdcdcc7246ffad32f334d5456d6ccf042f8175a9a4ab49fefd271ce"
+      },
+      "units": [
+        {
+          "id": "m05p08-s23-c1-15139a79c68f",
+          "slide": 23,
+          "text": "Use I P based records when known network ranges should receive different answers. The left side maps client C I D R ranges to locations. Consider how the resolver learns the client subnet and specify what should happen when no location matches.",
+          "text_sha256": "15139a79c68f154d77da7a9fdd07d3038e4b07cf443af6c7c01045ab62f068ea",
+          "asset_sha256": "66fcd1033ce560aeca592410b1cd2de20238a2a75a47f243d5d66e247a674887"
+        },
+        {
+          "id": "m05p08-s23-c2-1d1317c51c17",
+          "slide": 23,
+          "text": "On the right, geoproximity uses resource and user location. Bias expands or shrinks the area served by an endpoint. That is different from choosing by country or choosing the endpoint with the lowest measured latency.",
+          "text_sha256": "1d1317c51c17708a3ac257ed6907fe681f4bc6212d60ab0d4cb92d428f1f563e",
+          "asset_sha256": "66fcd1033ce560aeca592410b1cd2de20238a2a75a47f243d5d66e247a674887"
+        },
+        {
+          "id": "m05p08-s23-c3-62c2ec590629",
+          "slide": 23,
+          "text": "Geoproximity records can be configured directly where supported. Use Traffic Flow when you need a more complex reusable routing policy. Choose the input that matches the requirement: known client range, geographic catchment, or measured latency.",
+          "text_sha256": "62c2ec590629755d180fffbd702d29176ee0ea9c282bc09a89a88fea807e8ee2",
+          "asset_sha256": "66fcd1033ce560aeca592410b1cd2de20238a2a75a47f243d5d66e247a674887"
+        },
+        {
+          "id": "m05p08-s24-c1-0750c2f3b2ea",
+          "slide": 24,
+          "text": "For public readiness, the top right shows an H T T P S probe to slash health. The calculated check uses the states of child checks instead of probing an endpoint itself. With a threshold of two and two healthy children out of three, that calculated check is healthy.",
+          "text_sha256": "0750c2f3b2ea63dcc8ea45bb10eb208d3ccfdfce6e1c22b3bbd6e34e9e51ddd9",
+          "asset_sha256": "cb447d65ed03b2aa6bfba5b849e308d67f50354ab036950ae32f4d513c6ae0e4"
+        },
+        {
+          "id": "m05p08-s24-c2-ca17204cc537",
+          "slide": 24,
+          "text": "The lower lane shows a private app reporting a CloudWatch metric. This Route fifty-three health check uses the associated alarm's data stream, not a public probe into the app. Forcing the alarm state does not replace evaluating that metric signal.",
+          "text_sha256": "ca17204cc5379f8c15b5093412355427762c75472574f604649c206077eff28f",
+          "asset_sha256": "cb447d65ed03b2aa6bfba5b849e308d67f50354ab036950ae32f4d513c6ae0e4"
+        },
+        {
+          "id": "m05p08-s24-c3-e152a3f52010",
+          "slide": 24,
+          "text": "Now return to the two storefront deployments. With failover routing, an unhealthy primary and healthy standby can change future D N S answers. The warning below applies: cached responses may persist and established sessions do not move when the D N S answer changes.",
+          "text_sha256": "e152a3f52010f92e21e67103dd2f3fe3bb57830e8ecb6a1344c07304950a73c0",
+          "asset_sha256": "cb447d65ed03b2aa6bfba5b849e308d67f50354ab036950ae32f4d513c6ae0e4"
+        },
+        {
+          "id": "m05p08-s25-c1-231b46041723",
+          "slide": 25,
+          "text": "A traffic policy stores the routing rules. The traffic policy record applies a selected version to shop dot example dot com. Across the timeline, weights change from ninety and ten to seventy-five and twenty-five, then revert by applying version one to the same record.",
+          "text_sha256": "231b460417230160641be0a9aa03d1d8a3953ee148d81bbb33ba60924d1e5ae5",
+          "asset_sha256": "e14ed5e51cdcdcc7246ffad32f334d5456d6ccf042f8175a9a4ab49fefd271ce"
+        },
+        {
+          "id": "m05p08-s25-c2-03ba6c9cfacc",
+          "slide": 25,
+          "text": "Compare the two paths. A new query that reaches authoritative D N S uses version two and may receive the European endpoint. A recursive resolver that still holds the earlier U S answer can keep returning it until the record's time to live expires.",
+          "text_sha256": "03ba6c9cfaccc3f4fb33b51a3fcfddaa0674c2902f9d454b658e5a425178e8e9",
+          "asset_sha256": "e14ed5e51cdcdcc7246ffad32f334d5456d6ccf042f8175a9a4ab49fefd271ce"
+        },
+        {
+          "id": "m05p08-s25-c3-1728821b2559",
+          "slide": 25,
+          "text": "Weights steer D N S answers, not exact shares of H T T P requests. Applying the earlier version rolls back the policy for fresh responses, not the answers already cached. Verify the selected version and observe actual application traffic separately.",
+          "text_sha256": "1728821b2559f8ba312c5604ddbd74ac94101aa8492c485a62e767e75bea4399",
+          "asset_sha256": "e14ed5e51cdcdcc7246ffad32f334d5456d6ccf042f8175a9a4ab49fefd271ce"
+        }
+      ]
+    }
+  ]
+}
