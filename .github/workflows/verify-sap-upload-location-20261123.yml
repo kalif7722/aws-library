@@ -1,0 +1,71 @@
+name: Locate approved SAP archives (read only)
+on:
+  push:
+    branches: ['review/verify-sap-upload-location-20261123']
+    paths: ['.github/workflows/verify-sap-upload-location-20261123.yml']
+permissions:
+  contents: read
+jobs:
+  locate:
+    if: github.ref == 'refs/heads/review/verify-sap-upload-location-20261123' && github.repository == 'kalif7722/aws-library'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: python -m pip install --disable-pip-version-check boto3
+      - name: Locate only known SAP package names and release keys
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          AWS_EC2_METADATA_DISABLED: 'true'
+        run: |
+          python - <<'PY'
+          import os,json,re,urllib.parse,hashlib,concurrent.futures
+          import boto3
+          from botocore.config import Config
+          from botocore.exceptions import ClientError
+          PIN={"SAP-M00-Media-and-Captions.zip":{"sha":"c94371f334efafea321891062cd2f2471160fbdf5384c78e34774ec227927e12","bytes":27000567},"SAP-M01-Media-and-Captions.zip":{"sha":"4726ec35b1854e14a16e6a55195b88893f5a4aba4bade6b87150f87e69a446ef","bytes":114441303},"SAP-M02-Media-and-Captions.zip":{"sha":"ca52e3b77d45fb9f25ba68247252da42fea14e7382c773c5c0a084b264d4a331","bytes":101988551},"SAP-M03-Media-and-Captions.zip":{"sha":"798f8b21845292b1010ffebb45f2a923c7da2c87d6d9ea4b4da4ebf9cb37628a","bytes":79772759},"SAP-M04-Media-and-Captions.zip":{"sha":"babbb6adcda57e8dd7ff6512e943672094aa58b3c36af78529e02626b2b051ac","bytes":68625945},"SAP-M05-Media-and-Captions.zip":{"sha":"870aee1d2cf032d290f83cde049e60c42033b24d119fbdf72e031fafcb9dd736","bytes":30159713},"SAP-M06-Media-and-Captions.zip":{"sha":"b7369efff272e910f0b7794001e3f5726206a8df7f8dabf4e44a646f5c918b29","bytes":60510858},"SAP-M07-Media-and-Captions.zip":{"sha":"11a959535e3d26843978a5ad704800d6f3c2cd73d4a7ee9cb7e6bcfe8d7f7644","bytes":141307359},"SAP-M08-Media-and-Captions.zip":{"sha":"63389101b2e51e4468edd5f1bf42ec9e4ddcab94caf5ca510ab55222b2359b1a","bytes":86042110},"SAP-M00-M08-Upload-LAST-Manifests.zip":{"sha":"9f46a23ce8a3281ed4bb434231abbf18d4ced136ad73849aa57440d8ffbf1101","bytes":48479}}
+          root='aws-course-videos/previews/sap/'
+          rev='2026-11-23-sap-through-m08-v1'
+          ep=os.environ['R2_ENDPOINT']; u=urllib.parse.urlsplit(ep)
+          assert u.scheme=='https' and re.fullmatch(r'[a-z0-9-]+(?:\.[a-z0-9-]+)*\.r2\.cloudflarestorage\.com',u.hostname or '') and u.netloc==u.hostname and u.path in ('','/') and not u.query and not u.fragment
+          bucket=os.environ['R2_BUCKET']
+          api=boto3.client('s3',endpoint_url=ep,region_name='auto',config=Config(signature_version='s3v4',connect_timeout=6,read_timeout=30,max_pool_connections=10,retries={'total_max_attempts':1},s3={'addressing_style':'path'}))
+          zdirs=['','uploads/','archives/','incoming/','Downloads/','aws-course-videos/',root,root+'uploads/',root+'archives/',root+'incoming/',root+rev+'/']
+          release_dirs=[root+f'module-{i:02}/releases/{rev}/' for i in range(9)]
+          archive_lookups=[(d+n,n) for d in zdirs for n in PIN]
+          archive_lookups.extend((d+n,n) for i,d in enumerate(release_dirs) for n in (f'SAP-M{i:02}-Media-and-Captions.zip','SAP-M00-M08-Upload-LAST-Manifests.zip'))
+          def head(pair):
+           key,n=pair
+           try:h=api.head_object(Bucket=bucket,Key=key)
+           except ClientError as e:
+            return None if e.response.get('ResponseMetadata',{}).get('HTTPStatusCode')==404 else {'status':'head_error'}
+           except Exception:return {'status':'network_error'}
+           row={'key':key,'size':h['ContentLength'],'mime':h['ContentType'],'match':False}
+           if h['ContentLength']!=PIN[n]['bytes']:return row
+           try:
+            sha=hashlib.sha256();size=0
+            with api.get_object(Bucket=bucket,Key=key)['Body'] as body:
+             for x in body.iter_chunks(chunk_size=1024*1024):sha.update(x);size+=len(x)
+            row.update(sha256=sha.hexdigest(),match=size==PIN[n]['bytes'] and sha.hexdigest()==PIN[n]['sha'])
+           except Exception:row['status']='readback_error'
+           return row
+          def loc(d):
+           try:
+            page=api.list_objects_v2(Bucket=bucket,Prefix=d,MaxKeys=125)
+            approved=re.compile(r'^'+re.escape(d)+r'part-[0-9]{2}/sap-module-[0-8][0-9]-part-[0-9]{2}(?:\.mp4|\.vtt|\.srt|-transcript\.txt|-manifest\.json)$')
+            return {'module':re.search(r'module-(\d{2})',d).group(1),'release_candidates':sum(bool(approved.fullmatch(x['Key'])) for x in page.get('Contents',[])),'truncated':page.get('IsTruncated',False)}
+           except Exception:return {'status':'list_unavailable'}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as p:
+           rows=[r for r in p.map(head,archive_lookups) if r is not None]; locs=list(p.map(loc,release_dirs))
+          report={'archive_heads':len(archive_lookups),'archives':rows,'release_prefix_checks':locs}
+          print(json.dumps(report))
+          open('location.json','w').write(json.dumps(report,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m00-m08-location
+          path: location.json
+          retention-days: 3
+          if-no-files-found: error
