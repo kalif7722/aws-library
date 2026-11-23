@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "06",
+      "revision": "2026-11-23-m12p06-m12-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96",
+        "2": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+      },
+      "units": [
+        {
+          "id": "m12p06-ecr-c1-09580ab57fe9",
+          "slide": 1,
+          "text": "Use E C R when a build needs a managed registry, not a place to run the container. The pipeline builds and pushes an O C I image; the repository stores its manifest and layers, and the runtime later pulls that artifact.",
+          "text_sha256": "09580ab57fe94dbf7dd169cf5d519b83ab9c8e74563eed1bea35435126f59e16",
+          "canonical_text_sha256": "4bfa0a006f3fb69683a997ab29ede44eb13e2280b1884f814bf2a04f8e26cfee",
+          "asset_sha256": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96"
+        },
+        {
+          "id": "m12p06-ecr-c2-a55d3d25fd3e",
+          "slide": 1,
+          "text": "A tag is a convenient name, while a digest identifies exact content. Record the deployed digest and decide independently who can pull, what gets scanned, what to retain, and where to replicate.",
+          "text_sha256": "a55d3d25fd3e9f97f293d3811b6a4e2190c62f7745209378da2be5c3d374d8a0",
+          "canonical_text_sha256": "a55d3d25fd3e9f97f293d3811b6a4e2190c62f7745209378da2be5c3d374d8a0",
+          "asset_sha256": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96"
+        },
+        {
+          "id": "m12p06-014-c1-a27a11a03e90",
+          "slide": 2,
+          "text": "A failed image pull has three gates: caller permissions, repository access, and network reachability. For startup on E C S, check the task execution role rather than granting unrelated permissions to the application task role.",
+          "text_sha256": "a27a11a03e908855f3be782f8687767b747d20afaab2f6a95d75430fd06895b9",
+          "canonical_text_sha256": "1fa95b3be0ff5709f1faaae5cc0ad969ef3439d76ab0c74b64106a8c9e9ec7c5",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        },
+        {
+          "id": "m12p06-014-c2-59234a6d3505",
+          "slide": 2,
+          "text": "A token is not proof of access to every repository. Check the destination policy for cross-account pulls and reachability to the E C R interfaces and S three layers. Test from the actual runtime with the intended digest.",
+          "text_sha256": "59234a6d350539a422ea1a2a38046bf5b1abe1da939f00140f826daafa9ce1bb",
+          "canonical_text_sha256": "097f628647164004455de9e1f1ac27d721b827f3a60943991ecddbd100bd6552",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "07",
+      "revision": "2026-11-23-m12p07-m12-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "b42f37234312ee7268c549b819e131af03f98f045905ce597a5b3888176ef0c5",
+        "2": "3d4174e0f219a837d7221a678c241548339fc2e7a7c1f8824bc253d329002f47",
+        "3": "eb8629d6bfbceb007968c4f50f65470cbe73f008ce7836713203c5690a17441c"
+      },
+      "units": [
+        {
+          "id": "m12p07-015-c1-85f65e649527",
+          "slide": 1,
+          "text": "Before lifecycle cleanup, record the exact deployed digest and keep a known-good rollback digest, its multi-architecture manifests, and required artifacts. A movable tag alone cannot prove what will be redeployed.",
+          "text_sha256": "85f65e649527099e43e895f9fca8096a8dad0c8c3052007736ae1524aba12bd9",
+          "canonical_text_sha256": "85f65e649527099e43e895f9fca8096a8dad0c8c3052007736ae1524aba12bd9",
+          "asset_sha256": "b42f37234312ee7268c549b819e131af03f98f045905ce597a5b3888176ef0c5"
+        },
+        {
+          "id": "m12p07-015-c2-7ef74a95b099",
+          "slide": 1,
+          "text": "Preview the lifecycle policy and verify that the deployment and rollback digests remain accessible before allowing expiry. If a tag must never point to new content, apply tag immutability; that is separate from retention.",
+          "text_sha256": "7ef74a95b099838ff8ade68db988734a65331d6c3a1127829b86e70710985f58",
+          "canonical_text_sha256": "7ef74a95b099838ff8ade68db988734a65331d6c3a1127829b86e70710985f58",
+          "asset_sha256": "b42f37234312ee7268c549b819e131af03f98f045905ce597a5b3888176ef0c5"
+        },
+        {
+          "id": "m12p07-016-c1-2e9348183a53",
+          "slide": 2,
+          "text": "Use E C R replication to distribute the image artifact, not to create a working application in another Region. Compare source and destination digests. In a cross-account destination, the registry policy must allow replication from the source.",
+          "text_sha256": "2e9348183a532cd86b32fd469e8253df034697a57655080772708e437b208102",
+          "canonical_text_sha256": "31853f019e6a6747ec697aa87d0be2f777d5cbfd38d1e6f2817379972179f251",
+          "asset_sha256": "3d4174e0f219a837d7221a678c241548339fc2e7a7c1f8824bc253d329002f47"
+        },
+        {
+          "id": "m12p07-016-c2-e581345a022d",
+          "slide": 2,
+          "text": "Use explicit replication backfill for qualifying existing images when needed. At the destination, separately verify repository configuration, runtime access and the deployment. A replicated digest does not prove that a task is running.",
+          "text_sha256": "e581345a022d139707a081cfaf57ceac99c951f1ed7f2a7859a61708138154ef",
+          "canonical_text_sha256": "e581345a022d139707a081cfaf57ceac99c951f1ed7f2a7859a61708138154ef",
+          "asset_sha256": "3d4174e0f219a837d7221a678c241548339fc2e7a7c1f8824bc253d329002f47"
+        },
+        {
+          "id": "m12p07-017-c1-18d5c3bdc954",
+          "slide": 3,
+          "text": "Pick scanning coverage based on the packages you ship. Basic scanning covers supported operating-system vulnerabilities. Enhanced scanning uses Amazon Inspector and extends coverage to supported language packages; check the configured frequency.",
+          "text_sha256": "18d5c3bdc9548d3133a4fc975ffcb4b6495338bd05491e2d03ebe9e4ff8e584e",
+          "canonical_text_sha256": "18d5c3bdc9548d3133a4fc975ffcb4b6495338bd05491e2d03ebe9e4ff8e584e",
+          "asset_sha256": "eb8629d6bfbceb007968c4f50f65470cbe73f008ce7836713203c5690a17441c"
+        },
+        {
+          "id": "m12p07-017-c2-4b8cd75d8b5d",
+          "slide": 3,
+          "text": "Use the finding to decide what to remediate. Rebuild with patched dependencies, review the new digest and its scan results, then deploy the verified image. A past scan, or zero reported findings, is not proof of safety.",
+          "text_sha256": "4b8cd75d8b5d9312fccd701e113733d8d6bd98fa09ef777ed77fac4e2b5afc7f",
+          "canonical_text_sha256": "4b8cd75d8b5d9312fccd701e113733d8d6bd98fa09ef777ed77fac4e2b5afc7f",
+          "asset_sha256": "eb8629d6bfbceb007968c4f50f65470cbe73f008ce7836713203c5690a17441c"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "08",
+      "revision": "2026-11-23-m12p08-m12-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "4db14b8367577380a2bcd43a4115d2ac57dbe3c978e8add7e106aea2316b23d5",
+        "2": "0bd2c59220dde57948ebbde54c066110d0c49ec116862278d6cb826a52dbff80",
+        "3": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+      },
+      "units": [
+        {
+          "id": "m12p08-eks-c1-1c7185d4949f",
+          "slide": 1,
+          "text": "Amazon E K S runs the Kubernetes control plane. Your Pods run on the workload compute you select. This distinction matters because a healthy Kubernetes A P I does not tell you whether the application has enough healthy replicas.",
+          "text_sha256": "1c7185d4949fffe21211b72f97ded3797b135a5a79ee80d4db8775dcb53e99e4",
+          "canonical_text_sha256": "fbf8c51b5ae707fae98e75a5cd30885b6d25e05e82331b92d234d6125f445981",
+          "asset_sha256": "4db14b8367577380a2bcd43a4115d2ac57dbe3c978e8add7e106aea2316b23d5"
+        },
+        {
+          "id": "m12p08-eks-c2-5581e914658b",
+          "slide": 1,
+          "text": "Plan service exposure, workload identity, storage and upgrades separately. An E K S cluster is regional, so cross-Region recovery needs its own cluster and a data and traffic plan.",
+          "text_sha256": "5581e914658b25e0de4afa26a5cd468256b79472f6537e20399007193feee30d",
+          "canonical_text_sha256": "0e41f00dc84e27927a181003811391cb417dc7b9b8d89c6ef7144cbbf4d5b24a",
+          "asset_sha256": "4db14b8367577380a2bcd43a4115d2ac57dbe3c978e8add7e106aea2316b23d5"
+        },
+        {
+          "id": "m12p08-018-c1-4f3caa8a29b0",
+          "slide": 2,
+          "text": "AWS manages E K S control-plane availability across Availability Zones. You still select workload compute and configure deployments, service access and workload identity. Treat these as separate availability responsibilities.",
+          "text_sha256": "4f3caa8a29b029ce65697090b2af2cb998ce01b95e626ada9cc506ba37fbae6c",
+          "canonical_text_sha256": "9200c7a2f2e240463f7ab7bde9de1fc60f5c40ae8b77b230893c5c5dc3ad9d66",
+          "asset_sha256": "0bd2c59220dde57948ebbde54c066110d0c49ec116862278d6cb826a52dbff80"
+        },
+        {
+          "id": "m12p08-018-c2-fa98e537938a",
+          "slide": 2,
+          "text": "If one application Pod fails, the exam answer is not to add control-plane replicas. Check replica placement, health, runtime and storage. Use a separate regional recovery design when the requirement includes regional loss.",
+          "text_sha256": "fa98e537938abaecf756a1e2a8b6efcadc25395b0dfc455bbf7f4a1f54ac63e9",
+          "canonical_text_sha256": "fa98e537938abaecf756a1e2a8b6efcadc25395b0dfc455bbf7f4a1f54ac63e9",
+          "asset_sha256": "0bd2c59220dde57948ebbde54c066110d0c49ec116862278d6cb826a52dbff80"
+        },
+        {
+          "id": "m12p08-019-c1-a9d64dd12000",
+          "slide": 3,
+          "text": "Choose compute by the operational responsibility you need. Managed node groups integrate node lifecycle, while self-managed nodes give you more control and leave you with more patching and upgrade work.",
+          "text_sha256": "a9d64dd1200057da0bbced5ee140c263015152baf7193cec8e35d4f6ee38bbdb",
+          "canonical_text_sha256": "a9d64dd1200057da0bbced5ee140c263015152baf7193cec8e35d4f6ee38bbdb",
+          "asset_sha256": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+        },
+        {
+          "id": "m12p08-019-c2-6614f691e26f",
+          "slide": 3,
+          "text": "Fargate runs matching Pods without worker node administration, subject to platform constraints. E K S Auto Mode manages node compute and selected platform functions. Verify workload and add-on compatibility before selecting either.",
+          "text_sha256": "6614f691e26f608ec7b99b26ca68f6c24ba2f92586c53b53d4b6736ac53e724d",
+          "canonical_text_sha256": "1f8f350a242cc7167f329a665916a7446e8d4a43344cf7dfadd7962324108067",
+          "asset_sha256": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "09",
+      "revision": "2026-11-23-m12p09-m12-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "f516e14bc31fb4ddd0c4cf4c5cdb59f2649f51321533778edbaa926e916c6a61",
+        "2": "ce1bc95ee9755f2a2e9ed5ecb5da1d3589cd7622b1b24efbef2d04886aa56b9f"
+      },
+      "units": [
+        {
+          "id": "m12p09-020-c1-874e64b8900b",
+          "slide": 1,
+          "text": "A public application does not require public workers. The internet-facing load balancer accepts the request in public subnets and forwards it to allowed targets in private subnets. Choose the target type to match addressing.",
+          "text_sha256": "874e64b8900b601e5fe53a02b6d3a4171d11d52371965d8b5087d008148da3fa",
+          "canonical_text_sha256": "874e64b8900b601e5fe53a02b6d3a4171d11d52371965d8b5087d008148da3fa",
+          "asset_sha256": "f516e14bc31fb4ddd0c4cf4c5cdb59f2649f51321533778edbaa926e916c6a61"
+        },
+        {
+          "id": "m12p09-020-c2-56e634396751",
+          "slide": 1,
+          "text": "Validate worker access to the Kubernetes A P I and the dependencies used for image pulls and logs. Health checks, controller permissions and security-group paths are separate checks. This is not a requirement to expose the Kubernetes A P I publicly.",
+          "text_sha256": "56e6343967514eef33ffa0cf650500b47e0da64f57b195829e2176ed441278c6",
+          "canonical_text_sha256": "43abbe8e3aa8562afc51bd41774b96d7f60cce50839b66ebcaf9fed00284e0a3",
+          "asset_sha256": "f516e14bc31fb4ddd0c4cf4c5cdb59f2649f51321533778edbaa926e916c6a61"
+        },
+        {
+          "id": "m12p09-021-c1-2b35d468915f",
+          "slide": 2,
+          "text": "Separate permissions to administer Kubernetes from permissions for a Pod to call AWS APIs. For cluster operations, configure cluster access and grant Kubernetes permissions as appropriate; the illustrated R B A C rules scope namespace and object actions.",
+          "text_sha256": "2b35d468915f0e3053e86d290211badb30d34109774031835ddde2a3585406b2",
+          "canonical_text_sha256": "e1ec233ae5d9fae16e6ac4eef9aeafd47a620699337a0be4b06832e99b50f46d",
+          "asset_sha256": "ce1bc95ee9755f2a2e9ed5ecb5da1d3589cd7622b1b24efbef2d04886aa56b9f"
+        },
+        {
+          "id": "m12p09-021-c2-6b8912a472b8",
+          "slide": 2,
+          "text": "For S three access from a Pod, associate its service account with a scoped I A M role using a supported workload identity option. E K S Pod Identity is not supported on Fargate; consider I R S A there rather than broadening the node role.",
+          "text_sha256": "6b8912a472b82492e037c9a92ed221ce33c1c2dbd19028a1996141fa5c597273",
+          "canonical_text_sha256": "5292b4bccc4157fa760663e73519b8fe183b5e2752e8ee17e8612e2436232967",
+          "asset_sha256": "ce1bc95ee9755f2a2e9ed5ecb5da1d3589cd7622b1b24efbef2d04886aa56b9f"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "10",
+      "revision": "2026-11-23-m12p10-m12-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "db3133b02971546e5d2b06d20a6cfd46ba8a079b487a446de87b6247a9559bd3",
+        "2": "c3046869200942aec1c374d614b8387e673743dec74e3e87f8eb9125ad6fd797"
+      },
+      "units": [
+        {
+          "id": "m12p10-022-c1-5f8fc81e59ac",
+          "slide": 1,
+          "text": "A persistent volume claim requests storage; the provisioner and topology determine whether the Pod can use it. E B S gives compatible Pods block storage in the same Availability Zone. It is not a shared regional filesystem and cannot be mounted by Fargate Pods.",
+          "text_sha256": "5f8fc81e59ac06e526e73ab76781a5013624c92a880b33b015abcff3c3997f52",
+          "canonical_text_sha256": "9981f6b7a48099a8ef29056395bc5b6c828916b1ba51ea048c6aadd421e0b344",
+          "asset_sha256": "db3133b02971546e5d2b06d20a6cfd46ba8a079b487a446de87b6247a9559bd3"
+        },
+        {
+          "id": "m12p10-022-c2-3c1d9e20c5a3",
+          "slide": 1,
+          "text": "Use E F S when supported workloads need a shared regional filesystem. For E K S Fargate, use static provisioning rather than assuming a dynamically provisioned E F S volume. Also check access mode and what should happen when the claim is deleted.",
+          "text_sha256": "3c1d9e20c5a3a83bcef1700e8e375b3f0a9a6c39011cd7d7637e49b077efbc2e",
+          "canonical_text_sha256": "5bdc0a975a2c7c56232b3ec60558e815a424ed31449693ad0517c53d51bc6915",
+          "asset_sha256": "db3133b02971546e5d2b06d20a6cfd46ba8a079b487a446de87b6247a9559bd3"
+        },
+        {
+          "id": "m12p10-023-c1-ebb3d320a048",
+          "slide": 2,
+          "text": "Choose the F S x integration by workload and driver, not by the F S x name alone. The example uses the Lustre C S I driver for a parallel filesystem, and NetApp Trident for eligible On Tap-backed storage. The F S x for Lustre C S I driver is not supported on Fargate.",
+          "text_sha256": "ebb3d320a048d57ed8ad0f96ea50d2da6c818002d8b5aebef3783a254fb127b9",
+          "canonical_text_sha256": "0fd42296d40b77f87ab9c6eedfa681d6c927dbaac9dcb86f8456d98e51073195",
+          "asset_sha256": "c3046869200942aec1c374d614b8387e673743dec74e3e87f8eb9125ad6fd797"
+        },
+        {
+          "id": "m12p10-023-c2-81d349913c40",
+          "slide": 2,
+          "text": "Before choosing the storage class, verify the filesystem protocol, supported node placement, network access, I A M and reclaim behavior. Mount a test volume from a real Pod and check cleanup and recovery before relying on it.",
+          "text_sha256": "81d349913c400aa5a0f302f0bc27daa008cb9ef59067507f60cee9f38a216ae7",
+          "canonical_text_sha256": "46d77195c432fa4051b73259bbd131d5e195aa8956cf51fa93ad5e647bd265aa",
+          "asset_sha256": "c3046869200942aec1c374d614b8387e673743dec74e3e87f8eb9125ad6fd797"
+        }
+      ]
+    }
+  ]
+}
