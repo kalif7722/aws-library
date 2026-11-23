@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "06",
+      "part": "08",
+      "revision": "2026-11-23-m06p08-approved-aip-wave08-draft-v1",
+      "approved_assets": {
+        "27": "8a338e651e381792955fb8b2578800fefbe125fd0daf353fea38a4ac8141b4a5",
+        "28": "a8e580e74415b81528c0b98a3b1fa173d5b17762b0be75023ed25d3dd5349ac6",
+        "29": "60b6e0ba00b3c9ffc04d4dce5f68a363a518adb9f0f740ba0acca3664417e901",
+        "30": "ddb7a1889ce313ee319144702fb7c195ba410b644ab1788e128a49e95c39cef4"
+      },
+      "units": [
+        {
+          "id": "m06p08-s27-c1-282e7439f41f",
+          "slide": 27,
+          "text": "VPN CloudHub connects remote sites through a shared virtual private gateway. Each site has a Site-to-Site V P N connection to that hub.",
+          "text_sha256": "282e7439f41f112265cb59640e6c1cea459fc073e9051d14789d0f05a449c8d4",
+          "asset_sha256": "8a338e651e381792955fb8b2578800fefbe125fd0daf353fea38a4ac8141b4a5"
+        },
+        {
+          "id": "m06p08-s27-c2-9db68da3c59f",
+          "slide": 27,
+          "text": "The middle panels show what makes the spokes reachable: dynamic B G P, a unique customer autonomous system number per site, and nonoverlapping prefixes. The gateway can re-advertise a site's routes to the other sites.",
+          "text_sha256": "9db68da3c59f4b642d8fff7b08003335d46223d164282eff4d12b79c9d5cf08b",
+          "asset_sha256": "8a338e651e381792955fb8b2578800fefbe125fd0daf353fea38a4ac8141b4a5"
+        },
+        {
+          "id": "m06p08-s27-c3-8689f6169ec2",
+          "slide": 27,
+          "text": "This is remote site connectivity, not transitive V P C peering. Consider a Transit Gateway as the network grows and you need centralized routing and segmentation across more networks.",
+          "text_sha256": "8689f6169ec29d70f5ef744e3f82f3ce214ba4713d7239415b873ae1d2846b17",
+          "asset_sha256": "8a338e651e381792955fb8b2578800fefbe125fd0daf353fea38a4ac8141b4a5"
+        },
+        {
+          "id": "m06p08-s28-c1-1b9ed79f50b8",
+          "slide": 28,
+          "text": "Both users on the left can authenticate through the corporate SAML identity provider. But signing in only establishes identity. It doesn't authorize access to every private network behind the Client V P N endpoint.",
+          "text_sha256": "1b9ed79f50b89048bd5d631ee1acdcca1a196d32ac791392e4a8de59ab2898b2",
+          "asset_sha256": "a8e580e74415b81528c0b98a3b1fa173d5b17762b0be75023ed25d3dd5349ac6"
+        },
+        {
+          "id": "m06p08-s28-c2-26cd8812264b",
+          "slide": 28,
+          "text": "Follow the upper branch. The Ops group has destination authorization to the application's subnet. The other authenticated user has no matching authorization and is denied. The same sign-in result produces different access outcomes.",
+          "text_sha256": "26cd8812264b480ea705d4c13ed6eb8d99576a2dc6cfe385c207ea6db18dbe4d",
+          "asset_sha256": "a8e580e74415b81528c0b98a3b1fa173d5b17762b0be75023ed25d3dd5349ac6"
+        },
+        {
+          "id": "m06p08-s28-c3-b9b3faa4d8da",
+          "slide": 28,
+          "text": "Check the endpoint route and subnet association for the path, then verify the destination authorization rule, client D N S and relevant security groups. In this example, the private HTTPS application listens on T C P port four four three.",
+          "text_sha256": "b9b3faa4d8da51ef1e883e14c031f20b7802fe051618d6090c4be17a3402a6a1",
+          "asset_sha256": "a8e580e74415b81528c0b98a3b1fa173d5b17762b0be75023ed25d3dd5349ac6"
+        },
+        {
+          "id": "m06p08-s29-c1-951746692666",
+          "slide": 29,
+          "text": "In split tunnel mode, the endpoint routes are installed on the client. Matching destinations take the V P N; other traffic can follow the client's normal internet route.",
+          "text_sha256": "95174669266615512de9b85e209c2bc1d089950c9b960419129c6fdec61aec1c",
+          "asset_sha256": "60b6e0ba00b3c9ffc04d4dce5f68a363a518adb9f0f740ba0acca3664417e901"
+        },
+        {
+          "id": "m06p08-s29-c2-7b0d52a36809",
+          "slide": 29,
+          "text": "In full tunnel mode, client traffic goes through the V P N. Design internet egress explicitly if that traffic needs to reach the internet; full tunnel alone does not supply an egress path.",
+          "text_sha256": "7b0d52a36809a256c784fade4cb7b67eb2b29c29a78ef6ec918780f83626331d",
+          "asset_sha256": "60b6e0ba00b3c9ffc04d4dce5f68a363a518adb9f0f740ba0acca3664417e901"
+        },
+        {
+          "id": "m06p08-s29-c3-b2fa2c3139ec",
+          "slide": 29,
+          "text": "The lower panels show extra destinations: a peered V P C, an on-premises network, or native Transit Gateway integration. Choose the endpoint model and check the complete routes, destination authorization and return path. A tunnel choice is not an authorization rule.",
+          "text_sha256": "b2fa2c3139ecedd4718f5e3769bfdd9e8b8305933f523d32e8ae7a1357ef3349",
+          "asset_sha256": "60b6e0ba00b3c9ffc04d4dce5f68a363a518adb9f0f740ba0acca3664417e901"
+        },
+        {
+          "id": "m06p08-s30-c1-b7fe978c37be",
+          "slide": 30,
+          "text": "Direct Connect SiteLink lets supported on-premises sites exchange traffic through Direct Connect locations. The workload does not need to route the site-to-site traffic through an AWS Region.",
+          "text_sha256": "b7fe978c37be1010e14e6a17589b790285c12d2534785f8a919fd634b1eb49aa",
+          "asset_sha256": "ddb7a1889ce313ee319144702fb7c195ba410b644ab1788e128a49e95c39cef4"
+        },
+        {
+          "id": "m06p08-s30-c2-b7d52db6fb43",
+          "slide": 30,
+          "text": "Enable SiteLink on supported private or transit virtual interfaces associated with the same Direct Connect gateway. Check the service's routing policy against your W A N requirements before selecting this path.",
+          "text_sha256": "b7d52db6fb4319e496a6a87f681d3550347aa605d39103ff47377aeb4b2258db",
+          "asset_sha256": "ddb7a1889ce313ee319144702fb7c195ba410b644ab1788e128a49e95c39cef4"
+        },
+        {
+          "id": "m06p08-s30-c3-d3d81ae4cb99",
+          "slide": 30,
+          "text": "SiteLink doesn't eliminate failures on the customer's access circuits. Nor does it supply automatic end-to-end application encryption. Plan resilience and encryption separately.",
+          "text_sha256": "d3d81ae4cb99eb7710b577f81f42f82f5621401f380825fe21e7c753a9c6542e",
+          "asset_sha256": "ddb7a1889ce313ee319144702fb7c195ba410b644ab1788e128a49e95c39cef4"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "09",
+      "revision": "2026-11-23-m06p09-approved-aip-wave08-draft-v1",
+      "approved_assets": {
+        "31": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c",
+        "32": "87733007b6b237b26663614e2a9de054d17f7ada2ad767c88b53eb3996312846",
+        "33": "4fefc283187962afe248acf9b11367b8cfc8983b15de9462744ee0b9be508f72",
+        "34": "8effe0a42daf9f702f8aed187549d0ff2a40b32e17933c12a683b0d62f205669"
+      },
+      "units": [
+        {
+          "id": "m06p09-s31-c1-a66531011af9",
+          "slide": 31,
+          "text": "The left option puts an application or data replica in a shared-services V P C. Consumers reach the local endpoint instead of the original on-premises service. Account for replication lag, consistency and cost.",
+          "text_sha256": "a66531011af9e56eb705447dba90ac84c8b77c05fbfd38d1fb973f760e866a3c",
+          "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+        },
+        {
+          "id": "m06p09-s31-c2-e74683588667",
+          "slide": 31,
+          "text": "The proxy in the middle terminates the consumer connection and creates a separate connection to the original service. Plan proxy scaling, availability, authentication and protocol support.",
+          "text_sha256": "e74683588667048f6575e9035ae36d6b6afdbe94b395a9cc1915eefadd66cd1f",
+          "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+        },
+        {
+          "id": "m06p09-s31-c3-8e92ee5aefb6",
+          "slide": 31,
+          "text": "Use a transit hub when workloads need routed access to the on-premises network itself. Define routes, isolation, and return paths. Don't rely on V P C peering to transit another V P C's V P N or Direct Connect connection.",
+          "text_sha256": "8e92ee5aefb64dbc750d160b6ff77783fc6cda91d77bda9f71d66c724ec00562",
+          "asset_sha256": "6154aed5109bd351ba88c410e45628697389cc32802ef644d91f8e186ea2180c"
+        },
+        {
+          "id": "m06p09-s32-c1-94f17a66db6b",
+          "slide": 32,
+          "text": "Follow the outbound default route from on premises through the V P N or Direct Connect, Transit Gateway, and the egress V P C. The public NAT gateway in a public subnet sends traffic via the internet gateway.",
+          "text_sha256": "94f17a66db6bfcc4c6a9ac11ecbeb8af42c51335748cdc6da338a46af7a652ce",
+          "asset_sha256": "87733007b6b237b26663614e2a9de054d17f7ada2ad767c88b53eb3996312846"
+        },
+        {
+          "id": "m06p09-s32-c2-0f62fa588785",
+          "slide": 32,
+          "text": "Validate the Transit Gateway and subnet route tables in both directions. The return route must know the on-premises prefixes via Transit Gateway. In this zonal layout, use a public NAT in each egress zone and route to the local NAT.",
+          "text_sha256": "0f62fa58878560b7d40d5c92672d6af07935b1e1b099cf01a2c3f1f23ca46e92",
+          "asset_sha256": "87733007b6b237b26663614e2a9de054d17f7ada2ad767c88b53eb3996312846"
+        },
+        {
+          "id": "m06p09-s32-c3-206642b2dea1",
+          "slide": 32,
+          "text": "Don't substitute a virtual private gateway for Transit Gateway in this on-premises-to-NAT path. Don't substitute a private NAT for the public NAT internet exit. A separate design can use approved customer-provided egress on premises instead.",
+          "text_sha256": "206642b2dea169968b13e09fecd6aa6cb6a4145c76b45693db36a447b55b8d42",
+          "asset_sha256": "87733007b6b237b26663614e2a9de054d17f7ada2ad767c88b53eb3996312846"
+        },
+        {
+          "id": "m06p09-s33-c1-c00211144517",
+          "slide": 33,
+          "text": "Read the tunnel endpoint addresses first. The top tunnel uses public I P addresses and reaches the AWS public V P N endpoint over a Direct Connect public virtual interface. That interface reaches AWS public prefixes, not the general internet.",
+          "text_sha256": "c00211144517d7019c22d6088f131d428510335d6de9f95718898b3481a8f082",
+          "asset_sha256": "4fefc283187962afe248acf9b11367b8cfc8983b15de9462744ee0b9be508f72"
+        },
+        {
+          "id": "m06p09-s33-c2-8a8363de0d04",
+          "slide": 33,
+          "text": "The lower tunnel uses private IPv4 at both ends. Follow the Direct Connect transit virtual interface to the Direct Connect gateway, then to private V P N endpoints on Transit Gateway.",
+          "text_sha256": "8a8363de0d04d254fb0d5364100c07a40a3a38748586e0c28d34db28bcacd7b2",
+          "asset_sha256": "4fefc283187962afe248acf9b11367b8cfc8983b15de9462744ee0b9be508f72"
+        },
+        {
+          "id": "m06p09-s33-c3-c57756e907e6",
+          "slide": 33,
+          "text": "The designs differ in addressing and the virtual interface used. In both, Direct Connect supplies transport and I P sec encrypts traffic between the V P N endpoints.",
+          "text_sha256": "c57756e907e65fe484a792cf88a85e11814d6b1263703e81b1e9538d2546d4ab",
+          "asset_sha256": "4fefc283187962afe248acf9b11367b8cfc8983b15de9462744ee0b9be508f72"
+        },
+        {
+          "id": "m06p09-s34-c1-cddb68d4dc24",
+          "slide": 34,
+          "text": "In the upper example, Site A advertises one prefix and Site B another. Both sites can be active because each receives traffic for its own destination. That does not mean two paths are sharing traffic for one destination.",
+          "text_sha256": "cddb68d4dc2458c6a375b69e83766414fd263ce2c865392fa3c1da1f56feb450",
+          "asset_sha256": "8effe0a42daf9f702f8aed187549d0ff2a40b32e17933c12a683b0d62f205669"
+        },
+        {
+          "id": "m06p09-s34-c2-7e1bde1a6809",
+          "slide": 34,
+          "text": "The lower example advertises the same prefix over two dynamic V P N paths. When the paths qualify as equal cost and Transit Gateway V P N E C M P is enabled, it can distribute traffic across both paths to that same destination.",
+          "text_sha256": "7e1bde1a680946a10a69e1bb7d2b75f25eb768817cd87c69e66371d5581dc5e1",
+          "asset_sha256": "8effe0a42daf9f702f8aed187549d0ff2a40b32e17933c12a683b0d62f205669"
+        },
+        {
+          "id": "m06p09-s34-c3-56d9296cc7db",
+          "slide": 34,
+          "text": "Use dynamic B G P and check the AS numbers and AS paths so the routes qualify as equal cost. A virtual private gateway doesn't support V P N E C M P. Ask whether the requirement is two active sites or multiple paths for the same destination.",
+          "text_sha256": "56d9296cc7db0c7e7350304b49d84e8a85b90c38854a89d67d3b30b67ebc1a4f",
+          "asset_sha256": "8effe0a42daf9f702f8aed187549d0ff2a40b32e17933c12a683b0d62f205669"
+        }
+      ]
+    },
+    {
+      "module": "06",
+      "part": "10",
+      "revision": "2026-11-23-m06p10-approved-aip-wave08-draft-v1",
+      "approved_assets": {
+        "35": "769ab6f19923d5356371a09ff8d64c75b32f88d03a02970b13676727f719d8d5",
+        "36": "81b336651962acf0c7f6266fcdcf4d3e6ccb3e4fa8f5d5556890e8f070913ba3",
+        "37": "28a65e5c8769386975b3e62969288e4cc2c49259fc3138caba8dc5b3473747e7",
+        "38": "ff8f0d8ec39a0f3a801db662d4ad94a91b51af9ea119e01414f751a5378b45d1"
+      },
+      "units": [
+        {
+          "id": "m06p10-s35-c1-df24a0a1f19c",
+          "slide": 35,
+          "text": "S3 on Outposts keeps objects at the physical site for local processing or data residency. Use an S3 on Outposts access point and an Outposts endpoint; objects use the Outposts storage class.",
+          "text_sha256": "df24a0a1f19c5c23557eb6a6427a73e495dcc7ca3eb5364084cd732a8d3cc86f",
+          "asset_sha256": "769ab6f19923d5356371a09ff8d64c75b32f88d03a02970b13676727f719d8d5"
+        },
+        {
+          "id": "m06p10-s35-c2-24165677a62e",
+          "slide": 35,
+          "text": "Check supported encryption and features rather than assuming regional S3 parity. S S E S3 is the default, S S E C is an option, and S S E K M S isn't supported in this model. The rack has finite capacity, so monitor free space.",
+          "text_sha256": "24165677a62ef49ab4a30520fb60c7db85d6bf669572279464c5deaf3e8aeb80",
+          "asset_sha256": "769ab6f19923d5356371a09ff8d64c75b32f88d03a02970b13676727f719d8d5"
+        },
+        {
+          "id": "m06p10-s35-c3-90e206dd1598",
+          "slide": 35,
+          "text": "When you need an approved transfer between S3 on Outposts and regional S3, evaluate supported DataSync transfers. Design bandwidth, protection and recovery. An S3 API doesn't imply an automatic regional copy.",
+          "text_sha256": "90e206dd159815e061bfd1f32100da0f00bb3fa93b63815fa51d3b9eb76beb1e",
+          "asset_sha256": "769ab6f19923d5356371a09ff8d64c75b32f88d03a02970b13676727f719d8d5"
+        },
+        {
+          "id": "m06p10-s36-c1-e2f297caf5bd",
+          "slide": 36,
+          "text": "Follow the client to its endpoint and associated subnet in V P C A. Peering connects it to the private application in V P C B. This is the subnet-associated model.",
+          "text_sha256": "e2f297caf5bde615f9b785ebb70a0ee3237fea41c5dda5e1f77d5cc2c960dece",
+          "asset_sha256": "81b336651962acf0c7f6266fcdcf4d3e6ccb3e4fa8f5d5556890e8f070913ba3"
+        },
+        {
+          "id": "m06p10-s36-c2-78973cadc645",
+          "slide": 36,
+          "text": "Verify the endpoint has a destination route via each associated subnet. Authorize the approved group for the application range, then verify peering routes and the relevant security groups. Signing in alone is insufficient.",
+          "text_sha256": "78973cadc645d24a2863931ef9bce87fc0c9e6a77b4a0e2e2b30093a09d18574",
+          "asset_sha256": "81b336651962acf0c7f6266fcdcf4d3e6ccb3e4fa8f5d5556890e8f070913ba3"
+        },
+        {
+          "id": "m06p10-s36-c3-63535fc7bba5",
+          "slide": 36,
+          "text": "In this subnet-associated IPv4 example, the endpoint translates the client source to the Client V P N interface address. The return path must reach that association subnet. If the tunnel is up but the app is unreachable, check routing and authorization separately.",
+          "text_sha256": "63535fc7bba5c29803923e938cea19eeb1cfd439f8fd9ec4887845cddc0d892a",
+          "asset_sha256": "81b336651962acf0c7f6266fcdcf4d3e6ccb3e4fa8f5d5556890e8f070913ba3"
+        },
+        {
+          "id": "m06p10-s37-c1-3a53e9e0bf4f",
+          "slide": 37,
+          "text": "Start at the customer gateway device and the two I P sec tunnels. Both show Up. The customer gateway resource represents the on-premises device. Use a virtual private gateway for supported single V P C designs, or Transit Gateway for centralized routing across multiple networks.",
+          "text_sha256": "3a53e9e0bf4f08b461b7c72370b7030d13a93febcca8a0f2b1a8e06e098ed06b",
+          "asset_sha256": "28a65e5c8769386975b3e62969288e4cc2c49259fc3138caba8dc5b3473747e7"
+        },
+        {
+          "id": "m06p10-s37-c2-8f76c4a66ffc",
+          "slide": 37,
+          "text": "The app still cannot reply to the customer network. Check its subnet route for the customer prefix through Transit Gateway, then the relevant Transit Gateway route toward the V P N attachment. Verify propagation for learned B G P routes, or explicit entries when using a supported static design.",
+          "text_sha256": "8f76c4a66ffc0777e6ed320055a08397708ee69060c0d9d0b2ae142f659f904e",
+          "asset_sha256": "28a65e5c8769386975b3e62969288e4cc2c49259fc3138caba8dc5b3473747e7"
+        },
+        {
+          "id": "m06p10-s37-c3-a799038633b8",
+          "slide": 37,
+          "text": "Confirm the customer side routes the AWS prefix back through its customer gateway device. Also verify the opposite direction reaches the V P C through the correct attachment. In an approved test, exercise each tunnel and confirm actual traffic flows, not just tunnel status.",
+          "text_sha256": "a799038633b83c744d6ec8576e47dc7e1b5b53efbffebf40fa3be773e0640cc5",
+          "asset_sha256": "28a65e5c8769386975b3e62969288e4cc2c49259fc3138caba8dc5b3473747e7"
+        },
+        {
+          "id": "m06p10-s38-c1-568e71b778ef",
+          "slide": 38,
+          "text": "This is native Client V P N association with Transit Gateway, not the V P C subnet association shown earlier. Choose one model per endpoint. The Transit Gateway can lead to multiple V P Cs and to connected on-premises destinations.",
+          "text_sha256": "568e71b778efd76445f33736360c18c07ee26789633b818e0be261dbf8e1d7e1",
+          "asset_sha256": "ff8f0d8ec39a0f3a801db662d4ad94a91b51af9ea119e01414f751a5378b45d1"
+        },
+        {
+          "id": "m06p10-s38-c2-50e23f9112f1",
+          "slide": 38,
+          "text": "Add the destination routes explicitly; automatic propagation into the endpoint from Transit Gateway isn't supported. Configure network-based authorization; security-group-based authorization isn't supported for this model. Keep the endpoint and gateway in the same Region and use nonoverlapping ranges.",
+          "text_sha256": "50e23f9112f1ad639f6d2b9e368f55ffed248a4b820a5468c3d1a8b1848b00ca",
+          "asset_sha256": "ff8f0d8ec39a0f3a801db662d4ad94a91b51af9ea119e01414f751a5378b45d1"
+        },
+        {
+          "id": "m06p10-s38-c3-5f0647cfa3fc",
+          "slide": 38,
+          "text": "Unlike the previous subnet-associated IPv4 example, this native model preserves client source addresses. The destination networks must have return routes for the Client V P N range. Attachment, routing and authorization remain separate checks.",
+          "text_sha256": "5f0647cfa3fc10586b74eb73781d3a1aab5bf495bd77d60537990f46efb833f3",
+          "asset_sha256": "ff8f0d8ec39a0f3a801db662d4ad94a91b51af9ea119e01414f751a5378b45d1"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "01",
+      "revision": "2026-11-23-m07p01-approved-aip-wave08-draft-v1",
+      "approved_assets": {
+        "1": "a721a856c682a7904f6a546ec1aa6569de25e3301097ecfe5b0666bf9c632a97",
+        "2": "688df759e271c43a4b905d9772919f1e792d5fa70253a105980d12d7d6c7b207",
+        "3": "1de7625041e5afbb435c64dc81c7aeb86e2e0f0ad9044fd4449637d401b28d1e"
+      },
+      "units": [
+        {
+          "id": "m07p01-s01-c1-466191e13965",
+          "slide": 1,
+          "text": "Start with the workload in the middle. If a simulation is limited by C P U, benchmark a compute-optimized C family. If a cache needs a large working set, compare memory-optimized R. For a balanced web tier, begin with general-purpose M.",
+          "text_sha256": "466191e139658053622f71fd5fabebfa7c2e448b937ba189847218a638ad6a31",
+          "asset_sha256": "a721a856c682a7904f6a546ec1aa6569de25e3301097ecfe5b0666bf9c632a97"
+        },
+        {
+          "id": "m07p01-s01-c2-310163a01d66",
+          "slide": 1,
+          "text": "Local storage performance points toward a storage-optimized family, with a durability plan for local disks. Choose an accelerator for workloads that can use it. Burstable T fits variable C P U demand, so check how often the workload sits above its baseline.",
+          "text_sha256": "310163a01d66a482c9ee832abdf68c0b9fd26283c9c86a8cf48e782dbe8d2ccb",
+          "asset_sha256": "a721a856c682a7904f6a546ec1aa6569de25e3301097ecfe5b0666bf9c632a97"
+        },
+        {
+          "id": "m07p01-s01-c3-8ea81e9399b9",
+          "slide": 1,
+          "text": "The bottom list is the validation step. Check architecture, memory, storage bandwidth, network throughput and packet rate, then benchmark representative traffic. The family name gets you a shortlist; measurements tell you whether you picked the right instance.",
+          "text_sha256": "8ea81e9399b91af1bc00f4e027ce3dfc5554d11bb3800c83b629abe63cf42fe0",
+          "asset_sha256": "a721a856c682a7904f6a546ec1aa6569de25e3301097ecfe5b0666bf9c632a97"
+        },
+        {
+          "id": "m07p01-s02-c1-8d8dc94473c1",
+          "slide": 2,
+          "text": "Use the left side for the first decision: C P U credits accrue when demand is below baseline and are spent to burst above it. Standard mode is constrained when credits run out. In Unlimited mode, sustained surplus usage can incur charges. Check sustained demand, not just peak speed.",
+          "text_sha256": "8d8dc94473c16050477a75457eb3b8e17c3255ca8d012592c5dd36615df6ccc4",
+          "asset_sha256": "688df759e271c43a4b905d9772919f1e792d5fa70253a105980d12d7d6c7b207"
+        },
+        {
+          "id": "m07p01-s02-c2-0b645b5c1b12",
+          "slide": 2,
+          "text": "Now look at Graviton on the right. It is Arm sixty-four, not a statement about CPU credits. Choose a supported Linux image for this E C two example. Verify the binaries, container image, native libraries, monitoring agents and drivers before migrating an existing workload.",
+          "text_sha256": "0b645b5c1b12687b1116f1b3dfa00d4722cdd81d14f2bc072133d85a7ceb2aef",
+          "asset_sha256": "688df759e271c43a4b905d9772919f1e792d5fa70253a105980d12d7d6c7b207"
+        },
+        {
+          "id": "m07p01-s02-c3-a74c7b8153b6",
+          "slide": 2,
+          "text": "The last panel asks for a comparable test. Benchmark latency, throughput and total cost against a compatible x eighty-six option. Suitability depends on the workload. Bursting and processor architecture are two independent choices.",
+          "text_sha256": "a74c7b8153b644930dcb1c21078d39cd5b47dc1bc8f04cfc990ade4017ff5d3e",
+          "asset_sha256": "688df759e271c43a4b905d9772919f1e792d5fa70253a105980d12d7d6c7b207"
+        },
+        {
+          "id": "m07p01-s03-c1-127e5a8d9c14",
+          "slide": 3,
+          "text": "Compare the first two columns. A reboot restarts the operating system and clears volatile runtime state; E B S and instance-store data normally remain. With stop and start, E B S stays, but memory and instance-store data are lost, and the physical host can change.",
+          "text_sha256": "127e5a8d9c14939559e68e2e409f4f420cedeb9b4acace264382664bb0ec6314",
+          "asset_sha256": "1de7625041e5afbb435c64dc81c7aeb86e2e0f0ad9044fd4449637d401b28d1e"
+        },
+        {
+          "id": "m07p01-s03-c2-c5ac644d8adc",
+          "slide": 3,
+          "text": "Hibernation is the exception for memory. On a supported configuration it saves memory to the encrypted E B S root volume; the volume must have enough capacity. Instance-store data is still lost. Check support and prerequisites before relying on it.",
+          "text_sha256": "c5ac644d8adc8e602507ceaf222f6109aa033f6fdff76e57242bbaa30284da54",
+          "asset_sha256": "1de7625041e5afbb435c64dc81c7aeb86e2e0f0ad9044fd4449637d401b28d1e"
+        },
+        {
+          "id": "m07p01-s03-c3-e6b65b131944",
+          "slide": 3,
+          "text": "Termination removes the instance, memory and instance-store data. Check Delete on Termination for each E B S volume rather than assuming it survives. Keep important data outside the instance lifecycle or protect it separately.",
+          "text_sha256": "e6b65b1319449c692fefb913e3a29d80268095e0897f9b331651a52490125534",
+          "asset_sha256": "1de7625041e5afbb435c64dc81c7aeb86e2e0f0ad9044fd4449637d401b28d1e"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "02",
+      "revision": "2026-11-23-m07p02-approved-aip-wave08-draft-v1",
+      "approved_assets": {
+        "4": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5",
+        "5": "28ef3e6a9eb50ce9aa9684c730d7cc4de2d428cfb9ea4ff05e80fb1fe3edc52a",
+        "6": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+      },
+      "units": [
+        {
+          "id": "m07p02-s04-c1-766e90642bdc",
+          "slide": 4,
+          "text": "On the left, the A M I is the boot image and the launch template is the versioned launch configuration. The template can specify instance type, network, storage, instance profile and user data. Together they give a replacement a repeatable starting point.",
+          "text_sha256": "766e90642bdc273e288f1e9b2479f39718b792b73efca1efda4593837c7d3792",
+          "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+        },
+        {
+          "id": "m07p02-s04-c2-afd6d865b4bb",
+          "slide": 4,
+          "text": "On the right, use a prepared image or repeatable user data that handles retries. Do not embed long-lived secrets. An instance profile provides AWS access through temporary role credentials, and require I M D S version two where supported.",
+          "text_sha256": "afd6d865b4bb097ee95d236a8852dbd7049baed7c83c287ee8ab3a1476bce7d6",
+          "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+        },
+        {
+          "id": "m07p02-s04-c3-3f395b031930",
+          "slide": 4,
+          "text": "A new launch-template version does not change instances already running. Use a controlled replacement rollout, and verify health before moving on. That is how you move a fleet to a reproducible configuration without depending on hand-edited servers.",
+          "text_sha256": "3f395b0319308f89e654fe00a74861805d351ff71a149410938a9db30f0601b5",
+          "asset_sha256": "70c5af21d8d0e25575ba3116c4da65886ff16407ca42b9e1bf03d9c55b0e86c5"
+        },
+        {
+          "id": "m07p02-s05-c1-be0c91d7afb0",
+          "slide": 5,
+          "text": "Follow the H T T P S client to the load balancer and the instances across two Availability Zones. Auto Scaling can replace a failed instance. Its local cache is disposable; the replacement should not need files from the old host to serve an order.",
+          "text_sha256": "be0c91d7afb0ef7fdec355efd92b44b7cabd53e60ac5b90bc46e62aff9aafc96",
+          "asset_sha256": "28ef3e6a9eb50ce9aa9684c730d7cc4de2d428cfb9ea4ff05e80fb1fe3edc52a"
+        },
+        {
+          "id": "m07p02-s05-c2-d639aa65da0e",
+          "slide": 5,
+          "text": "The right side is the state boundary. The app stores order records in Dynamo D B and uploads in S three, so healthy replacement instances can use the same durable state. An Auto Scaling group protects capacity, not the contents of a local disk.",
+          "text_sha256": "d639aa65da0ec79543d73f6ce6c5b4147f32dbd2b584b9488cbc487aae8f56a1",
+          "asset_sha256": "28ef3e6a9eb50ce9aa9684c730d7cc4de2d428cfb9ea4ff05e80fb1fe3edc52a"
+        },
+        {
+          "id": "m07p02-s05-c3-9384877d873a",
+          "slide": 5,
+          "text": "Test the result that matters. Replace one instance, let the load balancer route users to healthy capacity, and read the same existing order again. A green instance health check is not enough if the order disappeared.",
+          "text_sha256": "9384877d873a02714fd0f4de3e4b20a5151e8377fe22cf093bf616dab50b10f6",
+          "asset_sha256": "28ef3e6a9eb50ce9aa9684c730d7cc4de2d428cfb9ea4ff05e80fb1fe3edc52a"
+        },
+        {
+          "id": "m07p02-s06-c1-93f513a4898b",
+          "slide": 6,
+          "text": "Start with the first two panels. On Demand avoids a long commitment; Spot requires an interruption-tolerant workload. A Savings Plan discounts eligible usage in exchange for a spend commitment. It does not reserve capacity.",
+          "text_sha256": "93f513a4898b72513e15b55fc7657632dda533b05d42b58696dc26c196b9d21b",
+          "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+        },
+        {
+          "id": "m07p02-s06-c2-c94ffe22e7f8",
+          "slide": 6,
+          "text": "Reserved Instances generally use one-year or three-year terms. Standard trades exchange flexibility for a larger discount; Convertible permits supported exchanges. Upfront and installment choices affect the bill, but a commitment does not disappear when the instance is unused.",
+          "text_sha256": "c94ffe22e7f8447476e8929bcbb6c1c529158914dc4dd5a1c886683ce6ae6670",
+          "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+        },
+        {
+          "id": "m07p02-s06-c3-fbf9cd9497bf",
+          "slide": 6,
+          "text": "Read the lower comparison. A Regional Reserved Instance provides a billing benefit, not a capacity reservation. A matching zonal Reserved Instance can reserve capacity in that Availability Zone, and an On Demand Capacity Reservation also reserves matching capacity with possible idle charges. Decide on availability separately from price.",
+          "text_sha256": "fbf9cd9497bf7a3598284014f9144228c4eb804f7fd216b43a0be622378dc65f",
+          "asset_sha256": "8c221ed99995c7880d8be66566eeb64001fc93fe4f3f50f3599ddd372e290ab9"
+        }
+      ]
+    }
+  ]
+}
