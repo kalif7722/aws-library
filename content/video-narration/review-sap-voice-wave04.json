@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "03",
+      "part": "03",
+      "revision": "2026-11-23-m03p03-approved-aip-wave04-draft-v1",
+      "approved_assets": {
+        "7": "dd20f965f06badd6035dcfb27b04ca33087d837920df6c065c1a52456cc45cee",
+        "8": "50cb6521305d6f56be18c108032817dac446ab665122bee53b2d9a19fc28c17f"
+      },
+      "units": [
+        {
+          "id": "m03p03-s07-c1-f14dfd99174c",
+          "slide": 7,
+          "text": "Choose S3 object encryption by the requirement. In the top row, routine uploads use S S E S3: one server-side layer with keys that S3 manages. That's the default for new uploads if you haven't chosen a different default.",
+          "text_sha256": "f14dfd99174c4b03912974e968465f9edc16c41f1f8a0becfe23f2b72f60bde2",
+          "asset_sha256": "dd20f965f06badd6035dcfb27b04ca33087d837920df6c065c1a52456cc45cee"
+        },
+        {
+          "id": "m03p03-s07-c2-5fa05cb209f4",
+          "slide": 7,
+          "text": "The finance export needs a key policy the organization controls. Choose S S E K M S with a customer-managed key. S3 uses a K M S data key for one layer. Plan key permissions for approved readers and any supported cross-account access.",
+          "text_sha256": "5fa05cb209f4492b91b697b23c005b14adb849500f9bd41eea4ba9a6bbe5914d",
+          "asset_sha256": "dd20f965f06badd6035dcfb27b04ca33087d837920df6c065c1a52456cc45cee"
+        },
+        {
+          "id": "m03p03-s07-c3-906bc7f5a2e0",
+          "slide": 7,
+          "text": "The third row adds a separate S3-managed encryption layer to the K M S data-key layer. Use dual-layer encryption when the requirement calls for two layers. Factor in quotas and cost. S3 Bucket Keys can reduce standard S S E K M S requests, but don't support dual-layer encryption. Use TLS separately for data in transit.",
+          "text_sha256": "906bc7f5a2e0943f07494222676f2d9cc9c8576965dedf44fba2fefb8d5b3490",
+          "asset_sha256": "dd20f965f06badd6035dcfb27b04ca33087d837920df6c065c1a52456cc45cee"
+        },
+        {
+          "id": "m03p03-s08-c1-caa7c6c3c786",
+          "slide": 8,
+          "text": "The top lane starts with an unencrypted E B S volume. You can't turn on encryption for that volume in place. Snapshot it, make an encrypted snapshot copy, then create and validate a replacement encrypted volume before attaching it in a compatible Availability Zone.",
+          "text_sha256": "caa7c6c3c78605e6ad86125c37050b952e03a9d0d626b518fa4d8f320f494b0b",
+          "asset_sha256": "50cb6521305d6f56be18c108032817dac446ab665122bee53b2d9a19fc28c17f"
+        },
+        {
+          "id": "m03p03-s08-c2-63f09e48ed1a",
+          "slide": 8,
+          "text": "The lower lane does the equivalent for an unencrypted R D S database instance. Take a database snapshot, make an encrypted copy, then restore a new encrypted database. Validate the restore and switch the application to the new endpoint rather than expecting the old endpoint to change.",
+          "text_sha256": "63f09e48ed1a009a68b016e4b742b10331433a9337df59f5ffd3a21a57ce4fb2",
+          "asset_sha256": "50cb6521305d6f56be18c108032817dac446ab665122bee53b2d9a19fc28c17f"
+        },
+        {
+          "id": "m03p03-s08-c3-bb3cb0e9a780",
+          "slide": 8,
+          "text": "Before either move, plan for application-consistent data, select a K M S key the relevant roles can use, and rehearse the cutover and rollback. An encrypted snapshot is a milestone, not proof that the application is ready.",
+          "text_sha256": "bb3cb0e9a780e2054cbcf14bb9ae86b08cb1df165f3770e15302323ab281d446",
+          "asset_sha256": "50cb6521305d6f56be18c108032817dac446ab665122bee53b2d9a19fc28c17f"
+        }
+      ]
+    },
+    {
+      "module": "03",
+      "part": "07",
+      "revision": "2026-11-23-m03p07-approved-aip-wave04-draft-v1",
+      "approved_assets": {
+        "18": "aa891b63d7f10a1ac3fd312b343a3320fad3e5981d403d49f11df89514c37ec8",
+        "19": "fdc047ed40cc276834d9cb44b42c497ed2553842edcf46df2251689e2f0bed02",
+        "20": "1fb253f6167333601348e432c5f478e351ca37a9198d4b20727f9bf482fa80cd"
+      },
+      "units": [
+        {
+          "id": "m03p07-s18-c1-d89e299712ac",
+          "slide": 18,
+          "text": "This Cloud H S M cluster gives an application dedicated hardware for cryptographic operations. Follow the client and its supported integration, such as P K C S eleven, into the cluster. The diagram places H S M devices in two Availability Zones; the cluster synchronizes key material between its devices.",
+          "text_sha256": "d89e299712ac0513a1556f3dcac914088f6bae798a668c9c0330aae611ffde9f",
+          "asset_sha256": "aa891b63d7f10a1ac3fd312b343a3320fad3e5981d403d49f11df89514c37ec8"
+        },
+        {
+          "id": "m03p07-s18-c2-512569789cec",
+          "slide": 18,
+          "text": "The two responsibility panels matter. AWS deploys, maintains, and replaces the hardware. You manage the cluster configuration, crypto users, key lifecycle, and application integration. Dedicated hardware does not make those operational duties disappear.",
+          "text_sha256": "512569789cecbc46b897d4a178e6e11902ff722c09724b618847ef74096c8978",
+          "asset_sha256": "aa891b63d7f10a1ac3fd312b343a3320fad3e5981d403d49f11df89514c37ec8"
+        },
+        {
+          "id": "m03p07-s18-c3-faa26773020c",
+          "slide": 18,
+          "text": "Multiple Availability Zones and encrypted backups support availability and recovery. Validate both for the workload. Choose direct Cloud H S M when dedicated hardware control and the specific compliance requirement justify the extra work.",
+          "text_sha256": "faa26773020c7b6d044132368ddec277aa15be2cdda753b830985d8ec84a6eb4",
+          "asset_sha256": "aa891b63d7f10a1ac3fd312b343a3320fad3e5981d403d49f11df89514c37ec8"
+        },
+        {
+          "id": "m03p07-s19-c1-98cff0d4d0ce",
+          "slide": 19,
+          "text": "On the left, application code calls an H S M client library that talks directly to your Cloud H S M cluster. That gives the application a direct cryptographic integration. Your team owns that integration, user management, and key operations.",
+          "text_sha256": "98cff0d4d0ce53c6733ac00915e21bd82220a2a12d0af03f5d3799c23afb097c",
+          "asset_sha256": "fdc047ed40cc276834d9cb44b42c497ed2553842edcf46df2251689e2f0bed02"
+        },
+        {
+          "id": "m03p07-s19-c2-84c60d724fc9",
+          "slide": 19,
+          "text": "On the right, an application or supported AWS service calls the familiar K M S API, subject to the K M S key policy. The custom key store backs the K M S key with non-extractable key material in your connected Cloud H S M cluster.",
+          "text_sha256": "84c60d724fc91b7d2cbb6cb2943fe2d04f3be75dabc6a1f29bcbfcc6e3161b4b",
+          "asset_sha256": "fdc047ed40cc276834d9cb44b42c497ed2553842edcf46df2251689e2f0bed02"
+        },
+        {
+          "id": "m03p07-s19-c3-92f4c2e67fc8",
+          "slide": 19,
+          "text": "If the workload needs the K M S interface, the right path preserves it. If the application requires direct H S M integration, take the left path. Either way, the cluster needs operating. For the custom store, check connectivity, health, capacity and quotas before relying on it.",
+          "text_sha256": "92f4c2e67fc8756a3c9a384967ec1833843c06ecd04af9a211e16fbc0bc61208",
+          "asset_sha256": "fdc047ed40cc276834d9cb44b42c497ed2553842edcf46df2251689e2f0bed02"
+        },
+        {
+          "id": "m03p07-s20-c1-5d47a82c41d2",
+          "slide": 20,
+          "text": "An external key store is for a requirement to hold external key material outside AWS. Start in the AWS environment: the service or app calls K M S, and K M S first authorizes the cryptographic request.",
+          "text_sha256": "5d47a82c41d2510c9c973b2821462b0a47be60caa802eb55093ab09461459161",
+          "asset_sha256": "1fb253f6167333601348e432c5f478e351ca37a9198d4b20727f9bf482fa80cd"
+        },
+        {
+          "id": "m03p07-s20-c2-ee3ecc16abae",
+          "slide": 20,
+          "text": "Follow the numbered arrows across the boundary. K M S uses server-authenticated T L S one point two or later and signs requests to the customer-operated proxy with Signature Version Four. The proxy routes to the external manager, which performs its part using the external key; the result returns through the proxy to K M S. The proxy itself can run inside or outside AWS.",
+          "text_sha256": "ee3ecc16abaef8fe00a8e8e5ae7b1bfc6d31bfbe0687ec6aaf92929306ffbb1c",
+          "asset_sha256": "1fb253f6167333601348e432c5f478e351ca37a9198d4b20727f9bf482fa80cd"
+        },
+        {
+          "id": "m03p07-s20-c3-4ecb6e2d5a62",
+          "slide": 20,
+          "text": "The lower callouts are the trade-off. Your team owns the proxy and external key manager, so monitor round-trip latency and test resilience. If that external path is unavailable, dependent K M S cryptographic operations can fail. Do not take on that dependency without a real custody requirement.",
+          "text_sha256": "4ecb6e2d5a620e0cb4dc531ce752a0bd78d49525ca23563e5424a3950c1fa98f",
+          "asset_sha256": "1fb253f6167333601348e432c5f478e351ca37a9198d4b20727f9bf482fa80cd"
+        }
+      ]
+    },
+    {
+      "module": "03",
+      "part": "09",
+      "revision": "2026-11-23-m03p09-approved-aip-wave04-draft-v1",
+      "approved_assets": {
+        "25": "9c1292bbd64e1401e72a78a99e148deb2a7d12f90b7a3c38bd1d9f3b7506ae32",
+        "26": "fca6598907ae0dd27d328ad67189fef080a10a68c56d205d1f5d70e4e95261a1"
+      },
+      "units": [
+        {
+          "id": "m03p09-s25-c1-3914e93e252a",
+          "slide": 25,
+          "text": "Start with the three workload accounts across the top. The producer sends the regulated object over H T T P S to the central data account. That account owns the bucket and its customer-managed K M S key, and S3 uses that key for server-side encryption at rest.",
+          "text_sha256": "3914e93e252ad626ef74219336786ee51006d07418825fab64e4ef1a577d6a92",
+          "asset_sha256": "9c1292bbd64e1401e72a78a99e148deb2a7d12f90b7a3c38bd1d9f3b7506ae32"
+        },
+        {
+          "id": "m03p09-s25-c2-a8bb62eafbb1",
+          "slide": 25,
+          "text": "On the right, an approved analyst must be allowed to read the S3 object and use K M S Decrypt on the key. Set the relevant cross-account resource and identity permissions. Passing the S3 permission check alone does not authorize decryption.",
+          "text_sha256": "a8bb62eafbb110ffbe15e67e68d6a5b8fe6b13ddbc67d5bb2fa681c959bdd379",
+          "asset_sha256": "9c1292bbd64e1401e72a78a99e148deb2a7d12f90b7a3c38bd1d9f3b7506ae32"
+        },
+        {
+          "id": "m03p09-s25-c3-ab5886ead53f",
+          "slide": 25,
+          "text": "The separate security account shown below provides oversight without taking ownership of the key. Its delegated role reviews key policy and audits key usage. Verify transport protection and both access gates, then review the evidence rather than assuming a shared bucket grants broad access.",
+          "text_sha256": "ab5886ead53f9f6c0be5dde16c1130cb2523ae315025d2a622d72c9df4454e10",
+          "asset_sha256": "9c1292bbd64e1401e72a78a99e148deb2a7d12f90b7a3c38bd1d9f3b7506ae32"
+        },
+        {
+          "id": "m03p09-s26-c1-71119e05fdc2",
+          "slide": 26,
+          "text": "For the document service, start on the left. Clients use H T T P S to reach the Application Load Balancer. Choose a trusted certificate and an appropriate T L S policy. A secure client connection doesn't by itself decide how the data is protected at rest.",
+          "text_sha256": "71119e05fdc28059c4e9771be565e7cf197a5ff0b6f7ebf9d4d2f3924c99b228",
+          "asset_sha256": "fca6598907ae0dd27d328ad67189fef080a10a68c56d205d1f5d70e4e95261a1"
+        },
+        {
+          "id": "m03p09-s26-c2-ca1a0c06d17e",
+          "slide": 26,
+          "text": "The center and checklist show that second decision. Store documents in S3 with a customer-managed K M S key. Name the key owner, grant only the required use, and test whether the recovery role can restore and read a document.",
+          "text_sha256": "ca1a0c06d17e533b297aa30707f5696993da59224c818b0cd7208a7b06233c61",
+          "asset_sha256": "fca6598907ae0dd27d328ad67189fef080a10a68c56d205d1f5d70e4e95261a1"
+        },
+        {
+          "id": "m03p09-s26-c3-9b7f2cc48541",
+          "slide": 26,
+          "text": "The bottom shows two separate architecture questions. Consider an external key store only if the custody requirement justifies its availability dependency. For quantum readiness, inventory key exchange and signature usage separately and test compatibility before assuming either can change safely.",
+          "text_sha256": "9b7f2cc485417ecdc0f968a408ad93e5781f6b8fa652976fc5ea4d38b5f49880",
+          "asset_sha256": "fca6598907ae0dd27d328ad67189fef080a10a68c56d205d1f5d70e4e95261a1"
+        }
+      ]
+    },
+    {
+      "module": "03",
+      "part": "10",
+      "revision": "2026-11-23-m03p10-approved-aip-wave04-draft-v1",
+      "approved_assets": {
+        "27": "28884606ec8d04cc8d561b32d2b12b09122c0ef36945e33798558da75a880cb7",
+        "28": "fa40007a9532f03df6127de1de7bbcab146be94fc1994758632493eac0eeabdb",
+        "29": "739b149a7ff0ddce2f1856223ad90ed8812dab3655be49bb87799896fa54278c",
+        "30": "2664689897ecbe0a99297ba7a27dc5b2601a162c03f853ff5a84b85d2ee97c8a"
+      },
+      "units": [
+        {
+          "id": "m03p10-s27-c1-3bd18fb4aaa8",
+          "slide": 27,
+          "text": "The two folders are separate branches. Give the Payments role only the Payments path it needs, not the common production parent. That keeps the Orders parameters out of the intended read scope.",
+          "text_sha256": "3bd18fb4aaa8104b7ae267f959e6fcf78c7b9530821a470e232904c792c77bda",
+          "asset_sha256": "28884606ec8d04cc8d561b32d2b12b09122c0ef36945e33798558da75a880cb7"
+        },
+        {
+          "id": "m03p10-s27-c2-4c137da43f49",
+          "slide": 27,
+          "text": "Read the note below: Get Parameters By Path authorizes the requested path. A recursive read includes descendants. Do not treat a broad ancestor grant as a safe substitute for defining the correct branch boundary.",
+          "text_sha256": "4c137da43f4967a9afd4fcbdd38548588fef0e7c6c9c5f511c49191ce6ffb62b",
+          "asset_sha256": "28884606ec8d04cc8d561b32d2b12b09122c0ef36945e33798558da75a880cb7"
+        },
+        {
+          "id": "m03p10-s27-c3-a0a9aaf31ce5",
+          "slide": 27,
+          "text": "For a Secure String returned as plaintext, both Systems Manager access and K M S decrypt access on the key must be authorized. Access and freshness are separate: check whether the application requests a specific version or caches earlier values.",
+          "text_sha256": "a0a9aaf31ce519d87f6e838299fac8579f47a774d8d17b4d0da69c1c0e042ff4",
+          "asset_sha256": "28884606ec8d04cc8d561b32d2b12b09122c0ef36945e33798558da75a880cb7"
+        },
+        {
+          "id": "m03p10-s28-c1-9a765c454f13",
+          "slide": 28,
+          "text": "The table separates size, count, cost and capabilities. Standard supports four kilobytes and ten thousand parameters, Advanced eight kilobytes and one hundred thousand, per account and Region. API throughput is separate. Choose Advanced when you need parameter policies or supported sharing, not merely because the value is important.",
+          "text_sha256": "9a765c454f131845713e4cda9c34bf1490f388618d41ee1628e666bbec9a5088",
+          "asset_sha256": "fa40007a9532f03df6127de1de7bbcab146be94fc1994758632493eac0eeabdb"
+        },
+        {
+          "id": "m03p10-s28-c2-fa8b280ca8db",
+          "slide": 28,
+          "text": "Follow the release exception timeline. The Advanced parameter is configured to warn before deletion. Expiration Notification sends a warning to EventBridge on June twenty-ninth. On June thirtieth the separate Expiration policy makes Parameter Store delete the parameter. EventBridge does not do the deleting.",
+          "text_sha256": "fa8b280ca8db18990c9e493d33d32d5eee1111fbfba8215a037e099baae57313",
+          "asset_sha256": "fa40007a9532f03df6127de1de7bbcab146be94fc1994758632493eac0eeabdb"
+        },
+        {
+          "id": "m03p10-s28-c3-83b77dc36b89",
+          "slide": 28,
+          "text": "No Change Notification can warn when a parameter has not been updated, even without an expiration. Standard can be upgraded, but there is no in-place downgrade. Adding a notification is not credential rotation.",
+          "text_sha256": "83b77dc36b895ae3653d81a5703e109a4a744ee086c3bc952f200bad061172ce",
+          "asset_sha256": "fa40007a9532f03df6127de1de7bbcab146be94fc1994758632493eac0eeabdb"
+        },
+        {
+          "id": "m03p10-s29-c1-9cb9aafd711a",
+          "slide": 29,
+          "text": "The vault holds the secret. A versionless dynamic reference in the CloudFormation template points to it without putting the plaintext in the template. Secrets Manager, not CloudFormation, owns a configured rotation workflow.",
+          "text_sha256": "9cb9aafd711ade9463e7347e433698f5240d5ac9de6fc2a2c6b55cb0455e1a90",
+          "asset_sha256": "739b149a7ff0ddce2f1856223ad90ed8812dab3655be49bb87799896fa54278c"
+        },
+        {
+          "id": "m03p10-s29-c2-a285248e1f2f",
+          "slide": 29,
+          "text": "Follow the upper path. Changing only the value in Secrets Manager does not make CloudFormation retrieve it again or update the existing resource. A versionless reference does not mean continuous refresh.",
+          "text_sha256": "a285248e1f2fcd317e9a2c9c3f0739ad38b9a422962b70bf5f86776bd628a440",
+          "asset_sha256": "739b149a7ff0ddce2f1856223ad90ed8812dab3655be49bb87799896fa54278c"
+        },
+        {
+          "id": "m03p10-s29-c3-da45474fe4b6",
+          "slide": 29,
+          "text": "On the lower path, creating or updating the resource that uses the reference causes CloudFormation to resolve the current version, A W S Current. Decide how each authorized consumer refreshes so rotation does not leave it relying on an old value.",
+          "text_sha256": "da45474fe4b62e11c1da8222a638dc0ff6d20f042d82497f1e09e8670c521973",
+          "asset_sha256": "739b149a7ff0ddce2f1856223ad90ed8812dab3655be49bb87799896fa54278c"
+        },
+        {
+          "id": "m03p10-s30-c1-6eae78426329",
+          "slide": 30,
+          "text": "The approved consumer is a role in Account B. It calls Get Secret Value for the full A R N of the secret owned by Account A. Getting the identity and resource right comes before evaluating permissions.",
+          "text_sha256": "6eae78426329d7cab140d9a81778b177bd3a4684990e60eebaf35f4b66db5d72",
+          "asset_sha256": "2664689897ecbe0a99297ba7a27dc5b2601a162c03f853ff5a84b85d2ee97c8a"
+        },
+        {
+          "id": "m03p10-s30-c2-431d0d4d09d2",
+          "slide": 30,
+          "text": "Read the three locks. The role's identity policy needs the secret read and decrypt permissions. The secret's resource policy in Account A must allow that role. And Account A's customer managed key policy must permit the authorized decrypt path for that role.",
+          "text_sha256": "431d0d4d09d25d9e68eb18eab8447bc5d9d53d1721e22d30bf9931e24f289710",
+          "asset_sha256": "2664689897ecbe0a99297ba7a27dc5b2601a162c03f853ff5a84b85d2ee97c8a"
+        },
+        {
+          "id": "m03p10-s30-c3-4067a45aa123",
+          "slide": 30,
+          "text": "The warning at the bottom is the exam decision. Permission to read the secret is not permission to decrypt it. The AWS managed Secrets Manager key cannot be used for this cross-account access pattern.",
+          "text_sha256": "4067a45aa1237193f56db1e38a8868a384f75e811a606048eb7156aadc33491b",
+          "asset_sha256": "2664689897ecbe0a99297ba7a27dc5b2601a162c03f853ff5a84b85d2ee97c8a"
+        }
+      ]
+    },
+    {
+      "module": "03",
+      "part": "11",
+      "revision": "2026-11-23-m03p11-approved-aip-wave04-draft-v1",
+      "approved_assets": {
+        "31": "24c75bd2858ca8c55b4deacb548b6d4ba7b600ff33b38406471b2ef45cd18124",
+        "32": "beeea026bd05c00d68dc3dce4cd1459b58dce3d65572bf3263f1e25fbe26c990"
+      },
+      "units": [
+        {
+          "id": "m03p11-s31-c1-f108f4a9ec43",
+          "slide": 31,
+          "text": "One K M S API does not mean every key has the same origin. The top row is the standard store: K M S performs its cryptographic operations using AWS-generated or imported material. If imported material expires, restoring routine use requires reimporting the same required material, not supplying a different key.",
+          "text_sha256": "f108f4a9ec43cf62d8e858ed7cff09635aba21fceba6f8557ddc07199565f85c",
+          "asset_sha256": "24c75bd2858ca8c55b4deacb548b6d4ba7b600ff33b38406471b2ef45cd18124"
+        },
+        {
+          "id": "m03p11-s31-c2-fcfefa9f61ca",
+          "slide": 31,
+          "text": "In the middle, the connected Cloud H S M cluster performs key operations for the custom key store. The team must plan for cluster capacity and availability. Customer managed describes who controls the key, not where the material is held.",
+          "text_sha256": "fcfefa9f61caf473a11a529175444745235223785b2bf025a62c0e16290b3ecc",
+          "asset_sha256": "24c75bd2858ca8c55b4deacb548b6d4ba7b600ff33b38406471b2ef45cd18124"
+        },
+        {
+          "id": "m03p11-s31-c3-604060147690",
+          "slide": 31,
+          "text": "The bottom route uses an external key store. K M S reaches a customer-operated proxy, which interfaces with the external key manager. Choose this when the external material and external operations must remain outside AWS. K M S also applies its own encryption layer. Plan for external dependency latency and outages.",
+          "text_sha256": "604060147690ecea8b8ae72c7b14ebaf19768d8b3fede95b10e0780736246869",
+          "asset_sha256": "24c75bd2858ca8c55b4deacb548b6d4ba7b600ff33b38406471b2ef45cd18124"
+        },
+        {
+          "id": "m03p11-s32-c1-31868f6903bb",
+          "slide": 32,
+          "text": "Follow the upper path: an Application Load Balancer HTTPS listener terminates the client TLS connection. That is distinct from the hardware-key pattern in the lower half.",
+          "text_sha256": "31868f6903bb2ef9e6b380fb9736bab00dc77949bc6b0ae11a4880169e5ec97a",
+          "asset_sha256": "beeea026bd05c00d68dc3dce4cd1459b58dce3d65572bf3263f1e25fbe26c990"
+        },
+        {
+          "id": "m03p11-s32-c2-4f41bec55c75",
+          "slide": 32,
+          "text": "In the lower path, N GIN X on E C two terminates client HTTPS. Through the Open S S L integration it delegates the private-key operation to the Cloud H S M cluster, where the private key stays. The cluster does not terminate the client connection or receive all application traffic.",
+          "text_sha256": "4f41bec55c75375d921977169607c1d4341d4869f23309a5ad3520fb859a7203",
+          "asset_sha256": "beeea026bd05c00d68dc3dce4cd1459b58dce3d65572bf3263f1e25fbe26c990"
+        },
+        {
+          "id": "m03p11-s32-c3-c4774f5ce87e",
+          "slide": 32,
+          "text": "The bottom line covers the operational choice. Plan redundant H S Ms and private connectivity. The application team still owns its TLS policy and should verify that clients can connect and the approved service remains available when a cluster member is unavailable.",
+          "text_sha256": "c4774f5ce87eeead5f9dbe9f922774292c7a4c2e475b3c9820db9bcc77c5d345",
+          "asset_sha256": "beeea026bd05c00d68dc3dce4cd1459b58dce3d65572bf3263f1e25fbe26c990"
+        }
+      ]
+    }
+  ]
+}
