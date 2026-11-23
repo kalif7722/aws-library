@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "01",
+      "revision": "2026-11-23-m12p01-m12-p01-p05-current-visuals-v1",
+      "approved_assets": {
+        "1": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c",
+        "2": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+      },
+      "units": [
+        {
+          "id": "m12p01-001-c1-832678f5b7b3",
+          "slide": 1,
+          "text": "A container image ships application code and user-space dependencies, not a full machine. Once launched, the container is a process with its own isolation and resource limits on a compatible host kernel.",
+          "text_sha256": "832678f5b7b3a547f043c7f70802468843f1a97f8a7b4f302a90428d57f09b4d",
+          "canonical_text_sha256": "832678f5b7b3a547f043c7f70802468843f1a97f8a7b4f302a90428d57f09b4d",
+          "asset_sha256": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c"
+        },
+        {
+          "id": "m12p01-001-c2-291c302ee68b",
+          "slide": 1,
+          "text": "Check the operating system and C P U architecture before deployment. Keep durable data outside the container's writable layer: use shared files, suitable block storage, or object storage according to the application's access pattern.",
+          "text_sha256": "291c302ee68bde8389292c80c6f234684246043bf4ba0c28d46e7d8cd47a23b3",
+          "canonical_text_sha256": "01c0510ed2d7d7107f6e6094d9425cc00a1a3e56cc5abe1e4cb2ab2efedd5ba3",
+          "asset_sha256": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c"
+        },
+        {
+          "id": "m12p01-002-c1-b88589fd1ba2",
+          "slide": 2,
+          "text": "Choose the orchestration A P I separately from the compute. E C S uses AWS-native task and service concepts, while E K S provides Kubernetes. The matrix shows E C two and Fargate choices for each; it is not an exhaustive list of compute modes.",
+          "text_sha256": "b88589fd1ba2f1f4524b3d20cfeea85e29492b0fb171cce4626e7836bb4b75f9",
+          "canonical_text_sha256": "978aeff481b8cd196affc4d0912557235c86c99996a58a4d04546b83266f1542",
+          "asset_sha256": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+        },
+        {
+          "id": "m12p01-002-c2-64213b345650",
+          "slide": 2,
+          "text": "Pick Fargate when managing worker hosts is not part of your requirement. You still own the application's images, identity, networking, health and cost. If you need host-level controls, evaluate an E C two-based option rather than assuming Fargate provides them.",
+          "text_sha256": "64213b3456509068e3e3c7e2dd5ca216ae3e52110786308027df8f867045f453",
+          "canonical_text_sha256": "1d4928a50713d165e9a096a73cfb6728ed30aa4a49ca2819763903355d78e7cc",
+          "asset_sha256": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "02",
+      "revision": "2026-11-23-m12p02-m12-p01-p05-current-visuals-v1",
+      "approved_assets": {
+        "1": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b",
+        "2": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0",
+        "3": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+      },
+      "units": [
+        {
+          "id": "m12p02-003-c1-4756f591d64f",
+          "slide": 1,
+          "text": "A task definition describes what to run. A task is a running instance of that definition. The cluster groups workloads and capacity, so it is not itself the unit that performs the application work.",
+          "text_sha256": "4756f591d64f7873e6b65577fe82b9f3418a40936dba1d89db6604d9eb4490e9",
+          "canonical_text_sha256": "4756f591d64f7873e6b65577fe82b9f3418a40936dba1d89db6604d9eb4490e9",
+          "asset_sha256": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b"
+        },
+        {
+          "id": "m12p02-003-c2-8a87c244419c",
+          "slide": 1,
+          "text": "Use the service for a web A P I that needs two healthy copies. It replaces failed tasks to maintain the desired count. For a finite data processing job, launch a standalone task instead; it is not kept running indefinitely.",
+          "text_sha256": "8a87c244419c05cf8cf9ea487ddad311f71505905ecfc2267ea8d6ce56022a58",
+          "canonical_text_sha256": "b4e89358e5ab94ced87d26f8b0fd49ab6f05bad6ac46be73e1812ce7cc2a45f9",
+          "asset_sha256": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b"
+        },
+        {
+          "id": "m12p02-004-c1-974a40b56c65",
+          "slide": 2,
+          "text": "Treat the task definition as a versioned deployment contract. Pin the image digest, select a compatible platform, set C P U and memory, document the listening port, and declare logs, secret references and storage.",
+          "text_sha256": "974a40b56c651a370fc2b98cde0e47a33d57865ba87d1f69210b343c850dca49",
+          "canonical_text_sha256": "58ec15bdf522bf62e55915b11e3b0e88666c526feaa04b7648cacd7e551ece0d",
+          "asset_sha256": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0"
+        },
+        {
+          "id": "m12p02-004-c2-b05b329cf4bd",
+          "slide": 2,
+          "text": "If you change a deployment setting, register a new revision and deploy it. Running tasks do not silently pick up the change. In Fargate, verify the supported C P U and memory combination before starting rollout.",
+          "text_sha256": "b05b329cf4bdc36494822d42a29cc94171ad3668a0b841156521b343212b400f",
+          "canonical_text_sha256": "17c3b4acfe09ffc27d7049ca853f891abdaa7845b3f93e71d5980185dd3868ee",
+          "asset_sha256": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0"
+        },
+        {
+          "id": "m12p02-005-c1-d775457c36c9",
+          "slide": 3,
+          "text": "Separate the permissions for startup and application activity. The execution role is for agent actions such as pulling the image, delivering configured logs and retrieving injected secrets. Application code uses the task role when it calls AWS APIs.",
+          "text_sha256": "d775457c36c9ba21a868914c33f1e93501c53de53764f6417b0921d9a940ae7a",
+          "canonical_text_sha256": "d775457c36c9ba21a868914c33f1e93501c53de53764f6417b0921d9a940ae7a",
+          "asset_sha256": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+        },
+        {
+          "id": "m12p02-005-c2-60687c21350e",
+          "slide": 3,
+          "text": "On an E C two-backed cluster, the instance profile covers container-host agent operations. Do not put long-lived keys in the image, and do not treat distinct task roles on a shared host as a hard tenant boundary.",
+          "text_sha256": "60687c21350e96425c8c79b40be7063981b090c64e07aa2e30a5ff4ca6a26621",
+          "canonical_text_sha256": "7e12ba6442d05cc0dbdb464f65c787b3c28f52d1ef5f859be779b0a0fd7f7e87",
+          "asset_sha256": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "03",
+      "revision": "2026-11-23-m12p03-m12-p01-p05-current-visuals-v1",
+      "approved_assets": {
+        "1": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9",
+        "2": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52",
+        "3": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+      },
+      "units": [
+        {
+          "id": "m12p03-006-c1-1c8efbc76cb9",
+          "slide": 1,
+          "text": "Match the target group to the task addressing. With the E C two bridge example, the load balancer registers the instance and mapped host port. With A W S V P C, register the task interface's I P and container port; Fargate uses A W S V P C.",
+          "text_sha256": "1c8efbc76cb96736c05b78f1c54ac8f1bbfd4447c07758d9fa7f0ee2d6d6dd41",
+          "canonical_text_sha256": "6e0cafb91081c2fbc8a600f3c1dfec72b844df710545746ddf80e86f4d4cb3b3",
+          "asset_sha256": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9"
+        },
+        {
+          "id": "m12p03-006-c2-8727a2f5ada8",
+          "slide": 1,
+          "text": "Allow the health check and application port through the relevant security groups. Use an Application Load Balancer for HTTP routing or a Network Load Balancer for connection-level needs, and spread the tasks across failure domains.",
+          "text_sha256": "8727a2f5ada82d28eaeb60c00b1f80dd4a425871d4f17ce20501f8f6bbc5e267",
+          "canonical_text_sha256": "8727a2f5ada82d28eaeb60c00b1f80dd4a425871d4f17ce20501f8f6bbc5e267",
+          "asset_sha256": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9"
+        },
+        {
+          "id": "m12p03-007-c1-625368b4ee28",
+          "slide": 2,
+          "text": "Pick a network mode according to the boundary you want. On eligible Linux E C two tasks, none has no external networking, bridge uses host-port mapping, and host shares the instance network and its port constraints.",
+          "text_sha256": "625368b4ee28f6ac038a4496b178c23a31817248b4ad769efffa76e2637274b2",
+          "canonical_text_sha256": "48d51a7c4c2f737426daed1f8cbc7107db0ad4a910088e02fe730d3857b3ccdd",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-007-c2-c5fa1b46140d",
+          "slide": 2,
+          "text": "With A W S V P C, the task gets an interface and security group boundary. Fargate requires this mode. When task placement fails, check subnet addresses and interface capacity rather than troubleshooting it as if it used bridge networking.",
+          "text_sha256": "c5fa1b46140d0ee930d6290a728c2201908d966fc7a387f29b35f1f5caddd384",
+          "canonical_text_sha256": "858fbf0ff01931585d6421dbdc5c98e5ab0645b069aff8088aaa94532a3b40c6",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-008-c1-91ed98af4580",
+          "slide": 3,
+          "text": "A private Fargate task still needs a route to its dependencies. For the illustrated private E C R image pull on modern Fargate, provide the E C R A P I and registry interface endpoints plus the S three gateway endpoint for layers, or suitable nat egress.",
+          "text_sha256": "91ed98af458028a6417e91b9029ca6936be8142eda455cf394126ecc855a0a88",
+          "canonical_text_sha256": "ac9f812c76467e7d665846d032fefb69cdf49c12ca33b391ca172e5dc3019405",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        },
+        {
+          "id": "m12p03-008-c2-e96e38d4e662",
+          "slide": 3,
+          "text": "Add private connectivity to CloudWatch Logs or Secrets Manager if the task configuration uses them. When a task cannot pull or start, check routes, endpoint access and security groups separately from execution-role permissions.",
+          "text_sha256": "e96e38d4e662a367f027ee65740fcb952d04fa3320c7eb195bb0a0dee44cc7ba",
+          "canonical_text_sha256": "e96e38d4e662a367f027ee65740fcb952d04fa3320c7eb195bb0a0dee44cc7ba",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "04",
+      "revision": "2026-11-23-m12p04-m12-p01-p05-current-visuals-v1",
+      "approved_assets": {
+        "1": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18",
+        "2": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+      },
+      "units": [
+        {
+          "id": "m12p04-009-c1-531a4c03920a",
+          "slide": 1,
+          "text": "Secret rotation does not change an environment variable already injected into a running container. In the example, the secret advances to version two but the old task keeps version one. Deploy new tasks when startup injection needs the updated value.",
+          "text_sha256": "531a4c03920ad39cea4c2799aae5c96da4adb7dc38ed73b97f1b9778e858a6bf",
+          "canonical_text_sha256": "531a4c03920ad39cea4c2799aae5c96da4adb7dc38ed73b97f1b9778e858a6bf",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-009-c2-c8cf916f8d1f",
+          "slide": 1,
+          "text": "If the application needs to refresh without a deployment, design it to retrieve the current value during execution through a scoped task role. Handle refresh failures and caching deliberately, and never write secret values to logs.",
+          "text_sha256": "c8cf916f8d1fc23b3edc95caba5c82f52dab3d156c7b0e5ea4551b178a2a4bb3",
+          "canonical_text_sha256": "c8cf916f8d1fc23b3edc95caba5c82f52dab3d156c7b0e5ea4551b178a2a4bb3",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-010-c1-ff5059230116",
+          "slide": 2,
+          "text": "Choose a service for a continually available A P I. The service keeps the desired number of healthy tasks behind the load balancer. Keep shared state outside the tasks so they can be replaced safely.",
+          "text_sha256": "ff5059230116ebbcaf3cfc795cc83257bbd8faff478a65daf270fef5563485b1",
+          "canonical_text_sha256": "956ac9bfe6f6c5ec29f63ca4eb2c5a447304e640847d0c8b3352cc242d9a99b0",
+          "asset_sha256": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+        },
+        {
+          "id": "m12p04-010-c2-7b69c6df1a2f",
+          "slide": 2,
+          "text": "Choose a standalone task for a bounded job. An EventBridge schedule can start it, but an accepted trigger is not proof of completion. Check the task's exit and logs, and make retries safe.",
+          "text_sha256": "7b69c6df1a2fd8ff900cf609a4347ae4636636ed25e2d4a82b04ffeb873d019e",
+          "canonical_text_sha256": "7b69c6df1a2fd8ff900cf609a4347ae4636636ed25e2d4a82b04ffeb873d019e",
+          "asset_sha256": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "05",
+      "revision": "2026-11-23-m12p05-m12-p01-p05-current-visuals-v1",
+      "approved_assets": {
+        "1": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16",
+        "2": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744",
+        "3": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+      },
+      "units": [
+        {
+          "id": "m12p05-011-c1-8cf3ae99a3a8",
+          "slide": 1,
+          "text": "Scale the thing that is constrained. Application Auto Scaling can use utilization or demand to change the service desired task count, but changing that count does not itself add an E C two host.",
+          "text_sha256": "8cf3ae99a3a85e5f8e92c4f5c13b611f92be15ba1b6f7d5c180b2162a4ae3942",
+          "canonical_text_sha256": "863a4781f13b5b2da098f1fdaca9787755f1d88c9c6bfafb30beab378f38e813",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-011-c2-e1cb61657f65",
+          "slide": 1,
+          "text": "If tasks stay pending, inspect available compute, placement and service limits. For self-managed E C two, configure capacity-provider scaling if needed. Fargate supplies eligible task compute, but quotas and startup time still matter.",
+          "text_sha256": "e1cb61657f65d41afbc4d408055b0dc99ec25238bf4bf58c5ba77ec47af27355",
+          "canonical_text_sha256": "d154c75ca2bea072a65aace0a18b7666cb1604bad569233bc932b55a6ab11f60",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-012-c1-b942db24ebef",
+          "slide": 2,
+          "text": "A capacity provider links the task request to available compute. Fargate abstracts host management, an Auto Scaling group supplies self-managed E C two capacity, and E C S Managed Instances provides AWS-managed E C two compute with supported placement options.",
+          "text_sha256": "b942db24ebef3f71bf5b9f1b812de703de17c8e76f698a4989055f1f523c2b43",
+          "canonical_text_sha256": "465187620ab14e02b512ef4bf332dc866b5207be3dacf7cb33480274af71ff9c",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-012-c2-b89e887356cd",
+          "slide": 2,
+          "text": "A cluster can contain different provider families, but an individual strategy cannot mix those families. Choose the provider family suitable for a workload and still plan placement, draining, and recovery.",
+          "text_sha256": "b89e887356cde210c2b01f08b4453fdd184f3b1cb27e0d59ebf220eb4345c1c7",
+          "canonical_text_sha256": "b89e887356cde210c2b01f08b4453fdd184f3b1cb27e0d59ebf220eb4345c1c7",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-013-c1-d0e1c1519376",
+          "slide": 3,
+          "text": "Use Fargate on demand for a reliable baseline and assign interruptible tasks to Fargate Spot where the work tolerates loss. Shortage of Spot does not automatically send those tasks to on-demand capacity.",
+          "text_sha256": "d0e1c1519376eb111488958a2d57b84d6c83ecd2c5d56bff9fb51ceacc2b987f",
+          "canonical_text_sha256": "d0e1c1519376eb111488958a2d57b84d6c83ecd2c5d56bff9fb51ceacc2b987f",
+          "asset_sha256": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+        },
+        {
+          "id": "m12p05-013-c2-d8faaf4e73cd",
+          "slide": 3,
+          "text": "When interruption is notified, stop gracefully and checkpoint or retry work safely. Spread healthy replicas across Availability Zones, and choose enough on-demand capacity to meet the minimum service requirement without Spot.",
+          "text_sha256": "d8faaf4e73cd21374b0ad1af06f9bf2b93e5736b44c56eb4bf02556fb7a863ad",
+          "canonical_text_sha256": "d8faaf4e73cd21374b0ad1af06f9bf2b93e5736b44c56eb4bf02556fb7a863ad",
+          "asset_sha256": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+        }
+      ]
+    }
+  ]
+}
