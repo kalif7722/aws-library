@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "14",
+      "part": "06",
+      "revision": "2026-11-23-m14p06-m14-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b",
+        "2": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+      },
+      "units": [
+        {
+          "id": "m14p06-015-c1-b7aa11908e41",
+          "slide": 1,
+          "text": "In this video, you'll diagnose a growing queue and design an asynchronous reply. Start with the backlog: if producers send faster than workers can complete writes, the queue grows and messages wait longer. Compare visible backlog and oldest-message age against the expected workload.",
+          "text_sha256": "b7aa11908e41a5acc3d39b08dcdde21377ac3435729c2c3100d252c3ce9f518e",
+          "canonical_text_sha256": "b7aa11908e41a5acc3d39b08dcdde21377ac3435729c2c3100d252c3ce9f518e",
+          "asset_sha256": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b"
+        },
+        {
+          "id": "m14p06-015-c2-d2361fa54faf",
+          "slide": 1,
+          "text": "Use the event source mapping settings and batch size to tune drain rate. First check database capacity and Lambda throttles. More concurrency can make a saturated database slower, and repeated processing failures should be inspected through the dead-letter queue.",
+          "text_sha256": "d2361fa54faf8e9997b6959cc06220e48334cb0e4767937e54e33311ce77fd4e",
+          "canonical_text_sha256": "d2361fa54faf8e9997b6959cc06220e48334cb0e4767937e54e33311ce77fd4e",
+          "asset_sha256": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b"
+        },
+        {
+          "id": "m14p06-016-c1-5d8eede9346f",
+          "slide": 2,
+          "text": "To return a result asynchronously, send a request with a correlation I D, let the worker process it, and place a reply with the same I D on a different queue. The caller matches the reply to the original request when it arrives.",
+          "text_sha256": "5d8eede9346f821833eebb9b1fe23f063bed55c1cbdc8ade8e5ac0d51698ab18",
+          "canonical_text_sha256": "e943322d7da7af74b3392bb255fca9574d27af684d971552dccba43a43a57161",
+          "asset_sha256": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+        },
+        {
+          "id": "m14p06-016-c2-9641d4113b54",
+          "slide": 2,
+          "text": "Separate the caller timeout from the worker's task and plan for late or duplicate replies. Give each producer and consumer permission only for its queue actions, and choose retention to cover the expected reply window. This is not synchronous remote procedure calling.",
+          "text_sha256": "9641d4113b54b8641ddfc6f78d95d8ccfaeb815460707a3001a836e42d615753",
+          "canonical_text_sha256": "9641d4113b54b8641ddfc6f78d95d8ccfaeb815460707a3001a836e42d615753",
+          "asset_sha256": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "07",
+      "revision": "2026-11-23-m14p07-m14-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966",
+        "2": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+      },
+      "units": [
+        {
+          "id": "m14p07-mq-c1-fca71105ebc7",
+          "slide": 1,
+          "text": "In this video, you'll decide whether to preserve an existing broker protocol or redesign around S Q S. Amazon M Q provides managed ActiveMQ or RabbitMQ capacity, so start with the actual protocol and features the current application uses.",
+          "text_sha256": "fca71105ebc7e480fc081c8d9a0dc9e9b52c6ee107712a4ff10191c34ca11252",
+          "canonical_text_sha256": "d4fd4db106f52138e4f46f78fa32a978f2c4157f1823ae22f02d437f1f0bade6",
+          "asset_sha256": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966"
+        },
+        {
+          "id": "m14p07-mq-c2-73b75aee265d",
+          "slide": 1,
+          "text": "Choose the compatible engine, configure network access and high availability, and test client reconnect and failover. S Q S is a different service A P I, not a drop-in broker endpoint. Moving to it may require changing application behavior.",
+          "text_sha256": "73b75aee265df34d4425a06989b3d4d04973c8108e13c4b4f6e8b964e2375531",
+          "canonical_text_sha256": "e1782383762b0ac2d5a12960fc22999a78f1c594369de5d88821e93181e804d7",
+          "asset_sha256": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966"
+        },
+        {
+          "id": "m14p07-017-c1-6db1bb443c65",
+          "slide": 2,
+          "text": "Keep a managed broker when the application still needs supported broker protocols or semantics, such as sessions or transactions that it already relies on. Managed infrastructure reduces some operating work, but does not remove application compatibility or failover testing.",
+          "text_sha256": "6db1bb443c65ac6bb1adfa641a5eee611814700d9365ef2bb4837e8833371dfa",
+          "canonical_text_sha256": "6db1bb443c65ac6bb1adfa641a5eee611814700d9365ef2bb4837e8833371dfa",
+          "asset_sha256": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+        },
+        {
+          "id": "m14p07-017-c2-8e0d834ea568",
+          "slide": 2,
+          "text": "Redesign for S Q S when the application can adopt its send, receive and delete model without those broker-specific features. Compare the migration effort against the benefits of a managed queue that scales independently of the existing broker.",
+          "text_sha256": "8e0d834ea568e0d86cb7c652e2555f578edb14a855250d63257c8137f5cbc3f3",
+          "canonical_text_sha256": "a1a1453609d3d6eeed1b78d0749a4817c98818565de9b0793a834e83e19098ad",
+          "asset_sha256": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "08",
+      "revision": "2026-11-23-m14p08-m14-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "0b8746c2ee9235a0e2f8db55d1a129612bda80e4664b98e62094b10d13fa5d7d",
+        "2": "f1728774c9e3161b8f4388bdce24e0fd361040b685111a81051c30ba2bb3cd19",
+        "3": "4b73f4a8fe7321e5ac9ee3c0a38e84b58e02f2d159af9fb184858a683475841f",
+        "4": "a4bdcb4ef4c9125bb335e8ea146b1fe9c93aa70390f170b95ef5c69cb5dc88dc"
+      },
+      "units": [
+        {
+          "id": "m14p08-sns-c1-5714b2e52f47",
+          "slide": 1,
+          "text": "In this video, you'll choose where S N S sends a published message, and when a topic is not the right address. The topic pushes notifications to independent subscribers. For example, a queue buffers a copy while a Lambda or HTTPS subscriber receives through its own path.",
+          "text_sha256": "5714b2e52f47005fe8106f7ae7ec659c39119c3985ec36dea0f14dcf156b6233",
+          "canonical_text_sha256": "9d4678d0d362aa1fa7eb9ce929e02fbb53a891ec5e4ceb0cb8f3d5c9f5bfe39f",
+          "asset_sha256": "0b8746c2ee9235a0e2f8db55d1a129612bda80e4664b98e62094b10d13fa5d7d"
+        },
+        {
+          "id": "m14p08-sns-c2-e85c6852c023",
+          "slide": 1,
+          "text": "A subscription filter can limit which messages it receives. Where one subscriber needs durable backlog and independent processing time, give it its own S Q S queue. A topic is delivery fanout; it is not a shared queue that every worker polls.",
+          "text_sha256": "e85c6852c0233934dafaa1a0fffd83dbd223bf314c845b359c2cb0673deb166f",
+          "canonical_text_sha256": "c1bec34133327eb6161787c573017a217811c789665328a460dfca996187ad33",
+          "asset_sha256": "0b8746c2ee9235a0e2f8db55d1a129612bda80e4664b98e62094b10d13fa5d7d"
+        },
+        {
+          "id": "m14p08-018-c1-3bee45b20172",
+          "slide": 2,
+          "text": "One publish can lead to several independent delivery outcomes. In the example, S N S sends to S Q S, Lambda and HTTPS. The queue can retain a copy for later worker processing; a failure at the HTTPS endpoint does not prevent the other subscriptions from receiving theirs.",
+          "text_sha256": "3bee45b20172f8ecc5fb980e5f07147044a77dfe08abbd6306df8c7d5ed49fd2",
+          "canonical_text_sha256": "8ac168d9f0c59d406be33024b6f33922dcd2ed5e2c37ff9a47502ab397460ae8",
+          "asset_sha256": "f1728774c9e3161b8f4388bdce24e0fd361040b685111a81051c30ba2bb3cd19"
+        },
+        {
+          "id": "m14p08-018-c2-596c1b756533",
+          "slide": 2,
+          "text": "Monitor delivery per subscription, not just replies from the publisher. An accepted publish is not proof that every subscriber received or processed it. Choose buffering and failure handling independently for each branch.",
+          "text_sha256": "596c1b756533859a9f2cc7792bccb2af57102a97b0a682515984e5406e7fca3b",
+          "canonical_text_sha256": "596c1b756533859a9f2cc7792bccb2af57102a97b0a682515984e5406e7fca3b",
+          "asset_sha256": "f1728774c9e3161b8f4388bdce24e0fd361040b685111a81051c30ba2bb3cd19"
+        },
+        {
+          "id": "m14p08-019-c1-277347d0288a",
+          "slide": 3,
+          "text": "Use a subscription filter when each receiver wants only selected messages. The example sends order-created messages to the order subscriber and billing-failed messages to billing. The inventory update reaches neither of these two subscriptions because it matches neither policy.",
+          "text_sha256": "277347d0288a7a7d40711dc8a2949d7b63d0a3b6255f5ed5831e95888cff7e72",
+          "canonical_text_sha256": "277347d0288a7a7d40711dc8a2949d7b63d0a3b6255f5ed5831e95888cff7e72",
+          "asset_sha256": "4b73f4a8fe7321e5ac9ee3c0a38e84b58e02f2d159af9fb184858a683475841f"
+        },
+        {
+          "id": "m14p08-019-c2-25b74c2dc93e",
+          "slide": 3,
+          "text": "filter policy scope selects message attributes or the JSON message body. Filtering changes which subscriptions receive the message; it does not rewrite its payload. If a subscription has no filter, it is not restricted by these two examples.",
+          "text_sha256": "25b74c2dc93e303f5737266f6e76d3925c66bef28a92dbb608c86cf57866a2ca",
+          "canonical_text_sha256": "f34015e531ae792dfa89b2cf2aa198046bbca73e614751f16f335a4d3c3c9adf",
+          "asset_sha256": "4b73f4a8fe7321e5ac9ee3c0a38e84b58e02f2d159af9fb184858a683475841f"
+        },
+        {
+          "id": "m14p08-020-c1-e1ce1a8b939e",
+          "slide": 4,
+          "text": "To notify several destinations, publish to a topic. An application can use the S N S A P I, and supported A W S services can publish through their integrations. Each configured subscription gets its relevant delivery rather than requiring the publisher to address consumers one by one.",
+          "text_sha256": "e1ce1a8b939e98527707db091bd084ca6da2865055850c0c30099b60b055d730",
+          "canonical_text_sha256": "0da64a6cb1ba004a38d968455821e1b9fe5a673ba612c277c6db2077a08fb6b8",
+          "asset_sha256": "a4bdcb4ef4c9125bb335e8ea146b1fe9c93aa70390f170b95ef5c69cb5dc88dc"
+        },
+        {
+          "id": "m14p08-020-c2-cf2fb59c5606",
+          "slide": 4,
+          "text": "For one device, publish to the mobile platform endpoint A R N instead of the topic A R N. The platform application connects S N S to the push provider, such as A P N S or F C M; the endpoint represents the individual device.",
+          "text_sha256": "cf2fb59c5606197ebe9a5c01b5cc196ce32e61f561e2f6c7cb0c9a110f7bef14",
+          "canonical_text_sha256": "bf81c8c292e40bebe59b4bcdb2b3f704b09f33297927553da5fa162f5400fd7d",
+          "asset_sha256": "a4bdcb4ef4c9125bb335e8ea146b1fe9c93aa70390f170b95ef5c69cb5dc88dc"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "09",
+      "revision": "2026-11-23-m14p09-m14-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "5037ec5d811f0b9bc29461139dab23b09f56eedce5bfe30183e928ee9089577c",
+        "2": "6e0c005c112cd235544a330fd58d52e664ab325f47f4f2c41ea5a513bf4a7f8c",
+        "3": "cad785bc6425c5ba0cd62e1881ad06f5b98b2e61c579375b67540d10dfd14611"
+      },
+      "units": [
+        {
+          "id": "m14p09-021-c1-7e7f02d8adc1",
+          "slide": 1,
+          "text": "In this video, you'll secure a topic and choose how to deliver S three events to multiple consumers. For S N S, HTTPS protects the A P I call in transit; S N S server-side encryption with KMS protects stored message contents. These are separate controls.",
+          "text_sha256": "7e7f02d8adc187d4f71ff34bcd20ac5b52b7a340443929a1eb3482790e520069",
+          "canonical_text_sha256": "3c2923bd89cf9edf00c7e3cb9d3d5d0475135663141cc672a1b8a16e48251f4b",
+          "asset_sha256": "5037ec5d811f0b9bc29461139dab23b09f56eedce5bfe30183e928ee9089577c"
+        },
+        {
+          "id": "m14p09-021-c2-0b15869c0b46",
+          "slide": 1,
+          "text": "A caller identity policy and the topic's resource policy address who can publish or subscribe. For a publisher using an encrypted topic, verify the scoped key grant for generate data key and decrypt. Do not add Encrypt just because the topic uses encryption.",
+          "text_sha256": "0b15869c0b46f2945d4072a5668130b2594fc3b03eb94732dfb0101f97f1e51d",
+          "canonical_text_sha256": "f9ea90bc0e2b1a272f1f00169d06705ab9cb3efb2ca4ddd7c33723e326db9b63",
+          "asset_sha256": "5037ec5d811f0b9bc29461139dab23b09f56eedce5bfe30183e928ee9089577c"
+        },
+        {
+          "id": "m14p09-022-c1-ed9bb68f6cf9",
+          "slide": 2,
+          "text": "S N S to S Q S creates a durable backlog for each subscriber. A publish fans out to queue A and queue B, and each worker drains and deletes its own messages. One slow consumer does not force the other to share its backlog.",
+          "text_sha256": "ed9bb68f6cf9992c7c9c5d49baf774c48c5a498b613544ed357e9581dd4e7d74",
+          "canonical_text_sha256": "fb60bfadbbc46702babc60ff9a31c64d7487f986ee1765e15fa8a25b8676bd03",
+          "asset_sha256": "6e0c005c112cd235544a330fd58d52e664ab325f47f4f2c41ea5a513bf4a7f8c"
+        },
+        {
+          "id": "m14p09-022-c2-cb3273620f65",
+          "slide": 2,
+          "text": "Each queue policy must allow the S N S topic to send messages, with a source A R N condition for the expected topic. Monitor topic delivery and consumer processing separately. A subscription dead-letter queue handles failed delivery to the subscriber, not messages its worker failed to process.",
+          "text_sha256": "cb3273620f65b0711b3cc4d914c5559af8b5cfd796608dbba0e3c614356e7a07",
+          "canonical_text_sha256": "4577ac6183d222c793bd2b3260c4ff1e93020f41566d08bf43fbb8baf3a7cd74",
+          "asset_sha256": "6e0c005c112cd235544a330fd58d52e664ab325f47f4f2c41ea5a513bf4a7f8c"
+        },
+        {
+          "id": "m14p09-023-c1-f26d877e8b95",
+          "slide": 3,
+          "text": "Choose S three notifications to a standard S N S topic for straightforward fanout to subscribed endpoints. Choose EventBridge when content-based rules and broader target types fit the design. The two paths share the same object-created event but differ in how destinations are selected.",
+          "text_sha256": "f26d877e8b95972c2eebb034a60254c8c54d85c984dc2dcd2ea1ce1e609f75d0",
+          "canonical_text_sha256": "64b825168ed225c04fbb676d0fb7d00b387f137b830bc48d8c74814e368a48a4",
+          "asset_sha256": "cad785bc6425c5ba0cd62e1881ad06f5b98b2e61c579375b67540d10dfd14611"
+        },
+        {
+          "id": "m14p09-023-c2-b2012360b978",
+          "slide": 3,
+          "text": "Verify destination permissions, and expect duplicate delivery regardless of the chosen path. Use an event or business identity that lets the consumer handle duplicates safely, for example the object key and version when the workflow tracks each version.",
+          "text_sha256": "b2012360b9781eb4492c2324713851a082be8dddf0080e7d8b40172cbd7b9d04",
+          "canonical_text_sha256": "b2012360b9781eb4492c2324713851a082be8dddf0080e7d8b40172cbd7b9d04",
+          "asset_sha256": "cad785bc6425c5ba0cd62e1881ad06f5b98b2e61c579375b67540d10dfd14611"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "10",
+      "revision": "2026-11-23-m14p10-m14-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "fdd8954ce4541eb01a38a0b661677f87a32987d0573397d8b153df7b36d9a8f6",
+        "2": "09fc102741456922a6af7a700399ff95fbc7df217155f76ce0c8c2f30db88504"
+      },
+      "units": [
+        {
+          "id": "m14p10-024-c1-924348bb412e",
+          "slide": 1,
+          "text": "In this video, you'll distinguish buffered stream delivery from ordered topic fanout. A standard S N S topic sends to a Firehose delivery stream, which buffers records and writes to S three using its destination role. The subscription role grants access to the stream; the Firehose role grants access to S three.",
+          "text_sha256": "924348bb412e1a6d80ec353380532cf096bd8dccc38790bb80d67d727b35284b",
+          "canonical_text_sha256": "b4740deef8f0c3b9a883ffd93e8844b5bc2477ee879f7a0bff583f29eca5adbf",
+          "asset_sha256": "fdd8954ce4541eb01a38a0b661677f87a32987d0573397d8b153df7b36d9a8f6"
+        },
+        {
+          "id": "m14p10-024-c2-7be8ae4826a3",
+          "slide": 1,
+          "text": "For this S three destination, a failed bucket delivery is retried within retention; don't rely on a second S three bucket as fallback for ordinary delivery failures. Processing or conversion errors can use an error output. Monitor failures and check the actual delivery contract before promising recovery.",
+          "text_sha256": "7be8ae4826a366ec328a6f38cf677f54f6ddd4b7061729cd9ea7fe458afd1ea2",
+          "canonical_text_sha256": "9f54da7ab408c34ad2469d8afc180183015b7c1e832b9d29fa105ef13303b837",
+          "asset_sha256": "fdd8954ce4541eb01a38a0b661677f87a32987d0573397d8b153df7b36d9a8f6"
+        },
+        {
+          "id": "m14p10-025-c1-7a802340e7d6",
+          "slide": 2,
+          "text": "An S N S first in, first out topic can deliver to S Q S first in, first out or Standard queues. Use first in, first out subscribers when processing must preserve order within each message group. A Standard queue subscriber does not preserve that ordering guarantee.",
+          "text_sha256": "7a802340e7d60ceebd9dcb03f67c82999c3937fed071e531a9ea2b7a2b2fc5ca",
+          "canonical_text_sha256": "d6c02b2badeb2013470aff5592989715033d2a20737a3f31e536b7d692b223be",
+          "asset_sha256": "09fc102741456922a6af7a700399ff95fbc7df217155f76ce0c8c2f30db88504"
+        },
+        {
+          "id": "m14p10-025-c2-322ab496a267",
+          "slide": 2,
+          "text": "Deduplication is scoped to its configured conditions and window; keep downstream work safe to retry. Select queue type by the receiving workload. One slower subscriber can keep its own backlog instead of dictating the ordering choice for every receiver.",
+          "text_sha256": "322ab496a26700f509ff8c45450f1efba96ef98ca2bd3dfad5a5d824f355623e",
+          "canonical_text_sha256": "322ab496a26700f509ff8c45450f1efba96ef98ca2bd3dfad5a5d824f355623e",
+          "asset_sha256": "09fc102741456922a6af7a700399ff95fbc7df217155f76ce0c8c2f30db88504"
+        }
+      ]
+    }
+  ]
+}
