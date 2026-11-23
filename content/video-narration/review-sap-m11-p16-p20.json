@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "16",
+      "revision": "2026-11-23-m11p16-m11-p16-p20-current-visuals-v1",
+      "approved_assets": {
+        "1": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172",
+        "2": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f",
+        "3": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a",
+        "4": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+      },
+      "units": [
+        {
+          "id": "m11p16-040-c1-b0773e92a780",
+          "slide": 1,
+          "text": "Keep object bytes in S3 and make metadata searchable in a separate index. The upload produces an event; Lambda can write a DynamoDB record with the tenant, date, category, and object key.",
+          "text_sha256": "b0773e92a780b2f595972bcacefc878c921403aa4c5936708ea51275cf80c326",
+          "canonical_text_sha256": "b0773e92a780b2f595972bcacefc878c921403aa4c5936708ea51275cf80c326",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-040-c2-66849459bde4",
+          "slide": 1,
+          "text": "Query that metadata to find the key, then fetch the object from S3. Index updates are not atomic with uploads, so handle duplicate or late events and reconcile missing records.",
+          "text_sha256": "66849459bde4dafa38e837dac84cf57440ddc494cd63c93155a18fd004ba2223",
+          "canonical_text_sha256": "66849459bde4dafa38e837dac84cf57440ddc494cd63c93155a18fd004ba2223",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-dax-c1-f141541ff2f9",
+          "slide": 2,
+          "text": "Choose Dax to speed up hot, eligible DynamoDB reads. The application uses a Dax-aware client; hits return from cache, and misses read DynamoDB and fill the cache.",
+          "text_sha256": "f141541ff2f979ff2bf5e70015151197355b1a259fe4256e2511621bc009e6f6",
+          "canonical_text_sha256": "184b9f0e091253996cab571cf3ceca2830043e944807482bba0f8e484fd497a7",
+          "asset_sha256": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f"
+        },
+        {
+          "id": "m11p16-dax-c2-6076c940ef71",
+          "slide": 2,
+          "text": "The table remains authoritative. Item and query caches have different freshness behavior, and strong reads go to DynamoDB. Dax does not fix an overloaded write path.",
+          "text_sha256": "6076c940ef715496d0ca67aadad33b531cf9066c4bceb5ee332b3ff8b6767c13",
+          "canonical_text_sha256": "6ca1d09a6c2b559191c904d4a15f6d0d8362f0bea65203245614d17698256c29",
+          "asset_sha256": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f"
+        },
+        {
+          "id": "m11p16-041-c1-dfc4b7f0fa5d",
+          "slide": 3,
+          "text": "Choose a regional Dax cluster for supported low-latency, eventually consistent reads. Follow the hit back to the client and the miss to DynamoDB.",
+          "text_sha256": "dfc4b7f0fa5d55ec3840db44336cf694b86ea9c0ebb3bf4251d55a8721a3d51f",
+          "canonical_text_sha256": "d88706d0565e4ed64cc4acebe8c14961d43c2cb7524d97de83ff48dd464ea09a",
+          "asset_sha256": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a"
+        },
+        {
+          "id": "m11p16-041-c2-0e3b09a4e9ca",
+          "slide": 3,
+          "text": "Writes sent through Dax reach DynamoDB and update the relevant item-cache entry. Strongly consistent reads bypass the cache. Keep monitoring cluster health and the table's own capacity.",
+          "text_sha256": "0e3b09a4e9ca73dc968125b6477af64e06890f9d823620fe94c7003470a59046",
+          "canonical_text_sha256": "3ee002187938a8983e9c9200599b3b20b8acbedc246f07f6d7ee9eaa46b5c23e",
+          "asset_sha256": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a"
+        },
+        {
+          "id": "m11p16-042-c1-a7ad61dbf972",
+          "slide": 4,
+          "text": "A successful write-through update does not refresh every cached query. The item cache uses a primary key; the query cache uses the request, so an earlier query result can remain stale.",
+          "text_sha256": "a7ad61dbf9729c65035b424433046b6ea21183727c82d960504b9545183554a9",
+          "canonical_text_sha256": "a7ad61dbf9729c65035b424433046b6ea21183727c82d960504b9545183554a9",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        },
+        {
+          "id": "m11p16-042-c2-a536543d66d0",
+          "slide": 4,
+          "text": "Choose the freshness requirement for each read path. A write that bypasses Dax can leave cached data stale, and critical reads may need a strongly consistent call to the table.",
+          "text_sha256": "a536543d66d08387df3355975021949820dab2faffcb7577f2f7c558f80459dd",
+          "canonical_text_sha256": "fd620dd8dacc0731285c932762ad2a4939c9e4073c5a0a21f786d3b21c7a62d9",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "17",
+      "revision": "2026-11-23-m11p17-m11-p16-p20-current-visuals-v1",
+      "approved_assets": {
+        "1": "5e155a028c08c5fda394f334035c2ba3ab4a0934d9d21e93224156fe3f5201af",
+        "2": "c205d095a8f77c751d9b9c182297a4cf34d336cbd62549a4a1ecc982c21d8e81",
+        "3": "6e8b91de3b54a178f306b4fcf26d26d4e6491db3f012437314978278e543dca5",
+        "4": "b6a6ebc8280786a3a375e280cd4290f011d0e58adc0f16f3782003c1865b0a23"
+      },
+      "units": [
+        {
+          "id": "m11p17-elasticache-c1-37d64d61bc77",
+          "slide": 1,
+          "text": "Use ElastiCache to reduce repeated work on the authoritative database. A hit returns the cached result; on a miss the application loads the result and fills the cache.",
+          "text_sha256": "37d64d61bc77ead1e9c923447665e5f57087725509f2f15ef437cab7676debe7",
+          "canonical_text_sha256": "37d64d61bc77ead1e9c923447665e5f57087725509f2f15ef437cab7676debe7",
+          "asset_sha256": "5e155a028c08c5fda394f334035c2ba3ab4a0934d9d21e93224156fe3f5201af"
+        },
+        {
+          "id": "m11p17-elasticache-c2-13135b18bec7",
+          "slide": 1,
+          "text": "Choose an engine and deployment mode, then design keys, expiry, and failure handling. The cache can lose data or serve stale data, so it is not the system of record.",
+          "text_sha256": "13135b18bec7b8999d002b48ef4cfffb066a45afd4cf69162163c4b6bea90dd3",
+          "canonical_text_sha256": "13135b18bec7b8999d002b48ef4cfffb066a45afd4cf69162163c4b6bea90dd3",
+          "asset_sha256": "5e155a028c08c5fda394f334035c2ba3ab4a0934d9d21e93224156fe3f5201af"
+        },
+        {
+          "id": "m11p17-043-c1-a422ea1adf82",
+          "slide": 2,
+          "text": "Choose Dax for supported DynamoDB operations. Choose ElastiCache when the application should define cache keys and values, such as computed results or sessions.",
+          "text_sha256": "a422ea1adf82d1da801e61ad8e0a52584e20c57cfe7c9ca5acdb5186215c5110",
+          "canonical_text_sha256": "21a2b86108d7052dd41568991cefddce35c3928a08816533f17a12689e42c424",
+          "asset_sha256": "c205d095a8f77c751d9b9c182297a4cf34d336cbd62549a4a1ecc982c21d8e81"
+        },
+        {
+          "id": "m11p17-043-c2-61223c8caaf5",
+          "slide": 2,
+          "text": "An application-managed cache also needs a plan for serialization, expiry, and invalidation. For an aggregate, define how it will be rebuilt when source data changes.",
+          "text_sha256": "61223c8caaf5f2111f1a00a64a772d2b05bed5ee77ff443c441e48928b5459d2",
+          "canonical_text_sha256": "61223c8caaf5f2111f1a00a64a772d2b05bed5ee77ff443c441e48928b5459d2",
+          "asset_sha256": "c205d095a8f77c751d9b9c182297a4cf34d336cbd62549a4a1ecc982c21d8e81"
+        },
+        {
+          "id": "m11p17-044-c1-53a5a60962d5",
+          "slide": 3,
+          "text": "Make the cache miss path explicit. A hit returns immediately. On a miss, read the authoritative database, fill the cache with an expiry, and return the result.",
+          "text_sha256": "53a5a60962d5c8837b82b30d21f849e81278e8174e7b1eb1dc8d7ba050c015be",
+          "canonical_text_sha256": "53a5a60962d5c8837b82b30d21f849e81278e8174e7b1eb1dc8d7ba050c015be",
+          "asset_sha256": "6e8b91de3b54a178f306b4fcf26d26d4e6491db3f012437314978278e543dca5"
+        },
+        {
+          "id": "m11p17-044-c2-f546eaa237bc",
+          "slide": 3,
+          "text": "Many misses for one key can overload the database. Coalesce requests for that key, bound retries, and spread expiry times with jitter. Watch cache hit rate and database load.",
+          "text_sha256": "f546eaa237bc1effc82d9a32eba144e22bd39c224f537ffd7b0482af28ee5496",
+          "canonical_text_sha256": "f546eaa237bc1effc82d9a32eba144e22bd39c224f537ffd7b0482af28ee5496",
+          "asset_sha256": "6e8b91de3b54a178f306b4fcf26d26d4e6491db3f012437314978278e543dca5"
+        },
+        {
+          "id": "m11p17-045-c1-354dfad29d21",
+          "slide": 4,
+          "text": "After a successful source write, invalidate or refresh the affected cache key. A reader that loaded the old value before the write can still put it back afterward.",
+          "text_sha256": "354dfad29d21c334ccdc70c2245cab6e45a81b165698409f135110f820a89d40",
+          "canonical_text_sha256": "354dfad29d21c334ccdc70c2245cab6e45a81b165698409f135110f820a89d40",
+          "asset_sha256": "b6a6ebc8280786a3a375e280cd4290f011d0e58adc0f16f3782003c1865b0a23"
+        },
+        {
+          "id": "m11p17-045-c2-64a7e9f949f5",
+          "slide": 4,
+          "text": "An expiry limits how long stale data can remain but does not make it correct instantly. Use versioned keys or conditional updates for races, and use the source directly when freshness is critical.",
+          "text_sha256": "64a7e9f949f59609068c266c84948a74291cc90f0332cf061844ba31ad8b8e63",
+          "canonical_text_sha256": "64a7e9f949f59609068c266c84948a74291cc90f0332cf061844ba31ad8b8e63",
+          "asset_sha256": "b6a6ebc8280786a3a375e280cd4290f011d0e58adc0f16f3782003c1865b0a23"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "18",
+      "revision": "2026-11-23-m11p18-m11-p16-p20-current-visuals-v1",
+      "approved_assets": {
+        "1": "4729ed2b395bdc376692635d1b48732979ae2205204830abc686759631bea707",
+        "2": "da6fc93c9ac663ad80e842f9386edf76c8d08e9e68d6d07fa5d9c9025552b236",
+        "3": "fb4236df309206087222b0200ecfe9d9233518033c83e159a594e2f2049d296c",
+        "4": "230c3d7994306eab379341bdc4f42bbec3c9d8a7868b7eddc8b027589a9ab87d"
+      },
+      "units": [
+        {
+          "id": "m11p18-046-c1-f9912806c6f9",
+          "slide": 1,
+          "text": "Keep app instances replaceable by storing the shared session separately. A secure cookie carries the session ID; either instance can use it to retrieve the same authorized session.",
+          "text_sha256": "f9912806c6f9ffc4e806dd876707e2a5e6db339e2101c52b7d0183b6662eef1c",
+          "canonical_text_sha256": "f9912806c6f9ffc4e806dd876707e2a5e6db339e2101c52b7d0183b6662eef1c",
+          "asset_sha256": "4729ed2b395bdc376692635d1b48732979ae2205204830abc686759631bea707"
+        },
+        {
+          "id": "m11p18-046-c2-14a6338f3b21",
+          "slide": 1,
+          "text": "Stickiness is not the only route to the state. Protect the token and the cache, and plan for expiry, eviction, or failover to require reauthentication.",
+          "text_sha256": "14a6338f3b21cbc5b0a280fc5e20a035d807a3fada78be0944bb4a2aa309aad2",
+          "canonical_text_sha256": "14a6338f3b21cbc5b0a280fc5e20a035d807a3fada78be0944bb4a2aa309aad2",
+          "asset_sha256": "4729ed2b395bdc376692635d1b48732979ae2205204830abc686759631bea707"
+        },
+        {
+          "id": "m11p18-047-c1-587f10f16525",
+          "slide": 2,
+          "text": "Choose the cache engine separately from deployment. Valkey and Redis OSS offer richer data structures; Memcached suits simple key-value caching.",
+          "text_sha256": "587f10f16525c5ced5e247d16d6a4f1db32c725a4c82d4118b1fa0d0b694d559",
+          "canonical_text_sha256": "587f10f16525c5ced5e247d16d6a4f1db32c725a4c82d4118b1fa0d0b694d559",
+          "asset_sha256": "da6fc93c9ac663ad80e842f9386edf76c8d08e9e68d6d07fa5d9c9025552b236"
+        },
+        {
+          "id": "m11p18-047-c2-26de04b887f8",
+          "slide": 2,
+          "text": "Verify features for the specific engine, version, and deployment mode. Traditional node-based Memcached is not Redis-style primary-replica storage, but serverless Memcached supports snapshots.",
+          "text_sha256": "26de04b887f8b304cb7555c569202e1efcab49085687fdc3f2f407e4581d95d4",
+          "canonical_text_sha256": "26de04b887f8b304cb7555c569202e1efcab49085687fdc3f2f407e4581d95d4",
+          "asset_sha256": "da6fc93c9ac663ad80e842f9386edf76c8d08e9e68d6d07fa5d9c9025552b236"
+        },
+        {
+          "id": "m11p18-048-c1-c9e475539556",
+          "slide": 3,
+          "text": "Shard to increase capacity, replicate to improve availability, and snapshot to support recovery. A hot key may still limit a sharded design.",
+          "text_sha256": "c9e475539556dff2cfd1bcbe1edf53a6fdcb127636e26b8b6de295e93caba18c",
+          "canonical_text_sha256": "c9e475539556dff2cfd1bcbe1edf53a6fdcb127636e26b8b6de295e93caba18c",
+          "asset_sha256": "fb4236df309206087222b0200ecfe9d9233518033c83e159a594e2f2049d296c"
+        },
+        {
+          "id": "m11p18-048-c2-e79b2536ffae",
+          "slide": 3,
+          "text": "A replica is not a backup. Validate failover and restore separately, and check which persistence features your engine and deployment support.",
+          "text_sha256": "e79b2536ffaee469f9ef809b7242cf8265a2de2138d52220b3f5de00e6a5ac4e",
+          "canonical_text_sha256": "e79b2536ffaee469f9ef809b7242cf8265a2de2138d52220b3f5de00e6a5ac4e",
+          "asset_sha256": "fb4236df309206087222b0200ecfe9d9233518033c83e159a594e2f2049d296c"
+        },
+        {
+          "id": "m11p18-049-c1-9d0a112591b8",
+          "slide": 4,
+          "text": "Trace an extreme burst through the whole path: edge, A P I throttling, compute, database, and encryption. A fast read cache does not fix a hot write partition.",
+          "text_sha256": "9d0a112591b8a199e26c1927947172978a7bf30bc2337928689f781d330ddb00",
+          "canonical_text_sha256": "ba8d0878af4b4f40bf181a2576f08539444a86d67ad5dd1faff3438583105971",
+          "asset_sha256": "230c3d7994306eab379341bdc4f42bbec3c9d8a7868b7eddc8b027589a9ab87d"
+        },
+        {
+          "id": "m11p18-049-c2-930821216e49",
+          "slide": 4,
+          "text": "Measure rate and concurrency separately, and check object sizes, cache hit rate, and account or Region quotas. Test the limiting layer before changing the rest of the design.",
+          "text_sha256": "930821216e49e6bc245a3e3ac87b5c0c7d754eb551ae6d104ba702f23381fb70",
+          "canonical_text_sha256": "930821216e49e6bc245a3e3ac87b5c0c7d754eb551ae6d104ba702f23381fb70",
+          "asset_sha256": "230c3d7994306eab379341bdc4f42bbec3c9d8a7868b7eddc8b027589a9ab87d"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "19",
+      "revision": "2026-11-23-m11p19-m11-p16-p20-current-visuals-v1",
+      "approved_assets": {
+        "1": "5e9bc93cc275ca382b799630cb6f66ecd29a8d1a25254e68b17d59c142f63b62",
+        "2": "95c08dcb7244c22580e25446a537dcb76c6db50351c3d95e9db844556c246c0c",
+        "3": "afe262a38a198c5526d60f8c1826e05d04c4426769d007d80340974f0d2c4502",
+        "4": "de3eafebc77fa30adf43dbe0f26636da0df41204afd32c1069bbbf740d14c973"
+      },
+      "units": [
+        {
+          "id": "m11p19-opensearch-c1-67e527302c5b",
+          "slide": 1,
+          "text": "Use OpenSearch for searching and analyzing indexed documents or logs. An ingestion path writes the index; applications and dashboards query it.",
+          "text_sha256": "67e527302c5b211bd890d477aa7f236c76d6d649b7ce31b929166e1c7978112c",
+          "canonical_text_sha256": "67e527302c5b211bd890d477aa7f236c76d6d649b7ce31b929166e1c7978112c",
+          "asset_sha256": "5e9bc93cc275ca382b799630cb6f66ecd29a8d1a25254e68b17d59c142f63b62"
+        },
+        {
+          "id": "m11p19-opensearch-c2-3f6180515d0a",
+          "slide": 1,
+          "text": "An index is a derived view, not the transactional source of truth. Plan for ingestion lag, failures, rebuilds, and access before choosing a provisioned or serverless model.",
+          "text_sha256": "3f6180515d0a96acb25d371b1a4edde3871a7666782bd82712100fb3682bcc33",
+          "canonical_text_sha256": "3f6180515d0a96acb25d371b1a4edde3871a7666782bd82712100fb3682bcc33",
+          "asset_sha256": "5e9bc93cc275ca382b799630cb6f66ecd29a8d1a25254e68b17d59c142f63b62"
+        },
+        {
+          "id": "m11p19-050-c1-d912b7efbed3",
+          "slide": 2,
+          "text": "Choose a provisioned domain when you need more infrastructure control, or a serverless collection when you want the service to manage capacity. Collection type and limits still matter.",
+          "text_sha256": "d912b7efbed3d783988609e899ccc32930a5b373364614c1729a319bd5b8ca60",
+          "canonical_text_sha256": "d912b7efbed3d783988609e899ccc32930a5b373364614c1729a319bd5b8ca60",
+          "asset_sha256": "95c08dcb7244c22580e25446a537dcb76c6db50351c3d95e9db844556c246c0c"
+        },
+        {
+          "id": "m11p19-050-c2-83c21fc7189c",
+          "slide": 2,
+          "text": "For either model, design mappings and query patterns, monitor indexing lag, and plan reindexing, failure recovery, and access controls.",
+          "text_sha256": "83c21fc7189cb5a14057e06a0e278bba225497c7bacbe0a6c8af6bd25898600b",
+          "canonical_text_sha256": "83c21fc7189cb5a14057e06a0e278bba225497c7bacbe0a6c8af6bd25898600b",
+          "asset_sha256": "95c08dcb7244c22580e25446a537dcb76c6db50351c3d95e9db844556c246c0c"
+        },
+        {
+          "id": "m11p19-051-c1-629d2c878862",
+          "slide": 3,
+          "text": "Keep ingestion, indexing, and dashboards separate. A collector or pipeline can transform and buffer documents. The index stores searchable fields; dashboards explore them.",
+          "text_sha256": "629d2c878862bf6f9217fe03e613069e7d45ca4208133fa46e5ce69930a7fa59",
+          "canonical_text_sha256": "629d2c878862bf6f9217fe03e613069e7d45ca4208133fa46e5ce69930a7fa59",
+          "asset_sha256": "afe262a38a198c5526d60f8c1826e05d04c4426769d007d80340974f0d2c4502"
+        },
+        {
+          "id": "m11p19-051-c2-e37f5c8dd71b",
+          "slide": 3,
+          "text": "Validate document shape before bulk indexing, monitor rejected writes, and provide a replay or recovery path. A dashboard does not retain the original logs or grant source access.",
+          "text_sha256": "e37f5c8dd71b8014e945bb926228d19737c3f145bcabc725a5789f705282ea83",
+          "canonical_text_sha256": "e37f5c8dd71b8014e945bb926228d19737c3f145bcabc725a5789f705282ea83",
+          "asset_sha256": "afe262a38a198c5526d60f8c1826e05d04c4426769d007d80340974f0d2c4502"
+        },
+        {
+          "id": "m11p19-052-c1-b2dd20099369",
+          "slide": 4,
+          "text": "Write authoritative items to DynamoDB, then use Streams and a consumer to maintain a separate OpenSearch index. Search can lag the source because indexing is asynchronous.",
+          "text_sha256": "b2dd20099369f040a37d89d8e332edac45d30e667d71a44f5e4849693d3131eb",
+          "canonical_text_sha256": "b2dd20099369f040a37d89d8e332edac45d30e667d71a44f5e4849693d3131eb",
+          "asset_sha256": "de3eafebc77fa30adf43dbe0f26636da0df41204afd32c1069bbbf740d14c973"
+        },
+        {
+          "id": "m11p19-052-c2-21777c704532",
+          "slide": 4,
+          "text": "Apply updates and deletes idempotently. Monitor lag and failures, and backfill or rebuild from trusted source records when needed. Keep item reads separate when they must use the authoritative value.",
+          "text_sha256": "21777c704532a3731d05b352849dda9edbdfc2572ef961fb9b5516e9950c2f41",
+          "canonical_text_sha256": "21777c704532a3731d05b352849dda9edbdfc2572ef961fb9b5516e9950c2f41",
+          "asset_sha256": "de3eafebc77fa30adf43dbe0f26636da0df41204afd32c1069bbbf740d14c973"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "20",
+      "revision": "2026-11-23-m11p20-m11-p16-p20-current-visuals-v1",
+      "approved_assets": {
+        "1": "4879f82881acc993cd23e671fce7fdfdce0f69f8ca37ad59e8e7c9fbdbcd797a",
+        "2": "154659f54e81edc422e8d6c04d6d9ff5ce4a924cbcc9ee97f4049ece571be5e4"
+      },
+      "units": [
+        {
+          "id": "m11p20-cloudwatchlogs-c1-ee6d6d61d6e8",
+          "slide": 1,
+          "text": "Choose CloudWatch Logs to collect, retain, query, and route application or service logs. Log groups organize retention and access; streams group related events.",
+          "text_sha256": "ee6d6d61d6e83fda03ea4bd1b4d38cf619bf4f3f01eb6d47ebeef229c0c10f4a",
+          "canonical_text_sha256": "ee6d6d61d6e83fda03ea4bd1b4d38cf619bf4f3f01eb6d47ebeef229c0c10f4a",
+          "asset_sha256": "4879f82881acc993cd23e671fce7fdfdce0f69f8ca37ad59e8e7c9fbdbcd797a"
+        },
+        {
+          "id": "m11p20-cloudwatchlogs-c2-9c2f6c7a0229",
+          "slide": 1,
+          "text": "Use Logs Insights for queries, metrics and alarms for signals, or a subscription filter for delivery. Check delivery errors and downstream capacity rather than assuming the destination processed everything.",
+          "text_sha256": "9c2f6c7a02299397909cfbc73066105bd2b0a2b57cc05ed901b0ee31f76a2a38",
+          "canonical_text_sha256": "9c2f6c7a02299397909cfbc73066105bd2b0a2b57cc05ed901b0ee31f76a2a38",
+          "asset_sha256": "4879f82881acc993cd23e671fce7fdfdce0f69f8ca37ad59e8e7c9fbdbcd797a"
+        },
+        {
+          "id": "m11p20-053-c1-3842135a9b7e",
+          "slide": 2,
+          "text": "Choose the delivery path for latency and operating effort. A subscription to a Lambda shipper gives you code-level control; plan its permissions, retries, and destination capacity.",
+          "text_sha256": "3842135a9b7eb020a66fbd443bc3cb022a73ae02eb5ada36b5a877184fe942f8",
+          "canonical_text_sha256": "3842135a9b7eb020a66fbd443bc3cb022a73ae02eb5ada36b5a877184fe942f8",
+          "asset_sha256": "154659f54e81edc422e8d6c04d6d9ff5ce4a924cbcc9ee97f4049ece571be5e4"
+        },
+        {
+          "id": "m11p20-053-c2-93ad4b6ecd41",
+          "slide": 2,
+          "text": "Firehose can buffer records by size or time before delivering to OpenSearch. Plan failed-delivery backup and monitor rejected documents; neither approach is instantaneous or loss-proof.",
+          "text_sha256": "93ad4b6ecd416a143409f23e757f101820e25f125259b5b9bc6ea7b179e4e466",
+          "canonical_text_sha256": "93ad4b6ecd416a143409f23e757f101820e25f125259b5b9bc6ea7b179e4e466",
+          "asset_sha256": "154659f54e81edc422e8d6c04d6d9ff5ce4a924cbcc9ee97f4049ece571be5e4"
+        }
+      ]
+    }
+  ]
+}
