@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "08",
+      "part": "07",
+      "revision": "2026-11-23-m08p07-post-legacy-b01-current-visuals-v1",
+      "approved_assets": {
+        "19": "2402ed0b0990f6c841532f5dc5bbb7e8570fa4c89889bdc978812bbba48148a5",
+        "20": "92c11ddc523c4778f620ca801aeb2f8ee973f2cc90bf56a3ff6d3dc96063d4bd",
+        "21": "81d3bedf58869ab332a489e4de56a62752cca4988b0c0390ee48225e14639457"
+      },
+      "units": [
+        {
+          "id": "m08p07-s19-c1-d8bcb3d9265e",
+          "slide": 19,
+          "text": "Secure an internet-facing Application Load Balancer without opening the private targets to the internet. Follow the client request and the separate health check.",
+          "text_sha256": "d8bcb3d9265e73d5fa075c348e67a8341e4375644aab8ef3e174b782cc04964f",
+          "canonical_text_sha256": "d8bcb3d9265e73d5fa075c348e67a8341e4375644aab8ef3e174b782cc04964f",
+          "asset_sha256": "2402ed0b0990f6c841532f5dc5bbb7e8570fa4c89889bdc978812bbba48148a5"
+        },
+        {
+          "id": "m08p07-s19-c2-6ee38184a694",
+          "slide": 19,
+          "text": "The client connects through HTTPS on port 443. The load balancer security group permits that listener, while the optional AWS Web Application Firewall inspects eligible web requests. It does not replace a security group.",
+          "text_sha256": "6ee38184a694cd2c024449fc9c542499abcc804dd87c3560d0d90e083c96ca99",
+          "canonical_text_sha256": "6ee38184a694cd2c024449fc9c542499abcc804dd87c3560d0d90e083c96ca99",
+          "asset_sha256": "2402ed0b0990f6c841532f5dc5bbb7e8570fa4c89889bdc978812bbba48148a5"
+        },
+        {
+          "id": "m08p07-s19-c3-ed818926b1b0",
+          "slide": 19,
+          "text": "The load balancer connects to the private EC2 targets on port 8080. In this design, target security allows that port only from the load balancer security group. The health check uses port 8080 too. Keep the target private and authorize both paths intentionally.",
+          "text_sha256": "ed818926b1b085586d04fbd10866a51e7e0ce38bbd46b700b05a604c2ecdf2c6",
+          "canonical_text_sha256": "ed818926b1b085586d04fbd10866a51e7e0ce38bbd46b700b05a604c2ecdf2c6",
+          "asset_sha256": "2402ed0b0990f6c841532f5dc5bbb7e8570fa4c89889bdc978812bbba48148a5"
+        },
+        {
+          "id": "m08p07-s20-c1-f1ca1925ebe0",
+          "slide": 20,
+          "text": "Diagnose a load balancer request one layer at a time. A reachable listener doesn't prove the target is healthy, and a healthy target doesn't prove an application request is authorized.",
+          "text_sha256": "f1ca1925ebe05b1324f6f8ec4c100696db4c3ccfd508387c2053f60ebda1f731",
+          "canonical_text_sha256": "f1ca1925ebe05b1324f6f8ec4c100696db4c3ccfd508387c2053f60ebda1f731",
+          "asset_sha256": "92c11ddc523c4778f620ca801aeb2f8ee973f2cc90bf56a3ff6d3dc96063d4bd"
+        },
+        {
+          "id": "m08p07-s20-c2-160a4ac7bda0",
+          "slide": 20,
+          "text": "Confirm DNS resolves to the intended load balancer and the listener accepts the client's protocol and port. Then check the security groups and subnet path between the load balancer and target.",
+          "text_sha256": "160a4ac7bda0e2f3ab8edafcc114bff5b8b346b4b1cc08c74e12db213c117f92",
+          "canonical_text_sha256": "160a4ac7bda0e2f3ab8edafcc114bff5b8b346b4b1cc08c74e12db213c117f92",
+          "asset_sha256": "92c11ddc523c4778f620ca801aeb2f8ee973f2cc90bf56a3ff6d3dc96063d4bd"
+        },
+        {
+          "id": "m08p07-s20-c3-bf6566b74396",
+          "slide": 20,
+          "text": "Read target health and its reason code. Verify that the health-check port and path match what the application serves. If health is good but the request fails, use application logs to check TLS or authorization rather than changing unrelated networking.",
+          "text_sha256": "bf6566b743968fd07fac1ca605ac527d3c04c62ee50cf9ed027fe5aaefbf936d",
+          "canonical_text_sha256": "bf6566b743968fd07fac1ca605ac527d3c04c62ee50cf9ed027fe5aaefbf936d",
+          "asset_sha256": "92c11ddc523c4778f620ca801aeb2f8ee973f2cc90bf56a3ff6d3dc96063d4bd"
+        },
+        {
+          "id": "m08p07-s21-c1-5f71dc4db4f9",
+          "slide": 21,
+          "text": "Choose the load balancer from the traffic and outcome, not from which service you used last.",
+          "text_sha256": "5f71dc4db4f978919b6883dad7fb47c4ba021a6d9ab00976bc7727b10aaa8221",
+          "canonical_text_sha256": "5f71dc4db4f978919b6883dad7fb47c4ba021a6d9ab00976bc7727b10aaa8221",
+          "asset_sha256": "81d3bedf58869ab332a489e4de56a62752cca4988b0c0390ee48225e14639457"
+        },
+        {
+          "id": "m08p07-s21-c2-70e30483398e",
+          "slide": 21,
+          "text": "Choose an Application Load Balancer to route web requests by host or path or to add supported application authentication. Choose a Network Load Balancer for TCP, UDP or TLS transport, static zonal addresses, or supported PrivateLink services. A Network Load Balancer does not inspect HTTP paths.",
+          "text_sha256": "70e30483398e37be9d5e2b2064e952a3088d29256d3563aeb719ce4dfa62ee0f",
+          "canonical_text_sha256": "70e30483398e37be9d5e2b2064e952a3088d29256d3563aeb719ce4dfa62ee0f",
+          "asset_sha256": "81d3bedf58869ab332a489e4de56a62752cca4988b0c0390ee48225e14639457"
+        },
+        {
+          "id": "m08p07-s21-c3-78c67c87b55d",
+          "slide": 21,
+          "text": "Choose a Gateway Load Balancer when inspection appliances need transparent insertion. It steers flows to the appliances; those appliances inspect traffic. None of these choices makes an Application Load Balancer handle raw UDP.",
+          "text_sha256": "78c67c87b55d719d26ecab4bce5a1ef4ad04c1089719e71e3983c6d1f39e48af",
+          "canonical_text_sha256": "78c67c87b55d719d26ecab4bce5a1ef4ad04c1089719e71e3983c6d1f39e48af",
+          "asset_sha256": "81d3bedf58869ab332a489e4de56a62752cca4988b0c0390ee48225e14639457"
+        }
+      ]
+    },
+    {
+      "module": "08",
+      "part": "08",
+      "revision": "2026-11-23-m08p08-post-legacy-b01-current-visuals-v1",
+      "approved_assets": {
+        "22": "85fcc2e5ad6747f6ee9330b66214639d153202865a81b747d1398e22cfd16721",
+        "23": "8242946f61f7a1befc3c983f4bbeaf23f329a098212f6656a8c8923d7a15fabf",
+        "24": "45a3545f76caf09e7948b1b55f80396342b19dd92053cadb6681c43d67dd2145"
+      },
+      "units": [
+        {
+          "id": "m08p08-s22-c1-6efac0c168ff",
+          "slide": 22,
+          "text": "Plan a Classic Load Balancer migration by the traffic you must support, not by trying to convert the existing resource in place.",
+          "text_sha256": "6efac0c168fff68ea72edad950cb3ecf9a477b6df5e59f7e15403f6d4c809726",
+          "canonical_text_sha256": "6efac0c168fff68ea72edad950cb3ecf9a477b6df5e59f7e15403f6d4c809726",
+          "asset_sha256": "85fcc2e5ad6747f6ee9330b66214639d153202865a81b747d1398e22cfd16721"
+        },
+        {
+          "id": "m08p08-s22-c2-653378522f27",
+          "slide": 22,
+          "text": "Choose an Application Load Balancer for web routing and supported identity features. Choose a Network Load Balancer for TCP or TLS transport and zonal addresses. Either choice creates a new resource, so existing clients are not redirected automatically.",
+          "text_sha256": "653378522f271053fe7df57025fef40940343d4dd646629825b3d1870be26d60",
+          "canonical_text_sha256": "653378522f271053fe7df57025fef40940343d4dd646629825b3d1870be26d60",
+          "asset_sha256": "85fcc2e5ad6747f6ee9330b66214639d153202865a81b747d1398e22cfd16721"
+        },
+        {
+          "id": "m08p08-s22-c3-772d55626324",
+          "slide": 22,
+          "text": "Create the new load balancer and target groups, then verify listeners, health checks, security controls and real requests. Only then shift DNS traffic. Keep the original endpoint available until you can safely roll back or retire it.",
+          "text_sha256": "772d55626324dcdef4e5b0aae63c29c04d279815a75c1e943d0bcd9c35e8b6a7",
+          "canonical_text_sha256": "772d55626324dcdef4e5b0aae63c29c04d279815a75c1e943d0bcd9c35e8b6a7",
+          "asset_sha256": "85fcc2e5ad6747f6ee9330b66214639d153202865a81b747d1398e22cfd16721"
+        },
+        {
+          "id": "m08p08-s23-c1-95e2635171a7",
+          "slide": 23,
+          "text": "Separate creating the load balancer from serving requests. A Kubernetes Ingress rule tells the AWS Load Balancer Controller what to provision; users later connect through the actual load balancer.",
+          "text_sha256": "95e2635171a7f1c36120fb413b4aff1e982c8f42420cbf64f311bd310480badf",
+          "canonical_text_sha256": "95e2635171a7f1c36120fb413b4aff1e982c8f42420cbf64f311bd310480badf",
+          "asset_sha256": "8242946f61f7a1befc3c983f4bbeaf23f329a098212f6656a8c8923d7a15fabf"
+        },
+        {
+          "id": "m08p08-s23-c2-7f322fcb6492",
+          "slide": 23,
+          "text": "The example uses the host shop dot example dot com and path slash orders. The controller provisions a Layer 7 listener rule and an IP target group. The Kubernetes Service selects the Pods, which informs endpoint discovery.",
+          "text_sha256": "7f322fcb6492343947d7c52f7fbbabf5a7db9696df0ba270987326df4208e6c8",
+          "canonical_text_sha256": "7f322fcb6492343947d7c52f7fbbabf5a7db9696df0ba270987326df4208e6c8",
+          "asset_sha256": "8242946f61f7a1befc3c983f4bbeaf23f329a098212f6656a8c8923d7a15fabf"
+        },
+        {
+          "id": "m08p08-s23-c3-97df99315b66",
+          "slide": 23,
+          "text": "At runtime the HTTPS client reaches the Application Load Balancer, which sends traffic to healthy Pod IP targets in this IP target mode. For Layer 4, a Kubernetes Service of type LoadBalancer can instead provision a Network Load Balancer with the appropriate controller configuration.",
+          "text_sha256": "97df99315b66ce91c9e21a342660656aea6e5577ccab97288ed001f2766cdc46",
+          "canonical_text_sha256": "97df99315b66ce91c9e21a342660656aea6e5577ccab97288ed001f2766cdc46",
+          "asset_sha256": "8242946f61f7a1befc3c983f4bbeaf23f329a098212f6656a8c8923d7a15fabf"
+        },
+        {
+          "id": "m08p08-s24-c1-77c4255a48f0",
+          "slide": 24,
+          "text": "Choose cross-zone routing by weighing failure isolation, usable target capacity and possible transfer charges.",
+          "text_sha256": "77c4255a48f0e7104eabfc287b93f0527170f0972b5e08ec852f078201820403",
+          "canonical_text_sha256": "77c4255a48f0e7104eabfc287b93f0527170f0972b5e08ec852f078201820403",
+          "asset_sha256": "45a3545f76caf09e7948b1b55f80396342b19dd92053cadb6681c43d67dd2145"
+        },
+        {
+          "id": "m08p08-s24-c2-cb05c4ef22c4",
+          "slide": 24,
+          "text": "On this Network Load Balancer, cross-zone routing is off by default. Each zonal node routes to healthy local targets. Plan sufficient capacity in every enabled Availability Zone; local-only routing can't borrow healthy targets from another zone.",
+          "text_sha256": "cb05c4ef22c448582a9ff6e0088161fd758b84840f9f3c5a5786a331dd6d88e1",
+          "canonical_text_sha256": "cb05c4ef22c448582a9ff6e0088161fd758b84840f9f3c5a5786a331dd6d88e1",
+          "asset_sha256": "45a3545f76caf09e7948b1b55f80396342b19dd92053cadb6681c43d67dd2145"
+        },
+        {
+          "id": "m08p08-s24-c3-d976b4c24570",
+          "slide": 24,
+          "text": "When cross-zone routing is on, a zonal node can reach healthy targets in another enabled zone. That increases target reach, but check transfer charges and which failures now share capacity. If a zone becomes unhealthy, its zonal DNS address may be withdrawn; caching and fail-open behavior mean traffic might not disappear immediately.",
+          "text_sha256": "d976b4c24570eb6f833c6fad6e8af18587969cc9164536a871d4a5fe749515da",
+          "canonical_text_sha256": "d976b4c24570eb6f833c6fad6e8af18587969cc9164536a871d4a5fe749515da",
+          "asset_sha256": "45a3545f76caf09e7948b1b55f80396342b19dd92053cadb6681c43d67dd2145"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "2026-11-23-m09p01-post-legacy-b01-current-visuals-v1",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "3": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-s01-c1-b5658a34e754",
+          "slide": 1,
+          "text": "Choose Amazon S3 when the application needs object storage. Each bucket lives in one AWS Region. The application accesses a bucket and an object key through an API, rather than opening a disk path.",
+          "text_sha256": "b5658a34e75491b5e964e6cf10c6cb8b79212ebe33a713b2a819a37555f3faee",
+          "canonical_text_sha256": "b5658a34e75491b5e964e6cf10c6cb8b79212ebe33a713b2a819a37555f3faee",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-s01-c2-59d4d14bb53f",
+          "slide": 1,
+          "text": "Take images slash logo dot P N G. The entire string is the object key. The slash gives us a useful prefix for grouping, but it does not turn the key into a filesystem path. The object also has bytes, metadata such as its content type, and a storage class.",
+          "text_sha256": "59d4d14bb53f325000a750b32a11f456aeeaaf794f8f9b22694d0f31d1872d36",
+          "canonical_text_sha256": "257e9c33eeb30b80215860576699b6e613ce40374db9463597a171efe033aac6",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-s01-c3-d8b3e1e6a042",
+          "slide": 1,
+          "text": "Static assets, backups and data lakes fit this model. An application that needs Pah-zicks filesystem behavior or in-place block updates needs a different storage mechanism. Choose those semantics first, then compare storage classes.",
+          "text_sha256": "d8b3e1e6a042713b3f1e2a22741e2de662af684e0fc07032399195cb6c7f25a2",
+          "canonical_text_sha256": "732bd6ff9cb89b37c582c1417b120aa5f0685acf501474fe985bf9178e8b63a8",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-s02-c1-365213222ebb",
+          "slide": 2,
+          "text": "Strong consistency tells you when a completed write becomes visible. Here, the application successfully puts orders slash one thousand one dot J S O N into the bucket.",
+          "text_sha256": "365213222ebb06e82983a7a8a62c4bc8777d7ff4b4dd5d59e539fbe2b1d68ec8",
+          "canonical_text_sha256": "597e9b6e557067345a19d6e155232054b9ae8ec0784649f5380bc810fc92417a",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-s02-c2-af0237d11a55",
+          "slide": 2,
+          "text": "A subsequent GET can read the written object, and LIST reflects that successful write. The application does not need to introduce a wait just for S3 to catch up.",
+          "text_sha256": "af0237d11a5514a2ad462ece786463f5a09345fda50ca59621dd9badccc9bcda",
+          "canonical_text_sha256": "af0237d11a5514a2ad462ece786463f5a09345fda50ca59621dd9badccc9bcda",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-s02-c3-d7806525d836",
+          "slide": 2,
+          "text": "Two concurrent writers to the same key can still race. A conditional write can require the expected state before replacing the object. Versioning preserves versions for recovery, but the application still decides how competing writes should be handled.",
+          "text_sha256": "d7806525d836668b111e9e31c2f03cce141689dad1be524a28576be710124c06",
+          "canonical_text_sha256": "d7806525d836668b111e9e31c2f03cce141689dad1be524a28576be710124c06",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-s02-c4-82cf861a4f17",
+          "slide": 2,
+          "text": "The same distinction applies across keys. Strong consistency does not make multiple object writes one atomic business transaction.",
+          "text_sha256": "82cf861a4f172b27c64966948bf37a7ea1885b22827866b86fa8e6676030af7f",
+          "canonical_text_sha256": "82cf861a4f172b27c64966948bf37a7ea1885b22827866b86fa8e6676030af7f",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-s03-c1-407c13f4a972",
+          "slide": 3,
+          "text": "To explain S3 access, start with the exact request. Identify the calling principal, the action, and the resource. An identity policy can allow a specific S3 action for that principal.",
+          "text_sha256": "407c13f4a972fc5f8e23542a94bcd888655b04859a2961492141012dc924105a",
+          "canonical_text_sha256": "407c13f4a972fc5f8e23542a94bcd888655b04859a2961492141012dc924105a",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-s03-c2-59aaf641ea52",
+          "slide": 3,
+          "text": "Bucket or access point policies can also restrict or grant applicable access. The policy check in the diagram is decisive: an applicable explicit deny wins. If there is no explicit deny, look for the effective permissions that allow this request.",
+          "text_sha256": "59aaf641ea5289a787548c1810ae7494b2b4a23d597daa7dbefc11b81f63e00d",
+          "canonical_text_sha256": "59aaf641ea5289a787548c1810ae7494b2b4a23d597daa7dbefc11b81f63e00d",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-s03-c3-93f11640c896",
+          "slide": 3,
+          "text": "With Bucket owner enforced Object Ownership, ACLs are disabled and the bucket owner owns the objects. Troubleshoot against the policies in force, rather than trying to repair access through an object ACL.",
+          "text_sha256": "93f11640c896f2cd8a04df5484cf32e4baf447d3eaa5acd64f7b6e67cf2154d2",
+          "canonical_text_sha256": "93f11640c896f2cd8a04df5484cf32e4baf447d3eaa5acd64f7b6e67cf2154d2",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "02",
+      "revision": "2026-11-23-m09p02-post-legacy-b01-current-visuals-v1",
+      "approved_assets": {
+        "4": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b",
+        "5": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de",
+        "6": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+      },
+      "units": [
+        {
+          "id": "m09p02-s04-c1-d802bec19264",
+          "slide": 4,
+          "text": "Separate the application access decision from the network path. An S3 Access Point is a named endpoint and policy boundary for an application. The underlying bucket permissions must also support the intended access.",
+          "text_sha256": "d802bec1926488eaea7902a80508c6a67e8986fbe420c7410f6568daae6529ad",
+          "canonical_text_sha256": "d802bec1926488eaea7902a80508c6a67e8986fbe420c7410f6568daae6529ad",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-s04-c2-a298b8e570e4",
+          "slide": 4,
+          "text": "Trace the application in the VPC. A gateway endpoint uses the subnet route table to reach S3. An interface endpoint uses AWS PrivateLink and private addresses on endpoint network interfaces. Choose the connectivity model before comparing its cost.",
+          "text_sha256": "a298b8e570e4971ba319e3dc1e668cde6347bf0b183655329fd0c2cc63018106",
+          "canonical_text_sha256": "a298b8e570e4971ba319e3dc1e668cde6347bf0b183655329fd0c2cc63018106",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-s04-c3-9e0bba33e5d7",
+          "slide": 4,
+          "text": "Now trace the authorization separately. An endpoint policy can restrict which requests use that path. It does not, by itself, grant bucket permissions, replace an access point policy, or encrypt the data.",
+          "text_sha256": "9e0bba33e5d7139992c1152d0e53cb6138c59d6fb92d4e28843dde22f6d5ebe7",
+          "canonical_text_sha256": "9e0bba33e5d7139992c1152d0e53cb6138c59d6fb92d4e28843dde22f6d5ebe7",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-s05-c1-8b4c99059335",
+          "slide": 5,
+          "text": "Choose encryption independently for stored data and for network traffic. S S E S three is the server-side option in which Amazon S3 manages the encryption keys.",
+          "text_sha256": "8b4c99059335699a55aaa46233e8a96c458dc7627f8bbae39fe266ea862b2991",
+          "canonical_text_sha256": "3b1125890de4b16cb2871c26bd0773eb79ac9a0713b7a9c51d31cccb54c2d29c",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-s05-c2-00be531d015f",
+          "slide": 5,
+          "text": "HTTPS protects the data in transit between the client and S3. Where required, enforce secure transport with the bucket policy. Storage encryption does not replace HTTPS.",
+          "text_sha256": "00be531d015f5cd3e6563383514bbdb0d7773e47fd67ab0559ade7f5f83d6644",
+          "canonical_text_sha256": "00be531d015f5cd3e6563383514bbdb0d7773e47fd67ab0559ade7f5f83d6644",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-s05-c3-ae0b26f8f4bb",
+          "slide": 5,
+          "text": "With S S E K M S, the stored object is encrypted using a data key protected by AWS KMS. The KMS key policy and applicable IAM permissions matter. Check key access as well as S3 access for readers, replication, and recovery.",
+          "text_sha256": "ae0b26f8f4bbc4eeffbb30b979e10166b9337854ca3998237930cd5256261569",
+          "canonical_text_sha256": "916555efaf77ef1ff113d065a66921f2c454e4b3ef2a4fbd735b662d50a73556",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-s05-c4-549ccd66fc6c",
+          "slide": 5,
+          "text": "For example, a reader may have permission to get an object but still fail to read it because the effective permissions do not allow KMS decryption. Check both authorization paths.",
+          "text_sha256": "549ccd66fc6cbed552c54da983af5c5481814c5cffc3991f4de15afbccc441d6",
+          "canonical_text_sha256": "549ccd66fc6cbed552c54da983af5c5481814c5cffc3991f4de15afbccc441d6",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-s06-c1-74ba37a0e6fb",
+          "slide": 6,
+          "text": "With S3 Versioning enabled, overwriting report dot C S V does not erase the first copy. The initial upload creates version one; the overwrite creates version two under the same key.",
+          "text_sha256": "74ba37a0e6fb1ec5e234d1f78353176999148aea38a27fe7abbb3011137e580c",
+          "canonical_text_sha256": "abb15f7afc3ab17df3979ff1b69614d5a386f75bda4ef52e8814ee0253a4244d",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-s06-c2-7f84d8a3e948",
+          "slide": 6,
+          "text": "A delete without a version ID makes a delete marker current, so a normal read no longer finds the object. To recover, remove that marker to reveal the latest remaining version, or retrieve a specific earlier version by its ID.",
+          "text_sha256": "7f84d8a3e948455ed08d794f7db3adc9884c7951721ba416fcaa79f4934ab8f9",
+          "canonical_text_sha256": "7f84d8a3e948455ed08d794f7db3adc9884c7951721ba416fcaa79f4934ab8f9",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-s06-c3-a0d709549f7a",
+          "slide": 6,
+          "text": "A version-specific delete can permanently remove that version. Use Lifecycle rules deliberately to manage noncurrent versions and expired delete markers.",
+          "text_sha256": "a0d709549f7a5f7ae1110bc2d450c100baabfafe4224f2d807f72cea24fc2cc8",
+          "canonical_text_sha256": "a0d709549f7a5f7ae1110bc2d450c100baabfafe4224f2d807f72cea24fc2cc8",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-s06-c4-220968418b79",
+          "slide": 6,
+          "text": "Suspending versioning does not remove historical versions. Do not mistake a hidden current object, or suspension, for permanent deletion of its history.",
+          "text_sha256": "220968418b791ff211ea111ddd6129eb0d8f724fb2136e63fdaa49eca8f05998",
+          "canonical_text_sha256": "220968418b791ff211ea111ddd6129eb0d8f724fb2136e63fdaa49eca8f05998",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "03",
+      "revision": "2026-11-23-m09p03-post-legacy-b01-current-visuals-v1",
+      "approved_assets": {
+        "7": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53",
+        "8": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e",
+        "9": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+      },
+      "units": [
+        {
+          "id": "m09p03-s07-c1-4e4e324df82f",
+          "slide": 7,
+          "text": "Protect the specific version of an audit record, not just the object name. In this versioned bucket, the clock sets a retention period. The separate legal hold has no expiration date.",
+          "text_sha256": "4e4e324df82fc39ad559e49c0fb0e05fedfbf3a97c74c179210e4d9d4c59784a",
+          "canonical_text_sha256": "4e4e324df82fc39ad559e49c0fb0e05fedfbf3a97c74c179210e4d9d4c59784a",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-s07-c2-c41e77b35d13",
+          "slide": 7,
+          "text": "Choose governance when your organization requires a controlled exception. For routine callers, retention remains in force.",
+          "text_sha256": "c41e77b35d13e084043de4b21f6d14c7271c89e4cc660a2ebb42d7550baf5804",
+          "canonical_text_sha256": "c41e77b35d13e084043de4b21f6d14c7271c89e4cc660a2ebb42d7550baf5804",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-s07-c3-978790d26efe",
+          "slide": 7,
+          "text": "Choose compliance for a fixed mandatory retention window. Until the date passes, no account user, including root, can shorten retention or delete that protected version.",
+          "text_sha256": "978790d26efe4ce01abb553f2a4b7fc28e70458da8b677b20963a3bbf1933088",
+          "canonical_text_sha256": "978790d26efe4ce01abb553f2a4b7fc28e70458da8b677b20963a3bbf1933088",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-s07-c4-ad45de025c5a",
+          "slide": 7,
+          "text": "Use legal hold when the end date is unknown. An authorized user must remove the hold; if another retention period still applies, the version remains protected.",
+          "text_sha256": "ad45de025c5a98dc0e7fcfb36ef9beea19a52ce86ee3cdfe64c6442ee990d953",
+          "canonical_text_sha256": "ad45de025c5a98dc0e7fcfb36ef9beea19a52ce86ee3cdfe64c6442ee990d953",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-s08-c1-52d6b49cbc42",
+          "slide": 8,
+          "text": "Keep the source bucket private while delivering static assets close to viewers. The viewer connects over H T T P S to CloudFront. A cache hit is served at the edge; an origin fetch goes to S three.",
+          "text_sha256": "52d6b49cbc42e37c3c112e6930dffb0825a8243f60f46c15b225777f2fdf036d",
+          "canonical_text_sha256": "df4590da59cbd390c47e4ca5a853ea1c35453656a0a5cf9c555f6075f373f6a8",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-s08-c2-018b68582ab7",
+          "slide": 8,
+          "text": "On an origin fetch, Origin Access Control lets CloudFront sign the S three request. The bucket policy authorizes that distribution, so a public bucket is not needed.",
+          "text_sha256": "018b68582ab7f92df03dd34b5f2443e54fc4b6710e74213b5f2c4a998864d785",
+          "canonical_text_sha256": "721c20fd292be58eab5f9305a3b04249fc8aec8ceacf1a9c04d848504b904408",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-s08-c3-d12786b4e8f3",
+          "slide": 8,
+          "text": "Keep images and scripts in S three. Run request-time business logic on separate compute, such as Lambda or E C S; caching static objects does not replace that application tier.",
+          "text_sha256": "d12786b4e8f3498152be3e39fcde779946f7a6229a753084d096ad1a9fb64309",
+          "canonical_text_sha256": "02f1ed5c2df3f0ecfa245edf83139a532a58b5d13cb9c9251bef7f010511c12f",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-s08-c4-80cef7ef679d",
+          "slide": 8,
+          "text": "For Origin Access Control, choose a regular S three bucket origin, not the S three website endpoint. Origin authentication controls CloudFront to S three; it does not decide which viewers may watch or download content.",
+          "text_sha256": "80cef7ef679d6ed403703558ac5bab4b484ce868474cfac993e81c76bf88029c",
+          "canonical_text_sha256": "8ecfc260871759a2dbbb231b8ffde116a6dd6cd8b61478f3c493e108b1bff1dc",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-s09-c1-7ef11ad74f09",
+          "slide": 9,
+          "text": "All three storage classes here give millisecond access. Choose by how often you read the objects and whether the data must survive the loss of an Availability Zone.",
+          "text_sha256": "7ef11ad74f0948b5464cfa9dfa633d2af2620182c93ff6075be0c375184edeac",
+          "canonical_text_sha256": "7ef11ad74f0948b5464cfa9dfa633d2af2620182c93ff6075be0c375184edeac",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-s09-c2-f863d0ebcd4a",
+          "slide": 9,
+          "text": "Choose S three Standard for frequently read assets, such as current product photos. It uses multiple Availability Zones and has no minimum storage duration.",
+          "text_sha256": "f863d0ebcd4a85f60958b4cb786190aa76556a72312f51e36f80742c2f37b91b",
+          "canonical_text_sha256": "81e3240cd695e4ae6f8d2c51b21ccd0b05874547a8ccd4d791a0cbc9034c6e81",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-s09-c3-1c9e0fd19a7c",
+          "slide": 9,
+          "text": "For infrequently read records that must survive a zone loss, choose Standard I A. It retains multi-zone resilience, but retrieval charges and the 30-day and one hundred twenty-eight kilobyte billing minimums affect the cost.",
+          "text_sha256": "1c9e0fd19a7c89a4135cb6d1e8342a688bb3694e020615a4cfc50dd08c542d23",
+          "canonical_text_sha256": "7fcaed3acfad2322c79ae78dce9b4ad34ee1be1ebda6c4ddc2ee41500c370d0c",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-s09-c4-590a17826c7a",
+          "slide": 9,
+          "text": "Use One Zone I A only when the data can be restored or recreated, such as rebuilt thumbnails. It still has retrieval charges and billing minimums, but the data stored in this class does not survive the loss of that zone.",
+          "text_sha256": "590a17826c7a0db382f8a71db15a04dc3e6da9f08fcd7c2253b3732daa502ba9",
+          "canonical_text_sha256": "9f97dc7c5d12f7813b9c6dee2c2ce9bac78cc308cc02019615183cdb971f66bb",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        }
+      ]
+    }
+  ]
+}
