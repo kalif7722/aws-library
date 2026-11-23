@@ -1,0 +1,48 @@
+name: SAP residual-native-fit opener audio only
+on:
+  push:
+    branches: [review/sap-openers-residual-native-fit]
+    paths: [.github/workflows/review-sap-openers-residual-native-fit.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-openers-residual-native-fit-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.ref == 'refs/heads/review/sap-openers-residual-native-fit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [M07P04-C, M07P04-D, M07P10-C, M07P10-D, M08P02-C, M08P02-D, M08P01-C, M08P03-C]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_openers_residual_native_fit.py
+            content/video-narration/review-sap-openers-residual-native-fit.json
+            content/video-narration/review-sap-openers-residual-native-fit.sha256
+          sparse-checkout-cone-mode: false
+      - run: python3 scripts/review_sap_openers_residual_native_fit.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+      - run: python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - run: python scripts/review_sap_openers_residual_native_fit.py synthesize "$PART"
+        env:
+          PART: ${{ matrix.part }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-opener-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
