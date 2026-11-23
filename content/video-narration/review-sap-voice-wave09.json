@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "07",
+      "part": "03",
+      "revision": "2026-11-23-m07p03-approved-aip-wave09-draft-v1",
+      "approved_assets": {
+        "7": "27d883301dc7b873a07365696300a8e371d3a062c419a4a8503830f8d970021f",
+        "8": "fa000fa512d4d0b6747f7ce765a7c5db909ee198d5376e428f5828dc8b187507",
+        "9": "31b945c8118fd7da0a12bea05f43c1e7147fb3833c138a1c44a2e6da75b65cd7"
+      },
+      "units": [
+        {
+          "id": "m07p03-s07-c1-249cef00279f",
+          "slide": 7,
+          "text": "Spot uses spare E C 2 capacity that AWS can reclaim. A configured maximum price can affect eligibility, but neither low price nor a successful launch guarantees future capacity.",
+          "text_sha256": "249cef00279f15478530bbad55e784e8219ccc65fdfcd95a991d7edfb529f1e0",
+          "asset_sha256": "27d883301dc7b873a07365696300a8e371d3a062c419a4a8503830f8d970021f"
+        },
+        {
+          "id": "m07p03-s07-c2-f56c55607b82",
+          "slide": 7,
+          "text": "Treat interruption notices as best effort. The usual warning is two minutes, but hibernation starts immediately without that lead time. Design retryable work: checkpoint to durable storage, drain when possible, and make retries idempotent.",
+          "text_sha256": "f56c55607b828a41d2d5ac2e10decbf5d0f2e528149ed06d11d8d3939e69bdc7",
+          "asset_sha256": "27d883301dc7b873a07365696300a8e371d3a062c419a4a8503830f8d970021f"
+        },
+        {
+          "id": "m07p03-s07-c3-72caf06cb585",
+          "slide": 7,
+          "text": "Diversify instance types and Availability Zones and choose a capacity-aware allocation strategy. Capacity Rebalancing can try a replacement early, but it doesn't guarantee one. Canceling a Spot request and terminating its running instance are distinct; verify both states.",
+          "text_sha256": "72caf06cb585370465c8eb56de1299eeb100099bec4b279cfc6f4ead8a399d4b",
+          "asset_sha256": "27d883301dc7b873a07365696300a8e371d3a062c419a4a8503830f8d970021f"
+        },
+        {
+          "id": "m07p03-s08-c1-8f3ca911b2b4",
+          "slide": 8,
+          "text": "Shared tenancy can run on hardware shared with other customers. Dedicated Instances isolate hardware to your account but don't provide host-level placement visibility or host affinity.",
+          "text_sha256": "8f3ca911b2b48498d286e310b4120d121479bbfcc279fe250b0d62d0dcfe59b1",
+          "asset_sha256": "fa000fa512d4d0b6747f7ce765a7c5db909ee198d5376e428f5828dc8b187507"
+        },
+        {
+          "id": "m07p03-s08-c2-4e61a8351100",
+          "slide": 8,
+          "text": "A Dedicated Host provides an allocated physical server, host visibility and placement controls. This can suit eligible per-socket or per-core licensing. Host affinity can bring an instance back to a particular host on subsequent starts; auto-placement is a different setting.",
+          "text_sha256": "4e61a835110094fb8ba99d61871784e4b80dc61e23db1cfbd1805425f721a396",
+          "asset_sha256": "fa000fa512d4d0b6747f7ce765a7c5db909ee198d5376e428f5828dc8b187507"
+        },
+        {
+          "id": "m07p03-s08-c3-8ce8676b4fc2",
+          "slide": 8,
+          "text": "If recovery is supported, AWS can allocate a replacement host in the same Availability Zone, and recovered instances establish affinity with it. Verify license terms, supported configurations, recovery requirements and cost separately.",
+          "text_sha256": "8ce8676b4fc29b81e26d2429409ce126367f42c92e27911223ef8f6391029c92",
+          "asset_sha256": "fa000fa512d4d0b6747f7ce765a7c5db909ee198d5376e428f5828dc8b187507"
+        },
+        {
+          "id": "m07p03-s09-c1-0bb576545c86",
+          "slide": 9,
+          "text": "Use cluster placement to put compatible instances close together in one Availability Zone for low latency and high throughput, not to guarantee one rack. Rack-level spread separates hardware for small critical fleets and supports up to seven running instances per zone per group.",
+          "text_sha256": "0bb576545c86ee67ec5ef40a302c3f78c183454efa2703d69bb0f7a440b2b816",
+          "asset_sha256": "31b945c8118fd7da0a12bea05f43c1e7147fb3833c138a1c44a2e6da75b65cd7"
+        },
+        {
+          "id": "m07p03-s09-c2-e8ee3c47dcb2",
+          "slide": 9,
+          "text": "Partition placement separates groups of replicas onto different sets of racks. Applications like Kafka can use partition metadata to spread replicas. The slide shows up to seven partitions per Availability Zone; total capacity is quota-limited.",
+          "text_sha256": "e8ee3c47dcb201199f5b2818564cb42c1c077c6bf35abf43d169873253addae4",
+          "asset_sha256": "31b945c8118fd7da0a12bea05f43c1e7147fb3833c138a1c44a2e6da75b65cd7"
+        },
+        {
+          "id": "m07p03-s09-c3-2edb0530a047",
+          "slide": 9,
+          "text": "For an eligible placement change, plan a stop, change and start in a maintenance window. Compatible launch capacity is not guaranteed. Placement helps control locality or hardware separation, but it does not create replicas or Multi-A Z recovery.",
+          "text_sha256": "2edb0530a047335d5200a6eb3cb2ec12de1ef8242a2fe517b786001952901538",
+          "asset_sha256": "31b945c8118fd7da0a12bea05f43c1e7147fb3833c138a1c44a2e6da75b65cd7"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "04",
+      "revision": "2026-11-23-m07p04-approved-aip-wave09-draft-v1",
+      "approved_assets": {
+        "10": "e7fa598415764df52352282a58e026d4df4318aca2d8ddcf1ca53d42ac82cc09",
+        "11": "00ea3c66092331e70cc8d26e4267f6eece37bb6216b3f03757171fc80dd307ea",
+        "12": "3cca3819e40eda8186ec8071822b8b05c8249c2e26fb8e8f42860483daccdaa7"
+      },
+      "units": [
+        {
+          "id": "m07p04-s10-c1-386997b383c6",
+          "slide": 10,
+          "text": "E N A provides hardware-assisted enhanced networking on supported E C 2 instances. Use it to improve throughput, packet rate and C P U efficiency; actual performance depends on instance limits and drivers.",
+          "text_sha256": "386997b383c6be6e89978abc17c97060525045e1b9822831abcea1638ce341ee",
+          "asset_sha256": "e7fa598415764df52352282a58e026d4df4318aca2d8ddcf1ca53d42ac82cc09"
+        },
+        {
+          "id": "m07p04-s10-c2-012cef4a2b68",
+          "slide": 10,
+          "text": "E F A targets low-latency communication between nodes in supported Linux H P C and machine learning workloads. Compatible M P I or N C C L software uses libfabric and the appropriate E F A integration.",
+          "text_sha256": "012cef4a2b68e203b6dc2259d5f1a51eef8c7813d506bdbca1a675c540a1d573",
+          "asset_sha256": "e7fa598415764df52352282a58e026d4df4318aca2d8ddcf1ca53d42ac82cc09"
+        },
+        {
+          "id": "m07p04-s10-c3-28662022b680",
+          "slide": 10,
+          "text": "For operating-system bypass, confirm supported instance types, software, same-zone placement and the required security group configuration. Don't assume E F A accelerates unmodified software, and don't apply historical network speeds as universal modern limits.",
+          "text_sha256": "28662022b68041703ea83bbb09b6b4d8f33ecdeae3fbd87ce42a2c65df20aa01",
+          "asset_sha256": "e7fa598415764df52352282a58e026d4df4318aca2d8ddcf1ca53d42ac82cc09"
+        },
+        {
+          "id": "m07p04-s11-c1-3e99460b98e5",
+          "slide": 11,
+          "text": "The weather model exchanges frequent messages. ParallelCluster with Slurm schedules those workers in one Availability Zone, and E F A supports their low-latency M P I communication. Stage input from S3, use F S x for Lustre for shared data and checkpoints, and export results to S3.",
+          "text_sha256": "3e99460b98e5a1aa3287b38148a6d5c1b1292e38bb63bc7548e9f219b9a5e211",
+          "asset_sha256": "00ea3c66092331e70cc8d26e4267f6eece37bb6216b3f03757171fc80dd307ea"
+        },
+        {
+          "id": "m07p04-s11-c2-d17202c40ffb",
+          "slide": 11,
+          "text": "On the right, each image frame can render independently. AWS Batch queues and dispatches jobs to E C 2 workers. Scale the number of workers as needed within available capacity; a tightly coupled interconnect isn't the main requirement.",
+          "text_sha256": "d17202c40ffb59425343104e52eb0b9677bf6414377c6b794558b8d9410d69fb",
+          "asset_sha256": "00ea3c66092331e70cc8d26e4267f6eece37bb6216b3f03757171fc80dd307ea"
+        },
+        {
+          "id": "m07p04-s11-c3-7e320ac6ae34",
+          "slide": 11,
+          "text": "Choose by how jobs communicate, then size C P U or G P U and storage throughput together. Faster compute won't fix slow input staging.",
+          "text_sha256": "7e320ac6ae34820679b873ee95c552472f4ca8eb06af2b1878d34915044267ee",
+          "asset_sha256": "00ea3c66092331e70cc8d26e4267f6eece37bb6216b3f03757171fc80dd307ea"
+        },
+        {
+          "id": "m07p04-s12-c1-141f8f8b01d4",
+          "slide": 12,
+          "text": "Minimum, desired and maximum do different jobs. In this unweighted example, two is the configured minimum, four is the current desired target, and six is the configured maximum.",
+          "text_sha256": "141f8f8b01d449b0518d38ae790b46a418cc83230a75731593c1735de6f7800b",
+          "asset_sha256": "3cca3819e40eda8186ec8071822b8b05c8249c2e26fb8e8f42860483daccdaa7"
+        },
+        {
+          "id": "m07p04-s12-c2-36c09f8325b1",
+          "slide": 12,
+          "text": "The load balancer sends traffic to healthy targets. When a launch fails, there are only three healthy instances even though desired stays at four. Check Auto Scaling activity and target health rather than assuming desired equals healthy.",
+          "text_sha256": "36c09f8325b10adc145fe487e96f8c75b2ff7cc0d242df1cd5e63695826f75f6",
+          "asset_sha256": "3cca3819e40eda8186ec8071822b8b05c8249c2e26fb8e8f42860483daccdaa7"
+        },
+        {
+          "id": "m07p04-s12-c3-ecaac61dde6b",
+          "slide": 12,
+          "text": "This gauge counts instances only in the unweighted example. In a weighted group, the values express capacity units and a group can exceed the configured maximum within documented limits. Keep the unit and the constraint separate.",
+          "text_sha256": "ecaac61dde6b4e0547457aab8ccadaec1fd3133e6468d1d39f5113996815a4da",
+          "asset_sha256": "3cca3819e40eda8186ec8071822b8b05c8249c2e26fb8e8f42860483daccdaa7"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "05",
+      "revision": "2026-11-23-m07p05-approved-aip-wave09-draft-v1",
+      "approved_assets": {
+        "13": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450",
+        "14": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0",
+        "15": "97094c4da4f94c90959b98986529a86277e276013cacd2df6107344eb78a68cd"
+      },
+      "units": [
+        {
+          "id": "m07p05-s13-c1-5be26a6a316d",
+          "slide": 13,
+          "text": "Target tracking changes capacity to keep a useful utilization metric near a target. Adding instances should reduce load per instance, so choose a metric aligned with the bottleneck.",
+          "text_sha256": "5be26a6a316d22f0d03e4d0715bfd982d77eb33581c28f15e511084164ca53db",
+          "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+        },
+        {
+          "id": "m07p05-s13-c2-99e58d26cb89",
+          "slide": 13,
+          "text": "For C P U-bound work use average C P U; for balanced request processing consider load balancer requests per target. Suitable network-bound work can use average network bytes. For queues, use backlog per worker rather than raw queue depth, and set its target by acceptable latency and processing time.",
+          "text_sha256": "99e58d26cb892eccf5b928e21970f7d7e60420c1d665b50c891397cc90c97f63",
+          "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+        },
+        {
+          "id": "m07p05-s13-c3-a36e67f01242",
+          "slide": 13,
+          "text": "Allow instances to warm up and validate scale-in behavior. With multiple target tracking policies, any policy can request scale-out, but all those with scale-in enabled must agree before scale-in.",
+          "text_sha256": "a36e67f01242424498e766d6d5f14efd5fd4575fae56395c2019faf71c3e22d5",
+          "asset_sha256": "450e13df826fad4be4f7c49b1add4488ecb2963957c03233df2fddbf649f4450"
+        },
+        {
+          "id": "m07p05-s14-c1-9efd635ad408",
+          "slide": 14,
+          "text": "Step scaling asks how far an alarm metric has crossed its threshold. Follow the rising line on the left. A larger breach can trigger a larger capacity adjustment than a small breach.",
+          "text_sha256": "9efd635ad408d2b2280eb40ab3be7d0a29c2c71d0752d163aac9a735a1b568f0",
+          "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+        },
+        {
+          "id": "m07p05-s14-c2-cbaa2a2fdd8f",
+          "slide": 14,
+          "text": "Simple scaling uses a single adjustment and a cooldown. Step scaling uses configured breach ranges, while target tracking works toward a utilization target. Pick the policy that suits the workload.",
+          "text_sha256": "cbaa2a2fdd8fe77c129cb96b9f52ee6058c7e5c27ed5ebc484d8f870c2a07013",
+          "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+        },
+        {
+          "id": "m07p05-s14-c3-d2b179e1f5ff",
+          "slide": 14,
+          "text": "Avoid conflicting policies and aggressive scale-in that removes capacity before demand stabilizes. Test thresholds, adjustments and warmup with realistic bursts, noisy readings and missing data.",
+          "text_sha256": "d2b179e1f5ffe7cc1abd2b13e7fea21d736bb3134a9efd02d348f54776e8fec0",
+          "asset_sha256": "5f33b0b6aac89e3bea90368cefe2bd34a3b0738ee828e43f6b7d6192a93851f0"
+        },
+        {
+          "id": "m07p05-s15-c1-de8b2d2e9e76",
+          "slide": 15,
+          "text": "At the left, the recurring morning peak is a predictive-scaling candidate. Start in forecast-only mode, compare the predictions with demand, then use forecast-and-scale when the pattern is reliable.",
+          "text_sha256": "de8b2d2e9e7649444627e8550ee852bc1151fdd5242171044eebbb9499da64fe",
+          "asset_sha256": "97094c4da4f94c90959b98986529a86277e276013cacd2df6107344eb78a68cd"
+        },
+        {
+          "id": "m07p05-s15-c2-a0ce217cca16",
+          "slide": 15,
+          "text": "The Friday sale has a known time. Use a scheduled action to raise the capacity floor before it starts, leaving time for instances to initialize and become healthy.",
+          "text_sha256": "a0ce217cca169d6744706e6dc1aee66515fc71cf2576ecc61b55f2fd65c65e83",
+          "asset_sha256": "97094c4da4f94c90959b98986529a86277e276013cacd2df6107344eb78a68cd"
+        },
+        {
+          "id": "m07p05-s15-c3-786bf4760a7f",
+          "slide": 15,
+          "text": "Keep dynamic scaling for the unexpected surge and for scaling in when demand falls and the capacity floor allows. A forecast or schedule helps you arrive prepared; live metrics still tell you what actually happened.",
+          "text_sha256": "786bf4760a7f987597bdd2c1a57423fcf860df17e36e9977aa2bae1cff758a55",
+          "asset_sha256": "97094c4da4f94c90959b98986529a86277e276013cacd2df6107344eb78a68cd"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "07",
+      "revision": "2026-11-23-m07p07-approved-aip-wave09-draft-v1",
+      "approved_assets": {
+        "19": "c5ab5526638ef574e0a35be0fad5f2535ff134957670fda80446f55f66ae6800",
+        "20": "c589476e027ed311ecb0abcc335b4f2deb1dff56a59c33fd3679c9997c1a84ad",
+        "21": "0b5e86fa9e4f46e7f08a3c463e6b204b23d558af7a998e9298b4ba7c3c96c6ba",
+        "22": "4df75332d7107b32319c917f63420f5528118fd3852673fc96dd9856d2ca0d74"
+      },
+      "units": [
+        {
+          "id": "m07p07-s19-c1-308c1ea05b83",
+          "slide": 19,
+          "text": "Follow slash ready from the load balancer to both targets. The E C two status checks pass, but the applications return five oh three because they share an unavailable database. The target group expects two hundred, so the reason is Target Response Code Mismatch.",
+          "text_sha256": "308c1ea05b83739eab01d0b8ab3c8ad906b9de647700ca8ffaf7b3a218cd0319",
+          "asset_sha256": "c5ab5526638ef574e0a35be0fad5f2535ff134957670fda80446f55f66ae6800"
+        },
+        {
+          "id": "m07p07-s19-c2-860d0b381b11",
+          "slide": 19,
+          "text": "The left example isolates a single bad host. Replacing it can help if the dependencies are healthy. In this case, both targets fail readiness for the same reason, so recover the shared database rather than replacing the entire fleet.",
+          "text_sha256": "860d0b381b119f263188c27dada414c5b91d1bfee95147e5bf37735a85c58b55",
+          "asset_sha256": "c5ab5526638ef574e0a35be0fad5f2535ff134957670fda80446f55f66ae6800"
+        },
+        {
+          "id": "m07p07-s19-c3-d0d912242916",
+          "slide": 19,
+          "text": "Auto Scaling can use load-balancer target health for replacement when you enable E L B health checks. The grace period gives a new instance time to become ready. It does not repair a database outage or turn a failing readiness check into a healthy one.",
+          "text_sha256": "d0d91224291615fa31c02625afdb01353861adc7dbce69974add479a2e203e3a",
+          "asset_sha256": "c5ab5526638ef574e0a35be0fad5f2535ff134957670fda80446f55f66ae6800"
+        },
+        {
+          "id": "m07p07-s20-c1-3d3fe5ea9216",
+          "slide": 20,
+          "text": "On the left, the timed target is being deregistered. The load balancer stops sending it new requests and gives supported in-flight requests time to drain within the configured delay. Test what happens when a request outlasts that window.",
+          "text_sha256": "3d3fe5ea9216e6a72de59514524c7ea1ba54d80203bd3b7f3c3e2a0c8d515e6d",
+          "asset_sha256": "c589476e027ed311ecb0abcc335b4f2deb1dff56a59c33fd3679c9997c1a84ad"
+        },
+        {
+          "id": "m07p07-s20-c2-f8c14d647422",
+          "slide": 20,
+          "text": "Scale-in protection can keep selected instances from normal scale-in. It does not protect them from every replacement or termination. Queue workers should stop accepting new work, finish or checkpoint existing tasks, and make unfinished work available for retry.",
+          "text_sha256": "f8c14d647422b52fa089db634850003225e5921b5a7c0bbbf01570b83f55b0c2",
+          "asset_sha256": "c589476e027ed311ecb0abcc335b4f2deb1dff56a59c33fd3679c9997c1a84ad"
+        },
+        {
+          "id": "m07p07-s20-c3-c95b02ea7eae",
+          "slide": 20,
+          "text": "Choose termination policy and lifecycle hooks to fit the application. Test long requests, interrupted jobs and scale-in during deployments. The evidence of success is completed or recoverable work, not merely a smaller instance count.",
+          "text_sha256": "c95b02ea7eaed618d70330af03da7375873e1bb67f51f9a536fb32fd25e29b98",
+          "asset_sha256": "c589476e027ed311ecb0abcc335b4f2deb1dff56a59c33fd3679c9997c1a84ad"
+        },
+        {
+          "id": "m07p07-s21-c1-1aae52b7eb01",
+          "slide": 21,
+          "text": "The workers here are not equivalent. Two have weight four and one has weight two. Define those weights in a common unit that reflects useful processing capacity, then ask Auto Scaling for units, not a fixed headcount.",
+          "text_sha256": "1aae52b7eb015d6c449cafe65edd19a3156b0dff95f35d839676212b4aa04504",
+          "asset_sha256": "0b5e86fa9e4f46e7f08a3c463e6b204b23d558af7a998e9298b4ba7c3c96c6ba"
+        },
+        {
+          "id": "m07p07-s21-c2-58c650f0deb0",
+          "slide": 21,
+          "text": "The desired capacity is ten units. Four plus four plus two meets it exactly. If the group chooses another weight-four worker to fill the remaining gap, four plus four plus four gives twelve. A whole instance can take the group above its desired capacity.",
+          "text_sha256": "58c650f0deb07a637b1f1dd3f81ae983bea9cf555a9879c9085a8e77a1e54772",
+          "asset_sha256": "0b5e86fa9e4f46e7f08a3c463e6b204b23d558af7a998e9298b4ba7c3c96c6ba"
+        },
+        {
+          "id": "m07p07-s21-c3-bbd434d78582",
+          "slide": 21,
+          "text": "Compare queue backlog per effective capacity unit instead of per instance. Separately decide the mix of On Demand and Spot, and the allocation strategy. That purchase and placement choice does not change what a capacity unit means.",
+          "text_sha256": "bbd434d78582d6e6b3ec51078d1bd6972de68dc1566993b6e045b5afc675b42b",
+          "asset_sha256": "0b5e86fa9e4f46e7f08a3c463e6b204b23d558af7a998e9298b4ba7c3c96c6ba"
+        },
+        {
+          "id": "m07p07-s22-c1-4f70864749b5",
+          "slide": 22,
+          "text": "Follow the client through the Application Load Balancer to the workers in three Availability Zones. The Dynamo D B table stores the orders outside the worker hosts, so a healthy worker can read the same order after another is removed.",
+          "text_sha256": "4f70864749b521a40bfe12caabfd4b7592c92f7ce96c1b95c7d26c218aba8c2d",
+          "asset_sha256": "4df75332d7107b32319c917f63420f5528118fd3852673fc96dd9856d2ca0d74"
+        },
+        {
+          "id": "m07p07-s22-c2-92e8f2f6532a",
+          "slide": 22,
+          "text": "At three hundred requests per second, the measured C P U is ninety-two percent and the ninety-fifth percentile latency is four hundred ten milliseconds. Profiling confirms C P U saturation in this example. Benchmark more compute at the same load rather than assuming every slow request is compute-bound.",
+          "text_sha256": "92e8f2f6532a3ad25af4f49073d95f7f05c3a697d5c33b4220ad475d63c19375",
+          "asset_sha256": "4df75332d7107b32319c917f63420f5528118fd3852673fc96dd9856d2ca0d74"
+        },
+        {
+          "id": "m07p07-s22-c3-b5b8df9fc8fe",
+          "slide": 22,
+          "text": "In a test environment, stop one worker. Healthy workers should still be able to return order one twenty-three from Dynamo D B. Check errors, ninety-fifth percentile latency and replacement time. This is an experiment, not a performance promise.",
+          "text_sha256": "b5b8df9fc8fee5698a16a8dd1744fa7876695d881d75882283691bc4c2586ae9",
+          "asset_sha256": "4df75332d7107b32319c917f63420f5528118fd3852673fc96dd9856d2ca0d74"
+        }
+      ]
+    },
+    {
+      "module": "07",
+      "part": "08",
+      "revision": "2026-11-23-m07p08-approved-aip-wave09-draft-v1",
+      "approved_assets": {
+        "23": "95107ef68bf20ea52fe731408c90d1514175d37c265daa381c4ffc220c9bec9d",
+        "24": "fb643928ed81a03dd17d1085567168d552479fe95f93044d7ed7447cf3f65b3e"
+      },
+      "units": [
+        {
+          "id": "m07p08-s23-c1-15f59bb9b806",
+          "slide": 23,
+          "text": "These Linux market-data hosts need accurately ordered timestamps. A precision time placement group puts supported instances on hardware with access to enhanced Amazon Time Sync. The arrow shows the link-local N T P option; enhanced time is distinct from basic local N T P access.",
+          "text_sha256": "15f59bb9b806d60a90e71de446a802f4b8d5d407dd15ee5efc0124d87d0e823f",
+          "asset_sha256": "95107ef68bf20ea52fe731408c90d1514175d37c265daa381c4ffc220c9bec9d"
+        },
+        {
+          "id": "m07p08-s23-c2-7b4c9ef46205",
+          "slide": 23,
+          "text": "A supported Linux instance can also use the P T P hardware clock as a local time source. Confirm instance and location support, then verify the source you actually configured. Do not assume the placement group automatically makes the host use the hardware clock.",
+          "text_sha256": "7b4c9ef4620511fd4f29006d4f7cc2d8cfab7fb801750d78fd158aa179cb5781",
+          "asset_sha256": "95107ef68bf20ea52fe731408c90d1514175d37c265daa381c4ffc220c9bec9d"
+        },
+        {
+          "id": "m07p08-s23-c3-f4302b674f32",
+          "slide": 23,
+          "text": "Use chrony C tracking to review clock offset and verify the selected source. Compare the observed offset with the application requirement. Better clock accuracy does not promise lower network latency or Availability Zone isolation.",
+          "text_sha256": "f4302b674f324628fc8733b343d28723c2e0b4a2dab1938a57db3309fd4fcc10",
+          "asset_sha256": "95107ef68bf20ea52fe731408c90d1514175d37c265daa381c4ffc220c9bec9d"
+        },
+        {
+          "id": "m07p08-s24-c1-42a5ca244351",
+          "slide": 24,
+          "text": "E C two publishes C P U utilization and, on burstable instances, credit metrics. Network In and Network Out measure bytes. Check packet counts and the instance's packet and bandwidth limits as well; byte rate alone does not show packet-rate pressure.",
+          "text_sha256": "42a5ca244351e7c7bfb88e1bc209d78bfa597316ad4d9253371c37a28c3fe51a",
+          "asset_sha256": "fb643928ed81a03dd17d1085567168d552479fe95f93044d7ed7447cf3f65b3e"
+        },
+        {
+          "id": "m07p08-s24-c2-86115827eb83",
+          "slide": 24,
+          "text": "Local disk metrics shown here describe instance-store I O. Use E B S volume metrics and supported Nitro instance-level E B S metrics for E B S behavior. Memory use and filesystem free space are inside the guest; publish them through the CloudWatch agent or custom metrics.",
+          "text_sha256": "86115827eb83cd137c7c59c6ee72950d66c18a02bc9a7bdaae88082f3ddc7c6b",
+          "asset_sha256": "fb643928ed81a03dd17d1085567168d552479fe95f93044d7ed7447cf3f65b3e"
+        },
+        {
+          "id": "m07p08-s24-c3-e2fee0ebfe00",
+          "slide": 24,
+          "text": "Basic monitoring is generally five minutes. Detailed monitoring gives one-minute observations for eligible E C two metrics, and some metric families follow their own cadence. Check metric source and resolution before deciding to change instance size.",
+          "text_sha256": "e2fee0ebfe0088243f58cc52862b61809832a816cef05cef5635da432500df33",
+          "asset_sha256": "fb643928ed81a03dd17d1085567168d552479fe95f93044d7ed7447cf3f65b3e"
+        }
+      ]
+    }
+  ]
+}
