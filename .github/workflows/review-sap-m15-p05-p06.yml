@@ -1,0 +1,51 @@
+name: SAP M15 parts 05–06 Andrew narration review
+on:
+  push:
+    branches: [review/sap-m15-p05-p06]
+    paths: [.github/workflows/review-sap-m15-p05-p06.yml, scripts/review_sap_m15_p05_p06.py, content/video-narration/review-sap-m15-p05-p06.json, content/video-narration/review-sap-m15-p05-p06.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m15-p05-p06-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-m15-p05-p06'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m15p05, m15p06]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m15_p05_p06.py
+            content/video-narration/review-sap-m15-p05-p06.json
+            content/video-narration/review-sap-m15-p05-p06.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_m15_p05_p06.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established audio tools
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_m15_p05_p06.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m15-p05-p06-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error

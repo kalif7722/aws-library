@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "15",
+      "part": "05",
+      "revision": "2026-11-23-m15p05-m15-p05-p06-current-visuals-v1",
+      "approved_assets": {
+        "1": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec",
+        "2": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+      },
+      "units": [
+        {
+          "id": "m15p05-013-c1-1ce26b2db67d",
+          "slide": 1,
+          "text": "In this video, you'll choose which service should verify temporary access to private content. For CloudFront, the application first authenticates the viewer and signs a U R L or cookie with its private key. The distribution verifies it against a public key in its trusted key group.",
+          "text_sha256": "1ce26b2db67dbe536772b9c870821793f54625068be6315e0a5f2018bb66b299",
+          "canonical_text_sha256": "d4517443277a90cfc264fef922765b8c3c3cd860e1ef9b8fa156acec340205eb",
+          "asset_sha256": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec"
+        },
+        {
+          "id": "m15p05-013-c2-03f38f9c57b5",
+          "slide": 1,
+          "text": "Use a signed U R L for a single object and signed cookies when access covers a set, such as video files. A valid request can hit the edge cache; for a miss, CloudFront can use Origin Access Control to fetch private S three content. Viewer access and origin permission are separate.",
+          "text_sha256": "03f38f9c57b5bf2623fc032e36695078cf2cd22164bcd20c18af5f3242a5d489",
+          "canonical_text_sha256": "1aeeee0a31fb106204532c3e308f53aecc7253f4743db8b7c78c4c6d29dfca66",
+          "asset_sha256": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec"
+        },
+        {
+          "id": "m15p05-014-c1-175df0844176",
+          "slide": 2,
+          "text": "A CloudFront signed U R L points to the distribution and CloudFront verifies the viewer signature. An S three presigned U R L instead points directly to the S three operation, signed with credentials authorized for that action. The direct S three request does not use the CloudFront cache.",
+          "text_sha256": "175df0844176853a6ef04b8630e54cf29888df89dfbdabcf7e6ae7f28e7322cb",
+          "canonical_text_sha256": "5ef5fcf2e6ea1231418fb74af4ff3734bdd5eff7e3b737c3e2513e225b032fb4",
+          "asset_sha256": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+        },
+        {
+          "id": "m15p05-014-c2-ec90124bd623",
+          "slide": 2,
+          "text": "Choose CloudFront signing for controlled access through the distribution; choose S three presigning for a specific direct S three operation such as a temporary upload. Match the expiration and scope to the task. Origin Access Control is still a separate permission for CloudFront to fetch private S three objects.",
+          "text_sha256": "ec90124bd623351c57df9f46fd7dc031f383d02d5ab0ffc0948c52b18672ddab",
+          "canonical_text_sha256": "ba9d96793e140c3ad81b0d12352709d2ff2e19f2af7dc83102801ede5b1a448c",
+          "asset_sha256": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+        }
+      ]
+    },
+    {
+      "module": "15",
+      "part": "06",
+      "revision": "2026-11-23-m15p06-m15-p05-p06-current-visuals-v1",
+      "approved_assets": {
+        "1": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51",
+        "2": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+      },
+      "units": [
+        {
+          "id": "m15p06-015-c1-dd45fc087e9a",
+          "slide": 1,
+          "text": "In this video, you'll decide what CloudFront caches and how to avoid hiding a recovery behind stale cached responses. On a miss, an origin error can trigger a configured custom page and viewer status. In this example, an origin 500 is shown to the viewer as 503 with a custom page.",
+          "text_sha256": "dd45fc087e9a6e294d9218d8c376b78e16e3362f052c16263b4399933654ff00",
+          "canonical_text_sha256": "dd45fc087e9a6e294d9218d8c376b78e16e3362f052c16263b4399933654ff00",
+          "asset_sha256": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51"
+        },
+        {
+          "id": "m15p06-015-c2-fe0e981f751d",
+          "slide": 1,
+          "text": "A cached error can outlive the origin outage. Inspect origin-side evidence as well as viewer status, and choose error caching duration to balance reduced repeated origin traffic against prompt recovery. Don't assume a friendly error page indicates an available backend.",
+          "text_sha256": "fe0e981f751da715bde35a29f28fdb23943ad13defa82e906f60390c8390e0e6",
+          "canonical_text_sha256": "fe0e981f751da715bde35a29f28fdb23943ad13defa82e906f60390c8390e0e6",
+          "asset_sha256": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51"
+        },
+        {
+          "id": "m15p06-016-c1-ec34fcf773cf",
+          "slide": 2,
+          "text": "Cache identity and forwarded values are different. In this example the path and language influence the cached variant; the session cookie can be forwarded without becoming part of the key. If an excluded value changes the resulting response, include a safe variant in the cache key or avoid caching that response.",
+          "text_sha256": "ec34fcf773cfb8f928fa4b89b2ca2d0cd2bc85c09ccab33abd86f9d6584984d9",
+          "canonical_text_sha256": "ec34fcf773cfb8f928fa4b89b2ca2d0cd2bc85c09ccab33abd86f9d6584984d9",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        },
+        {
+          "id": "m15p06-016-c2-4b9db0325a0f",
+          "slide": 2,
+          "text": "Use T T L policy to control freshness. A positive minimum T T L can keep content cached even with restrictive origin cache headers. Use new versioned paths for immutable assets or invalidate a stable path when it really must change. A hit needs no origin fetch; a miss does.",
+          "text_sha256": "4b9db0325a0f2aba9f98e3314e75dc73193c3d089a6ada11a3bf7ad5389fa74d",
+          "canonical_text_sha256": "912632a5b93b364bf54cd6f592c5574772b3d37f3b2b20ea372f5d72e42d3fb1",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        }
+      ]
+    }
+  ]
+}
