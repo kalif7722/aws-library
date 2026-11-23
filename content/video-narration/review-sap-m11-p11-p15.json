@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "11",
+      "revision": "2026-11-23-m11p11-m11-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0",
+        "2": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9",
+        "3": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+      },
+      "units": [
+        {
+          "id": "m11p11-dynamodb-c1-13963517b602",
+          "slide": 1,
+          "text": "Use DynamoDB when you can design around known keys. Each item needs the table's primary key, while attributes such as a game title or score can differ from item to item.",
+          "text_sha256": "13963517b6027dcc97c6b6e78928e1177deec803424dc0ef48cd9e284b2bc2a1",
+          "canonical_text_sha256": "13963517b6027dcc97c6b6e78928e1177deec803424dc0ef48cd9e284b2bc2a1",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-dynamodb-c2-283379fb9d12",
+          "slide": 1,
+          "text": "A partition key groups the access pattern, and an optional sort key orders items that share it. Pick keys from the queries you need, and remember that capacity mode does not remove item-size limits or hot-key risks.",
+          "text_sha256": "283379fb9d126e1af1e7404b9a3a5a514693fd635787949db3f840dd2a1eb27f",
+          "canonical_text_sha256": "283379fb9d126e1af1e7404b9a3a5a514693fd635787949db3f840dd2a1eb27f",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-027-c1-2adc8c8ecfc9",
+          "slide": 2,
+          "text": "Define the key schema for the table, not a fixed schema for every attribute. In this activity table, each item has a user ID and record ID, while a login can have a device and a purchase can have a total.",
+          "text_sha256": "2adc8c8ecfc9af142c5bd8a7553f529937879e1a27f5fcc5234c38a9a43acc5f",
+          "canonical_text_sha256": "2adc8c8ecfc9af142c5bd8a7553f529937879e1a27f5fcc5234c38a9a43acc5f",
+          "asset_sha256": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9"
+        },
+        {
+          "id": "m11p11-027-c2-d9570625c2dc",
+          "slide": 2,
+          "text": "Every item must include the defined keys. Non-key attributes can differ by item, but the full item, including attribute names and values, must fit the 400 kilobytes limit.",
+          "text_sha256": "d9570625c2dc91055b8006110f5e620d7be124c5ff4bd46cf5022c6f62998849",
+          "canonical_text_sha256": "6e304b1dc3cb2c679360ad7b936f0c942071db1a111a6670515a10589222994d",
+          "asset_sha256": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9"
+        },
+        {
+          "id": "m11p11-028-c1-46159758a21b",
+          "slide": 3,
+          "text": "Choose a composite key when the app needs several ordered records per entity. USER42 identifies the item collection; the GAME sort key lets Query return a full list or narrow it to a key range.",
+          "text_sha256": "46159758a21b9978cf508cdfc3175cca2cf442250b3c0dd1d020910dce10c231",
+          "canonical_text_sha256": "46159758a21b9978cf508cdfc3175cca2cf442250b3c0dd1d020910dce10c231",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        },
+        {
+          "id": "m11p11-028-c2-1f13db1c25bc",
+          "slide": 3,
+          "text": "A partition-only key must be unique by itself; with a sort key, the pair must be unique. Spread activity over suitable partition values so one very busy key does not become a bottleneck.",
+          "text_sha256": "1f13db1c25bc24cab8f5ebdb8b11806403573662acdf65d8ea39d106f5e1f0c3",
+          "canonical_text_sha256": "1f13db1c25bc24cab8f5ebdb8b11806403573662acdf65d8ea39d106f5e1f0c3",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "12",
+      "revision": "2026-11-23-m11p12-m11-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f",
+        "2": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226",
+        "3": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff",
+        "4": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+      },
+      "units": [
+        {
+          "id": "m11p12-029-c1-43191c0e799e",
+          "slide": 1,
+          "text": "Use Query when you know the partition key. Here it reads that customer's item collection, optionally restricted to a date range on the sort key.",
+          "text_sha256": "43191c0e799e37a1221fe37cd8abd70769653110d75db3ac2b3884bfd37d1832",
+          "canonical_text_sha256": "43191c0e799e37a1221fe37cd8abd70769653110d75db3ac2b3884bfd37d1832",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-029-c2-d3a277f06de4",
+          "slide": 1,
+          "text": "Scan reads across the table or index. Its filter discards results after items are read, so it does not save the read capacity already used. Both operations can paginate; parallel Scan can also compete with live traffic.",
+          "text_sha256": "d3a277f06de47de1fda226a8775844659c362de18b1410bfc1f77a0c0b75b732",
+          "canonical_text_sha256": "d3a277f06de47de1fda226a8775844659c362de18b1410bfc1f77a0c0b75b732",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-030-c1-a34c990ef539",
+          "slide": 2,
+          "text": "Choose an L S I when the same partition key needs a different sort order. Create it with the table; it shares table capacity and can support strongly consistent reads. Its item collection is limited to ten gigabytes.",
+          "text_sha256": "a34c990ef539448f436bb800e364a66af2b052495fe5d0c205ea723adf704ef9",
+          "canonical_text_sha256": "f74cf1aa21a7ae55a111f88a007684e74a5acff4cfb31c133ac5122a5043c64a",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-030-c2-3440e98cf20b",
+          "slide": 2,
+          "text": "Choose a G S I for another access path, such as querying orders by status. It can have a different partition key and be added later. It serves eventual reads only; choose projections carefully because index writes and storage add cost.",
+          "text_sha256": "3440e98cf20bbf23c143ece605a756495c72b38eae0db7e40e424e3905598218",
+          "canonical_text_sha256": "eb9f7142301d40970587866c92bea743df6a2b06d3daac8423e919ef5c47483d",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-031-c1-e70fc401cb98",
+          "slide": 3,
+          "text": "Choose provisioned capacity when demand is predictable and you want to set read and write capacity. Auto scaling can adjust it toward a target, but not instantly; traffic above capacity can throttle.",
+          "text_sha256": "e70fc401cb98aa9caa9d3b3b038667cc71e495b9de58ae5604bb72d648e17571",
+          "canonical_text_sha256": "e70fc401cb98aa9caa9d3b3b038667cc71e495b9de58ae5604bb72d648e17571",
+          "asset_sha256": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff"
+        },
+        {
+          "id": "m11p12-031-c2-506e7c0a4f2c",
+          "slide": 3,
+          "text": "Choose on-demand when demand varies and pay per request. It scales with traffic, but a sudden jump well above the previous peak can still throttle, so ramp large spikes.",
+          "text_sha256": "506e7c0a4f2cca6319fa04ef37ec8eb6c6580df5525d28928bd5d7c04ec5e2dc",
+          "canonical_text_sha256": "506e7c0a4f2cca6319fa04ef37ec8eb6c6580df5525d28928bd5d7c04ec5e2dc",
+          "asset_sha256": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff"
+        },
+        {
+          "id": "m11p12-032-c1-42d9d75ee023",
+          "slide": 4,
+          "text": "Choose a strongly consistent read when the application needs the latest successful write. In this comparison, base-table reads and L S I reads can opt into strong consistency.",
+          "text_sha256": "42d9d75ee023515ac9168f9f0faf7b7ce5b7451a43fb84979df9eb25f9b44026",
+          "canonical_text_sha256": "5d79e9bfcbdde66e041dcae8a18dbaf4243627390f2a28851a7ed4453d52c30b",
+          "asset_sha256": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+        },
+        {
+          "id": "m11p12-032-c2-a60c2bfb1648",
+          "slide": 4,
+          "text": "A G S I does not support strongly consistent reads. DynamoDB Streams is a change feed, not a strong point-read interface. Choose a supported read path when the consistency requirement is strict.",
+          "text_sha256": "a60c2bfb16485e7b3ff2771f36a1cab63dc5c84b785802c82ca177227cdb9b9f",
+          "canonical_text_sha256": "ad0ce567eb51904e6ef9ed79b4047814a95fa7a583204ed6d4deed9b8bc6f8fc",
+          "asset_sha256": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "13",
+      "revision": "2026-11-23-m11p13-m11-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90",
+        "2": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+      },
+      "units": [
+        {
+          "id": "m11p13-033-c1-c47b52d7e353",
+          "slide": 1,
+          "text": "Choose a conditional write when one item must satisfy a rule. Here the stock count falls only if enough stock remains; if the condition fails, that item is unchanged.",
+          "text_sha256": "c47b52d7e353b47edaad89fdd22fc6cf6107eb763bb6329b3a9b5f66cc6e733a",
+          "canonical_text_sha256": "c47b52d7e353b47edaad89fdd22fc6cf6107eb763bb6329b3a9b5f66cc6e733a",
+          "asset_sha256": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90"
+        },
+        {
+          "id": "m11p13-033-c2-64ff6c834635",
+          "slide": 1,
+          "text": "Choose a transaction when inventory reduction and order creation must succeed together. Both changes commit or neither does; a condition check can enforce a prerequisite inside the transaction.",
+          "text_sha256": "64ff6c83463599a28d91ddc811bfc3a715000ea009a39df63d856ae6c7a2f8bc",
+          "canonical_text_sha256": "64ff6c83463599a28d91ddc811bfc3a715000ea009a39df63d856ae6c7a2f8bc",
+          "asset_sha256": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90"
+        },
+        {
+          "id": "m11p13-034-c1-624562cb7223",
+          "slide": 2,
+          "text": "Use T T L for cleanup, not for an exact deadline. The expiry attribute is in Unix seconds. An item can still appear after expiry until DynamoDB deletes it asynchronously.",
+          "text_sha256": "624562cb7223341e5ec4d8215ea7122c18b8ee0bd3fdb2afc0448f7c194dba6d",
+          "canonical_text_sha256": "bfef5e05fb9452cd0cb724c52500ca70eb718928d1bbb7549e475ce0d7e5c0e9",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        },
+        {
+          "id": "m11p13-034-c2-5a1d1f64bedb",
+          "slide": 2,
+          "text": "Filter expired items while you wait if the application must hide them. With Streams enabled, the deletion can produce a stream record; do not use that asynchronous record as a precise timer.",
+          "text_sha256": "5a1d1f64bedb42509daf7b37aa78cedb61fe3aded9b4d5d8173f02ea158d6149",
+          "canonical_text_sha256": "5a1d1f64bedb42509daf7b37aa78cedb61fe3aded9b4d5d8173f02ea158d6149",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "14",
+      "revision": "2026-11-23-m11p14-m11-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf",
+        "2": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409",
+        "3": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+      },
+      "units": [
+        {
+          "id": "m11p14-035-c1-3efb1b0f0830",
+          "slide": 1,
+          "text": "Use DynamoDB Streams to react to item changes, such as updating a search index. Inserts, updates, and deletes are ordered for each item, not across the whole table.",
+          "text_sha256": "3efb1b0f08308a6d46be365e3cdabdc8ffdb52c0938e330e4685ab13ef8ebae9",
+          "canonical_text_sha256": "3efb1b0f08308a6d46be365e3cdabdc8ffdb52c0938e330e4685ab13ef8ebae9",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-035-c2-8a0942c4e2b5",
+          "slide": 1,
+          "text": "Choose the stream view for the payload you need: keys, the new image, the old image, or both. Native stream retention is 24 hours, and consumers should handle retries and duplicates safely.",
+          "text_sha256": "8a0942c4e2b5e3c288fdcff3b45d06d4d0f80f0dae7f702afd47feb8e62c0535",
+          "canonical_text_sha256": "8a0942c4e2b5e3c288fdcff3b45d06d4d0f80f0dae7f702afd47feb8e62c0535",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-kinesis-c1-c87f550cdf01",
+          "slide": 2,
+          "text": "Use Kinesis Data Streams when independent consumers need to read and replay retained events. Producers write into shards, and each consumer tracks its own position.",
+          "text_sha256": "c87f550cdf016218e719c1563f2b94ee78ee5013a50d27e33e3fb104029c9404",
+          "canonical_text_sha256": "c87f550cdf016218e719c1563f2b94ee78ee5013a50d27e33e3fb104029c9404",
+          "asset_sha256": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409"
+        },
+        {
+          "id": "m11p14-kinesis-c2-969b7f22dbf0",
+          "slide": 2,
+          "text": "The partition key routes records to a shard. Do not assume one global order. Retention sets the replay window, while consumers need checkpoints, retries, and idempotent writes.",
+          "text_sha256": "969b7f22dbf0f38724a37343fb37542f4fff766f1ae96bc7ae4b4d870368f0eb",
+          "canonical_text_sha256": "969b7f22dbf0f38724a37343fb37542f4fff766f1ae96bc7ae4b4d870368f0eb",
+          "asset_sha256": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409"
+        },
+        {
+          "id": "m11p14-036-c1-0a55a9c9c237",
+          "slide": 3,
+          "text": "Choose native DynamoDB Streams for a 24-hour change feed. Choose the Kinesis destination when you need configurable longer retention or a different consumer and delivery design.",
+          "text_sha256": "0a55a9c9c237b179afa21c906b3d4b294e18ff92f4fc7d21053c42d2483906c2",
+          "canonical_text_sha256": "0a55a9c9c237b179afa21c906b3d4b294e18ff92f4fc7d21053c42d2483906c2",
+          "asset_sha256": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+        },
+        {
+          "id": "m11p14-036-c2-52c8d88f3a46",
+          "slide": 3,
+          "text": "These are separate capture paths. Decide which consumers and destinations you need, then plan for ordering, duplicate delivery, checkpoints, and idempotent processing.",
+          "text_sha256": "52c8d88f3a46fe1463070bce6154510105bb9df2d2cc37cf56488e24a963deef",
+          "canonical_text_sha256": "52c8d88f3a46fe1463070bce6154510105bb9df2d2cc37cf56488e24a963deef",
+          "asset_sha256": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "15",
+      "revision": "2026-11-23-m11p15-m11-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3",
+        "2": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885",
+        "3": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+      },
+      "units": [
+        {
+          "id": "m11p15-037-c1-d35b0d737108",
+          "slide": 1,
+          "text": "Choose eventual-consistency global tables when applications should write locally in multiple Regions and can tolerate asynchronous replication.",
+          "text_sha256": "d35b0d737108fd21f794a60800486c646ed4cbd3747f830c86b5b0480a954402",
+          "canonical_text_sha256": "d35b0d737108fd21f794a60800486c646ed4cbd3747f830c86b5b0480a954402",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-037-c2-ef705eaa96a5",
+          "slide": 1,
+          "text": "A strong local read does not eliminate cross-Region replication lag. Concurrent writes can conflict and use last-writer-wins handling. Route clients deliberately and monitor replication.",
+          "text_sha256": "ef705eaa96a5a803935b0e47fb4945a537d7d761df3c3a1b0b5463db43764e1f",
+          "canonical_text_sha256": "ef705eaa96a5a803935b0e47fb4945a537d7d761df3c3a1b0b5463db43764e1f",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-038-c1-cced50228a1d",
+          "slide": 2,
+          "text": "Choose multi-Region strong consistency when strongly consistent reads in replica Regions must reflect successful writes. A write succeeds after synchronous replication to at least one other Region.",
+          "text_sha256": "cced50228a1da21dfafb85e935cb4329f6541b60340414b029642cded3203307",
+          "canonical_text_sha256": "cced50228a1da21dfafb85e935cb4329f6541b60340414b029642cded3203307",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-038-c2-5d2294c830c4",
+          "slide": 2,
+          "text": "This mode needs three supported Regions: three replicas, or two replicas plus a witness. A witness serves no application reads or writes. Check Region support, cross-Region latency, and feature limits before choosing it.",
+          "text_sha256": "5d2294c830c404ddc85225f7548e39c7370c991b09206e8ce243237b65646544",
+          "canonical_text_sha256": "5d2294c830c404ddc85225f7548e39c7370c991b09206e8ce243237b65646544",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-039-c1-e4e5f2b426db",
+          "slide": 3,
+          "text": "Choose Standard or Standard-IA by access and cost, not recovery. Standard-IA lowers storage cost for infrequently accessed data but is still an online class with different request costs.",
+          "text_sha256": "e4e5f2b426db40cc2d3b22050b5295f9aedab9a7b6e8d8d440f76052b92852b4",
+          "canonical_text_sha256": "e4e5f2b426db40cc2d3b22050b5295f9aedab9a7b6e8d8d440f76052b92852b4",
+          "asset_sha256": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+        },
+        {
+          "id": "m11p15-039-c2-cb8ec76c5c7a",
+          "slide": 3,
+          "text": "Use backup or point-in-time recovery for earlier data states. Restore to a new table, then validate configuration and reconnect applications. Global replication is not a substitute for historical recovery.",
+          "text_sha256": "cb8ec76c5c7a672b49151abba04477d80261f80bc6197012bbfa259831e5a45c",
+          "canonical_text_sha256": "cb8ec76c5c7a672b49151abba04477d80261f80bc6197012bbfa259831e5a45c",
+          "asset_sha256": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+        }
+      ]
+    }
+  ]
+}
