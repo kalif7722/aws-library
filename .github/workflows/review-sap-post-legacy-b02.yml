@@ -1,0 +1,51 @@
+name: SAP post-legacy batch 02 Andrew narration review
+on:
+  push:
+    branches: [review/sap-post-legacy-b02]
+    paths: [.github/workflows/review-sap-post-legacy-b02.yml, scripts/review_sap_post_legacy_b02.py, content/video-narration/review-sap-post-legacy-b02.json, content/video-narration/review-sap-post-legacy-b02.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-post-legacy-b02-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-post-legacy-b02'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m09p04, m09p05, m09p06, m09p07, m09p08]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_post_legacy_b02.py
+            content/video-narration/review-sap-post-legacy-b02.json
+            content/video-narration/review-sap-post-legacy-b02.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_post_legacy_b02.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established audio tools
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_post_legacy_b02.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-post-legacy-b02-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
