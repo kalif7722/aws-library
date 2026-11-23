@@ -1,0 +1,43 @@
+name: SAP next six opener audio only
+on:
+  push:
+    branches: [review/sap-openers-next-six]
+    paths: [.github/workflows/review-sap-openers-next-six.yml]
+permissions:
+  contents: read
+concurrency:
+  group: sap-openers-next-six-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.ref == 'refs/heads/review/sap-openers-next-six'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [M02P05, M03P07, M03P09, M04P04, M05P02, M06P06]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_openers_next_six.py
+            content/video-narration/review-sap-openers-next-six.json
+            content/video-narration/review-sap-openers-next-six.sha256
+          sparse-checkout-cone-mode: false
+      - run: python3 scripts/review_sap_openers_next_six.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - run: python scripts/review_sap_openers_next_six.py synthesize "$PART"
+        env:
+          PART: ${{ matrix.part }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-opener-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
