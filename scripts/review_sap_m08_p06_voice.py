@@ -3,7 +3,7 @@ import asyncio,hashlib,json,pathlib,random,ssl,subprocess
 import edge_tts,aiohttp
 from edge_tts.communicate import _SSL_CTX
 P=pathlib.Path('content/video-narration/review-sap-m08-p06-fresh.json');O=pathlib.Path('voice-review');O.mkdir(exist_ok=True)
-assert hashlib.sha256(P.read_bytes()).hexdigest()=='2ded248ae80401977e401243ad1cf1d18a6a708d6c7cf3bad79677a50e836ef2'
+assert hashlib.sha256(P.read_bytes()).hexdigest()=='d3722d805687a996c9019150649fc041dba4b89da29516ee365cce48217b7531'
 plan=json.loads(P.read_text());assert plan['voice']=='en-US-AndrewNeural' and plan['rate']=='-3%';assert len(plan['units'])==15;assert _SSL_CTX.check_hostname and _SSL_CTX.verify_mode==ssl.CERT_REQUIRED
 assert [u['slide'] for u in plan['units']]==[16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18]
 for u in plan['units']:assert hashlib.sha256(u['text'].encode()).hexdigest()==u['text_sha256']
