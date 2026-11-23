@@ -3,7 +3,7 @@ import argparse, array, asyncio, hashlib, html, json, math, os, pathlib, random,
 
 PLAN=pathlib.Path('content/video-narration/review-sap-post-legacy-b01.json')
 PIN=PLAN.with_suffix('.sha256')
-REF='refs/heads/review/sap-voice-wave11'
+REF='refs/heads/review/sap-post-legacy-b01'
 VOICE='en-US-AndrewNeural'
 RATE='-3%'
 SCOPE={'m08p07': {19: 3, 20: 3, 21: 3}, 'm08p08': {22: 3, 23: 3, 24: 3}, 'm09p01': {1: 3, 2: 4, 3: 3}, 'm09p02': {4: 3, 5: 4, 6: 4}, 'm09p03': {7: 4, 8: 4, 9: 4}}
