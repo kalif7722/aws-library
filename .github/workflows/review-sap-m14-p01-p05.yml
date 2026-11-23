@@ -1,0 +1,51 @@
+name: SAP M14 parts 01–05 Andrew narration review
+on:
+  push:
+    branches: [review/sap-m14-p01-p05]
+    paths: [.github/workflows/review-sap-m14-p01-p05.yml, scripts/review_sap_m14_p01_p05.py, content/video-narration/review-sap-m14-p01-p05.json, content/video-narration/review-sap-m14-p01-p05.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m14-p01-p05-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-m14-p01-p05'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m14p01, m14p02, m14p03, m14p04, m14p05]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m14_p01_p05.py
+            content/video-narration/review-sap-m14-p01-p05.json
+            content/video-narration/review-sap-m14-p01-p05.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_m14_p01_p05.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established audio tools
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_m14_p01_p05.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m14-p01-p05-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
