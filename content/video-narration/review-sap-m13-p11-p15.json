@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "11",
+      "revision": "2026-11-23-m13p11-m13-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "7fef11ed984932c32bf2f371a5a09d55bd01baea323a883382220a5f2280ddb2",
+        "2": "85c7cc538b643b7eef0ea4c696246b1406af6de95714f361cb45b428816429d7",
+        "3": "d0c1aee52b6c569594e6e8b0d44acd44b5a37062dc93683ab9815fd848ba276a",
+        "4": "2426406088c20a96b5749ec30c8fb842566fc48f2738779d287f0540b3fcb810",
+        "5": "0617dd114961f294b6e0cabf3dd594247c6d77c9ee417dba1b990a66865b4407"
+      },
+      "units": [
+        {
+          "id": "m13p11-029-c1-c9f5298ac6db",
+          "slide": 1,
+          "text": "In this video, you'll decide how to cache, authenticate, authorize and meter an A P I without mixing up the controls. Start with cache isolation: two callers entitled to different records must not share a cached response. The diagram separates tenants using a key that also includes the resource and response variant.",
+          "text_sha256": "c9f5298ac6db3146c30d59e64001d89a31c5929ec03fbc3e8c27d75b0d1a50aa",
+          "canonical_text_sha256": "50f1d5d775ae8c185a9549ae0dd73847ecaff0108f489b78b67413f294bac5c4",
+          "asset_sha256": "7fef11ed984932c32bf2f371a5a09d55bd01baea323a883382220a5f2280ddb2"
+        },
+        {
+          "id": "m13p11-029-c2-2510f3ef8dd3",
+          "slide": 1,
+          "text": "Derive tenant scope from trusted identity, not a caller-chosen label. If the cache cannot safely distinguish access scope, disable caching for that response. rest stage cache T T L defaults to 300 seconds when enabled, can be set up to 3,600 seconds, and zero disables caching.",
+          "text_sha256": "2510f3ef8dd39569dca69ffa9af6fabf870e67b9c06edf38efcbc9e2244c97c1",
+          "canonical_text_sha256": "da28c850284455540626ec3e36ebd8b43eb83348480ab257a7358b03ddfb96ea",
+          "asset_sha256": "7fef11ed984932c32bf2f371a5a09d55bd01baea323a883382220a5f2280ddb2"
+        },
+        {
+          "id": "m13p11-030-c1-ab1ee552bef1",
+          "slide": 2,
+          "text": "Authentication establishes the caller; it does not grant access to every record. A request using A W S IAM is signed with Sig version four. A rest A P I can use a Cognito user pool or a Lambda authorizer. An H T T P A P I supports J W T, IAM, or a Lambda authorizer.",
+          "text_sha256": "ab1ee552bef136ade22e2480bef4078111dc6272062b40e95c42bda03763b42e",
+          "canonical_text_sha256": "dd78039089e87f11ef3b8c33b17cc62454bde3c6c93850e2271b242404043519",
+          "asset_sha256": "85c7cc538b643b7eef0ea4c696246b1406af6de95714f361cb45b428816429d7"
+        },
+        {
+          "id": "m13p11-030-c2-9c9f1542b6a4",
+          "slide": 2,
+          "text": "In the token path, the identity provider gives the client a token to present to A P I Gateway. The application still checks that the authenticated tenant may read the requested record. A W S access keys are credentials for signing, not bearer tokens.",
+          "text_sha256": "9c9f1542b6a4767c6ef0b619585b1b1bcd37bc2416ee6e6ddc37dc28bd8647f9",
+          "canonical_text_sha256": "3b82782cb09250fecd2af25e7016e6164653feac40ebdf33631a086a1f34f5c8",
+          "asset_sha256": "85c7cc538b643b7eef0ea4c696246b1406af6de95714f361cb45b428816429d7"
+        },
+        {
+          "id": "m13p11-031-c1-07c182b6f048",
+          "slide": 3,
+          "text": "Check caller access, transport and backend invocation separately. The diagram's rest resource policy and method authorization govern entry. Route 53 and the A C M certificate help clients locate the endpoint and establish HTTPS; neither grants permission to call a method.",
+          "text_sha256": "07c182b6f0481ad63b1c4dbb988ebd9303a75912b9b95526eddc8dd66bc74db1",
+          "canonical_text_sha256": "5a831900a112742cf6264245170f65dd7fb447ba49e2a9eefbd08e92548c985e",
+          "asset_sha256": "d0c1aee52b6c569594e6e8b0d44acd44b5a37062dc93683ab9815fd848ba276a"
+        },
+        {
+          "id": "m13p11-031-c2-b4603a209d35",
+          "slide": 3,
+          "text": "After the request passes the caller gates, A P I Gateway still needs permission to invoke Lambda. For example, a caller may be authorized but the integration can fail if that invocation permission is missing. Fix the failing gate, not the other two.",
+          "text_sha256": "b4603a209d353599144f76415dadcc996296798a33746eaf2bb03f31c5dcadfb",
+          "canonical_text_sha256": "44a7f4945caca59a6b6c9249ab183c68c7e45e0dbb0eebd4dd082dbc78d1b691",
+          "asset_sha256": "d0c1aee52b6c569594e6e8b0d44acd44b5a37062dc93683ab9815fd848ba276a"
+        },
+        {
+          "id": "m13p11-032-c1-ec2242e56a04",
+          "slide": 4,
+          "text": "cores controls which cross-origin responses a browser makes readable. For a request that requires preflight, the browser first sends options and checks allowed origin, method and headers. With credentialed requests, use an explicit allowed origin rather than a wildcard.",
+          "text_sha256": "ec2242e56a040e82ef4e0d50d71e3cf09871998623665158bba1fca6b1c3be54",
+          "canonical_text_sha256": "9f29990edbeef56ba1ff578e06306e2d3627c20e94d089ba4ff296d76c748a4d",
+          "asset_sha256": "2426406088c20a96b5749ec30c8fb842566fc48f2738779d287f0540b3fcb810"
+        },
+        {
+          "id": "m13p11-032-c2-f48ee1cfabda",
+          "slide": 4,
+          "text": "A command-line client does not enforce the browser's cores rule, but the A P I's actual authentication and authorization still apply. A browser blocking access to a response also doesn't prove that the server never processed the request.",
+          "text_sha256": "f48ee1cfabdaf6d6b52b87e6869c26d0a55550a608f3cd49ca37307cf2767435",
+          "canonical_text_sha256": "9364b750a9e72585917134933ca712d6d5da299584dcc12fc81b38959106c622",
+          "asset_sha256": "2426406088c20a96b5749ec30c8fb842566fc48f2738779d287f0540b3fcb810"
+        },
+        {
+          "id": "m13p11-033-c1-a00f7510e09c",
+          "slide": 5,
+          "text": "A rest A P I usage-plan key identifies the consuming client for metering, not the user. The diagram sends meter and quota settings down one path, with IAM, Cognito or a Lambda authorizer protecting access separately.",
+          "text_sha256": "a00f7510e09c856951172011963d480f58db0dcb9dc0c52ee92f233cae983d53",
+          "canonical_text_sha256": "4920bc932d09bddef74cfc20d1b7cb919fbc6168f363754971bb448ff104b4b9",
+          "asset_sha256": "0617dd114961f294b6e0cabf3dd594247c6d77c9ee417dba1b990a66865b4407"
+        },
+        {
+          "id": "m13p11-033-c2-040cbea2c2d5",
+          "slide": 5,
+          "text": "Usage-plan throttles and quotas are best-effort, not hard billing caps. A retryable four twenty-nine calls for bounded backoff with jitter; it is not a reason to remove authorization or to retry a write without an idempotency plan.",
+          "text_sha256": "040cbea2c2d554d4a83bf580457a7a389c27fe6e2ea2af14a0973d374b2ed375",
+          "canonical_text_sha256": "fd21823e5089e6ef4d76b359bde0f2b95adf6f71f6bc581dc389cac02aa1c9df",
+          "asset_sha256": "0617dd114961f294b6e0cabf3dd594247c6d77c9ee417dba1b990a66865b4407"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "12",
+      "revision": "2026-11-23-m13p12-m13-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "df9ded48ab413001c72548b91cc7fe8c06caf06c62fb6aab2819feaa17af7996",
+        "2": "0a1c4194dadbefdf0092cb69f9aaffccec6e4277406746f3fbc6ce0f82e1f350"
+      },
+      "units": [
+        {
+          "id": "m13p12-034-c1-50a2465cf3c0",
+          "slide": 1,
+          "text": "In this video, you'll locate the layer that produced an A P I error or delay. Start with the status as a clue: four twenty-nine points toward throttling, while a five oh two in a Lambda proxy integration can reflect a handler error or malformed response. The code does not prove the cause.",
+          "text_sha256": "50a2465cf3c09d248d1822d9dc76cd4b02203fc291b7f33fbc2f45141c2e0348",
+          "canonical_text_sha256": "c241e4552b2a427c96c52c2a3504afcc732cf56ac39640568a75d6369256a28a",
+          "asset_sha256": "df9ded48ab413001c72548b91cc7fe8c06caf06c62fb6aab2819feaa17af7996"
+        },
+        {
+          "id": "m13p12-034-c2-e54c41bf9109",
+          "slide": 1,
+          "text": "Use the request ID to join access logs, integration status and Lambda metrics or logs. If the request may have written data before a timeout, verify its outcome or rely on idempotency before retrying it.",
+          "text_sha256": "e54c41bf9109d094d215071e53785e0d4d53fbc51dd9d2464667fa07b88ed39e",
+          "canonical_text_sha256": "e54c41bf9109d094d215071e53785e0d4d53fbc51dd9d2464667fa07b88ed39e",
+          "asset_sha256": "df9ded48ab413001c72548b91cc7fe8c06caf06c62fb6aab2819feaa17af7996"
+        },
+        {
+          "id": "m13p12-035-c1-52cbb6a160af",
+          "slide": 2,
+          "text": "Gateway latency covers request receipt to response, while integration latency covers the backend round trip. If gateway latency rises and integration latency stays flat, investigate the gateway-side portion rather than automatically increasing Lambda memory.",
+          "text_sha256": "52cbb6a160af19f5b9dcf54cc9e2976c3fde39ac91cc052acf0d446fbb1c9483",
+          "canonical_text_sha256": "52cbb6a160af19f5b9dcf54cc9e2976c3fde39ac91cc052acf0d446fbb1c9483",
+          "asset_sha256": "0a1c4194dadbefdf0092cb69f9aaffccec6e4277406746f3fbc6ce0f82e1f350"
+        },
+        {
+          "id": "m13p12-035-c2-6e63a3f2d32d",
+          "slide": 2,
+          "text": "Use access logs for request identity and status, and measure both spans with metrics. rest execution logs or supported tracing can add evidence. H T T P A P I monitoring differs, and logs should redact sensitive data.",
+          "text_sha256": "6e63a3f2d32d6df0b4749edc97f719663ec1eb380df9a69e87882cafd118df41",
+          "canonical_text_sha256": "7b9c151f1f6a03c799a1be31d6a8040247e5e82738e8777458fe7afab0b09476",
+          "asset_sha256": "0a1c4194dadbefdf0092cb69f9aaffccec6e4277406746f3fbc6ce0f82e1f350"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "13",
+      "revision": "2026-11-23-m13p13-m13-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "619189aad720f0b229af1df5e6dc53c636189dc19778e75fbd9604730dfb0e32",
+        "2": "703150c0fde1b332b8ebc8d8f7217f1b1595831cd3129417a3544e6a773696cd"
+      },
+      "units": [
+        {
+          "id": "m13p13-036-c1-83bd3dabcd41",
+          "slide": 1,
+          "text": "In this video, you'll follow a Web Socket connection from handshake to server push and reconnect. The connect route establishes the authorized connection, the chosen message route handles its work, and disconnect cleanup is best effort. The application owns the connection-to-user mapping.",
+          "text_sha256": "83bd3dabcd414029e70556357bb81e6b0dc95f7de2e39b51ba331de623444f7a",
+          "canonical_text_sha256": "509fdfd8dbe756acc4f8d9fd809486169e74f25f5155f592040910fa31fb33e8",
+          "asset_sha256": "619189aad720f0b229af1df5e6dc53c636189dc19778e75fbd9604730dfb0e32"
+        },
+        {
+          "id": "m13p13-036-c2-1bddf7a84b16",
+          "slide": 1,
+          "text": "A handler's return is not automatically pushed to the client. Configure a route response where appropriate or send a backend callback. After reconnect, the client needs to restore its subscriptions or state; do not rely on stale connection IDs.",
+          "text_sha256": "1bddf7a84b16cded95380634e985ca6ff852b0e0c3d63af920800cfc5bd7f345",
+          "canonical_text_sha256": "1bddf7a84b16cded95380634e985ca6ff852b0e0c3d63af920800cfc5bd7f345",
+          "asset_sha256": "619189aad720f0b229af1df5e6dc53c636189dc19778e75fbd9604730dfb0e32"
+        },
+        {
+          "id": "m13p13-037-c1-bb2cc7d79d4e",
+          "slide": 2,
+          "text": "For an unsolicited server push, the backend sends a signed HTTPS request to the A P I Gateway Management A P I. It targets the active connection ID, and the caller needs execute-api:ManageConnections plus Sig version four signing.",
+          "text_sha256": "bb2cc7d79d4eb2b33fcdd36c6e3da50ef8d71dccb15bfffb52ea5dd34b60ef4b",
+          "canonical_text_sha256": "8e334fb3aa08963719fd8814940c3d27e12a1131d8e8f4513f4fe283c3c283bb",
+          "asset_sha256": "703150c0fde1b332b8ebc8d8f7217f1b1595831cd3129417a3544e6a773696cd"
+        },
+        {
+          "id": "m13p13-037-c2-c89548b68916",
+          "slide": 2,
+          "text": "Use the callback endpoint for the correct A P I and stage, accounting for any custom domain mapping. A gone connection can return H T T P four ten. Remove that stale mapping and wait for a fresh authorized reconnect rather than repeatedly retrying the old connection ID.",
+          "text_sha256": "c89548b68916466ae56ecbe8879da71c8915dc60ea3ae05d028a0db459d31873",
+          "canonical_text_sha256": "8258c93c55be9af44623ab5b2cfee0a6d7924b7f645beb389c17a9b68e939cb9",
+          "asset_sha256": "703150c0fde1b332b8ebc8d8f7217f1b1595831cd3129417a3544e6a773696cd"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "14",
+      "revision": "2026-11-23-m13p14-m13-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b",
+        "2": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8",
+        "3": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb",
+        "4": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+      },
+      "units": [
+        {
+          "id": "m13p14-appsync-c1-bca14d72752a",
+          "slide": 1,
+          "text": "In this video, you'll connect a Graph Q L request to backend data in AppSync, then separate authorization from reconnect and offline sync. The client uses a typed schema. A resolver maps a field to its configured data source, such as Dynamo D B, Lambda or an H T T P endpoint.",
+          "text_sha256": "bca14d72752aac718c2da4942b2becd949e79340b6034776a0b6141839faa98d",
+          "canonical_text_sha256": "ce4f3b3afe1e30e14e27c516a6dd7a56628a2a43e977f372d02e13e7896b03f6",
+          "asset_sha256": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b"
+        },
+        {
+          "id": "m13p14-appsync-c2-551811ad198b",
+          "slide": 1,
+          "text": "Subscriptions deliver live updates to connected clients. They don't make every missed event reappear after disconnect. The application still owns authorization, the data-source permissions and how to recover offline state.",
+          "text_sha256": "551811ad198b6ca467996c658ec27cd20d18cdb15cb97c117f04cc762f27c2c0",
+          "canonical_text_sha256": "551811ad198b6ca467996c658ec27cd20d18cdb15cb97c117f04cc762f27c2c0",
+          "asset_sha256": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b"
+        },
+        {
+          "id": "m13p14-038-c1-7e37f5adb0ed",
+          "slide": 2,
+          "text": "In the product query, the Graph Q L field getProduct invokes a resolver. The resolver supplies the key to its configured data source, and the Graph Q L response follows the client's selected fields. Client access to AppSync does not itself grant access to the backing store.",
+          "text_sha256": "7e37f5adb0ed36649d197870112b30f14974df0c7e61577dc1902aea1b877678",
+          "canonical_text_sha256": "4f34848f6ff25b282f64dbaeb7a40b61d045df60a3c78478910bd0ed3bdff8d2",
+          "asset_sha256": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8"
+        },
+        {
+          "id": "m13p14-038-c2-e14e7ec3877e",
+          "slide": 2,
+          "text": "A unit resolver performs a single data-source operation. A pipeline resolver combines ordered functions, such as validating the requested account before calling its data source. Use field-level request and response mapping when the result needs a specific shape.",
+          "text_sha256": "e14e7ec3877eb2d2d71539a7dc90439c095e392abd54cf07d7f902d39cbbfb4c",
+          "canonical_text_sha256": "e14e7ec3877eb2d2d71539a7dc90439c095e392abd54cf07d7f902d39cbbfb4c",
+          "asset_sha256": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8"
+        },
+        {
+          "id": "m13p14-039-c1-eb6f0b37a9ef",
+          "slide": 3,
+          "text": "Authorize both sides of AppSync. First, the selected authorization mode and any schema or field rules decide whether this caller can request the field. For signed-in users, use an appropriate identity method and per-user access rules, not a shared A P I key.",
+          "text_sha256": "eb6f0b37a9ef7bfd2a14cc59444c0094ee57abf974983e66a508cfc6e456729b",
+          "canonical_text_sha256": "735e8e278160a2514df3b140f1333ffeef261bf4eb283e58d026b0b729002b44",
+          "asset_sha256": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb"
+        },
+        {
+          "id": "m13p14-039-c2-f545d3e1b1ff",
+          "slide": 3,
+          "text": "Then look at the resolver's permissions. Its service role should permit only the operations and resources the data source requires. A permitted user can still see a backend failure if the resolver role cannot access that table or function.",
+          "text_sha256": "f545d3e1b1ff4998d0f77b2d32352919e7d5733c1e0b9d9b919e13bf21fef41c",
+          "canonical_text_sha256": "f545d3e1b1ff4998d0f77b2d32352919e7d5733c1e0b9d9b919e13bf21fef41c",
+          "asset_sha256": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb"
+        },
+        {
+          "id": "m13p14-040-c1-d7305cd86a97",
+          "slide": 4,
+          "text": "A live subscription can send an update to connected clients after the pictured mutation. A disconnected device cannot assume the same subscription will replay everything it missed. Distinguish a real-time notification from a durable synchronization contract.",
+          "text_sha256": "d7305cd86a97d7c214127ebe0b0ab254cce31783a346a6a9f0a80d3c313da837",
+          "canonical_text_sha256": "d7305cd86a97d7c214127ebe0b0ab254cce31783a346a6a9f0a80d3c313da837",
+          "asset_sha256": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+        },
+        {
+          "id": "m13p14-040-c2-e6fad0414735",
+          "slide": 4,
+          "text": "For offline editing, store the working changes locally, then reconnect and reconcile them using a version and conflict strategy. For example, two clients can edit the same item from different versions; choose which updates to reject, merge or surface to a user.",
+          "text_sha256": "e6fad041473543a0e0230c2776f2c58a74a25470df01c3e096f1a042c4d79cf9",
+          "canonical_text_sha256": "e6fad041473543a0e0230c2776f2c58a74a25470df01c3e096f1a042c4d79cf9",
+          "asset_sha256": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "15",
+      "revision": "2026-11-23-m13p15-m13-p11-p15-current-visuals-v1",
+      "approved_assets": {
+        "1": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429",
+        "2": "3ac6965fdb63e7c03df24394a96f434de295762cf7252ef19cfa2e2322e55c4e"
+      },
+      "units": [
+        {
+          "id": "m13p15-041-c1-75542775df7b",
+          "slide": 1,
+          "text": "In this video, you'll select an A P I front door and design how it recovers across Regions. Use a rest A P I where features such as a managed stage cache or a private A P I are requirements. Choose an H T T P A P I for a lean request-response service with native J W T authorization.",
+          "text_sha256": "75542775df7bf330e2f5418eae35859c1dbdd5d601d9af23d84fc36ba20663e6",
+          "canonical_text_sha256": "5e98e0db1b020c067b281134244f9898fe4d76fcb5d504d0c4fb5d326fb50842",
+          "asset_sha256": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429"
+        },
+        {
+          "id": "m13p15-041-c2-89b9bb569d3f",
+          "slide": 1,
+          "text": "Use a Web Socket A P I for persistent bidirectional messages. Use AppSync when the application needs a Graph Q L schema and subscriptions. Start with protocol, required capabilities and service limits rather than choosing by product familiarity.",
+          "text_sha256": "89b9bb569d3f35aac01c0dee70295acce510bfcb77206c16570b0990086ddd6b",
+          "canonical_text_sha256": "6f54b4c6349c3df2b581f4b4b597939667d701f256e8d6bc26ba0cb2dbc95a9d",
+          "asset_sha256": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429"
+        },
+        {
+          "id": "m13p15-042-c1-2923c905d255",
+          "slide": 2,
+          "text": "For two Regional A P I Gateway deployments, direct callers using Route 53 health-based failover between the Regional custom domains. D N S selects the endpoint, then the client connects to it. Keep the A P I, its Lambda integration and dependencies ready in both Regions.",
+          "text_sha256": "2923c905d255af22b19e71f400cd170d53be39ef6a10215ab0362bf6d32dfb3f",
+          "canonical_text_sha256": "4e9da17c1f719e1964b736f8736f556cb937567bc7de9e86f52970859e7cf2e6",
+          "asset_sha256": "3ac6965fdb63e7c03df24394a96f434de295762cf7252ef19cfa2e2322e55c4e"
+        },
+        {
+          "id": "m13p15-042-c2-1a802099b84a",
+          "slide": 2,
+          "text": "Traffic failover and data recovery are different plans. Test when clients stop using cached D N S answers, verify that the standby A P I can serve real requests, and measure data loss against the R P O and service recovery time against the R T O.",
+          "text_sha256": "1a802099b84a858612226930dfba9be5ebe3d91c5080cecb24ee370f3afd0581",
+          "canonical_text_sha256": "4749166b3a3b0d9cc5da8b26aa5239c3bc4e0fdb5194587455a40d2afc2ab609",
+          "asset_sha256": "3ac6965fdb63e7c03df24394a96f434de295762cf7252ef19cfa2e2322e55c4e"
+        }
+      ]
+    }
+  ]
+}
