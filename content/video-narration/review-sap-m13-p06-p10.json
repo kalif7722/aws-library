@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "06",
+      "revision": "2026-11-23-m13p06-m13-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830",
+        "2": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b",
+        "3": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+      },
+      "units": [
+        {
+          "id": "m13p06-015-c1-c86197cbd3c7",
+          "slide": 1,
+          "text": "In this video, you will build a reliable thumbnail pipeline, schedule Lambda jobs, and decide when to buffer work. Build a thumbnail pipeline that won't trigger itself. An upload under the input prefix invokes Lambda. The function writes the thumbnail to the output prefix and can record metadata in Dynamo D B.",
+          "text_sha256": "c86197cbd3c710f1851f54bdc8851ce07f93fffcd1f95e8af6693aeeb4385794",
+          "canonical_text_sha256": "c87dcfd6955efc745a39fd9f23778fe4359a6ac09b47519f0e9bb72abc7c0dac",
+          "asset_sha256": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830"
+        },
+        {
+          "id": "m13p06-015-c2-a0338eea2726",
+          "slide": 1,
+          "text": "Filter for the input prefix only. Use a deterministic thumbnail key and make the metadata write safe to retry. If one write succeeds but the other fails, reconcile the missing side rather than assuming both completed.",
+          "text_sha256": "a0338eea272621049cd63c7280bb2355d3f05da6930ec393be9393ae61c8bd25",
+          "canonical_text_sha256": "a0338eea272621049cd63c7280bb2355d3f05da6930ec393be9393ae61c8bd25",
+          "asset_sha256": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830"
+        },
+        {
+          "id": "m13p06-016-c1-d71bb2d497a5",
+          "slide": 2,
+          "text": "A schedule is useful only if it invokes the intended function and the business task completes. Set the timezone and flexible delivery window deliberately, then scope the Scheduler role to invoke the qualified target.",
+          "text_sha256": "d71bb2d497a50bc79bfc19b2915d62777d0603f2800afa87f0c97986ec5ac590",
+          "canonical_text_sha256": "d71bb2d497a50bc79bfc19b2915d62777d0603f2800afa87f0c97986ec5ac590",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-016-c2-09fffbfa2f68",
+          "slide": 2,
+          "text": "Keep the two success checks separate. Scheduler retries and its dead-letter queue cover target delivery. Check Lambda logs and verify the business outcome to confirm the job actually completed.",
+          "text_sha256": "09fffbfa2f68c55d4cb5845704d174d31c5262091bb6b9ee7e5b8215592f49d0",
+          "canonical_text_sha256": "09fffbfa2f68c55d4cb5845704d174d31c5262091bb6b9ee7e5b8215592f49d0",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-017-c1-8834b7e4a2d2",
+          "slide": 3,
+          "text": "Choose how consumers receive and pace events. Direct S N S fan-out sends notifications to independent subscribers. It is useful when latency matters and each subscriber can handle its delivery workload.",
+          "text_sha256": "8834b7e4a2d28250d6e80ccc7c68ffb2bda241913b125709f1e40eae274df82d",
+          "canonical_text_sha256": "db5955549baece9f5fbc947a43892de7718f272f0b9d4afa3d1da8e442f9139d",
+          "asset_sha256": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+        },
+        {
+          "id": "m13p06-017-c2-33d48b2ae771",
+          "slide": 3,
+          "text": "Place S Q S between S N S and Lambda when a consumer needs independent buffering, batching, or recovery. The mapping polls the queue. Plan for duplicate delivery, and match the handler to the raw message or S N S envelope you configure.",
+          "text_sha256": "33d48b2ae771fe5a8a20b5e660f5395829d9e8744cd004e041e86751b6d3e0c0",
+          "canonical_text_sha256": "a87d7ac32a7b2593d73b0ac7638210d872d16c775b559e5f01f863af1608b967",
+          "asset_sha256": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "07",
+      "revision": "2026-11-23-m13p07-m13-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d",
+        "2": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+      },
+      "units": [
+        {
+          "id": "m13p07-018-c1-b806557792ff",
+          "slide": 1,
+          "text": "In this video, you will choose a Lambda execution model and separate permission to invoke from permission to access data. Choose the Lambda execution model by what runs and how long it must keep running. An on-demand Event Function can run up to 30 minutes per invocation. Managed Instances allow up to 30 minutes for synchronous work and up to 90 minutes for eligible asynchronous work or mappings. Amazon M Q and DocumentDB mappings remain at 15 minutes.",
+          "text_sha256": "b806557792ff5c3874e458af51ec22d6bb93761a3e43f107ffafd4c44c6cef1c",
+          "canonical_text_sha256": "8efa30324eb58415cbb4fa96b627a6ffac2658664f90726056a96b49ca9650fa",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-018-c2-14b095e7e80c",
+          "slide": 1,
+          "text": "Use Durable Functions when a workflow must checkpoint and resume. Direct asynchronous durable execution can span up to one year; synchronous or mapped execution has a shorter limit. A Web Function's H T T P request has a separate 15-minute ceiling. Check the caller's deadline as well.",
+          "text_sha256": "14b095e7e80c528e918b569a0a057555e15ba71ae9192865a452e531aaa3b293",
+          "canonical_text_sha256": "03973dac25d9c7a312300e7e928880b27308eab00a1f8c832100b8b05f194efe",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-019-c1-90ac23766aad",
+          "slide": 2,
+          "text": "Separate the permission to invoke Lambda from what its code can do. The first gate controls whether this caller or A W S service may invoke the selected function or alias. Scope the permitted source where the integration supports it.",
+          "text_sha256": "90ac23766aad48f1454b11fe704c4e3bba0fc4a7024edca28ac2de32ba76a273",
+          "canonical_text_sha256": "e6da56810b6f00e2e9dd9f1fc2f000826348cf012591727f3803e98ad94a9bac",
+          "asset_sha256": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+        },
+        {
+          "id": "m13p07-019-c2-c7c24d786d24",
+          "slide": 2,
+          "text": "Once the handler runs, its execution role controls access to resources such as S three, Dynamo D B, and Secrets Manager. Grant only the actions and resources the handler needs. Invoke permission does not give the handler permission to read data.",
+          "text_sha256": "c7c24d786d24d5d6bbacca9703ea86a96ac44f28aba37409966030975203b96d",
+          "canonical_text_sha256": "bcc41c7d9a9334268101b6cff2bf8536d7a7c68b9a6049fd3e896fc515b7a873",
+          "asset_sha256": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "08",
+      "revision": "2026-11-23-m13p08-m13-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867",
+        "2": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39",
+        "3": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62",
+        "4": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+      },
+      "units": [
+        {
+          "id": "m13p08-apigateway-c1-4e3f7e16654a",
+          "slide": 1,
+          "text": "In this video, you will choose an A P I type and decide how it should call its backend. Design the A P I front door before choosing the backend. A P I Gateway exposes managed endpoints and can route, authorize and throttle requests before calling Lambda or another supported backend.",
+          "text_sha256": "4e3f7e16654a2d99a66755a290a86051e100836ea54ac07aaf4a562f3a734252",
+          "canonical_text_sha256": "bacf8001f16edd6850d1c958b11765a27687ed3feada1d9f46db91cbb44c9eb8",
+          "asset_sha256": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867"
+        },
+        {
+          "id": "m13p08-apigateway-c2-5d563b8fff4d",
+          "slide": 1,
+          "text": "Choose the A P I type and integration together. Their features, time and payload limits, and backend permissions still apply. A reachable A P I does not mean every backend operation is allowed.",
+          "text_sha256": "5d563b8fff4d0457d6ffc03cec153e8fde9c51fa9a0132fd775a5d51fc612270",
+          "canonical_text_sha256": "bf1bb472324415abbec3a48557128994a0c9076e3b37c5e773738fcc025ed35f",
+          "asset_sha256": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867"
+        },
+        {
+          "id": "m13p08-020-c1-d3d0c86d5c4b",
+          "slide": 2,
+          "text": "Choose the A P I type by the features your application needs. rest APIs cover needs such as usage plans, validation, stage caching, private endpoints, and canary releases. H T T P APIs are a leaner option when their integrations and authorization mechanisms are enough.",
+          "text_sha256": "d3d0c86d5c4b26392507f422d09a042065b7cecf677aa8098b2f8dd9bb8ff846",
+          "canonical_text_sha256": "a3af00ae01932cd6ca92d5027195d36b318a8df15e5506c98858de2c79a128b9",
+          "asset_sha256": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39"
+        },
+        {
+          "id": "m13p08-020-c2-fa0516961d98",
+          "slide": 2,
+          "text": "Choose WebSocket APIs for persistent, bidirectional communication such as chat or live updates. Connection and message routes have their own lifecycle. Don't pick an H T T P A P I simply because it's lighter when persistent messaging is required.",
+          "text_sha256": "fa0516961d98be47baaaa6db89de13d0607d99c77ae530b416098145b71fe9f5",
+          "canonical_text_sha256": "428362936a2419638f9e0196ecb99ba430f516eabb2a613cc45806b726da8ae1",
+          "asset_sha256": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39"
+        },
+        {
+          "id": "m13p08-021-c1-6d1d057ee0ed",
+          "slide": 3,
+          "text": "Choose the backend contract for an A P I method. A Lambda proxy integration passes the request to a function; a scoped A W S integration calls a supported service operation; an H T T P integration sends the request to an H T T P endpoint.",
+          "text_sha256": "6d1d057ee0ed676e2f7145f507fc3c8fa8db478e8f2702a477e9aecb318cd9d1",
+          "canonical_text_sha256": "663af03e6764757544a5cc997bbf4e777c8c89170f64ebd128e42fdbdf8c7032",
+          "asset_sha256": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62"
+        },
+        {
+          "id": "m13p08-021-c2-4a9f314b17b1",
+          "slide": 3,
+          "text": "Then verify request and response mapping, backend authorization, network reachability, and validation. An Open A P I description describes the contract but does not itself authorize the backend.",
+          "text_sha256": "4a9f314b17b17c96d2387c7f71543d1103ced52e9e10afed97d5e94c03559fb6",
+          "canonical_text_sha256": "f64bbd9619dee9c2bb32279a68935f066d0ee1d4bd4c803579533ff864730dbe",
+          "asset_sha256": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62"
+        },
+        {
+          "id": "m13p08-022-c1-b4113a3bd55f",
+          "slide": 4,
+          "text": "Remove a Lambda hop when it only forwards a request. In this example, A P I Gateway can submit a message directly to S Q S through a scoped integration role. The response confirms acceptance, not completion of the queued work.",
+          "text_sha256": "b4113a3bd55f0ca485a837a0ed499446da17daf2adda24f1b9c25397d6b2f7d3",
+          "canonical_text_sha256": "a43ca7cd7cc7ae284a0de971c5cf5b855a626b363cc237cac6c277155a0b02f5",
+          "asset_sha256": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+        },
+        {
+          "id": "m13p08-022-c2-c9b0fc1fe866",
+          "slide": 4,
+          "text": "Keep Lambda when code owns validation, orchestration, or transformation that the selected integration cannot handle. Compare both paths before removing it.",
+          "text_sha256": "c9b0fc1fe866c114f6e813e319f46c19a8249bbf6f9cf6d1c0fc53dc219d4bfd",
+          "canonical_text_sha256": "c9b0fc1fe866c114f6e813e319f46c19a8249bbf6f9cf6d1c0fc53dc219d4bfd",
+          "asset_sha256": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "09",
+      "revision": "2026-11-23-m13p09-m13-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "69aa7a06da5414f07a805f4841daa0077adc81619c6038dc547fee5631f6f68f",
+        "2": "a67b2b7e81cb667aa279ddd61d811ebdefe11abd5e0b740f9450b23209abc54f",
+        "3": "a122bfc8871767d79b5fac3ef3c8aa34f0ada20cf77b232ffdfea79bdfed59b9"
+      },
+      "units": [
+        {
+          "id": "m13p09-023-c1-ab3541d7252c",
+          "slide": 1,
+          "text": "In this video, you will separate release controls, check size and timeout limits, and send large uploads directly to S three. Control A P I and Lambda releases separately. The rest A P I stage points at an A P I deployment, while the Lambda alias points at a published function version and can split traffic across versions.",
+          "text_sha256": "ab3541d7252c7ebfef33e65461d5b5bdae3fe7fa5ba5a62d31bf8475a7ba2a35",
+          "canonical_text_sha256": "7a29b675530f40f7d8fc9551e46d5339d3718c8b44811a8211280b15888a61ed",
+          "asset_sha256": "69aa7a06da5414f07a805f4841daa0077adc81619c6038dc547fee5631f6f68f"
+        },
+        {
+          "id": "m13p09-023-c2-a45966454a15",
+          "slide": 1,
+          "text": "A rest canary and a weighted Lambda alias are different controls. Verify permissions, cache behavior and client compatibility for the route you are changing, and keep the rollback decision separate.",
+          "text_sha256": "a45966454a153113e55fc4286607620c8b2830b842338bca003e4c0240375842",
+          "canonical_text_sha256": "bf49e1d397270fe3182a1fb080a59b0a4def11298fed06a7cf4b5a7ba6490472",
+          "asset_sha256": "69aa7a06da5414f07a805f4841daa0077adc81619c6038dc547fee5631f6f68f"
+        },
+        {
+          "id": "m13p09-024-c1-95adad61d5c4",
+          "slide": 2,
+          "text": "Check each size and timing boundary before promising a synchronous result. The buffered rest example has a 10-megabyte A P I payload limit and 6-megabyte synchronous Lambda request and response limits. The default rest integration limit is up to 29 seconds; eligible Regional and private rest APIs can request more.",
+          "text_sha256": "95adad61d5c48e10d9afb04d83cbe0e733d5e93b7acb6e5f01f1ca9a30b7a672",
+          "canonical_text_sha256": "a80aa8813951175e984c1f7ee89d8b419d3ab0df44b4ef6ecb84635df8788fb4",
+          "asset_sha256": "a67b2b7e81cb667aa279ddd61d811ebdefe11abd5e0b740f9450b23209abc54f"
+        },
+        {
+          "id": "m13p09-024-c2-8bc16bbdc260",
+          "slide": 2,
+          "text": "Streaming is an outbound response option for eligible rest proxy integrations. It can run for up to 15 minutes and exceed buffered response limits, but idle limits still apply and it does not stream the request body. Check the specific A P I type and client path.",
+          "text_sha256": "8bc16bbdc260f07758d5b6824066b699e5bc139c6ff1aadaa2f113c5609df3b7",
+          "canonical_text_sha256": "d32c0b580a7ce12ec6fc6f6c7cb1a96f393d2743e5fc2ff942b9ab9b39b08bcb",
+          "asset_sha256": "a67b2b7e81cb667aa279ddd61d811ebdefe11abd5e0b740f9450b23209abc54f"
+        },
+        {
+          "id": "m13p09-025-c1-e976bc868745",
+          "slide": 3,
+          "text": "Keep large object bytes out of the A P I and Lambda path. First authenticate and authorize the upload request. The signer generates a short-lived U R L for the permitted S three object and returns it to the browser.",
+          "text_sha256": "e976bc868745335b90b66f864e6821443fa5b0a91476a22871d389e66b283c61",
+          "canonical_text_sha256": "5b5fc6a4bcb041e27a7c2388ad108b59b639d40f54e6d000c4e86bbafc68fead",
+          "asset_sha256": "a122bfc8871767d79b5fac3ef3c8aa34f0ada20cf77b232ffdfea79bdfed59b9"
+        },
+        {
+          "id": "m13p09-025-c2-4c65962f4f8b",
+          "slide": 3,
+          "text": "The browser uploads directly to S three. A presigned U R L is a bearer capability: constrain the key, method and expiry, and use checksum or encryption requirements when appropriate. Verify completion separately from issuing the U R L.",
+          "text_sha256": "4c65962f4f8be8572a8499133d8877e093ced28bc5027ed8c2803877201f67f1",
+          "canonical_text_sha256": "1d70a6b2326199fb6f79a2916aaa6227124df2483b37d6152b28dc942c8611a0",
+          "asset_sha256": "a122bfc8871767d79b5fac3ef3c8aa34f0ada20cf77b232ffdfea79bdfed59b9"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "10",
+      "revision": "2026-11-23-m13p10-m13-p06-p10-current-visuals-v1",
+      "approved_assets": {
+        "1": "05b39d14227bc72f8cc11411228e857f46750ff04f2c9282a87e9a78ab291509",
+        "2": "b049402627f2abba09f670d984e626d6487537c0f4f1d1566a90e8fc56c73d2e",
+        "3": "4863b9b7a0241bd7b1706af1b0e490c71cfc054415198818bb994261416e0544"
+      },
+      "units": [
+        {
+          "id": "m13p10-026-c1-499a8aaced75",
+          "slide": 1,
+          "text": "In this video, you will choose how clients reach an A P I and when to keep its backend private. Pick the A P I endpoint from the client path and trust boundary. Edge-optimized rest uses an A W S-managed Cloud Front distribution; a Regional endpoint stays Regional and can sit behind your own distribution if needed.",
+          "text_sha256": "499a8aaced7527d1a726d8323803c44343682b7fcb436f81500578579d2ea971",
+          "canonical_text_sha256": "385fe67c18dc40b9aafdaf8aba5df832b4712b9abc0de54892f9d8b61a28d271",
+          "asset_sha256": "05b39d14227bc72f8cc11411228e857f46750ff04f2c9282a87e9a78ab291509"
+        },
+        {
+          "id": "m13p10-026-c2-723856c43b48",
+          "slide": 1,
+          "text": "Private rest uses an interface endpoint from an allowed network. Endpoint rules, the A P I resource policy, and method authorization are still separate gates. An edge entry point itself does not make the backend multi-Region.",
+          "text_sha256": "723856c43b48b380eaa4493fc24a20f5bd0b1b6229a266796d595fa86dfda2f0",
+          "canonical_text_sha256": "61980f76d348ea960eeef8b419ed15c872681e744613c3c73ed2c8e4cf5b25d2",
+          "asset_sha256": "05b39d14227bc72f8cc11411228e857f46750ff04f2c9282a87e9a78ab291509"
+        },
+        {
+          "id": "m13p10-027-c1-7708b2d9abbf",
+          "slide": 2,
+          "text": "A private rest A P I needs more than a routable address. Start with the client's execute A P I interface endpoint, its security group and D N S, then check the endpoint and A P I resource policies.",
+          "text_sha256": "7708b2d9abbf2ace2bc248e158207aeb6c9c4a820eb1954bd719c0818160862f",
+          "canonical_text_sha256": "e90ef2048592b20901e1cad547e6b9111f872eddd379f3f779ef98325226108c",
+          "asset_sha256": "b049402627f2abba09f670d984e626d6487537c0f4f1d1566a90e8fc56c73d2e"
+        },
+        {
+          "id": "m13p10-027-c2-63278ae081dd",
+          "slide": 2,
+          "text": "Verify the method's caller authorization before trusting a request that reaches the A P I. A permitted endpoint may reach more than one eligible private A P I; its existence does not grant access to every A P I.",
+          "text_sha256": "63278ae081dd19f2043f2b265dea77943bb464de98bbf3c458f1b1dc617b67f4",
+          "canonical_text_sha256": "7e94d0d03708e227d77dd33e2b38eb4eb052816c31cb5ee0a6844270a0c5e885",
+          "asset_sha256": "b049402627f2abba09f670d984e626d6487537c0f4f1d1566a90e8fc56c73d2e"
+        },
+        {
+          "id": "m13p10-028-c1-a42b0126b004",
+          "slide": 3,
+          "text": "Separate inbound A P I privacy from private backend access. A public rest A P I can reach eligible private load-balancer targets through V P C Link version two. The backend can stay private while callers reach the public A P I.",
+          "text_sha256": "a42b0126b0041b57054b8ce25f47e6550d0bcc4aaec02392706fb4d6e4f009d5",
+          "canonical_text_sha256": "be4c354beb3a9a4e05f43766b89af34c4582ca705fb9ddd4e6357c4d7375d6ab",
+          "asset_sha256": "4863b9b7a0241bd7b1706af1b0e490c71cfc054415198818bb994261416e0544"
+        },
+        {
+          "id": "m13p10-028-c2-dee1a673f9e7",
+          "slide": 3,
+          "text": "A private rest A P I instead controls the client entry path through an interface endpoint. Design client reachability and backend integration independently, and verify the supported link type, target, protocol, and account requirements.",
+          "text_sha256": "dee1a673f9e77eb81ae4e74360456dba8face57278fc3bd21676ed948d6ef554",
+          "canonical_text_sha256": "549f75e84d60c7b077ff33a1c4e3bfe2d4110e3ceee776e81d76cd51eedd3b7d",
+          "asset_sha256": "4863b9b7a0241bd7b1706af1b0e490c71cfc054415198818bb994261416e0544"
+        }
+      ]
+    }
+  ]
+}
