@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "22",
+      "revision": "2026-11-24-m11p22-andrew-expressive",
+      "approved_assets": {
+        "1": "1064abfa3d4523893b6a5113715191f8c184675877a2a392a9e812d06218e338",
+        "2": "013ba228bbc458b4fb11964cdd27cd38c1e43ff42263ad2083ec7ba6fa8f8347",
+        "3": "23a8a3a03e63c2aabde11a912ff5eeb3c22d9f5fdb12744c7c5a31c9c69e06ff"
+      },
+      "units": [
+        {
+          "id": "m11p22-andrew-exp-s01-c1-2b4b252d26d4",
+          "slide": 1,
+          "text": "A device sends temperature readings. To find the average every fifteen minutes, keep the observation time, the device identity, and the measured value separately. Then the query can group readings by device and time window.",
+          "text_sha256": "2b4b252d26d4b52186d9b175cbe03021bd5824d3d05d9b3df073940e1536a697",
+          "canonical_text_sha256": "2b4b252d26d4b52186d9b175cbe03021bd5824d3d05d9b3df073940e1536a697",
+          "asset_sha256": "1064abfa3d4523893b6a5113715191f8c184675877a2a392a9e812d06218e338"
+        },
+        {
+          "id": "m11p22-andrew-exp-s01-c2-d5bac475d5fe",
+          "slide": 1,
+          "text": "Timestream for LiveAnalytics is closed to new customers. Evaluate Timestream for InfluxDB when its model fits. It uses its own engine and A P I, so do not assume a source integration for one also works with the other.",
+          "text_sha256": "d5bac475d5fe61593640021a5817d033aaff8543a22789d63cf77e3f7052e4be",
+          "canonical_text_sha256": "9bba262d16e4566db45bb35e7508902ac55b5651f333c1ba890f9e245f0aa934",
+          "asset_sha256": "1064abfa3d4523893b6a5113715191f8c184675877a2a392a9e812d06218e338"
+        },
+        {
+          "id": "m11p22-andrew-exp-s02-c1-7971d365e908",
+          "slide": 2,
+          "text": "Here the timestamp says when the observation happened. The device and site are dimensions. Temperature and vibration are measures the app can aggregate.",
+          "text_sha256": "7971d365e9082d84e75b5c240d29978c241ae79764b84ac34d387a2054a64cd0",
+          "canonical_text_sha256": "7971d365e9082d84e75b5c240d29978c241ae79764b84ac34d387a2054a64cd0",
+          "asset_sha256": "013ba228bbc458b4fb11964cdd27cd38c1e43ff42263ad2083ec7ba6fa8f8347"
+        },
+        {
+          "id": "m11p22-andrew-exp-s02-c2-d04dd16bee9e",
+          "slide": 2,
+          "text": "Ask for the average temperature by device during the time window. That requires filtering by time and grouping the values; it is not a lookup of one generic record by I D.",
+          "text_sha256": "d04dd16bee9e6c5fbd3e221b5178f598a7205308d6876275db0d362748bfbe67",
+          "canonical_text_sha256": "97801a9aae3ae7ec109bb14a49686b0a717aa3026e0cbe52ef5b186f81d37bc1",
+          "asset_sha256": "013ba228bbc458b4fb11964cdd27cd38c1e43ff42263ad2083ec7ba6fa8f8347"
+        },
+        {
+          "id": "m11p22-andrew-exp-s02-c3-6ae2a5edaf65",
+          "slide": 2,
+          "text": "Validate which engine the team can actually use. The memory and magnetic tiers shown belong to LiveAnalytics. Do not carry that storage or query model over to InfluxDB.",
+          "text_sha256": "6ae2a5edaf65d0228505b1493923b81a7f11bddf0237e056510fd76da809a73d",
+          "canonical_text_sha256": "6ae2a5edaf65d0228505b1493923b81a7f11bddf0237e056510fd76da809a73d",
+          "asset_sha256": "013ba228bbc458b4fb11964cdd27cd38c1e43ff42263ad2083ec7ba6fa8f8347"
+        },
+        {
+          "id": "m11p22-andrew-exp-s03-c1-75db6cfd08d0",
+          "slide": 3,
+          "text": "Follow an observation from the device through the stream and the supported transformation to the chosen time-series database. A successful producer call proves the record reached the first step, not that it is available to query.",
+          "text_sha256": "75db6cfd08d0d9d5043014f593941fbb98a048782b18fb50206037a1132265af",
+          "canonical_text_sha256": "75db6cfd08d0d9d5043014f593941fbb98a048782b18fb50206037a1132265af",
+          "asset_sha256": "23a8a3a03e63c2aabde11a912ff5eeb3c22d9f5fdb12744c7c5a31c9c69e06ff"
+        },
+        {
+          "id": "m11p22-andrew-exp-s03-c2-5ded75660b5b",
+          "slide": 3,
+          "text": "Use the observation time rather than the processing time when the window depends on when the event happened. Handle late events, retries and duplicates, and keep enough retention to recover from a stalled consumer.",
+          "text_sha256": "5ded75660b5ba9f360239ccd6a2c13db4671c8e61a6029a9d994d6585d83ce1a",
+          "canonical_text_sha256": "5ded75660b5ba9f360239ccd6a2c13db4671c8e61a6029a9d994d6585d83ce1a",
+          "asset_sha256": "23a8a3a03e63c2aabde11a912ff5eeb3c22d9f5fdb12744c7c5a31c9c69e06ff"
+        },
+        {
+          "id": "m11p22-andrew-exp-s03-c3-56d123d1a7b4",
+          "slide": 3,
+          "text": "Check accepted writes and failed records. Then query one known observation and confirm the right device and time window. Use a write integration supported by the selected engine.",
+          "text_sha256": "56d123d1a7b4cdb187e842b28c6d0518798096ecb7472efdf42f396d7bf9fddf",
+          "canonical_text_sha256": "56d123d1a7b4cdb187e842b28c6d0518798096ecb7472efdf42f396d7bf9fddf",
+          "asset_sha256": "23a8a3a03e63c2aabde11a912ff5eeb3c22d9f5fdb12744c7c5a31c9c69e06ff"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "23",
+      "revision": "2026-11-24-m11p23-andrew-expressive",
+      "approved_assets": {
+        "1": "90ed208e50e6f497cd30af2c2202fbad2964c4532c4f68c80b81f7821d784538",
+        "2": "191323d633b0ee23107f4d40359994f6fa135c2be05ee308b674314dcba90c0b"
+      },
+      "units": [
+        {
+          "id": "m11p23-andrew-exp-s01-c1-e7d653aac6f3",
+          "slide": 1,
+          "text": "Make a small sandbox table and write two known game records under the same user. That gives you a result to check against rather than just a successful A P I response.",
+          "text_sha256": "e7d653aac6f331e628a9409ab431c0f7c159e07739e703dcf6bcf0ec202d4d57",
+          "canonical_text_sha256": "39e76e6853e2fe3e5b4ecbde30db66e93d3628bbd6875aa2f0562ee49ad02128",
+          "asset_sha256": "90ed208e50e6f497cd30af2c2202fbad2964c4532c4f68c80b81f7821d784538"
+        },
+        {
+          "id": "m11p23-andrew-exp-s01-c2-231ff65cf8dd",
+          "slide": 1,
+          "text": "Query that user with the sort-key prefix for games. Check that the expected records return, and follow pagination if there is another page.",
+          "text_sha256": "231ff65cf8dd6c087bea325dfe02b482c87105a1cf89814a063cf2f9e19a4ff9",
+          "canonical_text_sha256": "231ff65cf8dd6c087bea325dfe02b482c87105a1cf89814a063cf2f9e19a4ff9",
+          "asset_sha256": "90ed208e50e6f497cd30af2c2202fbad2964c4532c4f68c80b81f7821d784538"
+        },
+        {
+          "id": "m11p23-andrew-exp-s01-c3-16bb9554c97e",
+          "slide": 1,
+          "text": "A Scan can find the same records, but it does more read work before filtering. Compare consumed capacity in the controlled example rather than judging from result count alone.",
+          "text_sha256": "16bb9554c97e38d6331fd22c3e1ddb2ba635ddfd2817b7e26e5668d559e84b96",
+          "canonical_text_sha256": "16bb9554c97e38d6331fd22c3e1ddb2ba635ddfd2817b7e26e5668d559e84b96",
+          "asset_sha256": "90ed208e50e6f497cd30af2c2202fbad2964c4532c4f68c80b81f7821d784538"
+        },
+        {
+          "id": "m11p23-andrew-exp-s01-c4-d47df8c531cc",
+          "slide": 1,
+          "text": "Now create the alternate index on Game I D. Wait for it to become active before querying it. That index provides a different key path but still reads eventually consistently.",
+          "text_sha256": "d47df8c531ccd4eb833643774a1017c05e28bd4cd92953fe1ba8c692c4e29fc3",
+          "canonical_text_sha256": "6ad660970fb687fd59e2f0d697ed2c7751078861634d49a2f4429e30029f577f",
+          "asset_sha256": "90ed208e50e6f497cd30af2c2202fbad2964c4532c4f68c80b81f7821d784538"
+        },
+        {
+          "id": "m11p23-andrew-exp-s02-c1-dcc5b1109fbe",
+          "slide": 2,
+          "text": "Pick the snapshot or permitted restore time, then confirm the engine version and key permissions. If the restore role cannot use the needed key, a visible backup is not a usable one.",
+          "text_sha256": "dcc5b1109fbee944daec8391295e958c5c920a9fcaa0c830eef1bd4f756960b3",
+          "canonical_text_sha256": "dcc5b1109fbee944daec8391295e958c5c920a9fcaa0c830eef1bd4f756960b3",
+          "asset_sha256": "191323d633b0ee23107f4d40359994f6fa135c2be05ee308b674314dcba90c0b"
+        },
+        {
+          "id": "m11p23-andrew-exp-s02-c2-49d321f10d24",
+          "slide": 2,
+          "text": "Restore into a new private database with the appropriate subnet selection and security groups. Leave the production endpoint alone while you test.",
+          "text_sha256": "49d321f10d242786b1348bbcb830122527e4ed82e8f1cd325c9247dd187e7a61",
+          "canonical_text_sha256": "49d321f10d242786b1348bbcb830122527e4ed82e8f1cd325c9247dd187e7a61",
+          "asset_sha256": "191323d633b0ee23107f4d40359994f6fa135c2be05ee308b674314dcba90c0b"
+        },
+        {
+          "id": "m11p23-andrew-exp-s02-c3-eedd27a6f98c",
+          "slide": 2,
+          "text": "Connect with the intended credentials and verify both representative data and application operations. A database status of available isn't proof that the workload can use it.",
+          "text_sha256": "eedd27a6f98c68efa8225cf95b1bc341b4d3171cd90ae458e32b5c3841f154f6",
+          "canonical_text_sha256": "eedd27a6f98c68efa8225cf95b1bc341b4d3171cd90ae458e32b5c3841f154f6",
+          "asset_sha256": "191323d633b0ee23107f4d40359994f6fa135c2be05ee308b674314dcba90c0b"
+        },
+        {
+          "id": "m11p23-andrew-exp-s02-c4-0ed488ed37e8",
+          "slide": 2,
+          "text": "Update the sandbox app endpoint only after the checks pass. Record elapsed recovery time and how you would fall back. The rehearsal is meant to prove the change without affecting production.",
+          "text_sha256": "0ed488ed37e8f87a76a7f56542f6c382a19b39fc6c7112b2cd1ce5529f23339e",
+          "canonical_text_sha256": "0ed488ed37e8f87a76a7f56542f6c382a19b39fc6c7112b2cd1ce5529f23339e",
+          "asset_sha256": "191323d633b0ee23107f4d40359994f6fa135c2be05ee308b674314dcba90c0b"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "24",
+      "revision": "2026-11-24-m11p24-andrew-expressive",
+      "approved_assets": {
+        "1": "e9bc2ba6f51bf4cdf67fbaa1a548747638dd90433d272eb72ac843a7a4ecf3fa",
+        "2": "a7cad4965052b3ea9dd4d932b0bc359f2729c92f185c0ac73ad596ab4ac98629"
+      },
+      "units": [
+        {
+          "id": "m11p24-andrew-exp-s01-c1-15a9bbfd974b",
+          "slide": 1,
+          "text": "Set up a supported proxy with private reachability and its expected authorization method. Use a sandbox database so the burst does not interfere with production.",
+          "text_sha256": "15a9bbfd974b97d328346089326ed20a7d60a5690d25f21c8ad58c24bb78a613",
+          "canonical_text_sha256": "15a9bbfd974b97d328346089326ed20a7d60a5690d25f21c8ad58c24bb78a613",
+          "asset_sha256": "e9bc2ba6f51bf4cdf67fbaa1a548747638dd90433d272eb72ac843a7a4ecf3fa"
+        },
+        {
+          "id": "m11p24-andrew-exp-s01-c2-acff60251d36",
+          "slide": 1,
+          "text": "Generate a small time-bounded burst of client connections. Route it through the proxy so you can see what the database receives for that workload.",
+          "text_sha256": "acff60251d362df7303f002b94e9c398a91d7a28f04ca4ee2dc66a25811b2209",
+          "canonical_text_sha256": "acff60251d362df7303f002b94e9c398a91d7a28f04ca4ee2dc66a25811b2209",
+          "asset_sha256": "e9bc2ba6f51bf4cdf67fbaa1a548747638dd90433d272eb72ac843a7a4ecf3fa"
+        },
+        {
+          "id": "m11p24-andrew-exp-s01-c3-d126e8d4a134",
+          "slide": 1,
+          "text": "Compare incoming client connections with the database connections the proxy uses. Watch borrow latency and pinning. Pooling can reuse connections, but it does not promise all requests share one database connection.",
+          "text_sha256": "d126e8d4a134b9ae515904a910f6948e8ed8a4e7cc2979aa856f06782c450b96",
+          "canonical_text_sha256": "d126e8d4a134b9ae515904a910f6948e8ed8a4e7cc2979aa856f06782c450b96",
+          "asset_sha256": "e9bc2ba6f51bf4cdf67fbaa1a548747638dd90433d272eb72ac843a7a4ecf3fa"
+        },
+        {
+          "id": "m11p24-andrew-exp-s01-c4-dffee644758a",
+          "slide": 1,
+          "text": "In the sandbox, try a deliberately denied connection and verify you get the expected failure. Restore the intended configuration and remove test resources when the evidence is captured.",
+          "text_sha256": "dffee644758a7655a8065234bd102b18d838e5d84b83d81addfbb8dacfff26af",
+          "canonical_text_sha256": "dffee644758a7655a8065234bd102b18d838e5d84b83d81addfbb8dacfff26af",
+          "asset_sha256": "e9bc2ba6f51bf4cdf67fbaa1a548747638dd90433d272eb72ac843a7a4ecf3fa"
+        },
+        {
+          "id": "m11p24-andrew-exp-s02-c1-99c12ca1ce82",
+          "slide": 2,
+          "text": "Request a key the cache doesn't have. The app reads version one from the database, returns it, and fills the cache.",
+          "text_sha256": "99c12ca1ce82ffebc9853e01e089f7a9254d54eba5d6551526fe19f8cd03cdfb",
+          "canonical_text_sha256": "99c12ca1ce82ffebc9853e01e089f7a9254d54eba5d6551526fe19f8cd03cdfb",
+          "asset_sha256": "a7cad4965052b3ea9dd4d932b0bc359f2729c92f185c0ac73ad596ab4ac98629"
+        },
+        {
+          "id": "m11p24-andrew-exp-s02-c2-36deba280194",
+          "slide": 2,
+          "text": "Ask for the same key again. It should return version one from cache without another database read. Use a metric or trace to confirm the path.",
+          "text_sha256": "36deba28019462aaf55d2a11dc6e89ecfdaf212bd2514220a8bf3004606dce52",
+          "canonical_text_sha256": "36deba28019462aaf55d2a11dc6e89ecfdaf212bd2514220a8bf3004606dce52",
+          "asset_sha256": "a7cad4965052b3ea9dd4d932b0bc359f2729c92f185c0ac73ad596ab4ac98629"
+        },
+        {
+          "id": "m11p24-andrew-exp-s02-c3-62f29168bbb2",
+          "slide": 2,
+          "text": "Change the authoritative value to version two. Before expiry or invalidation, an ordinary cached read can still return version one. That is the freshness tradeoff, not a failed database write.",
+          "text_sha256": "62f29168bbb261ca60e35699326d2e40cca92455476de39fefec6639d295449c",
+          "canonical_text_sha256": "62f29168bbb261ca60e35699326d2e40cca92455476de39fefec6639d295449c",
+          "asset_sha256": "a7cad4965052b3ea9dd4d932b0bc359f2729c92f185c0ac73ad596ab4ac98629"
+        },
+        {
+          "id": "m11p24-andrew-exp-s02-c4-9f69776e02e1",
+          "slide": 2,
+          "text": "Remove the cache entry or let it expire, then read again and verify version two. Simulate cache unavailability in the sandbox and observe a controlled fallback rather than treating a cache hit as the only success.",
+          "text_sha256": "9f69776e02e1cf8d01044a7f20b0f62637f4cfd6b4beb2452a5c7060ac357d2b",
+          "canonical_text_sha256": "9f69776e02e1cf8d01044a7f20b0f62637f4cfd6b4beb2452a5c7060ac357d2b",
+          "asset_sha256": "a7cad4965052b3ea9dd4d932b0bc359f2729c92f185c0ac73ad596ab4ac98629"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "25",
+      "revision": "2026-11-24-m11p25-andrew-expressive",
+      "approved_assets": {
+        "1": "041da8aa66556d383cd6a09ba03d1b086b72bbe7ec9057c92c9bf1970ea4e36b",
+        "2": "ed77d4d42cc32649aa617ea0c9ed1b044d50fe1c324c7fb36de787f35928a7b4"
+      },
+      "units": [
+        {
+          "id": "m11p25-andrew-exp-s01-c1-9106da7529ec",
+          "slide": 1,
+          "text": "Aurora MySQL can use its supported S three load and export statements for this movement. Check the assigned role, access to the intended S three objects, and applicable key and database permissions before testing.",
+          "text_sha256": "9106da7529ec99f7fcec900cb0f8aa92dc92ed31520f120e485e9edfe7caeeb6",
+          "canonical_text_sha256": "9898a71c2e2c359e5d6cfd7e35ce4f8f87dee0cc4ae60512c81e8dafe71406e8",
+          "asset_sha256": "041da8aa66556d383cd6a09ba03d1b086b72bbe7ec9057c92c9bf1970ea4e36b"
+        },
+        {
+          "id": "m11p25-andrew-exp-s01-c2-acea9a81639c",
+          "slide": 1,
+          "text": "Aurora PostgreSQL uses its supported A W S S three extension functions instead. Verify the engine and version, connectivity, and the required database privileges. Test a small file and compare the rows.",
+          "text_sha256": "acea9a81639c2ab85bf7911b8aa281512c46c88e0420d0c5444fae56155f670e",
+          "canonical_text_sha256": "1d878883bd01db5b1532b468e6c14ec236b4b8d602ac0a15099b67d839aff79f",
+          "asset_sha256": "041da8aa66556d383cd6a09ba03d1b086b72bbe7ec9057c92c9bf1970ea4e36b"
+        },
+        {
+          "id": "m11p25-andrew-exp-s01-c3-3ca8ab101944",
+          "slide": 1,
+          "text": "A successful import or export moves data. It is not a transaction-consistent recovery plan by itself. Choose a supported backup strategy separately.",
+          "text_sha256": "3ca8ab1019445fbed3179762b9be18397619114ad297f6cb69dafe527adbff30",
+          "canonical_text_sha256": "3ca8ab1019445fbed3179762b9be18397619114ad297f6cb69dafe527adbff30",
+          "asset_sha256": "041da8aa66556d383cd6a09ba03d1b086b72bbe7ec9057c92c9bf1970ea4e36b"
+        },
+        {
+          "id": "m11p25-andrew-exp-s02-c1-04a5d5bc043f",
+          "slide": 2,
+          "text": "Choose the R D S source and event categories. A matching event goes to the S N S topic and subscribed recipients. Check that the endpoint can receive it and that permissions allow delivery.",
+          "text_sha256": "04a5d5bc043ffa2316c39fab4368714817914dc344e0a047d7437376129673cd",
+          "canonical_text_sha256": "2b498148ad5fa56c0f2f547990b371cac137d8dfc3f59dc5e1c0be49cac0d5f0",
+          "asset_sha256": "ed77d4d42cc32649aa617ea0c9ed1b044d50fe1c324c7fb36de787f35928a7b4"
+        },
+        {
+          "id": "m11p25-andrew-exp-s02-c2-c14a1c8d3741",
+          "slide": 2,
+          "text": "A failover notification tells you what to investigate. Verify the current writer and the app connection, then use metrics and database logs to see how the workload behaved. The message can arrive late.",
+          "text_sha256": "c14a1c8d3741ac85bbb253c49169347a3d4332e468393c7c8d837366f3007519",
+          "canonical_text_sha256": "c14a1c8d3741ac85bbb253c49169347a3d4332e468393c7c8d837366f3007519",
+          "asset_sha256": "ed77d4d42cc32649aa617ea0c9ed1b044d50fe1c324c7fb36de787f35928a7b4"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "01",
+      "revision": "2026-11-24-m12p01-andrew-expressive",
+      "approved_assets": {
+        "1": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c",
+        "2": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+      },
+      "units": [
+        {
+          "id": "m12p01-andrew-exp-s01-c1-840b2304ad0a",
+          "slide": 1,
+          "text": "An image contains the application and its user-space dependencies. Start it and you get a running process, not a whole independent machine. Several instances can start from the same image.",
+          "text_sha256": "840b2304ad0a186d07ffcc461a7bfd0e4a7743d9a4fae6ee998e3a3a7a06d774",
+          "canonical_text_sha256": "840b2304ad0a186d07ffcc461a7bfd0e4a7743d9a4fae6ee998e3a3a7a06d774",
+          "asset_sha256": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c"
+        },
+        {
+          "id": "m12p01-andrew-exp-s01-c2-fd25ec28bda3",
+          "slide": 1,
+          "text": "The process runs on a compatible host kernel. Match the C P U architecture and operating-system family and set the C P U and memory limits the workload needs. Packaging alone does not solve host mismatches.",
+          "text_sha256": "fd25ec28bda32da90678f1b114e6577050f9670feb0c7e044de45e7335e54f45",
+          "canonical_text_sha256": "ae01c9a4a296d2668bad88a46b1b70f57fbe5936a67034c60de74bcd90ef454e",
+          "asset_sha256": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c"
+        },
+        {
+          "id": "m12p01-andrew-exp-s01-c3-4efe30dbb96b",
+          "slide": 1,
+          "text": "The container can be replaced, so keep required data outside its writable layer. Choose shared files, block storage where supported, or object storage according to what the application needs.",
+          "text_sha256": "4efe30dbb96b750d1f681884ce4a5d7418d64baf6f75a96fc5b4b216655c4fb5",
+          "canonical_text_sha256": "4efe30dbb96b750d1f681884ce4a5d7418d64baf6f75a96fc5b4b216655c4fb5",
+          "asset_sha256": "f184904d682dfc10e73631e3f1db62ec93138b44d4fe32bf5cb3ca219c80d39c"
+        },
+        {
+          "id": "m12p01-andrew-exp-s02-c1-bbb9a4c40d08",
+          "slide": 2,
+          "text": "Do you need the Kubernetes A P I and its ecosystem, or an A W S-native task and service model? That is a choice between E K S and E C S, not yet a choice of where the containers run.",
+          "text_sha256": "bbb9a4c40d083951899e2abadfcc03feebcc756d575adc3ac21495cf6f15676a",
+          "canonical_text_sha256": "a79846a73e77aea635ae9d88af6c68e8e0ba7e750b3fd669d66bdff586952686",
+          "asset_sha256": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+        },
+        {
+          "id": "m12p01-andrew-exp-s02-c2-d2c6242914d3",
+          "slide": 2,
+          "text": "Now decide who manages the workers. E C two gives you instance-level control and responsibility. Fargate runs supported work without your managing those worker instances. Evaluate the requirements of each combination.",
+          "text_sha256": "d2c6242914d3edd3a8d4a33360a9c3144f4f30927dd00dcbdb86f66761fab081",
+          "canonical_text_sha256": "1bd138f5c00981eb59ab00cbac793731f05c3415dfd4ffa11e3e09226eb58fea",
+          "asset_sha256": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+        },
+        {
+          "id": "m12p01-andrew-exp-s02-c3-1ffb9cdb093e",
+          "slide": 2,
+          "text": "Even with Fargate, you still maintain the image, configure identity and networking, and check application health and cost. Managed workers don't make the application self-operating.",
+          "text_sha256": "1ffb9cdb093e4a324d320e5301d71fac2f2c352ecfe8cd1500887a6a70bd5b5a",
+          "canonical_text_sha256": "1ffb9cdb093e4a324d320e5301d71fac2f2c352ecfe8cd1500887a6a70bd5b5a",
+          "asset_sha256": "6ac7a8c71cb592dd6be64a0735c824e8f641307bf86c8e2a7b81442609a2b87c"
+        }
+      ]
+    }
+  ]
+}
