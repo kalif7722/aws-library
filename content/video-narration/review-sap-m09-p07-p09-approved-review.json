@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-15%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "07",
+      "revision": "m09p07-sap-m09-p07-p09-approved-review",
+      "approved_assets": {
+        "1": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b",
+        "2": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b",
+        "3": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b",
+        "4": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1",
+        "5": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1",
+        "6": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69",
+        "7": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+      },
+      "units": [
+        {
+          "id": "m09-s19-01",
+          "slide": 1,
+          "text": "A video upload stalls after two parts. S three has stored the parts, but the client never finished the upload. The normal object listing shows nothing for that transfer, even though its parts can still incur storage charges.",
+          "text_sha256": "21ecd4ab3b6806d6ed58246a9670f35030a1307851f2c6dd8b82a51e7873d51c",
+          "canonical_text_sha256": "3616a399d1d6af2122b7a0c42e30417390c712ad9d4e49cda48329754afb1f48",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09-s19-02",
+          "slide": 2,
+          "text": "List multipart uploads to find its upload ID. List parts for that ID to see what landed. Resume if it's still needed; otherwise abort it. If parts were still uploading, verify cleanup afterwards.",
+          "text_sha256": "0e092500269dd2d33b268ffe76601b654e8d8508707c82ee99886b579d78ee18",
+          "canonical_text_sha256": "8d017666680f86a50a4feecbc600bea7a4e61eab1944abf8809d04dda325078e",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09-s19-03",
+          "slide": 3,
+          "text": "For abandoned uploads, set an abort window that gives legitimate clients enough time to finish. Expiring completed objects is a different rule.",
+          "text_sha256": "792b201e2c0a1e72f2277370ed8a06912cfa8ca44d12690bed325b6c8858359a",
+          "canonical_text_sha256": "792b201e2c0a1e72f2277370ed8a06912cfa8ca44d12690bed325b6c8858359a",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09-s20-01",
+          "slide": 4,
+          "text": "You only need a header? Request its byte range rather than downloading the whole object. S three takes one contiguous range per get; each interval here is a separate request.",
+          "text_sha256": "5c4628f4cc850f1272c1b2c2c029611006344906a4667122ca7181df5cc57dca",
+          "canonical_text_sha256": "61856e70b79bfadef57fd265daa3cf17e8a3ead8e63e39086423c1fdb5ac390b",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09-s20-02",
+          "slide": 5,
+          "text": "If the third request fails, fetch those bytes again and assemble the pieces in order. If the key can change mid-download, pin one version or apply matching conditions, so you don't join bytes from different versions.",
+          "text_sha256": "50c7f233f6305056664b57689ea5ffe4484cb6701960b6ef1d59f20ef6d9f389",
+          "canonical_text_sha256": "fc50e2fa913723c66159a2f2ca5689dcc6bc353587b18fc38502e23a0bf8e70f",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09-s21-01",
+          "slide": 6,
+          "text": "Transfer Acceleration changes the journey a distant client takes to reach the bucket. The accelerate endpoint takes traffic into an ay double-you ess edge location and over the ay double-you ess network. The bucket stays in its original Region.",
+          "text_sha256": "059707e4aa0d20a40c2b14ae997c63d04b7cd1df7c7613e94774ba2a2c2f9bd8",
+          "canonical_text_sha256": "5c4f918e9f9ea255de08e5f392841a38dc9adc6357b3964925982b3e4e871aa7",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        },
+        {
+          "id": "m09-s21-02",
+          "slide": 7,
+          "text": "Multipart changes how the upload is split and retried. You can combine the two. Compare the same representative upload with and without acceleration, and weigh the measured improvement against charges.",
+          "text_sha256": "60e00b822700ab4148ab3476e117274fe75080eacec21136a3176c6954d12f03",
+          "canonical_text_sha256": "60e00b822700ab4148ab3476e117274fe75080eacec21136a3176c6954d12f03",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "08",
+      "revision": "m09p08-sap-m09-p07-p09-approved-review",
+      "approved_assets": {
+        "1": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c",
+        "2": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c",
+        "3": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80",
+        "4": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80",
+        "5": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80",
+        "6": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab",
+        "7": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+      },
+      "units": [
+        {
+          "id": "m09-s22-01",
+          "slide": 1,
+          "text": "S three Select is not available to new customers. The older design is useful to recognize: ask S three to filter rows or columns of one supported CSV, JSON or par-kay object and return just the matching result.",
+          "text_sha256": "efe535c5fd45d1e44f0468c0a0dc65cc1685da3ae932c310206f9237066a77e6",
+          "canonical_text_sha256": "6131a379e74842429586acc4379cb232916602031ba70d46c9914b461e29b832",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09-s22-02",
+          "slide": 2,
+          "text": "That cuts the bytes sent to the client. For a new workload querying data across many objects, evaluate Athena or another appropriate query engine. Don't confuse one-object filtering with querying a dataset.",
+          "text_sha256": "9d7c5970f133863e674f43f3b30c22fff78b90bea70601541c529d40ecc135b8",
+          "canonical_text_sha256": "a3d846bad1e5a27d28a3b9c48a87c5a7cf33237cd87bbee7595500234e53fceb",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09-s23-01",
+          "slide": 3,
+          "text": "If you're considering moving rarely read reports out of S three Standard, scope Storage Class Analysis to those reports with a prefix or tag.",
+          "text_sha256": "1fe343cfe98dccd346279ad273c7e341ca82d8fe0b58e7ceb0ea199f8adbc347",
+          "canonical_text_sha256": "5b20cdeb884b94ee2fe3a11a1b1ecb8f0ae929aab9e2bb5bfa77ad73e07e872e",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09-s23-02",
+          "slide": 4,
+          "text": "Early data can appear in a day or two, but ay double-you ess says it usually takes about thirty days of observations to develop useful results. This feature recommends Standard to Standard-IA only.",
+          "text_sha256": "7c0efb677b764b16739196e44b64221d38f49c9a4017eb157355c92838f5c5a8",
+          "canonical_text_sha256": "87abdc357f0b94304eb619c4882389340730c7df22d2ff810ba55c09b2182092",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09-s23-03",
+          "slide": 5,
+          "text": "If the result supports it after checking retrieval charges and minimum duration, you configure the lifecycle rule separately. Analysis does not move anything.",
+          "text_sha256": "4e7bb4d030cf515127f9b3db5f80de19712b9449f222e6873f2dad4698a0d0f2",
+          "canonical_text_sha256": "4e7bb4d030cf515127f9b3db5f80de19712b9449f222e6873f2dad4698a0d0f2",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09-s24-01",
+          "slide": 6,
+          "text": "Storage Lens rolls up usage and activity from buckets, accounts and Regions; with Organizations it can show the broader estate. Start wide when you don't know where storage is growing, then narrow the scope to the affected buckets.",
+          "text_sha256": "dcd59c6a745ba84653f9355fa8d64b934abcc603937c5217d6dd114c716cce25",
+          "canonical_text_sha256": "17899b7b907c4926ad6b9de989ad857f4ef102f38f7c717dae0e3db27fd5a50d",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09-s24-02",
+          "slide": 7,
+          "text": "There's a preconfigured default dashboard, a custom dashboard for a tailored view, and daily CSV or par-kay exports to an authorized S three destination. This is evidence, not a policy that changes the buckets.",
+          "text_sha256": "f9b7e92a870c6f8493bf443ded820a26ce783a1a0343d2ca70eee48b80033be1",
+          "canonical_text_sha256": "7ceb3035cfacf9b573eb97d3cb5148207895887e8eeac8652becfb75d72fe7fd",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "09",
+      "revision": "m09p09-sap-m09-p07-p09-approved-review",
+      "approved_assets": {
+        "1": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2",
+        "2": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2",
+        "3": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb",
+        "4": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb",
+        "5": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb",
+        "6": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95",
+        "7": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95",
+        "8": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95",
+        "9": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd",
+        "10": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd",
+        "11": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+      },
+      "units": [
+        {
+          "id": "m09-s25-01",
+          "slide": 1,
+          "text": "Bytes rose, but the visible object count barely moved. Check retained noncurrent versions and abandoned multipart uploads; a normal current-object listing can miss both.",
+          "text_sha256": "48552eee3e2bbff70ea997bef79ad2ae693daf961c78be56ad93355835b1dcfb",
+          "canonical_text_sha256": "48552eee3e2bbff70ea997bef79ad2ae693daf961c78be56ad93355835b1dcfb",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09-s25-02",
+          "slide": 2,
+          "text": "If old versions account for the increase, choose retention based on recovery needs. If orphaned upload parts are the cause, use a multipart cleanup rule. Don't apply the same fix to both.",
+          "text_sha256": "6d2fc42ff6f817c9fd569ab3c57c0c36fe10cc9ff080cd1ef12b63cdd68f1634",
+          "canonical_text_sha256": "f93cf766fc3e12f300d5c67a7b457b05b143093cdc7ca83fd1b2b7f346ddc0a5",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09-s26-01",
+          "slide": 3,
+          "text": "The dashboard shows signals from settings like versioning, encryption and replication. Check an actual object version or replica to confirm the safeguard covers the data you care about.",
+          "text_sha256": "bd8db26502aed1c33b04172b5d5fbb5e665eeff3d376896b15086dfbe28403a8",
+          "canonical_text_sha256": "bd8db26502aed1c33b04172b5d5fbb5e665eeff3d376896b15086dfbe28403a8",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09-s26-02",
+          "slide": 4,
+          "text": "Bucket owner enforced disables A C Ls; bucket and I A M policies still decide access.",
+          "text_sha256": "29f5d422f887568827886851f98c5ba8d2b3f5e6710390aae4a1712e098911fa",
+          "canonical_text_sha256": "c55f1233287b87189b0924c913f7a0c5964e6008489f6d1757175edfbdd3e93c",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09-s26-03",
+          "slide": 5,
+          "text": "A bucket with notifications enabled tells you the feature is configured, not that a downstream worker processed an event. Check that separately.",
+          "text_sha256": "08a5c08cf5cbb098cd2f886b6595d28e92e766251618fc2e7891e28dfcec6ac4",
+          "canonical_text_sha256": "08a5c08cf5cbb098cd2f886b6595d28e92e766251618fc2e7891e28dfcec6ac4",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09-s27-01",
+          "slide": 6,
+          "text": "The request and byte counts show work done, not whether the work succeeded.",
+          "text_sha256": "13b9b13329ecc8b98d1514be00af34d04661c2ae5754cca90c4c08a39543766f",
+          "canonical_text_sha256": "13b9b13329ecc8b98d1514be00af34d04661c2ae5754cca90c4c08a39543766f",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09-s27-02",
+          "slide": 7,
+          "text": "Acceleration enabled is a configuration signal. Benchmark real transfers to measure the effect.",
+          "text_sha256": "263c6a96f603bf9df762106e85a7506a32ec0124fc8b76ac553aa971a6dd6693",
+          "canonical_text_sha256": "263c6a96f603bf9df762106e85a7506a32ec0124fc8b76ac553aa971a6dd6693",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09-s27-03",
+          "slide": 8,
+          "text": "A rise in four-oh-three or four-oh-four responses tells you where to investigate. Check the requester's permissions and exact key. For an absent key, S three can return four-oh-three rather than four-oh-four if the caller lacks ListBucket, so the status alone is not the root cause.",
+          "text_sha256": "d72037b50f723c6d934c4f78795e0b13d0c39407cd3234c9cdd153ae3b736139",
+          "canonical_text_sha256": "e3e67c3d6c83c4b8019e20454b28f447d14dc2962f9696b2f9d49163edd20aae",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09-s28-01",
+          "slide": 9,
+          "text": "For a recent bucket-level usage check, use the free dashboard. Its console query window is fourteen days.",
+          "text_sha256": "e1d622c543ae8ff5afc812d35cfaafa0f466226ec8ebaed716f501fb49285972",
+          "canonical_text_sha256": "e1d622c543ae8ff5afc812d35cfaafa0f466226ec8ebaed716f501fb49285972",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09-s28-02",
+          "slide": 10,
+          "text": "For a longer console comparison or detailed activity and status metrics, consider Advanced. It supports fifteen months of queries, optional features such as publishing to CloudWatch, and richer prefix reporting. Prefix-level Storage Lens metrics themselves aren't published to CloudWatch.",
+          "text_sha256": "357fafd4607628f27b5454ce454618f623aa2deb2b3c10ff559bedac391f2ca0",
+          "canonical_text_sha256": "71dbb03d750abf10766d08613f0e6609e6460c63f617f820200418594bda22a2",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09-s28-03",
+          "slide": 11,
+          "text": "Retained for fifteen months doesn't mean you can query fifteen months in the free dashboard.",
+          "text_sha256": "46d3b8f2d94060b48b69a897a808ab85282c45878b46620cb31e952a2bafcbbb",
+          "canonical_text_sha256": "0b38f0c2220e14d868c371e7e7205f9e63cfaf2896d48efbdeb44e37447d59c3",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        }
+      ]
+    }
+  ]
+}
