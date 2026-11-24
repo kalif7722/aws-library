@@ -1,0 +1,56 @@
+name: SAP M12 P17–18 + M13 P01–03 expressive Andrew review
+on:
+  push:
+    branches: [review/sap-expressive-andrew-m12p17-m13p03]
+    paths: [.github/workflows/review-sap-expressive-andrew-m12p17-m13p03.yml, scripts/review_sap_expressive_andrew_m12p17_m13p03.py, content/video-narration/review-sap-expressive-andrew-m12p17-m13p03.json, content/video-narration/review-sap-expressive-andrew-m12p17-m13p03.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-expressive-andrew-m12p17-m13p03-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-expressive-andrew-m12p17-m13p03'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m12p17, m12p18, m13p01, m13p02, m13p03]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_expressive_andrew_m12p17_m13p03.py
+            content/video-narration/review-sap-expressive-andrew-m12p17-m13p03.json
+            content/video-narration/review-sap-expressive-andrew-m12p17-m13p03.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_expressive_andrew_m12p17_m13p03.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned edge-tts
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          for attempt in 1 2; do
+            if timeout 75s python -m pip install --disable-pip-version-check --timeout 15 --retries 1 'edge-tts==7.3.1'; then
+              break
+            fi
+            if [ "$attempt" -eq 2 ]; then exit 1; fi
+            sleep 3
+          done
+          python -c 'from importlib.metadata import version; v = version("edge-tts"); assert v == "7.3.1", v; print("edge-tts", v)'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_expressive_andrew_m12p17_m13p03.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-expressive-andrew-m12p17-m13p03-${{ matrix.part }}-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
