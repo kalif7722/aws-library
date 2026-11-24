@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "m09p01-sap-m09-p01-aip-style",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "3": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "4": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "5": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "6": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "7": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217",
+        "8": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217",
+        "9": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-01",
+          "slide": 1,
+          "text": "Imagine a shop needs to store product photos, backups, and order records. We'll use Amazon S three to decide how to store them, coordinate updates, and control who can read them. Start with the bucket: it lives in one A W S Region and holds objects.",
+          "text_sha256": "24d96145394ab9ee51ed57e4d7b2b670e023db572a6bc10907daa3a7e1d55ead",
+          "canonical_text_sha256": "5f83cffefde00a3dba92ed1c78c7140f13a01b628418932bbaa43c0b284afe99",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-02",
+          "slide": 2,
+          "text": "The photo example shows what makes up an object: its key, its bytes, metadata such as the content type, and a storage class. The key images slash logo dot P N G is one name. The slash can look like a folder, but the application asks S three for the exact key.",
+          "text_sha256": "b4c6bd8b7580ebcc539654ba972361e297b86fa278388b838bef3476b361cae1",
+          "canonical_text_sha256": "5f6d2a5b7101d403c697630df34a4f8955b17af4a4ed1b3f1cbb070bcc1ca611",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-03",
+          "slide": 3,
+          "text": "Product photos, backups, and data lake files fit that object interface. A photo opened every day and a copy hardly ever retrieved have different storage class needs. But choose the interface first: use file or block storage when the application needs a mounted file system or in-place disk writes.",
+          "text_sha256": "665c32ce47ec32bd331026dc7d2c70a8fe24470330915a61ab472a33f344cd78",
+          "canonical_text_sha256": "665c32ce47ec32bd331026dc7d2c70a8fe24470330915a61ab472a33f344cd78",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-04",
+          "slide": 4,
+          "text": "Now the order system writes orders slash one zero zero one dot Jason. The put has to succeed before we count on the new record. The next step is checking what another worker can see after that write completes.",
+          "text_sha256": "79bd18d50946a7b677ea0d1da93d5301a2927d50a3944c321c024e666319e0f6",
+          "canonical_text_sha256": "5770ff43c3f7d0a853f3a7c2cfa75841ac3597dc3a72c361faf857bfc218a0f0",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-05",
+          "slide": 5,
+          "text": "A later get reads the completed change, and list reflects it, too. That's strong consistency. It covers overwrites and deletes, but doesn't make an application read and its later write one atomic operation.",
+          "text_sha256": "6ad72b6bb2e4af83906b0e6e095261167f0d7e6f264b61f33fc0195866372fc5",
+          "canonical_text_sha256": "1de78da441fcde0ea1934fc1bb2a0a19eafc74edee2d93728d68e60ca63e3427",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-06",
+          "slide": 6,
+          "text": "Two workers can read the same version and race to replace it. Use a conditional write to require a matching E tag, then handle the conflict. Versioning helps recover earlier copies; it doesn't choose the right update or make several object writes one atomic transaction.",
+          "text_sha256": "0d5133d201084794facaef49a17eb3ff31d3e8b2776b30ccb92746ece2b83105",
+          "canonical_text_sha256": "522e2ff5e8e9c27e680090aac12fe333e754daccc34aaa6717e7f9d1a2b9cd9e",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-07",
+          "slide": 7,
+          "text": "Now suppose a reporting role needs to read an order another team uploaded. Ask who is actually making the request. The role's identity policy can grant the needed action on that specific object instead of opening the entire bucket.",
+          "text_sha256": "7dc18205492a727b8ca26b617cf43c2c42054583298245b9cf09e06080760591",
+          "canonical_text_sha256": "7dc18205492a727b8ca26b617cf43c2c42054583298245b9cf09e06080760591",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-08",
+          "slide": 8,
+          "text": "The bucket or access point policy adds resource-side rules. A cross-account request generally needs permission on both sides. If an applicable rule explicitly denies the action, a separate allow won't fix it.",
+          "text_sha256": "5a5609808cd67a231ac00f957d67c51cd7d022af789b2809006a63089e608da4",
+          "canonical_text_sha256": "5a5609808cd67a231ac00f957d67c51cd7d022af789b2809006a63089e608da4",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-09",
+          "slide": 9,
+          "text": "Bucket owner enforced is a separate choice: it turns off A C Ls and gives ownership of uploaded objects to the bucket owner. That doesn't grant read access by itself. If you get Access Denied, identify the actual caller, action, resource, and effective policies before widening access.",
+          "text_sha256": "72d552fcda112e0670063371e41c1dcf134e7d93d274b6209ff0a19a8888ff51",
+          "canonical_text_sha256": "4702abd6f9f50b695fbfa1c7dc2d9a7e51fecb98170462b95b6d89203e009971",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    }
+  ]
+}
