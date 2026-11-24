@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "04",
+      "revision": "2026-11-24-m13p04-andrew-expressive",
+      "approved_assets": {
+        "1": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403",
+        "2": "c78f9e39811c328c1445f412697a59c91f513723889fed3dcabd0c5db2c57851"
+      },
+      "units": [
+        {
+          "id": "m13p04-andrew-exp-s01-c1-310e26d51dfb",
+          "slide": 1,
+          "text": "The function must reach a private database. Attach it to the customer V P C so traffic can use the private path. Check the network rules and the database login separately; reaching its port does not log the function in.",
+          "text_sha256": "310e26d51dfbc4f0fcd1f781e840f81d41b51457145f554c1b8c666448111133",
+          "canonical_text_sha256": "8f81dcbfb437b85cd56bc7c1cb76c1fd2760b10ddd7f32adfd74e3cf2924a4a1",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-andrew-exp-s01-c2-6050893fefe1",
+          "slide": 1,
+          "text": "Now send traffic to the public internet. The private subnet needs a route through the appropriate nat path. Putting the function in a public subnet does not give it a public I P.",
+          "text_sha256": "6050893fefe1a3a743cd22c161f7c2fdfb9ae0fd341c63cdffc804d8b1d2d91d",
+          "canonical_text_sha256": "746050a4cdec8a483c5366ffdf39ceffcdffc652919322078a34f9f9e1693ba9",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-andrew-exp-s01-c3-9523f0bf04e0",
+          "slide": 1,
+          "text": "An endpoint can provide a private route to supported A W S services. If the function times out, check the intended route, D N S, addresses and security rules for that destination instead of assuming all egress goes the same way.",
+          "text_sha256": "9523f0bf04e0bd31f70c774f5d11352d421700e9c3ba7f001549ef0b074ace49",
+          "canonical_text_sha256": "b51ed7d9124c0416128387aef6afbfc1038a2a181265c394fd07572228cd371b",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-andrew-exp-s02-c1-885634497d52",
+          "slide": 2,
+          "text": "The external A P I allows requests from a known I P version four address. Route the Lambda subnet's public egress to a public nat gateway with an Elastic I P. The external A P I sees that address, not a public I P on the function.",
+          "text_sha256": "885634497d52b0dcc20a3ed049b531c1e20f511bafe43c8b0279a27a30dc685e",
+          "canonical_text_sha256": "c1f41291de624e8beb21d13f26ca89d309ac9d55432801d2345ff949a38695b9",
+          "asset_sha256": "c78f9e39811c328c1445f412697a59c91f513723889fed3dcabd0c5db2c57851"
+        },
+        {
+          "id": "m13p04-andrew-exp-s02-c2-8f2e31115bb5",
+          "slide": 2,
+          "text": "If you use multiple nat gateways for resilience, allowlist each possible public address and check the route from every intended subnet. Count the gateway and processing costs, too.",
+          "text_sha256": "8f2e31115bb54446459d502ad411e55e74fa894ecd2d106931a8ac63a8dc24dd",
+          "canonical_text_sha256": "1465a4bd055666d48850faed74d52690ec3d154bf4abd5aaadb8d8f78f024bef",
+          "asset_sha256": "c78f9e39811c328c1445f412697a59c91f513723889fed3dcabd0c5db2c57851"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "05",
+      "revision": "2026-11-24-m13p05-andrew-expressive",
+      "approved_assets": {
+        "1": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b",
+        "2": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b",
+        "3": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab",
+        "4": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+      },
+      "units": [
+        {
+          "id": "m13p05-andrew-exp-s01-c1-a5249d27a614",
+          "slide": 1,
+          "text": "The app calls Lambda synchronously and waits. The function writes the order, but the response is lost. From the timeout alone, the caller cannot know whether that write happened.",
+          "text_sha256": "a5249d27a614b086f99d0e5bf92355e7f74db251135d9c0593ecb4d5fc1f574d",
+          "canonical_text_sha256": "a5249d27a614b086f99d0e5bf92355e7f74db251135d9c0593ecb4d5fc1f574d",
+          "asset_sha256": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s01-c2-d4c692e47d51",
+          "slide": 1,
+          "text": "If the caller retries, reuse the same idempotency key. Check or record the earlier result with the write so one business request does not create two orders.",
+          "text_sha256": "d4c692e47d511a7192389be183e553b039a1f18df496585c334bd74ffb94da75",
+          "canonical_text_sha256": "d4c692e47d511a7192389be183e553b039a1f18df496585c334bd74ffb94da75",
+          "asset_sha256": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s01-c3-712e4f09d604",
+          "slide": 1,
+          "text": "A successful transport response can still carry a function error. Check the response and logs, and use bounded backoff with jitter only for retryable cases. Don't assume Lambda retries a direct synchronous call for the client.",
+          "text_sha256": "712e4f09d6040b3467375b78d8903729b9d07f1c118103603eedaa6f569b3e6c",
+          "canonical_text_sha256": "712e4f09d6040b3467375b78d8903729b9d07f1c118103603eedaa6f569b3e6c",
+          "asset_sha256": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s02-c1-b6ba16b4b931",
+          "slide": 2,
+          "text": "EventBridge can deliver an event to Lambda and get acceptance before the handler runs. That means the event entered the asynchronous path, not that the order is already in the database.",
+          "text_sha256": "b6ba16b4b93198573942a6a1fa7776a5c79efdab60f71af7b637b547dd5fe917",
+          "canonical_text_sha256": "b6ba16b4b93198573942a6a1fa7776a5c79efdab60f71af7b637b547dd5fe917",
+          "asset_sha256": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s02-c2-3de6d27c1483",
+          "slide": 2,
+          "text": "If the handler fails, Lambda makes two additional attempts by default for function errors. Throttling and service errors can follow a different retry path within the allowed event age. Check actual execution and the recorded business result.",
+          "text_sha256": "3de6d27c1483c620885d5d72a0d6b3606d840ef04a18c937be83de37c6652538",
+          "canonical_text_sha256": "3de6d27c1483c620885d5d72a0d6b3606d840ef04a18c937be83de37c6652538",
+          "asset_sha256": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s02-c3-7c059281a5c4",
+          "slide": 2,
+          "text": "Check the sender's delivery status separately from Lambda's processing evidence. Use the event identity to make a duplicate safe, and verify your configured failure destination or dead-letter queue after retries expire.",
+          "text_sha256": "7c059281a5c49ae290caddd8394e8add97eb2d09308954f3d885c038ee9a4cef",
+          "canonical_text_sha256": "7c059281a5c49ae290caddd8394e8add97eb2d09308954f3d885c038ee9a4cef",
+          "asset_sha256": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b"
+        },
+        {
+          "id": "m13p05-andrew-exp-s03-c1-6ec30faa4ace",
+          "slide": 3,
+          "text": "When an asynchronous attempt finishes, a configured destination can receive an invocation record for success or failure. That record includes context about what Lambda tried and how it ended.",
+          "text_sha256": "6ec30faa4ace1c77f40d6ae4e439e03bdefd59490526cf4edebd882fc667e5f6",
+          "canonical_text_sha256": "6ec30faa4ace1c77f40d6ae4e439e03bdefd59490526cf4edebd882fc667e5f6",
+          "asset_sha256": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab"
+        },
+        {
+          "id": "m13p05-andrew-exp-s03-c2-7a4860af449a",
+          "slide": 3,
+          "text": "A dead-letter queue is different. It retains the original event after failure, not the full invocation record. Choose based on the evidence or replay input you need.",
+          "text_sha256": "7a4860af449a2ba58bdb480d42b2b35a6096bfa66035f5c649056add3a37e075",
+          "canonical_text_sha256": "7a4860af449a2ba58bdb480d42b2b35a6096bfa66035f5c649056add3a37e075",
+          "asset_sha256": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab"
+        },
+        {
+          "id": "m13p05-andrew-exp-s03-c3-153e9471c3f8",
+          "slide": 3,
+          "text": "Check which targets support the outcome you want. S three is supported for asynchronous failure destinations only. An S N S destination can reject an invocation record that exceeds its limit, even if Lambda accepted the original event.",
+          "text_sha256": "153e9471c3f89a5ff756cac7b239111e169f2c480337c341e63c9c79c7b6223a",
+          "canonical_text_sha256": "1ddfe038a49ec2d830e11fcdb6ced5d6fb76404f4a686077d66420f2be91944c",
+          "asset_sha256": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab"
+        },
+        {
+          "id": "m13p05-andrew-exp-s03-c4-49f48fb62448",
+          "slide": 3,
+          "text": "Give Lambda permission to deliver to the target and monitor delivery failures. A function reaching its retry limit does not prove its failure record arrived.",
+          "text_sha256": "49f48fb624489fcec8b7bee3fc99b41f9f18ba73b2e9683f26c6661d23332860",
+          "canonical_text_sha256": "49f48fb624489fcec8b7bee3fc99b41f9f18ba73b2e9683f26c6661d23332860",
+          "asset_sha256": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab"
+        },
+        {
+          "id": "m13p05-andrew-exp-s04-c1-59058253ef40",
+          "slide": 4,
+          "text": "An event source mapping polls S Q S and invokes the handler with a batch. A failed message can become visible again. With configured partial batch response, report only the failures so successes need not be retried with them.",
+          "text_sha256": "59058253ef400d95c52499f06f4282a056c09c8eefb750c675b8a3a0b20ad3ca",
+          "canonical_text_sha256": "6043817096ae75e2a8cc1cd476fab46f6ce230a8d1ee79417bf46741026fc268",
+          "asset_sha256": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+        },
+        {
+          "id": "m13p05-andrew-exp-s04-c2-35f2471c7a27",
+          "slide": 4,
+          "text": "Kinesis works differently. The poller tracks a stream position. A failed record or batch can hold up progress at that position, depending on the retry and batch settings. Make consumer writes safe to repeat.",
+          "text_sha256": "35f2471c7a2706f84cdcb5c13099bf2dfa46cdd85ac2f358f1ef7038a6a10496",
+          "canonical_text_sha256": "35f2471c7a2706f84cdcb5c13099bf2dfa46cdd85ac2f358f1ef7038a6a10496",
+          "asset_sha256": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+        },
+        {
+          "id": "m13p05-andrew-exp-s04-c3-1d0da1b375bd",
+          "slide": 4,
+          "text": "Tune batch size, concurrency and applicable retry controls for the particular source. The poller path is not Lambda's separate asynchronous invocation queue.",
+          "text_sha256": "1d0da1b375bd917019b5a2a6035f334a9f378c3fb8e988a218ec726d9708b5ab",
+          "canonical_text_sha256": "1d0da1b375bd917019b5a2a6035f334a9f378c3fb8e988a218ec726d9708b5ab",
+          "asset_sha256": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "06",
+      "revision": "2026-11-24-m13p06-andrew-expressive",
+      "approved_assets": {
+        "1": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830",
+        "2": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b",
+        "3": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+      },
+      "units": [
+        {
+          "id": "m13p06-andrew-exp-s01-c1-ba9e5dadb097",
+          "slide": 1,
+          "text": "An image arrives under the input prefix. The event triggers the function, which saves the thumbnail under an output prefix. If both are in one bucket, keep outputs out of the triggering filter so a thumbnail doesn't trigger another thumbnail.",
+          "text_sha256": "ba9e5dadb0970a43be15e7b758b24b177d91020a09155c8a09d07a805edbd2aa",
+          "canonical_text_sha256": "ba9e5dadb0970a43be15e7b758b24b177d91020a09155c8a09d07a805edbd2aa",
+          "asset_sha256": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830"
+        },
+        {
+          "id": "m13p06-andrew-exp-s01-c2-90e727c89b7c",
+          "slide": 1,
+          "text": "Use a deterministic output key and safe repeated metadata updates. If the thumbnail is written but the metadata write fails, retry or reconcile the missing record. One success does not prove both writes completed.",
+          "text_sha256": "90e727c89b7cc02fcd4464f06df17b2312984b393f79e8cdeddb560aa30fd9cf",
+          "canonical_text_sha256": "90e727c89b7cc02fcd4464f06df17b2312984b393f79e8cdeddb560aa30fd9cf",
+          "asset_sha256": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830"
+        },
+        {
+          "id": "m13p06-andrew-exp-s02-c1-b178943f42b6",
+          "slide": 2,
+          "text": "The clock triggers EventBridge Scheduler at the configured time. The scheduler's execution role must be allowed to invoke the intended qualified Lambda target. Check the time zone and flexible window setting.",
+          "text_sha256": "b178943f42b6ec99fbc5cfcfd5837ecb35ec7ed20dea90ec53ab6f620ab08faf",
+          "canonical_text_sha256": "b178943f42b6ec99fbc5cfcfd5837ecb35ec7ed20dea90ec53ab6f620ab08faf",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-andrew-exp-s02-c2-9e572cc610d9",
+          "slide": 2,
+          "text": "Scheduler retries and its dead-letter queue address delivery failure. If the target accepts the call, this gate can succeed even though the actual job later fails.",
+          "text_sha256": "9e572cc610d9d2ba0e7901aa1a463d07845c9e55fef22f79b15b303c1532c48b",
+          "canonical_text_sha256": "9e572cc610d9d2ba0e7901aa1a463d07845c9e55fef22f79b15b303c1532c48b",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-andrew-exp-s02-c3-41e3f6edad14",
+          "slide": 2,
+          "text": "Open the function's execution evidence and verify the expected result. Make the job safe to repeat, because a schedule firing is not proof of one successful business action.",
+          "text_sha256": "41e3f6edad145b5c1d77a8c4b2d147c010600e4d95b2a8563d5b6eee0ae2b599",
+          "canonical_text_sha256": "41e3f6edad145b5c1d77a8c4b2d147c010600e4d95b2a8563d5b6eee0ae2b599",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-andrew-exp-s03-c1-5bfc4860d029",
+          "slide": 3,
+          "text": "One message must reach several consumers. S N S can fan it out to independent subscriptions with low delivery delay. Each consumer still needs its own failure handling.",
+          "text_sha256": "5bfc4860d02933e3263f4af230923d6312d76ea1300cd069d32a97ad6b9f03a1",
+          "canonical_text_sha256": "d546186dcd53c0c7542dc65910acacdcd1625da483cf3db9ea0e9d957ffdb3ce",
+          "asset_sha256": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+        },
+        {
+          "id": "m13p06-andrew-exp-s03-c2-756190297a76",
+          "slide": 3,
+          "text": "If the work arrives faster than the consumer can handle, add S Q S. The poller can process it at a controlled pace. Accept some queue delay and design retention, retries and idempotency.",
+          "text_sha256": "756190297a761b3d221825f25670e447f8bb01514dc4be384c61606d6cdff26c",
+          "canonical_text_sha256": "f23783ed53b10c54d6de6696ad414e6b3347d84c19dcfef67bed8e6b9ccb79b1",
+          "asset_sha256": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "07",
+      "revision": "2026-11-24-m13p07-andrew-expressive",
+      "approved_assets": {
+        "1": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d",
+        "2": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+      },
+      "units": [
+        {
+          "id": "m13p07-andrew-exp-s01-c1-6e7ea540dfd3",
+          "slide": 1,
+          "text": "First ask how the work starts. A synchronous caller waits. An asynchronous caller hands off the event. A mapping polls or reads a source and invokes the function with records. These don't have the same retry and timeout contracts.",
+          "text_sha256": "6e7ea540dfd3057043df52f46eb77623a6121da77d0c45e8b1f979295011e796",
+          "canonical_text_sha256": "6e7ea540dfd3057043df52f46eb77623a6121da77d0c45e8b1f979295011e796",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-andrew-exp-s01-c2-caaf1fdf9d33",
+          "slide": 1,
+          "text": "On-demand Event Functions support up to thirty minutes per invocation. Check the caller or integration timeout separately; a client may stop waiting sooner.",
+          "text_sha256": "caaf1fdf9d33b57f8356258f934c10afc17c2a0478347b8b90189031a19101da",
+          "canonical_text_sha256": "caaf1fdf9d33b57f8356258f934c10afc17c2a0478347b8b90189031a19101da",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-andrew-exp-s01-c3-87e92c4a1fad",
+          "slide": 1,
+          "text": "Managed Instances support up to thirty minutes for synchronous invocations and up to ninety for eligible asynchronous or mapped work. Amazon M Q and Document D B mappings retain the shorter fifteen-minute limit.",
+          "text_sha256": "87e92c4a1fad6980b079e48fb2628a8517695d52c095fcb9fc117e746e1d3a37",
+          "canonical_text_sha256": "f55959395cb0bc6c9527ed6eddbea64977205a04ec3b2efb1de141857e0da1ff",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-andrew-exp-s01-c4-1158f6db2cb2",
+          "slide": 1,
+          "text": "A durable workflow can checkpoint and resume instead of holding one execution open. Direct asynchronous durable execution can span up to a year; synchronous and mapped paths have tighter limits. Pick the trigger and execution contract together.",
+          "text_sha256": "1158f6db2cb2a0434dbd9bc4b41c088c33e1fe6b9ef5ea2e00e76b1943eb35f9",
+          "canonical_text_sha256": "1158f6db2cb2a0434dbd9bc4b41c088c33e1fe6b9ef5ea2e00e76b1943eb35f9",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-andrew-exp-s01-c5-807415228f27",
+          "slide": 1,
+          "text": "Web Functions follow an H T T P request contract, up to fifteen minutes per request. Do not use the Event Function maximum to size that path.",
+          "text_sha256": "807415228f277d986877d3e4b490feac8a97cafddf3cd238cd59000e13b156af",
+          "canonical_text_sha256": "3d614707e2aa1594f1b30a468df022b6b9b24e36ac62b6322413af2d69b81a1a",
+          "asset_sha256": "2254431eb91180546ca17671b7c568bb0be97a6f1a1876f72a714949521dab4d"
+        },
+        {
+          "id": "m13p07-andrew-exp-s02-c1-3b233ded0b29",
+          "slide": 2,
+          "text": "Who may call this function or alias? Check the source and invocation authorization first. A valid application role inside the function cannot fix an unauthorized caller.",
+          "text_sha256": "3b233ded0b299e03687c910c290cde99c04784d82abac80381b510a9a91f8e32",
+          "canonical_text_sha256": "3b233ded0b299e03687c910c290cde99c04784d82abac80381b510a9a91f8e32",
+          "asset_sha256": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+        },
+        {
+          "id": "m13p07-andrew-exp-s02-c2-f5f20b4d8663",
+          "slide": 2,
+          "text": "Once the function runs, its execution role controls access to S three, Dynamo D B or Secrets Manager. Giving callers invoke access does not give the handler permission to read those resources.",
+          "text_sha256": "f5f20b4d8663cf9f5c8da776dd0938d08881f8748f1c7c976430c0c307fd37bb",
+          "canonical_text_sha256": "7ba34e8899dced3278bc7c15c7aae80c9c894b5d5dbde6e8253c27ac5e3f7286",
+          "asset_sha256": "a69da7e95455490ca61daf64483900ad0253b997bd9d02b3ce9328a3e7f8f9d2"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "08",
+      "revision": "2026-11-24-m13p08-andrew-expressive",
+      "approved_assets": {
+        "1": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867",
+        "2": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39",
+        "3": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62",
+        "4": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+      },
+      "units": [
+        {
+          "id": "m13p08-andrew-exp-s01-c1-3f92ddbdb89f",
+          "slide": 1,
+          "text": "A client sends a request to A P I Gateway. The route and authorization decide if it can continue, then the configured integration calls Lambda or another supported backend.",
+          "text_sha256": "3f92ddbdb89f97cf9fd21dbb348a1a6ef5d3199dad7999de6467b7593d53edbe",
+          "canonical_text_sha256": "f1784f4f1bd05fc3746952a2d9f1b347eecb1dfa7614f14a13aaabf4a051a946",
+          "asset_sha256": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867"
+        },
+        {
+          "id": "m13p08-andrew-exp-s01-c2-5e2872a76cc9",
+          "slide": 1,
+          "text": "Check the A P I type, authorization, throttle policy and request limits before designing the backend call. A managed front door doesn't remove backend permissions or integration limits.",
+          "text_sha256": "5e2872a76cc9f3495b243d6ee82eff4438d769bf303a2e74849d8dbf82fb6c3a",
+          "canonical_text_sha256": "7937c27d47d68ce25dab532f4d98d89c49989fb17f365821b856383e66383dd5",
+          "asset_sha256": "65949cb51cca7580945ab6a6c7490db52dd04d1160a6aceb916bab0469522867"
+        },
+        {
+          "id": "m13p08-andrew-exp-s02-c1-2946b96c12f7",
+          "slide": 2,
+          "text": "If the app needs features such as request validation, usage plans, private A P I endpoints or waff integration as shown, evaluate a REST A P I. Choose it because you need the feature, not just because the client uses H T T P.",
+          "text_sha256": "2946b96c12f7f034b7926a3e9c37eb79cfa113a3c15b54501d236b43d6cbd9b2",
+          "canonical_text_sha256": "f01ba804d77d27b79fa6ebc81b033c37afa3dbc53c7095bc40b16cb3b8ed8cbf",
+          "asset_sha256": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39"
+        },
+        {
+          "id": "m13p08-andrew-exp-s02-c2-0b645a770b94",
+          "slide": 2,
+          "text": "If the app only needs a lighter request path with its supported routing and authorization, consider H T T P A P I. Check the required management features rather than assuming it offers the same set as REST.",
+          "text_sha256": "0b645a770b94dec9ec3dec02adb578ead3d38f76495458254660f9c94cb46e51",
+          "canonical_text_sha256": "cd475fba59d124a5cebbb004a29c383f9efe252d620d4d1cbf12e32039d4c713",
+          "asset_sha256": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39"
+        },
+        {
+          "id": "m13p08-andrew-exp-s02-c3-291d19b92313",
+          "slide": 2,
+          "text": "For chat or live updates over a persistent two-way connection, consider WebSocket A P I. The application still handles its connection lifecycle and routes each relevant message.",
+          "text_sha256": "291d19b92313e4f8a516993351073c08a69efacc16ebf2993da83fd237820342",
+          "canonical_text_sha256": "e7cbe36942b7226c8ecf345902fa8c4c5b85275884c353f879465ab8fb1a1685",
+          "asset_sha256": "4f4505d4590b3e9d5f24f5c8faa80e9707bb083f6df5f4dd0fe0c182ed1aee39"
+        },
+        {
+          "id": "m13p08-andrew-exp-s03-c1-da8e0c7b3d45",
+          "slide": 3,
+          "text": "Pick a Lambda proxy, a supported A W S service action, or a supported H T T P backend according to what the route must do. That choice determines how the request gets translated and how errors return to the client.",
+          "text_sha256": "da8e0c7b3d45a3c524895693645828c56e1a10447a66bc7479dd706d172e294c",
+          "canonical_text_sha256": "75eaf61c79f56c07257610db7e18df3748a9b985ad3265442d8cdd43a332291b",
+          "asset_sha256": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62"
+        },
+        {
+          "id": "m13p08-andrew-exp-s03-c2-760ae79136d6",
+          "slide": 3,
+          "text": "Check payload mapping, backend authorization and network reachability independently. OpenAPI can describe the interface, but it does not grant A P I Gateway backend access.",
+          "text_sha256": "760ae79136d6bfad43d0167b059b20550e5a2ab4867ab2cbbe4f01e028ea4114",
+          "canonical_text_sha256": "320c1537992829ba523ebdc8daaa52eabb606217ae100f6c5a39af707d91a103",
+          "asset_sha256": "7f1ac74d684ddfff260b33ce241eee2acce765ca31e474cf561539b5509d2d62"
+        },
+        {
+          "id": "m13p08-andrew-exp-s04-c1-3bb37c0e0a6b",
+          "slide": 4,
+          "text": "If Lambda only forwards the request to S Q S unchanged, the function adds another component to pay for and operate. Ask whether the integration can already perform the enqueue operation.",
+          "text_sha256": "3bb37c0e0a6b40acdf9034872db9aeaca9de1b88fcddbf593eddbecdecb6a3bc",
+          "canonical_text_sha256": "242985f8605cf2d70ae06e75e4e055d8380f78bf7ac6220f96d7f31595338f02",
+          "asset_sha256": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+        },
+        {
+          "id": "m13p08-andrew-exp-s04-c2-ee26c4c5581c",
+          "slide": 4,
+          "text": "Use the supported A P I Gateway to S Q S integration and a scoped role when it meets the contract. Map and validate the input, then return an enqueue result. That response does not mean a worker has completed the job.",
+          "text_sha256": "ee26c4c5581c587e045690e43bf23023e4ebf93b2c3a37092baa876b92c78989",
+          "canonical_text_sha256": "54e5cbb0120e8f2ae7a176043383a5a501690a3d767a951fcfdaad6d5c3beebd",
+          "asset_sha256": "329a7df3b200227983afaacd33d99caafb343b18599252b9a993ab8dc029231c"
+        }
+      ]
+    }
+  ]
+}
