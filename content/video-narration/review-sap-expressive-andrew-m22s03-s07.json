@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "22",
+      "part": "03",
+      "revision": "2026-11-24-m22p03-andrew-expressive",
+      "approved_assets": {
+        "1": "431371b8abfefd2f2826f4bd9c45bbf0852fc46885d21d5df8f7aa18a63cadff",
+        "2": "341c08c03d771d69f344e79aef0bf3ca2cea74be80306e0d28a6dad479d1c55d",
+        "3": "36874fb89e8700cf492a3f30594faf66b906a3e6ff5e6577c15f1f67e0a9f7a2",
+        "4": "9547835b2b4575b1a26aa976d91b972bdb9cd6781e8cbf2467a198c0753f01d8"
+      },
+      "units": [
+        {
+          "id": "m22p03-andrew-exp-s01-c1-cf9e82d9c3ed",
+          "slide": 1,
+          "text": "Let's find the right evidence for an application error. A log group gathers streams, and each stream represents a source. Preserve that source when comparing records; don't assume CloudWatch supplies one ordered timeline across all streams.",
+          "text_sha256": "cf9e82d9c3edc15548842083aae97225b34accd15876ae6807cd2fde9aa89b79",
+          "canonical_text_sha256": "cf9e82d9c3edc15548842083aae97225b34accd15876ae6807cd2fde9aa89b79",
+          "asset_sha256": "431371b8abfefd2f2826f4bd9c45bbf0852fc46885d21d5df8f7aa18a63cadff"
+        },
+        {
+          "id": "m22p03-andrew-exp-s01-c2-5709b075d1c1",
+          "slide": 1,
+          "text": "Set retention to meet the investigation need without keeping data indefinitely by accident. Verify encryption and access separately. Once required records expire, a later query can't recover them from that group.",
+          "text_sha256": "5709b075d1c1d8aec60aee9edbd5fcba5439c4228978f8408383069c52117df5",
+          "canonical_text_sha256": "5709b075d1c1d8aec60aee9edbd5fcba5439c4228978f8408383069c52117df5",
+          "asset_sha256": "431371b8abfefd2f2826f4bd9c45bbf0852fc46885d21d5df8f7aa18a63cadff"
+        },
+        {
+          "id": "m22p03-andrew-exp-s02-c1-91e149072605",
+          "slide": 2,
+          "text": "A metric filter can turn matching newly ingested error events into a metric that an alarm can use. Test against the actual record format. If the application changes its log format, the alarm can go quiet without the error disappearing.",
+          "text_sha256": "91e1490726055d61c3192db77c38acb9c0a3ded4397cba1692c211bffb7daf18",
+          "canonical_text_sha256": "91e1490726055d61c3192db77c38acb9c0a3ded4397cba1692c211bffb7daf18",
+          "asset_sha256": "341c08c03d771d69f344e79aef0bf3ca2cea74be80306e0d28a6dad479d1c55d"
+        },
+        {
+          "id": "m22p03-andrew-exp-s02-c2-b9e0994bf4d7",
+          "slide": 2,
+          "text": "Use Logs Insights to query the records for a particular time window and identify details such as status and request I D. That answers what happened in this incident; it is distinct from continuously publishing a metric.",
+          "text_sha256": "b9e0994bf4d713ac64e07fdfafc20360067c1f4434854113cc2e7ce74959ad5f",
+          "canonical_text_sha256": "e6a15334cb364aa7623b97aaf69ac07f9c3f1523411dccf0fc976d8aac8d09e9",
+          "asset_sha256": "341c08c03d771d69f344e79aef0bf3ca2cea74be80306e0d28a6dad479d1c55d"
+        },
+        {
+          "id": "m22p03-andrew-exp-s03-c1-840f7f436bc6",
+          "slide": 3,
+          "text": "A subscription sends new matching records for ongoing processing. An export task writes a selected historical time range to S three. Choose by latency and destination: a historical export is not a near-real-time feed, and a subscription does not normally backfill old records.",
+          "text_sha256": "840f7f436bc605481bde27a1354d979f67056e94cfad4846cb65b93d5317e361",
+          "canonical_text_sha256": "a959856220a93fc4e0bb1035f30d0beeb947018eeb20a4cc844d8cfa3eb6d428",
+          "asset_sha256": "36874fb89e8700cf492a3f30594faf66b906a3e6ff5e6577c15f1f67e0a9f7a2"
+        },
+        {
+          "id": "m22p03-andrew-exp-s03-c2-b73573515b90",
+          "slide": 3,
+          "text": "Check when the records become available and which permissions the destination needs. If an alert is delayed, verify ingestion and subscription output separately before blaming the downstream consumer.",
+          "text_sha256": "b73573515b90a8abc8e42b55565bb1247b24bb7b000428aca7a31e55b42d13c2",
+          "canonical_text_sha256": "b73573515b90a8abc8e42b55565bb1247b24bb7b000428aca7a31e55b42d13c2",
+          "asset_sha256": "36874fb89e8700cf492a3f30594faf66b906a3e6ff5e6577c15f1f67e0a9f7a2"
+        },
+        {
+          "id": "m22p03-andrew-exp-s04-c1-8654774d6a3a",
+          "slide": 4,
+          "text": "For the depicted cross-account subscriptions, the log group and its logical Logs destination must share a Region. The backing resource can be in a different Region where supported. The diagram uses regional destinations and then an explicit transport to the analytics layer.",
+          "text_sha256": "8654774d6a3a58d42186a75ce757510fa4ad28586615231d722f43a88e4aae36",
+          "canonical_text_sha256": "8654774d6a3a58d42186a75ce757510fa4ad28586615231d722f43a88e4aae36",
+          "asset_sha256": "9547835b2b4575b1a26aa976d91b972bdb9cd6781e8cbf2467a198c0753f01d8"
+        },
+        {
+          "id": "m22p03-andrew-exp-s04-c2-43fc3cb58fa7",
+          "slide": 4,
+          "text": "Allow only the approved source accounts in the destination policy, and give the delivery role only the required target access. Preserve source account and Region in the records so an analyst can interpret the combined view.",
+          "text_sha256": "43fc3cb58fa7b1b3609ec79a8e928147a74dab594fdda52893874d222c120949",
+          "canonical_text_sha256": "43fc3cb58fa7b1b3609ec79a8e928147a74dab594fdda52893874d222c120949",
+          "asset_sha256": "9547835b2b4575b1a26aa976d91b972bdb9cd6781e8cbf2467a198c0753f01d8"
+        }
+      ]
+    },
+    {
+      "module": "22",
+      "part": "04",
+      "revision": "2026-11-24-m22p04-andrew-expressive",
+      "approved_assets": {
+        "1": "aea73d5dd4c1eddea504e6f488a0e238b0fd4a8d12640238898229c62b01580b",
+        "2": "11985f3bd2303c2783d100180aa8235e7d2ae274cde7c3a4c8d8d9b267b3fdaa",
+        "3": "3625cd6dd21c2b8b326e36866b60769f88beaf8e8bab62f3ae74782af68358c0",
+        "4": "4dfb47772ffc0a2168f6588c1fb1f84d864b20737f36da50e8ea283fd243e20a"
+      },
+      "units": [
+        {
+          "id": "m22p04-andrew-exp-s01-c1-aa23ba6c66a3",
+          "slide": 1,
+          "text": "We'll diagnose whether a container or its host is under pressure. Task and service metrics describe the workload. For E C two-backed tasks you can also collect host telemetry; on Fargate you don't manage the host and should use supported task-level signals.",
+          "text_sha256": "aa23ba6c66a3c93191c80f35d434a90f6826bb1b8c38b0db9baaf98549ee9f01",
+          "canonical_text_sha256": "6b2077369f1873a7be6558651c9e4d297bed3a3c9894161d08197b524a2c6771",
+          "asset_sha256": "aea73d5dd4c1eddea504e6f488a0e238b0fd4a8d12640238898229c62b01580b"
+        },
+        {
+          "id": "m22p04-andrew-exp-s01-c2-ab8e0532e927",
+          "slide": 1,
+          "text": "Check the application log configuration and where those records arrive. Then inspect task or host metrics as appropriate. Enabling one doesn't prove the other is collected.",
+          "text_sha256": "ab8e0532e9273da8b60ab7814b24b96250f5b6b28f8f07ac580f07127ae38bce",
+          "canonical_text_sha256": "ab8e0532e9273da8b60ab7814b24b96250f5b6b28f8f07ac580f07127ae38bce",
+          "asset_sha256": "aea73d5dd4c1eddea504e6f488a0e238b0fd4a8d12640238898229c62b01580b"
+        },
+        {
+          "id": "m22p04-andrew-exp-s02-c1-a2e182141c6d",
+          "slide": 2,
+          "text": "The application emits traces, metrics and logs through appropriate instrumentation. An OpenTelemetry collector receives and can process them, then sends each to a configured compatible backend. Deploying a collector doesn't create application spans by itself.",
+          "text_sha256": "a2e182141c6d675aee3f995f4b16ebc3c0605111e5534a149fa1d4282d2e0c82",
+          "canonical_text_sha256": "a2e182141c6d675aee3f995f4b16ebc3c0605111e5534a149fa1d4282d2e0c82",
+          "asset_sha256": "11985f3bd2303c2783d100180aa8235e7d2ae274cde7c3a4c8d8d9b267b3fdaa"
+        },
+        {
+          "id": "m22p04-andrew-exp-s02-c2-2de20081a68e",
+          "slide": 2,
+          "text": "Verify each intended export separately. For new instrumentation use OpenTelemetry rather than assuming you need the legacy X-Ray S D K or daemon. X-Ray can still receive traces; its S D K and daemon maintenance is a different issue.",
+          "text_sha256": "2de20081a68ea263d3bab8f712ec35c075f407ea1b735a1027b18170f44a445b",
+          "canonical_text_sha256": "3d0ab43c056b862eef58db10c1f8b929418a2a2162a8a363d2339a2921485dba",
+          "asset_sha256": "11985f3bd2303c2783d100180aa8235e7d2ae274cde7c3a4c8d8d9b267b3fdaa"
+        },
+        {
+          "id": "m22p04-andrew-exp-s03-c1-a178cc39746f",
+          "slide": 3,
+          "text": "Follow one checkout request across its trace. The A P I calls payments, and payments calls the database. Look for the span that accounts for the longest wait instead of assuming the first service seen in the error owns the problem.",
+          "text_sha256": "a178cc39746f36f6e30141c79100c78076fe48db9d8836bf228df27d2f1b7878",
+          "canonical_text_sha256": "0f6299a147182901de691d25478f418b22d680a77b35c9251e42ca0c3b37c61c",
+          "asset_sha256": "3625cd6dd21c2b8b326e36866b60769f88beaf8e8bab62f3ae74782af68358c0"
+        },
+        {
+          "id": "m22p04-andrew-exp-s03-c2-273338b3a284",
+          "slide": 3,
+          "text": "The database wait is nested inside the payment span, not an extra duration to add to it. In this example it explains much of the slow path. Check database or connection evidence before scaling checkout.",
+          "text_sha256": "273338b3a2844b59bc59fd47a7e07a56f1f736bcff940106a674db77c2e6caac",
+          "canonical_text_sha256": "273338b3a2844b59bc59fd47a7e07a56f1f736bcff940106a674db77c2e6caac",
+          "asset_sha256": "3625cd6dd21c2b8b326e36866b60769f88beaf8e8bab62f3ae74782af68358c0"
+        },
+        {
+          "id": "m22p04-andrew-exp-s04-c1-0e9aea470072",
+          "slide": 4,
+          "text": "A trace map can show the downstream dependency failing while multiple upstream services report errors. Follow a trace and inspect the affected span to distinguish the first observed failure from its callers' symptoms.",
+          "text_sha256": "0e9aea470072208e73c6eecdf162d4b3b6cec770b58983b96fa7c8da7ba2def3",
+          "canonical_text_sha256": "0e9aea470072208e73c6eecdf162d4b3b6cec770b58983b96fa7c8da7ba2def3",
+          "asset_sha256": "4dfb47772ffc0a2168f6588c1fb1f84d864b20737f36da50e8ea283fd243e20a"
+        },
+        {
+          "id": "m22p04-andrew-exp-s04-c2-4515c0f49e6c",
+          "slide": 4,
+          "text": "Compare a failing trace with a successful trace for the same operation. Indexed annotations can help select the relevant set, while metadata adds context. Trace evidence can narrow the investigation without proving every request took the same path.",
+          "text_sha256": "4515c0f49e6c959260bb269a8e22822553920b3f81d25a10c154b798fe2c8e6c",
+          "canonical_text_sha256": "4515c0f49e6c959260bb269a8e22822553920b3f81d25a10c154b798fe2c8e6c",
+          "asset_sha256": "4dfb47772ffc0a2168f6588c1fb1f84d864b20737f36da50e8ea283fd243e20a"
+        }
+      ]
+    },
+    {
+      "module": "22",
+      "part": "05",
+      "revision": "2026-11-24-m22p05-andrew-expressive",
+      "approved_assets": {
+        "1": "58cbcfe5e18dd949736ff385add228c56cc36a20e6691346ed4de9b0e6626345",
+        "2": "505ca831bec07288a9a4931488ad468bcfb298956177a5918b89d954dd6fd983",
+        "3": "56d281afacb4cdbbfbb1d0535d392d1fc85b230ee26d276eba110ceb86a5fc07",
+        "4": "bbe96b799cade5963ca96fa9262ab1cdcf28aeb9f72d30bcd16330465497188b",
+        "5": "5605a6a8edc2093e321cbcc4f9f36f459f2c5eddee1af5da8e9c57b229ddd215"
+      },
+      "units": [
+        {
+          "id": "m22p05-andrew-exp-s01-c1-0d439e2fa1db",
+          "slide": 1,
+          "text": "We'll compare synthetic checks with actual user evidence. The canary runs a controlled journey, and this example fails at checkout before confirmation. A successful storefront check wouldn't tell us that the whole journey works.",
+          "text_sha256": "0d439e2fa1db1b83cd3f2e76fd24f97933466c31b2216b30c8f8769a140c4730",
+          "canonical_text_sha256": "0d439e2fa1db1b83cd3f2e76fd24f97933466c31b2216b30c8f8769a140c4730",
+          "asset_sha256": "58cbcfe5e18dd949736ff385add228c56cc36a20e6691346ed4de9b0e6626345"
+        },
+        {
+          "id": "m22p05-andrew-exp-s01-c2-2ecc4d7fbe21",
+          "slide": 1,
+          "text": "Inspect the recorded step, availability result and failure evidence. Use those to notify the owner. A canary only tests its configured path and conditions, so compare it with what users actually experienced.",
+          "text_sha256": "2ecc4d7fbe219ef12a644b681754ba400c9550601d6352cda1153874037ba752",
+          "canonical_text_sha256": "2ecc4d7fbe219ef12a644b681754ba400c9550601d6352cda1153874037ba752",
+          "asset_sha256": "58cbcfe5e18dd949736ff385add228c56cc36a20e6691346ed4de9b0e6626345"
+        },
+        {
+          "id": "m22p05-andrew-exp-s02-c1-048dad951548",
+          "slide": 2,
+          "text": "rum collects supported signals from real browser sessions. The slow experience for one device and location can exist even when a controlled canary passes. Segment the evidence before assuming every user has the same result.",
+          "text_sha256": "048dad951548dc2d4d9ba812e9826a9e9933f6d4e680c2787fe56e890e0629ae",
+          "canonical_text_sha256": "27a4f01e0e59c01d828686e74a19808e8da4a7c2fd8bb47548c540a2c7a913c6",
+          "asset_sha256": "505ca831bec07288a9a4931488ad468bcfb298956177a5918b89d954dd6fd983"
+        },
+        {
+          "id": "m22p05-andrew-exp-s02-c2-91f82fd6c722",
+          "slide": 2,
+          "text": "Set sampling and data-handling controls. Compare the controlled check with real-user results: one tests a repeatable path; the other helps show who is actually affected.",
+          "text_sha256": "91f82fd6c722ce3541020eed4d3004ed4934194a65206dbd972a3c51248e0bea",
+          "canonical_text_sha256": "91f82fd6c722ce3541020eed4d3004ed4934194a65206dbd972a3c51248e0bea",
+          "asset_sha256": "505ca831bec07288a9a4931488ad468bcfb298956177a5918b89d954dd6fd983"
+        },
+        {
+          "id": "m22p05-andrew-exp-s03-c1-58f5b5aa8e49",
+          "slide": 3,
+          "text": "Application Signals can surface service metrics for instrumented and enabled services. Start with request volume, errors and latency, then follow a slow or failing dependency. Don't assume every service is present without checking coverage.",
+          "text_sha256": "58f5b5aa8e4953ff31aa12b5ae7140f98331e989687ef7a8a3940762031b48c8",
+          "canonical_text_sha256": "58f5b5aa8e4953ff31aa12b5ae7140f98331e989687ef7a8a3940762031b48c8",
+          "asset_sha256": "56d281afacb4cdbbfbb1d0535d392d1fc85b230ee26d276eba110ceb86a5fc07"
+        },
+        {
+          "id": "m22p05-andrew-exp-s03-c2-4c7a4c465538",
+          "slide": 3,
+          "text": "Compare the measured checkout reliability with its service objective. A passing current measure doesn't eliminate the need to watch the remaining error budget. The target tells you which symptoms actually threaten the user-facing service.",
+          "text_sha256": "4c7a4c4655381128c59e7e8f60593b733066430590956bee47bad4c0b956866e",
+          "canonical_text_sha256": "4c7a4c4655381128c59e7e8f60593b733066430590956bee47bad4c0b956866e",
+          "asset_sha256": "56d281afacb4cdbbfbb1d0535d392d1fc85b230ee26d276eba110ceb86a5fc07"
+        },
+        {
+          "id": "m22p05-andrew-exp-s04-c1-3d62a48588b4",
+          "slide": 4,
+          "text": "The indicator measures which eligible outcomes were good. The objective defines the target over its agreed period. The error budget is what can go wrong while still meeting that target; it is not permission to ignore individual incidents.",
+          "text_sha256": "3d62a48588b4ae0bc73b219869eaac23622ee9a72f5183bcb839e94f6f67aad6",
+          "canonical_text_sha256": "3d62a48588b4ae0bc73b219869eaac23622ee9a72f5183bcb839e94f6f67aad6",
+          "asset_sha256": "bbe96b799cade5963ca96fa9262ab1cdcf28aeb9f72d30bcd16330465497188b"
+        },
+        {
+          "id": "m22p05-andrew-exp-s04-c2-8d8790397026",
+          "slide": 4,
+          "text": "At ninety-nine point nine percent on one million eligible requests, one thousand bad requests are allowed. With six hundred used, four hundred remain. A quickly rising error rate can consume that budget before the reporting window ends.",
+          "text_sha256": "8d879039702657423d584962ee7918d15c42b457a696404d766e18601cea8cd8",
+          "canonical_text_sha256": "8d879039702657423d584962ee7918d15c42b457a696404d766e18601cea8cd8",
+          "asset_sha256": "bbe96b799cade5963ca96fa9262ab1cdcf28aeb9f72d30bcd16330465497188b"
+        },
+        {
+          "id": "m22p05-andrew-exp-s05-c1-5fee61b1f215",
+          "slide": 5,
+          "text": "For this A P I, define the eligible operation and the success result first. Be explicit about which request types count and which are excluded. Otherwise different teams can report different reliability for the same path.",
+          "text_sha256": "5fee61b1f21544296aa859e60404888fac0e08e5889ae23f3d5a311ee73540ed",
+          "canonical_text_sha256": "791f6b0c8783e515debfaa7e55b683d11f09dfcb29dfe931752acb08da28c196",
+          "asset_sha256": "5605a6a8edc2093e321cbcc4f9f36f459f2c5eddee1af5da8e9c57b229ddd215"
+        },
+        {
+          "id": "m22p05-andrew-exp-s05-c2-eab1fa1cbf58",
+          "slide": 5,
+          "text": "In this example, a ninety-nine point nine percent objective on two hundred thousand requests permits two hundred failures. With one hundred failures, one hundred remain. If burn rises, inspect the covered operation and choose the appropriate response.",
+          "text_sha256": "eab1fa1cbf580c7510f2de20022d61cffc6568926f96abf7c56c48b53052a4da",
+          "canonical_text_sha256": "eab1fa1cbf580c7510f2de20022d61cffc6568926f96abf7c56c48b53052a4da",
+          "asset_sha256": "5605a6a8edc2093e321cbcc4f9f36f459f2c5eddee1af5da8e9c57b229ddd215"
+        }
+      ]
+    },
+    {
+      "module": "22",
+      "part": "06",
+      "revision": "2026-11-24-m22p06-andrew-expressive",
+      "approved_assets": {
+        "1": "e50bde17d50fb2b77992926ba5520a74e4b1e4fad132849605643877c3384e91",
+        "2": "1f8f04ce223f6cb2cc9b1ea8bbb6b321ee7d5bb186cc6df696176e8b64e706e4",
+        "3": "aa3258ac27588e851b4a75655fd34e3b2743986f73535fb068cf8488d7a5021b",
+        "4": "bbcf9a4b34f91d589816059dd9154b33f39be5a03b398055d449e93f19b86559"
+      },
+      "units": [
+        {
+          "id": "m22p06-andrew-exp-s01-c1-797f3ac7b5f5",
+          "slide": 1,
+          "text": "We'll trace an AI request and separate system health from answer quality. Invocation count, latency and errors help diagnose service behavior. A response can arrive quickly and still be unsupported or unsafe.",
+          "text_sha256": "797f3ac7b5f520870939e58e50df027896bc2bd272aa16818c3f84b47a004037",
+          "canonical_text_sha256": "797f3ac7b5f520870939e58e50df027896bc2bd272aa16818c3f84b47a004037",
+          "asset_sha256": "e50bde17d50fb2b77992926ba5520a74e4b1e4fad132849605643877c3384e91"
+        },
+        {
+          "id": "m22p06-andrew-exp-s01-c2-1c63e2b90804",
+          "slide": 1,
+          "text": "Collect representative quality and safety evidence. If logging model content is justified, restrict scope and retention; it needn't be enabled by default. Verify that a change improved the actual answer, not merely request latency.",
+          "text_sha256": "1c63e2b90804216eab9c254d76b2299b6fbff401ee7d00068057653d72d27321",
+          "canonical_text_sha256": "1c63e2b90804216eab9c254d76b2299b6fbff401ee7d00068057653d72d27321",
+          "asset_sha256": "e50bde17d50fb2b77992926ba5520a74e4b1e4fad132849605643877c3384e91"
+        },
+        {
+          "id": "m22p06-andrew-exp-s02-c1-49e81c573dab",
+          "slide": 2,
+          "text": "Follow the request across retrieval, the proposed action, review and the tool operation. Carry context so a later reviewer can connect the steps. An approval record is separate from a successful execution record.",
+          "text_sha256": "49e81c573dabb6b0f407261f4afd0bfaa12ac4c49538e91a35ca8533f5051834",
+          "canonical_text_sha256": "49e81c573dabb6b0f407261f4afd0bfaa12ac4c49538e91a35ca8533f5051834",
+          "asset_sha256": "1f8f04ce223f6cb2cc9b1ea8bbb6b321ee7d5bb186cc6df696176e8b64e706e4"
+        },
+        {
+          "id": "m22p06-andrew-exp-s02-c2-33a50ce593cc",
+          "slide": 2,
+          "text": "Keep a stable request identifier and the minimum approved audit fields. Redact sensitive tool inputs and outputs. A trace is evidence about what happened; it does not authorize a missing approval or recover an unrecorded decision.",
+          "text_sha256": "33a50ce593cc17e2d429a4e2d272c54312727202247d18229555113dd6b8cd4e",
+          "canonical_text_sha256": "33a50ce593cc17e2d429a4e2d272c54312727202247d18229555113dd6b8cd4e",
+          "asset_sha256": "1f8f04ce223f6cb2cc9b1ea8bbb6b321ee7d5bb186cc6df696176e8b64e706e4"
+        },
+        {
+          "id": "m22p06-andrew-exp-s03-c1-430b83e750ca",
+          "slide": 3,
+          "text": "When the alarm changes state, a matching event rule can route it to a scoped runbook. Decide ownership and response policy explicitly. If you need resource tags for routing, retrieve them as appropriate rather than assuming the alarm event contains them.",
+          "text_sha256": "430b83e750caf7ed65634a0c37567c1ab97870ef58eb18a6bfdee454afae4c2a",
+          "canonical_text_sha256": "430b83e750caf7ed65634a0c37567c1ab97870ef58eb18a6bfdee454afae4c2a",
+          "asset_sha256": "aa3258ac27588e851b4a75655fd34e3b2743986f73535fb068cf8488d7a5021b"
+        },
+        {
+          "id": "m22p06-andrew-exp-s03-c2-31af5f48703c",
+          "slide": 3,
+          "text": "Check the application health after the runbook. An alarm action only proves the workflow was invoked. If the resource remains unhealthy or the action isn't authorized, notify the owner instead of repeatedly expanding the response.",
+          "text_sha256": "31af5f48703ce695ae9b4a7d9b0f15c97c32d3b92b4b87eec010d9f2e2b7b436",
+          "canonical_text_sha256": "31af5f48703ce695ae9b4a7d9b0f15c97c32d3b92b4b87eec010d9f2e2b7b436",
+          "asset_sha256": "aa3258ac27588e851b4a75655fd34e3b2743986f73535fb068cf8488d7a5021b"
+        },
+        {
+          "id": "m22p06-andrew-exp-s04-c1-11ff11bb43d8",
+          "slide": 4,
+          "text": "A public A W S Health notice can describe a broader regional issue. It helps with awareness but doesn't establish that your individual resource was affected. Look for account-specific evidence before applying a targeted action.",
+          "text_sha256": "11ff11bb43d8f26c1827290f8e4c38f9e0c0dd9319dc3523d86fe67bbd6e4310",
+          "canonical_text_sha256": "00de854849b0ee9e40639857966870c5a665aac12dd0a9747d8e9d50ed29c7bd",
+          "asset_sha256": "bbcf9a4b34f91d589816059dd9154b33f39be5a03b398055d449e93f19b86559"
+        },
+        {
+          "id": "m22p06-andrew-exp-s04-c2-4cba88876944",
+          "slide": 4,
+          "text": "The maintenance event in the example names an affected resource. Verify the event, scope and resource list, then notify the accountable team. Treat the event Region and resource identity as separate details to check.",
+          "text_sha256": "4cba88876944cc5ea29acf1c17f37176cdae149c54059d1bfc57f584d2150774",
+          "canonical_text_sha256": "4cba88876944cc5ea29acf1c17f37176cdae149c54059d1bfc57f584d2150774",
+          "asset_sha256": "bbcf9a4b34f91d589816059dd9154b33f39be5a03b398055d449e93f19b86559"
+        }
+      ]
+    },
+    {
+      "module": "22",
+      "part": "07",
+      "revision": "2026-11-24-m22p07-andrew-expressive",
+      "approved_assets": {
+        "1": "9d48dc0bfa2915ae9af875ac490e01789a122510b350058a5c507fd98007478b",
+        "2": "ad77d585c1a1e24c8ef9585ec8c09d9b49d286c7d8c16bede994c0a93f9ed5c3",
+        "3": "3c8de3ef501d95fa7474e6a1a4d8a62aac6cbfd5e5e7345405cd95b108ce8832",
+        "4": "76b3d75d0e7e28902167ccdcf8ad2df03e1a7d45dacf21663a7f4c16961f3834"
+      },
+      "units": [
+        {
+          "id": "m22p07-andrew-exp-s01-c1-582b1c8c6f48",
+          "slide": 1,
+          "text": "We'll choose the narrowest Systems Manager capability for a fleet task. On E C two, use the appropriate attached role and managed node setup. For eligible non-E C two machines, use the approved hybrid activation path and managed node identity.",
+          "text_sha256": "582b1c8c6f48bf9615383c54dce4e23930005ae241b365aed06487e5f0e9c918",
+          "canonical_text_sha256": "0f7cb9016aaf21e4f10b6334cb6ce062f58124b42e48bf4e2e66524655af937d",
+          "asset_sha256": "9d48dc0bfa2915ae9af875ac490e01789a122510b350058a5c507fd98007478b"
+        },
+        {
+          "id": "m22p07-andrew-exp-s01-c2-7f4bae5ba43b",
+          "slide": 1,
+          "text": "The node needs an active compatible agent, permissions, and connectivity to the service. Verify it appears as the intended managed node and grant only the capabilities it needs.",
+          "text_sha256": "7f4bae5ba43bd04105800aa2438bd6c6190dd89500ef065c301fd13c01f59874",
+          "canonical_text_sha256": "7f4bae5ba43bd04105800aa2438bd6c6190dd89500ef065c301fd13c01f59874",
+          "asset_sha256": "9d48dc0bfa2915ae9af875ac490e01789a122510b350058a5c507fd98007478b"
+        },
+        {
+          "id": "m22p07-andrew-exp-s02-c1-b0ee7a157737",
+          "slide": 2,
+          "text": "The approved operator uses Session Manager instead of opening inbound S S H. The managed node's agent connects outbound to the needed service endpoints, and the operator needs permission for the intended node. Confirm the network path as well as the identity.",
+          "text_sha256": "b0ee7a15773760081c35bd5bad5135f21ca1df24670a477056a64bf677cb5504",
+          "canonical_text_sha256": "b9d69840675806d234b0bd813c9aebe68c27de5242d2455492f0858b268f6374",
+          "asset_sha256": "ad77d585c1a1e24c8ef9585ec8c09d9b49d286c7d8c16bede994c0a93f9ed5c3"
+        },
+        {
+          "id": "m22p07-andrew-exp-s02-c2-a56a5caeb252",
+          "slide": 2,
+          "text": "Supported standard sessions can log content when configured. S S H and port-forwarding sessions do not provide that same Session Manager payload log. Choose a session type and logging policy that meet the actual audit requirement.",
+          "text_sha256": "a56a5caeb252000e8dce0ffc097860fc103c2a78bd7c1769b483505e31082dd8",
+          "canonical_text_sha256": "3864a15d09c10658c7bef3e38351c4765ecced49a3b1aa7cace7e570f560debb",
+          "asset_sha256": "ad77d585c1a1e24c8ef9585ec8c09d9b49d286c7d8c16bede994c0a93f9ed5c3"
+        },
+        {
+          "id": "m22p07-andrew-exp-s03-c1-a792398173ce",
+          "slide": 3,
+          "text": "Use a reviewed Run Command document and target only the intended nodes. Bound concurrency and the error threshold so a bad command doesn't reach the whole fleet at once. Commands already underway can still finish.",
+          "text_sha256": "a792398173ce949098b99395e7cf831245cd6931812d326906ff80ed0803d511",
+          "canonical_text_sha256": "a792398173ce949098b99395e7cf831245cd6931812d326906ff80ed0803d511",
+          "asset_sha256": "3c8de3ef501d95fa7474e6a1a4d8a62aac6cbfd5e5e7345405cd95b108ce8832"
+        },
+        {
+          "id": "m22p07-andrew-exp-s03-c2-18ceb88afa13",
+          "slide": 3,
+          "text": "Check which nodes succeeded, failed or never ran. Use the recorded output to investigate the failed group rather than retrying across every node indiscriminately.",
+          "text_sha256": "18ceb88afa136d64ba763e6e38ea56f22d87e5c9f67d16b69ae4e908ca64ff7b",
+          "canonical_text_sha256": "18ceb88afa136d64ba763e6e38ea56f22d87e5c9f67d16b69ae4e908ca64ff7b",
+          "asset_sha256": "3c8de3ef501d95fa7474e6a1a4d8a62aac6cbfd5e5e7345405cd95b108ce8832"
+        },
+        {
+          "id": "m22p07-andrew-exp-s04-c1-e475e7d12e4b",
+          "slide": 4,
+          "text": "Use Automation for the multi-step state change. Verify the node's expected state, obtain required approval, and use a scoped role for the approved action. The runbook should stop if its preconditions fail.",
+          "text_sha256": "e475e7d12e4bebd89189918aa26d277af4ee5db2479dab6353cec6c06d708e69",
+          "canonical_text_sha256": "e475e7d12e4bebd89189918aa26d277af4ee5db2479dab6353cec6c06d708e69",
+          "asset_sha256": "76b3d75d0e7e28902167ccdcf8ad2df03e1a7d45dacf21663a7f4c16961f3834"
+        },
+        {
+          "id": "m22p07-andrew-exp-s04-c2-66eef563322b",
+          "slide": 4,
+          "text": "A running instance is not necessarily a healthy application. Verify both the desired resource state and workload behavior. If verification fails, stop and route it to the responsible team.",
+          "text_sha256": "66eef563322b9692091334bf6052da37238a6545ce1eec972a95936d3e5fa372",
+          "canonical_text_sha256": "66eef563322b9692091334bf6052da37238a6545ce1eec972a95936d3e5fa372",
+          "asset_sha256": "76b3d75d0e7e28902167ccdcf8ad2df03e1a7d45dacf21663a7f4c16961f3834"
+        }
+      ]
+    }
+  ]
+}
