@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "09",
+      "revision": "2026-11-24-m10p09-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "4c2bae6161a900a257dcd25d63d8a6c674b7825ecef8e479323d3cfeb804d2a8",
+        "2": "81c24b415df78516205bed19bdfea6b94b0cab3bbc6a70645399c614c7c91dea",
+        "3": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+      },
+      "units": [
+        {
+          "id": "m10p09-redo-s01-c1-4e4d32f58867",
+          "slide": 1,
+          "text": "Learn to choose a Lustre deployment and follow how a dataset reaches the workers. These compute nodes use compatible Lustre clients. They need parallel access to the same files, not a separate local copy on every node.",
+          "text_sha256": "4e4d32f58867b20aeaf59f947e44f60b1fe1317fb57ddcb2adc649f631c973f2",
+          "canonical_text_sha256": "4e4d32f58867b20aeaf59f947e44f60b1fe1317fb57ddcb2adc649f631c973f2",
+          "asset_sha256": "4c2bae6161a900a257dcd25d63d8a6c674b7825ecef8e479323d3cfeb804d2a8"
+        },
+        {
+          "id": "m10p09-redo-s01-c2-e247218d9fce",
+          "slide": 1,
+          "text": "F S x for Lustre presents the shared high-performance filesystem.",
+          "text_sha256": "e247218d9fceedeb50abfdddc4f1d6bb39f85cbe9a52b1be2e5c982f978aa6b6",
+          "canonical_text_sha256": "20bc01486753bff2eb8b6aed4be7da44761a7cebbce7a6815eebdb70a8d546a8",
+          "asset_sha256": "4c2bae6161a900a257dcd25d63d8a6c674b7825ecef8e479323d3cfeb804d2a8"
+        },
+        {
+          "id": "m10p09-redo-s01-c3-c3d21576b0ee",
+          "slide": 1,
+          "text": "On supported configurations, link an S three data repository. Import brings the dataset into the filesystem view; configured export sends changes back. S three remains object storage. The Lustre clients talk to Lustre, not directly to S three.",
+          "text_sha256": "c3d21576b0eed3c9484dc9693af6efeb513b734e48e2a009dd6a258709b5b56e",
+          "canonical_text_sha256": "ae1ff640ca86db1352d73ac003ac89e9980d80608f6ae5bfe33424d84b2685b0",
+          "asset_sha256": "4c2bae6161a900a257dcd25d63d8a6c674b7825ecef8e479323d3cfeb804d2a8"
+        },
+        {
+          "id": "m10p09-redo-s01-c4-106c4f8b6c10",
+          "slide": 1,
+          "text": "Size for the actual job: many small files can put pressure on metadata operations even when bulk throughput looks adequate. Measure open and lookup activity as well as the data rate.",
+          "text_sha256": "106c4f8b6c10642fb707128e01574542f5a4e83041740f8252a75b76f8635ab7",
+          "canonical_text_sha256": "106c4f8b6c10642fb707128e01574542f5a4e83041740f8252a75b76f8635ab7",
+          "asset_sha256": "4c2bae6161a900a257dcd25d63d8a6c674b7825ecef8e479323d3cfeb804d2a8"
+        },
+        {
+          "id": "m10p09-redo-s02-c1-7e806c77d902",
+          "slide": 2,
+          "text": "Scratch suits temporary, reproducible processing. Data is not replicated, so a component failure can leave data unavailable or lost. Keep the source and any results you cannot reproduce elsewhere.",
+          "text_sha256": "7e806c77d90237f08d912bcd27311aec2de212bc538a1428f78b8abee667caf2",
+          "canonical_text_sha256": "7e806c77d90237f08d912bcd27311aec2de212bc538a1428f78b8abee667caf2",
+          "asset_sha256": "81c24b415df78516205bed19bdfea6b94b0cab3bbc6a70645399c614c7c91dea"
+        },
+        {
+          "id": "m10p09-redo-s02-c2-be5e0f7cb263",
+          "slide": 2,
+          "text": "Persistent S S D and H D D protect data with replication within one Availability Zone and replace failed components. That makes them a better fit for longer-running work, but it does not make this a multi-zone data copy.",
+          "text_sha256": "be5e0f7cb2631ffa64d4d3b29b55a6d2e22aea7eeb4e66e780bcff18e3c00782",
+          "canonical_text_sha256": "98578126ac0c984acf9002ddf0681307f9e32165beffb400a1e58da225211f49",
+          "asset_sha256": "81c24b415df78516205bed19bdfea6b94b0cab3bbc6a70645399c614c7c91dea"
+        },
+        {
+          "id": "m10p09-redo-s02-c3-37232696d12c",
+          "slide": 2,
+          "text": "Intelligent-Tiering replicates data across multiple zones and suits longer-lived tiered data. That data placement does not guarantee uninterrupted service or replace a backup plan. This storage class also does not support linking to an S three data repository.",
+          "text_sha256": "37232696d12cc6a37b015edfe4daa8a1c173902525e5cc0e1ce00385ed8018b4",
+          "canonical_text_sha256": "fcc243d08c677cbba5dc052d4ac2069315bdeac641babb44dbfc82719fdde761",
+          "asset_sha256": "81c24b415df78516205bed19bdfea6b94b0cab3bbc6a70645399c614c7c91dea"
+        },
+        {
+          "id": "m10p09-redo-s03-c1-e7de834f9e04",
+          "slide": 3,
+          "text": "Start by associating an S three bucket or prefix with a Lustre directory on a supported deployment and version. An unavailable repository feature is a configuration mismatch, not a missing file.",
+          "text_sha256": "e7de834f9e04d05b92b55e0c2c0291e2b94b727299d22e97b5770b77e49d704c",
+          "canonical_text_sha256": "8385635608cd9f25e535f47aae7eb2d5732b5c2cb3adf841025f786765d8be78",
+          "asset_sha256": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+        },
+        {
+          "id": "m10p09-redo-s03-c2-8c6dda0bb025",
+          "slide": 3,
+          "text": "The import can bring in metadata first. Names and sizes can already appear even though the content bytes have not yet been loaded.",
+          "text_sha256": "8c6dda0bb02577c73b2c430c892a9c220330fbc638adea6131d989ae0a1de3bf",
+          "canonical_text_sha256": "8c6dda0bb02577c73b2c430c892a9c220330fbc638adea6131d989ae0a1de3bf",
+          "asset_sha256": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+        },
+        {
+          "id": "m10p09-redo-s03-c3-a1ca471abc4f",
+          "slide": 3,
+          "text": "When the job first reads the selected file, its contents can load on demand. Seeing the filename is not evidence of a warm first read.",
+          "text_sha256": "a1ca471abc4f89d06d172ce53e8328f8edcd0159bbd2822f586be68b9ecb3e9a",
+          "canonical_text_sha256": "a1ca471abc4f89d06d172ce53e8328f8edcd0159bbd2822f586be68b9ecb3e9a",
+          "asset_sha256": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+        },
+        {
+          "id": "m10p09-redo-s03-c4-dc6b12bdc902",
+          "slide": 3,
+          "text": "The workers process files through Lustre. Once required content is present, later access need not pay the same initial loading delay.",
+          "text_sha256": "dc6b12bdc9028ced5fd32f6cc8b339529c366b6552719f6e584fc2e8d1b8ee4a",
+          "canonical_text_sha256": "dc6b12bdc9028ced5fd32f6cc8b339529c366b6552719f6e584fc2e8d1b8ee4a",
+          "asset_sha256": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+        },
+        {
+          "id": "m10p09-redo-s03-c5-ef953336b800",
+          "slide": 3,
+          "text": "Configure an export policy or run a repository task for changed files. Verify completion in S three before assuming new output will survive loss of the filesystem.",
+          "text_sha256": "ef953336b800d44d5c03b6ce716899177c885423da8e861c88f1cab07e176868",
+          "canonical_text_sha256": "e60312fc3b868bb6544ff71234f7daaafa63a005f3524798d03ceb183b249df3",
+          "asset_sha256": "211cc35ae9db93e6be52721ad8be2c299384cc6b70dd7c7ab829774672797c3b"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "10",
+      "revision": "2026-11-24-m10p10-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be",
+        "2": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+      },
+      "units": [
+        {
+          "id": "m10p10-redo-s01-c1-c88228c0517f",
+          "slide": 1,
+          "text": "Learn how on tap serves file and block clients without confusing their interfaces. N F S and S M B clients use file paths on an appropriate file volume. The storage virtual machine supplies the relevant protocol endpoints.",
+          "text_sha256": "c88228c0517f22e9eda692d9f7329bf622058a8d5ef792d2b25fad8af201b931",
+          "canonical_text_sha256": "fb8f506b68e7b53b1cb9f2d27d516bbc1c2581ae30249c0d415721c84380e254",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s01-c2-f49c9d946b87",
+          "slide": 1,
+          "text": "An eye scuzzy initiator connects to a lun presented from the storage system. The client sees block storage rather than an N F S or S M B share. Choose this when the workload actually needs block access.",
+          "text_sha256": "f49c9d946b871261fcf239f51967dada159ddd0b6e213ef11606f4a3d15b8a81",
+          "canonical_text_sha256": "f14ad94135902c4d955402b26dbd353f973b9f3bdb9275a2b8ca5730d0687444",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s01-c3-373e3a05f841",
+          "slide": 1,
+          "text": "on tap offers features such as snapshots, clones, compression and deduplication. These help manage data and copies, but they do not turn every write or copy into zero-cost storage.",
+          "text_sha256": "373e3a05f841f3ef0133ee7ec8d64f0f8e6bb03a5edb86e577e0b862c2893add",
+          "canonical_text_sha256": "0fdb83e3f119cf26d451c4c2261e6c75834febab7a6fecf6d22aa2eddb427b2a",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s01-c4-aa534bf722e9",
+          "slide": 1,
+          "text": "Account for S S D capacity, I ops and throughput as well as tiering. New writes still consume space; using a data-efficiency feature is not a substitute for sizing.",
+          "text_sha256": "aa534bf722e9a973a5ce2b008a0d2cecddadee6a120d5d8528a1d864567d04ac",
+          "canonical_text_sha256": "1e4a5a6a544a2aaf036e942753e9839770ec9abc0da875f7c74a5eae16782c89",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s02-c1-5659b51d8665",
+          "slide": 2,
+          "text": "Open Z F S serves the source volume to N F S clients. The snapshot and clone use that same dataset as a starting point, but serve two different purposes.",
+          "text_sha256": "5659b51d866523ecc4ad546ef50c96aaffebefd52195a40673a0e0e97e18e36b",
+          "canonical_text_sha256": "1be7aa2e1c9d1bc720872bfca332cc6496a3a73a14501d910ee641423935c37c",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        },
+        {
+          "id": "m10p10-redo-s02-c2-aedd12b77041",
+          "slide": 2,
+          "text": "A snapshot records the volume at a point in time and is read-only. It is not an independent backup of the whole filesystem.",
+          "text_sha256": "aedd12b770416c9e03f9ad5cc43a76f95ffafc20f346da7fa9feb673d0814806",
+          "canonical_text_sha256": "aedd12b770416c9e03f9ad5cc43a76f95ffafc20f346da7fa9feb673d0814806",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        },
+        {
+          "id": "m10p10-redo-s02-c3-9902ce92f08b",
+          "slide": 2,
+          "text": "A clone starts with the snapshot's data and lets a separate test workload write its own changes. Those changes consume capacity. The clone still depends on its source snapshot; a fully independent copy is a different choice.",
+          "text_sha256": "9902ce92f08b4e224207359411528cc80a51584113a85c6ae243ff991347af0b",
+          "canonical_text_sha256": "9902ce92f08b4e224207359411528cc80a51584113a85c6ae243ff991347af0b",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        },
+        {
+          "id": "m10p10-redo-s02-c4-9ab48358cf64",
+          "slide": 2,
+          "text": "Choose the deployment availability and throughput independently from how you will create test copies. A clone within the same system is convenient for parallel work, but it does not isolate that work from loss of the filesystem.",
+          "text_sha256": "9ab48358cf647e9ead2aaba7101eb884525d8b4195ea6065870e13c4fe662ace",
+          "canonical_text_sha256": "9ab48358cf647e9ead2aaba7101eb884525d8b4195ea6065870e13c4fe662ace",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "11",
+      "revision": "2026-11-24-m10p11-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd",
+        "2": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d",
+        "3": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+      },
+      "units": [
+        {
+          "id": "m10p11-redo-s01-c1-c496f6a97df8",
+          "slide": 1,
+          "text": "Learn to match the gateway to the client's interface and decide what must survive locally. File Gateway accepts N F S or S M B requests from local clients and uses a cache. The applications work with file paths instead of calling an S three object A P I.",
+          "text_sha256": "c496f6a97df8dfb1c6939abc702ff825c63d09e344302df2571e090ee4856287",
+          "canonical_text_sha256": "f931e8ec63ec576a945af256933d4cdfcb620d26d14cddab630643a8c17b92b9",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s01-c2-90810ce9c448",
+          "slide": 1,
+          "text": "The backend is S three object storage. Uploads from the gateway are asynchronous, so a successful local write is not proof that the corresponding S three object has already arrived.",
+          "text_sha256": "90810ce9c4489f3b75490ae842f1198db85e279d0536c004960e77fdbe5dab82",
+          "canonical_text_sha256": "2acd07b96e6227490af9e3163e3fe88926b28c7c54857edfabbdb555927bb2f7",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s01-c3-a6095d6a301e",
+          "slide": 1,
+          "text": "A local client can read cached data without waiting for another S three fetch. On a cache miss, the gateway must retrieve the required data, so the cloud path still matters.",
+          "text_sha256": "a6095d6a301e443b45be439d5b4ab8528ac25e609bf3e6f316ca302312357914",
+          "canonical_text_sha256": "4f4886c3b189dd12e71313e96b4981fdb5678bbfa684e061e4369364afe3e1e4",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s01-c4-afcb9dd73f41",
+          "slide": 1,
+          "text": "The example writes locally, updates the cache, and then uploads to S three. Monitor the upload path and dirty cache rather than treating the cache as an independent backup.",
+          "text_sha256": "afcb9dd73f41c169406ce27ec14c5fb26b632629e9a0392eb79c26dc19273c45",
+          "canonical_text_sha256": "441eeb797618188a539b75d3e375adde880ffe37e49be5e4e84481d87eb5b840",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s01-c5-e34cd4730ac5",
+          "slide": 1,
+          "text": "If another authorized process writes directly to the bucket, refresh the gateway's cached inventory when needed so clients can see the new metadata. That is a discovery step, not a way to settle concurrent writes.",
+          "text_sha256": "e34cd4730ac5ca86354122bd32c1e85e12d89e0a911ff64d71961b045747c9df",
+          "canonical_text_sha256": "e34cd4730ac5ca86354122bd32c1e85e12d89e0a911ff64d71961b045747c9df",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s02-c1-9da69fe445b8",
+          "slide": 2,
+          "text": "With cached volumes, the application sees an eye scuzzy block device, while primary data is in A W S. The local cache keeps frequently accessed data nearby; the gateway also needs an upload buffer. Do not size it as though all primary data must fit locally.",
+          "text_sha256": "9da69fe445b856eafdae59f18759e7e22ea44dc8231eaacfd0c80a04b15fe989",
+          "canonical_text_sha256": "76c4670c12aecfebae5cde59d1d0042e2b50f62afc32d66938fab507acd16d33",
+          "asset_sha256": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d"
+        },
+        {
+          "id": "m10p11-redo-s02-c2-e362860a3365",
+          "slide": 2,
+          "text": "Same block interface, different placement. Stored volumes keep the full primary volume on premises and send asynchronous snapshots to A W S. Choose this when the complete primary copy must stay local and you can provide its full capacity.",
+          "text_sha256": "e362860a3365b3a6ac8627da0ffbf775f35f5712b4be80aead996b7858824c9b",
+          "canonical_text_sha256": "ba2968ff8b8b3b78e745bfc892e4e9307fc216600712ac222ff6f189c932d14d",
+          "asset_sha256": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d"
+        },
+        {
+          "id": "m10p11-redo-s03-c1-419ea0b975bd",
+          "slide": 3,
+          "text": "The backup application connects over eye scuzzy to a virtual tape library. It can keep its tape workflow while writing to a virtual tape rather than a physical cartridge.",
+          "text_sha256": "419ea0b975bd1938d96ca6f32dea9991121487c7ccfc6e230c7398bb0781bb82",
+          "canonical_text_sha256": "c92a7fc4beb15a8d663338238d2dfd9ce9322afb076a0220ac9ade63d6f5cd4a",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        },
+        {
+          "id": "m10p11-redo-s03-c2-486dac47f4fc",
+          "slide": 3,
+          "text": "On the gateway, online tapes are backed by S three. Ejecting a tape can put it in the configured archive. It will no longer behave like an online tape immediately available for a restore.",
+          "text_sha256": "486dac47f4fc0df168ce21a67c5026b1bef8ae14d62a532711f83bd46e41537a",
+          "canonical_text_sha256": "a76453a47da7f9e5cccea4833a44262f939bb41f3332fe225aba4e2229dec80e",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        },
+        {
+          "id": "m10p11-redo-s03-c3-2ea694c76df6",
+          "slide": 3,
+          "text": "Retrieve the archived tape to a gateway before the backup application can read it. Include archive retrieval time and charges in the recovery plan, then confirm the backup program can actually restore it.",
+          "text_sha256": "2ea694c76df6cc83b0dd83a317993f4a4d06d5b05f304d00af3b80dd5a012237",
+          "canonical_text_sha256": "2ea694c76df6cc83b0dd83a317993f4a4d06d5b05f304d00af3b80dd5a012237",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "12",
+      "revision": "2026-11-24-m10p12-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6",
+        "2": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+      },
+      "units": [
+        {
+          "id": "m10p12-redo-s01-c1-68b3b28e72cb",
+          "slide": 1,
+          "text": "Learn to expand an E B S-backed Linux filesystem without formatting it. First confirm you have the intended volume, its zone, and the actual guest filesystem and partition layout. This tells you which layer needs expanding.",
+          "text_sha256": "68b3b28e72cb147f353b2d70239ee5a3bc2156fb9042ba10a297660fbf8bb5ca",
+          "canonical_text_sha256": "e8d858f4b415efd7b7be45949173e2b0e4bf8d5a4ea1d16d3cb80cd2ee5d9c0c",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s01-c2-7b17c3112dcc",
+          "slide": 1,
+          "text": "Before modifying the volume, create an appropriate recovery point. An E B S snapshot protects a point in time; make sure it represents recoverable application data if the workload requires that.",
+          "text_sha256": "7b17c3112dcc3de66d038bc0eb938acb4caadcb1d7a1eebd6428ea9061030248",
+          "canonical_text_sha256": "13c4d43a082b2029456a65c7e311c49c080097e547c7cb8a64711fbc2a02b296",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s01-c3-5f6c6dd07c2e",
+          "slide": 1,
+          "text": "Increase the E B S capacity and check the modification state. Wait until it reaches optimizing or completed before extending the guest storage. You do not have to wait for completed if it is already optimizing.",
+          "text_sha256": "5f6c6dd07c2ec1e49a2782c715dbb4b20eceb8ad7777481143f29b18f52c9b2b",
+          "canonical_text_sha256": "d3d6b14b4f951a73d0cf4993e4676144c02a31ebb6870aa4f537441bb4e934a2",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s01-c4-7bd4025e77fa",
+          "slide": 1,
+          "text": "Now grow the guest layers. Extend the partition if the volume uses one, then use the correct filesystem procedure. Do not create a new filesystem over the existing data.",
+          "text_sha256": "7bd4025e77fac07ef732b7a1be46a30b9e9668fc477f29b955e50bac0fae00a0",
+          "canonical_text_sha256": "7bd4025e77fac07ef732b7a1be46a30b9e9668fc477f29b955e50bac0fae00a0",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s01-c5-1dc6f4084f0f",
+          "slide": 1,
+          "text": "Use the device and filesystem checks shown, then confirm the application can use the extra space. If the block device grew but the filesystem did not, finish the guest step rather than modifying E B S again.",
+          "text_sha256": "1dc6f4084f0f10bbaae080394b80f7d203110b95ae1276a80da68cbb5c0cfaa6",
+          "canonical_text_sha256": "f2d37503325d584607d49f9470f35e3ab53273e4f15926d3fd123d766adbc4c0",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s02-c1-1b9003f2bccb",
+          "slide": 2,
+          "text": "For the sharing test, each client reaches a mount target over N F S on T C P port twenty forty-nine. Allow the intended source at the mount target and verify the network path before troubleshooting file permissions.",
+          "text_sha256": "1b9003f2bccb9bb46e540300807b49fa6cc2e9c0900817e020c5a9285b632b87",
+          "canonical_text_sha256": "b40525d99329b7116a5274929adf33e4205e9a456ccfd37cc6a5a36b47c0fd27",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        },
+        {
+          "id": "m10p12-redo-s02-c2-b16f6522d9ea",
+          "slide": 2,
+          "text": "These two paths converge on the same Regional E F S filesystem. When using I A M authorization and an access point, use the E F S mount helper with T L S and check the effective identity and file permissions.",
+          "text_sha256": "b16f6522d9ea11ac8070dec8c3692b7836fdf13da18206b964ec515cdf9e7d8c",
+          "canonical_text_sha256": "fa1bdb8f89d292af84183b378c16eac236c6cf7373f42cb1ed25af470808feea",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        },
+        {
+          "id": "m10p12-redo-s02-c3-157995eed963",
+          "slide": 2,
+          "text": "Client A writes orders dot C S V. Client B reads it through the other mount target. An unauthorized client is denied. All three outcomes matter: reachability alone does not prove sharing or policy.",
+          "text_sha256": "157995eed9631d46d43c491ed1a488d9f3d5b1c6ad5d0ab4c28d848c40e149d1",
+          "canonical_text_sha256": "1a0b190d95842f2c1cd135044150cc181573221af4206f4107f7cd84561d886e",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "13",
+      "revision": "2026-11-24-m10p13-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6",
+        "2": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+      },
+      "units": [
+        {
+          "id": "m10p13-redo-s01-c1-5150be6a4a03",
+          "slide": 1,
+          "text": "Learn which recovery artifact matches what you need back. Use an E B S snapshot to restore a volume's point-in-time block contents. That gives you data on a new volume, not an instance image with boot configuration.",
+          "text_sha256": "5150be6a4a0364844ad3079586bafcbd23144b8cd9dfc885ca09602fbab9ecbd",
+          "canonical_text_sha256": "5e251cf477f57810be1c5a3f1b04434e9e5afbecdf0e292788980efb16c0e7b9",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s01-c2-39c9cf8dcf93",
+          "slide": 1,
+          "text": "Use an E B S-backed A M I when the recovery needs a launchable instance image. It references snapshots and includes launch-relevant configuration and block-device mappings. Choose options such as the instance type when launching, or in a launch template.",
+          "text_sha256": "39c9cf8dcf936e198b0cb9f5f7816cb1d76b3db89117c5062bd0cfe9793aa8b2",
+          "canonical_text_sha256": "63e787c74fdb7e487a967888720b64af7c62a3e2c07f7248a18b31711af91ac6",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s01-c3-63d87acfe928",
+          "slide": 1,
+          "text": "A recovery in another Region needs an available copy in that Region. For an encrypted copy, verify the destination key and permissions. Test the volume restore or instance launch before an outage.",
+          "text_sha256": "63d87acfe928ed7e2f633b67351b6c731c9a3f3d36c5cd8e749f84706e81f68a",
+          "canonical_text_sha256": "63d87acfe928ed7e2f633b67351b6c731c9a3f3d36c5cd8e749f84706e81f68a",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s02-c1-eb5aadbd5beb",
+          "slide": 2,
+          "text": "For the custom Data Lifecycle Manager policy shown here, tags select the supported target volumes or E C two instances. Do not assume that every Data Lifecycle Manager policy uses tags to select its targets.",
+          "text_sha256": "eb5aadbd5beb01572f7a8c194838974ae5209c9f708b422134fcc5bb7a38e112",
+          "canonical_text_sha256": "ddd39a968ebfdd0ce89f9ddb554d17a9482ffd2b5c6423841c9f78c10bd7b59f",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        },
+        {
+          "id": "m10p13-redo-s02-c2-e27f2c4ff710",
+          "slide": 2,
+          "text": "Set the capture schedule for the recovery points this policy owns. Match the frequency to how much recent work the workload can afford to lose.",
+          "text_sha256": "e27f2c4ff710c8870361f862e8ffffd41288cafee2fe40a696e1a9ef503c9791",
+          "canonical_text_sha256": "e27f2c4ff710c8870361f862e8ffffd41288cafee2fe40a696e1a9ef503c9791",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        },
+        {
+          "id": "m10p13-redo-s02-c3-f6a49f4e085c",
+          "slide": 2,
+          "text": "Define retention for the snapshots or E B S-backed A M Is it creates. It does not simply adopt existing snapshots from unrelated workflows or manage instance-store A M Is.",
+          "text_sha256": "f6a49f4e085c96d234419f2a9562cd0fe5f8f7258751903c83c3ac9fb411a67a",
+          "canonical_text_sha256": "ae985482af9e35f800623f2f8cb652b2f928fc0354cccbe816a4d2c1e83ae247",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        },
+        {
+          "id": "m10p13-redo-s02-c4-9897341cc859",
+          "slide": 2,
+          "text": "Configure copy actions where the selected policy and destination support them. If you instead need centrally managed protection across several supported services, evaluate A W S Backup.",
+          "text_sha256": "9897341cc859c04230d45ec55fdb8fb5dc960c4c9df5e4eb10eb07ee93e0ac9f",
+          "canonical_text_sha256": "fdae2771c2d1caa97cbc17521a203667782646bf6985349c641dffab04b8de18",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        }
+      ]
+    }
+  ]
+}
