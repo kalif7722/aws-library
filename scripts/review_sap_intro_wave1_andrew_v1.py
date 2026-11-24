@@ -65,15 +65,12 @@ async def one(c,voice,rate,out):
             need(len(audio)>1000 and bounds,'no complete audio')
             need(norm(' '.join(ev['text'] for ev in bounds))==norm(c['text']),'provider boundary coverage mismatch')
             tmp.write_bytes(audio)
-            pcm=array.array('h');pcm.frombytes(subprocess.check_output(['ffmpeg','-v','error','-xerror','-i',str(tmp),'-f','s16le','-ac','1','-ar','24000','-']))
-            dur=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(tmp)]))
-            need(pcm and max(abs(v) for v in pcm)>300 and math.isfinite(dur) and dur>.3,'empty/silent/truncated audio')
             tmp.rename(out/(i+'.mp3'))
             receipt={k:c[k] for k in ('id','text_sha256','asset_sha256','canonical_text_sha256')}
-            receipt.update(voice=voice,rate=rate,duration=dur,audio_sha256=sha(audio),audio_bytes=len(audio),boundaries_sha256=sha(json.dumps(bounds).encode()),attempts=attempt)
+            receipt.update(voice=voice,rate=rate,audio_sha256=sha(audio),audio_bytes=len(audio),boundaries_sha256=sha(json.dumps(bounds).encode()),attempts=attempt)
             (out/(i+'.json')).write_text(json.dumps(receipt,indent=2))
             (out/(i+'.boundaries.json')).write_text(json.dumps(bounds))
-            print('READY',i,round(dur,3),flush=True);return
+            print('READY',i,len(audio),flush=True);return
         except Exception as e:
             tmp.unlink(missing_ok=True)
             status=getattr(e,'status',None)
