@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-JennyNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "2026-11-24-m09p01-jenny-explainer-first",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "3": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-jenny-s01-c1-94204e27972d",
+          "slide": 1,
+          "text": "Let’s follow an app asking S three for a logo. Its object read names the bucket, which belongs to one A W S Region, and the full object key. We’ll see when a write is visible and what can deny the read.",
+          "text_sha256": "94204e27972d089d63daa87299c8dfb995081928d51a3d33aa5ff2d87753c449",
+          "canonical_text_sha256": "760c694a4d53bfb8f29d32909068ce0cc4b257d89281251c405b6bf79156bd3b",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-jenny-s01-c2-58f78ca241f0",
+          "slide": 1,
+          "text": "In this request the key is images slash logo dot P N G. The slash is part of the key, not a disk directory. If the read is allowed, S three returns the logo's bytes and metadata such as its content type.",
+          "text_sha256": "58f78ca241f0d60011bc7165f5e63cddfd9afc36bf2037b9cb27595d7ed9e95b",
+          "canonical_text_sha256": "19620456d7d16980e9513030a7ef026f690bd02eae411bfba0b529ce39e5218e",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-jenny-s01-c3-3156a8024c98",
+          "slide": 1,
+          "text": "Logos and backups work as objects. If the app must mount shared files or edit blocks in place, it needs different storage. Changing the S three storage class won't change that access model.",
+          "text_sha256": "3156a8024c986452ece35466380df3ae3891bbf1a54bcad3269a1397a8c1365c",
+          "canonical_text_sha256": "6b151194d83b9be68ed8175380dfd93e4c01e3664b3e2eec2fc8d7558f9e64bd",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-jenny-s02-c1-90e18a12652f",
+          "slide": 2,
+          "text": "Now the app uploads orders slash one thousand one dot Jason. Wait for the put to succeed. That success marks the point after which a new read should see the change.",
+          "text_sha256": "90e18a12652f3b2c119a6f7f578f94279116b0b75f16e119397852fd1db0e028",
+          "canonical_text_sha256": "696234154c052ec5251ea67e3f72ddf377bea0cd2dc8d06018aeb33295e06648",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-jenny-s02-c2-2f29fe684fc7",
+          "slide": 2,
+          "text": "A later get for that key returns the object, and a later list reflects it. That's strong consistency: the app doesn't need to wait for the completed write to become visible.",
+          "text_sha256": "2f29fe684fc7750ce2109c058bd6bf3929083496ef891229302f5f1f41dedaa9",
+          "canonical_text_sha256": "e20a5c1a8a9f98576380f4402e008f26b8fdcfcddf954f0dbaa596e70d7e1d00",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-jenny-s02-c3-c42ce0a8dc01",
+          "slide": 2,
+          "text": "Both workers read the same E tag. If one updates the order, the second worker’s old If-Match value no longer matches and S three rejects the stale write. Versioning keeps history, but doesn’t prevent the race.",
+          "text_sha256": "c42ce0a8dc0191e24ece7c493ba4947c4a7068e561698bbacab7ec93d5fac23b",
+          "canonical_text_sha256": "8a28c93d054daa8b4f194b4f26132b1a513788ca57906a5cc809c04ba0a0aa00",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-jenny-s02-c4-a57da5142540",
+          "slide": 2,
+          "text": "That check protects a single key. It can't make an order object and a payment object commit together. If both changes must succeed as one, use a transaction or design a way to recover from partial completion.",
+          "text_sha256": "a57da51425404a75622e441822d632ff11f1ff139ebc60ec66c7c231e8133d6d",
+          "canonical_text_sha256": "a57da51425404a75622e441822d632ff11f1ff139ebc60ec66c7c231e8133d6d",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-jenny-s03-c1-830f05490d9b",
+          "slide": 3,
+          "text": "If the logo read comes back denied, start with the call that failed. Which role sent GetObject, and what was the object's A R N? That's the request you look for in the role's I A M policy.",
+          "text_sha256": "830f05490d9b9c502c9fbb9542b63ba6c74affa2f9a95ce95c1a8c009e2b3445",
+          "canonical_text_sha256": "5b211bc17c9ca58567a66070922677314b3b17f7426bdd708c774f073d4a8117",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-jenny-s03-c2-99582bf9a2cb",
+          "slide": 3,
+          "text": "Now check the bucket or access point policy and other applicable restrictions. If an applicable policy explicitly denies this read, an allow on the role doesn't cancel it. Verify that this caller has effective access to this exact object.",
+          "text_sha256": "99582bf9a2cbfb2cbdc73d735fe0bbef20f7c52a77d1d095514d14b7e858fe64",
+          "canonical_text_sha256": "99582bf9a2cbfb2cbdc73d735fe0bbef20f7c52a77d1d095514d14b7e858fe64",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-jenny-s03-c3-abeef2d5fab2",
+          "slide": 3,
+          "text": "With Bucket owner enforced, the bucket owner owns the objects and A C Ls are disabled. Adding an A C L won't restore the read. Fix the applicable policy and retry the same request.",
+          "text_sha256": "abeef2d5fab212c1ddd5a4a452b8116f6e969a901a7dee12ae9357912b4381d7",
+          "canonical_text_sha256": "0b7b2fa42946142a093caffeb050437cdef8afd7b8018efffd7f7a382059a305",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "02",
+      "revision": "2026-11-24-m09p02-jenny-explainer-first",
+      "approved_assets": {
+        "1": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b",
+        "2": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de",
+        "3": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+      },
+      "units": [
+        {
+          "id": "m09p02-jenny-s01-c1-d87e0aa6b883",
+          "slide": 1,
+          "text": "Let’s separate reaching S three from getting permission to read. An access point gives this application a named way into the bucket and a policy of its own. The bucket still has to permit that access.",
+          "text_sha256": "d87e0aa6b883226a6a28ad8892c69afc03383a5a764fcfef0816ace2fcd0c803",
+          "canonical_text_sha256": "ed6f74237f5b0cd9adbceea8e81c1a5e7b60263e415b94f6985aa924a92b63bc",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-jenny-s01-c2-a1437cf4d5f7",
+          "slide": 1,
+          "text": "The app can use a gateway endpoint. Its route table sends supported S three traffic over that private path instead of requiring an internet route. That route still doesn’t authorize the object read.",
+          "text_sha256": "a1437cf4d5f7a8c9aa1eaa58fb7adfc32929346e32f583d7973462dc4ec43702",
+          "canonical_text_sha256": "78441e8612db1f6a56532f85130f225ba853b311484c537c23b59d0c9efcc656",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-jenny-s01-c3-035ba500ddcc",
+          "slide": 1,
+          "text": "An interface endpoint solves the private connection differently. The app connects through PrivateLink network interfaces. Choose it when you need that connectivity model, and account for its cost.",
+          "text_sha256": "035ba500ddcc9ec01627bd42223381bad19a3f3d1f464e4700999ea1c043d716",
+          "canonical_text_sha256": "035ba500ddcc9ec01627bd42223381bad19a3f3d1f464e4700999ea1c043d716",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-jenny-s01-c4-aeb43cf3ca8a",
+          "slide": 1,
+          "text": "After the request reaches S three, it still faces the permissions check shown here. If a client can reach the service but gets Access Denied, inspect those policies before changing the network route.",
+          "text_sha256": "aeb43cf3ca8acf0f0a1126843d8492b99af6c5f0e9e3c27dc17c77d90f20efca",
+          "canonical_text_sha256": "fbcb7464c86d1b78b046c7cd7d5602caf467e5f6ac268894ab1b4c569534e088",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-jenny-s02-c1-9bf916cc732f",
+          "slide": 2,
+          "text": "S S E S three protects the stored bytes with S three-managed keys. If the design needs a customer-managed key policy or key-level control, consider S S E K M S.",
+          "text_sha256": "9bf916cc732f67b61387743c494cc918d78ad2f8dcc6cc978f8f6dedb79a5741",
+          "canonical_text_sha256": "4a9c1bccaaee79aa2357e4552937444e40f0b8c799e9383354b0155ec8dc221a",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-jenny-s02-c2-28e0f11d4f1d",
+          "slide": 2,
+          "text": "Now the object uses S S E K M S. S three access lets the reader ask for the object, but key authorization determines whether the encrypted data can be decrypted. Check the key for the reader performing the restore or replication operation, too.",
+          "text_sha256": "28e0f11d4f1d0ff8d8996b510e3d78842f5f3c17aaa043e32cb38bfb54ef84d3",
+          "canonical_text_sha256": "af378f913fff6a163fe8590f1314de806607cc89cdeb3faaeb9aa15ecbb66916",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-jenny-s02-c3-4437900b3642",
+          "slide": 2,
+          "text": "H T T P S protects the request in transit. Neither key option replaces it. If the bucket must reject insecure requests, enforce H T T P S separately in a bucket policy.",
+          "text_sha256": "4437900b364283f3fc0cef4c3a72ed290936838801d555f88367aeed4dc3b0c2",
+          "canonical_text_sha256": "a84787083535d2d91c7b4dd6ff9c31616ff150a7085efd6ee90d810d690da93f",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-jenny-s02-c4-d9fbb9f326ae",
+          "slide": 2,
+          "text": "The dashed key path represents an additional authorization check for S S E K M S. It is not another hop that the client uses to send the H T T P S request.",
+          "text_sha256": "d9fbb9f326ae12f0ee8a981784341e284188346eef31cdf5f1f21782752ee61d",
+          "canonical_text_sha256": "fd3fb0b188cd97a2ff554f42bc87f49131a29aad4740e3704cad6ef3ec4152fb",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-jenny-s03-c1-2d6abf3c295f",
+          "slide": 3,
+          "text": "Uploading report dot C S V creates version one for that key.",
+          "text_sha256": "2d6abf3c295f78479af8332c7389ffdd3b8e9fb27440192cdec83aa6f2303deb",
+          "canonical_text_sha256": "2d6abf3c295f78479af8332c7389ffdd3b8e9fb27440192cdec83aa6f2303deb",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-jenny-s03-c2-4b1fce20423a",
+          "slide": 3,
+          "text": "An overwrite creates version two under the same key. Version one stays available instead of being destroyed.",
+          "text_sha256": "4b1fce20423ae817e9a6acd4828318f7ab620005d265511d0c6bac5d781493a4",
+          "canonical_text_sha256": "4b1fce20423ae817e9a6acd4828318f7ab620005d265511d0c6bac5d781493a4",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-jenny-s03-c3-2fa7441f21b5",
+          "slide": 3,
+          "text": "Delete the key without naming a version. S three puts a delete marker at the top of its history, so a normal read returns the key as missing even though both saved versions still exist.",
+          "text_sha256": "2fa7441f21b5d3ed08f1d0671b28df28cb5f78e8e8eab8f5b9c925a66c29aa90",
+          "canonical_text_sha256": "b5ef2eb273791db17954ec570dbfda96c042342510bf928914719683fa64d0da",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-jenny-s03-c4-be69b5027c9e",
+          "slide": 3,
+          "text": "Remove the current marker to reveal the latest underlying version, or request the specific saved version you need.",
+          "text_sha256": "be69b5027c9e3f3f01d20659f00f9b8a0add0ff564141b517a368d63ca3a1d0f",
+          "canonical_text_sha256": "be69b5027c9e3f3f01d20659f00f9b8a0add0ff564141b517a368d63ca3a1d0f",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-jenny-s03-c5-a1871825b5ca",
+          "slide": 3,
+          "text": "Deleting a version by I D removes that exact version permanently, not the other versions.",
+          "text_sha256": "a1871825b5ca3fd7cda1b12033fc70ca91f689729f3fd43ba0fd3a955fc03018",
+          "canonical_text_sha256": "531191dbeddfeb8be309981bbe14cb3caab58f804b563b87a55b1ee41418c07f",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "03",
+      "revision": "2026-11-24-m09p03-jenny-explainer-first",
+      "approved_assets": {
+        "1": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53",
+        "2": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e",
+        "3": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+      },
+      "units": [
+        {
+          "id": "m09p03-jenny-s01-c1-e039ca473ae9",
+          "slide": 1,
+          "text": "Suppose a retained version gets a delete request. Governance mode blocks ordinary deletion. Bypass is possible only when the caller has the relevant permission and explicitly asks for it.",
+          "text_sha256": "e039ca473ae907b2b2b38b510bb974502b942355b3c7bd52dbd3f605d3e0075f",
+          "canonical_text_sha256": "e039ca473ae907b2b2b38b510bb974502b942355b3c7bd52dbd3f605d3e0075f",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-jenny-s01-c2-91f3b8c3e409",
+          "slide": 1,
+          "text": "Compliance retention protects the version until the date expires. Even the account root user cannot delete that protected version or shorten its retention while it applies.",
+          "text_sha256": "91f3b8c3e409c97dffc967d50e1b55cc862c4743edd3716190f190e3df7f094c",
+          "canonical_text_sha256": "91f3b8c3e409c97dffc967d50e1b55cc862c4743edd3716190f190e3df7f094c",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-jenny-s01-c3-5b70d21ee439",
+          "slide": 1,
+          "text": "Legal hold is separate and has no automatic expiry. An authorized principal can remove it. Apply retention or a hold to the object version that actually needs protection, and decide the recovery implications first.",
+          "text_sha256": "5b70d21ee43913091065b6d1a9b9ebc76fb6e452ee251cfca162b2f8a7fc03b6",
+          "canonical_text_sha256": "5b70d21ee43913091065b6d1a9b9ebc76fb6e452ee251cfca162b2f8a7fc03b6",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-jenny-s02-c1-a2e87fe9bfb1",
+          "slide": 2,
+          "text": "A viewer sends an H T T P S request to CloudFront. The distribution is the public entry point; the S three bucket does not have to be public.",
+          "text_sha256": "a2e87fe9bfb19f743c14d6ae11292645671af236501508964c8e4f44591fdab9",
+          "canonical_text_sha256": "df7e7e024710cde78bc4b3cb8cf1893aac021aca886ba831eb8f9806863a8c13",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s02-c2-3427cb2aba93",
+          "slide": 2,
+          "text": "If the edge does not already have the file, CloudFront needs to retrieve it from the origin. Origin Access Control lets the distribution authenticate that request to the private bucket.",
+          "text_sha256": "3427cb2aba934ef18a443b88f5fc6048ee28425d6efdff2db6381153fa2207f6",
+          "canonical_text_sha256": "3427cb2aba934ef18a443b88f5fc6048ee28425d6efdff2db6381153fa2207f6",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s02-c3-df858003e262",
+          "slide": 2,
+          "text": "The bucket policy trusts the distribution for that origin read, not every viewer. Use a regular S three bucket origin here: the S three website endpoint doesn’t work with O A C.",
+          "text_sha256": "df858003e262677536f890f6527a31e6df9686d5f74047c544a745442a9dfd1a",
+          "canonical_text_sha256": "42816d96884edb3dd06d84c2ead6ef953e3ef06bbf20ec26b9a1e2e4842f447d",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s02-c4-92fbbcee7ea3",
+          "slide": 2,
+          "text": "Store the static images, C S S and scripts as objects in S three.",
+          "text_sha256": "92fbbcee7ea3c5a30cd43fa4a2e246ff4bac1c8b70ebd4db3563ba2e911e6410",
+          "canonical_text_sha256": "0fec15105c89db5c6e7ff76322fcfd04f137d3681be2b6174ea60052ca007e81",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s02-c5-07c3fcfcaddf",
+          "slide": 2,
+          "text": "CloudFront can return a cached copy from the edge without asking S three for it on every request.",
+          "text_sha256": "07c3fcfcaddfe86e3fb82d737d4f42e9bc53e98a3c926408c24d8ee2bf956828",
+          "canonical_text_sha256": "0e7ec5facf2b4d3c2152233e6d40efa49eab86688ff850b8547b36922cd8f1e1",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s02-c6-77febd4d6005",
+          "slide": 2,
+          "text": "Keep dynamic application logic in a separate compute service. Delivering a file does not make S three a compute runtime.",
+          "text_sha256": "77febd4d6005b7ce533d49cfcd2eca3afcdc4b65f8c6b00a9a069ce6099a8318",
+          "canonical_text_sha256": "ebe4ba84979508188fce5122748f86d0d14c050fb0fc78ccf273ca27f58e63c9",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-jenny-s03-c1-91fa3cabb76a",
+          "slide": 3,
+          "text": "Choose Standard for frequently accessed data when you also want storage across Availability Zones. It has no minimum storage duration. The latency by itself does not distinguish these three classes.",
+          "text_sha256": "91fa3cabb76af40cf458c16b3b4b11982de8dce0be7ad7d48b5e462ed908c303",
+          "canonical_text_sha256": "91fa3cabb76af40cf458c16b3b4b11982de8dce0be7ad7d48b5e462ed908c303",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-jenny-s03-c2-f47249a2cbad",
+          "slide": 3,
+          "text": "If access is infrequent but the file still needs multi-zone storage, consider Standard Infrequent Access. It reads in milliseconds, but retrieval and billing minimums can erase the savings for a small, short-lived or heavily read file.",
+          "text_sha256": "f47249a2cbade51753a07aaed9874acf52ef23d53e5a7e94b56d52d3f0f25d64",
+          "canonical_text_sha256": "f47249a2cbade51753a07aaed9874acf52ef23d53e5a7e94b56d52d3f0f25d64",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-jenny-s03-c3-4ec37868c55b",
+          "slide": 3,
+          "text": "One Zone Infrequent Access keeps the data in one Availability Zone. Use it only when a separate copy or recreation can cover that zone's loss. Price is not a substitute for the recovery requirement.",
+          "text_sha256": "4ec37868c55b1c9d497d3fbd1cec04fd8ff3f310d17e32f4a0d404460edc71f0",
+          "canonical_text_sha256": "4ec37868c55b1c9d497d3fbd1cec04fd8ff3f310d17e32f4a0d404460edc71f0",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "04",
+      "revision": "2026-11-24-m09p04-jenny-explainer-first",
+      "approved_assets": {
+        "1": "cba464fab65d2f69eda48c02c99e829e62113fac4d01d09215064d295d01941e",
+        "2": "e9212162838fe4ac6f9552e9cc40625045b60bd8ae41946b5affdefb86744fb5",
+        "3": "e908dcd44019e92ed3af3ade73c42512cd250115958243ef993d1075617a6fc2"
+      },
+      "units": [
+        {
+          "id": "m09p04-jenny-s01-c1-802d4869f9cb",
+          "slide": 1,
+          "text": "Choose the archive class by how quickly an application must read the data. Glacier Instant Retrieval offers millisecond access without a restore request, but has retrieval charges and a ninety-day minimum duration.",
+          "text_sha256": "802d4869f9cb6311958923108e5d895a9213762840816c0707a8098636d123f0",
+          "canonical_text_sha256": "802d4869f9cb6311958923108e5d895a9213762840816c0707a8098636d123f0",
+          "asset_sha256": "cba464fab65d2f69eda48c02c99e829e62113fac4d01d09215064d295d01941e"
+        },
+        {
+          "id": "m09p04-jenny-s01-c2-fb0f3bae5c40",
+          "slide": 1,
+          "text": "Flexible Retrieval does not serve the bytes as soon as the app requests them. First restore the archived object, then read it. Choose a retrieval option that leaves enough time for that first step.",
+          "text_sha256": "fb0f3bae5c40f3e765f33ec1d5c34345a0c44c429580a7e3c460faa87b043e7b",
+          "canonical_text_sha256": "fb0f3bae5c40f3e765f33ec1d5c34345a0c44c429580a7e3c460faa87b043e7b",
+          "asset_sha256": "cba464fab65d2f69eda48c02c99e829e62113fac4d01d09215064d295d01941e"
+        },
+        {
+          "id": "m09p04-jenny-s01-c3-a4f12f603e10",
+          "slide": 1,
+          "text": "Deep Archive targets longer retention with generally longer retrieval lead time and a one-hundred-eighty-day minimum storage duration. Use it only when that recovery delay is acceptable; a cheap archive that misses the deadline does not meet the requirement.",
+          "text_sha256": "a4f12f603e108b966453e59db1b684594d51ec11cc913376202f130be282ab6b",
+          "canonical_text_sha256": "a4f12f603e108b966453e59db1b684594d51ec11cc913376202f130be282ab6b",
+          "asset_sha256": "cba464fab65d2f69eda48c02c99e829e62113fac4d01d09215064d295d01941e"
+        },
+        {
+          "id": "m09p04-jenny-s02-c1-b2eae0925767",
+          "slide": 2,
+          "text": "An eligible object starts in Frequent Access. Without reads it can move to Infrequent Access after thirty days and Archive Instant Access after ninety. A reader can still request the object without starting a restore.",
+          "text_sha256": "b2eae0925767382cedda9af196ed8dbaaa1f7c2831f1310427cacf3bfa9cacde",
+          "canonical_text_sha256": "b2eae0925767382cedda9af196ed8dbaaa1f7c2831f1310427cacf3bfa9cacde",
+          "asset_sha256": "e9212162838fe4ac6f9552e9cc40625045b60bd8ae41946b5affdefb86744fb5"
+        },
+        {
+          "id": "m09p04-jenny-s02-c2-643e52f3cb33",
+          "slide": 2,
+          "text": "Optional Archive Access can start at ninety days without access, and the object needs a restore before it can be read. That is different from automatic Archive Instant Access.",
+          "text_sha256": "643e52f3cb3346514df4e8983f3e7a9d00ecb62bbdd6deb862b85595db04e469",
+          "canonical_text_sha256": "643e52f3cb3346514df4e8983f3e7a9d00ecb62bbdd6deb862b85595db04e469",
+          "asset_sha256": "e9212162838fe4ac6f9552e9cc40625045b60bd8ae41946b5affdefb86744fb5"
+        },
+        {
+          "id": "m09p04-jenny-s02-c3-c14241935cc6",
+          "slide": 2,
+          "text": "Optional Deep Archive Access starts no earlier than one hundred eighty days without access. It also needs a restore before reading.",
+          "text_sha256": "c14241935cc60beff04bcb1b645c4254588301a6cdebeb48f780aa0e7298783f",
+          "canonical_text_sha256": "c14241935cc60beff04bcb1b645c4254588301a6cdebeb48f780aa0e7298783f",
+          "asset_sha256": "e9212162838fe4ac6f9552e9cc40625045b60bd8ae41946b5affdefb86744fb5"
+        },
+        {
+          "id": "m09p04-jenny-s02-c4-77ac8492fa5a",
+          "slide": 2,
+          "text": "Objects under one hundred twenty-eight kilobytes stay in Frequent Access and are not monitored for tiering. Eligible objects can incur a monitoring and automation charge, so consider the size mix.",
+          "text_sha256": "77ac8492fa5ad25315f45e18ee3cf1c08c802b12c1784a4ef6729ef5e031dc8c",
+          "canonical_text_sha256": "77ac8492fa5ad25315f45e18ee3cf1c08c802b12c1784a4ef6729ef5e031dc8c",
+          "asset_sha256": "e9212162838fe4ac6f9552e9cc40625045b60bd8ae41946b5affdefb86744fb5"
+        },
+        {
+          "id": "m09p04-jenny-s03-c1-84fac299e112",
+          "slide": 3,
+          "text": "A current-version expiration rule acts on the version a normal read sees. In a versioned bucket it can make a delete marker current, which hides that key without automatically removing its previous versions.",
+          "text_sha256": "84fac299e112b98b3b58468319ef2b7eb070edac326d6ba98b8d29050a8b3e6e",
+          "canonical_text_sha256": "84fac299e112b98b3b58468319ef2b7eb070edac326d6ba98b8d29050a8b3e6e",
+          "asset_sha256": "e908dcd44019e92ed3af3ade73c42512cd250115958243ef993d1075617a6fc2"
+        },
+        {
+          "id": "m09p04-jenny-s03-c2-f76c9efda0bb",
+          "slide": 3,
+          "text": "Older versions need separate noncurrent transition or expiration rules. Before removing them, check the recovery window, minimum-duration charges and storage-class constraints.",
+          "text_sha256": "f76c9efda0bbbc8e7f4c85e47227343a920cf5f4bd29fadb0dc8805360c049e9",
+          "canonical_text_sha256": "f76c9efda0bbbc8e7f4c85e47227343a920cf5f4bd29fadb0dc8805360c049e9",
+          "asset_sha256": "e908dcd44019e92ed3af3ade73c42512cd250115958243ef993d1075617a6fc2"
+        },
+        {
+          "id": "m09p04-jenny-s03-c3-0d608d1afce3",
+          "slide": 3,
+          "text": "Expired delete markers can be cleaned up only when eligible. A prefix or tag filter limits the objects in scope and does not name a physical folder. Verify the policy against a sample key and all its versions before relying on it.",
+          "text_sha256": "0d608d1afce3740aa923d7c53250cf4476cad5db24b853f56e180e1df8b14837",
+          "canonical_text_sha256": "0d608d1afce3740aa923d7c53250cf4476cad5db24b853f56e180e1df8b14837",
+          "asset_sha256": "e908dcd44019e92ed3af3ade73c42512cd250115958243ef993d1075617a6fc2"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "05",
+      "revision": "2026-11-24-m09p05-jenny-explainer-first",
+      "approved_assets": {
+        "1": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322",
+        "2": "ca4a2eee9d0f4901b16bcb15ad9fa894cf4837a7b62e399ade34fd2165afb830",
+        "3": "b42b1bc561b63e3ea58dcae5c1bd7762eb822f3c18212e63f62618066ee0891f"
+      },
+      "units": [
+        {
+          "id": "m09p05-jenny-s01-c1-a720dd9d0b9e",
+          "slide": 1,
+          "text": "Let’s choose where the copy belongs, then test whether the destination can actually serve it. The rule starts with a versioned source bucket.",
+          "text_sha256": "a720dd9d0b9ee7e2357d9e34fd630c996fa97dd0089ef63558c038b89af6b231",
+          "canonical_text_sha256": "a720dd9d0b9ee7e2357d9e34fd630c996fa97dd0089ef63558c038b89af6b231",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s01-c2-18e094bfe2f3",
+          "slide": 1,
+          "text": "Choose Same-Region Replication when copies must stay in the same Region. Both example buckets here are in US East one.",
+          "text_sha256": "18e094bfe2f334288515ffbd970f1a2c06491ebee2d81cb66060755cef342d1e",
+          "canonical_text_sha256": "18e094bfe2f334288515ffbd970f1a2c06491ebee2d81cb66060755cef342d1e",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s01-c3-81a562ee59f8",
+          "slide": 1,
+          "text": "Choose Cross-Region Replication when the recovery requirement calls for another Region. Here the destination is US West two.",
+          "text_sha256": "81a562ee59f89909c5ac2998da2d0be5e092b11928c236d22e5323a437a964a2",
+          "canonical_text_sha256": "81a562ee59f89909c5ac2998da2d0be5e092b11928c236d22e5323a437a964a2",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s01-c4-f4d853682b8f",
+          "slide": 1,
+          "text": "Enable versioning on both buckets so the rule can copy eligible object versions.",
+          "text_sha256": "f4d853682b8f054553d85ac1943d669ffafe2d468a15cd19ce47310d5056e5c9",
+          "canonical_text_sha256": "f4d853682b8f054553d85ac1943d669ffafe2d468a15cd19ce47310d5056e5c9",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s01-c5-b5bdd4f328a7",
+          "slide": 1,
+          "text": "Configure the replication rule and its I A M role. Do not assume the bucket configuration itself is replicated.",
+          "text_sha256": "b5bdd4f328a756df3ba6de43a3e3976f0bbf7b5e5015e80288d923affb4fbfc9",
+          "canonical_text_sha256": "fc841cce524c739f1818acc8e22f441e3609413ee3e22d383962c068b35c1cf2",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s01-c6-8b6ba32e124c",
+          "slide": 1,
+          "text": "For S S E K M S objects, configure supported encryption settings and key permissions. Test an eligible encrypted version at the destination.",
+          "text_sha256": "8b6ba32e124c03499f09414aa9936a7ec56d5a4131c9bd5729032a89dbc1101d",
+          "canonical_text_sha256": "0390735fe40f3bf3ea3516d920e7bab3f9b2200fc0ab6b876d1e4a1d673b84fc",
+          "asset_sha256": "a0e9e6fa69d8064da2aa1432f41b49fa367cccaa6fe8bebbf18262867ce4c322"
+        },
+        {
+          "id": "m09p05-jenny-s02-c1-07a5038f1ffd",
+          "slide": 2,
+          "text": "New eligible objects written after the rule is configured follow the live replication path. Use monitoring and, if the live timing requirement calls for it, evaluate S three Replication Time Control. A rule alone does not prove a specific object has arrived.",
+          "text_sha256": "07a5038f1ffd67425811c6b2e5cf308bed7340557b94b7103351f20e3a97c1ac",
+          "canonical_text_sha256": "9f14f657853c4317f8f27363af80c2f7747fc2b37448f8e007047367c977ac9d",
+          "asset_sha256": "ca4a2eee9d0f4901b16bcb15ad9fa894cf4837a7b62e399ade34fd2165afb830"
+        },
+        {
+          "id": "m09p05-jenny-s02-c2-c3018d5fcf4f",
+          "slide": 2,
+          "text": "The objects already in the bucket need a different path. Create a Batch Replication job to backfill eligible objects or repair missing copies. Replication Time Control does not cover that batch job.",
+          "text_sha256": "c3018d5fcf4f9f1feba8f303a89468554f39e136b6c58c27f52d0051b2b8be78",
+          "canonical_text_sha256": "c3018d5fcf4f9f1feba8f303a89468554f39e136b6c58c27f52d0051b2b8be78",
+          "asset_sha256": "ca4a2eee9d0f4901b16bcb15ad9fa894cf4837a7b62e399ade34fd2165afb830"
+        },
+        {
+          "id": "m09p05-jenny-s02-c3-a6dd2d3dccee",
+          "slide": 2,
+          "text": "Replicate delete markers only when your rule supports and enables it. Deleting a particular version at the source does not perform the same delete at the destination. Test the exact behavior against the recovery policy.",
+          "text_sha256": "a6dd2d3dcceed9ed7b7306cba4909487a57d943b5523adbd5858e753508d0638",
+          "canonical_text_sha256": "a6dd2d3dcceed9ed7b7306cba4909487a57d943b5523adbd5858e753508d0638",
+          "asset_sha256": "ca4a2eee9d0f4901b16bcb15ad9fa894cf4837a7b62e399ade34fd2165afb830"
+        },
+        {
+          "id": "m09p05-jenny-s03-c1-33e67b7ec3bc",
+          "slide": 3,
+          "text": "Start from the event the application needs, such as an object creation, removal or restore. A notification lets a consumer react without the uploader having to run the downstream job itself.",
+          "text_sha256": "33e67b7ec3bc6c392ff69a22d5b4f57097f301f12c332886249aa937f445f0b0",
+          "canonical_text_sha256": "33e67b7ec3bc6c392ff69a22d5b4f57097f301f12c332886249aa937f445f0b0",
+          "asset_sha256": "b42b1bc561b63e3ea58dcae5c1bd7762eb822f3c18212e63f62618066ee0891f"
+        },
+        {
+          "id": "m09p05-jenny-s03-c2-a0803f74d942",
+          "slide": 3,
+          "text": "Use supported key filters, for example an invoices prefix and a dot CSV suffix, to narrow what invokes the consumer. Do not treat the prefix or suffix as an arbitrary wildcard. Also keep derived output outside the trigger scope where needed.",
+          "text_sha256": "a0803f74d942f1a1883176bc020fda18eac7ed32ad99e47a5f7ef4b96b3f38f8",
+          "canonical_text_sha256": "a0803f74d942f1a1883176bc020fda18eac7ed32ad99e47a5f7ef4b96b3f38f8",
+          "asset_sha256": "b42b1bc561b63e3ea58dcae5c1bd7762eb822f3c18212e63f62618066ee0891f"
+        },
+        {
+          "id": "m09p05-jenny-s03-c3-82539cc3fbd6",
+          "slide": 3,
+          "text": "Send the event directly to the Lambda function, standard S Q S queue or standard S N S topic shown. Grant delivery permission and verify receipt. If an event arrives twice or out of order, processing it must not duplicate the business action.",
+          "text_sha256": "82539cc3fbd63848bf2f6b75509da29250b951aa469fadb2274a685d9c68c1b0",
+          "canonical_text_sha256": "0e63ce5afc56fbd26344e8b8ca830c33d160e24243d741f55b5e234a5c4cf947",
+          "asset_sha256": "b42b1bc561b63e3ea58dcae5c1bd7762eb822f3c18212e63f62618066ee0891f"
+        }
+      ]
+    }
+  ]
+}
