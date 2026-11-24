@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "05",
+      "revision": "2026-11-23-m12p05-m12-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16",
+        "2": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744",
+        "3": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+      },
+      "units": [
+        {
+          "id": "m12p05-redo-s01-c1-9210b041ae8a",
+          "slide": 1,
+          "text": "The service can increase its desired tasks from two to four, but that does not create E C two hosts by itself. Choose a useful demand metric and allow for startup time and cooldowns.",
+          "text_sha256": "9210b041ae8a05e22afd9384753e62b40f9c5a21436786d4f360ce82bc65f6be",
+          "canonical_text_sha256": "3c3db5350e5bb83fe6209b6163b161116f08cc409a0598f666d183c51e71370e",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-redo-s01-c2-8420d779effd",
+          "slide": 1,
+          "text": "If the extra tasks stay pending, check compute placement and quotas separately from the scaling policy. On E C two, the fleet needs enough eligible slots. So if desired count rises but running count stays flat, look first at pending task reasons rather than increasing the scaling target again.",
+          "text_sha256": "8420d779effd3fe6393372eac06c6ef579b79b803e490c675e1a266ae5dfc77e",
+          "canonical_text_sha256": "e8df6f9da82625c29fd6684287374037719a74c8ca0e62438b5a6acb7232457b",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-redo-s02-c1-a519bae4620a",
+          "slide": 2,
+          "text": "A capacity provider connects task demand to a compute model. Fargate supplies managed serverless capacity. An Auto Scaling group provider can increase E C two fleet capacity when managed scaling is enabled and can coordinate draining during scale-in when configured. ECS Managed Instances is a separate managed E C two option. Check strategy compatibility, placement and failure behavior.",
+          "text_sha256": "a519bae4620af012758b5e4c767858b308ff2013b875b7115db2ff80b68a331d",
+          "canonical_text_sha256": "7799c2bd342680ff98244882ee2a0987f9c06a838c7b63458491550833b1a62f",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-redo-s03-c1-076a669419db",
+          "slide": 3,
+          "text": "Keep a reliable On-Demand base for steady work and assign interruption-tolerant capacity to Fargate Spot. A Spot interruption can stop a task, so handle its termination signal, checkpoint progress and make retries safe. E C two Spot is also reclaimable but has different host handling. Never assume unavailable Fargate Spot automatically falls back to On-Demand.",
+          "text_sha256": "076a669419db2c795f9b3deada394461d042b95612d81ad915b4baf4f8cd1158",
+          "canonical_text_sha256": "d35a2ae6921093b5b8d3b19c9fca89294ab1bd6cbda2583b06833aeb6f0bf445",
+          "asset_sha256": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "06",
+      "revision": "2026-11-23-m12p06-m12-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96",
+        "2": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+      },
+      "units": [
+        {
+          "id": "m12p06-redo-s01-c1-6444a9308ead",
+          "slide": 1,
+          "text": "Follow an image from build to registry to runtime. The pipeline pushes an image manifest and layers into a private ECR repository. The runtime authenticates, pulls the authorized image and runs it. ECR stores images; it does not run containers. Record a digest to identify the exact content rather than depending only on a tag.",
+          "text_sha256": "6444a9308ead0127e227847faa577debb38e14f980f558617fcfbaf64c3172bc",
+          "canonical_text_sha256": "6444a9308ead0127e227847faa577debb38e14f980f558617fcfbaf64c3172bc",
+          "asset_sha256": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96"
+        },
+        {
+          "id": "m12p06-redo-s02-c1-00024ce337cc",
+          "slide": 2,
+          "text": "Test the image pull at three layers. The actual execution identity needs permission to authenticate and pull; for cross-account access the repository policy must also authorize the caller. Then verify reachability to ECR and its S three layers. A token is not permission to every repository. Use the digest to verify which image was pulled.",
+          "text_sha256": "00024ce337cc985479b76ebff94519ade2f43e20f95400ebc8b2e06947a54787",
+          "canonical_text_sha256": "c923ee638110a3e51c7ef8c79a667cc67103050f53d77c203a4fdd4d10564a93",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "07",
+      "revision": "2026-11-23-m12p07-m12-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "b42f37234312ee7268c549b819e131af03f98f045905ce597a5b3888176ef0c5",
+        "2": "3d4174e0f219a837d7221a678c241548339fc2e7a7c1f8824bc253d329002f47",
+        "3": "eb8629d6bfbceb007968c4f50f65470cbe73f008ce7836713203c5690a17441c"
+      },
+      "units": [
+        {
+          "id": "m12p07-redo-s01-c1-235563d08071",
+          "slide": 1,
+          "text": "Protect the known-good deployment digest and its multi-architecture artifacts before expiring old images. A moving tag can point at different content, and tag immutability is not a retention policy. Preview the lifecycle rules against test images, then prove a fresh task can still pull and run the intended rollback digest. Record that digest in the release evidence: it gives recovery a specific artifact to test before the cleanup runs.",
+          "text_sha256": "235563d0807134f0391b7c861b42f8c9666188b2e08981021380c60955ef7c19",
+          "canonical_text_sha256": "235563d0807134f0391b7c861b42f8c9666188b2e08981021380c60955ef7c19",
+          "asset_sha256": "b42f37234312ee7268c549b819e131af03f98f045905ce597a5b3888176ef0c5"
+        },
+        {
+          "id": "m12p07-redo-s02-c1-0dd8512fd862",
+          "slide": 2,
+          "text": "ECR replication copies eligible image artifacts, not the application. Push after the rule is configured and verify the destination digest. Older images are not replicated automatically; plan explicit backfill if needed. Cross-account replication needs destination registry permission. Separately configure destination policies, lifecycle, network access and the actual runtime deployment.",
+          "text_sha256": "0dd8512fd8626881744cd184ab73910b49dfaf2f60fd8da170fddf855f40c786",
+          "canonical_text_sha256": "0dd8512fd8626881744cd184ab73910b49dfaf2f60fd8da170fddf855f40c786",
+          "asset_sha256": "3d4174e0f219a837d7221a678c241548339fc2e7a7c1f8824bc253d329002f47"
+        },
+        {
+          "id": "m12p07-redo-s03-c1-094f2bdbf719",
+          "slide": 3,
+          "text": "Basic ECR scanning finds supported operating-system package issues. Enhanced scanning integrates Amazon Inspector and can also cover supported language packages. A finding is an input to remediation: review context, patch and rebuild, verify the new scan and digest, then deploy the verified image. A clean or older scan does not establish that the image is safe.",
+          "text_sha256": "094f2bdbf719b5afb927600b3739e118b3890b44b40aea4fdb7a37d0d04f8db5",
+          "canonical_text_sha256": "094f2bdbf719b5afb927600b3739e118b3890b44b40aea4fdb7a37d0d04f8db5",
+          "asset_sha256": "eb8629d6bfbceb007968c4f50f65470cbe73f008ce7836713203c5690a17441c"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "08",
+      "revision": "2026-11-23-m12p08-m12-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "4db14b8367577380a2bcd43a4115d2ac57dbe3c978e8add7e106aea2316b23d5",
+        "2": "0bd2c59220dde57948ebbde54c066110d0c49ec116862278d6cb826a52dbff80",
+        "3": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+      },
+      "units": [
+        {
+          "id": "m12p08-redo-s01-c1-e1a0b62293d6",
+          "slide": 1,
+          "text": "EKS runs the highly available Kubernetes control plane. Your compute options supply the worker capacity, and a Deployment runs replicas that a Service can reach. You still choose workload placement, identity, networking and storage. The cluster is Regional; a separate-Region recovery plan needs separate capacity and a plan for traffic and data.",
+          "text_sha256": "e1a0b62293d639dabdc859575f556d5d866c620b645311b366d46de31616bf9d",
+          "canonical_text_sha256": "e1a0b62293d639dabdc859575f556d5d866c620b645311b366d46de31616bf9d",
+          "asset_sha256": "4db14b8367577380a2bcd43a4115d2ac57dbe3c978e8add7e106aea2316b23d5"
+        },
+        {
+          "id": "m12p08-redo-s02-c1-6b62c942d089",
+          "slide": 2,
+          "text": "Availability of the Kubernetes API is different from availability of your application. The managed control plane spans zones. You still decide where Pods run, how replicas spread, how ingress reaches them and how to manage workload identity and storage. Test application availability and recovery, not just whether the API server responds.",
+          "text_sha256": "6b62c942d089f7f5f220402ba96c349c9ea7564a6274c5c7380e4ece34a6d622",
+          "canonical_text_sha256": "6b62c942d089f7f5f220402ba96c349c9ea7564a6274c5c7380e4ece34a6d622",
+          "asset_sha256": "0bd2c59220dde57948ebbde54c066110d0c49ec116862278d6cb826a52dbff80"
+        },
+        {
+          "id": "m12p08-redo-s03-c1-571171a7c0f7",
+          "slide": 3,
+          "text": "Compare what you want to manage. Managed node groups offer E C two lifecycle integration; self-managed nodes leave more work with you. Fargate runs matching Pods without you managing their nodes, within its supported constraints. EKS Auto Mode also manages node compute and certain infrastructure capabilities.",
+          "text_sha256": "571171a7c0f76b38a13594409bf455e9b46091cb94a7b5d659bd1c494de3c697",
+          "canonical_text_sha256": "4bbf23daeb13f7feb488271db2b0fee7ecba19b627a4099928ad9dc5d49b3125",
+          "asset_sha256": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+        },
+        {
+          "id": "m12p08-redo-s03-c2-69fad27c9472",
+          "slide": 3,
+          "text": "Check workload requirements rather than assuming the models are interchangeable. A team that requires node-level customization may prefer an E C two node group, while a supported workload that needs no such control can consider a more managed option.",
+          "text_sha256": "69fad27c9472b4fb7a56b0ee07aa9f33348a0105415c34e39969a4f353b5f6b3",
+          "canonical_text_sha256": "a169f26351cce4a368ab18cb325957882f85ffdeaeb913b4646ddb9f6dd74587",
+          "asset_sha256": "35d753f6b9bce1cf96375a09fcff428c3b530f038d64d0ff2326a978b850f3af"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "09",
+      "revision": "2026-11-23-m12p09-m12-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "f516e14bc31fb4ddd0c4cf4c5cdb59f2649f51321533778edbaa926e916c6a61",
+        "2": "ce1bc95ee9755f2a2e9ed5ecb5da1d3589cd7622b1b24efbef2d04886aa56b9f"
+      },
+      "units": [
+        {
+          "id": "m12p09-redo-s01-c1-52f53d9409d8",
+          "slide": 1,
+          "text": "A public load balancer can accept internet requests while workers and Pods remain private. Choose target type and permit the actual traffic and health path. Independently verify private access to the Kubernetes API, image registry, and logging destinations, plus the load-balancer controller permissions. If the application is private, an internal load balancer may be the right exposure.",
+          "text_sha256": "52f53d9409d88db95b9ca597c9c76b69cf9e6e1f9c9708200a01a9b37723a91e",
+          "canonical_text_sha256": "52f53d9409d88db95b9ca597c9c76b69cf9e6e1f9c9708200a01a9b37723a91e",
+          "asset_sha256": "f516e14bc31fb4ddd0c4cf4c5cdb59f2649f51321533778edbaa926e916c6a61"
+        },
+        {
+          "id": "m12p09-redo-s02-c1-5be2bf6d6171",
+          "slide": 2,
+          "text": "Use the first path to decide what a person may do to Kubernetes objects: authenticate to the cluster, then apply its authorization rules, such as namespace RBAC. The second path gives a Pod a narrowly scoped I A M role for A W S APIs. EKS Pod Identity needs supported nodes, not Fargate; use a supported option such as IRSA there. Do not substitute the node role for per-workload access.",
+          "text_sha256": "5be2bf6d61715fbaf860417f7206cc68c64e5c98295af8774c8dc1b199c16b25",
+          "canonical_text_sha256": "b6c85fa2e1cc4752d8445b0a188d000c55738243bfb2294a9310a9cd03619efe",
+          "asset_sha256": "ce1bc95ee9755f2a2e9ed5ecb5da1d3589cd7622b1b24efbef2d04886aa56b9f"
+        }
+      ]
+    }
+  ]
+}
