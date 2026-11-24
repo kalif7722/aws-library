@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "10",
+      "revision": "2026-11-23-m10p10-m10-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "24": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be",
+        "25": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+      },
+      "units": [
+        {
+          "id": "m10p10-redo-s24-c1-a1390e77b1ff",
+          "slide": 24,
+          "text": "You’ll learn when to choose ONTAP for existing protocols and when OpenZFS is a better fit for Linux file workflows. Choose this file system when the application needs more than a single file protocol.",
+          "text_sha256": "a1390e77b1ffa0cb01e52d248b08d3e0b55f17d27fb8cc608a5273917994300b",
+          "canonical_text_sha256": "a1390e77b1ffa0cb01e52d248b08d3e0b55f17d27fb8cc608a5273917994300b",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s24-c2-7ddac814f76c",
+          "slide": 24,
+          "text": "A Linux service might consume reports through NFS, while a Windows team opens them through SMB. A different workload may require block storage through iSCSI. FSx for NetApp ONTAP supports those needs on one managed platform, but the endpoints do not all expose the same storage abstraction.",
+          "text_sha256": "7ddac814f76cffabea5334a7590b0f2d2d5b56cf8ff9ee089275d55fde6d6054",
+          "canonical_text_sha256": "7ddac814f76cffabea5334a7590b0f2d2d5b56cf8ff9ee089275d55fde6d6054",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s24-c3-be009bbe162d",
+          "slide": 24,
+          "text": "Follow the two file clients into the storage virtual machine. A storage virtual machine provides its own client-facing endpoints and serves the volumes that belong to it. The file volume shown can be made available through NFS or SMB, subject to configuration and client permissions. When a team must keep its Windows workflows, SMB support does not remove the need to plan directory identity and how permissions map to the files.",
+          "text_sha256": "be009bbe162d8b182a0eb06fa6b3bbce3134feed313dbfc15cc16971a06820b8",
+          "canonical_text_sha256": "be009bbe162d8b182a0eb06fa6b3bbce3134feed313dbfc15cc16971a06820b8",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s24-c4-54117d263a29",
+          "slide": 24,
+          "text": "Now trace the separate iSCSI connection. The host attaches a logical unit, or LUN, and sees block storage rather than a directory of shared files. The host supplies the file system if its application needs one.",
+          "text_sha256": "54117d263a294de4c24eadef3c86bdddf7e46804ce986dc244353c61b8690518",
+          "canonical_text_sha256": "54117d263a294de4c24eadef3c86bdddf7e46804ce986dc244353c61b8690518",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s24-c5-fff332535c72",
+          "slide": 24,
+          "text": "This is why a workload that explicitly requires an iSCSI LUN rules out an NFS-only feature match even if both alternatives could hold the same amount of data. Check the deployment supports iSCSI: A W S limits it to file systems with six or fewer high-availability pairs.",
+          "text_sha256": "fff332535c7279b91f6630fe19c8153cee1d42738efae287312764e6e3c1d4a8",
+          "canonical_text_sha256": "5a17f0ae563c773459a6195628584dd8ff9fd57ac861781a8a5bb262d93dddd4",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s24-c6-6cce42d79804",
+          "slide": 24,
+          "text": "Before sizing the deployment, separate data management from performance. Snapshots and clones can help create test copies or recover a previous view. Compression and deduplication can make storage more efficient, but do not promise that every workload saves the same amount. Plan the SSD working capacity, throughput and I ops for the real application. Test the actual mix of small and large operations, not just a single peak transfer.",
+          "text_sha256": "6cce42d79804d2bd2326a502b6f2e4a2c43b31b26b93e5065c6e5f973b1c7fe7",
+          "canonical_text_sha256": "3a87a833fc407ad9917ddab35f8105d44e9477f9a71436f4d7148c568405b5d2",
+          "asset_sha256": "2486ddecdbee64ab5944232b1a244b72574714147ab81e5653ae56f4a43426be"
+        },
+        {
+          "id": "m10p10-redo-s25-c1-34877c60fb24",
+          "slide": 25,
+          "text": "If you need a managed NFS share with ZFS snapshots and fast working copies, follow the OpenZFS example. Multiple compatible NFS clients access the source volume. A snapshot records a read-only point in time. It lets you return to a known dataset, but it is not someplace a tester can write new results.",
+          "text_sha256": "34877c60fb241cc0c3e54a7e3828d2acde0105e9342ab8c0bd237f3a9383f203",
+          "canonical_text_sha256": "34877c60fb241cc0c3e54a7e3828d2acde0105e9342ab8c0bd237f3a9383f203",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        },
+        {
+          "id": "m10p10-redo-s25-c2-18891425ae1c",
+          "slide": 25,
+          "text": "Create a writable clone from the chosen snapshot when another team needs to experiment without changing the source. The illustration shows the usual clone dependency: new changes consume storage as the clone diverges, and a dependent clone needs its originating snapshot. If your design needs the copied data independent of the original, use a full-copy volume instead.",
+          "text_sha256": "18891425ae1c4119f98e2bb2d487631979916fa1dbcba148323a51658a34ed79",
+          "canonical_text_sha256": "18891425ae1c4119f98e2bb2d487631979916fa1dbcba148323a51658a34ed79",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        },
+        {
+          "id": "m10p10-redo-s25-c3-1d1a0306b664",
+          "slide": 25,
+          "text": "For example, take a known version of a reporting dataset and give two test jobs their own writable clones. Verify that a test job changes its copy without altering the source. Then make the separate engineering choices: select availability and throughput for the workload, and design a backup if you need independent recovery. A quick snapshot-based working copy does not meet a requirement for a separate backup simply because it was fast to create.",
+          "text_sha256": "1d1a0306b664163ad5ac147c7e86ae54b3272c359a5515a523e71049123b3ab9",
+          "canonical_text_sha256": "1d1a0306b664163ad5ac147c7e86ae54b3272c359a5515a523e71049123b3ab9",
+          "asset_sha256": "d9c83e97e5a7139c379547572b76d17d0168fb472519fd30151ac739a8c2b160"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "11",
+      "revision": "2026-11-23-m10p11-m10-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "26": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd",
+        "27": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d",
+        "28": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+      },
+      "units": [
+        {
+          "id": "m10p11-redo-s26-c1-381ec5b7be17",
+          "slide": 26,
+          "text": "You’ll learn how a file gateway turns a local file operation into S three storage and what to verify when a write looks missing. Use S three File Gateway when local applications need a file share but your cloud destination is Amazon S three.",
+          "text_sha256": "381ec5b7be17fe7595917411f93c55d6aa3e0cd57e6e966f33dee9a0145d3911",
+          "canonical_text_sha256": "91af8960502133ebb442d2d82da037412105a536dc5693ab81dd528d3d224576",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s26-c2-93207f6753a0",
+          "slide": 26,
+          "text": "The local clients speak NFS or SMB to the gateway. They are not issuing S three API requests. The gateway translates between the file interface and objects in the bucket and uses a local cache to reduce repeated remote access.",
+          "text_sha256": "93207f6753a08fd4e47175cda3ee5b69e283b5c94856e77e66b30af9ef9cdd58",
+          "canonical_text_sha256": "241ca8982d9415d519c0247808c70e383cb6346f6d858a40c70891c171ebc2b2",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s26-c3-4633f1d124f0",
+          "slide": 26,
+          "text": "Follow the report example. The application writes report dot CSV to the share, the cache receives it, and the gateway uploads it asynchronously. A successful local write is not yet evidence that the object is available in S three. If a cloud job depends on that object, wait for confirmed cloud-side arrival or another suitable upload-completion signal rather than starting from the local save event alone.",
+          "text_sha256": "4633f1d124f0d90d099319cb9707fb62bb2e939b05259281135a34dd6f44f914",
+          "canonical_text_sha256": "0cb9d6bca5f2a5f968d24e039ec4a4918fcc60fabf29f9245306a920971c01aa",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s26-c4-dc51fd2a51fa",
+          "slide": 26,
+          "text": "The opposite direction has a different issue. If an approved cloud workflow changes an object outside the gateway, the share can still have older cached metadata. Refresh the gateway cache as appropriate and verify that the file view shows the latest entry. A refresh is not a way to reconcile simultaneous writers; coordinate updates and watch upload and cache health before depending on the design for recovery.",
+          "text_sha256": "dc51fd2a51fabf20d95e28b85b4c7b74b3364fa4bca1758a0ea1a4ed2a641015",
+          "canonical_text_sha256": "dc51fd2a51fabf20d95e28b85b4c7b74b3364fa4bca1758a0ea1a4ed2a641015",
+          "asset_sha256": "6047532046465071639e6bca7096f519a7155c84584802c1e63587e4eb874dbd"
+        },
+        {
+          "id": "m10p11-redo-s27-c1-21853263f67b",
+          "slide": 27,
+          "text": "Volume Gateway looks similar at first, but the clients use iSCSI block volumes, not file shares. The decision is where the primary data lives. Cached volumes keep the primary data in A W S. The gateway retains frequently accessed data locally and uses local storage for the cache and upload buffer. This is useful when your data set is much larger than the amount of on-premises storage you want to operate.",
+          "text_sha256": "21853263f67ba2d61d99d06a34b76d9f51582db76ca3c38193bf4e33d5971d5d",
+          "canonical_text_sha256": "ea0af20182ea380978fdc1ef4b7887597a0ef392b37c2ca688b794720645f7c3",
+          "asset_sha256": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d"
+        },
+        {
+          "id": "m10p11-redo-s27-c2-8d5841e45950",
+          "slide": 27,
+          "text": "Stored volumes make the opposite tradeoff. The complete primary volume resides locally, and the gateway asynchronously backs it up to A W S as snapshots. A local block workload can therefore keep direct access to its full dataset, but you must provision enough local disk for the whole primary plus the required buffering. Verify the latest completed recovery point rather than treating a saved local write as a completed cloud snapshot.",
+          "text_sha256": "8d5841e45950c93125d23bf057aa555345e233f30f4aa0bc9ea226ad0a2e9c56",
+          "canonical_text_sha256": "ad282dcc22cac7d315f30e24fcb5d59b1ee99dc28faa4e8350cb4a107cd42da0",
+          "asset_sha256": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d"
+        },
+        {
+          "id": "m10p11-redo-s27-c3-ed4bfc13054e",
+          "slide": 27,
+          "text": "Compare two real exam requirements. When the branch wants to avoid keeping its complete dataset locally, cached volumes fit. When the workload has to retain a complete local block volume and use A W S for backup, stored volumes fit. If the client instead needs an SMB share mapped into S three objects, neither Volume Gateway mode supplies that interface. Start with client protocol and primary data location, then test restore from the chosen recovery path.",
+          "text_sha256": "ed4bfc13054e0da27224155117b4e95665bf8eacc67c2ed2a002ab20af2433d1",
+          "canonical_text_sha256": "43babb4bde6ea68dbb05e2251020f5cd69f775c3bf1cce256d5b530f597c6c6a",
+          "asset_sha256": "5e2efb386f1d839e5845b502c17c141ebfb71375af08aa59b5f30fdfc6d9f87d"
+        },
+        {
+          "id": "m10p11-redo-s28-c1-cea5181367f2",
+          "slide": 28,
+          "text": "Tape Gateway is the answer when the backup software already understands a tape library and the team cannot replace that interface. Follow the iSCSI connection into the gateway's virtual tape library. The backup software writes a virtual tape instead of handling a cartridge. The online virtual tape is backed by S three through the gateway. Treat it as a tape to manage through the backup application, not as a collection of objects to edit in a bucket.",
+          "text_sha256": "cea5181367f2f9b21cb473e845825221de0b3e7b3215232246d80cdbf5a14b7a",
+          "canonical_text_sha256": "656128bac0f6780fbf3704c593b657e3fb1a705926f03fe48007da35cfa62aff",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        },
+        {
+          "id": "m10p11-redo-s28-c2-633cb3d729ff",
+          "slide": 28,
+          "text": "When the software ejects a tape, you can archive it to the configured Glacier storage class. If you later need the archived backup, retrieve the virtual tape to a Tape Gateway before reading it with the backup software. The arrow back to the library represents that recovery step. It is not the same experience as reading an online tape.",
+          "text_sha256": "633cb3d729ffa468e7322eb57973718c7f29e9c4e16d70c0faa13dfbcfdc081d",
+          "canonical_text_sha256": "633cb3d729ffa468e7322eb57973718c7f29e9c4e16d70c0faa13dfbcfdc081d",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        },
+        {
+          "id": "m10p11-redo-s28-c3-d11fd73116a3",
+          "slide": 28,
+          "text": "Imagine a quarterly restore exercise. Pick an archived tape, measure how long retrieval takes, then verify that the backup software can actually restore and read a sample. Choose an archive tier using the resulting recovery deadline and cost, not just the lowest storage price. The key distinction is preserving an existing tape workflow: if applications need live NFS files or iSCSI disks, choose the corresponding gateway rather than virtual tape.",
+          "text_sha256": "d11fd73116a3e587dc04287f579a8b79c0b9c6fb3ca61f243593d2ad120a8617",
+          "canonical_text_sha256": "d11fd73116a3e587dc04287f579a8b79c0b9c6fb3ca61f243593d2ad120a8617",
+          "asset_sha256": "e8454c52ff421a9a8820fdd0ddb9c79a75167873b9730b838c5a45ddc47ff0e9"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "12",
+      "revision": "2026-11-23-m10p12-m10-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "29": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6",
+        "30": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+      },
+      "units": [
+        {
+          "id": "m10p12-redo-s29-c1-d92f98d187a1",
+          "slide": 29,
+          "text": "You’ll learn how to grow an E B S volume and confirm that the operating system and application can use the new space. Expand an E B S volume safely and prove the application can use it. Confirm the exact volume, Availability Zone, and file system, create an appropriate recovery point, then request and monitor the size change.",
+          "text_sha256": "d92f98d187a1c6bda751d5bdfe8e46493ce4633cd872c1214740633162e528e9",
+          "canonical_text_sha256": "846d5b515af890b2d3f4a6884a957913da115dc3be8cd7e3e8ca769cc5e8c1cf",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s29-c2-a4808b4fb5b7",
+          "slide": 29,
+          "text": "In this example the cloud disk grows from one hundred to two hundred gibibytes. Extend the partition if needed, then grow the existing file system with the matching tool. Do not format it.",
+          "text_sha256": "a4808b4fb5b74eb0c70c49432a1be5f2ddbc45df0a6b94f609a21d644d02679e",
+          "canonical_text_sha256": "a4808b4fb5b74eb0c70c49432a1be5f2ddbc45df0a6b94f609a21d644d02679e",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s29-c3-e075a584a0e8",
+          "slide": 29,
+          "text": "Compare the block-device size with the mounted capacity, then perform a normal application read or write. If the console says two hundred but the guest mount still says one hundred, the expansion is not complete for the workload.",
+          "text_sha256": "e075a584a0e8bcb124d1de2cf0bfba25adaa52d0d41cb078981ec091e698b6cc",
+          "canonical_text_sha256": "e075a584a0e8bcb124d1de2cf0bfba25adaa52d0d41cb078981ec091e698b6cc",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        },
+        {
+          "id": "m10p12-redo-s30-c1-1ff082464ae8",
+          "slide": 30,
+          "text": "Now prove that two authorized clients really share the same file. Client A reaches its local mount target, Client B reaches the target in its own zone, and both reach one Regional EFS file system.",
+          "text_sha256": "1ff082464ae8b8388cd98dfb6f4f7a008070e2cb227e7a4f86a7d044659f81f8",
+          "canonical_text_sha256": "1ff082464ae8b8388cd98dfb6f4f7a008070e2cb227e7a4f86a7d044659f81f8",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        },
+        {
+          "id": "m10p12-redo-s30-c2-4f00e45c83b9",
+          "slide": 30,
+          "text": "Allow NFS on TCP port twenty forty-nine from the client security group. In this example mount with the EFS helper, TLS, I A M authorization, and the intended access point. Check the effective Unix permissions too.",
+          "text_sha256": "4f00e45c83b98cf450ccdad6449a191f57596e6acb326d8a5f5ec7af17ab1f98",
+          "canonical_text_sha256": "65a1714aec23f895b1851e342b388025a31ee636f0e1d4355ad8367c616736c3",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        },
+        {
+          "id": "m10p12-redo-s30-c3-f5f3496d6e0d",
+          "slide": 30,
+          "text": "Let Client A write orders dot CSV, and have Client B read the same contents. Then verify that an unauthorized client fails. A successful mount or open TCP port alone does not prove that your sharing and access design works.",
+          "text_sha256": "f5f3496d6e0de85647304ce168b57cd3fe5ca9ef064e198fba5f3cc6c9c0d158",
+          "canonical_text_sha256": "f5f3496d6e0de85647304ce168b57cd3fe5ca9ef064e198fba5f3cc6c9c0d158",
+          "asset_sha256": "099cf172dc3ea8cfd8bd51041d203ef928bab48e1878225e5cc8d22690cda407"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "13",
+      "revision": "2026-11-23-m10p13-m10-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "31": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6",
+        "32": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+      },
+      "units": [
+        {
+          "id": "m10p13-redo-s31-c1-9c8427b4da31",
+          "slide": 31,
+          "text": "You’ll learn to choose a volume snapshot, an instance image, or a regional recovery copy based on what you need to restore. Choose the recovery artifact by what you need back. For volume data, restore an E B S snapshot to a new volume. The snapshot captures point-in-time blocks, not the instance's boot configuration.",
+          "text_sha256": "9c8427b4da317d3fdf24cd58a4a2f1ebaa4cff607ca80a23c56099a6408a9a58",
+          "canonical_text_sha256": "f08f5f9bbd3a05a9692e079f5be32ba11f63efafdefc5db47ab6569e7b98a6e9",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s31-c2-a17d5a59eef0",
+          "slide": 31,
+          "text": "For a bootable E C two instance, use an E B S-backed A M I. It references snapshots and holds launch metadata, including block-device mappings. Choose the instance type separately at launch or through the launch template.",
+          "text_sha256": "a17d5a59eef0bdaf8133a5c7c861f30f7d39a1aa431a27d0a21773f81cd9f6ba",
+          "canonical_text_sha256": "758eae6a35c4a21e0f37c0552f9ca9ef18668e0c45a053c42a93bc22defbd56a",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s31-c3-9c27f541a899",
+          "slide": 31,
+          "text": "If the target is another Region, prepare the appropriate copy before the incident. For an encrypted copy, verify the destination K M S key and permissions. Run a real test restore or launch in that Region.",
+          "text_sha256": "9c27f541a8995d0e9cd9a3bad5c6e4f27a0c3d3cd483cca64e14a9095387a91c",
+          "canonical_text_sha256": "57d135b660f9ad2852315f2f5ae39a221b01e9e5faf385da2c83f7dc55042406",
+          "asset_sha256": "18f20c996fe3e701bb6fad4aa095275bcc1e09a43b6c0fdae88a35d5092cf6c6"
+        },
+        {
+          "id": "m10p13-redo-s32-c1-8006d6713a5c",
+          "slide": 32,
+          "text": "Use Data Lifecycle Manager when supported E B S volumes or E C two instances need scheduled recovery points. Select the resources by tags, choose a schedule, and define how long to keep the snapshots or E B S-backed AMIs this policy creates. Configure cross-Region copying when needed.",
+          "text_sha256": "8006d6713a5cfa114de679546dcb83b68ef2462c9fbcaa5e547bb721480f96f6",
+          "canonical_text_sha256": "a80454a8a2336beec08cf738cf5d60bffd9d20fb946591ddc1289c426f835c8c",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        },
+        {
+          "id": "m10p13-redo-s32-c2-47c750a6abf8",
+          "slide": 32,
+          "text": "The policy does not adopt snapshots created outside Data Lifecycle Manager or manage instance-store-backed AMIs. If the requirement covers several supported A W S services under one backup plan, compare A W S Backup instead. Verify which policy actually owns the recovery point.",
+          "text_sha256": "47c750a6abf89be3cf1e1b489d2e3e144bcc946a3e08cbebcb16679c98d1a648",
+          "canonical_text_sha256": "d7989f35054ff6082cd1a3a143b8e216db28aa229d5355f338fe1f137a30fe22",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "14",
+      "revision": "2026-11-23-m10p14-m10-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "33": "ee6310c690992b5094667d4f66278f0b09b07b025a720727c10ea2f7328baf16",
+        "34": "93cfcefb8b8406c16fa898342fc4ead430cd163f5ff49bb134845a89a46275c5"
+      },
+      "units": [
+        {
+          "id": "m10p14-redo-s33-c1-48de163d2746",
+          "slide": 33,
+          "text": "You’ll learn how to improve file performance while preserving the access behavior your applications need. Choose the file system first, then tune performance. For a Windows SMB share, preserve Active Directory identity and NTFS permissions. Choose SSD for latency-sensitive or metadata-heavy access, and consider HDD for cost-sensitive workloads dominated by broad sequential transfers.",
+          "text_sha256": "48de163d2746da59191670363154293b8a2e157aa2747bf5b69bc1531d82ec86",
+          "canonical_text_sha256": "48de163d2746da59191670363154293b8a2e157aa2747bf5b69bc1531d82ec86",
+          "asset_sha256": "ee6310c690992b5094667d4f66278f0b09b07b025a720727c10ea2f7328baf16"
+        },
+        {
+          "id": "m10p14-redo-s33-c2-d3b279d0a5c2",
+          "slide": 33,
+          "text": "For parallel compute, the workers need concurrent reads or writes on a shared working file system. Choose a suitable Lustre deployment, storage class, and throughput for the access pattern. S three can supply or receive data on supported configurations. It is not the file system the workers mount.",
+          "text_sha256": "d3b279d0a5c2e68ec43e563b4563e5a703554043b21be987e96c55f94e406ae9",
+          "canonical_text_sha256": "469db66a1ffe8db946f0701aa053a0154625182cb3b837f4e412b70c0e3b72ea",
+          "asset_sha256": "ee6310c690992b5094667d4f66278f0b09b07b025a720727c10ea2f7328baf16"
+        },
+        {
+          "id": "m10p14-redo-s34-c1-7a7c1dcc16cb",
+          "slide": 34,
+          "text": "Deploy S three File Gateway when on-premises clients need SMB access to S three-backed files. The SMB share can use Active Directory; a separate I A M role authorizes the gateway to access the bucket. Test the share identity and bucket permissions independently.",
+          "text_sha256": "7a7c1dcc16cb0c83df3d99f7d9584714b1a8c8b2c8b7f26ebec858a9580da1ef",
+          "canonical_text_sha256": "5665293b02a82d6aee3e624894abf5fbf0078afac4f5f6978382d4da7d93a2af",
+          "asset_sha256": "93cfcefb8b8406c16fa898342fc4ead430cd163f5ff49bb134845a89a46275c5"
+        },
+        {
+          "id": "m10p14-redo-s34-c2-c5b17c897843",
+          "slide": 34,
+          "text": "Use a supported virtual host for this design. Size the cache for pending uploads, then monitor gateway and upload health. Confirm objects reached S three before counting the change as recoverable there. Avoid picking the discontinued hardware appliance or FSx File Gateway for a new customer.",
+          "text_sha256": "c5b17c897843d833d2ce238902b8ae75c14e6f9ca53260524f879f23cfa5bca3",
+          "canonical_text_sha256": "77137ab13a5acaf1c2c953e6581e47d986a77d00f837c71ab8852be240704e6a",
+          "asset_sha256": "93cfcefb8b8406c16fa898342fc4ead430cd163f5ff49bb134845a89a46275c5"
+        },
+        {
+          "id": "m10p14-redo-s34-c3-6786691af9e6",
+          "slide": 34,
+          "text": "In the deployment test, save a file through the share and verify it appears in S three. If the user's share works but upload is failing, inspect the gateway and its bucket access rather than broadening the user's Windows permissions.",
+          "text_sha256": "6786691af9e60b0f1eb2233ea300c6662540fce6d6f4f60874b394f767a4e131",
+          "canonical_text_sha256": "b57186095376369927178079155ce25eee440b76aa4a01b5b406a98893f6864d",
+          "asset_sha256": "93cfcefb8b8406c16fa898342fc4ead430cd163f5ff49bb134845a89a46275c5"
+        }
+      ]
+    }
+  ]
+}
