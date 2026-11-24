@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "02",
+      "revision": "2026-11-24-m12p02-andrew-expressive",
+      "approved_assets": {
+        "1": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b",
+        "2": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0",
+        "3": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+      },
+      "units": [
+        {
+          "id": "m12p02-andrew-exp-s01-c1-75aa4b7819b6",
+          "slide": 1,
+          "text": "You need two healthy copies of an A P I. Begin with the task definition: it identifies the image, ports and resources each copy should use. It describes a task; it is not a running one.",
+          "text_sha256": "75aa4b7819b68543613a6364b3031c290ed28db6e93bf83d1030c346ed91ef51",
+          "canonical_text_sha256": "9ab17f62f2869c2eb38532677bddcaec3d8fc72bdad5a7bbf0dcc0ad98db4002",
+          "asset_sha256": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b"
+        },
+        {
+          "id": "m12p02-andrew-exp-s01-c2-0b8cce398725",
+          "slide": 1,
+          "text": "Run a task and that recipe becomes a running instance. A service now keeps two running and replaces an unhealthy task. The cluster gives E C S the logical place to manage them and their compute.",
+          "text_sha256": "0b8cce398725ab74bd145fc269686cebef85bc83f150e8af328049d961577c72",
+          "canonical_text_sha256": "aa2ea9c9ba37d3494ddde1023ce6d26ef6bac036910a2119cba83779b43247a3",
+          "asset_sha256": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b"
+        },
+        {
+          "id": "m12p02-andrew-exp-s01-c3-c68e256a2fd1",
+          "slide": 1,
+          "text": "If the same image performs a one-time batch instead, run a standalone task. Let it exit when it finishes rather than telling a service to keep replacing it.",
+          "text_sha256": "c68e256a2fd1d7215c115267ef7002e59e2acabb79a8e147461fa8077e45188e",
+          "canonical_text_sha256": "c68e256a2fd1d7215c115267ef7002e59e2acabb79a8e147461fa8077e45188e",
+          "asset_sha256": "c7224d0e95c363f0b3a9043949bfe08d8bd0b2c9a57e9543118607d04e37530b"
+        },
+        {
+          "id": "m12p02-andrew-exp-s02-c1-f74b1e7d4a35",
+          "slide": 2,
+          "text": "The container starts from a specific image. Specify the task C P U and memory and the port the process listens on. With Fargate, choose a supported C P U and memory combination.",
+          "text_sha256": "f74b1e7d4a356686ed2562fc9ed918f6b405ff7ace5c9772118c9eff673fd2dd",
+          "canonical_text_sha256": "0ce878c9ceba5a0670cb2a5c3b9ccfb5659f4366e3b69f47095f41a43408de99",
+          "asset_sha256": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0"
+        },
+        {
+          "id": "m12p02-andrew-exp-s02-c2-3ac9081f2eb5",
+          "slide": 2,
+          "text": "Define essential containers, logging, environment settings, secret references and storage. Those settings make startup repeatable without putting secrets into the image.",
+          "text_sha256": "3ac9081f2eb5da31b7a8e159a2f8425e97df85888884ae84c3bd7298449bcb59",
+          "canonical_text_sha256": "3ac9081f2eb5da31b7a8e159a2f8425e97df85888884ae84c3bd7298449bcb59",
+          "asset_sha256": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0"
+        },
+        {
+          "id": "m12p02-andrew-exp-s02-c3-7c6961528ca1",
+          "slide": 2,
+          "text": "What if the app needs a different image or a higher memory limit? Register a new revision, then deploy it through the service. Changing the recipe does not rewrite tasks that are already running.",
+          "text_sha256": "7c6961528ca195b480597948431eff4315b857e77a92334fc46ac38f4bf8da65",
+          "canonical_text_sha256": "7c6961528ca195b480597948431eff4315b857e77a92334fc46ac38f4bf8da65",
+          "asset_sha256": "2a703de3cf46302e8d8c0c8b49c205cd494598d1aa63388397cf78abd72c7ec0"
+        },
+        {
+          "id": "m12p02-andrew-exp-s03-c1-70a5c1dac404",
+          "slide": 3,
+          "text": "The app reads S three or calls Dynamo D B. Give the application that permission through the task role. The runtime supplies temporary credentials; you don't need a static key in the image.",
+          "text_sha256": "70a5c1dac404c255f278582ae004f0a6ac3a66f4104985ea00f24ba5c6d9437c",
+          "canonical_text_sha256": "a376f9e278857f4c86368cb4268c107c81332f7c426d9507e6bafe21f96b39f2",
+          "asset_sha256": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+        },
+        {
+          "id": "m12p02-andrew-exp-s03-c2-4045325b4895",
+          "slide": 3,
+          "text": "Now look at startup. In the pictured configuration the E C S agent uses execution-role permissions to pull the image, send logs or fetch injected secrets. These rights are not the app's business permissions. Check the actual launch configuration.",
+          "text_sha256": "4045325b4895647481b2ff7f2601fad96614a6cd9ff5e273ed1a28df6deaa8ac",
+          "canonical_text_sha256": "e7bb8fc6871079f19afd352e190779ab8012315477abbea08f6f8f9209109f24",
+          "asset_sha256": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+        },
+        {
+          "id": "m12p02-andrew-exp-s03-c3-25c300b9cff9",
+          "slide": 3,
+          "text": "For an E C S worker on E C two, the instance profile serves the host and agent functions. It is not a substitute for the task role, and task roles by themselves are not a hard boundary between tenants on one host.",
+          "text_sha256": "25c300b9cff972c150a4f256d8b6432bb0af9c563d5c8fa988ab8c09b8035b37",
+          "canonical_text_sha256": "869589eafa4e1ef3e8aebc3c77c9a992f2ad65d97d565fcefc2172b9eb6337f9",
+          "asset_sha256": "2c3b9e56cc45745ab4544dc4044fe834a7d9176dd32fb70eb68f59904c16c420"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "03",
+      "revision": "2026-11-24-m12p03-andrew-expressive",
+      "approved_assets": {
+        "1": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9",
+        "2": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52",
+        "3": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+      },
+      "units": [
+        {
+          "id": "m12p03-andrew-exp-s01-c1-8c953f888941",
+          "slide": 1,
+          "text": "Two bridge-mode tasks listen on container port eighty-eighty. They run on one E C two instance, so E C S registers different host ports in an instance target group. The load balancer sends traffic to the mapped port, not straight to a task I P.",
+          "text_sha256": "8c953f888941e15e4ef27ab06490f3054347c4d2450aac887ef594bda784eaa9",
+          "canonical_text_sha256": "560490d7851eac3e71b55c4749301199e1f99600ce9f5f16ee0def40497f9f35",
+          "asset_sha256": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9"
+        },
+        {
+          "id": "m12p03-andrew-exp-s01-c2-3525fdfb2c76",
+          "slide": 1,
+          "text": "With A W S V P C, each task has its own network interface and address. Use an I P target group and register each task's address and container port, including for Fargate.",
+          "text_sha256": "3525fdfb2c767837f457591510949776dfa1830c82cef2378946d616005fde3a",
+          "canonical_text_sha256": "6d9f041d1fa2b6d4e4c4445e0159bd45fc41c57d7a8d80b7971645bebcdd32d9",
+          "asset_sha256": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9"
+        },
+        {
+          "id": "m12p03-andrew-exp-s01-c3-a875095f7332",
+          "slide": 1,
+          "text": "Correct registration is only the start. Allow traffic and health checks on the intended path and spread tasks across failure domains. Use the listener and load balancer type that matches HTTP or connection-level routing.",
+          "text_sha256": "a875095f7332f587d5c71f3c5fd336af18f55f0f883a793effad8d2fda82c5a1",
+          "canonical_text_sha256": "a875095f7332f587d5c71f3c5fd336af18f55f0f883a793effad8d2fda82c5a1",
+          "asset_sha256": "d506313177711fb2a3128040079ac2b3a6dece5c1599ea21517c1132046df5e9"
+        },
+        {
+          "id": "m12p03-andrew-exp-s02-c1-58f1ecacc0ed",
+          "slide": 2,
+          "text": "With none mode, the task has no external network path or port mapping. Use it only when that work can run without those connections.",
+          "text_sha256": "58f1ecacc0edda5d968a239938fba2c9f0c6a02a2450d112d4aea2c09c5240bf",
+          "canonical_text_sha256": "58f1ecacc0edda5d968a239938fba2c9f0c6a02a2450d112d4aea2c09c5240bf",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-andrew-exp-s02-c2-352da7425142",
+          "slide": 2,
+          "text": "A bridge gives the container a network behind the Linux E C two host. Map the host port to the container port when the host needs to receive traffic for it.",
+          "text_sha256": "352da74251420af2dabd4f446fef2e3ac195d53d1268e7fa2050a99bc9a16ce4",
+          "canonical_text_sha256": "23f7036ef0242727ddfdb3e9730ec7717c14360cc655ec1c96043b3d1461ebe4",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-andrew-exp-s02-c3-9ddae131a1d0",
+          "slide": 2,
+          "text": "Host mode uses the instance network directly. A service binding a particular host port competes with other tasks for that same port on the instance.",
+          "text_sha256": "9ddae131a1d06013db4e2ae0078c9ac92a8c495031e339531c95b8ad7e59c16c",
+          "canonical_text_sha256": "9ddae131a1d06013db4e2ae0078c9ac92a8c495031e339531c95b8ad7e59c16c",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-andrew-exp-s02-c4-b8535cb81f97",
+          "slide": 2,
+          "text": "With A W S V P C, the task has its own interface, private address and security groups. Fargate requires it. Account for subnet addresses and interface capacity when sizing the placement.",
+          "text_sha256": "b8535cb81f976eb93884a2cc499225b5f0eea066f4788175afddb92bca6a1f4f",
+          "canonical_text_sha256": "17a2187012de4b456f641dbc262a5816fb3c4852a9b542f2cf8ad006fcb3e162",
+          "asset_sha256": "7ae525e242c5f47c79b48b9f7bd99082a27bb92930e2626ad5ea16d536c38e52"
+        },
+        {
+          "id": "m12p03-andrew-exp-s03-c1-c644acafd589",
+          "slide": 3,
+          "text": "The Fargate task has no public I P. Can it still pull its image? Yes, if the appropriate network path and execution permissions are both there.",
+          "text_sha256": "c644acafd589b24999f881cb08be64ba36675cf78691f03fd9ac77c86cd922a3",
+          "canonical_text_sha256": "f3f5abf4e77adf5d2ba25fad210b9aa81be870748bedbac235181976601d163f",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        },
+        {
+          "id": "m12p03-andrew-exp-s03-c2-b67527d171bb",
+          "slide": 3,
+          "text": "For the current endpoint-only path shown, private E C R pulls need the A P I path for authentication and metadata and the registry path for the actual pull. Check endpoint access and D N S from that task.",
+          "text_sha256": "b67527d171bbd4374f46a5d23562100e8b8c82c8e7a965506a31408642a98050",
+          "canonical_text_sha256": "9ff0bcc3bd03e52449b8e9162a96143271cdf48ef2c0366bf0b97068328b2a69",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        },
+        {
+          "id": "m12p03-andrew-exp-s03-c3-cd8f903d8df5",
+          "slide": 3,
+          "text": "The image layers come from S three. Give the task subnet a route to the S three gateway endpoint as well. E C R authentication can work while downloading a layer still fails.",
+          "text_sha256": "cd8f903d8df5773fcab611f702a2b2eb226a5227a5e833ef0d23751ea7ad3d06",
+          "canonical_text_sha256": "b7ec212ba19f3b61b8d4cec25a70bbe2c18bca28359a5ac56ef8e5d56d22d12f",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        },
+        {
+          "id": "m12p03-andrew-exp-s03-c4-fb46a8e68398",
+          "slide": 3,
+          "text": "If the task sends logs or loads secrets, arrange connectivity to those services as configured. A nat path is an alternative where appropriate. Diagnose routing and execution-role authorization separately.",
+          "text_sha256": "fb46a8e683984879c124499b5ddaae5a3d767fb65d4b5a5235d6c24fdf544391",
+          "canonical_text_sha256": "5dfc9bdbe2f084003484dd08138d37d4a007a2814a145baa00736d87590b2090",
+          "asset_sha256": "5252cedd3ffc44202584ad7218cb283e73ec187abb03f9f655bbdbb35e1291ed"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "04",
+      "revision": "2026-11-24-m12p04-andrew-expressive",
+      "approved_assets": {
+        "1": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18",
+        "2": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+      },
+      "units": [
+        {
+          "id": "m12p04-andrew-exp-s01-c1-41c1e1794db8",
+          "slide": 1,
+          "text": "Reference Secrets Manager or Parameter Store from the task definition. At startup E C S obtains the value using the execution-role permissions, including the key when required, and injects it into the task.",
+          "text_sha256": "41c1e1794db84d689d06a630f9d916a1aa35989a9fb0cbb8126e5e9710a5927b",
+          "canonical_text_sha256": "b19d246caa98cfefadafa201ba2d8f9dbac1b2bca382bea3ff9e66dd6ffe767b",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-andrew-exp-s01-c2-88a8108954f9",
+          "slide": 1,
+          "text": "The store rotates the secret to version two. The running process still has version one in its environment. Do not expect it to update just because the store changed.",
+          "text_sha256": "88a8108954f91224d6e98664107b08eb0bfdbcd8bfb289dae863efe21b6d32b8",
+          "canonical_text_sha256": "88a8108954f91224d6e98664107b08eb0bfdbcd8bfb289dae863efe21b6d32b8",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-andrew-exp-s01-c3-7cab341d5ffe",
+          "slide": 1,
+          "text": "Deploy replacement tasks when you need a refreshed injected value. They fetch the secret at startup. Test that the app can authenticate with the new value.",
+          "text_sha256": "7cab341d5ffeeee46b6fbf3f80f949bdf9940f9ef4a6336c5a67cc719e8a8a5a",
+          "canonical_text_sha256": "7cab341d5ffeeee46b6fbf3f80f949bdf9940f9ef4a6336c5a67cc719e8a8a5a",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-andrew-exp-s01-c4-d76f2e0c1d3d",
+          "slide": 1,
+          "text": "If the app needs to retrieve changes without task replacement, implement a controlled runtime fetch using the application task role. Keep the value out of images and logs.",
+          "text_sha256": "d76f2e0c1d3dc02b43658ab26a62714737e1ba201f0ca829ff5623975ca51044",
+          "canonical_text_sha256": "d76f2e0c1d3dc02b43658ab26a62714737e1ba201f0ca829ff5623975ca51044",
+          "asset_sha256": "fca8e1ba517b89dec782e4e32d9d2ff91b26b8bc4e2815f49617e8469b5edf18"
+        },
+        {
+          "id": "m12p04-andrew-exp-s02-c1-f1dae398f205",
+          "slide": 2,
+          "text": "For an A P I that must keep answering, use an E C S service. It keeps the desired number of tasks and replaces unhealthy ones behind the load balancer. Keep durable application state outside those replaceable tasks.",
+          "text_sha256": "f1dae398f2054820d664d5ce8ed03234cd1003c7c128091857ecd40f57d9bb21",
+          "canonical_text_sha256": "a5ebb2bb978d64a3e940b45fb3de826a9b8c3e35895e2d43ba477f039ccc2179",
+          "asset_sha256": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+        },
+        {
+          "id": "m12p04-andrew-exp-s02-c2-8fac6d8158ab",
+          "slide": 2,
+          "text": "A finite job should finish and exit. EventBridge Scheduler can start it, but that does not prove the run succeeded. Check its exit status and logs and make retries safe for the business work.",
+          "text_sha256": "8fac6d8158abff11792964b62ac832fcf37f96911abe103edf1a50178cede054",
+          "canonical_text_sha256": "8fac6d8158abff11792964b62ac832fcf37f96911abe103edf1a50178cede054",
+          "asset_sha256": "212d1073f46eb9f6854d8abc9529b7f8a6857f47103ea7632e5c5092cd7cd883"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "05",
+      "revision": "2026-11-24-m12p05-andrew-expressive",
+      "approved_assets": {
+        "1": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16",
+        "2": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744",
+        "3": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+      },
+      "units": [
+        {
+          "id": "m12p05-andrew-exp-s01-c1-dba917a7182a",
+          "slide": 1,
+          "text": "Requests are rising, so Service Auto Scaling raises the desired task count. It adjusts how many tasks E C S wants, based on the chosen metric and policy. It does not directly create E C two hosts.",
+          "text_sha256": "dba917a7182ad320403609d7d2002397383c41db1af22b7b8e368ccb7ba75281",
+          "canonical_text_sha256": "572eba0b6c39122ccccd8ba54880489e4c248fcd99165638cd68b5982e5d25f9",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-andrew-exp-s01-c2-428ba18bd023",
+          "slide": 1,
+          "text": "If there is not enough room, tasks can stay pending. Fargate and E C two have different capacity controls. For a self-managed E C two fleet, verify that compute scales separately and that tasks fit the hosts.",
+          "text_sha256": "428ba18bd0237e693ff21bf0ad2649bd3b7b4992e39dc1531ed4de89faf9bc83",
+          "canonical_text_sha256": "fb9c4145e8e482d8e6caca0e2ea4354d53facd7db6f9c2f97bd8eb020246f72a",
+          "asset_sha256": "e5d5eb68529899e5fdf7231098e3f2471fd008b66caf877eb3bf14ef17ab8a16"
+        },
+        {
+          "id": "m12p05-andrew-exp-s02-c1-dad1e35a4e59",
+          "slide": 2,
+          "text": "A capacity provider tells E C S where to place tasks. With Fargate, A W S supplies serverless compute for supported task requirements. You still have to design the task and its limits.",
+          "text_sha256": "dad1e35a4e59d4aa4d0f90978470a3b27b26ebed593041526d7b5216b8269a92",
+          "canonical_text_sha256": "889c515302872d9e928d4ae28d50582bbff2ba0d50a9a8cd68f112d1b7287674",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-andrew-exp-s02-c2-4d8b10496337",
+          "slide": 2,
+          "text": "For a self-managed E C two fleet, an Auto Scaling group provider can add hosts and coordinate draining when configured. E C S still has to place the tasks on instances that meet their requirements.",
+          "text_sha256": "4d8b10496337026c792e5f8044324356af19ab437d56f4185be140f0015fe917",
+          "canonical_text_sha256": "4fd24b5c096de95e93be25d4823c790a1c425578943d5a8aa0da32e5786b8572",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-andrew-exp-s02-c3-96eebb2553fe",
+          "slide": 2,
+          "text": "E C S Managed Instances puts provisioning and patching of supported E C two capacity under A W S management. This is a separate provider family: a single strategy cannot mix Managed Instances, Auto Scaling group and Fargate families.",
+          "text_sha256": "96eebb2553fe66f7a8d885cdc05d835ff212f8691b892fd73d49ad7a19aab828",
+          "canonical_text_sha256": "3652583d561bdc9434c60c5f80e10b5ad26bcc7bafe2258bb934a7672702a0df",
+          "asset_sha256": "1ff53db98cf117142e5eef3a4d73a0a9c94d0c94e55893a35fdc3a605f6c9744"
+        },
+        {
+          "id": "m12p05-andrew-exp-s03-c1-12baa6fe8e15",
+          "slide": 3,
+          "text": "If the A P I needs reliable baseline capacity, place that portion on Fargate On-Demand and use Fargate Spot for work that can tolerate interruption. A weighted Spot assignment is not a promise of automatic On-Demand fallback.",
+          "text_sha256": "12baa6fe8e159ef559b36548f0b5676f24209077e2c99c3f21f682f091870644",
+          "canonical_text_sha256": "fe789c93bc91a5c60620937521e9cebca5244fe180ba7fa14e2cd85d259dd0ff",
+          "asset_sha256": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+        },
+        {
+          "id": "m12p05-andrew-exp-s03-c2-874ab43a2d56",
+          "slide": 3,
+          "text": "Spot capacity is reclaimable. Handle the stop signal, complete or persist the work you can, and make the remaining work safe to retry. Check the procedure for the chosen compute option; E C two Spot and Fargate Spot do not handle everything identically.",
+          "text_sha256": "874ab43a2d56b9bda3ba6146aed6334d031172be39fcc5892a21917b68a931f5",
+          "canonical_text_sha256": "63d7f0bcd47b54f725b9b863198043630a7289d5c5a4d675f0f6ec78b6bd09bb",
+          "asset_sha256": "dd11226066a518c1af9a8dc846de8cb39819fab0ba9f8b0167cf705d225d6298"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "06",
+      "revision": "2026-11-24-m12p06-andrew-expressive",
+      "approved_assets": {
+        "1": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96",
+        "2": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+      },
+      "units": [
+        {
+          "id": "m12p06-andrew-exp-s01-c1-a16a54f0f9eb",
+          "slide": 1,
+          "text": "The pipeline builds an image and pushes its manifest and layers to private E C R. A tag is a convenient reference. A content digest identifies the exact image, so deploying by digest pins what runs.",
+          "text_sha256": "a16a54f0f9eb7efa719cb77e7acf02c79ec14ce0985c88cbab5cee9f11c92c87",
+          "canonical_text_sha256": "8e1493ae3f6e34430ca1a4ef0222f0c7943545c71aae32463b033a11660c6082",
+          "asset_sha256": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96"
+        },
+        {
+          "id": "m12p06-andrew-exp-s01-c2-99cc49604740",
+          "slide": 1,
+          "text": "E C S or E K S must be authorized to pull the image and able to reach its network path. E C R stores the image; it does not run the application. Manage repository policy, scanning and retention as separate controls.",
+          "text_sha256": "99cc49604740e6a355a2293c94539f07ae9256812ea98a1127feb7aca58add9d",
+          "canonical_text_sha256": "f206069ea5386983acd9fa736068bbc5c3b9c49dd7167be92d9be36ecbd23bbd",
+          "asset_sha256": "264279624e18a74c7b62d05f2005b7e40e6775c95e811302eabd617c17cf4e96"
+        },
+        {
+          "id": "m12p06-andrew-exp-s02-c1-f88445e993be",
+          "slide": 2,
+          "text": "Start with the identity that pulls the image, such as the execution role for a Fargate task. That identity must be allowed to authenticate and pull the required data.",
+          "text_sha256": "f88445e993be5465688b6ef9607c59852adb417eaa6594629d33af3799ce3a56",
+          "canonical_text_sha256": "f88445e993be5465688b6ef9607c59852adb417eaa6594629d33af3799ce3a56",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        },
+        {
+          "id": "m12p06-andrew-exp-s02-c2-bd4edeeb6bd0",
+          "slide": 2,
+          "text": "For a cross-account pull, the repository's policy must support the intended access and the caller still needs its identity permissions. An authentication token is not permission for every repository.",
+          "text_sha256": "bd4edeeb6bd0c011733565b8c84707dbb5a34c49bbf9414cd31988698ca89017",
+          "canonical_text_sha256": "bd4edeeb6bd0c011733565b8c84707dbb5a34c49bbf9414cd31988698ca89017",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        },
+        {
+          "id": "m12p06-andrew-exp-s02-c3-7bfe4a414b20",
+          "slide": 2,
+          "text": "From the actual runtime, test the path to the E C R A P I and registry and to S three for image layers. Use supported endpoints or another configured network route. Passing the repository permission check does not fix a network timeout.",
+          "text_sha256": "7bfe4a414b203f5531bd5028829b024ec0540d3f4f56a3b2fb8c577eb0de52af",
+          "canonical_text_sha256": "b8c970be5225ff0228a833bcf0574666cc82229383c852d624e11133feb4c723",
+          "asset_sha256": "0e614bf23459d59705b2247bbb4eabdc1dee8d100255a144d01502fd5948df13"
+        }
+      ]
+    }
+  ]
+}
