@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "16",
+      "part": "05",
+      "revision": "2026-11-24-m16p05-andrew-expressive",
+      "approved_assets": {
+        "1": "2a75cf485188874ffc2c63faa1de8da0d0fc66ded89429ae3865b5947a00a351",
+        "2": "083f96b2d1661b5e7274848871622859f600c937a7bdf4e0abaf1aa61785e94e"
+      },
+      "units": [
+        {
+          "id": "m16p05-andrew-exp-s01-c1-b1c991f64eb5",
+          "slide": 1,
+          "text": "Let's follow a record that has arrived but isn't visible at the destination yet. Firehose groups incoming data. The configured size and time settings guide when it will attempt a delivery; they are buffering hints, not a precise deadline for every record.",
+          "text_sha256": "b1c991f64eb52511ea891436fc7b5500072dad944f6abbee2f3a2c00f5bd1e47",
+          "canonical_text_sha256": "b1c991f64eb52511ea891436fc7b5500072dad944f6abbee2f3a2c00f5bd1e47",
+          "asset_sha256": "2a75cf485188874ffc2c63faa1de8da0d0fc66ded89429ae3865b5947a00a351"
+        },
+        {
+          "id": "m16p05-andrew-exp-s01-c2-1b9c36c2a678",
+          "slide": 1,
+          "text": "During light traffic, time often drives the flush. When records arrive quickly, the size threshold can be reached sooner. Choose settings by the tolerated delay and destination behavior; smaller batches can increase requests or the number of small files.",
+          "text_sha256": "1b9c36c2a67807790376918520bb5dc5f80ab342b52eb000b9563fded144b32f",
+          "canonical_text_sha256": "1b9c36c2a67807790376918520bb5dc5f80ab342b52eb000b9563fded144b32f",
+          "asset_sha256": "2a75cf485188874ffc2c63faa1de8da0d0fc66ded89429ae3865b5947a00a351"
+        },
+        {
+          "id": "m16p05-andrew-exp-s02-c1-2ec8e753addb",
+          "slide": 2,
+          "text": "Data Streams retains events and lets applications read and replay them within retention. Choose it if two independent readers need their own position or a failed reader must go back and read earlier events again.",
+          "text_sha256": "2ec8e753addbb1c963c49bf5ffe791fccf88ef5fe1635544bfe1394dd38d7aee",
+          "canonical_text_sha256": "2ec8e753addbb1c963c49bf5ffe791fccf88ef5fe1635544bfe1394dd38d7aee",
+          "asset_sha256": "083f96b2d1661b5e7274848871622859f600c937a7bdf4e0abaf1aa61785e94e"
+        },
+        {
+          "id": "m16p05-andrew-exp-s02-c2-db1dba3bcf69",
+          "slide": 2,
+          "text": "Use Firehose when the goal is managed transformation and delivery to a supported destination. In the combined path, Firehose reads from Data Streams and lands the records in S three. The upstream stream, not the delivery buffer, gives other consumers a replay point.",
+          "text_sha256": "db1dba3bcf693de63c722b3bc9ae3d670bf15c1e3ee1a7a90a5a3b72d479a094",
+          "canonical_text_sha256": "f7cefa178024a245ccec14ade66f55ae2a3b0e78eaab9b0f91423957bd1acfbd",
+          "asset_sha256": "083f96b2d1661b5e7274848871622859f600c937a7bdf4e0abaf1aa61785e94e"
+        }
+      ]
+    },
+    {
+      "module": "16",
+      "part": "06",
+      "revision": "2026-11-24-m16p06-andrew-expressive",
+      "approved_assets": {
+        "1": "093284b5eb6b6f891e8fc8d337126eeebc98ea4410bc8b913391a48a9fca54d3",
+        "2": "391e08eb6b2025b3dbca3f63cc07d446e85084b014321b717b64a9192940d2e9",
+        "3": "0a9de714c7e92ffc525ea03638b7375891e3d4fac0d807fdfb41d01d462d1c11"
+      },
+      "units": [
+        {
+          "id": "m16p06-andrew-exp-s01-c1-274fa54905a0",
+          "slide": 1,
+          "text": "Let's look at a decision that can't be made from one event alone. A stateful Flink application can retain information for a key or time window, so a new event can update an existing count or join context instead of starting from zero every time.",
+          "text_sha256": "274fa54905a0eaf21b99d8ef54488a876d3e77f478b3c840379d9d148221e8f9",
+          "canonical_text_sha256": "274fa54905a0eaf21b99d8ef54488a876d3e77f478b3c840379d9d148221e8f9",
+          "asset_sha256": "093284b5eb6b6f891e8fc8d337126eeebc98ea4410bc8b913391a48a9fca54d3"
+        },
+        {
+          "id": "m16p06-andrew-exp-s01-c2-46e6c79ec0d0",
+          "slide": 1,
+          "text": "Checkpointing can help recover application state after a failure. That does not by itself prove that every external write happens exactly once. Verify the source and sink guarantees as well as what the application restores.",
+          "text_sha256": "46e6c79ec0d0a1a9c954ec4a7a83bde14ba11555a7d9b5b07292fb0f05701de5",
+          "canonical_text_sha256": "46e6c79ec0d0a1a9c954ec4a7a83bde14ba11555a7d9b5b07292fb0f05701de5",
+          "asset_sha256": "093284b5eb6b6f891e8fc8d337126eeebc98ea4410bc8b913391a48a9fca54d3"
+        },
+        {
+          "id": "m16p06-andrew-exp-s02-c1-9a8dd3de23d3",
+          "slide": 2,
+          "text": "Streamed input carries the events that change continuously. Reference data adds context, such as a stable lookup value. Find out whether that reference changes and how it is refreshed; a fast stream can still produce outdated results if its lookup data is stale.",
+          "text_sha256": "9a8dd3de23d3e57637a94e5acb4714ecd26b7869497bdae67eb1506c2def32a3",
+          "canonical_text_sha256": "9a8dd3de23d3e57637a94e5acb4714ecd26b7869497bdae67eb1506c2def32a3",
+          "asset_sha256": "391e08eb6b2025b3dbca3f63cc07d446e85084b014321b717b64a9192940d2e9"
+        },
+        {
+          "id": "m16p06-andrew-exp-s02-c2-ee464e1e955d",
+          "slide": 2,
+          "text": "Decide where the result should go. A retained stream can hand it to another consumer, while an analytics or storage sink supports a different access pattern. Verify connector behavior, access and the result at the destination.",
+          "text_sha256": "ee464e1e955dcf803fa33ee3ba6a08f686a75cd5860438e4ac77d80288f8e42a",
+          "canonical_text_sha256": "ee464e1e955dcf803fa33ee3ba6a08f686a75cd5860438e4ac77d80288f8e42a",
+          "asset_sha256": "391e08eb6b2025b3dbca3f63cc07d446e85084b014321b717b64a9192940d2e9"
+        },
+        {
+          "id": "m16p06-andrew-exp-s03-c1-7f2ba2f1dbc8",
+          "slide": 3,
+          "text": "Use a stream processor when you need a running aggregation, windowed analysis or correlation and not simply to move records. Ask what must be remembered between events; that determines why a stateful job matters.",
+          "text_sha256": "7f2ba2f1dbc808753b1bf782a40d880690d9a4e41e13cf803246c395e5b6822e",
+          "canonical_text_sha256": "7f2ba2f1dbc808753b1bf782a40d880690d9a4e41e13cf803246c395e5b6822e",
+          "asset_sha256": "0a9de714c7e92ffc525ea03638b7375891e3d4fac0d807fdfb41d01d462d1c11"
+        },
+        {
+          "id": "m16p06-andrew-exp-s03-c2-50ebe3ffd7c0",
+          "slide": 3,
+          "text": "Watch processing lag and checkpoint health while verifying the actual result. If lag grows, check whether the next system is accepting output as quickly as the processor produces it before increasing compute.",
+          "text_sha256": "50ebe3ffd7c0bf2b5a1b1e6bdb73d7e9e98f3ee755a83b02b4e72a7b76f36cd8",
+          "canonical_text_sha256": "50ebe3ffd7c0bf2b5a1b1e6bdb73d7e9e98f3ee755a83b02b4e72a7b76f36cd8",
+          "asset_sha256": "0a9de714c7e92ffc525ea03638b7375891e3d4fac0d807fdfb41d01d462d1c11"
+        }
+      ]
+    },
+    {
+      "module": "16",
+      "part": "07",
+      "revision": "2026-11-24-m16p07-andrew-expressive",
+      "approved_assets": {
+        "1": "9758da8aef7ea1f9497a40915231ad1d1986ffa528cf4428469a7d117bbcd659",
+        "2": "0a38131762504f38a9f9eac9f9625c57459513af096f1e452c374d67d24e370f",
+        "3": "9a18634ed60e480de810c2fb7681da82939936c744471143e0126fee87df47e4"
+      },
+      "units": [
+        {
+          "id": "m16p07-andrew-exp-s01-c1-10e1bc6ddb8f",
+          "slide": 1,
+          "text": "We'll follow the same event into a live view and a historical path. A live processing stage can emit an actionable result quickly, while data retained in S three can support later analytics or a backfill.",
+          "text_sha256": "10e1bc6ddb8f763817cbffd4960d583717e3f12873c8f86ed73f5405c2811014",
+          "canonical_text_sha256": "c731cf7ce0b05594d983c7d97fec6940cd5430849501307bfc1ef98a7a26640c",
+          "asset_sha256": "9758da8aef7ea1f9497a40915231ad1d1986ffa528cf4428469a7d117bbcd659"
+        },
+        {
+          "id": "m16p07-andrew-exp-s01-c2-6088b18dde4e",
+          "slide": 1,
+          "text": "The live and historical results can differ when events arrive late or are reprocessed. Define how you reconcile those differences and verify both paths against a known event, rather than treating one number as automatically authoritative.",
+          "text_sha256": "6088b18dde4e521f7acad98fca4fc00bff7a33044a00718a086386c15045d7fb",
+          "canonical_text_sha256": "6088b18dde4e521f7acad98fca4fc00bff7a33044a00718a086386c15045d7fb",
+          "asset_sha256": "9758da8aef7ea1f9497a40915231ad1d1986ffa528cf4428469a7d117bbcd659"
+        },
+        {
+          "id": "m16p07-andrew-exp-s02-c1-241057bb2ec1",
+          "slide": 2,
+          "text": "Follow the volume through the services. Ingestion, computed results, delivery, retained storage and queries can contribute different costs. More output copies or heavier transforms change more than the charge for just the source.",
+          "text_sha256": "241057bb2ec1057b2724cd6bee9130dc5b44fac583e596db1159bbf02b902745",
+          "canonical_text_sha256": "241057bb2ec1057b2724cd6bee9130dc5b44fac583e596db1159bbf02b902745",
+          "asset_sha256": "0a38131762504f38a9f9eac9f9625c57459513af096f1e452c374d67d24e370f"
+        },
+        {
+          "id": "m16p07-andrew-exp-s02-c2-8fe9d3ef13a1",
+          "slide": 2,
+          "text": "Compare the same workload and delivery target before changing the design. Check whether capacity, retention, transformation, or the destination is driving cost. Cutting retention can save money but also remove your recovery window.",
+          "text_sha256": "8fe9d3ef13a193a28b742709926a84e3fcb5d2e0eb69a49cef324faeae903327",
+          "canonical_text_sha256": "8fe9d3ef13a193a28b742709926a84e3fcb5d2e0eb69a49cef324faeae903327",
+          "asset_sha256": "0a38131762504f38a9f9eac9f9625c57459513af096f1e452c374d67d24e370f"
+        },
+        {
+          "id": "m16p07-andrew-exp-s03-c1-02000e9ba0f1",
+          "slide": 3,
+          "text": "If workers should take work from a buffer, use a queue. If each subscriber needs a copy, think topic. If independent readers must read history within retention, use a stream. If the need is durable named objects for later access, use object storage.",
+          "text_sha256": "02000e9ba0f14704480cd28bb738a198c1761c6b4c839cee7ea1d1aa9320c66c",
+          "canonical_text_sha256": "02000e9ba0f14704480cd28bb738a198c1761c6b4c839cee7ea1d1aa9320c66c",
+          "asset_sha256": "9a18634ed60e480de810c2fb7681da82939936c744471143e0126fee87df47e4"
+        },
+        {
+          "id": "m16p07-andrew-exp-s03-c2-1ede4e20c60a",
+          "slide": 3,
+          "text": "Dynamo D B serves a different contract: a mutable item by key. The same system can use more than one. For example, a stream supports replay while S three keeps a durable analytical copy. Decide separately who receives the event, how they retry, and whether they need the past.",
+          "text_sha256": "1ede4e20c60aba71ff55c19b1292d49e3bd021aca31e38157d2cb812ddc54ddf",
+          "canonical_text_sha256": "a258df95f3d0f6961318df9ad0443653464362de0a35d74d8748569053160768",
+          "asset_sha256": "9a18634ed60e480de810c2fb7681da82939936c744471143e0126fee87df47e4"
+        }
+      ]
+    },
+    {
+      "module": "16",
+      "part": "08",
+      "revision": "2026-11-24-m16p08-andrew-expressive",
+      "approved_assets": {
+        "1": "79710b4b874f3acb290feb873c54c77971797ce7b8509c9094b3666ba3c3e3f9",
+        "2": "fd01789780f26f244ccfdbe7bedeeff58d567885f057f3dbd1f07fb375c9a4b3",
+        "3": "a44485c6031bc5f3b4806e00744a86716fb89da18271a92ee4ddfb488952c488",
+        "4": "a8a95966d9c8f485c4ba42c59e56b15dc0c11024755995c07139177defc76c68"
+      },
+      "units": [
+        {
+          "id": "m16p08-andrew-exp-s01-c1-b584ac721e5f",
+          "slide": 1,
+          "text": "Let's choose a Kaf ka deployment before designing its consumers. With a provisioned cluster, you select supported capacity and broker options. With Serverless, the service manages broker capacity scaling. Check pricing, quotas and supported features before assuming the deployment types are interchangeable.",
+          "text_sha256": "b584ac721e5fc4c32289ded198e1ebfb1180350c1aa213e4d16b85849bf75d95",
+          "canonical_text_sha256": "68180a3e2e23a231ed9d7f95616425552fbaf93672010f7ae391eb800a8d75f4",
+          "asset_sha256": "79710b4b874f3acb290feb873c54c77971797ce7b8509c9094b3666ba3c3e3f9"
+        },
+        {
+          "id": "m16p08-andrew-exp-s01-c2-d8c7225f0f08",
+          "slide": 1,
+          "text": "If the application already speaks Kaf ka, preserving the Kaf ka interface can matter more than replacing the broker. Then ask whether you need explicit capacity or configuration controls, or prefer the service to manage that dimension.",
+          "text_sha256": "d8c7225f0f08bc9ca4300d291303a2f310ccd932cb1df1a5846742d2be4feeb2",
+          "canonical_text_sha256": "bddad7681f915589dcabf808e2603d37ccd0ea2f04fc1af7f1be6f363905b47d",
+          "asset_sha256": "79710b4b874f3acb290feb873c54c77971797ce7b8509c9094b3666ba3c3e3f9"
+        },
+        {
+          "id": "m16p08-andrew-exp-s02-c1-75718cd656cb",
+          "slide": 2,
+          "text": "A producer writes records to a topic. A key can keep related records in the same partition, where they have an ordered offset sequence. Separate partitions allow parallelism but do not create a global order.",
+          "text_sha256": "75718cd656cbdfc8110b33ffb7fc4539c267c2bae4833d06780166d74576f057",
+          "canonical_text_sha256": "75718cd656cbdfc8110b33ffb7fc4539c267c2bae4833d06780166d74576f057",
+          "asset_sha256": "fd01789780f26f244ccfdbe7bedeeff58d567885f057f3dbd1f07fb375c9a4b3"
+        },
+        {
+          "id": "m16p08-andrew-exp-s02-c2-0e5a7fcb285a",
+          "slide": 2,
+          "text": "Members of one consumer group divide the partitions. Another group reads the same retained data independently with its own offsets. Adding group members beyond the available partitions does not by itself increase active partition processing.",
+          "text_sha256": "0e5a7fcb285ab6f9f087b72e2aa84c06a8b452f71099c9f8af5600e9d1a68129",
+          "canonical_text_sha256": "0e5a7fcb285ab6f9f087b72e2aa84c06a8b452f71099c9f8af5600e9d1a68129",
+          "asset_sha256": "fd01789780f26f244ccfdbe7bedeeff58d567885f057f3dbd1f07fb375c9a4b3"
+        },
+        {
+          "id": "m16p08-andrew-exp-s03-c1-428aa7867981",
+          "slide": 3,
+          "text": "Kinesis Data Streams is a managed A W S stream with shard-based capacity and native integrations. M S K preserves Kaf ka's APIs and ecosystem. Prefer the interface, operational controls and integrations that the actual workload needs.",
+          "text_sha256": "428aa7867981379db543e38e1f148ee2ca24ccced070e895ccec40faad4c1669",
+          "canonical_text_sha256": "4abfc0fcbc96b16135860c1c1db3248ef24bdcf090b346d70028eac66a41f50f",
+          "asset_sha256": "a44485c6031bc5f3b4806e00744a86716fb89da18271a92ee4ddfb488952c488"
+        },
+        {
+          "id": "m16p08-andrew-exp-s03-c2-e701d9b9e460",
+          "slide": 3,
+          "text": "Both preserve order within a unit, not across every record in the system. Verify retained history, how consumers advance their progress, and capacity for the workload. Don't choose one solely because both can move events.",
+          "text_sha256": "e701d9b9e4607d525c86983d951edb0e36c8b55039ab16a33bad409e87f3ee04",
+          "canonical_text_sha256": "e701d9b9e4607d525c86983d951edb0e36c8b55039ab16a33bad409e87f3ee04",
+          "asset_sha256": "a44485c6031bc5f3b4806e00744a86716fb89da18271a92ee4ddfb488952c488"
+        },
+        {
+          "id": "m16p08-andrew-exp-s04-c1-f3569c7fed84",
+          "slide": 4,
+          "text": "A Lambda event source mapping can poll supported M S K topics and invoke the function with batches. For continuous Kaf ka processing or custom control, use a compatible long-lived application. Choose based on processing state and how the consumer should recover.",
+          "text_sha256": "f3569c7fed849c530884633f213aa1547918301e69ef97e31a3b18a66370cb25",
+          "canonical_text_sha256": "19f35c563e314ddd3fadc52917f69ac25005015975719dc18b9bec4aefcfe884",
+          "asset_sha256": "a8a95966d9c8f485c4ba42c59e56b15dc0c11024755995c07139177defc76c68"
+        },
+        {
+          "id": "m16p08-andrew-exp-s04-c2-575b1379503b",
+          "slide": 4,
+          "text": "Whichever consumer you choose, verify it can reach and authenticate to the cluster. Then monitor lag and confirm progress advances only after successful work. Retries can repeat processing, so don't count each delivery as a new business event.",
+          "text_sha256": "575b1379503b7e7d6940f8b23974267166b4f52b996020cb7250cf8088a02032",
+          "canonical_text_sha256": "575b1379503b7e7d6940f8b23974267166b4f52b996020cb7250cf8088a02032",
+          "asset_sha256": "a8a95966d9c8f485c4ba42c59e56b15dc0c11024755995c07139177defc76c68"
+        }
+      ]
+    },
+    {
+      "module": "16",
+      "part": "09",
+      "revision": "2026-11-24-m16p09-andrew-expressive",
+      "approved_assets": {
+        "1": "9e223639263dd67d4af017493181e24643e431c666f69ee2fe6a9e0b59cbb1eb",
+        "2": "76a494b4bfffbda8b623db5e6c1bc7ff9b7338207e23a0e779dd7de3483b676e",
+        "3": "994acdca5de05ee9ad6e7b2bd4981e51b642113a6cfb78211c409607db588922"
+      },
+      "units": [
+        {
+          "id": "m16p09-andrew-exp-s01-c1-200e596c4cf6",
+          "slide": 1,
+          "text": "We'll follow a batch job from submission to execution. The definition specifies what to run and the resources it needs. The queue holds the job until Batch can place it on eligible compute. That's different from keeping the submitting application running.",
+          "text_sha256": "200e596c4cf6b79dabda217405f36aad2ebec6efa971403f202aa55e9eb347b3",
+          "canonical_text_sha256": "200e596c4cf6b79dabda217405f36aad2ebec6efa971403f202aa55e9eb347b3",
+          "asset_sha256": "9e223639263dd67d4af017493181e24643e431c666f69ee2fe6a9e0b59cbb1eb"
+        },
+        {
+          "id": "m16p09-andrew-exp-s01-c2-e19e3b1ab0a4",
+          "slide": 1,
+          "text": "The compute environment provides the capacity. Choose it for the job's resource profile and constraints. Read the job state and logs before treating a successful submission as successful processing.",
+          "text_sha256": "e19e3b1ab0a4c4fc8faa3818aff4a7d4e5a9c26bdcaad15b301fb7b9eecba544",
+          "canonical_text_sha256": "e19e3b1ab0a4c4fc8faa3818aff4a7d4e5a9c26bdcaad15b301fb7b9eecba544",
+          "asset_sha256": "9e223639263dd67d4af017493181e24643e431c666f69ee2fe6a9e0b59cbb1eb"
+        },
+        {
+          "id": "m16p09-andrew-exp-s02-c1-9e93178fd9e9",
+          "slide": 2,
+          "text": "An input event can start a batch workflow. The processing then proceeds asynchronously, so the producer doesn't need to wait for compute placement or job completion. Keep an input identity so a repeated event doesn't create duplicate work.",
+          "text_sha256": "9e93178fd9e94477e995b05d4dae0e4c4369468e6f42cecf0167869da45b0179",
+          "canonical_text_sha256": "9e93178fd9e94477e995b05d4dae0e4c4369468e6f42cecf0167869da45b0179",
+          "asset_sha256": "76a494b4bfffbda8b623db5e6c1bc7ff9b7338207e23a0e779dd7de3483b676e"
+        },
+        {
+          "id": "m16p09-andrew-exp-s02-c2-7e8645d95eb1",
+          "slide": 2,
+          "text": "Verify the job state and that the expected output arrived. Route failures to a recovery path instead of claiming that an event delivery meant the job finished. A short control-plane step and a long-running computation belong to different parts of the design.",
+          "text_sha256": "7e8645d95eb1936394bbebc0f46154fdbc4e6c78b9869441aa3643e8f001b5c4",
+          "canonical_text_sha256": "7e8645d95eb1936394bbebc0f46154fdbc4e6c78b9869441aa3643e8f001b5c4",
+          "asset_sha256": "76a494b4bfffbda8b623db5e6c1bc7ff9b7338207e23a0e779dd7de3483b676e"
+        },
+        {
+          "id": "m16p09-andrew-exp-s03-c1-b8f980a74325",
+          "slide": 3,
+          "text": "Choose by runtime and compute needs. A short event handler can suit Lambda. A job that exceeds the applicable Lambda limit, or requires a different C P U, memory, accelerator or compute configuration, is a better candidate for Batch.",
+          "text_sha256": "b8f980a74325c62f1f7880110790e4da12f218cb7f68ebfb3e20748a4fe4ddcd",
+          "canonical_text_sha256": "d10fb44e76bc0266cf10ae433a34cd3eea55a3ce9b070a41832a9f281d035909",
+          "asset_sha256": "994acdca5de05ee9ad6e7b2bd4981e51b642113a6cfb78211c409607db588922"
+        },
+        {
+          "id": "m16p09-andrew-exp-s03-c2-dfac785550d9",
+          "slide": 3,
+          "text": "A W S now supports up to thirty minutes for eligible on-demand Lambda Event Functions. Other invocation modes or integrations can have different limits. Check the actual mode and retry owner: Lambda retries vary by invocation, whereas Batch has a job retry strategy.",
+          "text_sha256": "dfac785550d9acbad0e9bb8e865be5edda14ca5d946434b48d63a315d11630bb",
+          "canonical_text_sha256": "ffcbe46f490661d73325bc9fdf29a7bbb85b0aa08a8cbd330a141c28454e4606",
+          "asset_sha256": "994acdca5de05ee9ad6e7b2bd4981e51b642113a6cfb78211c409607db588922"
+        }
+      ]
+    }
+  ]
+}
