@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "02",
+      "revision": "2026-11-24-m10p02-andrew-expressive",
+      "approved_assets": {
+        "1": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145",
+        "2": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f",
+        "3": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+      },
+      "units": [
+        {
+          "id": "m10p02-andrew-exp-s01-c1-d42f71829bd9",
+          "slide": 1,
+          "text": "Would a faster volume help? On the graph, demand outpaces delivered capacity, so requests queue and latency can rise. Find what's limiting that capacity first.",
+          "text_sha256": "d42f71829bd9707f4d5b8554b66ae9961b784b9b62485e0725e23a376a2fb3a1",
+          "canonical_text_sha256": "d42f71829bd9707f4d5b8554b66ae9961b784b9b62485e0725e23a376a2fb3a1",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-andrew-exp-s01-c2-02d2e3641729",
+          "slide": 1,
+          "text": "If the queue backs up at a saturated instance E B S link, provisioning a faster volume cannot get more requests through that connection.",
+          "text_sha256": "02d2e364172952b17fa5ce98c40193c4f593b389d9ce944de7f1e6263602c480",
+          "canonical_text_sha256": "c575c6c08b4cda966004a6ef56fd40cdeb881658fb4a9e668f8b7ec71328ab42",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-andrew-exp-s01-c3-c69bf413ad77",
+          "slide": 1,
+          "text": "Check the volume's I ops and throughput, too. Small requests can hit the operations limit first; large requests can hit the byte rate.",
+          "text_sha256": "c69bf413ad7727c14be82e9c6b556082fdf588de26b25591d370a9804711c5dd",
+          "canonical_text_sha256": "8eb9b263b76895ee01806745f7f61319cf9f25fffba504fb35d0305410e42d4e",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-andrew-exp-s02-c1-e903b9e545e5",
+          "slide": 2,
+          "text": "The first snapshot captures the blocks the volume has written. In this example, that's A, B and C.",
+          "text_sha256": "e903b9e545e52626d3bfb63f1006a2de7f38cef15df912a7c4cbca949f480441",
+          "canonical_text_sha256": "e903b9e545e52626d3bfb63f1006a2de7f38cef15df912a7c4cbca949f480441",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-andrew-exp-s02-c2-9eee3cac61fb",
+          "slide": 2,
+          "text": "By the next snapshot, B has changed and D has been added. The snapshot needs to save those new or changed blocks, not another copy of the unchanged A and C.",
+          "text_sha256": "9eee3cac61fbe1a4361805d005f1c01137039f636fa9c1e8621c984c30b6e971",
+          "canonical_text_sha256": "9eee3cac61fbe1a4361805d005f1c01137039f636fa9c1e8621c984c30b6e971",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-andrew-exp-s02-c3-ae37d358a150",
+          "slide": 2,
+          "text": "So does the later snapshot restore only B and D? No. Restoring it gives the complete volume as it was then: A, changed B, C and D. Incremental describes what gets stored, not what the restored disk contains.",
+          "text_sha256": "ae37d358a150d5d55d9612c4c2d002f46790cf002dd126568fdda338f69177bd",
+          "canonical_text_sha256": "ae37d358a150d5d55d9612c4c2d002f46790cf002dd126568fdda338f69177bd",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-andrew-exp-s02-c4-20cdd0c131e6",
+          "slide": 2,
+          "text": "A snapshot can capture a point in time while the application is in the middle of several writes. Flush or pause writes when needed, and coordinate related volumes so the recovered data is consistent for the app.",
+          "text_sha256": "20cdd0c131e6f5e5093d5eb198e94845fee5880582e1dacb1d5dced033794c4f",
+          "canonical_text_sha256": "20cdd0c131e6f5e5093d5eb198e94845fee5880582e1dacb1d5dced033794c4f",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-andrew-exp-s02-c5-bf5017efaa5c",
+          "slide": 2,
+          "text": "If you remove the first snapshot, E B S still keeps blocks that later snapshots depend on. Deleting that one recovery point does not break the rest.",
+          "text_sha256": "bf5017efaa5ccd0228b755f68b48be78865a6cb91794fa0cb5639627849a32ae",
+          "canonical_text_sha256": "edf9900d05b50f0ccefe273779937c5d03ef6efad5d138b493743e45e893f317",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-andrew-exp-s03-c1-613ac68707a6",
+          "slide": 3,
+          "text": "Start with the E B S snapshot in the target Region. You create a volume from it rather than attaching the snapshot.",
+          "text_sha256": "613ac68707a66b519b24b2c43cd958cec349e7d7cd154dad20018b3d2d079c05",
+          "canonical_text_sha256": "695a7095a30bef4747b978c813a38e04c410c668f91515d6a20a1287b0ceed61",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-andrew-exp-s03-c2-3a2952850444",
+          "slide": 3,
+          "text": "Create the volume in Zone B, where the recovery instance will run.",
+          "text_sha256": "3a2952850444827fbc7454ef2bb18cbc7494f33f54a299621831a4800f4e63ef",
+          "canonical_text_sha256": "3a2952850444827fbc7454ef2bb18cbc7494f33f54a299621831a4800f4e63ef",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-andrew-exp-s03-c3-db543203f6da",
+          "slide": 3,
+          "text": "Attach the volume to the E C two instance. Both must be in Zone B.",
+          "text_sha256": "db543203f6dab426418b9349de4e626012af000d6d360507d012d471e41bc192",
+          "canonical_text_sha256": "cf0bd546d1e06257529e35a26d7db786a82b71e40621fa35862f31b01748374a",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-andrew-exp-s03-c4-ca2f23ae8652",
+          "slide": 3,
+          "text": "Once it's attached, check the filesystem and open data with the actual application. A successful attachment tells you the disk is connected, not that the workload recovered.",
+          "text_sha256": "ca2f23ae865218b5cb6378e12da2b2be1843906f336fbb2e5f26c4fa022668d9",
+          "canonical_text_sha256": "ca2f23ae865218b5cb6378e12da2b2be1843906f336fbb2e5f26c4fa022668d9",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-andrew-exp-s03-c5-4f6ed92e86ba",
+          "slide": 3,
+          "text": "The first read can be slower while restored blocks initialize. If startup latency matters, consider an eligible Fast Snapshot Restore configuration or specify a provisioned initialization rate.",
+          "text_sha256": "4f6ed92e86ba4f8d4ec6392af19281b9351e679fbdab4b8ab0b8d2c2ded037b2",
+          "canonical_text_sha256": "4f6ed92e86ba4f8d4ec6392af19281b9351e679fbdab4b8ab0b8d2c2ded037b2",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "03",
+      "revision": "2026-11-24-m10p03-andrew-expressive",
+      "approved_assets": {
+        "1": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8",
+        "2": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+      },
+      "units": [
+        {
+          "id": "m10p03-andrew-exp-s01-c1-cd785b9963a7",
+          "slide": 1,
+          "text": "You need repeatable recovery points for a group of E B S resources. Start with the custom Data Lifecycle Manager policy shown here. Its resource tags say which volumes or supported instances the policy covers.",
+          "text_sha256": "cd785b9963a7eb1d60b96608f7c4511285025d4542d16d1a9aadf7ce730cff58",
+          "canonical_text_sha256": "052d410eda0d32d7f3054eead046b90f4562307458fd8a01e7924023544a75ea",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s01-c2-8c6177f60e86",
+          "slide": 1,
+          "text": "Schedule how often the policy runs, such as once a day.",
+          "text_sha256": "8c6177f60e8623e1c62ff475b80396f559f39353fc3c007093a0f94f50a04b04",
+          "canonical_text_sha256": "8c6177f60e8623e1c62ff475b80396f559f39353fc3c007093a0f94f50a04b04",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s01-c3-578c7bc515fb",
+          "slide": 1,
+          "text": "Choose the output that solves the recovery: a snapshot to restore volume data or an E B S-backed A M I for a launchable image. The policy manages the recovery points it creates.",
+          "text_sha256": "578c7bc515fb49d65f83842c1ec6a2423c5aac5b4a22167dcdcddd3bbda2d839",
+          "canonical_text_sha256": "9689b6b976536e58b04857812ecb74ac7e0171ba30da9aa36018a94e72e8adcb",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s01-c4-5fb71af47a66",
+          "slide": 1,
+          "text": "Set when recovery points expire, based on your recovery window.",
+          "text_sha256": "5fb71af47a6665d92b727756427e5c60909744aca1aa35a70060b0bc046d9d58",
+          "canonical_text_sha256": "5fb71af47a6665d92b727756427e5c60909744aca1aa35a70060b0bc046d9d58",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s01-c5-d4a010259e3a",
+          "slide": 1,
+          "text": "Configure a cross-Region copy if supported and needed, then test a restore.",
+          "text_sha256": "d4a010259e3a0ca03ad5f9c138b2c7ee9b60fef53864c737d7458f9f8434e2ce",
+          "canonical_text_sha256": "d4a010259e3a0ca03ad5f9c138b2c7ee9b60fef53864c737d7458f9f8434e2ce",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s01-c6-04cb2db6b984",
+          "slide": 1,
+          "text": "For the volumes in this example, take daily snapshots, keep fourteen days and copy to another Region if the recovery plan needs it. If you need one central policy across several supported services, consider A W S Backup.",
+          "text_sha256": "04cb2db6b984557a2f379bba7a22762aa42ddb5acdf2ab21a47f0e20cdc05bda",
+          "canonical_text_sha256": "7c1dd8eeb62cfbd228870bd477bca4d88b7b81bd55810acaf3db2cdcb14ed231",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-andrew-exp-s02-c1-10288ccfddfe",
+          "slide": 2,
+          "text": "Turning on E B S encryption by default protects new volumes and snapshot copies. It doesn't rewrite an existing unencrypted volume. For that disk, prepare an encrypted replacement from a snapshot and test before cutting over.",
+          "text_sha256": "10288ccfddfe757ff02524a80a3c495bb21e1fe457b604c46a7eb08f8d947b1f",
+          "canonical_text_sha256": "3b779d29183cbed3f0a4fb5fa0dfbe22a1185585e25850e2a5817246dc8450b5",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-andrew-exp-s02-c2-7af29668437f",
+          "slide": 2,
+          "text": "The restore role must be allowed to use the customer-managed K M S key for this snapshot.",
+          "text_sha256": "7af29668437f816b4c1a68126c8e27ba160a60c4733f1503473d39d529c82617",
+          "canonical_text_sha256": "2c5294667861fd795b44b25528b84a97672749fbbbfc9b4ae67167c4bcb21930",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-andrew-exp-s02-c3-3ac916fb2fe8",
+          "slide": 2,
+          "text": "If the role cannot use the customer-managed key, the restore stops here. Permission to work with the snapshot is not the same as permission to use its key.",
+          "text_sha256": "3ac916fb2fe8a786112d8fc3cbd93303d76ee52a498ea87f326863e248c1fa52",
+          "canonical_text_sha256": "3ac916fb2fe8a786112d8fc3cbd93303d76ee52a498ea87f326863e248c1fa52",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-andrew-exp-s02-c4-1c1c81949c72",
+          "slide": 2,
+          "text": "After the key check passes, restore a new encrypted volume and attach it to the recovery instance in the correct zone.",
+          "text_sha256": "1c1c81949c7254c22c1a272391ff7e7fd3504beea6cdaf76f3f2bd1e42220dd9",
+          "canonical_text_sha256": "1c1c81949c7254c22c1a272391ff7e7fd3504beea6cdaf76f3f2bd1e42220dd9",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-andrew-exp-s02-c5-6f28726c4c52",
+          "slide": 2,
+          "text": "The new volume is attached. Are we recovered? Not until the instance can mount it, read the expected data and run the application. The key opened the path; the test verifies the result.",
+          "text_sha256": "6f28726c4c522c93f92016ea3d8cbc45a5dfa6394bc0bfdc3abe169931d5041e",
+          "canonical_text_sha256": "6f28726c4c522c93f92016ea3d8cbc45a5dfa6394bc0bfdc3abe169931d5041e",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "04",
+      "revision": "2026-11-24-m10p04-andrew-expressive",
+      "approved_assets": {
+        "1": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+      },
+      "units": [
+        {
+          "id": "m10p04-andrew-exp-s01-c1-0ae20e0c0ceb",
+          "slide": 1,
+          "text": "Three instances need to write to the same disk. E B S Multi-Attach gives supported writers in one Availability Zone access to one provisioned I ops volume. All three are working with the same blocks, not a network file share.",
+          "text_sha256": "0ae20e0c0ceb8e6c0a75404cb9a135ab660abc4e2754e9e0a9b4a2ff83e2dfa4",
+          "canonical_text_sha256": "ea5a830bb3a401960c0d7dcb16c368aa68d592c0e9957f600bd4ac62e993e901",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-andrew-exp-s01-c2-212207652739",
+          "slide": 1,
+          "text": "Those writers have to agree who may update which data and fence failed writers. Use a cluster-aware application or filesystem that coordinates access.",
+          "text_sha256": "21220765273942d251f26b5f03e350fc81e3fc508cd265be38ee995761f63de4",
+          "canonical_text_sha256": "21220765273942d251f26b5f03e350fc81e3fc508cd265be38ee995761f63de4",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-andrew-exp-s01-c3-66519c629c34",
+          "slide": 1,
+          "text": "Use supported Nitro instances in one zone. Linux supports I O one and I O two; Windows supports I O two.",
+          "text_sha256": "66519c629c34cca954e83273bd31e5b22e9fe5eaad881f679c0d63541d089f06",
+          "canonical_text_sha256": "ea7f2620dd81945fd6ba53982d4ab2498a63208133e58e7dd0cdd96c1d2d06ae",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-andrew-exp-s01-c4-24aef614e7bc",
+          "slide": 1,
+          "text": "What happens if you simply mount a regular filesystem on all three hosts? Each can assume it owns those blocks. Conflicting writes can corrupt shared data.",
+          "text_sha256": "24aef614e7bcc4842f9d438937a993e2b0b602b022bf758ee3fc69a943c2ab4a",
+          "canonical_text_sha256": "24aef614e7bcc4842f9d438937a993e2b0b602b022bf758ee3fc69a943c2ab4a",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "05",
+      "revision": "2026-11-24-m10p05-andrew-expressive",
+      "approved_assets": {
+        "1": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+      },
+      "units": [
+        {
+          "id": "m10p05-andrew-exp-s01-c1-e6dd74a1c8fa",
+          "slide": 1,
+          "text": "The team grows a disk from one hundred to two hundred gibibytes, but the app still reports the old size. Why? Enlarging E B S changes the block device first. It doesn't automatically change how much space the guest filesystem can use.",
+          "text_sha256": "e6dd74a1c8fa0b1fbc38b516899972c8525fffa1527e31cfd4730d1b15cdff7e",
+          "canonical_text_sha256": "df542709f0e709915ff6cf1c5e4e8184626adae772ba6ed149cfb70727e79cfc",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-andrew-exp-s01-c2-99bf83065f56",
+          "slide": 1,
+          "text": "Once the E B S modification reaches optimizing or completed, look at the guest layout. Extend the partition if there is one, then grow the filesystem using its own procedure.",
+          "text_sha256": "99bf83065f56f26d2e9bb83d0ea26c5f03b1de05379c3a49f460a26d5517a22d",
+          "canonical_text_sha256": "71d66d3c196a441740a0ca6154df540fb7f66c7d231ec2904e3b75867a9b25f4",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-andrew-exp-s01-c3-88f2cbc32afa",
+          "slide": 1,
+          "text": "Check the filesystem from the operating system, then verify application reads and writes. The result that matters is usable space for the workload, not only a larger E B S volume.",
+          "text_sha256": "88f2cbc32afa449b92b2deb452ac63cd13ada2961216d05f817898e7f1c2637b",
+          "canonical_text_sha256": "668aca6a8ecdf09be6d1d7f40360bda543e3cfef1b47d33fda4f38def377dde3",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-andrew-exp-s01-c4-9bc0131f2564",
+          "slide": 1,
+          "text": "The example grows the disk from one hundred to two hundred gibibytes. Until the filesystem grows, the extra space is not available to files. Check both sizes separately to tell which step is unfinished.",
+          "text_sha256": "9bc0131f2564c815cc80bf0a07f2cb4780805fd27888a68e633eb4c06a1e175b",
+          "canonical_text_sha256": "9bc0131f2564c815cc80bf0a07f2cb4780805fd27888a68e633eb4c06a1e175b",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-andrew-exp-s01-c5-eb8127dc8775",
+          "slide": 1,
+          "text": "Can you reverse the operation by shrinking that same E B S volume? No. If you need a smaller disk, create one, copy the data, validate it, then switch.",
+          "text_sha256": "eb8127dc8775a91629411ca2731cc2089a73aba892373423489f9403beda2590",
+          "canonical_text_sha256": "f6d42056aa2a250b48cc5c52a21d37cb882a28ce482feed254bb534a9e85409b",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-andrew-exp-s01-c6-65899ca91e08",
+          "slide": 1,
+          "text": "Instance store is a different choice. Use it for scratch data or cache you can rebuild. A reboot preserves it, but stop, termination or disk failure can lose it. Copy required data to persistent storage.",
+          "text_sha256": "65899ca91e0880a1b3a6cf4c7cac0a5804314d4beaf2d2835bf89b454486762d",
+          "canonical_text_sha256": "65899ca91e0880a1b3a6cf4c7cac0a5804314d4beaf2d2835bf89b454486762d",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "06",
+      "revision": "2026-11-24-m10p06-andrew-expressive",
+      "approved_assets": {
+        "1": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5",
+        "2": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0",
+        "3": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+      },
+      "units": [
+        {
+          "id": "m10p06-andrew-exp-s01-c1-b225c0a53775",
+          "slide": 1,
+          "text": "Two Linux clients in different Availability Zones need the same files. The Zone A client connects over N F S to its mount target. Let's follow where those requests go.",
+          "text_sha256": "b225c0a537751f2ebc37e20f3e313edf7c66c2da728e25475143dda7d6eeee41",
+          "canonical_text_sha256": "8c2931ab84edd08fda0826273b0cf333f6e93b687075ffa777c81cb18e082d7d",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-andrew-exp-s01-c2-1435012ab1d0",
+          "slide": 1,
+          "text": "The Zone B client uses a different mount target to reach the same Regional E F S filesystem. It can read the files the first client wrote. The mount targets are network entry points, not independent file copies.",
+          "text_sha256": "1435012ab1d0783a1acc1d435d3c921a7832b4442da1c17b91e6c166821c3130",
+          "canonical_text_sha256": "b898eb7b30d27607969636478481e04328f2d5219d693c91055cec44e759c84f",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-andrew-exp-s01-c3-cb719c001eb1",
+          "slide": 1,
+          "text": "Regional E F S stores the filesystem across multiple zones. That suits a workload that needs the shared files when a zone is unavailable. Mount targets provide paths into the filesystem; they are not separate copies to synchronize.",
+          "text_sha256": "cb719c001eb154bbbe9610893b42a959da83ba903398a611530609064de98cbe",
+          "canonical_text_sha256": "bbce79a8fa28c4d8df05260b74095a279f225097292b8cfee03e1217a2577e54",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-andrew-exp-s01-c4-84d65b4f8542",
+          "slide": 1,
+          "text": "One Zone keeps storage and the mount target in one zone. Choose it only when the workload can accept that failure boundary. Being able to mount a filesystem is not proof that it will survive loss of its storage zone.",
+          "text_sha256": "84d65b4f854234154f6def89e6cb973d6538e698f294d9c584a60e726c3bee8a",
+          "canonical_text_sha256": "84d65b4f854234154f6def89e6cb973d6538e698f294d9c584a60e726c3bee8a",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-andrew-exp-s02-c1-686ee53e6f7d",
+          "slide": 2,
+          "text": "The on-premises client needs a private route to the mount target, for example over Direct Connect or V P N. A working connection needs both a way in and a return path. E F S is not exposing a public file share.",
+          "text_sha256": "686ee53e6f7d83c5683f9adc7599b94f5a7d9d12a2d74301b51faf60afd3a856",
+          "canonical_text_sha256": "cd291e023a5bf18c75c1b04c55f663f96f68a7eb783063d5f417bf9cb1572821",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-andrew-exp-s02-c2-a2b3012069a2",
+          "slide": 2,
+          "text": "The E C two client also connects to the mount target over N F S on T C P port twenty forty-nine. Prefer the mount target in the same zone for a Regional filesystem and allow the client traffic out as needed.",
+          "text_sha256": "a2b3012069a28c47cc2dbead403bbdb5b75e095167b4c24424c20ec4a623c675",
+          "canonical_text_sha256": "7b8ab85931d47fb7611fbb34b40f4d0459070953087b4cf1411c16cdc5d9c2fe",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-andrew-exp-s02-c3-0e80f6509afd",
+          "slide": 2,
+          "text": "The mount target is a network interface. Its security group must allow inbound N F S from the intended source. If the client times out, check the forward and return routes and security rules before changing file permissions.",
+          "text_sha256": "0e80f6509afda11053e3db6bcf2cadc287156f3d33861bdf73fcf22898dd45ef",
+          "canonical_text_sha256": "a4795267a05b3360eca30cf4f3e78e60827560b7e3bcea5f1065d58feecc24ed",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-andrew-exp-s02-c4-c9529301422c",
+          "slide": 2,
+          "text": "For Regional E F S, create mount targets in the zones used by the clients. One Zone has a single target in the storage zone. For clients outside the VPC, plan how they resolve or obtain a reachable private target address.",
+          "text_sha256": "c9529301422c2164868c0bde774310cf20cc81f88379865f2fb020dc295a53d5",
+          "canonical_text_sha256": "ec3e72c755f3ab41859ca91a6d59e37f1ffec55ae912fb8d67a3ae3222501b2d",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-andrew-exp-s03-c1-c6b024571df6",
+          "slide": 3,
+          "text": "The app cannot open a file. Start with whether it can establish the N F S connection on T C P port twenty forty-nine. Granting file permissions doesn't help if the mount target isn't reachable.",
+          "text_sha256": "c6b024571df6d3e296d92affef1364488d3fee785f01a7fdb17d0c84bcf854dc",
+          "canonical_text_sha256": "cd789ab5c1ce7757c71792fae399a8bcb68096c23e71110e86ce902a4bfb8641",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-andrew-exp-s03-c2-012d443f3220",
+          "slide": 3,
+          "text": "A reachable client can take the anonymous N F S path under the default E F S policy. That does not make the filesystem public, and it does not make every operation on every file allowed.",
+          "text_sha256": "012d443f32202046c06996f1418c17e6bc61d2c11232a657d2220eb3bd471837",
+          "canonical_text_sha256": "aa09398801eb20755178e007d11516edd7fcac8e1444d4406bb2d4b2e10f65d9",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-andrew-exp-s03-c3-721d5beffd64",
+          "slide": 3,
+          "text": "If the design requires I A M client authorization, use the E F S mount helper with I A M and T L S. Give the client only the mount, write or root permissions it actually needs.",
+          "text_sha256": "721d5beffd64df9fdd5b095614127f7a7b8c8abc39e8432a9d995745a2cc19fa",
+          "canonical_text_sha256": "740c772160d2af9a905132087fe21b117de1f923d7d790fe4aa1fdde11115350",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-andrew-exp-s03-c4-ab34a406cd40",
+          "slide": 3,
+          "text": "Suppose the client can mount E F S but can't write here. The file operation still checks the effective user, group and mode. Network reachability and the ability to mount don't grant write permission on that directory.",
+          "text_sha256": "ab34a406cd405fbf3204747040e194fc45c90db9c7766a2ddbe035414386cdec",
+          "canonical_text_sha256": "6610dc7de887a7e3b02c97cc612ec2cf193aa660f7f67dc324e949eacf98d490",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-andrew-exp-s03-c5-a78e11d56924",
+          "slide": 3,
+          "text": "An access point can enforce a Pozix identity and expose a specific application root directory. It does not replace security groups or I A M permissions. Use it to give the application the intended identity and view.",
+          "text_sha256": "a78e11d569248843165260608ef515f6d35927f54ae635232a55a09f97bd2a95",
+          "canonical_text_sha256": "fc7a69bb0ba84e6062cdc4b6adc8d92e366b0fede7da0c9e873e92d4f4dfafda",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        }
+      ]
+    }
+  ]
+}
