@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-15%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "94",
+      "revision": "m11p94-sap-m11-second-primer-redos",
+      "approved_assets": {
+        "1": "e0ef882f99cfa989a76d2d967a441e751df4fafe033e3cfb903ff83c3339d298",
+        "2": "e0ef882f99cfa989a76d2d967a441e751df4fafe033e3cfb903ff83c3339d298"
+      },
+      "units": [
+        {
+          "id": "m11p94-kinesis-01",
+          "slide": 1,
+          "text": "Amazon Kinesis Data Streams keeps a running record of events so different applications can process them as they arrive. Imagine a shop sending an event every time an order changes. The shop gives the placed and paid events for order forty-two the same partition key. Kinesis uses that key to put them in a shard, a lane with its own sequence. Follow the sequence within a shard, not across the whole stream.",
+          "text_sha256": "10aca2d7d01349429f29a0e097b1f06f10d1e66e5bea2f80bfdb380cf84ca39d",
+          "canonical_text_sha256": "10aca2d7d01349429f29a0e097b1f06f10d1e66e5bea2f80bfdb380cf84ca39d",
+          "asset_sha256": "e0ef882f99cfa989a76d2d967a441e751df4fafe033e3cfb903ff83c3339d298"
+        },
+        {
+          "id": "m11p94-kinesis-02",
+          "slide": 2,
+          "text": "Two applications can read the same records. One tracks orders for a dashboard; the other looks for possible fraud. They can each keep their own reading position. If a reader needs to catch up or repeat its work, it can replay records that are still within the stream's configured retention period.",
+          "text_sha256": "48e9948931f1422dd1dfd515e56b71c0129137d80c357fdcdbd6beddc9533419",
+          "canonical_text_sha256": "48e9948931f1422dd1dfd515e56b71c0129137d80c357fdcdbd6beddc9533419",
+          "asset_sha256": "e0ef882f99cfa989a76d2d967a441e751df4fafe033e3cfb903ff83c3339d298"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "95",
+      "revision": "m11p95-sap-m11-second-primer-redos",
+      "approved_assets": {
+        "1": "1ab5778827d10d7d3df0d7c2a9d379fc167812bd5b2e9aab82d834fd6f8bbcb2",
+        "2": "1ab5778827d10d7d3df0d7c2a9d379fc167812bd5b2e9aab82d834fd6f8bbcb2"
+      },
+      "units": [
+        {
+          "id": "m11p95-dax-01",
+          "slide": 1,
+          "text": "DynamoDB Accelerator, or Dacks, is a cache made for DynamoDB. It helps when an app reads the same items repeatedly and can tolerate a slightly older answer. Suppose customers keep opening a backpack product page. The app looks up the backpack record, not the image file. If Dacks has a usable copy, it returns it without another DynamoDB read.",
+          "text_sha256": "aaedc428f0854a5f3625b9c6114b0079a45ab717d78e91819cce1066fcb933e4",
+          "canonical_text_sha256": "c4d184839e0885f6a3ca40408bfcf993eabc81e2a19a009469e16acf8fe6a380",
+          "asset_sha256": "1ab5778827d10d7d3df0d7c2a9d379fc167812bd5b2e9aab82d834fd6f8bbcb2"
+        },
+        {
+          "id": "m11p95-dax-02",
+          "slide": 2,
+          "text": "If the item isn't cached, Dacks reads it from DynamoDB, saves a copy, and returns it. DynamoDB still holds the authoritative record. If the app needs a strongly consistent read, for example to check the latest stock record, the request goes to DynamoDB and the result isn't cached. Use Dacks for repeated reads that can tolerate eventual consistency.",
+          "text_sha256": "71e27d878ff0471322cbfa29126220b15b66ede25b49e7b19a3ce36d9cc3585d",
+          "canonical_text_sha256": "712f16943cbdc8735481010c848de4cd7e2c70e9e0b71da24cc308ddf99dfc71",
+          "asset_sha256": "1ab5778827d10d7d3df0d7c2a9d379fc167812bd5b2e9aab82d834fd6f8bbcb2"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "96",
+      "revision": "m11p96-sap-m11-second-primer-redos",
+      "approved_assets": {
+        "1": "f7a82e8e8b95d2e1c1099fd3f9629f67747be55fbf908702bbf39f1f08e0cee8",
+        "2": "f7a82e8e8b95d2e1c1099fd3f9629f67747be55fbf908702bbf39f1f08e0cee8"
+      },
+      "units": [
+        {
+          "id": "m11p96-elasticache-01",
+          "slide": 1,
+          "text": "Amazon ElastiCache keeps frequently used data in memory so an application can read it without visiting the database every time. Think of this shop counter. The application is like a customer asking for a product catalog, and the counter keeps a copy close at hand. If the copy is already there, the app uses it.",
+          "text_sha256": "36b60d2a6ead8865282db29b26ce6c009169a7d25630e1a75d1f597bc67ca8ac",
+          "canonical_text_sha256": "36b60d2a6ead8865282db29b26ce6c009169a7d25630e1a75d1f597bc67ca8ac",
+          "asset_sha256": "f7a82e8e8b95d2e1c1099fd3f9629f67747be55fbf908702bbf39f1f08e0cee8"
+        },
+        {
+          "id": "m11p96-elasticache-02",
+          "slide": 2,
+          "text": "If the copy isn't there, the application reads the original from the database, stores a copy in ElastiCache, and serves the result. That's cache-aside: the app decides when to fill the cache. The copy can expire. Expiry doesn't guarantee the copy is current before it expires, and it doesn't protect the original. The database remains the source of truth.",
+          "text_sha256": "1f5c60b03510a3fbde69327ffde821b6d4d31e1986aa8cf914eda5c52e49ca73",
+          "canonical_text_sha256": "1f5c60b03510a3fbde69327ffde821b6d4d31e1986aa8cf914eda5c52e49ca73",
+          "asset_sha256": "f7a82e8e8b95d2e1c1099fd3f9629f67747be55fbf908702bbf39f1f08e0cee8"
+        }
+      ]
+    }
+  ]
+}
