@@ -1,11 +1,12 @@
 "use client";
 import {useCallback,useEffect,useRef,useState,type PointerEvent,type KeyboardEvent} from "react";
+import {legacyRecordingLinks} from "./sap-recording-revision.mjs";
 import CourseVideoCaptions from "./CourseVideoCaptions";
 import {discoveryPartIds,discoveredLectures,readyRequestedPart} from "./sap-video-discovery.mjs";
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
-type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;posterUrl?:string;durationSeconds:number;chapters:Chapter[]};
+type Ready={status:"ready";revision?:string;title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;posterUrl?:string;durationSeconds:number;chapters:Chapter[]};
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
@@ -53,6 +54,7 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
   const result=results[active];
   const readyCount=entries.filter(lecture=>results[lecture.id]?.status==="ready").length;
   const ready=result?.status==="ready"?result:null;
+  const legacyLinks=legacyRecordingLinks(moduleId,active,ready,slideAssets);
   const storageKey=`sap-video-${moduleId}-${active}-position`;
   const completedKey=`sap-video-${moduleId}-${active}-complete`;
   const source=(n:number)=>(moduleId==="10"||moduleId==="02")?slideAssets?.[n]:`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
@@ -323,6 +325,11 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
             </div>
             <span className={ready?"sap-video-pill":"sap-video-pill pending"}>{ready?(completed?"✓ Completed":"Ready to watch"):"In preparation"}</span>
           </div>
+          {legacyLinks.length>0&&<aside aria-label="Recording revision note" style={{padding:"12px 16px",background:"#fff8e8",color:"#684220"}}>
+            <strong>This recording uses earlier versions of these slides.</strong>{" "}
+            Use the corrected slides for current guidance:{" "}
+            {legacyLinks.map(({slide,href},index)=><span key={slide}>{index>0&&" · "}<a href={href} target="_blank" rel="noopener noreferrer">Slide {slide} ↗</a></span>)}
+          </aside>}
           {ready&&!mediaError?<div>
           <div ref={stageRef} className="sap-video-stage" data-hud={hudVisible?"visible":"hidden"}
             tabIndex={fullscreen?0:undefined} onPointerMove={trackHud}

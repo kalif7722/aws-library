@@ -1,0 +1,30 @@
+name: SAP audited slide release preflight (no deploy)
+on:
+  push:
+    branches: ['review/sap-gap-preflight-20261124']
+permissions:
+  contents: read
+jobs:
+  preflight:
+    if: github.ref == 'refs/heads/review/sap-gap-preflight-20261124'
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.13.0'
+      - name: Verify checkout and install locked dependencies
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
+          npm ci --no-audit --no-fund
+      - name: Run full project build and regression suite
+        env:
+          SITES_BUILD_TIMEOUT: 6m
+          SITES_BUILD_KILL_AFTER: 15s
+        run: npm test
