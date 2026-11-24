@@ -1,0 +1,47 @@
+name: SAP EC2 v6 intro Andrew speech-only review
+on:
+  push:
+    branches: [review/sap-ec2-v6-pronunciation]
+    paths: [.github/workflows/review-sap-ec2-v6-pronunciation.yml, scripts/review_sap_ec2_v6_pronunciation.py, content/video-narration/review-sap-ec2-v6-pronunciation.json, content/video-narration/review-sap-ec2-v6-pronunciation.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-ec2-v6-pronunciation-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-ec2-v6-pronunciation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        part: [m01p99]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_ec2_v6_pronunciation.py
+            content/video-narration/review-sap-ec2-v6-pronunciation.json
+            content/video-narration/review-sap-ec2-v6-pronunciation.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_ec2_v6_pronunciation.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned edge-tts
+        timeout-minutes: 4
+        run: python -m pip install --disable-pip-version-check --timeout 15 --retries 2 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_ec2_v6_pronunciation.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-ec2-v6-pronunciation-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
