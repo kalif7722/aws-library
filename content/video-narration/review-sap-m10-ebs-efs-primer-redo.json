@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-15%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "91",
+      "revision": "m10p91-sap-m10-ebs-efs-primer-redo",
+      "approved_assets": {
+        "1": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf",
+        "2": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf",
+        "3": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf"
+      },
+      "units": [
+        {
+          "id": "m10p91-ebs-01",
+          "slide": 1,
+          "text": "Amazon Elastic Block Store, or E B S, gives an E C two instance a durable storage volume. Think of it as a disk you attach to a server. It can hold the operating system that starts the instance, or data that an application needs to keep. Take a database on E C two. The database reads and writes to its attached E B S volume like a disk.",
+          "text_sha256": "8b93da0ba3b9bab74d999cdef7471a5422837a951ec87c57243055b7eafe2feb",
+          "canonical_text_sha256": "22d0674660906b4ff19e8d1610f64a0f0b87a407bb8ba61af931e0cea841ad46",
+          "asset_sha256": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf"
+        },
+        {
+          "id": "m10p91-ebs-02",
+          "slide": 2,
+          "text": "If you replace the instance and keep the volume, you can attach that volume to another instance in the same Availability Zone and reuse the data. Most volumes attach to one instance at a time. Multi-Attach is a specialized exception, not a shared file system. What if the replacement instance is in a different zone? Take a snapshot, a point-in-time copy of the volume.",
+          "text_sha256": "a1197178c3fdbf64c9cbd3761eaddd8c77526f50815d2cca34991368732f844d",
+          "canonical_text_sha256": "a1197178c3fdbf64c9cbd3761eaddd8c77526f50815d2cca34991368732f844d",
+          "asset_sha256": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf"
+        },
+        {
+          "id": "m10p91-ebs-03",
+          "slide": 3,
+          "text": "Restore that snapshot to a new volume in the other zone, then attach the new volume there. You are restoring a copy, not moving the original disk across zones.",
+          "text_sha256": "95bc12076c9d9a2a160ab7be99f95b12f7fa8d39ad4a23f5c4b00358b1e9ed10",
+          "canonical_text_sha256": "95bc12076c9d9a2a160ab7be99f95b12f7fa8d39ad4a23f5c4b00358b1e9ed10",
+          "asset_sha256": "516826adf50562626a931e89b4bddd0f4dbe682a64d2984ea2f97a1db32b68cf"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "92",
+      "revision": "m10p92-sap-m10-ebs-efs-primer-redo",
+      "approved_assets": {
+        "1": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873",
+        "2": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873",
+        "3": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873"
+      },
+      "units": [
+        {
+          "id": "m10p92-efs-01",
+          "slide": 1,
+          "text": "Amazon Elastic File System, or E F S, is a managed shared file system. Several Linux servers can mount it over the network and work with the same files. This is useful when your app runs on more than one server, but the files need to stay in one shared place. Take a website running on two groups of E C two instances. Instead of copying a new image to every server, the app writes it once to the shared folder.",
+          "text_sha256": "1626e121e984891b2fdc714469882533f2e79caafc2a2fc69368e26305ae6222",
+          "canonical_text_sha256": "6839908dd7dff885bfaae8f6258ffcaad6243a55e184b041f30354af2b6afc3f",
+          "asset_sha256": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873"
+        },
+        {
+          "id": "m10p92-efs-02",
+          "slide": 2,
+          "text": "Other instances can read that same file. Each group connects through a mount target, the network entry point for the file system. They use N F S, a protocol for accessing files over a network. Both groups see the same directory tree, provided they have network access and the right permissions. Regional E F S stores data across Availability Zones. One Zone stores it in just one.",
+          "text_sha256": "78958efd907cdfd092eee878476392444aa162a3703e361dd9dc898e76dc3150",
+          "canonical_text_sha256": "efa19e6f84e91438d340369077b713183a517738d7f88018ffe560902eba8053",
+          "asset_sha256": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873"
+        },
+        {
+          "id": "m10p92-efs-03",
+          "slide": 3,
+          "text": "Choose E F S for shared Linux files, not as a native Windows file share.",
+          "text_sha256": "5a47608cfd7903eb7f047c7d954e05e3e2d0ce6868e2050d4d4f808719d3ab73",
+          "canonical_text_sha256": "2d51c5f15242c85772a72a141c47e56876716d04ac6960a0471ab1ab58eb8a11",
+          "asset_sha256": "d1ac2cae61478a703f7766dc721d7977a77dfe0fc527f1ab8f36060457b89873"
+        }
+      ]
+    }
+  ]
+}
