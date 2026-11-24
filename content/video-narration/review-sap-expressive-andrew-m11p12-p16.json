@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "12",
+      "revision": "2026-11-24-m11p12-andrew-expressive",
+      "approved_assets": {
+        "1": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f",
+        "2": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226",
+        "3": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff",
+        "4": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+      },
+      "units": [
+        {
+          "id": "m11p12-andrew-exp-s01-c1-db0fec5c7d07",
+          "slide": 1,
+          "text": "You need customer C forty-two's January orders. Query starts with that customer key, then uses the date range to narrow results. It doesn't read through everyone else's orders first.",
+          "text_sha256": "db0fec5c7d07eb2af63d446c5f7f7a5054f369d2847963d6d3d768c31a62e1b5",
+          "canonical_text_sha256": "db0fec5c7d07eb2af63d446c5f7f7a5054f369d2847963d6d3d768c31a62e1b5",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-andrew-exp-s01-c2-12f5704a6aa6",
+          "slide": 1,
+          "text": "If you don't know the key and scan the table, Dynamo D B reads across the table before applying the filter. That can return only the matches, but the discarded items still cost read work.",
+          "text_sha256": "12f5704a6aa69f92f3336dca03ffe6d472e021fc7bfb40e0d7c7f19307690faa",
+          "canonical_text_sha256": "7ff465ed6da8239ce0c7f529b39bafc16364a0d9138992ce4a4771c6cb82febd",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-andrew-exp-s01-c3-62fc4eac1d4f",
+          "slide": 1,
+          "text": "A single request can stop before the whole result has been read. Follow the last evaluated key to continue the page sequence. Adding a filter or parallel scan doesn't make the underlying reads free.",
+          "text_sha256": "62fc4eac1d4fa74414bdcd4f7d175cd8bb00cd0922d266b0cbb096f5d99b7ea9",
+          "canonical_text_sha256": "62fc4eac1d4fa74414bdcd4f7d175cd8bb00cd0922d266b0cbb096f5d99b7ea9",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-andrew-exp-s02-c1-8ef08513bff9",
+          "slide": 2,
+          "text": "Need another order within the same customer group? A local secondary index keeps the customer partition key and can use total as the alternate sort key. Define it at table creation; it can support strongly consistent reads.",
+          "text_sha256": "8ef08513bff92a39fd05a2ccc5336b330f463210c559b6dec7f15d89997904dd",
+          "canonical_text_sha256": "8ef08513bff92a39fd05a2ccc5336b330f463210c559b6dec7f15d89997904dd",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-andrew-exp-s02-c2-a6e556fa7e94",
+          "slide": 2,
+          "text": "Need orders by status across customers? The global secondary index can use status as its partition key. It can be added later, and its reads are eventually consistent.",
+          "text_sha256": "a6e556fa7e94d7c620c91cf6692316f541304f08a1b72df18eb49ebb5e24ec2b",
+          "canonical_text_sha256": "a6e556fa7e94d7c620c91cf6692316f541304f08a1b72df18eb49ebb5e24ec2b",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-andrew-exp-s02-c3-577fd67cbd9b",
+          "slide": 2,
+          "text": "Project the attributes the new access path needs. The index adds storage and can add write work when the table changes. This is not just a free alternate filter.",
+          "text_sha256": "577fd67cbd9bd34d7614d34b1bf4b33c45ca2cf0c2b09effef35cc313055f6c8",
+          "canonical_text_sha256": "577fd67cbd9bd34d7614d34b1bf4b33c45ca2cf0c2b09effef35cc313055f6c8",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-andrew-exp-s03-c1-214c95fac7e5",
+          "slide": 3,
+          "text": "Suppose traffic is steady enough to size. Provisioned mode lets you set capacity and use Auto Scaling toward a utilization target. It doesn't react instantly; a burst above the current capacity can still throttle.",
+          "text_sha256": "214c95fac7e57b2922227dc76ed9720ce02f2cf0f31ff583149e9b13dd2ea304",
+          "canonical_text_sha256": "214c95fac7e57b2922227dc76ed9720ce02f2cf0f31ff583149e9b13dd2ea304",
+          "asset_sha256": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff"
+        },
+        {
+          "id": "m11p12-andrew-exp-s03-c2-928acbc26f60",
+          "slide": 3,
+          "text": "If traffic varies widely, on-demand charges per request without that capacity configuration. It adapts to demand, but a jump well above a previous peak can still throttle. Ramp a large planned spike instead of assuming unlimited instantaneous scale.",
+          "text_sha256": "928acbc26f60baa8a5a0fe870e6ab1972f3eb95ed04b0154ab0e552fb675a76c",
+          "canonical_text_sha256": "928acbc26f60baa8a5a0fe870e6ab1972f3eb95ed04b0154ab0e552fb675a76c",
+          "asset_sha256": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff"
+        },
+        {
+          "id": "m11p12-andrew-exp-s04-c1-99f3593c3c28",
+          "slide": 4,
+          "text": "The order write just succeeded. If the next operation needs the latest completed update, request a strongly consistent read on the base table or local secondary index. Otherwise, the eventual default can briefly return an older value.",
+          "text_sha256": "99f3593c3c28b993fa3908fe49d3d5a47c2bd5c6afa1bac4559f213225e3fab6",
+          "canonical_text_sha256": "99f3593c3c28b993fa3908fe49d3d5a47c2bd5c6afa1bac4559f213225e3fab6",
+          "asset_sha256": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+        },
+        {
+          "id": "m11p12-andrew-exp-s04-c2-5c4e4cc02110",
+          "slide": 4,
+          "text": "The same guarantee cannot be requested on a global secondary index or Dynamo D B Streams. If an index result can be stale and the decision is critical, confirm the item on a path with the consistency you need.",
+          "text_sha256": "5c4e4cc02110e9ad7e9a61e352d3f994c5a363aae7806bc068de741d697eeea1",
+          "canonical_text_sha256": "3b997111b457642e52ab3e95b4ba2375177b6897839a1412dc7aee52203dd209",
+          "asset_sha256": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "13",
+      "revision": "2026-11-24-m11p13-andrew-expressive",
+      "approved_assets": {
+        "1": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90",
+        "2": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+      },
+      "units": [
+        {
+          "id": "m11p13-andrew-exp-s01-c1-9c8afbb0a581",
+          "slide": 1,
+          "text": "Two buyers see stock available. For a single inventory item, make the update conditional on stock still being positive. Dynamo D B checks that condition with the write, so the second buyer cannot decrement it once the condition is false.",
+          "text_sha256": "9c8afbb0a581c2354f9444d6c517ad042cf5d696ed9a8881c894d71468f110e1",
+          "canonical_text_sha256": "23d82a6e85bec44d26d70170c5e8cfbcfacdd66a70e52c64047e570e8a8f695a",
+          "asset_sha256": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90"
+        },
+        {
+          "id": "m11p13-andrew-exp-s01-c2-d1f894bb91f3",
+          "slide": 1,
+          "text": "Now the inventory change and an order record must succeed together. Group them in a transaction. If one condition fails, neither write is committed. That's the difference between protecting one item and protecting a business change across items.",
+          "text_sha256": "d1f894bb91f3e209f0dc9346a32362a61d4ab8f4fe259d35d19d63a152378c04",
+          "canonical_text_sha256": "d1f894bb91f3e209f0dc9346a32362a61d4ab8f4fe259d35d19d63a152378c04",
+          "asset_sha256": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90"
+        },
+        {
+          "id": "m11p13-andrew-exp-s02-c1-6479bb2bba3c",
+          "slide": 2,
+          "text": "The item carries an expiration timestamp in Unix epoch seconds. That value tells Dynamo D B when the item is eligible for Time to Live cleanup.",
+          "text_sha256": "6479bb2bba3c24e33c75ac835026b5160ca30974361976ea2e83e3b82e5e076a",
+          "canonical_text_sha256": "bb55955122946789f9687a58f99fa790603a95b7146847b2130f76ba435fd51f",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        },
+        {
+          "id": "m11p13-andrew-exp-s02-c2-a565a4ac5500",
+          "slide": 2,
+          "text": "Once it expires, it can still appear in Query or Scan until cleanup runs. Filter out expired items when the application must stop showing them now.",
+          "text_sha256": "a565a4ac55009cabf14c75a9fc0f7dcab000942254617c45cffb3363c22732b7",
+          "canonical_text_sha256": "a565a4ac55009cabf14c75a9fc0f7dcab000942254617c45cffb3363c22732b7",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        },
+        {
+          "id": "m11p13-andrew-exp-s02-c3-49e7d8e6966c",
+          "slide": 2,
+          "text": "Dynamo D B removes eligible items asynchronously, typically within a few days. Treat the deletion as storage cleanup, not a deadline for starting a business action. A stream can surface the eventual deletion if enabled.",
+          "text_sha256": "49e7d8e6966ce33b35ea30494a22fb7670b61966091b5f23d62d4f423c4ff811",
+          "canonical_text_sha256": "3602cfcd32dc5841f46e8132319c5340f5a1157879ecc6d4227af5dd65340dd7",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "14",
+      "revision": "2026-11-24-m11p14-andrew-expressive",
+      "approved_assets": {
+        "1": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf",
+        "2": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409",
+        "3": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+      },
+      "units": [
+        {
+          "id": "m11p14-andrew-exp-s01-c1-19f53185fc09",
+          "slide": 1,
+          "text": "Follow one order from insert to status update to removal. Dynamo D B Streams records item changes in order for that item. It doesn't promise one order across all the items in the table.",
+          "text_sha256": "19f53185fc09695d5ea343a24a2c917d4c5b66c9fe11b87609f806003e3fce4d",
+          "canonical_text_sha256": "8b6997edf79c7f436d9f91e92eb86f2e851a3770badf99e3244e4a70a407e6cd",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-andrew-exp-s01-c2-9ebb676bba1f",
+          "slide": 1,
+          "text": "Choose what each reader actually needs. For a status transition, old and new images can show what changed. If the consumer only needs a key, avoid depending on attributes that aren't in its record view.",
+          "text_sha256": "9ebb676bba1ff26c1909735ebe5d4ee692e361dfba01e5429bb8a80c4a8fc530",
+          "canonical_text_sha256": "9ebb676bba1ff26c1909735ebe5d4ee692e361dfba01e5429bb8a80c4a8fc530",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-andrew-exp-s01-c3-af7d29339b3c",
+          "slide": 1,
+          "text": "The Lambda consumer can use the change to update the search index. Keep within the twenty-four-hour stream retention and make the update safe to repeat, since processing retries can deliver a record again.",
+          "text_sha256": "af7d29339b3c25ce06edaff4a1bb3ed5420022621ec6d0f8fb43cb3c751030c6",
+          "canonical_text_sha256": "af7d29339b3c25ce06edaff4a1bb3ed5420022621ec6d0f8fb43cb3c751030c6",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-andrew-exp-s02-c1-32c8ff12ead9",
+          "slide": 2,
+          "text": "Producers send records to Kinesis Data Streams. The partition key influences the shard they enter. Sequence order is within a shard, not a total order across the stream.",
+          "text_sha256": "32c8ff12ead9ebc2a043577ff9feb920b19f6b6f29ac5c5076fa1309edd817cd",
+          "canonical_text_sha256": "32c8ff12ead9ebc2a043577ff9feb920b19f6b6f29ac5c5076fa1309edd817cd",
+          "asset_sha256": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409"
+        },
+        {
+          "id": "m11p14-andrew-exp-s02-c2-21e05d81e9fc",
+          "slide": 2,
+          "text": "Two consumers can read the same stream and track different positions. If one needs to replay data, it must still be inside the retention window. Plan shard capacity and make destination writes safe to repeat.",
+          "text_sha256": "21e05d81e9fc8aa95b617c004b7defeb94f04bf215ca49404ed0e0650962977a",
+          "canonical_text_sha256": "21e05d81e9fc8aa95b617c004b7defeb94f04bf215ca49404ed0e0650962977a",
+          "asset_sha256": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409"
+        },
+        {
+          "id": "m11p14-andrew-exp-s03-c1-0019831410be",
+          "slide": 3,
+          "text": "Native Dynamo D B Streams and Kinesis capture are different options. Use native streams for their change feed, or choose Kinesis when you need its configurable longer retention and consumer options.",
+          "text_sha256": "0019831410be1a5f9a77cb4950b000613a3b5293394ad86c6cc6fabb6542d1a5",
+          "canonical_text_sha256": "6249b0b6c61154e02f8b3c66be96dfccc95858677b8c74b53dee40240c7f541f",
+          "asset_sha256": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+        },
+        {
+          "id": "m11p14-andrew-exp-s03-c2-d1fcd442178e",
+          "slide": 3,
+          "text": "Choose the processing route separately. Lambda or Flink can react to records, and Firehose can deliver to a supported destination. Plan for duplicate and out-of-order records on the Kinesis capture path; validate what the destination actually receives.",
+          "text_sha256": "d1fcd442178e5600da974e6185facc1466fcd49129ba87189f2596b7640b59cf",
+          "canonical_text_sha256": "d1fcd442178e5600da974e6185facc1466fcd49129ba87189f2596b7640b59cf",
+          "asset_sha256": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "15",
+      "revision": "2026-11-24-m11p15-andrew-expressive",
+      "approved_assets": {
+        "1": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3",
+        "2": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885",
+        "3": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+      },
+      "units": [
+        {
+          "id": "m11p15-andrew-exp-s01-c1-e4103b781a51",
+          "slide": 1,
+          "text": "Both Regions can accept local writes. Suppose the app updates an item in Region A and immediately reads in Region B. That copy can still show the prior value because replication is asynchronous.",
+          "text_sha256": "e4103b781a51d1367faffefc37c886c0dc2051f5e07bb5d7340397374c4f8baf",
+          "canonical_text_sha256": "e4103b781a51d1367faffefc37c886c0dc2051f5e07bb5d7340397374c4f8baf",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-andrew-exp-s01-c2-5446419fa95a",
+          "slide": 1,
+          "text": "If both Regions update the same item, M reck uses last-writer-wins conflict resolution per item. Design the app so two edits don't silently overwrite something the business needs.",
+          "text_sha256": "5446419fa95aa0aa947f3f177d35e5d8b0ba62cfa4292d927303a6c6398d5b58",
+          "canonical_text_sha256": "6274eb38b2db4e7c2cd5d63244138fae351bedfba32cb34173a5f0827320fcb6",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-andrew-exp-s01-c3-0f3bb0321a73",
+          "slide": 1,
+          "text": "A strong read in one Region can still miss a change that hasn't arrived from another. And if a transaction updates order and inventory together locally, a remote replica can temporarily see only one update.",
+          "text_sha256": "0f3bb0321a733d0ac078c372db7f11c6ccd395f6165c59a874bed99942f5f6a7",
+          "canonical_text_sha256": "0f3bb0321a733d0ac078c372db7f11c6ccd395f6165c59a874bed99942f5f6a7",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-andrew-exp-s02-c1-801d1e108d24",
+          "slide": 2,
+          "text": "Now require strong cross-Region consistency. In M R S C, a successful write involves synchronous replication. Strong reads on a replica can then see the latest successful write, at the cost of cross-Region latency.",
+          "text_sha256": "801d1e108d24833dbf6ad32bee9980c698db68362b75f4ad3a69ea0f59ee053e",
+          "canonical_text_sha256": "3770e6815112567607cc13e2905e4bd5e6d5debfc09eda8c2cd246b9092406c5",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-andrew-exp-s02-c2-243aeaf47138",
+          "slide": 2,
+          "text": "The topology uses exactly three Regions: either three full replicas or two replicas and a witness. The witness does not receive application reads or writes.",
+          "text_sha256": "243aeaf47138b953c1da9e306f1ebeda3b1dfe0182db631c906b79ec81088f93",
+          "canonical_text_sha256": "243aeaf47138b953c1da9e306f1ebeda3b1dfe0182db631c906b79ec81088f93",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-andrew-exp-s02-c3-50d8e872173c",
+          "slide": 2,
+          "text": "Choose M R S C at creation. Check the supported Regions and test latency. It does not support Dynamo D B transaction APIs or Time to Live, so don't select it if the application needs those capabilities unchanged.",
+          "text_sha256": "50d8e872173c96b4e582690e76cced336ccc62429689e7309bc37c7d393d9766",
+          "canonical_text_sha256": "12d199c9ea0c6140169f82cdbc8a3cb42b1d8106b9c5064b0341f3e2c2f06191",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-andrew-exp-s03-c1-3e7c265fc75a",
+          "slide": 3,
+          "text": "Standard and Standard Infrequent Access are both online table classes. Compare the storage and request price mix. Choosing the cheaper class for occasional access isn't an archival backup.",
+          "text_sha256": "3e7c265fc75a79d1cbb807fc7369286c6d0b3536a7e584bc5ed3e8278e0ebb54",
+          "canonical_text_sha256": "3e7c265fc75a79d1cbb807fc7369286c6d0b3536a7e584bc5ed3e8278e0ebb54",
+          "asset_sha256": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+        },
+        {
+          "id": "m11p15-andrew-exp-s03-c2-b93850f26106",
+          "slide": 3,
+          "text": "If an application error damaged the data, use a supported backup or point-in-time recovery to restore a new table. Then verify indexes, encryption, permissions, integrations and application routing. A global replica is not a substitute for that history.",
+          "text_sha256": "b93850f261062f9e36f470d7cd21d5a10b7c8ed94376e98743df836949f711fb",
+          "canonical_text_sha256": "b93850f261062f9e36f470d7cd21d5a10b7c8ed94376e98743df836949f711fb",
+          "asset_sha256": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "16",
+      "revision": "2026-11-24-m11p16-andrew-expressive",
+      "approved_assets": {
+        "1": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172",
+        "2": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f",
+        "3": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a",
+        "4": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+      },
+      "units": [
+        {
+          "id": "m11p16-andrew-exp-s01-c1-c08b342db006",
+          "slide": 1,
+          "text": "The app uploads the actual file to S three. If users need to find files by tenant or date, the object upload alone doesn't give the app that search.",
+          "text_sha256": "c08b342db006d20da427f794ad1674a25d6bbc61f1468d8110742d9fb2cea87a",
+          "canonical_text_sha256": "093b52e121c7d0661c9ed6783318242314f984e2e10540b9d459b9867dcea9d1",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-andrew-exp-s01-c2-a2db7b8a7d15",
+          "slide": 1,
+          "text": "An S three event invokes Lambda, which writes searchable metadata to Dynamo D B. These two writes are not atomic. An upload can succeed before it appears in search, so handle retries and repair missing entries.",
+          "text_sha256": "a2db7b8a7d1524b5a2d12f815df4bcc49a263ec22a4fa32582fc85bc8b15f8cc",
+          "canonical_text_sha256": "5cf2e1b4b6634020e9d90b9172599f865b489bcd02dd64aaa9901e6a308f9367",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-andrew-exp-s01-c3-f454f3854ad2",
+          "slide": 1,
+          "text": "Query the index for candidate keys, then read the selected object from S three. Check tenant authorization for the search and the object read.",
+          "text_sha256": "f454f3854ad2b0872deee52d37bb32c381dd4ddb8b2ca7ba4906d399d17217ca",
+          "canonical_text_sha256": "b8e164baae6e61fcae08cac00de6f66431f272d83bfc7283d39e69392a24b093",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-andrew-exp-s02-c1-b44c4a54a43c",
+          "slide": 2,
+          "text": "A dacks-aware client can send supported reads to the in-memory cache. A hit returns without another table read. On a miss, dacks fetches the data from the table and fills the cache.",
+          "text_sha256": "b44c4a54a43c62532db293750573d186c87c3c6a8a342555a8d3121fbedd45f2",
+          "canonical_text_sha256": "10568606abcbf4a68b586a8483554c49503feed15294b2e91233c0b14168ff03",
+          "asset_sha256": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f"
+        },
+        {
+          "id": "m11p16-andrew-exp-s02-c2-b7cb005b7911",
+          "slide": 2,
+          "text": "The table stays authoritative. Cached data is eventually consistent. Strong or transactional reads go to Dynamo D B rather than being answered from cache. Match the read to the user's freshness needs.",
+          "text_sha256": "b7cb005b7911c380bbc4f2097492e702a4273d2f63a8eae73d90c3d760ead01a",
+          "canonical_text_sha256": "f30411b2fe8cbbd6561b5737b00b755a3cba9e51394b61c4cd7ac1d9ae77114f",
+          "asset_sha256": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f"
+        },
+        {
+          "id": "m11p16-andrew-exp-s03-c1-a7f0861c5394",
+          "slide": 3,
+          "text": "If clients keep reading the same eligible data, dacks can serve cache hits quickly. A miss still reaches Dynamo D B. This is a regional read-path choice, not relief for all write-capacity or hot-partition problems.",
+          "text_sha256": "a7f0861c53946f5ff793aafac00a9c3b815403fe8ebf65750c5ddbc9c3ef36cc",
+          "canonical_text_sha256": "2a24905a66b1a9f62004ddaf4ca813faddb19ed8ffa209c453af9696bc186398",
+          "asset_sha256": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a"
+        },
+        {
+          "id": "m11p16-andrew-exp-s03-c2-2b3096f0f4a1",
+          "slide": 3,
+          "text": "A supported write through dacks updates the table and the relevant item cache. Strongly consistent reads bypass the cache and reach Dynamo D B. Do not judge their freshness from the cache hit rate.",
+          "text_sha256": "2b3096f0f4a13594c1a2e46e38ec8c73288123022faf12f9c2a94f77adfee354",
+          "canonical_text_sha256": "d2ea221a741518b99dd4e32a81820011ba4445822b5971a9896ae1d11a4ff89a",
+          "asset_sha256": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a"
+        },
+        {
+          "id": "m11p16-andrew-exp-s04-c1-db1f23260a3e",
+          "slide": 4,
+          "text": "Update one item through dacks, and the item cache can reflect the write. A later lookup by that primary key and a later query are not the same cache operation.",
+          "text_sha256": "db1f23260a3ea6fe6a1fb1f048fedde8d921b4517aebeac02f016ac1ecc93979",
+          "canonical_text_sha256": "536806a8ce45b9b0509eeda83ee878a8fd24dc1ce1a95e5d34864361c1d403b5",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        },
+        {
+          "id": "m11p16-andrew-exp-s04-c2-d163eae932a2",
+          "slide": 4,
+          "text": "A previously cached Query or Scan result can still hold the old value until it expires or refreshes. The item update doesn't invalidate every cached result that contains that item.",
+          "text_sha256": "d163eae932a22e5aeddb816d1e69663fbc5979954f92da5d59e86f9241bb779f",
+          "canonical_text_sha256": "d163eae932a22e5aeddb816d1e69663fbc5979954f92da5d59e86f9241bb779f",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        },
+        {
+          "id": "m11p16-andrew-exp-s04-c3-38d8e5264035",
+          "slide": 4,
+          "text": "The default is five minutes for each cache, configurable separately. A direct table write or a replicated global-table change can leave a cache stale. Use a strong table read when the decision requires the latest completed value.",
+          "text_sha256": "38d8e52640356de4ab2fcdebb06e32c0f67839fff963a412bb249947ab63454f",
+          "canonical_text_sha256": "38d8e52640356de4ab2fcdebb06e32c0f67839fff963a412bb249947ab63454f",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        }
+      ]
+    }
+  ]
+}
