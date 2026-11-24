@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "15",
+      "revision": "2026-11-23-m12p15-m12-p15-p18-m13-p01-teaching-redo-v1",
+      "approved_assets": {
+        "1": "748169d1d39b71eb6554f2041e596a2078ca3d42e3cf275d4c885eb2bed2bd77",
+        "2": "cb207686b307f54dd310c23595bcc0e54ebc7da209338b020e56f6733ccafdcf",
+        "3": "407eac369236ec98e77c988c58bc0d512084c6a8d538025fc28384cbf16975bc"
+      },
+      "units": [
+        {
+          "id": "m12p15-redo-s01-c1-e24cf8525d85",
+          "slide": 1,
+          "text": "App Mesh support ended on September thirtieth, twenty twenty-six. The design questions remain: how do services route traffic, establish identity, observe calls and handle failures? Consider ECS Service Connect for participating ECS services, VPC Lattice for connectivity across VPCs and accounts, or a supported Kubernetes mesh when its features fit. Verify traffic policy, telemetry and TLS rather than assuming these choices are interchangeable.",
+          "text_sha256": "e24cf8525d855796e2411f161417f90c7d61bdee5eac644a80c19e754cfae0e6",
+          "canonical_text_sha256": "e24cf8525d855796e2411f161417f90c7d61bdee5eac644a80c19e754cfae0e6",
+          "asset_sha256": "748169d1d39b71eb6554f2041e596a2078ca3d42e3cf275d4c885eb2bed2bd77"
+        },
+        {
+          "id": "m12p15-redo-s02-c1-da0ae04ff202",
+          "slide": 2,
+          "text": "Follow the caller from its VPC through a Lattice service network to the target in another VPC. Association provides a service access path; routing uses registered targets. When A W S I A M authorization is configured, access also depends on the applicable auth policy and a signed request. Check target health and access logs independently of association.",
+          "text_sha256": "da0ae04ff202d90463c4c1a87b0ab8d6d6f852f3cc6c92c06e2b561056442ad5",
+          "canonical_text_sha256": "f64af907196de741a0d6e9f0c458348d42d07738af8349cff92bb7d079054626",
+          "asset_sha256": "cb207686b307f54dd310c23595bcc0e54ebc7da209338b020e56f6733ccafdcf"
+        },
+        {
+          "id": "m12p15-redo-s03-c1-0540047fff79",
+          "slide": 3,
+          "text": "Trace this caller through three checks: a reachable service network, authorization when A W S I A M mode is enabled, and a listener routing to a healthy target. A denied request calls for a review of identity, policy and signing. A target failure calls for a look at health and routing. Use Lattice access logs and metrics to tell these cases apart.",
+          "text_sha256": "0540047fff79f76cf07b1d4f2237bf7bb493b6839938dd36d20e36f028c8c983",
+          "canonical_text_sha256": "3b4f66820e29a292223e9dc7a8833bb62c759076b45f47d831dc1e274d0becec",
+          "asset_sha256": "407eac369236ec98e77c988c58bc0d512084c6a8d538025fc28384cbf16975bc"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "16",
+      "revision": "2026-11-23-m12p16-m12-p15-p18-m13-p01-teaching-redo-v1",
+      "approved_assets": {
+        "1": "660d8f5feb72c6e60ba5452c9a85358e8640517b4806052edd2fce5e7e83c92b",
+        "2": "5031c0e59e62ca8c70ba9bad64e71b650e5f177d50d6b9069d25ba95427c5211",
+        "3": "58f960df3a5a2b4cb3056e9cf582b03286a201c34138c73b5a1cc0b4cc97983d"
+      },
+      "units": [
+        {
+          "id": "m12p16-redo-s01-c1-c0906e17eac2",
+          "slide": 1,
+          "text": "Start with what tenants are allowed to share. A silo dedicates resources for stronger isolation; a pool shares them, demanding tenant-scoped controls. A bridge shares selected layers but dedicates others where the requirement justifies it. Derive tenant context from trusted authentication and document the blast radius and recovery ownership at each layer.",
+          "text_sha256": "c0906e17eac269df400011a9b22b24bd9c6d890ecf6d93d82d3d952f56334db5",
+          "canonical_text_sha256": "c0906e17eac269df400011a9b22b24bd9c6d890ecf6d93d82d3d952f56334db5",
+          "asset_sha256": "660d8f5feb72c6e60ba5452c9a85358e8640517b4806052edd2fce5e7e83c92b"
+        },
+        {
+          "id": "m12p16-redo-s02-c1-78b7c785a2c4",
+          "slide": 2,
+          "text": "Pick the boundary by trust and failure impact. Separate accounts or clusters can reduce shared blast radius. A pooled application must authorize the tenant before touching its data. A bridge may keep shared ingress but use dedicated data stores. A tenant identifier supplied by the caller is not proof of authorization; enforce the boundary with trusted context.",
+          "text_sha256": "78b7c785a2c4720d1c0ff3648862bb26565ffbf0f808ff28231e8232c34f36d0",
+          "canonical_text_sha256": "78b7c785a2c4720d1c0ff3648862bb26565ffbf0f808ff28231e8232c34f36d0",
+          "asset_sha256": "5031c0e59e62ca8c70ba9bad64e71b650e5f177d50d6b9069d25ba95427c5211"
+        },
+        {
+          "id": "m12p16-redo-s03-c1-01c520d8b6cb",
+          "slide": 3,
+          "text": "A namespace groups Kubernetes resources, but the workloads can still share nodes and a kernel. Add scoped roles and service accounts, enforced network policy, quotas, admission controls and workload I A M. Where trust or blast radius demands more separation, consider dedicated nodes, clusters or accounts. Test both data isolation and resource contention instead of assuming a namespace name ensures either.",
+          "text_sha256": "01c520d8b6cb9126c9f711cd8106c350d37f218fd8e18de72d2cd097a85871e2",
+          "canonical_text_sha256": "f0f20295dd9a8c8239f9ab5b77c48774972c9c8c0b143bef49961a984472c17a",
+          "asset_sha256": "58f960df3a5a2b4cb3056e9cf582b03286a201c34138c73b5a1cc0b4cc97983d"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "17",
+      "revision": "2026-11-23-m12p17-m12-p15-p18-m13-p01-teaching-redo-v1",
+      "approved_assets": {
+        "1": "feb960cf129d29ad5bb89d9e84c4ee8b0d47a5c9a7ac157a565fbe6a6da7fc2f",
+        "2": "1555b8a82c2c311b6a1e49a2e6b5f9606b55c245c89acb4c6252fdf254578174",
+        "3": "b9fcd18d07a4ebd3faf06b80ebde83f0250152bd04d6dfa6396423c5b865f980"
+      },
+      "units": [
+        {
+          "id": "m12p17-redo-s01-c1-2bc05b805ed7",
+          "slide": 1,
+          "text": "In this sandbox rollout, establish two healthy old tasks and verify the load balancer and a real response. Deploy the new revision with a strategy that keeps healthy capacity while replacements become ready. Confirm new target and application health before retiring the old tasks. A deliberate sandbox health failure lets you observe deployment events and practice recovery or rollback.",
+          "text_sha256": "2bc05b805ed75728539e508449816a82ad4af9f39eb4afd7a285623f7eba5ac0",
+          "canonical_text_sha256": "2bc05b805ed75728539e508449816a82ad4af9f39eb4afd7a285623f7eba5ac0",
+          "asset_sha256": "feb960cf129d29ad5bb89d9e84c4ee8b0d47a5c9a7ac157a565fbe6a6da7fc2f"
+        },
+        {
+          "id": "m12p17-redo-s02-c1-e5fb17077b44",
+          "slide": 2,
+          "text": "Use an authorized test repository. Record the trusted image digest and check findings, access and tag settings. Preview lifecycle rules before cleanup; the known-good rollback digest must still be pullable. If replication is in scope, verify the destination digest separately, and capture evidence before removing sandbox resources.",
+          "text_sha256": "e5fb17077b44d8b2d83c55b284041b9a656e059f0d7024f9cf0b9340a22c22dd",
+          "canonical_text_sha256": "e5fb17077b44d8b2d83c55b284041b9a656e059f0d7024f9cf0b9340a22c22dd",
+          "asset_sha256": "1555b8a82c2c311b6a1e49a2e6b5f9606b55c245c89acb4c6252fdf254578174"
+        },
+        {
+          "id": "m12p17-redo-s03-c1-c902f2b6a3bc",
+          "slide": 3,
+          "text": "When a sandbox Pod is Pending, start with its events. In this example the scheduler reports insufficient CPU. Adjust an unrealistic request only if it is safe, or add eligible node capacity; then confirm readiness and a successful request. Image pull errors and failed health checks need other fixes, so follow what the observed event actually says.",
+          "text_sha256": "c902f2b6a3bce05461d6528bae99f0d62c40e81fe1e46f8c695f6366a589a121",
+          "canonical_text_sha256": "c902f2b6a3bce05461d6528bae99f0d62c40e81fe1e46f8c695f6366a589a121",
+          "asset_sha256": "b9fcd18d07a4ebd3faf06b80ebde83f0250152bd04d6dfa6396423c5b865f980"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "18",
+      "revision": "2026-11-23-m12p18-m12-p15-p18-m13-p01-teaching-redo-v1",
+      "approved_assets": {
+        "1": "24acf49023fe96643ea658e8c0b68045d7fd0b0273c2a79a71fb5e9ce15387f4"
+      },
+      "units": [
+        {
+          "id": "m12p18-redo-s01-c1-adbafd091853",
+          "slide": 1,
+          "text": "Prove both sides of the sandbox isolation boundary. With a test identity for Tenant A, verify its own expected access works and a request for Tenant B's test data is denied. Check app authorization, workload I A M and enforced network policy separately. Record the expected decision and supporting evidence, then clean up test data and resources.",
+          "text_sha256": "adbafd091853de4d2eae1fd6b17b316c637fb379093c881079e14279fa7d847f",
+          "canonical_text_sha256": "04bb6869ecf6733e54c155f3c0098faf9b29b5f84710c66e9e5e6abe18bdaaae",
+          "asset_sha256": "24acf49023fe96643ea658e8c0b68045d7fd0b0273c2a79a71fb5e9ce15387f4"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "01",
+      "revision": "2026-11-23-m13p01-m12-p15-p18-m13-p01-teaching-redo-v1",
+      "approved_assets": {
+        "1": "eda09f8926c869c8e1a51c9966a87464b23fec963dc4c10abc9c5f7f5889298b",
+        "2": "cbfaea8e44f86bbce0b092072c0aa39005b4162fe3aa00f38fae903cab554ed7",
+        "3": "ae29b7d495392cb8921f3d7846ad319e4eb7409410eac0ea370b4505e13c58e0"
+      },
+      "units": [
+        {
+          "id": "m13p01-redo-s01-c1-52f5d8652630",
+          "slide": 1,
+          "text": "An uploaded image triggers Lambda through an S three event. The function makes a thumbnail and writes it to a separate bucket, so the output does not depend on the execution environment surviving. On-demand Lambda Event Functions can run up to thirty minutes per invocation. A W S operates the compute; the application owns the code, scoped permissions and safe handling of repeat events.",
+          "text_sha256": "52f5d8652630172fbb4886d3d1a04e92401665de9e902ce4e52ca46ad5f59d6a",
+          "canonical_text_sha256": "af2415f73c1121e71e2a03c429015d91ac709489e5c078aa508994963d802ae3",
+          "asset_sha256": "eda09f8926c869c8e1a51c9966a87464b23fec963dc4c10abc9c5f7f5889298b"
+        },
+        {
+          "id": "m13p01-redo-s02-c1-05f9dbd09038",
+          "slide": 2,
+          "text": "An EventBridge event invokes the handler in a Lambda execution environment. Initialization can be reused, but a later invocation may get a replacement environment. Keep durable results in a service such as DynamoDB or S three, not process memory. Verify input, give the function only needed permissions and design both repeat processing and downstream capacity deliberately.",
+          "text_sha256": "05f9dbd090385877c77355033bb13ae913b7b4d0ce04d49a7f913feffe490f3f",
+          "canonical_text_sha256": "3918fdddfde32a44251490255f1e3d2f6b0c4e4b12819163898a59f2ab5482c4",
+          "asset_sha256": "cbfaea8e44f86bbce0b092072c0aa39005b4162fe3aa00f38fae903cab554ed7"
+        },
+        {
+          "id": "m13p01-redo-s02-c2-ee2e83f8727a",
+          "slide": 2,
+          "text": "Suppose EventBridge delivers the same product update again after a retry. A warm environment might remember handling it, but a replacement would not. Make the write idempotent against durable state so the outcome stays correct in either case. Reusing an initialized client helps performance, not correctness.",
+          "text_sha256": "ee2e83f8727a8e200364825b927a355952fbb3a7b6f0256c860d27e35c6d8631",
+          "canonical_text_sha256": "ee2e83f8727a8e200364825b927a355952fbb3a7b6f0256c860d27e35c6d8631",
+          "asset_sha256": "cbfaea8e44f86bbce0b092072c0aa39005b4162fe3aa00f38fae903cab554ed7"
+        },
+        {
+          "id": "m13p01-redo-s03-c1-59dc0a6e7da8",
+          "slide": 3,
+          "text": "A ZIP package can use a supported managed runtime. A Lambda image is a compatible Linux image for one architecture, stored in ECR, that implements the Lambda Runtime API. The runtime interface client is how compatible images do that. An arbitrary web-server image is not automatically suitable; a long-running server may fit ECS instead. Patch dependencies regardless of packaging.",
+          "text_sha256": "59dc0a6e7da8a35781997e984034dd7c2360d39a3a183449310e9345a8707d26",
+          "canonical_text_sha256": "59dc0a6e7da8a35781997e984034dd7c2360d39a3a183449310e9345a8707d26",
+          "asset_sha256": "ae29b7d495392cb8921f3d7846ad319e4eb7409410eac0ea370b4505e13c58e0"
+        }
+      ]
+    }
+  ]
+}
