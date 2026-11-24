@@ -1,0 +1,504 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "04",
+      "revision": "2026-11-24-m10p04-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+      },
+      "units": [
+        {
+          "id": "m10p04-redo-s01-c1-ce29bc131722",
+          "slide": 1,
+          "text": "Learn when to share an E B S volume between instances. Here the supported E C two writers attach to one provisioned I ops volume in the same Availability Zone. They see the same block device, not a network file share.",
+          "text_sha256": "ce29bc1317225cd60e177ee225ae40bdde27d26d9d39ce7f42880946cf6ff10b",
+          "canonical_text_sha256": "0128351d84a1a48875aa5566f5a7cfa38c0aff03348e1ccae2c9c2225a5f29ec",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-redo-s01-c2-30652b92f2c8",
+          "slide": 1,
+          "text": "Use a cluster-aware application or filesystem to coordinate writes and fence failed writers.",
+          "text_sha256": "30652b92f2c86b111659f9de6df3dff206961dc40a983c541e921118316aa67f",
+          "canonical_text_sha256": "30652b92f2c86b111659f9de6df3dff206961dc40a983c541e921118316aa67f",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-redo-s01-c3-66519c629c34",
+          "slide": 1,
+          "text": "Use supported Nitro instances in one zone. Linux supports I O one and I O two; Windows supports I O two.",
+          "text_sha256": "66519c629c34cca954e83273bd31e5b22e9fe5eaad881f679c0d63541d089f06",
+          "canonical_text_sha256": "ea7f2620dd81945fd6ba53982d4ab2498a63208133e58e7dd0cdd96c1d2d06ae",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        },
+        {
+          "id": "m10p04-redo-s01-c4-4ee7a9434e33",
+          "slide": 1,
+          "text": "An ordinary filesystem mounted independently on two hosts does not provide that coordination. Both writers can overwrite shared data.",
+          "text_sha256": "4ee7a9434e33b46f3698e03e8fec32a33b106b098c89cf880baa53ec3aa578c0",
+          "canonical_text_sha256": "4ee7a9434e33b46f3698e03e8fec32a33b106b098c89cf880baa53ec3aa578c0",
+          "asset_sha256": "93df8dc0dcb79d3af2a7c53314aaf87b5d2558babe5d4000d2521637cd6e8874"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "05",
+      "revision": "2026-11-24-m10p05-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+      },
+      "units": [
+        {
+          "id": "m10p05-redo-s01-c1-c2a7963e1c20",
+          "slide": 1,
+          "text": "Learn why increasing the size of an E B S volume does not immediately give the application more usable space. Start by modifying the volume. The infrastructure can report a larger block device while the operating system still presents the old filesystem size.",
+          "text_sha256": "c2a7963e1c209c617027a3c26b280213989611e098e7842a8333571403713f12",
+          "canonical_text_sha256": "8d0312136d861c592400d0180dc790e5b67819b97c52fe915f143883ecf5bc31",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-redo-s01-c2-27b24e06a2cf",
+          "slide": 1,
+          "text": "Next check whether the volume has a partition. If it does, extend the appropriate partition, then grow the filesystem using the correct tool for its type. Increasing the volume alone does not perform either operation for you.",
+          "text_sha256": "27b24e06a2cfca2ec6cf755e5137a99c25468990b9b94d4c3b0a4c21d93469df",
+          "canonical_text_sha256": "27b24e06a2cfca2ec6cf755e5137a99c25468990b9b94d4c3b0a4c21d93469df",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-redo-s01-c3-9b7ab39be88e",
+          "slide": 1,
+          "text": "Now check the filesystem size from the operating system and verify the application still reads and writes normally. The useful result is space visible to the workload, not merely a larger number on the E B S volume.",
+          "text_sha256": "9b7ab39be88e15c76800fec813796bff227ad4153695cf959fe42f46d0c7e56a",
+          "canonical_text_sha256": "ef19082b3bbd3c06478b667979e53d14eb2bdb380a420b5e90172525884be5d7",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-redo-s01-c4-9bc0131f2564",
+          "slide": 1,
+          "text": "The example grows the disk from one hundred to two hundred gibibytes. Until the filesystem grows, the extra space is not available to files. Check both sizes separately to tell which step is unfinished.",
+          "text_sha256": "9bc0131f2564c815cc80bf0a07f2cb4780805fd27888a68e633eb4c06a1e175b",
+          "canonical_text_sha256": "9bc0131f2564c815cc80bf0a07f2cb4780805fd27888a68e633eb4c06a1e175b",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-redo-s01-c5-ed9b27374e9b",
+          "slide": 1,
+          "text": "E B S does not shrink an existing volume in place. For smaller capacity, create a smaller target, copy the data, validate the application, and cut over when ready.",
+          "text_sha256": "ed9b27374e9b7fc98920909b7c95d14a517fb0f66e1dd5c3ba27f7a79d15ff70",
+          "canonical_text_sha256": "75b7e7a388ab2e6528c728f9a1b11c246dd0e9d4f2718abb62d7efb915ee8d33",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        },
+        {
+          "id": "m10p05-redo-s01-c6-ad9d3cba6a41",
+          "slide": 1,
+          "text": "Instance store is different. It is useful for scratch data or cache, and it survives a reboot, but can be lost on stop, termination or the underlying disk failing. Copy anything required to persistent storage.",
+          "text_sha256": "ad9d3cba6a419d50f1430f1f26b9143ee07014f9382e9426d580afb161dc854b",
+          "canonical_text_sha256": "ad9d3cba6a419d50f1430f1f26b9143ee07014f9382e9426d580afb161dc854b",
+          "asset_sha256": "63be218ae8484dd63674973dc821eb820a714412fff7bc2c33e1acca74bc85b5"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "06",
+      "revision": "2026-11-24-m10p06-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5",
+        "2": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0",
+        "3": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+      },
+      "units": [
+        {
+          "id": "m10p06-redo-s01-c1-b6fa1fa4c931",
+          "slide": 1,
+          "text": "Learn how Linux clients in different zones reach one filesystem, and why an attempted connection can still fail. The Zone A client uses N F S through its mount target to reach Regional E F S.",
+          "text_sha256": "b6fa1fa4c931e9137c2a948ed4f2dd24edd67632f1c0d5ffd2b94cee30df5fcd",
+          "canonical_text_sha256": "2017fe9f0f6f9745f725c620d16a8f03c8f50ac08b59217a829e9a2d9db7368f",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-redo-s01-c2-8d0e82398ba7",
+          "slide": 1,
+          "text": "The Zone B client uses its own mount target to reach the same namespace, not a separate filesystem. It can read the shared files the first client wrote.",
+          "text_sha256": "8d0e82398ba78ef4f41309c1b64b9560cf594dc860b6008dc235ee5738838d4a",
+          "canonical_text_sha256": "8d0e82398ba78ef4f41309c1b64b9560cf594dc860b6008dc235ee5738838d4a",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-redo-s01-c3-cb719c001eb1",
+          "slide": 1,
+          "text": "Regional E F S stores the filesystem across multiple zones. That suits a workload that needs the shared files when a zone is unavailable. Mount targets provide paths into the filesystem; they are not separate copies to synchronize.",
+          "text_sha256": "cb719c001eb154bbbe9610893b42a959da83ba903398a611530609064de98cbe",
+          "canonical_text_sha256": "bbce79a8fa28c4d8df05260b74095a279f225097292b8cfee03e1217a2577e54",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-redo-s01-c4-84d65b4f8542",
+          "slide": 1,
+          "text": "One Zone keeps storage and the mount target in one zone. Choose it only when the workload can accept that failure boundary. Being able to mount a filesystem is not proof that it will survive loss of its storage zone.",
+          "text_sha256": "84d65b4f854234154f6def89e6cb973d6538e698f294d9c584a60e726c3bee8a",
+          "canonical_text_sha256": "84d65b4f854234154f6def89e6cb973d6538e698f294d9c584a60e726c3bee8a",
+          "asset_sha256": "a47f9954e2f6b0ac7598e08444d56432901f37eb0320e75d1b1732276bfb3ee5"
+        },
+        {
+          "id": "m10p06-redo-s02-c1-143aa3528fac",
+          "slide": 2,
+          "text": "An on-premises Linux client reaches E F S over routed private connectivity, such as Direct Connect or V P N. E F S does not become an internet-facing file server; the client still needs a route to a mount target address and a working return path.",
+          "text_sha256": "143aa3528fac698d067479002db79030367b63f88cf8ba68161c1b617b3c54e9",
+          "canonical_text_sha256": "b1608243bb173d19d0e3e6063421488ac2a923a2823b0cc7202dfda55026550d",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-redo-s02-c2-a2b3012069a2",
+          "slide": 2,
+          "text": "The E C two client also connects to the mount target over N F S on T C P port twenty forty-nine. Prefer the mount target in the same zone for a Regional filesystem and allow the client traffic out as needed.",
+          "text_sha256": "a2b3012069a28c47cc2dbead403bbdb5b75e095167b4c24424c20ec4a623c675",
+          "canonical_text_sha256": "7b8ab85931d47fb7611fbb34b40f4d0459070953087b4cf1411c16cdc5d9c2fe",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-redo-s02-c3-1bd9338823c0",
+          "slide": 2,
+          "text": "The mount target is a network interface, not a directory or a second filesystem. Its security group must permit inbound N F S from the intended source. When testing a timeout, verify forward and return routing plus the security rules before changing file permissions.",
+          "text_sha256": "1bd9338823c088321e0a6d44f162233a4b53ea4c5de2a0410d994900e7c16245",
+          "canonical_text_sha256": "bc5802124c135ba1b386854dfa6eb8816d9ad2e1e23c0d9dc7a9859152dd5ba3",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-redo-s02-c4-c20ce6689b9d",
+          "slide": 2,
+          "text": "For Regional E F S, create mount targets in the zones used by the clients. One Zone has a single target in the storage zone. For clients outside the V P C, plan how they resolve or obtain a reachable private target address.",
+          "text_sha256": "c20ce6689b9d43adce855b78eb0b94bb702eadeb0768377f130591ae1b6438dc",
+          "canonical_text_sha256": "ec3e72c755f3ab41859ca91a6d59e37f1ffec55ae912fb8d67a3ae3222501b2d",
+          "asset_sha256": "91be4f6d97923c122217e0ce51536d95545322af3a158e80d15565f7d77760c0"
+        },
+        {
+          "id": "m10p06-redo-s03-c1-997ea07ac790",
+          "slide": 3,
+          "text": "First establish a T C P connection to the mount target on port twenty forty-nine. If packets cannot reach it or come back, changing the application’s file permissions does not help. Test the network path separately.",
+          "text_sha256": "997ea07ac790140fe4411a8ff1b3d36c656571fb2bb65083068682e17c4b034f",
+          "canonical_text_sha256": "6797d9d16c639fe4d1c8facaeff99ba54d5d7996e33cfec8202d69b3a9d2b88a",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-redo-s03-c2-09f62e1508be",
+          "slide": 3,
+          "text": "With the default E F S file system policy, a reachable N F S client is treated as anonymous for the I A M decision. That does not mean anyone on the internet can mount it or that every file permission has been bypassed.",
+          "text_sha256": "09f62e1508be414a360c65584a0efe438a2019b196b1245a9470bdbc855aa11a",
+          "canonical_text_sha256": "38af418080c1a1ddb9bb68676866f676596bf4b86bd714a9db1268b97e493e17",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-redo-s03-c3-dec8b54d9926",
+          "slide": 3,
+          "text": "If the filesystem uses I A M client authorization, mount with the E F S mount helper and enable I A M and T L S. Check the permissions for the exact mount, write, or root access the workload needs.",
+          "text_sha256": "dec8b54d9926715de264015cb49bcf743c9e2051edf6fb5cc58351405163b013",
+          "canonical_text_sha256": "1b18e4b97a5b09eb5da0adc496d2fe76c32546b707cabe36f601757bb043df58",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-redo-s03-c4-29a5516f822e",
+          "slide": 3,
+          "text": "After mounting, the file operation still faces Pozix checks. A client that can mount the filesystem can still be denied a write because its user or group does not have permission on that directory.",
+          "text_sha256": "29a5516f822e4509f07039689c281ef437709dadc4c61cd15c9c77d2f6d8737e",
+          "canonical_text_sha256": "2de1d565f06d163e195d022ebeea217598b9209c87522c7970be3c3d5c92718c",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        },
+        {
+          "id": "m10p06-redo-s03-c5-a78e11d56924",
+          "slide": 3,
+          "text": "An access point can enforce a Pozix identity and expose a specific application root directory. It does not replace security groups or I A M permissions. Use it to give the application the intended identity and view.",
+          "text_sha256": "a78e11d569248843165260608ef515f6d35927f54ae635232a55a09f97bd2a95",
+          "canonical_text_sha256": "fc7a69bb0ba84e6062cdc4b6adc8d92e366b0fede7da0c9e873e92d4f4dfafda",
+          "asset_sha256": "dfa69096ea4802697b803427dd5972540f06e50273b98c8620e4a424fbca64f9"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "07",
+      "revision": "2026-11-24-m10p07-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "c19ea6971c460663be8e2396c60cc058b45f8677c5cf36bbf12f43d2ac8dcfc9",
+        "2": "d4a84ada75b7662a901cd43c7617c34ea8eb45ed6830e6664ac5549c40a36409",
+        "3": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+      },
+      "units": [
+        {
+          "id": "m10p07-redo-s01-c1-b6193b2ba84d",
+          "slide": 1,
+          "text": "Learn to choose E F S throughput for real demand without confusing it with performance mode. General Purpose is preferred for lower latency. Max I O is a previous-generation mode with restrictions. The throughput modes below are a different choice.",
+          "text_sha256": "b6193b2ba84df5902bab6876df260911f288c53f9e72805f43a9aa22b81710be",
+          "canonical_text_sha256": "8a365a17cdd68df8dfa34c043ab785144451aab0ce21f13bafc430da47a9b34c",
+          "asset_sha256": "c19ea6971c460663be8e2396c60cc058b45f8677c5cf36bbf12f43d2ac8dcfc9"
+        },
+        {
+          "id": "m10p07-redo-s01-c2-99b6004fcc94",
+          "slide": 1,
+          "text": "Elastic throughput adapts as workload demand changes. Consider it when load is spiky or hard to forecast. The graph is a shape comparison, not a promise that every client can exceed its own limit.",
+          "text_sha256": "99b6004fcc9480be80aa040b18d8d9ca8477e165841286468c63b9a794ceed7a",
+          "canonical_text_sha256": "99b6004fcc9480be80aa040b18d8d9ca8477e165841286468c63b9a794ceed7a",
+          "asset_sha256": "c19ea6971c460663be8e2396c60cc058b45f8677c5cf36bbf12f43d2ac8dcfc9"
+        },
+        {
+          "id": "m10p07-redo-s01-c3-04078682f346",
+          "slide": 1,
+          "text": "Provisioned throughput is a deliberate setting independent of stored capacity. Use it when you can estimate the throughput you need and want a defined setting instead of relying on storage-driven burst behavior.",
+          "text_sha256": "04078682f3464a3d5b7aa17bc3be2d5d1d569dbf2ec1c865588439a2d2c7eb9d",
+          "canonical_text_sha256": "04078682f3464a3d5b7aa17bc3be2d5d1d569dbf2ec1c865588439a2d2c7eb9d",
+          "asset_sha256": "c19ea6971c460663be8e2396c60cc058b45f8677c5cf36bbf12f43d2ac8dcfc9"
+        },
+        {
+          "id": "m10p07-redo-s01-c4-4c52a50bd96e",
+          "slide": 1,
+          "text": "Bursting has a baseline and credits tied to data in Standard storage. A short peak is not the same as sustained demand. Check credits and the actual read and write pattern before deciding the mode is adequate.",
+          "text_sha256": "4c52a50bd96e86144018e7a33a23f4878d352e8ed82d8778f49c8c79de7e6055",
+          "canonical_text_sha256": "4c52a50bd96e86144018e7a33a23f4878d352e8ed82d8778f49c8c79de7e6055",
+          "asset_sha256": "c19ea6971c460663be8e2396c60cc058b45f8677c5cf36bbf12f43d2ac8dcfc9"
+        },
+        {
+          "id": "m10p07-redo-s02-c1-789a3a437323",
+          "slide": 2,
+          "text": "Standard is the normal class for frequently accessed content and the lowest latency here. Policy decisions follow time since file access, not the age of the directory name or the date you enabled the filesystem.",
+          "text_sha256": "789a3a437323e9d6546e7562699bfa1e57a28dc2da3054a300242c50314ea40c",
+          "canonical_text_sha256": "789a3a437323e9d6546e7562699bfa1e57a28dc2da3054a300242c50314ea40c",
+          "asset_sha256": "d4a84ada75b7662a901cd43c7617c34ea8eb45ed6830e6664ac5549c40a36409"
+        },
+        {
+          "id": "m10p07-redo-s02-c2-99e2e5f597a4",
+          "slide": 2,
+          "text": "After the configured inactivity period, a file can move to Infrequent Access. Storage costs less, but reading it incurs access charges and can have higher latency. A workload that repeatedly reads the same files may not benefit.",
+          "text_sha256": "99e2e5f597a411ef54a6c6d0af00f239117993eec69d920b220d5fe1702baa49",
+          "canonical_text_sha256": "99e2e5f597a411ef54a6c6d0af00f239117993eec69d920b220d5fe1702baa49",
+          "asset_sha256": "d4a84ada75b7662a901cd43c7617c34ea8eb45ed6830e6664ac5549c40a36409"
+        },
+        {
+          "id": "m10p07-redo-s02-c3-fb6a697b3a41",
+          "slide": 2,
+          "text": "Archive is for colder files and has a ninety-day minimum storage duration. It is available for Regional filesystems using Elastic throughput, not One Zone. Check whether the environment and expected access can accept that class.",
+          "text_sha256": "fb6a697b3a41edb91ecd3898b17e4d6676e2b71de2756923886c0b6cf9e9c013",
+          "canonical_text_sha256": "fb6a697b3a41edb91ecd3898b17e4d6676e2b71de2756923886c0b6cf9e9c013",
+          "asset_sha256": "d4a84ada75b7662a901cd43c7617c34ea8eb45ed6830e6664ac5549c40a36409"
+        },
+        {
+          "id": "m10p07-redo-s02-c4-73eea6981159",
+          "slide": 2,
+          "text": "You can configure the first access to transition a file back to Standard. That makes sense when a formerly cold file is becoming active again. It is not a requirement to move a file before opening it.",
+          "text_sha256": "73eea698115953899717dc2a71375b11d82920628f92c2b3c66f4fc7b0c55d73",
+          "canonical_text_sha256": "73eea698115953899717dc2a71375b11d82920628f92c2b3c66f4fc7b0c55d73",
+          "asset_sha256": "d4a84ada75b7662a901cd43c7617c34ea8eb45ed6830e6664ac5549c40a36409"
+        },
+        {
+          "id": "m10p07-redo-s03-c1-f01023d0f0ab",
+          "slide": 3,
+          "text": "The source continues serving reads and writes while E F S replicates asynchronously. The destination is read-only while replication protects it, and it becomes readable after the initial sync. A reachable destination is not necessarily fully up to date.",
+          "text_sha256": "f01023d0f0ab90b41c4dae410404c6f698bf33cafd6125bd74b37e1c200b4b5b",
+          "canonical_text_sha256": "fb170a0bf26b9dc68c5d39a26e6fb18b9c997aa380037ff08a2f0310367fc1e0",
+          "asset_sha256": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+        },
+        {
+          "id": "m10p07-redo-s03-c2-d20990b3ade6",
+          "slide": 3,
+          "text": "Check time since the last successful sync to estimate how much recent data may be at risk. Also prepare mount targets, application access, and key permissions. Replication lag and network readiness are separate checks.",
+          "text_sha256": "d20990b3ade651037a4712b41b82b98a25dbc894a9f582e07e3d52786c263297",
+          "canonical_text_sha256": "d20990b3ade651037a4712b41b82b98a25dbc894a9f582e07e3d52786c263297",
+          "asset_sha256": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+        },
+        {
+          "id": "m10p07-redo-s03-c3-507f9b207df4",
+          "slide": 3,
+          "text": "In a planned transition, stop writes to the source, then verify the latest sync before switching. If a real failure prevents that, account for remaining lag rather than promising zero loss.",
+          "text_sha256": "507f9b207df4b6c528ffef8b6d779229dbfd800e62a5c2ab6c07d7cae823b501",
+          "canonical_text_sha256": "507f9b207df4b6c528ffef8b6d779229dbfd800e62a5c2ab6c07d7cae823b501",
+          "asset_sha256": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+        },
+        {
+          "id": "m10p07-redo-s03-c4-917a624bf8e8",
+          "slide": 3,
+          "text": "For the depicted failover, delete the replication configuration and wait until the destination can accept writes. Do not direct a writer to a still read-only target.",
+          "text_sha256": "917a624bf8e843d54f622f607e762a91e20e738e32921fa588922ce3b75e9a1d",
+          "canonical_text_sha256": "917a624bf8e843d54f622f607e762a91e20e738e32921fa588922ce3b75e9a1d",
+          "asset_sha256": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+        },
+        {
+          "id": "m10p07-redo-s03-c5-6ec5a5bf27b8",
+          "slide": 3,
+          "text": "Mount the writable destination and validate the actual application read and write. Keep independent backup history, because replication is not a point-in-time recovery history.",
+          "text_sha256": "6ec5a5bf27b83abd7d3b660d71bbfe8b908a3adf4c6ff1887058cef9a81780a7",
+          "canonical_text_sha256": "6ec5a5bf27b83abd7d3b660d71bbfe8b908a3adf4c6ff1887058cef9a81780a7",
+          "asset_sha256": "8e454fcd2979afc0ce037c584825ad247095f8baeaf7558477b416e97abf9c48"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "08",
+      "revision": "2026-11-24-m10p08-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "ef8452087118ecc2cf131bfa77232ec07f62d5a23d02ae00695ad70259415699",
+        "2": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75",
+        "3": "11860b9896014baf9cbe26d6859829b16bfe56231262d3ae783749def58164c6",
+        "4": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+      },
+      "units": [
+        {
+          "id": "m10p08-redo-s01-c1-074754eda5ea",
+          "slide": 1,
+          "text": "Learn to choose an F S x family by what the client needs to do. For Windows applications that need S M B shares with Active Directory and Windows file permissions, F S x for Windows File Server is the natural fit.",
+          "text_sha256": "074754eda5ea4884363754851839fcc6896a593956e4a32753cc00210b55c86c",
+          "canonical_text_sha256": "aa14b5f9c10602265e075d5af13a62f57179b618b59c9dfdb38dbc92b41c0ea0",
+          "asset_sha256": "ef8452087118ecc2cf131bfa77232ec07f62d5a23d02ae00695ad70259415699"
+        },
+        {
+          "id": "m10p08-redo-s01-c2-bc5f553bdd2a",
+          "slide": 1,
+          "text": "For a parallel compute job or training workload with many workers reading a shared dataset, choose F S x for Lustre when the workload fits the Lustre client. Supported deployments can integrate with an S three data repository.",
+          "text_sha256": "bc5f553bdd2a9911742460925c425423a14ed07ddb981c2b52c224c0390417f0",
+          "canonical_text_sha256": "aa8ab553df9022c9a463e15793e06466d9bc2116141523d6006cf1a0366a60d1",
+          "asset_sha256": "ef8452087118ecc2cf131bfa77232ec07f62d5a23d02ae00695ad70259415699"
+        },
+        {
+          "id": "m10p08-redo-s01-c3-7cf0266c7971",
+          "slide": 1,
+          "text": "Use F S x for NetApp on tap when the design needs supported combinations of N F S, S M B, or eye scuzzy and on tap data features. A multi-protocol requirement is a different choice from Windows-only file sharing.",
+          "text_sha256": "7cf0266c7971fe26dafe57e8e2228fcdf8ef754fbf6db7c89b1ff05140c31b7a",
+          "canonical_text_sha256": "cad85c95750e3614d8af3f21c167f11a004fafb05c1dd1ad0a429476c0ee3ef6",
+          "asset_sha256": "ef8452087118ecc2cf131bfa77232ec07f62d5a23d02ae00695ad70259415699"
+        },
+        {
+          "id": "m10p08-redo-s01-c4-2563abab7853",
+          "slide": 1,
+          "text": "Use F S x for Open Z F S for Linux N F S workloads that need the Open Z F S model and features such as snapshots and clones. Compare the real client protocol and data operations before picking a family.",
+          "text_sha256": "2563abab785356029c7e71fa0bac5298c8716d4bfc733fb1be07318b8384a13b",
+          "canonical_text_sha256": "1a64d19c03b276d13aeda690e6ed4a654496a27a85ad0b9b3e7c26eb1630787f",
+          "asset_sha256": "ef8452087118ecc2cf131bfa77232ec07f62d5a23d02ae00695ad70259415699"
+        },
+        {
+          "id": "m10p08-redo-s02-c1-fe173376b571",
+          "slide": 2,
+          "text": "The Windows or compatible S M B client connects to the file system over T C P port four forty-five, using the share path. A failure to reach that port is a network problem to diagnose before changing permissions.",
+          "text_sha256": "fe173376b5713d80ed29a1d53eb4cfdf53c41fdafbf7c0b04b7e891025010e73",
+          "canonical_text_sha256": "96ed06148188e3c4e58deb0531ef501bd9d0a35666a412ffa3bf85525be89d88",
+          "asset_sha256": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75"
+        },
+        {
+          "id": "m10p08-redo-s02-c2-f3e718af02f6",
+          "slide": 2,
+          "text": "Active Directory supplies the identities and groups used for authorization. An authenticated user still needs permission on both the share and the file or folder.",
+          "text_sha256": "f3e718af02f66ec7393cdef3ba9a3c992723cd6b52afb1e13a86054ddbce17d1",
+          "canonical_text_sha256": "f3e718af02f66ec7393cdef3ba9a3c992723cd6b52afb1e13a86054ddbce17d1",
+          "asset_sha256": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75"
+        },
+        {
+          "id": "m10p08-redo-s02-c3-8f35cdebd4ce",
+          "slide": 2,
+          "text": "Alice has Change on the share and Modify in the file permissions. In this simplified example, both allow modification, so she can modify the file.",
+          "text_sha256": "8f35cdebd4ce3d161296f7ba136639aff4f80b297676c6f231edb3319e66adec",
+          "canonical_text_sha256": "8f35cdebd4ce3d161296f7ba136639aff4f80b297676c6f231edb3319e66adec",
+          "asset_sha256": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75"
+        },
+        {
+          "id": "m10p08-redo-s02-c4-37a9581a4000",
+          "slide": 2,
+          "text": "Bob also has Modify on the file, but the share gives him only Read. The narrower share permission applies across the network. Giving him the same file permission as Alice does not fix that difference.",
+          "text_sha256": "37a9581a4000fe98a58c8485cdd3b99c4912a4390a9b921a818a2194620f1b88",
+          "canonical_text_sha256": "37a9581a4000fe98a58c8485cdd3b99c4912a4390a9b921a818a2194620f1b88",
+          "asset_sha256": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75"
+        },
+        {
+          "id": "m10p08-redo-s02-c5-907ce771c689",
+          "slide": 2,
+          "text": "For a failed connection, verify name resolution, routing and the security group allowing S M B traffic. An on-premises client also needs a working private path such as V P N or Direct Connect.",
+          "text_sha256": "907ce771c68994eae7cf5829bc4448a38163426f549dd393ba8fede530a96c32",
+          "canonical_text_sha256": "0bb0333053ac8d23cee2c84696f5cf89acd1d35868752df6e22ee7c264486e68",
+          "asset_sha256": "36298308763435dc25af211521e4d18f6acadf3272acc006f77a387ff50aef75"
+        },
+        {
+          "id": "m10p08-redo-s03-c1-7263c7902417",
+          "slide": 3,
+          "text": "Before failover, the Windows client uses the F S x D N S name to reach the preferred active server. The Multi-AZ file system synchronously replicates to the standby in another zone.",
+          "text_sha256": "7263c79024173aebdbe43cde68aae07a828b5dda3ce8b8e149e61dcd454d015d",
+          "canonical_text_sha256": "9fc925c77c02bb4cb39e1487881f19009c25e73064031a41320735b9e8643166",
+          "asset_sha256": "11860b9896014baf9cbe26d6859829b16bfe56231262d3ae783749def58164c6"
+        },
+        {
+          "id": "m10p08-redo-s03-c2-5372906a6a38",
+          "slide": 3,
+          "text": "If the original server fails, the standby becomes active and serves reads and writes. Windows clients use the same D N S name and can resume after an interruption. Do not pin the old server address.",
+          "text_sha256": "5372906a6a38c2d5e5616109791544e00822d7027a4aad0d75918af4bb784a2f",
+          "canonical_text_sha256": "f46c01e9d1dbe3abf528106e596adca9b4b29e5cfe4bfb3d50040679673143b9",
+          "asset_sha256": "11860b9896014baf9cbe26d6859829b16bfe56231262d3ae783749def58164c6"
+        },
+        {
+          "id": "m10p08-redo-s03-c3-79dfa1b20041",
+          "slide": 3,
+          "text": "Same D N S name does not guarantee the same recovery behavior for all clients. Linux clients do not automatically follow this D N S-based failover; test how your client reconnects.",
+          "text_sha256": "79dfa1b200416874ede7f6ac25a5d0f89735a62318e0e14195b61277626515c8",
+          "canonical_text_sha256": "1fc2972fbe3f659489bba07499d616819668f281b9517a4ce6a71f459f28fc52",
+          "asset_sha256": "11860b9896014baf9cbe26d6859829b16bfe56231262d3ae783749def58164c6"
+        },
+        {
+          "id": "m10p08-redo-s03-c4-5a5a24999d25",
+          "slide": 3,
+          "text": "Multi-AZ helps if the server is unavailable. It does not undo an accidental file deletion. Restore from an earlier backup when that fault requires a prior version.",
+          "text_sha256": "5a5a24999d2542a8e491daee3fd9d30c183f5def0e9a6063f72f40352bc556e5",
+          "canonical_text_sha256": "5a5a24999d2542a8e491daee3fd9d30c183f5def0e9a6063f72f40352bc556e5",
+          "asset_sha256": "11860b9896014baf9cbe26d6859829b16bfe56231262d3ae783749def58164c6"
+        },
+        {
+          "id": "m10p08-redo-s04-c1-9f3af2dd677d",
+          "slide": 4,
+          "text": "Start with the source shares. Inventory the paths, identities and access controls applications need. Use those as validation criteria rather than treating this as a copy of bytes alone.",
+          "text_sha256": "9f3af2dd677d9f25848f7aa89f5c712e47d8120fd17b1c4ed36cfc9c06a9a60b",
+          "canonical_text_sha256": "9f3af2dd677d9f25848f7aa89f5c712e47d8120fd17b1c4ed36cfc9c06a9a60b",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        },
+        {
+          "id": "m10p08-redo-s04-c2-def8e6e87d7b",
+          "slide": 4,
+          "text": "Prepare the new F S x target, join it to the intended directory as appropriate, and verify connectivity and access against a representative client before the cutover.",
+          "text_sha256": "def8e6e87d7bf9fe52ee21fd5aeffc767541f09b8efdfcd4373ca87f199c2a09",
+          "canonical_text_sha256": "a7b0ad870b6aa11fe5c5a2941caf81855030633c6673a27214aae283ca7e5fcc",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        },
+        {
+          "id": "m10p08-redo-s04-c3-1af393dcab26",
+          "slide": 4,
+          "text": "Copy the data using a supported method such as DataSync or Robocopy. Preserve the required security metadata and check that the files and permissions at the destination match what the workload needs.",
+          "text_sha256": "1af393dcab266683adcb2963f730d0222120b7ddd4287af4b511dd93d7e26619",
+          "canonical_text_sha256": "1af393dcab266683adcb2963f730d0222120b7ddd4287af4b511dd93d7e26619",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        },
+        {
+          "id": "m10p08-redo-s04-c4-1df9bda6b9ed",
+          "slide": 4,
+          "text": "Keep normal use on the source during the bulk copy. At the final sync, pause source writes and copy the remaining changes. This avoids switching clients to a destination that is missing their latest writes.",
+          "text_sha256": "1df9bda6b9edb6e172d31ddcf0d91f6520c6be89310b3ec15aca841c2156dd6d",
+          "canonical_text_sha256": "1df9bda6b9edb6e172d31ddcf0d91f6520c6be89310b3ec15aca841c2156dd6d",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        },
+        {
+          "id": "m10p08-redo-s04-c5-350f87cbc180",
+          "slide": 4,
+          "text": "Switch client paths to the new share only after the final sync. Then test the real application path and permissions, not just a file listing from the migration operator’s account.",
+          "text_sha256": "350f87cbc180621d2e20be34f50df51dbdce74f71a8f83981ea26ba62a16968c",
+          "canonical_text_sha256": "350f87cbc180621d2e20be34f50df51dbdce74f71a8f83981ea26ba62a16968c",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        },
+        {
+          "id": "m10p08-redo-s04-c6-525e9c9ce7e6",
+          "slide": 4,
+          "text": "If the requirement is a smaller file system, copy into a new, appropriately sized target. Restoring a backup does not shrink the allocated capacity.",
+          "text_sha256": "525e9c9ce7e609a73a688e045918b53b7fe4933ea7a2774da1697c05034f1727",
+          "canonical_text_sha256": "525e9c9ce7e609a73a688e045918b53b7fe4933ea7a2774da1697c05034f1727",
+          "asset_sha256": "a8bcc03c4521d7293860113b6b49c0a3dc93beddf718bdbec9c48eb83e91cfea"
+        }
+      ]
+    }
+  ]
+}
