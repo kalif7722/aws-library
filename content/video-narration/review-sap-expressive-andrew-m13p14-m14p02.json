@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "14",
+      "revision": "2026-11-24-m13p14-andrew-expressive",
+      "approved_assets": {
+        "1": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b",
+        "2": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8",
+        "3": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb",
+        "4": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+      },
+      "units": [
+        {
+          "id": "m13p14-andrew-exp-s01-c1-505b3feba0af",
+          "slide": 1,
+          "text": "We'll follow an AppSync request from schema to data, then compare live updates with offline recovery. The schema defines what a client can query, change, or subscribe to. A mobile client can ask for the specific fields it needs.",
+          "text_sha256": "505b3feba0af71be9a410b1d56c7881bad66f29763a6072ec443a7fa6f367cdf",
+          "canonical_text_sha256": "505b3feba0af71be9a410b1d56c7881bad66f29763a6072ec443a7fa6f367cdf",
+          "asset_sha256": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b"
+        },
+        {
+          "id": "m13p14-andrew-exp-s01-c2-485e5b75a3d0",
+          "slide": 1,
+          "text": "A resolver takes a request for a field and calls the configured data source, such as Dynamo D B or Lambda. AppSync manages the A P I, but you still decide who can request the field and what the resolver may do.",
+          "text_sha256": "485e5b75a3d0a6e366e34dfa6866939312283d7c83e1bcfcae8abe450e353ae0",
+          "canonical_text_sha256": "2c00c05520e523f7fdb0852196de53dae21814bf23262907070f7327237ec740",
+          "asset_sha256": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b"
+        },
+        {
+          "id": "m13p14-andrew-exp-s01-c3-52fae97365f5",
+          "slide": 1,
+          "text": "A subscription is another path: a connected client can receive relevant updates as they happen. That saves it from polling, but it doesn't make an offline client catch up automatically.",
+          "text_sha256": "52fae97365f55f245af250e6057c3beb7397bf96b273e2ab32e2af268dcadb45",
+          "canonical_text_sha256": "52fae97365f55f245af250e6057c3beb7397bf96b273e2ab32e2af268dcadb45",
+          "asset_sha256": "ab3245b21e8034e42d167f5eb08a72662dffc50466c8cfb32bb1c110d129565b"
+        },
+        {
+          "id": "m13p14-andrew-exp-s02-c1-22335d7781df",
+          "slide": 2,
+          "text": "Here the client asks for a product by I D and selects its name. The schema routes that field to its resolver, which gets the product and returns the requested shape. The client isn't given direct access to the database.",
+          "text_sha256": "22335d7781dfc66457e46f15b41706385c4d0e467a4011f4bebf14754adba42b",
+          "canonical_text_sha256": "4ad392bf7054773ada2edacd631c3dd343948db9f2d1112e34c92a8c7a60ead1",
+          "asset_sha256": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8"
+        },
+        {
+          "id": "m13p14-andrew-exp-s02-c2-c8544c9bc902",
+          "slide": 2,
+          "text": "A unit resolver can handle a lookup with one data-source operation. Choose a pipeline if the same field needs several steps, such as checking eligibility before retrieving the product.",
+          "text_sha256": "c8544c9bc90293fc00647b55e84a27e5e4839a38aa63ec4b2f3c898e31710197",
+          "canonical_text_sha256": "c8544c9bc90293fc00647b55e84a27e5e4839a38aa63ec4b2f3c898e31710197",
+          "asset_sha256": "359d4f335bd8c818bc7295de817f4d8b2597bdf81ff9a1fc18ec608a3bea9de8"
+        },
+        {
+          "id": "m13p14-andrew-exp-s03-c1-b9471cc8d7b3",
+          "slide": 3,
+          "text": "A Cog neato token might get the caller through the A P I's authentication gate. The schema still controls which fields that identity can use. Passing authentication doesn't give the caller every field.",
+          "text_sha256": "b9471cc8d7b3ab16442660f9a952e46ad8da96967d98c6b970e1b8627ac4161b",
+          "canonical_text_sha256": "9132c8bbcc5ecd71fb5f2adc8a9447ac86aea6088cd271158c30c4259c615c5a",
+          "asset_sha256": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb"
+        },
+        {
+          "id": "m13p14-andrew-exp-s03-c2-a71755758973",
+          "slide": 3,
+          "text": "Then the resolver's role faces its own check. If that role can't read the intended Dynamo D B data, an authorized caller still gets a failing field. When troubleshooting, ask whether the caller was denied or whether the resolver's downstream call was denied.",
+          "text_sha256": "a717557589731e58a43072cf740e39fa0610fb75fa601882d4b18f441d91a93d",
+          "canonical_text_sha256": "687cf5f9a1a9ed31d2e92ddf26c7289b59c4d5a15439470d5ba5b8f1485e6d6e",
+          "asset_sha256": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb"
+        },
+        {
+          "id": "m13p14-andrew-exp-s03-c3-540280fc1240",
+          "slide": 3,
+          "text": "An A P I key can suit limited public access, but it identifies no individual user. Don't rely on it when different users must see different records.",
+          "text_sha256": "540280fc1240526e1cf56c3b9936d46947cb74ec8e8653c7fe437fec19447667",
+          "canonical_text_sha256": "441c7480168e5d7ff7d01c3ab3aaf7a4429434647118a6e3a130cdd6b5cb3703",
+          "asset_sha256": "d0acf4d5a3edb6af8b880f278e763d07b899e7bc15fb883228630adf54f7fddb"
+        },
+        {
+          "id": "m13p14-andrew-exp-s04-c1-ce8282e7a69d",
+          "slide": 4,
+          "text": "The connected clients in this example subscribe to updates. When the linked mutation runs, AppSync publishes an update to matching subscribers. Useful for a live view, but only while the connection can receive it.",
+          "text_sha256": "ce8282e7a69d7e5a5740c8f12d97a3d8a176d7c713ea0d4f68de51e73ee9a43f",
+          "canonical_text_sha256": "ce8282e7a69d7e5a5740c8f12d97a3d8a176d7c713ea0d4f68de51e73ee9a43f",
+          "asset_sha256": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+        },
+        {
+          "id": "m13p14-andrew-exp-s04-c2-4a25f1a644ce",
+          "slide": 4,
+          "text": "If the device disconnects, a local store can keep its edits. On reconnect, the app needs a way to fetch missed changes and sync its pending writes. Versioning and a conflict policy determine what happens when the same record changed elsewhere.",
+          "text_sha256": "4a25f1a644cefd591ac4ca2ab0e6ea724b7002bc043785e768b6681b84b7806a",
+          "canonical_text_sha256": "4a25f1a644cefd591ac4ca2ab0e6ea724b7002bc043785e768b6681b84b7806a",
+          "asset_sha256": "d6079004556c339e5be9b114b832a593ca61c9eccd244d9264fdc8fa56ce18f6"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "15",
+      "revision": "2026-11-24-m13p15-andrew-expressive",
+      "approved_assets": {
+        "1": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429",
+        "2": "152f28a4485c47f33042237e59beb273ed87ad01df0933523f4ebcefcce480a4"
+      },
+      "units": [
+        {
+          "id": "m13p15-andrew-exp-s01-c1-9a8d627eb32d",
+          "slide": 1,
+          "text": "Let's pick a front door by the requirement, not the product name. Need built-in caching, usage plans, or a private A P I? Start with REST A P I. For a lean public H T T P A P I that needs a J W T authorizer but none of those features, compare H T T P A P I.",
+          "text_sha256": "9a8d627eb32db86c569ea4df0834a70ca847d27a4b488d278b22c09f59490ddb",
+          "canonical_text_sha256": "39d8b1da2119fed3b192499a7351b8bc8707d33fa349add9c72db01436e325cc",
+          "asset_sha256": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429"
+        },
+        {
+          "id": "m13p15-andrew-exp-s01-c2-9c8633d1bf36",
+          "slide": 1,
+          "text": "A persistent two-way channel is a WebSocket A P I job. If clients instead need to select fields through a GraphQL schema and subscribe to changes from it, AppSync supplies that model.",
+          "text_sha256": "9c8633d1bf3620da641282bab35542da1937d8e9a6178559cef2f88fbd622034",
+          "canonical_text_sha256": "4502486b2b00493b4bcc72046329585f7dd62e0b40fbc91d23c0c7dfd72c3b31",
+          "asset_sha256": "5c7bf99f84f385ab973a1e9fe2882404955866012769a365b18016ebdd9b4429"
+        },
+        {
+          "id": "m13p15-andrew-exp-s02-c1-18f0ca1ce8bf",
+          "slide": 2,
+          "text": "The failover job starts at D N S. Route 53 failover alias records select the active or standby Regional A P I target. D N S answers can change as health changes; Route 53 is not proxying the request, and cached answers won't all refresh at once.",
+          "text_sha256": "18f0ca1ce8bf94dc87cc306992893c64df115f480becdc83274627b65f38e15c",
+          "canonical_text_sha256": "0636e21adfb243918200c436b81090aab45d006628351ba171271961a727a1ec",
+          "asset_sha256": "152f28a4485c47f33042237e59beb273ed87ad01df0933523f4ebcefcce480a4"
+        },
+        {
+          "id": "m13p15-andrew-exp-s02-c2-728e6aa4fb73",
+          "slide": 2,
+          "text": "Both Regions need their own A P I Gateway and Lambda deployment. Sending traffic to the second Region only helps if its A P I and function are ready to handle the same request.",
+          "text_sha256": "728e6aa4fb737816769144c083f71236bdbe86e536e10ceed18b0e3656777554",
+          "canonical_text_sha256": "fd4142e8576031c2c35ebbdc8937b2b6bf606b315d760001a3b6775b3a23573f",
+          "asset_sha256": "152f28a4485c47f33042237e59beb273ed87ad01df0933523f4ebcefcce480a4"
+        },
+        {
+          "id": "m13p15-andrew-exp-s02-c3-8a03128da343",
+          "slide": 2,
+          "text": "Now check the data. A working standby A P I can still read stale records if replication is behind. Test a real application read and compare recovered data against your data-loss target, then measure when the workload meets its recovery target.",
+          "text_sha256": "8a03128da343b267b76217ebe88ba1f0fa80da8193ddb5d1f856a14b9f6f617d",
+          "canonical_text_sha256": "09d854755bc9a2f0da6c0facc8afada55a6f2cbf903e3f6fd6d6472865ad7870",
+          "asset_sha256": "152f28a4485c47f33042237e59beb273ed87ad01df0933523f4ebcefcce480a4"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "16",
+      "revision": "2026-11-24-m13p16-andrew-expressive",
+      "approved_assets": {
+        "1": "a38802864defc38492a059a4372104ce5eeb0d2c141141f72423b0b765d22582",
+        "2": "7ba0244d47a765e591e42235350eb22c2df711a6e4bbe4e96d59451e771adc46",
+        "3": "a6a21d700d0539fb6dc4dec6cc2b5fd6390bceac1c996b64a382f2965436f6a9"
+      },
+      "units": [
+        {
+          "id": "m13p16-andrew-exp-s01-c1-1a3847a9f32a",
+          "slide": 1,
+          "text": "We'll use three symptoms to choose where to investigate. First, a successful asynchronous invoke acknowledges the queued event. It does not mean the function processed it. If the function fails, Lambda retries within the applicable limits, then can retain the failure through your configured destination or dead-letter queue.",
+          "text_sha256": "1a3847a9f32a3683afa66d25b701b9eb88e25ce7efc36a0bfe86ee0b3f78313b",
+          "canonical_text_sha256": "1a3847a9f32a3683afa66d25b701b9eb88e25ce7efc36a0bfe86ee0b3f78313b",
+          "asset_sha256": "a38802864defc38492a059a4372104ce5eeb0d2c141141f72423b0b765d22582"
+        },
+        {
+          "id": "m13p16-andrew-exp-s01-c2-89b2b1a630dc",
+          "slide": 1,
+          "text": "Look at the logs, async event metrics and failure configuration. That tells you whether the event ran and failed, aged out, or could not be delivered to its destination. Don't infer completed work from the caller acknowledgment.",
+          "text_sha256": "89b2b1a630dc141a00bd8c7466e23de69a1359290914c69035d856f8a8edd89a",
+          "canonical_text_sha256": "89b2b1a630dc141a00bd8c7466e23de69a1359290914c69035d856f8a8edd89a",
+          "asset_sha256": "a38802864defc38492a059a4372104ce5eeb0d2c141141f72423b0b765d22582"
+        },
+        {
+          "id": "m13p16-andrew-exp-s01-c3-db670ca2d339",
+          "slide": 1,
+          "text": "Inspect the retained event, fix the underlying problem, then replay selectively. Verify the expected result and make replay safe for duplicates so the same event can't apply a write twice.",
+          "text_sha256": "db670ca2d33949758d315823f0d89a3b9d52af3ce867550471f61bfe449bb212",
+          "canonical_text_sha256": "db670ca2d33949758d315823f0d89a3b9d52af3ce867550471f61bfe449bb212",
+          "asset_sha256": "a38802864defc38492a059a4372104ce5eeb0d2c141141f72423b0b765d22582"
+        },
+        {
+          "id": "m13p16-andrew-exp-s02-c1-981755e01476",
+          "slide": 2,
+          "text": "In this case the function times out reaching private R D S. Use the logs or trace to identify the waiting hop, then check D N S, the database port and the security-group rules. Follow the intended private route, not the nat path shown for public destinations.",
+          "text_sha256": "981755e01476a87324190928c862137bf82532eeb7bd47db0b5e96879ffa773c",
+          "canonical_text_sha256": "536c540038ff8bfbb5906a415bf07d924bd903465803bd706aa7e743fa211e4b",
+          "asset_sha256": "7ba0244d47a765e591e42235350eb22c2df711a6e4bbe4e96d59451e771adc46"
+        },
+        {
+          "id": "m13p16-andrew-exp-s02-c2-8883d7649104",
+          "slide": 2,
+          "text": "If a connection reaches the database but the database denies login, troubleshoot credentials or database authorization. If the connection can't reach the endpoint at all, keep investigating networking. Correct the failing hop and confirm the same application request succeeds.",
+          "text_sha256": "8883d7649104b21045041fe818c1623281c5c13ef754cbe86caf60c7c08778ce",
+          "canonical_text_sha256": "8883d7649104b21045041fe818c1623281c5c13ef754cbe86caf60c7c08778ce",
+          "asset_sha256": "7ba0244d47a765e591e42235350eb22c2df711a6e4bbe4e96d59451e771adc46"
+        },
+        {
+          "id": "m13p16-andrew-exp-s03-c1-75ec12408ff5",
+          "slide": 3,
+          "text": "With a four twenty-nine, check throttling evidence and determine which limit applied. Compare gateway metrics with what the backend received; don't assume the function returned a malformed result.",
+          "text_sha256": "75ec12408ff5c8919c2614cdbb4b737859ce1cac08e22934942a8325d6cfe9a5",
+          "canonical_text_sha256": "75ec12408ff5c8919c2614cdbb4b737859ce1cac08e22934942a8325d6cfe9a5",
+          "asset_sha256": "a6a21d700d0539fb6dc4dec6cc2b5fd6390bceac1c996b64a382f2965436f6a9"
+        },
+        {
+          "id": "m13p16-andrew-exp-s03-c2-c195f7c46188",
+          "slide": 3,
+          "text": "A five oh two sends you to integration evidence, such as a function error or invalid proxy response. Correlate the gateway and function logs with the request. The fix depends on which layer produced the symptom.",
+          "text_sha256": "c195f7c461889fe7c9db9d8b3e2e134ed2aa9d521649d312ccffe1c43257b3c3",
+          "canonical_text_sha256": "c195f7c461889fe7c9db9d8b3e2e134ed2aa9d521649d312ccffe1c43257b3c3",
+          "asset_sha256": "a6a21d700d0539fb6dc4dec6cc2b5fd6390bceac1c996b64a382f2965436f6a9"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "01",
+      "revision": "2026-11-24-m14p01-andrew-expressive",
+      "approved_assets": {
+        "1": "480d49ba05bc9e929c3fd140a517f652ed87454af863ba0c26e6d8fbf00084ac",
+        "2": "8a379bf2c0ccd876cd9085a7852ca9129892077674758024b0e94fb7704d0dc8",
+        "3": "583ab8ee683a04adad1894d809cbcd47ea37fab4929862c86648af99f877d8b3",
+        "4": "3ce8362b7366322c93e6f0d4bcb02cbd2e307f86ffb141dd893f4642d379a548"
+      },
+      "units": [
+        {
+          "id": "m14p01-andrew-exp-s01-c1-cb68948cabdf",
+          "slide": 1,
+          "text": "Let's take one request and follow it through a workflow. The first task calls Lambda. Step Functions then evaluates the result and chooses where the work goes next. The function does its part; the workflow owns the sequence.",
+          "text_sha256": "cb68948cabdfc66885e21f4143e3ed0f37d1e49f8d975a1e6d824bc24d7e5b50",
+          "canonical_text_sha256": "cb68948cabdfc66885e21f4143e3ed0f37d1e49f8d975a1e6d824bc24d7e5b50",
+          "asset_sha256": "480d49ba05bc9e929c3fd140a517f652ed87454af863ba0c26e6d8fbf00084ac"
+        },
+        {
+          "id": "m14p01-andrew-exp-s01-c2-043c799e9779",
+          "slide": 1,
+          "text": "A Choice state might send a ready request to the next task. If the condition instead calls for a delay, a Wait state pauses progress. That's orchestration, not code spinning inside a function.",
+          "text_sha256": "043c799e9779ba632c5bde345c5bf9c9677a2981c1f85e3bfa70d990e4b47289",
+          "canonical_text_sha256": "043c799e9779ba632c5bde345c5bf9c9677a2981c1f85e3bfa70d990e4b47289",
+          "asset_sha256": "480d49ba05bc9e929c3fd140a517f652ed87454af863ba0c26e6d8fbf00084ac"
+        },
+        {
+          "id": "m14p01-andrew-exp-s01-c3-d3fce32a3959",
+          "slide": 1,
+          "text": "The dotted path is different: a Catch handler can route a task failure to a state that handles it. Define those failure paths in the workflow instead of leaving the caller to guess what happened.",
+          "text_sha256": "d3fce32a3959b3375a95bc332da8d681c20b9022b64d333e92ea3590d46c3e95",
+          "canonical_text_sha256": "d3fce32a3959b3375a95bc332da8d681c20b9022b64d333e92ea3590d46c3e95",
+          "asset_sha256": "480d49ba05bc9e929c3fd140a517f652ed87454af863ba0c26e6d8fbf00084ac"
+        },
+        {
+          "id": "m14p01-andrew-exp-s02-c1-4d52ebfeab16",
+          "slide": 2,
+          "text": "The order starts at a task, then a Choice decides whether to wait or fail. The successful branch can continue to another task before completion. The sequence, decisions and failure transitions live in the state machine definition.",
+          "text_sha256": "4d52ebfeab16f13644b9301504a598ad367da7b33841b3df23b1598ca0691801",
+          "canonical_text_sha256": "4d52ebfeab16f13644b9301504a598ad367da7b33841b3df23b1598ca0691801",
+          "asset_sha256": "8a379bf2c0ccd876cd9085a7852ca9129892077674758024b0e94fb7704d0dc8"
+        },
+        {
+          "id": "m14p01-andrew-exp-s02-c2-83d0e85cf503",
+          "slide": 2,
+          "text": "The definition describes the steps, and each execution begins with its own input. Standard keeps durable execution history so you can inspect where this order ended up. The execution role governs the calls those states make to other services.",
+          "text_sha256": "83d0e85cf503a140f8136f3f08ebbfeb3baec3f450ca839515201d61a1d5be6f",
+          "canonical_text_sha256": "83d0e85cf503a140f8136f3f08ebbfeb3baec3f450ca839515201d61a1d5be6f",
+          "asset_sha256": "8a379bf2c0ccd876cd9085a7852ca9129892077674758024b0e94fb7704d0dc8"
+        },
+        {
+          "id": "m14p01-andrew-exp-s03-c1-10b3c62e98cd",
+          "slide": 3,
+          "text": "With Request Response, Step Functions waits for the service A P I to respond. That response can mean a job was accepted, not that it finished. This pattern is available in both Standard and Express.",
+          "text_sha256": "10b3c62e98cd915e2c495c3afe1dfa41746f9f161d7121cbc6ba071f5346003f",
+          "canonical_text_sha256": "16a4a3423ef3eb7dd9426e2e30b6dbfb97c144e37c970117f84804a7fffa83cb",
+          "asset_sha256": "583ab8ee683a04adad1894d809cbcd47ea37fab4929862c86648af99f877d8b3"
+        },
+        {
+          "id": "m14p01-andrew-exp-s03-c2-5e50812eebc2",
+          "slide": 3,
+          "text": "Need the completed job before the next state runs? A supported optimized integration in Standard can use the Run a Job pattern to wait until the job itself finishes.",
+          "text_sha256": "5e50812eebc2fbbe3488c9edf203d900aa734b6e7d8085c5c2e9af0523d4504a",
+          "canonical_text_sha256": "5e50812eebc2fbbe3488c9edf203d900aa734b6e7d8085c5c2e9af0523d4504a",
+          "asset_sha256": "583ab8ee683a04adad1894d809cbcd47ea37fab4929862c86648af99f877d8b3"
+        },
+        {
+          "id": "m14p01-andrew-exp-s03-c3-d1e692252c80",
+          "slide": 3,
+          "text": "The callback pattern pauses a Standard workflow until the worker returns its task token with success or failure. S D K integrations can use Request Response and, where supported, a callback; don't assume an S D K call supports Run a Job.",
+          "text_sha256": "d1e692252c8000257109cbf9a8cecd99dbcd436d5d2c8230914a1804ecb84bf7",
+          "canonical_text_sha256": "a041b1cba211600e8630f53a295f4638e78f7ddcd9265dfa26dc7ab6e10f0d08",
+          "asset_sha256": "583ab8ee683a04adad1894d809cbcd47ea37fab4929862c86648af99f877d8b3"
+        },
+        {
+          "id": "m14p01-andrew-exp-s04-c1-91d57dca0aef",
+          "slide": 4,
+          "text": "An EventBridge rule or an application may start the state machine. Give the calling principal permission to start only the intended workflow. The returned execution A R N means the run started, not that the order already completed.",
+          "text_sha256": "91d57dca0aeff50e6f31a388a114f980baf773f03ec6e9b0edc5eb51bf976551",
+          "canonical_text_sha256": "3cecb39df3e13934316c30746b7dbe329d4fd35aa821d9b0c04a5273efb54e6a",
+          "asset_sha256": "3ce8362b7366322c93e6f0d4bcb02cbd2e307f86ffb141dd893f4642d379a548"
+        },
+        {
+          "id": "m14p01-andrew-exp-s04-c2-3d0fec1c90af",
+          "slide": 4,
+          "text": "The state machine uses a separate execution role. That role needs only the actions for its tasks, such as invoking the function, sending to the queue, or writing the intended item. Giving a caller start permission doesn't grant it those downstream permissions.",
+          "text_sha256": "3d0fec1c90afc3a2341342c99fde76b207670be8511ff7198406649eec6067ac",
+          "canonical_text_sha256": "3d0fec1c90afc3a2341342c99fde76b207670be8511ff7198406649eec6067ac",
+          "asset_sha256": "3ce8362b7366322c93e6f0d4bcb02cbd2e307f86ffb141dd893f4642d379a548"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "02",
+      "revision": "2026-11-24-m14p02-andrew-expressive",
+      "approved_assets": {
+        "1": "506d7ba11d07e510fb9e40fbdbb1aa0997ce9676f70d2818dedfe42ebd18b626",
+        "2": "de993aeb9c80ca119b234b61f8f204acac257f764ddef661650137d15c00effe"
+      },
+      "units": [
+        {
+          "id": "m14p02-andrew-exp-s01-c1-e52fffa25843",
+          "slide": 1,
+          "text": "We'll choose the states for an order workflow. Task does the work, Wait pauses, and Choice decides where the input goes. Parallel and Map both arrange multiple pieces of work, but they don't mean the same thing.",
+          "text_sha256": "e52fffa258435b4410f722e57e83e97a924d50f294928974df33f5205dac6869",
+          "canonical_text_sha256": "e52fffa258435b4410f722e57e83e97a924d50f294928974df33f5205dac6869",
+          "asset_sha256": "506d7ba11d07e510fb9e40fbdbb1aa0997ce9676f70d2818dedfe42ebd18b626"
+        },
+        {
+          "id": "m14p02-andrew-exp-s01-c2-301650808d82",
+          "slide": 1,
+          "text": "Here the workflow validates an order first. The Choice then checks the input. On one path, the fixed inventory and notification tasks can run together. The other path uses Map to apply the same work to the order's line items.",
+          "text_sha256": "301650808d821397d7b6f52878ef9e69dd2f6d4ebe594cd4e43bd50eba17ee1a",
+          "canonical_text_sha256": "301650808d821397d7b6f52878ef9e69dd2f6d4ebe594cd4e43bd50eba17ee1a",
+          "asset_sha256": "506d7ba11d07e510fb9e40fbdbb1aa0997ce9676f70d2818dedfe42ebd18b626"
+        },
+        {
+          "id": "m14p02-andrew-exp-s01-c3-1d9a1815a5c8",
+          "slide": 1,
+          "text": "Ask what repeats. Parallel starts the branches you defined, even if the order contains many items. Map iterates over the collection, so the number of iterations depends on the data.",
+          "text_sha256": "1d9a1815a5c83ccfbf6e9e28dd61d3216d5c9594d88193dd4a7149d36f3ecd39",
+          "canonical_text_sha256": "1d9a1815a5c83ccfbf6e9e28dd61d3216d5c9594d88193dd4a7149d36f3ecd39",
+          "asset_sha256": "506d7ba11d07e510fb9e40fbdbb1aa0997ce9676f70d2818dedfe42ebd18b626"
+        },
+        {
+          "id": "m14p02-andrew-exp-s02-c1-8398cbc19a2a",
+          "slide": 2,
+          "text": "An approval might sit for hours. Standard can run up to a year and supports the callback and Run a Job patterns when the integration supports them. Its default exactly-once workflow execution does not mean an explicitly retried task can't run again.",
+          "text_sha256": "8398cbc19a2a58f1293666a5b86912527970a0039cfc52181dff7819160dc75e",
+          "canonical_text_sha256": "8398cbc19a2a58f1293666a5b86912527970a0039cfc52181dff7819160dc75e",
+          "asset_sha256": "de993aeb9c80ca119b234b61f8f204acac257f764ddef661650137d15c00effe"
+        },
+        {
+          "id": "m14p02-andrew-exp-s02-c2-a22e6f3e282f",
+          "slide": 2,
+          "text": "Compare a burst of short executions. Express can run up to five minutes. Asynchronous Express is at-least-once, so protect writes against duplicates; synchronous Express is at-most-once. Neither offers the callback or Run a Job patterns shown in Standard.",
+          "text_sha256": "a22e6f3e282facaac5901e844de573801287cf4b2770f2fc95352a8ae7ae1141",
+          "canonical_text_sha256": "a22e6f3e282facaac5901e844de573801287cf4b2770f2fc95352a8ae7ae1141",
+          "asset_sha256": "de993aeb9c80ca119b234b61f8f204acac257f764ddef661650137d15c00effe"
+        }
+      ]
+    }
+  ]
+}
