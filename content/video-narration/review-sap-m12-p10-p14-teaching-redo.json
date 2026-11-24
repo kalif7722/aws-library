@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "12",
+      "part": "10",
+      "revision": "2026-11-23-m12p10-m12-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "db3133b02971546e5d2b06d20a6cfd46ba8a079b487a446de87b6247a9559bd3",
+        "2": "c3046869200942aec1c374d614b8387e673743dec74e3e87f8eb9125ad6fd797"
+      },
+      "units": [
+        {
+          "id": "m12p10-redo-s01-c1-b8f6271789b4",
+          "slide": 1,
+          "text": "A claim requests storage; its StorageClass and driver determine what actually mounts. E B S supplies zonal block storage for a compatible Pod in the volume's zone, not an EKS Fargate volume. Use Regional EFS when multiple eligible Pods need shared files across zones. On Fargate use supported static EFS provisioning. Check access mode and reclaim policy before deleting a claim.",
+          "text_sha256": "b8f6271789b406eefc3df4a54d14784a3efc22fb5230f2fdd5b97357ed78a521",
+          "canonical_text_sha256": "07f536df46754f29db69cae2fee46a5be92c873d681869b7f1fd19b28f914fc9",
+          "asset_sha256": "db3133b02971546e5d2b06d20a6cfd46ba8a079b487a446de87b6247a9559bd3"
+        },
+        {
+          "id": "m12p10-redo-s02-c1-39e4cae4dd65",
+          "slide": 2,
+          "text": "Choose the FSx driver and file system together. The first path uses the Lustre CSI driver for a parallel file system; the second uses NetApp Trident with ONTAP for suitable persistent storage. Verify node support, network, permissions and StorageClass parameters. Have a real test Pod mount, write and remount, and separately prove restore and the intended reclaim behavior.",
+          "text_sha256": "39e4cae4dd654fbf00c183d375c9f46867ce2544aa1d153cd5440ebf76fc95fd",
+          "canonical_text_sha256": "39e4cae4dd654fbf00c183d375c9f46867ce2544aa1d153cd5440ebf76fc95fd",
+          "asset_sha256": "c3046869200942aec1c374d614b8387e673743dec74e3e87f8eb9125ad6fd797"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "11",
+      "revision": "2026-11-23-m12p11-m12-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "6a98f4ce7ac1a29af0b74e50ec678a242fe9d998783108b3a6a17bd0a7fa4ede",
+        "2": "0b1fa527209c123da7be057ddd4aa68f09745aa54fee74326c29303aed1f3ece"
+      },
+      "units": [
+        {
+          "id": "m12p11-redo-s01-c1-323b240c0e28",
+          "slide": 1,
+          "text": "Pod and node scaling solve different shortages. A demand metric can make the horizontal autoscaler request four replicas instead of two. If Pods cannot be scheduled, a node autoscaler can add eligible E C two capacity. Four replicas on one node do not create zone resilience. Verify placement across zones, resource requests, readiness and the disruption rules before calling the rollout healthy.",
+          "text_sha256": "323b240c0e288112c5a82ba6f716a214e06cf1a93ae2529dfe5a2ea850bf9f40",
+          "canonical_text_sha256": "17e5bd22e44b3b9241ec2fc45bd68c879f39bf0e2011f3b126ed664f4eec2ae8",
+          "asset_sha256": "6a98f4ce7ac1a29af0b74e50ec678a242fe9d998783108b3a6a17bd0a7fa4ede"
+        },
+        {
+          "id": "m12p11-redo-s02-c1-de26f509967a",
+          "slide": 2,
+          "text": "When requests fail, follow the evidence from load-balancer target health to Service and Ingress events, then to Pod readiness and logs. Check node or container resource metrics next, and control-plane logs when enabled and relevant. Metrics show trends, events show lifecycle changes, and traces show a request path. Container Insights requires configuration; do not assume every signal is already collected.",
+          "text_sha256": "de26f509967ae5107823b5f1dfb6675c2ca6a8a07f105a6ed48e8a3ce9a102cb",
+          "canonical_text_sha256": "de26f509967ae5107823b5f1dfb6675c2ca6a8a07f105a6ed48e8a3ce9a102cb",
+          "asset_sha256": "0b1fa527209c123da7be057ddd4aa68f09745aa54fee74326c29303aed1f3ece"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "12",
+      "revision": "2026-11-23-m12p12-m12-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "b2db9697d5153b7795c40e152385ae2ce3d36f625475cfe3d0fa9d7dd22b0204",
+        "2": "c425ea159e854afc2af3c0a2dd170811c5ada052d74b6ddb4ac8e72e1f81524c",
+        "3": "b898c9a5731ffb71528a5c1de929536018c5e00ff59252b49accaa32d3c6ea85",
+        "4": "265e95740d91a63d9cedec7a8e807e2af0978d79ed603dd41ac7b5d13d10c239"
+      },
+      "units": [
+        {
+          "id": "m12p12-redo-s01-c1-d8d1194a72f6",
+          "slide": 1,
+          "text": "App Runner illustrates a managed route from source or container image to a running H T T P S app, with health checks and scaling. The platform simplifies deployment but has supported runtimes and quotas. It is now closed to new customers. Existing eligible customers can continue; for a new adoption evaluate ECS Express Mode instead.",
+          "text_sha256": "d8d1194a72f6b84060fb568246870ee0d785087994feeceaf673350840875207",
+          "canonical_text_sha256": "46335b3266b8c71779da4969f38efcb7706e99254397928a7958463fe769014f",
+          "asset_sha256": "b2db9697d5153b7795c40e152385ae2ce3d36f625475cfe3d0fa9d7dd22b0204"
+        },
+        {
+          "id": "m12p12-redo-s02-c1-5fd85d285899",
+          "slide": 2,
+          "text": "The practical decision is account eligibility. Eligible existing App Runner customers can continue and create eligible resources; A W S is not planning new features. For a new streamlined container deployment, assess ECS Express Mode. If migrating, validate the image, domain, health checks, networking and rollback before shifting traffic. A source-based project may need to build a container image first.",
+          "text_sha256": "5fd85d285899c89176a68fc9ba1cfa1b0165a5104286539fbfaa073de6013f8e",
+          "canonical_text_sha256": "0b49e7ecd522d3c96a9893433d01b51150fd4c5b5f6487454e4a574af8982030",
+          "asset_sha256": "c425ea159e854afc2af3c0a2dd170811c5ada052d74b6ddb4ac8e72e1f81524c"
+        },
+        {
+          "id": "m12p12-redo-s03-c1-149307a539d0",
+          "slide": 3,
+          "text": "The connector is an outbound path for application traffic to private resources, such as RDS. Configure private subnets and security groups. Add NAT for applicable internet egress or endpoints for supported A W S services. The connector does not make the inbound service private; configure ingress separately. Using a public subnet for the connector is not a shortcut to internet access.",
+          "text_sha256": "149307a539d0e19c4cc8243627f054ac0281db4df9d76ff67d3db40075edcde7",
+          "canonical_text_sha256": "c8a8d9c7a6f4ca30e9f2f467e32628ebbde64fc6062d0e2c644dee0591962b58",
+          "asset_sha256": "b898c9a5731ffb71528a5c1de929536018c5e00ff59252b49accaa32d3c6ea85"
+        },
+        {
+          "id": "m12p12-redo-s04-c1-a91fb7897ee1",
+          "slide": 4,
+          "text": "Make three independent recovery plans. Replicate and verify the container image digest, configure the application in both Regions, and choose a DynamoDB replication mode compatible with the data requirement. A healthy image replica does not replicate application state. Then test regional hostnames, TLS, DNS caching, and actual client cutover while measuring which recent writes the recovery Region can read.",
+          "text_sha256": "a91fb7897ee1997b7f9924ffeef96032a974310f09dae9e5bfa2d3b58d3ae455",
+          "canonical_text_sha256": "a91fb7897ee1997b7f9924ffeef96032a974310f09dae9e5bfa2d3b58d3ae455",
+          "asset_sha256": "265e95740d91a63d9cedec7a8e807e2af0978d79ed603dd41ac7b5d13d10c239"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "13",
+      "revision": "2026-11-23-m12p13-m12-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "41363acd6ca16ad11d9b22a10449e5b22876f3b6958507687d5ce6f4efefe4e8",
+        "2": "637b24b5ae81a1a941e05aabe15da96f1b69956e41d21664150771f0381211fe",
+        "3": "f70a39b7c4fed4b96328c42f5b2af5b8804673b89cf5bfde0b1308aa09d26bc1",
+        "4": "d46c0685a3d107806d3ee8f0664425ac08365fb531e8a217928c79d6bdfd8dde"
+      },
+      "units": [
+        {
+          "id": "m12p13-redo-s01-c1-234082741fd5",
+          "slide": 1,
+          "text": "ECS Anywhere keeps the regional ECS and Systems Manager control path in A W S and runs EXTERNAL tasks on your registered infrastructure. The local ECS and Systems Manager agents connect the two. You own the hosts and local network. Check supported host platforms and verify connectivity to the control plane before choosing the model.",
+          "text_sha256": "234082741fd5fd002d2a448e9183f785ee11323fd4075a54c7ae5819ae22f3d4",
+          "canonical_text_sha256": "d10714f0554acdc2efc39add24f651696e8293764baaf043e6eae30c7cfb1c61",
+          "asset_sha256": "41363acd6ca16ad11d9b22a10449e5b22876f3b6958507687d5ce6f4efefe4e8"
+        },
+        {
+          "id": "m12p13-redo-s02-c1-923a67c769a1",
+          "slide": 2,
+          "text": "Follow registration, scheduling and reconnect. Some running tasks can continue during a temporary disconnect, but you need connectivity back for reliable management and scheduling. External tasks do not support A W S VPC task networking, ECS service load balancing, service discovery or capacity providers. If the design needs one of those, do not assume the on-premises host inherits normal cloud features.",
+          "text_sha256": "923a67c769a14df09b289e9146faf2923a845caed2ec25e045b1030fe0044cdc",
+          "canonical_text_sha256": "e075d2fc67960dbd2d7fe81d1c950148a5647411125d00e9abb5275b51e43b99",
+          "asset_sha256": "637b24b5ae81a1a941e05aabe15da96f1b69956e41d21664150771f0381211fe"
+        },
+        {
+          "id": "m12p13-redo-s03-c1-dc044b89f18d",
+          "slide": 3,
+          "text": "EKS Anywhere runs Kubernetes control and worker nodes on supported customer infrastructure. You operate the platform and its lifecycle. A local registry and prepared artifacts support disconnected sites. An optional EKS Connector can add console visibility when connected, but it does not shift the control plane or maintenance responsibility into an A W S-managed EKS cluster.",
+          "text_sha256": "dc044b89f18de408b1744162374062f59cd8e764ae0ce9dd6a1e226841046509",
+          "canonical_text_sha256": "160fb22a4c0416272962d729db006bac7543c59682fda0342c5a978a44630a14",
+          "asset_sha256": "f70a39b7c4fed4b96328c42f5b2af5b8804673b89cf5bfde0b1308aa09d26bc1"
+        },
+        {
+          "id": "m12p13-redo-s04-c1-f1a4b1f140a7",
+          "slide": 4,
+          "text": "For a disconnected design, obtain the required images and dependencies ahead of time and import them into a supported local registry mirror. Verify cluster deployment and the upgrade process with the real dependencies available locally. Local Kubernetes control can continue without an A W S-hosted control plane. The optional console visibility path is distinct from the air-gapped operation path.",
+          "text_sha256": "f1a4b1f140a7684fcaccafe838b6662e2994a5dc7d25f05d6632f1b715b53b2c",
+          "canonical_text_sha256": "13af80c270427a85c52483c60d48e64ffd95ab199ad3c15ba81eaa29a1727ecd",
+          "asset_sha256": "d46c0685a3d107806d3ee8f0664425ac08365fb531e8a217928c79d6bdfd8dde"
+        }
+      ]
+    },
+    {
+      "module": "12",
+      "part": "14",
+      "revision": "2026-11-23-m12p14-m12-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "8e97c597079bb5b3f698a929217a8b59fc05f75cbf07f7d85af815b4cbac4b2d",
+        "2": "63f9f3e13c7a1dccd0c266382593376b8cc64b65319166d2c0ee2c7e65cc2ce2",
+        "3": "148837ba5f622a8cbbd275ef3da2a74eafb2cf4a6629b7cafa989635488b4ff7",
+        "4": "b3f4519f7ea9747e3b6b3c7cce083c14be9ebcbadb207eba2763b9f48de205c5"
+      },
+      "units": [
+        {
+          "id": "m12p14-redo-s01-c1-0a3295b58eb5",
+          "slide": 1,
+          "text": "A service registers instances and attributes in Cloud Map. A client queries a supported DNS or API discovery mechanism, receives an endpoint, then connects directly. Registration and health can change the returned endpoints; caches can delay what the client observes. Cloud Map is neither the data path nor a grant of access.",
+          "text_sha256": "0a3295b58eb52d83089bec82bf8d42557f69cfaf5b5baa85dfbf519426626343",
+          "canonical_text_sha256": "0a3295b58eb52d83089bec82bf8d42557f69cfaf5b5baa85dfbf519426626343",
+          "asset_sha256": "8e97c597079bb5b3f698a929217a8b59fc05f75cbf07f7d85af815b4cbac4b2d"
+        },
+        {
+          "id": "m12p14-redo-s02-c1-7f2293efbdcb",
+          "slide": 2,
+          "text": "Separate the discovery exchange from the application connection. The client asks Cloud Map for a location, but the orange path goes directly to the backend. If the lookup succeeds and the application still fails, inspect the returned target, network and authorization separately. Consider the effect of health rules and cached DNS answers.",
+          "text_sha256": "7f2293efbdcb216afdee4ab7d21aaaa4058d41e96cf7bc562564e98670e32dfe",
+          "canonical_text_sha256": "7f2293efbdcb216afdee4ab7d21aaaa4058d41e96cf7bc562564e98670e32dfe",
+          "asset_sha256": "63f9f3e13c7a1dccd0c266382593376b8cc64b65319166d2c0ee2c7e65cc2ce2"
+        },
+        {
+          "id": "m12p14-redo-s03-c1-037fd86b130e",
+          "slide": 3,
+          "text": "Service Connect gives participating ECS services short names and adds managed task proxies for communication. The Cloud Map namespace supplies naming, and application traffic follows the proxy path. This enables useful connection handling and observability, but the tasks still need network reachability, correct ports and applicable security rules.",
+          "text_sha256": "037fd86b130e2473350d67fd1207289e020b9adec5693a9db3010ff9d689caf4",
+          "canonical_text_sha256": "037fd86b130e2473350d67fd1207289e020b9adec5693a9db3010ff9d689caf4",
+          "asset_sha256": "148837ba5f622a8cbbd275ef3da2a74eafb2cf4a6629b7cafa989635488b4ff7"
+        },
+        {
+          "id": "m12p14-redo-s04-c1-0068bfcf7972",
+          "slide": 4,
+          "text": "Trace service A's request through its local proxy, across the reachable network, through service B's proxy and into B. The namespace configures the participants, not a network tunnel. Eligible services can share a namespace within one Region as supported. Outside clients need a supported access path. Measure proxy telemetry and test network and ports separately from naming.",
+          "text_sha256": "0068bfcf797225787c773529b83b0a277ecfa4737cb856363e84df0f67d2d78c",
+          "canonical_text_sha256": "0068bfcf797225787c773529b83b0a277ecfa4737cb856363e84df0f67d2d78c",
+          "asset_sha256": "b3f4519f7ea9747e3b6b3c7cce083c14be9ebcbadb207eba2763b9f48de205c5"
+        }
+      ]
+    }
+  ]
+}
