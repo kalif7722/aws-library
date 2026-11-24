@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "15",
+      "revision": "2026-11-23-m11p15-m11-p15-p19-teaching-redo-v1",
+      "approved_assets": {
+        "1": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3",
+        "2": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885",
+        "3": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+      },
+      "units": [
+        {
+          "id": "m11p15-redo-s01-c1-4c1604b6da08",
+          "slide": 1,
+          "text": "Choose multi-Region eventual consistency when applications need local writes and can tolerate asynchronous replication and conflict resolution. A strong read in Region B does not pull in a write still traveling from Region A. Concurrent writes to the same item use last writer wins; monitor replication and test regional routing.",
+          "text_sha256": "4c1604b6da0815319b77eca4d7249dcd8e1711c5fb4152a24ac707e046def059",
+          "canonical_text_sha256": "4c1604b6da0815319b77eca4d7249dcd8e1711c5fb4152a24ac707e046def059",
+          "asset_sha256": "d0dd10f470e8f238d196606f484da5c6f4bacd201ed17fd0d3972bfdfb8776c3"
+        },
+        {
+          "id": "m11p15-redo-s02-c1-4f3f62ef56db",
+          "slide": 2,
+          "text": "Multi-Region strong consistency synchronously replicates a write to at least one other Region before success. The third Region can host another replica or a witness; the witness does not serve application reads or writes. Choose the mode at creation and test the latency across the supported Region set.",
+          "text_sha256": "4f3f62ef56db008608ace1f88b1a578125ec321b7acf0a2cbdaf9086de13a29e",
+          "canonical_text_sha256": "4f3f62ef56db008608ace1f88b1a578125ec321b7acf0a2cbdaf9086de13a29e",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-redo-s02-c2-1c1c4d89a00f",
+          "slide": 2,
+          "text": "Strong global tables do not support DynamoDB transaction APIs or Time to Live. Eventual global tables support transactions, but only atomically in the origin Region. If a transaction updates inventory and creates an order, a remote replica can briefly show one without the other.",
+          "text_sha256": "1c1c4d89a00fc01ee1bb0e4ac3e6bb22365181f236e395ede966ca27300c69dc",
+          "canonical_text_sha256": "1c1c4d89a00fc01ee1bb0e4ac3e6bb22365181f236e395ede966ca27300c69dc",
+          "asset_sha256": "f62b74bbebdf85f228440dd96b395a51ac54d754542abc759afe834b6910a885"
+        },
+        {
+          "id": "m11p15-redo-s03-c1-964275e8f4f3",
+          "slide": 3,
+          "text": "Standard and Standard Infrequent Access are both online table classes. Compare request cost with storage cost, rather than treating the latter as an archive. For historical recovery, choose on-demand backup or point-in-time recovery. Restore to a new table, then verify indexes, permissions, encryption, dependent settings and application routing. Replication is not backup history.",
+          "text_sha256": "964275e8f4f3053865ec5d149331b689587b68b90fb172a7a31dc21d8e243f00",
+          "canonical_text_sha256": "964275e8f4f3053865ec5d149331b689587b68b90fb172a7a31dc21d8e243f00",
+          "asset_sha256": "6ff0aa8b795dfa9e3fd2b3c5ad7844bed1f15057c5968c7ac0f668494f2acf85"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "16",
+      "revision": "2026-11-23-m11p16-m11-p15-p19-teaching-redo-v1",
+      "approved_assets": {
+        "1": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172",
+        "2": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f",
+        "3": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a",
+        "4": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+      },
+      "units": [
+        {
+          "id": "m11p16-redo-s01-c1-a822384ee519",
+          "slide": 1,
+          "text": "Leave file bytes in S three. An upload event drives a Lambda indexer that writes searchable metadata into DynamoDB. Query the index by the access pattern and fetch the selected object from S three. This update is asynchronous: handle duplicate and out-of-order events, reconcile missing rows and enforce tenant access on both paths.",
+          "text_sha256": "a822384ee5192e4e14a314e4fbff0ac9fd17f3a41b056f6b2cdc82de326a30f4",
+          "canonical_text_sha256": "0887db790d0ff1cdf8c99506c96fa092ac07cfc652500fc9554cac0fad6c0898",
+          "asset_sha256": "f8f847b7c1be35b5da995503e2462922dcadfb19c4630fbcfecd69eac71a5172"
+        },
+        {
+          "id": "m11p16-redo-s02-c1-c3ceedb1ed18",
+          "slide": 2,
+          "text": "DynamoDB Accelerator is a regional in-memory cache for supported DynamoDB operations. A hit returns from the cache; a miss retrieves data from DynamoDB and fills the cache. Use a compatible client and choose suitable cluster capacity and redundancy. The database remains authoritative; cached reads do not give strong consistency.",
+          "text_sha256": "c3ceedb1ed18642ed2609445c30eb00918d9cace923f79a517fcbbecbf2f3502",
+          "canonical_text_sha256": "c3ceedb1ed18642ed2609445c30eb00918d9cace923f79a517fcbbecbf2f3502",
+          "asset_sha256": "ab77ca3f39a27af03d8122955fed6a0a5dc77e4178f97457f7d6581636737c0f"
+        },
+        {
+          "id": "m11p16-redo-s03-c1-63a5e5616092",
+          "slide": 3,
+          "text": "Follow a hot eligible read: the DAX-aware application gets a hit from the private cluster, or the cluster reads from DynamoDB on a miss. Supported strong reads bypass caching. Writes through DAX still reach DynamoDB. Check hit rates and table throttle metrics; a faster read path does not remove write limits.",
+          "text_sha256": "63a5e561609269b5934fb1a2e0d3158d5a8ef329e8679a1cb0f43e5eefd9d40a",
+          "canonical_text_sha256": "63a5e561609269b5934fb1a2e0d3158d5a8ef329e8679a1cb0f43e5eefd9d40a",
+          "asset_sha256": "252f1caf5e2fe749d529790a86634dd0a6408c3eb407055462f9d9b09941c64a"
+        },
+        {
+          "id": "m11p16-redo-s04-c1-9de63caa016a",
+          "slide": 4,
+          "text": "One item write through DAX can update the item cache. A cached Query or Scan result is separate and can remain stale until expiry or refresh. Writes bypassing DAX, including replication from another Region, can leave stale data in cache. Where supported, request a strong read when you need the latest item instead of assuming a single time-to-live setting fixes freshness.",
+          "text_sha256": "9de63caa016adf2fc549bfa47fa8f270a84c4189d3207bb212db769ff7524679",
+          "canonical_text_sha256": "9de63caa016adf2fc549bfa47fa8f270a84c4189d3207bb212db769ff7524679",
+          "asset_sha256": "f174c5bb366057567e894ffaa768f765d665246e76817a600d5e14a6b1c8be6a"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "17",
+      "revision": "2026-11-23-m11p17-m11-p15-p19-teaching-redo-v1",
+      "approved_assets": {
+        "1": "5e155a028c08c5fda394f334035c2ba3ab4a0934d9d21e93224156fe3f5201af",
+        "2": "c205d095a8f77c751d9b9c182297a4cf34d336cbd62549a4a1ecc982c21d8e81",
+        "3": "6e8b91de3b54a178f306b4fcf26d26d4e6491db3f012437314978278e543dca5",
+        "4": "b6a6ebc8280786a3a375e280cd4290f011d0e58adc0f16f3782003c1865b0a23"
+      },
+      "units": [
+        {
+          "id": "m11p17-redo-s01-c1-d132c152489d",
+          "slide": 1,
+          "text": "ElastiCache holds frequently reused values in memory so the application avoids repeated database work. Trace a cache hit back to the app and a miss to the authoritative store, then fill the cache. Choose engine and deployment separately; design keys, expiry and failure behavior. A cache is not the source of truth in this design.",
+          "text_sha256": "d132c152489da6fb06b60f401f93106f9aa6fa37d0dd15b70dbb4698d3369fc7",
+          "canonical_text_sha256": "d132c152489da6fb06b60f401f93106f9aa6fa37d0dd15b70dbb4698d3369fc7",
+          "asset_sha256": "5e155a028c08c5fda394f334035c2ba3ab4a0934d9d21e93224156fe3f5201af"
+        },
+        {
+          "id": "m11p17-redo-s02-c1-9fe13a0c055d",
+          "slide": 2,
+          "text": "DAX understands supported DynamoDB item and query operations. ElastiCache holds application-defined values such as computed totals, rendered results or sessions. The application designs its serialization and invalidation. Choose DAX for a suitable DynamoDB read path, and an application cache for materialized results whose contents you control.",
+          "text_sha256": "9fe13a0c055d04a064de44db30446319ff6f50706c9ea1645fbae9f9d97a8187",
+          "canonical_text_sha256": "9fe13a0c055d04a064de44db30446319ff6f50706c9ea1645fbae9f9d97a8187",
+          "asset_sha256": "c205d095a8f77c751d9b9c182297a4cf34d336cbd62549a4a1ecc982c21d8e81"
+        },
+        {
+          "id": "m11p17-redo-s03-c1-522e1b27d8a9",
+          "slide": 3,
+          "text": "In cache-aside, a hit can return immediately. On a miss, the application reads the authoritative database, stores the result with an expiry, then responds. Many simultaneous misses on one hot key can overwhelm the database. Coalesce identical work, bound retries and use jitter; monitor both hit rate and database load.",
+          "text_sha256": "522e1b27d8a934a58ed030e5864ee5336d855ca5638bdbcdbefb99ecea78b3d6",
+          "canonical_text_sha256": "522e1b27d8a934a58ed030e5864ee5336d855ca5638bdbcdbefb99ecea78b3d6",
+          "asset_sha256": "6e8b91de3b54a178f306b4fcf26d26d4e6491db3f012437314978278e543dca5"
+        },
+        {
+          "id": "m11p17-redo-s04-c1-d5562e005113",
+          "slide": 4,
+          "text": "After committing the source write, invalidate or refresh the cached value. A reader already fetching old data can refill the cache after invalidation and bring stale data back. Use versioned keys or guarded updates when that race matters. Expiry limits some staleness; it does not make a sensitive read immediately correct.",
+          "text_sha256": "d5562e00511348a2d7fce8a30bd35901f67004966eba10ff0276f5d45fd9c4c9",
+          "canonical_text_sha256": "d5562e00511348a2d7fce8a30bd35901f67004966eba10ff0276f5d45fd9c4c9",
+          "asset_sha256": "b6a6ebc8280786a3a375e280cd4290f011d0e58adc0f16f3782003c1865b0a23"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "18",
+      "revision": "2026-11-23-m11p18-m11-p15-p19-teaching-redo-v1",
+      "approved_assets": {
+        "1": "4729ed2b395bdc376692635d1b48732979ae2205204830abc686759631bea707",
+        "2": "da6fc93c9ac663ad80e842f9386edf76c8d08e9e68d6d07fa5d9c9025552b236",
+        "3": "fb4236df309206087222b0200ecfe9d9233518033c83e159a594e2f2049d296c",
+        "4": "230c3d7994306eab379341bdc4f42bbec3c9d8a7868b7eddc8b027589a9ab87d"
+      },
+      "units": [
+        {
+          "id": "m11p18-redo-s01-c1-bc57205ddebd",
+          "slide": 1,
+          "text": "A browser keeps a secure cookie with a session identifier. The load balancer can send the next request to either app instance; both can read authorized session state from the shared store. Instances are replaceable, but session availability now depends on the store. Protect the session and plan reauthentication after expiry or loss.",
+          "text_sha256": "bc57205ddebd9cc361cf6a3c96e5f867ef23c335486ab84cecb1eaef30eaa00d",
+          "canonical_text_sha256": "bc57205ddebd9cc361cf6a3c96e5f867ef23c335486ab84cecb1eaef30eaa00d",
+          "asset_sha256": "4729ed2b395bdc376692635d1b48732979ae2205204830abc686759631bea707"
+        },
+        {
+          "id": "m11p18-redo-s02-c1-5912db094817",
+          "slide": 2,
+          "text": "Pick the engine for needed features, then pick node-based or serverless deployment. Valkey and Redis OSS offer richer structures and supported replication. Traditional node-based Memcached is a simple disposable cache; do not assume it inherits those features. Serverless Memcached does support backups, so verify the deployment as well as the engine.",
+          "text_sha256": "5912db094817b6bca4df8fef34aab42d6c8306db249943f56f2d21b9e7ccc365",
+          "canonical_text_sha256": "5912db094817b6bca4df8fef34aab42d6c8306db249943f56f2d21b9e7ccc365",
+          "asset_sha256": "da6fc93c9ac663ad80e842f9386edf76c8d08e9e68d6d07fa5d9c9025552b236"
+        },
+        {
+          "id": "m11p18-redo-s03-c1-c8c20de6c966",
+          "slide": 3,
+          "text": "Sharding distributes keys for capacity, but one hot key can still bottleneck. Replication improves availability on supported deployments and can lag. Snapshots recover an earlier state; they are not automatic failover. Test failover and restore independently, and retain the authoritative data outside this cache.",
+          "text_sha256": "c8c20de6c966886491afa11b0fa7b5829a13dd5684d9d94324464b12f130f776",
+          "canonical_text_sha256": "c8c20de6c966886491afa11b0fa7b5829a13dd5684d9d94324464b12f130f776",
+          "asset_sha256": "fb4236df309206087222b0200ecfe9d9233518033c83e159a594e2f2049d296c"
+        },
+        {
+          "id": "m11p18-redo-s04-c1-abf2d4d1bff6",
+          "slide": 4,
+          "text": "During a burst, follow each layer and find where errors first appear. Requests per second are not the same as concurrent work. If the write partition is throttled, an excellent edge hit rate on reads does not repair it. Correlate throttle and load metrics, work size, and current service quotas before changing the limiting layer.",
+          "text_sha256": "abf2d4d1bff62c84c216632e145f7fe519232758513a1ffc34a5a52c4ed90c25",
+          "canonical_text_sha256": "abf2d4d1bff62c84c216632e145f7fe519232758513a1ffc34a5a52c4ed90c25",
+          "asset_sha256": "230c3d7994306eab379341bdc4f42bbec3c9d8a7868b7eddc8b027589a9ab87d"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "19",
+      "revision": "2026-11-23-m11p19-m11-p15-p19-teaching-redo-v1",
+      "approved_assets": {
+        "1": "5e9bc93cc275ca382b799630cb6f66ecd29a8d1a25254e68b17d59c142f63b62",
+        "2": "95c08dcb7244c22580e25446a537dcb76c6db50351c3d95e9db844556c246c0c",
+        "3": "afe262a38a198c5526d60f8c1826e05d04c4426769d007d80340974f0d2c4502",
+        "4": "de3eafebc77fa30adf43dbe0f26636da0df41204afd32c1069bbbf740d14c973"
+      },
+      "units": [
+        {
+          "id": "m11p19-redo-s01-c1-54266defbcec",
+          "slide": 1,
+          "text": "OpenSearch indexes documents and logs for search and analysis. A separate ingestion path prepares the records. Search APIs and Dashboards use the resulting index. Choose a managed domain or Serverless collection by operating needs. Plan index lag and repair; the search index is a derived view, not a transactional source of truth.",
+          "text_sha256": "54266defbcec321b5f1ab96fe4f798a5d692137880f1f295016accb8c2df0b3b",
+          "canonical_text_sha256": "54266defbcec321b5f1ab96fe4f798a5d692137880f1f295016accb8c2df0b3b",
+          "asset_sha256": "5e9bc93cc275ca382b799630cb6f66ecd29a8d1a25254e68b17d59c142f63b62"
+        },
+        {
+          "id": "m11p19-redo-s02-c1-e8896834b93f",
+          "slide": 2,
+          "text": "A provisioned OpenSearch domain gives you control over capacity, nodes and upgrades, while Serverless manages more of that infrastructure. Collection type, access rules, quotas and cost still matter. In either model, source records are indexed before search can use them. Define mappings and a recovery path for delayed or failed ingestion.",
+          "text_sha256": "e8896834b93f572b0e2f77ed136a532e1012b8ec1d9983382c6b3db86e08288c",
+          "canonical_text_sha256": "e8896834b93f572b0e2f77ed136a532e1012b8ec1d9983382c6b3db86e08288c",
+          "asset_sha256": "95c08dcb7244c22580e25446a537dcb76c6db50351c3d95e9db844556c246c0c"
+        },
+        {
+          "id": "m11p19-redo-s03-c1-f79951ea678b",
+          "slide": 3,
+          "text": "The collector or managed pipeline collects, transforms and buffers data. The index stores documents using the chosen mappings. Dashboards queries that index; it does not collect source logs. Verify document shape and monitor rejected writes, and plan source retention and access separately.",
+          "text_sha256": "f79951ea678b76ef49bf9a7ad1ac3674ee849300a42d4ccf39c9b9a1d60f9b74",
+          "canonical_text_sha256": "f79951ea678b76ef49bf9a7ad1ac3674ee849300a42d4ccf39c9b9a1d60f9b74",
+          "asset_sha256": "afe262a38a198c5526d60f8c1826e05d04c4426769d007d80340974f0d2c4502"
+        },
+        {
+          "id": "m11p19-redo-s04-c1-17afe834239f",
+          "slide": 4,
+          "text": "Keep item writes and authoritative reads on DynamoDB. A stream and Lambda maintain the OpenSearch documents asynchronously for search. Handle deletes, duplicate events and retries; monitor indexing lag and failures. If the index drifts, rebuild it from trusted source data. An updated item can be correct before it appears in search.",
+          "text_sha256": "17afe834239f5bccb8f2172e44141c3c7b7c605cd9ef286ea4a44d45409eab83",
+          "canonical_text_sha256": "17afe834239f5bccb8f2172e44141c3c7b7c605cd9ef286ea4a44d45409eab83",
+          "asset_sha256": "de3eafebc77fa30adf43dbe0f26636da0df41204afd32c1069bbbf740d14c973"
+        }
+      ]
+    }
+  ]
+}
