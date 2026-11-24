@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "26",
+      "part": "06",
+      "revision": "2026-11-24-m26p06-andrew-expressive",
+      "approved_assets": {
+        "1": "e6210b2f031e2c8423f07b40434734eb105803003da2fa1a4e8fc0b8265adc71",
+        "2": "2078df3330c421b4365362b259344a8caac09fd8067dda4c6f4f8e9bd6267cdd",
+        "3": "5e81af63f83ff1eaa4e450ca6a59932beb3f0bc38a440414556928f06810b750"
+      },
+      "units": [
+        {
+          "id": "m26p06-andrew-exp-s01-c1-70257e53d560",
+          "slide": 1,
+          "text": "A caller waits while the function does work and calls its dependencies. Compare when the caller stopped waiting with how long Lambda ran. A slow dependency can consume the time budget even when the function code itself starts promptly.",
+          "text_sha256": "70257e53d5603cd3325770ab47584c44969b01dc815e07ab65fd3f6296d7905e",
+          "canonical_text_sha256": "70257e53d5603cd3325770ab47584c44969b01dc815e07ab65fd3f6296d7905e",
+          "asset_sha256": "e6210b2f031e2c8423f07b40434734eb105803003da2fa1a4e8fc0b8265adc71"
+        },
+        {
+          "id": "m26p06-andrew-exp-s01-c2-df3e0bbb0ec5",
+          "slide": 1,
+          "text": "Use function duration, logs, and dependency measurements to find the slow stage. Fix that boundary before automatically raising the timeout. Then test under representative load and confirm both the client result and function metrics improve.",
+          "text_sha256": "df3e0bbb0ec576bb3c15700c76f5193f3b16dd48c9600ab92e03f970687acbd9",
+          "canonical_text_sha256": "df3e0bbb0ec576bb3c15700c76f5193f3b16dd48c9600ab92e03f970687acbd9",
+          "asset_sha256": "e6210b2f031e2c8423f07b40434734eb105803003da2fa1a4e8fc0b8265adc71"
+        },
+        {
+          "id": "m26p06-andrew-exp-s02-c1-74c9895f2bd7",
+          "slide": 2,
+          "text": "A task can fail to start because of image, permissions, or configuration, or it can start and then fail a target health check. Check the E C S service events and task reason first so you know which branch you are investigating.",
+          "text_sha256": "74c9895f2bd7f3ab807a78e73affe060e073a1d7bbb52b7610066ce7e16f6b5c",
+          "canonical_text_sha256": "6f2d1f9908e2ac56ea2c172bf712b7ab6239e426e3844c0c52361d5d3dfb1d57",
+          "asset_sha256": "2078df3330c421b4365362b259344a8caac09fd8067dda4c6f4f8e9bd6267cdd"
+        },
+        {
+          "id": "m26p06-andrew-exp-s02-c2-a2c6e4b68f4e",
+          "slide": 2,
+          "text": "If configured, rollback returns a failed rollout to a prior completed deployment. That restores a baseline; it does not correct the failed revision. Fix the one verified issue before trying again, then check service stability, target health, and a real application request.",
+          "text_sha256": "a2c6e4b68f4e1a708b16c83838437d8278a954a8a3d8e683b10a13dd3d53c173",
+          "canonical_text_sha256": "a2c6e4b68f4e1a708b16c83838437d8278a954a8a3d8e683b10a13dd3d53c173",
+          "asset_sha256": "2078df3330c421b4365362b259344a8caac09fd8067dda4c6f4f8e9bd6267cdd"
+        },
+        {
+          "id": "m26p06-andrew-exp-s03-c1-3517a6fe866b",
+          "slide": 3,
+          "text": "A restart loop is repeated container failure, not a diagnosis. Inspect pod events, previous container logs, and termination reasons. Distinguish an application startup or configuration failure from a probe restarting a container that needs more time.",
+          "text_sha256": "3517a6fe866b97ea3a7be6e5b7a5da4b08497e1f8d4696c617b0038ed9dcb2e7",
+          "canonical_text_sha256": "3517a6fe866b97ea3a7be6e5b7a5da4b08497e1f8d4696c617b0038ed9dcb2e7",
+          "asset_sha256": "5e81af63f83ff1eaa4e450ca6a59932beb3f0bc38a440414556928f06810b750"
+        },
+        {
+          "id": "m26p06-andrew-exp-s03-c2-f0314d6e0bbb",
+          "slide": 3,
+          "text": "Correct only the verified configuration or probe mismatch using the approved deployment process. Check that restarts stop and the pod becomes ready, then exercise the service. A pod can be running without being ready to accept traffic.",
+          "text_sha256": "f0314d6e0bbb996c431123bbe26ba942763524694ed5af18196bccdcd6b04d57",
+          "canonical_text_sha256": "f0314d6e0bbb996c431123bbe26ba942763524694ed5af18196bccdcd6b04d57",
+          "asset_sha256": "5e81af63f83ff1eaa4e450ca6a59932beb3f0bc38a440414556928f06810b750"
+        }
+      ]
+    },
+    {
+      "module": "26",
+      "part": "07",
+      "revision": "2026-11-24-m26p07-andrew-expressive",
+      "approved_assets": {
+        "1": "9d8376a3c108c49b05ef801fa8abd3c55c9d9297526747e057b68c6e37a5d255",
+        "2": "6f030d81464dc8810d504534d1f9e97f6b245e1a2a2ecb90cc20631fe6a03a15"
+      },
+      "units": [
+        {
+          "id": "m26p07-andrew-exp-s01-c1-fe3edd72e016",
+          "slide": 1,
+          "text": "When alarms spike after a release, mark the release time and compare user errors, tail latency, and dependency signals. Several alerts can report the same underlying symptom. Use the customer-facing result to decide whether the release should pause or roll back.",
+          "text_sha256": "fe3edd72e0164f7abfb070a8f17db5842b2de6705cd131569052965bf96b78e2",
+          "canonical_text_sha256": "fe3edd72e0164f7abfb070a8f17db5842b2de6705cd131569052965bf96b78e2",
+          "asset_sha256": "9d8376a3c108c49b05ef801fa8abd3c55c9d9297526747e057b68c6e37a5d255"
+        },
+        {
+          "id": "m26p07-andrew-exp-s01-c2-e49893cb2c66",
+          "slide": 1,
+          "text": "After the approved response, repeat the same checks and watch the recovery window. Reduce duplicate alerts only after the workflow is stable. Silencing an alarm during an incident is not proof the customer impact ended.",
+          "text_sha256": "e49893cb2c66335af2ea93d4bc771f9b022d8e7d8c70ce3d6fbb088005608f8d",
+          "canonical_text_sha256": "e49893cb2c66335af2ea93d4bc771f9b022d8e7d8c70ce3d6fbb088005608f8d",
+          "asset_sha256": "9d8376a3c108c49b05ef801fa8abd3c55c9d9297526747e057b68c6e37a5d255"
+        },
+        {
+          "id": "m26p07-andrew-exp-s02-c1-3a9bd3392253",
+          "slide": 2,
+          "text": "Choose a harmless unique marker emitted by the authorized workload. Follow it from the producer through the collector or integration to the exact log group, stream and Region. This separates missing emission or delivery from querying the wrong destination.",
+          "text_sha256": "3a9bd339225328ef2abc82a718cd69222ac34cb2055cda65a180a54d3c2510a1",
+          "canonical_text_sha256": "3a9bd339225328ef2abc82a718cd69222ac34cb2055cda65a180a54d3c2510a1",
+          "asset_sha256": "6f030d81464dc8810d504534d1f9e97f6b245e1a2a2ecb90cc20631fe6a03a15"
+        },
+        {
+          "id": "m26p07-andrew-exp-s02-c2-ebc976ef4bba",
+          "slide": 2,
+          "text": "If delivery is blocked by an execution role, collector configuration, or network path, correct only the verified cause. Generate a new marker afterward and look for that exact event, rather than using an unrelated older message as evidence.",
+          "text_sha256": "ebc976ef4bba7073686e1d02f982457dbb55729526a34dedff5791397e8f8929",
+          "canonical_text_sha256": "ebc976ef4bba7073686e1d02f982457dbb55729526a34dedff5791397e8f8929",
+          "asset_sha256": "6f030d81464dc8810d504534d1f9e97f6b245e1a2a2ecb90cc20631fe6a03a15"
+        }
+      ]
+    },
+    {
+      "module": "26",
+      "part": "08",
+      "revision": "2026-11-24-m26p08-andrew-expressive",
+      "approved_assets": {
+        "1": "f8117ef15e7cdcc120df33a62759f242535afc6f66335e41b58159fc78958336",
+        "2": "bb48c7e44e8109cb9e4beaf5a500395ad0feda09d7f13bd947b1a884c974b9b4",
+        "3": "a588dcf2dc7a3228f862d0105935c0a82cbeec00af34a14d1a6987920333f3f4",
+        "4": "c9f0765125f9762173ba6e1599f4b6feb1d7b519f484c8ea450fd5fa066824dd"
+      },
+      "units": [
+        {
+          "id": "m26p08-andrew-exp-s01-c1-3e9bc4d6b36b",
+          "slide": 1,
+          "text": "An invocation denial can be attached to the calling role, the exact model or inference profile, or the Region and account requirements. Check the authorized workload identity and request context before changing any permission.",
+          "text_sha256": "3e9bc4d6b36b9a6e8cba9a702621e8ad7469d4ab4491f3a1599105e06f156dd3",
+          "canonical_text_sha256": "3e9bc4d6b36b9a6e8cba9a702621e8ad7469d4ab4491f3a1599105e06f156dd3",
+          "asset_sha256": "f8117ef15e7cdcc120df33a62759f242535afc6f66335e41b58159fc78958336"
+        },
+        {
+          "id": "m26p08-andrew-exp-s01-c2-2dede36205c2",
+          "slide": 1,
+          "text": "Use audit evidence to decide which authorized permission or model prerequisite is missing. For cross-Region profiles, verify applicable destination permissions without granting unnecessary model access. Rerun only the intended request and confirm the legitimate workload result.",
+          "text_sha256": "2dede36205c2d291743cc0a4985532a7084a5573866a3b192f494be1f9ce48d8",
+          "canonical_text_sha256": "2dede36205c2d291743cc0a4985532a7084a5573866a3b192f494be1f9ce48d8",
+          "asset_sha256": "f8117ef15e7cdcc120df33a62759f242535afc6f66335e41b58159fc78958336"
+        },
+        {
+          "id": "m26p08-andrew-exp-s02-c1-a0a1312c72de",
+          "slide": 2,
+          "text": "Follow the document from the source bucket to ingestion, the index, and retrieval. A recent source update does not mean retrieval uses the new version. Check the indexed metadata and the chunks actually returned before blaming the model.",
+          "text_sha256": "a0a1312c72de784ae0c82adfe11e20f17622c8c3a44103c2afacccf0625d2a23",
+          "canonical_text_sha256": "a0a1312c72de784ae0c82adfe11e20f17622c8c3a44103c2afacccf0625d2a23",
+          "asset_sha256": "bb48c7e44e8109cb9e4beaf5a500395ad0feda09d7f13bd947b1a884c974b9b4"
+        },
+        {
+          "id": "m26p08-andrew-exp-s02-c2-b1a5d5481dac",
+          "slide": 2,
+          "text": "If ingestion or filters are wrong, correct that stage, then ask a representative question whose answer changed. Inspect retrieval and the cited evidence; a plausible sounding answer alone does not prove the current document was retrieved.",
+          "text_sha256": "b1a5d5481dac00604eca61d262bfe1a1d2e6cacc7902bc0c28d39d60c8a95586",
+          "canonical_text_sha256": "b1a5d5481dac00604eca61d262bfe1a1d2e6cacc7902bc0c28d39d60c8a95586",
+          "asset_sha256": "bb48c7e44e8109cb9e4beaf5a500395ad0feda09d7f13bd947b1a884c974b9b4"
+        },
+        {
+          "id": "m26p08-andrew-exp-s03-c1-0440192cfd7a",
+          "slide": 3,
+          "text": "Begin with the cost line and nat byte trend, then correlate flow logs with the source and destination. Moving traffic off the wrong path has no effect. Verify whether the observed volume actually goes to a service with an appropriate endpoint.",
+          "text_sha256": "0440192cfd7ab23a5cbeb9190548341b6cb59e15353f883968155b065c5e9533",
+          "canonical_text_sha256": "0c61f1cc8777824058bfe2069c24fe98df6911e45f3f160224e7218fe2d6fde1",
+          "asset_sha256": "a588dcf2dc7a3228f862d0105935c0a82cbeec00af34a14d1a6987920333f3f4"
+        },
+        {
+          "id": "m26p08-andrew-exp-s03-c2-700519468b5a",
+          "slide": 3,
+          "text": "For supported traffic, compare gateway or interface endpoints with the nat path using actual pricing and routing. Some traffic still needs internet egress. Compare post-change bytes and total charges and verify the application before calling it a saving.",
+          "text_sha256": "700519468b5a08e74b392953899c8c693947b2d6bad86214479fc0c68dae1efb",
+          "canonical_text_sha256": "840611a3a7977feaa949102b0905c31ddf5189015515d7d5605fcd0252e9bf12",
+          "asset_sha256": "a588dcf2dc7a3228f862d0105935c0a82cbeec00af34a14d1a6987920333f3f4"
+        },
+        {
+          "id": "m26p08-andrew-exp-s04-c1-4ac138b9f430",
+          "slide": 4,
+          "text": "The recovery route can be active while users still fail at D N S cache, load-balancer targets, capacity, or stale application data. Follow the exact client journey and identify the first failing link. A routing-control change does not recover those dependencies.",
+          "text_sha256": "4ac138b9f4303853f70908c19cd85a09af6f124efcc42381f03822019aa08792",
+          "canonical_text_sha256": "62cd60b71c75e6dad656a9bbf47b5c854892b17e1cce65b8d9d19a6552a30519",
+          "asset_sha256": "c9f0765125f9762173ba6e1599f4b6feb1d7b519f484c8ea450fd5fa066824dd"
+        },
+        {
+          "id": "m26p08-andrew-exp-s04-c2-4dabd916bcda",
+          "slide": 4,
+          "text": "Repair the verified boundary and shift traffic only after the destination is ready. Exercise a real user journey and record recovered data and elapsed downtime. Do not count the control update as the moment service returned.",
+          "text_sha256": "4dabd916bcdac7ae9ea96201e57bbf29f738fb2a15f671093267fab44bdee61b",
+          "canonical_text_sha256": "4dabd916bcdac7ae9ea96201e57bbf29f738fb2a15f671093267fab44bdee61b",
+          "asset_sha256": "c9f0765125f9762173ba6e1599f4b6feb1d7b519f484c8ea450fd5fa066824dd"
+        }
+      ]
+    },
+    {
+      "module": "26",
+      "part": "09",
+      "revision": "2026-11-24-m26p09-andrew-expressive",
+      "approved_assets": {
+        "1": "1917a79a9bdeeb9624aef8f53e9e8c6b53dc4a3dc120f1eb3a8dbe8112b3ae45",
+        "2": "bdba21099d42e0cc75e86ba2862f4deda55e51b29c2eb68f7bf865a1007e48e9",
+        "3": "25e46016297b2ce3c2398925c5104f6a3bcb5a2d08ecdc6b9e8720c16f14fdce",
+        "4": "464da6621fdf715a04130032756c443550bc4126d1c0b0acc50d4d598163e9c8"
+      },
+      "units": [
+        {
+          "id": "m26p09-andrew-exp-s01-c1-017e114eff58",
+          "slide": 1,
+          "text": "An alert is a trigger, not authority to change everything. The workflow limits scope, checks inputs, and pauses for approval where required. Make the action safe to retry so a repeated event does not repeat an unwanted effect.",
+          "text_sha256": "017e114eff58709c761bd5e9d10cd7fbd4ff1c9929061f99eadeb0b6d325156e",
+          "canonical_text_sha256": "017e114eff58709c761bd5e9d10cd7fbd4ff1c9929061f99eadeb0b6d325156e",
+          "asset_sha256": "1917a79a9bdeeb9624aef8f53e9e8c6b53dc4a3dc120f1eb3a8dbe8112b3ae45"
+        },
+        {
+          "id": "m26p09-andrew-exp-s01-c2-17ba955351d1",
+          "slide": 1,
+          "text": "Set retry limits and circuit breakers so a failing response cannot amplify an incident. Verify the result with the workload signal. If it fails, choose the authored rollback or handoff rather than looping without new evidence.",
+          "text_sha256": "17ba955351d15d8ee21f805f475a1af52cf8ff623b596ef3681810bf5d23e6c1",
+          "canonical_text_sha256": "17ba955351d15d8ee21f805f475a1af52cf8ff623b596ef3681810bf5d23e6c1",
+          "asset_sha256": "1917a79a9bdeeb9624aef8f53e9e8c6b53dc4a3dc120f1eb3a8dbe8112b3ae45"
+        },
+        {
+          "id": "m26p09-andrew-exp-s02-c1-54ad837594f4",
+          "slide": 2,
+          "text": "A runbook starts with the expected path and the first reliable evidence of failure. State a hypothesis that a test could disprove, then identify which single reversible change would address that boundary.",
+          "text_sha256": "54ad837594f4396be6384e8744adfd17efa1c9e0261d71dc4107283051d1854e",
+          "canonical_text_sha256": "54ad837594f4396be6384e8744adfd17efa1c9e0261d71dc4107283051d1854e",
+          "asset_sha256": "bdba21099d42e0cc75e86ba2862f4deda55e51b29c2eb68f7bf865a1007e48e9"
+        },
+        {
+          "id": "m26p09-andrew-exp-s02-c2-d64232c9633d",
+          "slide": 2,
+          "text": "Compare the same user-facing metric and a functional check before and after the change. Record the exact change and the owner. Roll back or escalate if evidence does not improve instead of declaring success because an automation finished.",
+          "text_sha256": "d64232c9633d0858200cf0b0467c8ce14f85be90f01450285365c8b97d7367af",
+          "canonical_text_sha256": "d64232c9633d0858200cf0b0467c8ce14f85be90f01450285365c8b97d7367af",
+          "asset_sha256": "bdba21099d42e0cc75e86ba2862f4deda55e51b29c2eb68f7bf865a1007e48e9"
+        },
+        {
+          "id": "m26p09-andrew-exp-s03-c1-0344cda8273a",
+          "slide": 3,
+          "text": "Follow the request across the edge, gateway, application and data tiers. A connection timeout, an H T T P error, and an access denial each suggest looking for different evidence. The symptom narrows the search but does not confirm a cause.",
+          "text_sha256": "0344cda8273accfd3711c5d732c8d54ad8a5f77839e015eeddb1551470312ce3",
+          "canonical_text_sha256": "8b8993f0a4132c1c6b64c67301ea82871f382a22ebee5547f26320e93f2df099",
+          "asset_sha256": "25e46016297b2ce3c2398925c5104f6a3bcb5a2d08ecdc6b9e8720c16f14fdce"
+        },
+        {
+          "id": "m26p09-andrew-exp-s03-c2-7cb76a9e4558",
+          "slide": 3,
+          "text": "For a suspected permission issue, inspect the actual identity and action. For throttling, inspect applicable service metrics. Correct only the boundary supported by evidence and repeat the same request under comparable conditions.",
+          "text_sha256": "7cb76a9e4558d101cd45bbad20425a4fb87392df813fc7e80a1a2bd87ed61313",
+          "canonical_text_sha256": "7cb76a9e4558d101cd45bbad20425a4fb87392df813fc7e80a1a2bd87ed61313",
+          "asset_sha256": "25e46016297b2ce3c2398925c5104f6a3bcb5a2d08ecdc6b9e8720c16f14fdce"
+        },
+        {
+          "id": "m26p09-andrew-exp-s04-c1-8ea75a12817e",
+          "slide": 4,
+          "text": "For each troubleshooting lab, document the expected path, observed failure, scoped change and retest. In this practice case the application needs legitimate database connectivity. Verify the intended source only, then prove the application can complete a real database-backed request.",
+          "text_sha256": "8ea75a12817e757ec6835b47d4b0d6cff4a79fddc1500cc3bb81f5146fe3fe5d",
+          "canonical_text_sha256": "8ea75a12817e757ec6835b47d4b0d6cff4a79fddc1500cc3bb81f5146fe3fe5d",
+          "asset_sha256": "464da6621fdf715a04130032756c443550bc4126d1c0b0acc50d4d598163e9c8"
+        },
+        {
+          "id": "m26p09-andrew-exp-s04-c2-e9ed50d0d718",
+          "slide": 4,
+          "text": "If the result fails or has side effects, revert the approved change according to the runbook and record the evidence. Capture one prevention measure and its owner. A healthy status alone does not complete the lab.",
+          "text_sha256": "e9ed50d0d718b9952f19fed645d0c4569a43f29cf9729061a5669bd027baf8b0",
+          "canonical_text_sha256": "e9ed50d0d718b9952f19fed645d0c4569a43f29cf9729061a5669bd027baf8b0",
+          "asset_sha256": "464da6621fdf715a04130032756c443550bc4126d1c0b0acc50d4d598163e9c8"
+        }
+      ]
+    }
+  ]
+}
