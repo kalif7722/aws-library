@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "10",
+      "revision": "2026-11-23-m11p10-m11-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571",
+        "2": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469",
+        "3": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+      },
+      "units": [
+        {
+          "id": "m11p10-redo-s01-c1-93ef24895d57",
+          "slide": 1,
+          "text": "Use Aurora Global Database when readers in other Regions need local access but the architecture can use one primary writer. The primary stores changes that replicate asynchronously. Monitor lag. A planned switchover waits for synchronization; operator-initiated managed failover after an outage can lose recent writes. Test application reconnection separately.",
+          "text_sha256": "93ef24895d5768746b27942719a790d56d096afbe13a4df3564a268e519cd53b",
+          "canonical_text_sha256": "93ef24895d5768746b27942719a790d56d096afbe13a4df3564a268e519cd53b",
+          "asset_sha256": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571"
+        },
+        {
+          "id": "m11p10-redo-s02-c1-ea82ea60a863",
+          "slide": 2,
+          "text": "Write forwarding lets an application in a secondary Region send supported statements to the primary writer. The primary commits them, then replication carries changes back. It is not independent multi-writer. Check engine and statement support; cross-Region travel adds latency, and the configured consistency determines when secondary reads see the change.",
+          "text_sha256": "ea82ea60a863e5f69b87c73214b1b986d5db15bd4d3a1e30f3d2f0647b519a09",
+          "canonical_text_sha256": "ea82ea60a863e5f69b87c73214b1b986d5db15bd4d3a1e30f3d2f0647b519a09",
+          "asset_sha256": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469"
+        },
+        {
+          "id": "m11p10-redo-s03-c1-66b8551fee6d",
+          "slide": 3,
+          "text": "For a compatible RDS source, restore a supported snapshot into Aurora or use a supported Aurora read replica to catch up before promotion. Check engine version, Region, and account eligibility. Validate data, application behavior, and permissions, then switch the endpoint deliberately. Retain the source for a rollback plan.",
+          "text_sha256": "66b8551fee6d584586b6787a0d6df22393c629c5d664c44be6fc8b2dcacc3e31",
+          "canonical_text_sha256": "66b8551fee6d584586b6787a0d6df22393c629c5d664c44be6fc8b2dcacc3e31",
+          "asset_sha256": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "11",
+      "revision": "2026-11-23-m11p11-m11-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0",
+        "2": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9",
+        "3": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+      },
+      "units": [
+        {
+          "id": "m11p11-redo-s01-c1-4715b4d902e7",
+          "slide": 1,
+          "text": "Start with the requests the application needs. This DynamoDB table groups each user's games by partition key and orders them by sort key. Each item has required key attributes and flexible non-key attributes. An item still has a four-hundred-kilobyte size limit including attribute names and values.",
+          "text_sha256": "4715b4d902e7f04db692bb3a29cf27535505c1998b05c32a8c934c204c9bed5d",
+          "canonical_text_sha256": "4715b4d902e7f04db692bb3a29cf27535505c1998b05c32a8c934c204c9bed5d",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-redo-s02-c1-4457be89bbd1",
+          "slide": 2,
+          "text": "User one-two-three has two activities with different record IDs. Both key attributes are mandatory in this composite-key table; the sort key is optional when designing a table, not optional per item once defined. Login and purchase can store different details, but neither can omit its keys.",
+          "text_sha256": "4457be89bbd1782affb55c6760de4cfd74994a789a24ab57a45d4c71098c1b17",
+          "canonical_text_sha256": "4457be89bbd1782affb55c6760de4cfd74994a789a24ab57a45d4c71098c1b17",
+          "asset_sha256": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9"
+        },
+        {
+          "id": "m11p11-redo-s03-c1-9c715fdeb5fb",
+          "slide": 3,
+          "text": "The paired keys uniquely identify a game and let Query fetch one user's games in sort-key order or narrow them by prefix. In a partition-key-only table, that key alone must be unique. A very busy customer can create a hot key even when the table has spare total capacity.",
+          "text_sha256": "9c715fdeb5fbe823133bee76ad0a3bcf57c5b80a9cc7b04cad334d86983a145a",
+          "canonical_text_sha256": "9c715fdeb5fbe823133bee76ad0a3bcf57c5b80a9cc7b04cad334d86983a145a",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "12",
+      "revision": "2026-11-23-m11p12-m11-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f",
+        "2": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226",
+        "3": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff",
+        "4": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+      },
+      "units": [
+        {
+          "id": "m11p12-redo-s01-c1-d76a160f7e4c",
+          "slide": 1,
+          "text": "Query the January orders for customer C forty-two by matching the partition key and using a sort-key range. Scan instead reads across the table or index before applying a filter. Filtering changes what is returned, not the capacity consumed by the read. Follow Last Evaluated Key to continue paging.",
+          "text_sha256": "d76a160f7e4cea0a93cc291ef4dfbbc352fa79febdf2d43290ec50efd34e0fb6",
+          "canonical_text_sha256": "d76a160f7e4cea0a93cc291ef4dfbbc352fa79febdf2d43290ec50efd34e0fb6",
+          "asset_sha256": "e4547803336ec6b646d944031f1291df69600cf70c8cb4a18b6d7c1fafd6081f"
+        },
+        {
+          "id": "m11p12-redo-s02-c1-0e46c0054eb1",
+          "slide": 2,
+          "text": "A local secondary index keeps customer ID and changes the sort key to total. Define it when creating the table; it shares table capacity and supports strong reads; an item collection with an LSI is limited to ten gigabytes. A global secondary index can use status as a different partition key, be added later, and serves eventual reads only. Project what you need and budget for index storage and writes.",
+          "text_sha256": "0e46c0054eb1c02f2f587cc923d6d188d013640093e41ab313ce365a45234350",
+          "canonical_text_sha256": "0e46c0054eb1c02f2f587cc923d6d188d013640093e41ab313ce365a45234350",
+          "asset_sha256": "b4d43a76f89477b5078c9923932354062ea79b2f430e8e79f2256dbe66ff7226"
+        },
+        {
+          "id": "m11p12-redo-s03-c1-6d4617d8d1a9",
+          "slide": 3,
+          "text": "Provisioned mode bills for configured capacity; target tracking adjusts it but is not instantaneous. On-demand bills per request and suits uncertain traffic. A sudden jump beyond recent peaks or heavy traffic to one key can still throttle. Use observed demand, throttle metrics and cost, not the mode name alone.",
+          "text_sha256": "6d4617d8d1a990f46e3d28120b442e8c4eb24860a2da6893f1939ef11aa060c2",
+          "canonical_text_sha256": "6d4617d8d1a990f46e3d28120b442e8c4eb24860a2da6893f1939ef11aa060c2",
+          "asset_sha256": "9ce75ce4116a384d95e38049451cf7a018907fb18b78f7ce122b2e20d3583eff"
+        },
+        {
+          "id": "m11p12-redo-s04-c1-a647f3037996",
+          "slide": 4,
+          "text": "After a successful order update, a supported strongly consistent base-table read can show the latest state. A local secondary index can offer strong reads too; a global secondary index does not. A stream is asynchronous change capture, not a strongly consistent current-state read. Choose the access path as well as the consistency setting.",
+          "text_sha256": "a647f3037996bd1db5c4a43223e96937656541f6c9c38b12675a815032a852ee",
+          "canonical_text_sha256": "a647f3037996bd1db5c4a43223e96937656541f6c9c38b12675a815032a852ee",
+          "asset_sha256": "a3358bed401b4e71bc78c15ac3c81332c01e744556e4503a593b99f65c551114"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "13",
+      "revision": "2026-11-23-m11p13-m11-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90",
+        "2": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+      },
+      "units": [
+        {
+          "id": "m11p13-redo-s01-c1-41c8d91f3d87",
+          "slide": 1,
+          "text": "To decrement one inventory item only when stock remains, use a condition on that update. If stock changes and an order record must be created together, put both actions in a transaction. Both apply or neither does; test that a failed stock condition does not leave an order behind.",
+          "text_sha256": "41c8d91f3d873761ece5b0570ea82083da53f2bb9054101675fe6b7436d599cb",
+          "canonical_text_sha256": "41c8d91f3d873761ece5b0570ea82083da53f2bb9054101675fe6b7436d599cb",
+          "asset_sha256": "7f913fb59b26478e563e639c94714aefd42c382d800704ead9ad4136842e5b90"
+        },
+        {
+          "id": "m11p13-redo-s02-c1-4ba3a499c748",
+          "slide": 2,
+          "text": "The expiry attribute uses Unix epoch seconds. After that time, the item is eligible for background deletion, not guaranteed gone. Exclude expired items in application reads while waiting; filters still read the candidates. Time to Live cleans up data, but it is not a precise deadline scheduler.",
+          "text_sha256": "4ba3a499c748edf60df16157d18ec247ebd880e8abd0bf0871dd0e0ddc50db32",
+          "canonical_text_sha256": "4ba3a499c748edf60df16157d18ec247ebd880e8abd0bf0871dd0e0ddc50db32",
+          "asset_sha256": "00d8b78ce0a6c22e69e584dbc9f9ecf455e1ae5f81a24972e6f440219456aa63"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "14",
+      "revision": "2026-11-23-m11p14-m11-p10-p14-teaching-redo-v1",
+      "approved_assets": {
+        "1": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf",
+        "2": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409",
+        "3": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+      },
+      "units": [
+        {
+          "id": "m11p14-redo-s01-c1-bbebc6e2c08f",
+          "slide": 1,
+          "text": "Follow one order from insert to paid to removal. DynamoDB Streams preserves that item's change order, not a total order across all items, and keeps records for twenty-four hours. Pick the image view for the consumer; using old and new images shows the status change. Handle retries idempotently.",
+          "text_sha256": "bbebc6e2c08f157516e8f10ffee3557faac9a736260d0f559e0581794c0c36e8",
+          "canonical_text_sha256": "bbebc6e2c08f157516e8f10ffee3557faac9a736260d0f559e0581794c0c36e8",
+          "asset_sha256": "7d710a397d7d6d70315c1049d0b9c6a4738889d90869f4bf946863a030049adf"
+        },
+        {
+          "id": "m11p14-redo-s02-c1-6e29a88d5989",
+          "slide": 2,
+          "text": "Producers send records into Kinesis Data Streams. Partition keys influence shard placement. Independent consumers read and track their own positions, so they can retry or replay within configured retention. Order is per shard, not global. Make downstream writes safe to repeat.",
+          "text_sha256": "6e29a88d59899ce46a2fbf0a553136f599e154b14124aa4dc77f7fe6a41e9d27",
+          "canonical_text_sha256": "6e29a88d59899ce46a2fbf0a553136f599e154b14124aa4dc77f7fe6a41e9d27",
+          "asset_sha256": "1fa38ac51bc73b5e5b341a8096ff0962cc79cbf7431fe2a95ca7898306c84409"
+        },
+        {
+          "id": "m11p14-redo-s03-c1-670565fc9487",
+          "slide": 3,
+          "text": "Choose native DynamoDB Streams for the illustrated short-retention change processing, or a Kinesis destination for configurable longer replay and consumers such as Lambda or Flink. Kinesis capture can duplicate or reorder source changes. Checkpoint and deduplicate; where order matters, use explicit sequencing evidence rather than arrival order. Firehose can deliver to configured destinations.",
+          "text_sha256": "670565fc9487b4a8db39560406863b34d0483787fde82559d49622e2fba92c31",
+          "canonical_text_sha256": "670565fc9487b4a8db39560406863b34d0483787fde82559d49622e2fba92c31",
+          "asset_sha256": "1d4cdad85fb4c86a1f366d121482468267cdace16c2ab66245e857a789a37aa5"
+        }
+      ]
+    }
+  ]
+}
