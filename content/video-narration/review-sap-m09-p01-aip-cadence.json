@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-12%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "m09p01-sap-m09-p01-aip-cadence",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "3": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-cadence-01",
+          "slide": 1,
+          "text": "Imagine you are building an online shop. The site needs to load product photos, keep backups, and store order records. This slide starts with the storage decision that makes those examples work. Amazon S three is object storage. For our shop, the bucket gives us a container in one A W S Region. Put a photo in that bucket, and the application retrieves it by its key. The example key, images slash logo dot P N G, looks like a file path. But S three looks up the complete name; the slash can organize names without turning the bucket into a conventional file system. The object also has data bytes, metadata such as the content type, and a storage class. That class matters because an image served all day and an archive opened once a year have different retrieval and cost needs. Notice what comes first, though: all of those are object requests. If your app needs mounted files and locking, or a disk for in-place writes, choose the appropriate file or block interface before looking at cheaper S three classes.",
+          "text_sha256": "1df6c3ffe58a4fc643e50bf7d24ab5b77107d942cbffbe5019de0ee859c48796",
+          "canonical_text_sha256": "c45520b9a68aa93dad201684bcbbc7a76deb2a57ab8e5e4976ebafb9ef022905",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-cadence-02",
+          "slide": 2,
+          "text": "Now the shop saves order one thousand and one. It sends a put for the key shown on the slide, and the write succeeds. What can another worker see at that point? A subsequent get reads the new order, and list reflects the completed change. That's strong consistency. It also applies after successful overwrites and deletes. Now change the scenario: two workers both read that same order, each edits a field, and each writes a full replacement. Both reads can be current when they happen. But the last replacement can overwrite the first worker's change. Strong consistency didn't coordinate the writers. If each update should apply only to the version the worker read, send a conditional write with the expected E tag and handle the conflict if it no longer matches. Versioning can preserve earlier copies for recovery; it doesn't merge two edits. And if the order and inventory are separate objects, a successful write to one doesn't make both writes a single transaction.",
+          "text_sha256": "fc2cbcd13f65aa9a562304de2ba43a9fad03be4658ff27c2b924792cb99e9295",
+          "canonical_text_sha256": "3fb1c98ae59874b21383a8d910058a8cc15dbeba6ef3a8e3202897862be8524d",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-cadence-03",
+          "slide": 3,
+          "text": "Now give a reporting application access to a saved order. The application runs as a role, so start with the actual caller, not the person who deployed it. Its identity policy can allow the action the app needs on the intended object. A bucket or access point policy sets resource-side rules. Across accounts, check both sides instead of assuming that one allow is enough. The evaluation box calls out an important exam rule: an applicable explicit deny wins. Now look at the object ownership choice. Bucket owner enforced turns off access control lists and makes the bucket owner own uploaded objects. That removes the legacy problem of a different account owning the upload. It doesn't give the reporting role permission to read it. So if the app gets Access Denied, identify the principal, action, exact object, and effective policies before changing anything. Then fix the missing permission or conflicting rule; don't open the bucket to make the error disappear.",
+          "text_sha256": "d8a8e01084f298c287f9151f1aa44b249ab2a2f8b3cd0994fc91bfae6e37fbf7",
+          "canonical_text_sha256": "d8a8e01084f298c287f9151f1aa44b249ab2a2f8b3cd0994fc91bfae6e37fbf7",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    }
+  ]
+}
