@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "05",
+      "revision": "2026-11-23-m11p05-m11-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c",
+        "2": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46",
+        "3": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+      },
+      "units": [
+        {
+          "id": "m11p05-redo-s01-c1-3d68e4e183b7",
+          "slide": 1,
+          "text": "You’ll learn how RDS Proxy pools client connections and when it can help your application. Use RDS Proxy when connection bursts, not slow SQL, are overloading the database. Follow clients in the database VPC through the default private endpoint. A client in another VPC can use an additional private endpoint in that VPC within the same Region, as shown. The database does not move.",
+          "text_sha256": "3d68e4e183b76c354fb44f9761a21a083b8649774eadb19eb4e14a2ccfe4856c",
+          "canonical_text_sha256": "3d68e4e183b76c354fb44f9761a21a083b8649774eadb19eb4e14a2ccfe4856c",
+          "asset_sha256": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c"
+        },
+        {
+          "id": "m11p05-redo-s01-c2-2ecbd688669a",
+          "slide": 1,
+          "text": "Many client connections can reuse fewer database connections. Configure credentials separately for each leg: client to proxy and proxy to database. Session pinning can reduce reuse, and database limits still apply. Measure pinned sessions and connection borrowing before assuming that pooling fixed the bottleneck.",
+          "text_sha256": "2ecbd688669a1b363c6ff7891f03226c189cc0752eb1cf540b9ccdcb1562bb07",
+          "canonical_text_sha256": "2ecbd688669a1b363c6ff7891f03226c189cc0752eb1cf540b9ccdcb1562bb07",
+          "asset_sha256": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c"
+        },
+        {
+          "id": "m11p05-redo-s02-c1-632329ea677d",
+          "slide": 2,
+          "text": "Route writes through the default proxy endpoint to the Aurora writer, and send suitable reads to the separate read-only proxy endpoint. Both paths reach the same target cluster. Read-only endpoints require actual eligible readers. Changing an endpoint name does not create a replica.",
+          "text_sha256": "632329ea677d74dec18fc3a1672699bd1a2dfb90f4d78a7f90f2be96859d1ac7",
+          "canonical_text_sha256": "632329ea677d74dec18fc3a1672699bd1a2dfb90f4d78a7f90f2be96859d1ac7",
+          "asset_sha256": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46"
+        },
+        {
+          "id": "m11p05-redo-s02-c2-88eb5f54ee7e",
+          "slide": 2,
+          "text": "With a writer-only cluster, this proxy endpoint fails immediately rather than falling back to the writer. If readers exist but are temporarily unavailable, it waits up to the borrow timeout. Verify target support, reader health and lag, and how your driver reconnects when a pinned session fails.",
+          "text_sha256": "88eb5f54ee7e7efaef5e932da05a03a2751cd65483721edbdb118366d8db2986",
+          "canonical_text_sha256": "88eb5f54ee7e7efaef5e932da05a03a2751cd65483721edbdb118366d8db2986",
+          "asset_sha256": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46"
+        },
+        {
+          "id": "m11p05-redo-s03-c1-e2d50a489854",
+          "slide": 3,
+          "text": "A supported cross-Region read replica copies asynchronously. At cutover, inspect lag to estimate what might not have arrived. Fence the old writer where possible, verify writes have stopped, promote the replica, and validate the new writer. Change the application endpoint and prove a real reconnect and transaction.",
+          "text_sha256": "e2d50a4898545ab6ed74093a50b5c78997254fee8788017fb79f985429c8d71f",
+          "canonical_text_sha256": "e2d50a4898545ab6ed74093a50b5c78997254fee8788017fb79f985429c8d71f",
+          "asset_sha256": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+        },
+        {
+          "id": "m11p05-redo-s03-c2-53b6b089c549",
+          "slide": 3,
+          "text": "Compare that runbook with the classic same-Region Multi-AZ instance. RDS manages standby promotion and the application reconnects to the same endpoint. Cross-Region replica promotion is different. Measure resumption of service for the recovery time, and compare recovered transactions with the acceptable data-loss window.",
+          "text_sha256": "53b6b089c5494292637a0357318479f3c7d20dca2bdb65c7f9b179202cbe8aec",
+          "canonical_text_sha256": "53b6b089c5494292637a0357318479f3c7d20dca2bdb65c7f9b179202cbe8aec",
+          "asset_sha256": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "06",
+      "revision": "2026-11-23-m11p06-m11-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "6be88e4b24f3dec6ef9ceeca0cc96c1ca5bfa0a62dd6f079074510fe471d6317",
+        "2": "c7a968bad04a8e652efbe0fd4a0a99184d4c3363b84b12754df58e4913fecd5f",
+        "3": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+      },
+      "units": [
+        {
+          "id": "m11p06-redo-s01-c1-3de4717a5c9c",
+          "slide": 1,
+          "text": "You’ll learn how Aurora separates database compute from shared storage and what that means for resilience. Aurora is managed relational storage with MySQL- or PostgreSQL-compatible engines. The writer and optional readers are database compute. They use the same distributed cluster volume, which grows independently. Check version and Regional compatibility instead of assuming every upstream feature behaves identically.",
+          "text_sha256": "3de4717a5c9cd8d654928a59c95d65549a27ebcf8a1ce8b0cd0289ed61093235",
+          "canonical_text_sha256": "3de4717a5c9cd8d654928a59c95d65549a27ebcf8a1ce8b0cd0289ed61093235",
+          "asset_sha256": "6be88e4b24f3dec6ef9ceeca0cc96c1ca5bfa0a62dd6f079074510fe471d6317"
+        },
+        {
+          "id": "m11p06-redo-s02-c1-de929014aa81",
+          "slide": 2,
+          "text": "Follow the writer and optional readers into one volume spread across three Availability Zones. Add readers to distribute suitable read compute, not to create another storage copy. The volume grows separately; its maximum depends on the supported engine and version.",
+          "text_sha256": "de929014aa81e4b156a8f447a0a6b053ff29740927150d70034e93fc6e364310",
+          "canonical_text_sha256": "de929014aa81e4b156a8f447a0a6b053ff29740927150d70034e93fc6e364310",
+          "asset_sha256": "c7a968bad04a8e652efbe0fd4a0a99184d4c3363b84b12754df58e4913fecd5f"
+        },
+        {
+          "id": "m11p06-redo-s03-c1-9f6f8966ca3f",
+          "slide": 3,
+          "text": "The storage layer replicates data across three zones whether or not you add readers. The six storage copies are not six SQL endpoints. Reader instances are separate compute that serve queries and can be promotion targets; they share the volume. Failover timing still depends on actual workload and configuration, so test it.",
+          "text_sha256": "9f6f8966ca3f17fd91d07932a4e9f2957084606c5d7ec3921f4cfb9c0a9dce83",
+          "canonical_text_sha256": "9f6f8966ca3f17fd91d07932a4e9f2957084606c5d7ec3921f4cfb9c0a9dce83",
+          "asset_sha256": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "07",
+      "revision": "2026-11-23-m11p07-m11-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc",
+        "2": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe",
+        "3": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+      },
+      "units": [
+        {
+          "id": "m11p07-redo-s01-c1-48a80004745f",
+          "slide": 1,
+          "text": "You’ll learn to select an Aurora endpoint and check where the application connection lands. Choose endpoints by the connection's purpose. Use the cluster endpoint for the current writer, the built-in reader endpoint for eligible reads, a custom endpoint for a selected subset, or an instance endpoint to diagnose a named instance. Connection routing does not rebalance individual SQL statements.",
+          "text_sha256": "48a80004745f8260d37a8b4a60166a54e0f481d222aa315d81146fcfebfea50c",
+          "canonical_text_sha256": "48a80004745f8260d37a8b4a60166a54e0f481d222aa315d81146fcfebfea50c",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-redo-s01-c2-68d5003de641",
+          "slide": 1,
+          "text": "With no replicas, the built-in reader endpoint can connect to the writer. It is not a read-only security boundary. Use database privileges to constrain access.",
+          "text_sha256": "68d5003de6417ee67255516bacda854e65f36a588163b21158f5b44be10f66cd",
+          "canonical_text_sha256": "68d5003de6417ee67255516bacda854e65f36a588163b21158f5b44be10f66cd",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-redo-s02-c1-c32ef21fdf50",
+          "slide": 2,
+          "text": "The analytics endpoint selects readers B and C. The built-in reader endpoint can still use A, B, and C, so this does not reserve those two readers for analytics. If workloads must use different readers, configure non-overlapping custom memberships and use those endpoints. Monitor lag and load; this is routing, not physical isolation.",
+          "text_sha256": "c32ef21fdf50c6d8a1a110ed243a280ac97e3359d6500483adbad93e7345f174",
+          "canonical_text_sha256": "c32ef21fdf50c6d8a1a110ed243a280ac97e3359d6500483adbad93e7345f174",
+          "asset_sha256": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe"
+        },
+        {
+          "id": "m11p07-redo-s03-c1-c490cf8458fe",
+          "slide": 3,
+          "text": "Aurora Auto Scaling monitors readers and adds or removes replicas within configured bounds. At least one reader is needed to calculate the metric. New connections can spread to new readers, but open connections do not move and more readers do not increase single-writer write capacity.",
+          "text_sha256": "c490cf8458fe65628dc1fbc640deaf538df8c0aa89c64bd8ac2d0a6d802b0980",
+          "canonical_text_sha256": "c490cf8458fe65628dc1fbc640deaf538df8c0aa89c64bd8ac2d0a6d802b0980",
+          "asset_sha256": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "08",
+      "revision": "2026-11-23-m11p08-m11-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28",
+        "2": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+      },
+      "units": [
+        {
+          "id": "m11p08-redo-s01-c1-0b2eecb2e036",
+          "slide": 1,
+          "text": "You’ll learn to choose the right database logs and evidence for an Aurora investigation. Choose a log based on your question. For Aurora MySQL, use the error log for engine failures, the slow-query log for expensive SQL, and supported audit logging for audit events. PostgreSQL instead uses its own log and parameters.",
+          "text_sha256": "0b2eecb2e036ffaeed22d1ccc3d960c7587e6acf02de808353b20ea86d8f2e63",
+          "canonical_text_sha256": "0b2eecb2e036ffaeed22d1ccc3d960c7587e6acf02de808353b20ea86d8f2e63",
+          "asset_sha256": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28"
+        },
+        {
+          "id": "m11p08-redo-s01-c2-433ce9cec52c",
+          "slide": 1,
+          "text": "Export supported logs to CloudWatch Logs and verify records arrive. Set retention and access controls, and consider encryption requirements. Verbose SQL logs can increase cost and include sensitive values. Do not copy a MySQL parameter set into PostgreSQL.",
+          "text_sha256": "433ce9cec52cf171d94a4cbb8dc345d07ce8c14e5614188cc2f57cca20eb3028",
+          "canonical_text_sha256": "433ce9cec52cf171d94a4cbb8dc345d07ce8c14e5614188cc2f57cca20eb3028",
+          "asset_sha256": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28"
+        },
+        {
+          "id": "m11p08-redo-s02-c1-34eb008f6709",
+          "slide": 2,
+          "text": "Start with a latency symptom and database load in CloudWatch Database Insights, then find the waits and SQL that explain it. Correlate with resource and operating-system metrics. Lock waits point toward contention; connection exhaustion points toward the pool. Fix the evidenced cause and remeasure, instead of defaulting to a larger instance.",
+          "text_sha256": "34eb008f6709ed47edca945d351c5cfd3f77962bc48ea272f64a4b5dad7d04e4",
+          "canonical_text_sha256": "34eb008f6709ed47edca945d351c5cfd3f77962bc48ea272f64a4b5dad7d04e4",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "09",
+      "revision": "2026-11-23-m11p09-m11-p05-p09-teaching-redo-v1",
+      "approved_assets": {
+        "1": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d",
+        "2": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+      },
+      "units": [
+        {
+          "id": "m11p09-redo-s01-c1-9ff08fde3fee",
+          "slide": 1,
+          "text": "You’ll learn to choose a capacity range for Aurora Serverless v2 and distinguish it from read scaling. Aurora Serverless version two scales compute inside the configured range of Aurora capacity units; the shared storage remains. An eligible version and configuration can pause at zero after an idle period. Resume can delay a new connection, and storage and other applicable charges can remain.",
+          "text_sha256": "9ff08fde3fee5da6d3fc63810d62937226ffe3551c9fe8a655b3218bd4aed6db",
+          "canonical_text_sha256": "9ff08fde3fee5da6d3fc63810d62937226ffe3551c9fe8a655b3218bd4aed6db",
+          "asset_sha256": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d"
+        },
+        {
+          "id": "m11p09-redo-s02-c1-0a7f9e0c64c1",
+          "slide": 2,
+          "text": "Use the Data API when a supported Aurora cluster needs SQL over H T T P S without a persistent client database socket. The request needs I A M authorization and access to the Secrets Manager credential, with key permissions if applicable. The database user still needs SQL grants.",
+          "text_sha256": "0a7f9e0c64c13a50e0b8736192259e0852cd8b62e48f97b8329f86d9aaac3ca2",
+          "canonical_text_sha256": "ae27c11ab796f3afaf8f1d5f3c05430554a964efc99b57191a7ba2db8e31e500",
+          "asset_sha256": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+        },
+        {
+          "id": "m11p09-redo-s02-c2-e1560bf6ab44",
+          "slide": 2,
+          "text": "The request runs on the writer, even for SELECT. Check engine and Region eligibility, the one-mebibyte response limit, and transaction constraints. This is not a reader endpoint or a way to skip database permissions.",
+          "text_sha256": "e1560bf6ab44473967d4c7d09d15ef9497706868db18b3f3f51c63ae3b268e9b",
+          "canonical_text_sha256": "e1560bf6ab44473967d4c7d09d15ef9497706868db18b3f3f51c63ae3b268e9b",
+          "asset_sha256": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+        }
+      ]
+    }
+  ]
+}

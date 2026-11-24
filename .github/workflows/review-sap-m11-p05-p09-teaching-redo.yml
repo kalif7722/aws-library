@@ -1,0 +1,51 @@
+name: SAP M11 P05–09 teaching redo Andrew narration review
+on:
+  push:
+    branches: [review/sap-m11-p05-p09-teaching-redo]
+    paths: [.github/workflows/review-sap-m11-p05-p09-teaching-redo.yml, scripts/review_sap_m11_p05_p09_teaching_redo.py, content/video-narration/review-sap-m11-p05-p09-teaching-redo.json, content/video-narration/review-sap-m11-p05-p09-teaching-redo.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m11-p05-p09-teaching-redo-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-m11-p05-p09-teaching-redo'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m11p05, m11p06, m11p07, m11p08, m11p09]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m11_p05_p09_teaching_redo.py
+            content/video-narration/review-sap-m11-p05-p09-teaching-redo.json
+            content/video-narration/review-sap-m11-p05-p09-teaching-redo.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_m11_p05_p09_teaching_redo.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install established audio tools
+        run: |
+          if ! command -v ffmpeg >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          python -m pip install --disable-pip-version-check 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_m11_p05_p09_teaching_redo.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m11-p05-p09-teaching-redo-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
