@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "14",
+      "part": "13",
+      "revision": "2026-11-24-m14p13-andrew-expressive",
+      "approved_assets": {
+        "1": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c",
+        "2": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+      },
+      "units": [
+        {
+          "id": "m14p13-andrew-exp-s01-c1-aa13c930cbe5",
+          "slide": 1,
+          "text": "We'll choose who owns the next step after an order arrives. In choreography, the order event goes to EventBridge. Inventory and billing each react independently. That decouples the services, but there isn't one workflow deciding when the whole order is complete.",
+          "text_sha256": "aa13c930cbe5ceedd96631228b31e2ae6469477b33949f45dfe023b5c3ed07f6",
+          "canonical_text_sha256": "aa13c930cbe5ceedd96631228b31e2ae6469477b33949f45dfe023b5c3ed07f6",
+          "asset_sha256": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c"
+        },
+        {
+          "id": "m14p13-andrew-exp-s01-c2-21d71f605bd0",
+          "slide": 1,
+          "text": "If billing must follow a reservation and failure must release it, use a workflow to express those steps. Step Functions can track the decision and route to a compensation action. The application still defines how to undo the reservation.",
+          "text_sha256": "21d71f605bd0a27a1b846cb146f796be947f799fb472b582115c392c777a2f9d",
+          "canonical_text_sha256": "21d71f605bd0a27a1b846cb146f796be947f799fb472b582115c392c777a2f9d",
+          "asset_sha256": "3662db8eae3de2b7a61b358cf16d360c1e335105ba568dbb70ff8dcb82ae529c"
+        },
+        {
+          "id": "m14p13-andrew-exp-s02-c1-7defe0c53d13",
+          "slide": 2,
+          "text": "Choose S Q S when a worker should take work from a buffer. Choose S N S when each subscriber needs a copy. A queue on an S N S subscription combines fanout with independent buffering.",
+          "text_sha256": "7defe0c53d13c479609c404ba23ff79f7147aea6ebdec2d674f3062168cedb32",
+          "canonical_text_sha256": "0b181f9f998673dca7aa997916102d032b4417ad59ba3090004192ec7a015dd3",
+          "asset_sha256": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+        },
+        {
+          "id": "m14p13-andrew-exp-s02-c2-c7c58cd5bd5f",
+          "slide": 2,
+          "text": "Choose EventBridge when the contents of events drive flexible routing. Choose Amazon M Q when an existing application's broker protocol or messaging behavior must carry over. A routing bus does not track workflow state, and a modern queue A P I is not a drop-in broker.",
+          "text_sha256": "c7c58cd5bd5fb0167a01faee8719d31c63839c6baa532de4428a9d3a50b4cb0b",
+          "canonical_text_sha256": "668253b208275a2c0afb0ae02041b69847be9a958b2123f2349197009855dfe9",
+          "asset_sha256": "3887338d65072f3c1af169483e87783cf8f216f52de4341dd5665b8cb0ebbfca"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "14",
+      "revision": "2026-11-24-m14p14-andrew-expressive",
+      "approved_assets": {
+        "1": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f",
+        "2": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+      },
+      "units": [
+        {
+          "id": "m14p14-andrew-exp-s01-c1-d942022202ae",
+          "slide": 1,
+          "text": "Let's recover one repeatedly failing order. The worker receives it and fails again. Once the configured receive threshold is reached, S Q S can move the message to the dead-letter queue. The problem is isolated but the order hasn't succeeded.",
+          "text_sha256": "d942022202ae7bd35bc4cc505936a8b613978af50cd9036109e7a729512efb37",
+          "canonical_text_sha256": "3e215faef3453926844f57253bd10491b4387b59313d30eb8cace325a9e36aa1",
+          "asset_sha256": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f"
+        },
+        {
+          "id": "m14p14-andrew-exp-s01-c2-6d7f2751f307",
+          "slide": 1,
+          "text": "Inspect the message and verify the failure. In this example the worker lacked permission for the intended downstream action, so fix that specific policy first. Then deliberately redrive the message to the source queue and verify that processing succeeds.",
+          "text_sha256": "6d7f2751f30767a9963dede746d51c1e68e7c29cd306eedcf589efacf3030182",
+          "canonical_text_sha256": "6d7f2751f30767a9963dede746d51c1e68e7c29cd306eedcf589efacf3030182",
+          "asset_sha256": "21cadb2dc7bf0f14030e858b0b4142ceb67489c6103a3603788825a9be7eec5f"
+        },
+        {
+          "id": "m14p14-andrew-exp-s02-c1-75444fddc116",
+          "slide": 2,
+          "text": "The order service publishes one event. Both queues receive a copy. Fulfillment has twelve waiting while analytics has two and keeps moving. Each queue absorbs only its own consumer's lag.",
+          "text_sha256": "75444fddc1166cf35bf5d93b59c35b5bfc6afbab32361cb9ae0085e2a4c3bf39",
+          "canonical_text_sha256": "75444fddc1166cf35bf5d93b59c35b5bfc6afbab32361cb9ae0085e2a4c3bf39",
+          "asset_sha256": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+        },
+        {
+          "id": "m14p14-andrew-exp-s02-c2-a00c8f7888be",
+          "slide": 2,
+          "text": "That delivery relies on each queue's resource policy allowing S N S to send from this specific topic. If one queue doesn't get its copy, check that queue's subscription and policy before blaming the publisher.",
+          "text_sha256": "a00c8f7888bea768ba2991f1a488e1d755ee09f3c3908e336551b7495eff48f1",
+          "canonical_text_sha256": "1974b38891cf7111d0b2900c02cfd68fa8cd74ceb7d1fd3b063b26973647e6f7",
+          "asset_sha256": "579d9c0f8ade149da318db151b62483e6636a1acc3db72c88875592626cf56fb"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "15",
+      "revision": "2026-11-24-m14p15-andrew-expressive",
+      "approved_assets": {
+        "1": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e",
+        "2": "4814f3d053632f80f6bd311cea116e1f6a25677e13ff62673334e43cffff38f3"
+      },
+      "units": [
+        {
+          "id": "m14p15-andrew-exp-s01-c1-9445eac9ca85",
+          "slide": 1,
+          "text": "We'll follow an order that reserves inventory and then hits a payment failure. The reservation already happened. Step Functions can retry a transient payment error with bounded backoff, but the payment step must be safe to repeat.",
+          "text_sha256": "9445eac9ca853b5de52951aa786c59e98c6ad57b6818e78b09efd01893decc5e",
+          "canonical_text_sha256": "9445eac9ca853b5de52951aa786c59e98c6ad57b6818e78b09efd01893decc5e",
+          "asset_sha256": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e"
+        },
+        {
+          "id": "m14p15-andrew-exp-s01-c2-1389412ba0d4",
+          "slide": 1,
+          "text": "If payment still fails, the compensation step releases order one thousand one's reservation. That is a separate business operation, not a built-in rollback. If payment succeeds, the workflow confirms the order instead.",
+          "text_sha256": "1389412ba0d404ef9258f1d6e5afc6c77381e01a9b826bba4a2a43665aa8d1be",
+          "canonical_text_sha256": "1389412ba0d404ef9258f1d6e5afc6c77381e01a9b826bba4a2a43665aa8d1be",
+          "asset_sha256": "50a6abbd3991126b615430f793a38fe33eddee881761b097447553760bc1ba8e"
+        },
+        {
+          "id": "m14p15-andrew-exp-s02-c1-4343282bc921",
+          "slide": 2,
+          "text": "OrderCreated lands on the custom bus. The rule matches the source and detail type, then tries to invoke Lambda. If it doesn't match, first compare those fields with the event that actually arrived.",
+          "text_sha256": "4343282bc921ce37f78329a8b364f42819d96f154227445ecd9d85da8692a5a6",
+          "canonical_text_sha256": "4343282bc921ce37f78329a8b364f42819d96f154227445ecd9d85da8692a5a6",
+          "asset_sha256": "4814f3d053632f80f6bd311cea116e1f6a25677e13ff62673334e43cffff38f3"
+        },
+        {
+          "id": "m14p15-andrew-exp-s02-c2-36a138b21721",
+          "slide": 2,
+          "text": "If EventBridge can't deliver, it may retry a retryable error within its target policy. With a configured dead-letter queue, it can retain undelivered events. That's different from successfully invoking Lambda and having the function fail afterward.",
+          "text_sha256": "36a138b21721f44c8fed833407686922b83bd943bcbdbd591cf0a01d226a932c",
+          "canonical_text_sha256": "36a138b21721f44c8fed833407686922b83bd943bcbdbd591cf0a01d226a932c",
+          "asset_sha256": "4814f3d053632f80f6bd311cea116e1f6a25677e13ff62673334e43cffff38f3"
+        },
+        {
+          "id": "m14p15-andrew-exp-s02-c3-beb23f516587",
+          "slide": 2,
+          "text": "Inspect the failed delivery and correct its cause before reprocessing. Confirm the target received the intended event and check its application result separately, especially if it could have processed a previous attempt.",
+          "text_sha256": "beb23f5165877892a54354e1654ff26edeaf28d83974bfc4467f0e26cb626280",
+          "canonical_text_sha256": "beb23f5165877892a54354e1654ff26edeaf28d83974bfc4467f0e26cb626280",
+          "asset_sha256": "4814f3d053632f80f6bd311cea116e1f6a25677e13ff62673334e43cffff38f3"
+        }
+      ]
+    },
+    {
+      "module": "15",
+      "part": "05",
+      "revision": "2026-11-24-m15p05-andrew-expressive",
+      "approved_assets": {
+        "1": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec",
+        "2": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+      },
+      "units": [
+        {
+          "id": "m15p05-andrew-exp-s01-c1-5016a984874d",
+          "slide": 1,
+          "text": "Let's choose a way to give a viewer temporary access to private content. The application checks entitlement, then signs using a private key. The browser presents the signed U R L or cookie, and CloudFront verifies it with the public key in a trusted key group before serving the protected object.",
+          "text_sha256": "5016a984874dbbdc1ea8a278717f51f877667ab0e1deb8b6f40de87bc0735e21",
+          "canonical_text_sha256": "878726243c30f27b014cbe46e8694a7eba4370a5e92ec6424c960fdf30515d14",
+          "asset_sha256": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec"
+        },
+        {
+          "id": "m15p05-andrew-exp-s01-c2-6ee12353d347",
+          "slide": 1,
+          "text": "If the viewer needs several related files, such as the chapters shown here, signed cookies can cover the permitted set without changing each U R L. If the user needs a single download link, a signed U R L is usually simpler.",
+          "text_sha256": "6ee12353d347c849aed7753955a5e1604dcd1629baff3e5be9f9c84f4edcecde",
+          "canonical_text_sha256": "f8b6cbf4413614a88e0b64729bf2cf3cbe43182fad900208fcb69904d1f739a4",
+          "asset_sha256": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec"
+        },
+        {
+          "id": "m15p05-andrew-exp-s01-c3-4caafe1a8de7",
+          "slide": 1,
+          "text": "A valid request may be served at the edge. On a cache miss CloudFront can fetch from the private S three origin using origin access control. That origin permission is separate from the signature the viewer presents.",
+          "text_sha256": "4caafe1a8de785383ff12dfedc85c637958ee7532a032c3821cbc29ce0ec49c9",
+          "canonical_text_sha256": "1b6929d81e0488d0ef03149cccce9188ef74dbc5e079be690f2d95f8b5a9a2bf",
+          "asset_sha256": "b3160c48f8a0553bae600417e3349849dc611f6ab777d6dff47b361d96a9adec"
+        },
+        {
+          "id": "m15p05-andrew-exp-s02-c1-93e3b3160d15",
+          "slide": 2,
+          "text": "A CloudFront signed U R L addresses the distribution. The application signs it, and CloudFront verifies the signature and policy. Pick this when delivery should remain on the distribution and may be served from the edge cache.",
+          "text_sha256": "93e3b3160d15a99cee4ea786a3d969783f92a153d93c1294a6ac8dfd36f2cc4a",
+          "canonical_text_sha256": "a138d0fcda71cfd3f6d014f23f852f2540e64eb39e39f93dd51f92c6ae3d2bf6",
+          "asset_sha256": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+        },
+        {
+          "id": "m15p05-andrew-exp-s02-c2-139b63e59bb1",
+          "slide": 2,
+          "text": "An S three presigned U R L goes straight to S three for a specific authorized operation, such as downloading or uploading an object. S three verifies the signed request from the I A M credentials used to create it. It does not go through the CloudFront cache.",
+          "text_sha256": "139b63e59bb1214c2c6705c3cc476488a21e9c08c479c0d01c66f3445b1b9d50",
+          "canonical_text_sha256": "c80184b866b7d59a34e7b23cea6c8e1553ec201893ec5fb99c63a9e342f92877",
+          "asset_sha256": "7ba4133ce8f9c6a395848a0f7b276a7ed12223856d908c25febbf39d81f5e8f4"
+        }
+      ]
+    },
+    {
+      "module": "15",
+      "part": "06",
+      "revision": "2026-11-24-m15p06-andrew-expressive",
+      "approved_assets": {
+        "1": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51",
+        "2": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+      },
+      "units": [
+        {
+          "id": "m15p06-andrew-exp-s01-c1-cba1bd0c2bcc",
+          "slide": 1,
+          "text": "We'll separate what the viewer sees from what the origin did. The origin returns an error and CloudFront can fetch a configured custom page. You can also change the status returned to the viewer for supported errors. A friendly response doesn't mean the origin is healthy.",
+          "text_sha256": "cba1bd0c2bcc400b6b06a372eac600b51b36509fb336be008866bdc638f161fb",
+          "canonical_text_sha256": "cba1bd0c2bcc400b6b06a372eac600b51b36509fb336be008866bdc638f161fb",
+          "asset_sha256": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51"
+        },
+        {
+          "id": "m15p06-andrew-exp-s01-c2-f3ae112685c9",
+          "slide": 1,
+          "text": "Here the settings pair an original status with a custom response and an error caching time. Keep the original failure visible in monitoring, especially if the viewer status is changed.",
+          "text_sha256": "f3ae112685c9942357bfadfdc5424c7c5a7a514f73c36be984e87ccc1263a249",
+          "canonical_text_sha256": "f3ae112685c9942357bfadfdc5424c7c5a7a514f73c36be984e87ccc1263a249",
+          "asset_sha256": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51"
+        },
+        {
+          "id": "m15p06-andrew-exp-s01-c3-5748d1e235ba",
+          "slide": 1,
+          "text": "Even after the origin serves the object again, an edge can still have the old error cached. Verify what the viewer receives. Where appropriate, invalidate the affected object path instead of assuming the first successful origin check clears the edge.",
+          "text_sha256": "5748d1e235bad07919b020b348944151511ae6223071499d66686de029db5944",
+          "canonical_text_sha256": "5748d1e235bad07919b020b348944151511ae6223071499d66686de029db5944",
+          "asset_sha256": "e41de3844eb2a503b8ac22dbbdcd97e7a1da871ac29e3af3183ac656ed656a51"
+        },
+        {
+          "id": "m15p06-andrew-exp-s02-c1-66be2fff3d5c",
+          "slide": 2,
+          "text": "The cache key decides which requests share a response. Include a header if that header changes the representation. If an origin needs a value but it doesn't change the cacheable result, it can be forwarded separately rather than creating another cache entry.",
+          "text_sha256": "66be2fff3d5c4b174e7c0b7e85fd599eee533ba323eeb76fd2b71de8a9d35d2a",
+          "canonical_text_sha256": "66be2fff3d5c4b174e7c0b7e85fd599eee533ba323eeb76fd2b71de8a9d35d2a",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        },
+        {
+          "id": "m15p06-andrew-exp-s02-c2-6aaa8cc44c26",
+          "slide": 2,
+          "text": "The lifetime settings set the boundaries for freshness. Origin cache headers matter within those boundaries, and a positive minimum can keep an item cached even when origin directives normally tell caches not to store it. Keep that minimum compatible with your application.",
+          "text_sha256": "6aaa8cc44c26b3d821b3517b9262fdb8d43133d60bc427fc7025b81467f2260a",
+          "canonical_text_sha256": "6aaa8cc44c26b3d821b3517b9262fdb8d43133d60bc427fc7025b81467f2260a",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        },
+        {
+          "id": "m15p06-andrew-exp-s02-c3-56c6cf0aa438",
+          "slide": 2,
+          "text": "For a planned release, version the path so the new asset has a new cache key. When you must replace an existing path quickly, invalidate it. Then verify the client receives the new content, not just that the origin has it.",
+          "text_sha256": "56c6cf0aa438fa733d890ec7fc33a12076e1dc26b47a33aacc7f834d7d18ee21",
+          "canonical_text_sha256": "56c6cf0aa438fa733d890ec7fc33a12076e1dc26b47a33aacc7f834d7d18ee21",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        },
+        {
+          "id": "m15p06-andrew-exp-s02-c4-29ca0ce17993",
+          "slide": 2,
+          "text": "A hit can return the cached response without a new origin request. A miss fetches from the origin and may cache the response. That's why seeing no new origin request can be normal when a viewer still gets a response.",
+          "text_sha256": "29ca0ce17993a5ad1f4fb62b075c90d3b3ce8b07ff454600b42da2b1334cb977",
+          "canonical_text_sha256": "29ca0ce17993a5ad1f4fb62b075c90d3b3ce8b07ff454600b42da2b1334cb977",
+          "asset_sha256": "6e55ffb4876bd5cd3351b0f102412bf4272549d98f9f49ac50e3c61e0c3a178d"
+        }
+      ]
+    }
+  ]
+}
