@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "15",
+      "part": "09",
+      "revision": "2026-11-24-m15p09-andrew-expressive",
+      "approved_assets": {
+        "1": "d1c2d5f62b99e50bdee0400a139defdc915919f9db222f068aa5b8da7ac1f26b",
+        "2": "86708f0ccaed67ba22e85c4fff2d5df9d4f7c1f1bf553cd353bfecfd6b31bff2",
+        "3": "d48273908639668865aa889b239a2e6459911b16043a24a943494dde10b6d267"
+      },
+      "units": [
+        {
+          "id": "m15p09-andrew-exp-s01-c1-2a5763207bb4",
+          "slide": 1,
+          "text": "We'll improve reuse without mixing responses. Normalize harmless variants before lookup so they share one cache key. If a value changes the content or authorization, keep that variation in the design instead of treating the requests as equivalent.",
+          "text_sha256": "2a5763207bb48778f6cd1fec1596709f1ba722ec4bc8d4b798305a03e54864d7",
+          "canonical_text_sha256": "2a5763207bb48778f6cd1fec1596709f1ba722ec4bc8d4b798305a03e54864d7",
+          "asset_sha256": "d1c2d5f62b99e50bdee0400a139defdc915919f9db222f068aa5b8da7ac1f26b"
+        },
+        {
+          "id": "m15p09-andrew-exp-s01-c2-3205ec31508b",
+          "slide": 1,
+          "text": "Test two equivalent requests and confirm the expected cache behavior. Then test a request with meaningfully different content, and confirm it still gets the right variant. A higher hit ratio doesn't count as success if viewers receive the wrong response.",
+          "text_sha256": "3205ec31508b93081b2b4a68df68e0f523a8be374a4a3ca89ab6e59633d44303",
+          "canonical_text_sha256": "3205ec31508b93081b2b4a68df68e0f523a8be374a4a3ca89ab6e59633d44303",
+          "asset_sha256": "d1c2d5f62b99e50bdee0400a139defdc915919f9db222f068aa5b8da7ac1f26b"
+        },
+        {
+          "id": "m15p09-andrew-exp-s02-c1-484c95c320e1",
+          "slide": 2,
+          "text": "If protected content can be served from cache, the access check cannot run only when CloudFront calls the origin. Apply the proper viewer-facing authorization before serving protected content, and stop the request when the caller isn't entitled.",
+          "text_sha256": "484c95c320e193e0383c2190f3b23cc05976a9e0e96b86886b5ee821b53d21f8",
+          "canonical_text_sha256": "484c95c320e193e0383c2190f3b23cc05976a9e0e96b86886b5ee821b53d21f8",
+          "asset_sha256": "86708f0ccaed67ba22e85c4fff2d5df9d4f7c1f1bf553cd353bfecfd6b31bff2"
+        },
+        {
+          "id": "m15p09-andrew-exp-s02-c2-bf2af1ef3ccf",
+          "slide": 2,
+          "text": "Don't confuse a viewer's login with permission for CloudFront to read a private origin. Keep those controls separate. If the body of a response depends on the viewer, design cache isolation around that fact or don't cache that response.",
+          "text_sha256": "bf2af1ef3ccf2aebeeaa4b27a0094db9a90b87ef2b0906dec76419bfb1aa934f",
+          "canonical_text_sha256": "bf2af1ef3ccf2aebeeaa4b27a0094db9a90b87ef2b0906dec76419bfb1aa934f",
+          "asset_sha256": "86708f0ccaed67ba22e85c4fff2d5df9d4f7c1f1bf553cd353bfecfd6b31bff2"
+        },
+        {
+          "id": "m15p09-andrew-exp-s03-c1-ac968b17a743",
+          "slide": 3,
+          "text": "A User-Agent can help select a compatible variant, but raw User-Agent values create many unnecessary cache entries. If the response genuinely differs by device class, map the request to the small set of variants your application actually serves.",
+          "text_sha256": "ac968b17a7437ceaaff906062fd9fec8bae27179d7906056dfaed4cb50d33edc",
+          "canonical_text_sha256": "ac968b17a7437ceaaff906062fd9fec8bae27179d7906056dfaed4cb50d33edc",
+          "asset_sha256": "d48273908639668865aa889b239a2e6459911b16043a24a943494dde10b6d267"
+        },
+        {
+          "id": "m15p09-andrew-exp-s03-c2-d9d55d43a526",
+          "slide": 3,
+          "text": "Check that requests within one supported class get the same representation and can reuse it. Then compare two classes that need different output; normalizing them into one key would cross the content boundary.",
+          "text_sha256": "d9d55d43a5264b858ecf9eb9cccd222578e3fa54af1f8e30c9eba59bceaf0a0e",
+          "canonical_text_sha256": "d9d55d43a5264b858ecf9eb9cccd222578e3fa54af1f8e30c9eba59bceaf0a0e",
+          "asset_sha256": "d48273908639668865aa889b239a2e6459911b16043a24a943494dde10b6d267"
+        }
+      ]
+    },
+    {
+      "module": "15",
+      "part": "10",
+      "revision": "2026-11-24-m15p10-andrew-expressive",
+      "approved_assets": {
+        "1": "7987e426ef2d30a6cc36d221b405d7d10a501b5972cf0670a57570defc25e3a5",
+        "2": "63990ecddaa65c9417b9a052fde2e385a3eeb388c11b2ca5d02455b80fed7e92",
+        "3": "1065616c97081fb8f031995d0489a1c1d7b302186006d5ad970eab1b1e8479ae"
+      },
+      "units": [
+        {
+          "id": "m15p10-andrew-exp-s01-c1-c1845500813c",
+          "slide": 1,
+          "text": "Let's route two kinds of request through one distribution. A versioned static asset can reuse a cached response. An A P I path should forward what its backend needs, and private or personalized results should not be shared through a public cache.",
+          "text_sha256": "c1845500813c4201f2e32f34633fb89db8575ad948accdf87219e752e03804e2",
+          "canonical_text_sha256": "7463aa804235770e7c06214da10e2165b034e2177c9c2a56f71f36aa16e3522a",
+          "asset_sha256": "7987e426ef2d30a6cc36d221b405d7d10a501b5972cf0670a57570defc25e3a5"
+        },
+        {
+          "id": "m15p10-andrew-exp-s01-c2-6364d52c61f7",
+          "slide": 1,
+          "text": "Use the path behavior to select the intended origin and policy. Test the actual asset and an A P I request separately. A cache hit is good for the static file, but it doesn't prove the A P I path or its authorization is correct.",
+          "text_sha256": "6364d52c61f7474f69048e6c494456d97f7b97dc4633a1c66fc1afbbb50d0c76",
+          "canonical_text_sha256": "e697242413b5a4786e4e71f8e4513eb3883a35242f58e11a1a0dd464fd42da7b",
+          "asset_sha256": "7987e426ef2d30a6cc36d221b405d7d10a501b5972cf0670a57570defc25e3a5"
+        },
+        {
+          "id": "m15p10-andrew-exp-s02-c1-3656a2c099ad",
+          "slide": 2,
+          "text": "A Lambda at Edge origin-request function can choose an origin before CloudFront fetches it. That hook is not rerun on a hit. If the origin choice changes the response, make the cache design distinguish those variants.",
+          "text_sha256": "3656a2c099adfa39a3969c52179a51710b762f763ad4e09600d3dab919f618aa",
+          "canonical_text_sha256": "3656a2c099adfa39a3969c52179a51710b762f763ad4e09600d3dab919f618aa",
+          "asset_sha256": "63990ecddaa65c9417b9a052fde2e385a3eeb388c11b2ca5d02455b80fed7e92"
+        },
+        {
+          "id": "m15p10-andrew-exp-s02-c2-bd98d0760472",
+          "slide": 2,
+          "text": "For a decision that must run before lookup, compare a viewer-request approach. A CloudFront Function can also modify origins in its supported environment. Use Lambda at Edge when you specifically need the origin-stage hook or features its counterpart doesn't provide.",
+          "text_sha256": "bd98d076047299b63d0f86da36a77b44b14f7f7cb0d06e70aed66490578643df",
+          "canonical_text_sha256": "bd98d076047299b63d0f86da36a77b44b14f7f7cb0d06e70aed66490578643df",
+          "asset_sha256": "63990ecddaa65c9417b9a052fde2e385a3eeb388c11b2ca5d02455b80fed7e92"
+        },
+        {
+          "id": "m15p10-andrew-exp-s03-c1-286d7c1e329d",
+          "slide": 3,
+          "text": "CloudFront serves H T T P content through a distribution and can cache it. Global Accelerator supplies static anycast I P addresses and accelerates supported traffic to eligible endpoints. Route 53 answers D N S queries and chooses an answer according to its routing policy.",
+          "text_sha256": "286d7c1e329d92e8882352af26f7e12cb9917580dd3bf7997b06124835f0cc27",
+          "canonical_text_sha256": "e2da47b874fe4034fea4f7ae6749134288cbabb4abadef13737f40b82b4531a8",
+          "asset_sha256": "1065616c97081fb8f031995d0489a1c1d7b302186006d5ad970eab1b1e8479ae"
+        },
+        {
+          "id": "m15p10-andrew-exp-s03-c2-e52966a13f4b",
+          "slide": 3,
+          "text": "If the requirement is to reuse cached content, D N S alone won't do it. If a client needs static anycast IPs for a supported application endpoint, compare Global Accelerator. Choose based on whether the problem is content delivery, a network front door, or D N S routing.",
+          "text_sha256": "e52966a13f4b5bd7b430bf66cbd57f66a7ea6f7b4a9628923945d9cbe9ef2c2e",
+          "canonical_text_sha256": "e1bdcf701fc83e711979e995322ec6fb4f922ced9e57d3d9933b6f96140dfcbc",
+          "asset_sha256": "1065616c97081fb8f031995d0489a1c1d7b302186006d5ad970eab1b1e8479ae"
+        }
+      ]
+    },
+    {
+      "module": "15",
+      "part": "11",
+      "revision": "2026-11-24-m15p11-andrew-expressive",
+      "approved_assets": {
+        "1": "9eb06c00ee6751d66775241dcbc5f50e81fbb0a4fb31595d34d68f7efbf32a3b",
+        "2": "d11a7c3a1906d8bb9ec5c99a1dc57bc8b3236fe500086bf01217d4e2d80611b0"
+      },
+      "units": [
+        {
+          "id": "m15p11-andrew-exp-s01-c1-b9ae2464586c",
+          "slide": 1,
+          "text": "Let's update an object and prove the viewer gets the new version. Change the path for a planned versioned release. If an existing path must update quickly, invalidate that path and wait for the invalidation to complete.",
+          "text_sha256": "b9ae2464586ca228f44675628d52a10a58b9641098fe64e3c0a0206a13a354e4",
+          "canonical_text_sha256": "b9ae2464586ca228f44675628d52a10a58b9641098fe64e3c0a0206a13a354e4",
+          "asset_sha256": "9eb06c00ee6751d66775241dcbc5f50e81fbb0a4fb31595d34d68f7efbf32a3b"
+        },
+        {
+          "id": "m15p11-andrew-exp-s01-c2-6394f60a3187",
+          "slide": 1,
+          "text": "Then inspect the viewer response rather than only checking the origin. Compare cache behavior, age and status, and use metrics or logs to tell whether a request reached the origin. Those observations tell you whether the rollout changed what viewers see.",
+          "text_sha256": "6394f60a318773678611db41095d6771924c8235e5105cfe7799cbe231fd9e2e",
+          "canonical_text_sha256": "6394f60a318773678611db41095d6771924c8235e5105cfe7799cbe231fd9e2e",
+          "asset_sha256": "9eb06c00ee6751d66775241dcbc5f50e81fbb0a4fb31595d34d68f7efbf32a3b"
+        },
+        {
+          "id": "m15p11-andrew-exp-s02-c1-bd130a0ba950",
+          "slide": 2,
+          "text": "A private bucket can allow CloudFront to read the intended objects using Origin Access Control. Scope the bucket permission to the CloudFront service principal and the intended distribution. That grants the distribution an origin permission, not everybody a public bucket read.",
+          "text_sha256": "bd130a0ba95093fb0590c96917832c0909d4571521bae2bcb26ecee0db958aec",
+          "canonical_text_sha256": "bd130a0ba95093fb0590c96917832c0909d4571521bae2bcb26ecee0db958aec",
+          "asset_sha256": "d11a7c3a1906d8bb9ec5c99a1dc57bc8b3236fe500086bf01217d4e2d80611b0"
+        },
+        {
+          "id": "m15p11-andrew-exp-s02-c2-36510ec54593",
+          "slide": 2,
+          "text": "Test the same object through CloudFront and directly through the S three endpoint without credentials. Expect the allowed CloudFront path to succeed and the direct anonymous path to fail. That's evidence that the private-origin boundary is doing its job.",
+          "text_sha256": "36510ec54593d226ea3c53c79d03e4984f2db0a99b774053bef1fa73c4c10d25",
+          "canonical_text_sha256": "f9a14bfa896df254c6e648ca7c630edf432fc84d789b290a15f09b9a9a837ca2",
+          "asset_sha256": "d11a7c3a1906d8bb9ec5c99a1dc57bc8b3236fe500086bf01217d4e2d80611b0"
+        }
+      ]
+    }
+  ]
+}
