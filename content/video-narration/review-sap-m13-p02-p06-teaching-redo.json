@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "02",
+      "revision": "2026-11-24-m13p02-m13-p02-p06-teaching-redo-v1",
+      "approved_assets": {
+        "1": "6affa59424500f8b61981c893371348e4efae6380432ca99af6b54fed6942536",
+        "2": "269e8916afa10a07d7256156343970053dde8a39eafec2c3c1b8ba54f594a42f",
+        "3": "6ad5d1fdb4c1784e0ecf441c1adc0d55fb98720dd2c082b59768aa31051ebf09",
+        "4": "6289f77a1e3f9fa96c51f7a3a23adb3679fc81baab40e42b421fe1a4176fc141"
+      },
+      "units": [
+        {
+          "id": "m13p02-redo-s01-c1-d9e4f64670f4",
+          "slide": 1,
+          "text": "Set Lambda memory, storage and timeout independently. Memory controls more than memory. Lambda allocates CPU proportionally, so increasing memory can shorten a compute-heavy invocation enough to change its cost. Benchmark identical work across settings before choosing. Temporary storage under slash temp is configured independently and is not durable; don't pay for memory just to fit a larger temporary file.",
+          "text_sha256": "d9e4f64670f44066350cd5ecacc9ac4cc7bc4541c2448f39e85ade27d3c968bc",
+          "canonical_text_sha256": "d9e4f64670f44066350cd5ecacc9ac4cc7bc4541c2448f39e85ade27d3c968bc",
+          "asset_sha256": "6affa59424500f8b61981c893371348e4efae6380432ca99af6b54fed6942536"
+        },
+        {
+          "id": "m13p02-redo-s01-c2-94f85631ff23",
+          "slide": 1,
+          "text": "A W S raised the on-demand Lambda Event Function maximum from fifteen to thirty minutes, or eighteen hundred seconds. A caller or integration may stop waiting much sooner, so check both limits.",
+          "text_sha256": "94f85631ff23351deecfacf9a8b633f12ad8a490aac6215a02c236b944b65142",
+          "canonical_text_sha256": "dcda2bae0706b0376374aec95ec310aee1906412caf4ac8fee97830517b5e978",
+          "asset_sha256": "6affa59424500f8b61981c893371348e4efae6380432ca99af6b54fed6942536"
+        },
+        {
+          "id": "m13p02-redo-s02-c1-0ac20fb08b6d",
+          "slide": 2,
+          "text": "Measure the deployment artifact and invocation separately. The zip upload limit, uncompressed zip plus layers limit, and image limit are package constraints. A buffered synchronous Lambda request and response each have a six-megabyte limit; the asynchronous event has a one-megabyte limit. Streaming has a separate response contract. If any upstream or downstream limit is smaller, it governs. For a large file, put the bytes in S three and pass a scoped reference.",
+          "text_sha256": "0ac20fb08b6d84a6bc9d9467a3b0c8c3cbcc382c7096b61306a0f0b8478935cd",
+          "canonical_text_sha256": "3c13994bbea68cb696d6288e98abfeaef6fb08057f8e1cb1b362325782eace1f",
+          "asset_sha256": "269e8916afa10a07d7256156343970053dde8a39eafec2c3c1b8ba54f594a42f"
+        },
+        {
+          "id": "m13p02-redo-s02-c2-e71b272fda74",
+          "slide": 2,
+          "text": "For example, a zip sent directly through the A P I has a fifty-megabyte compressed limit, and the unpacked function plus layers must fit the separate two-hundred-and-fifty-megabyte limit. A compatible image can be larger, but packaging in an image does not raise invocation payload limits.",
+          "text_sha256": "e71b272fda744d817a51de9fe04767e8f8546c95cce05ed0683b735b9e8249f6",
+          "canonical_text_sha256": "9765d65f1a8419a7eeed003e9ce4a467768e71f9b8d190cc3ebb48b9031157af",
+          "asset_sha256": "269e8916afa10a07d7256156343970053dde8a39eafec2c3c1b8ba54f594a42f"
+        },
+        {
+          "id": "m13p02-redo-s03-c1-05c601f7ac2a",
+          "slide": 3,
+          "text": "At two hundred requests per second taking half a second each, expect about one hundred concurrent executions in steady state. Real bursts and slow responses can push higher. Reserved concurrency protects capacity for the critical function while capping how many simultaneous requests it can send to the database. Check throttles and database pressure before raising that cap.",
+          "text_sha256": "05c601f7ac2a8250942fdb5c38a8fd5c9242bac2718171339c303ce86648183b",
+          "canonical_text_sha256": "05c601f7ac2a8250942fdb5c38a8fd5c9242bac2718171339c303ce86648183b",
+          "asset_sha256": "6ad5d1fdb4c1784e0ecf441c1adc0d55fb98720dd2c082b59768aa31051ebf09"
+        },
+        {
+          "id": "m13p02-redo-s04-c1-b755b48bf2c2",
+          "slide": 4,
+          "text": "Choose the control by problem. Reserved concurrency reserves and caps execution capacity but does not pre-initialize anything. Provisioned concurrency keeps environments ready on a version or alias and costs extra. SnapStart restores an initialized snapshot for supported configurations; check restore-time uniqueness and compatibility. Do not combine SnapStart and provisioned concurrency on the same version.",
+          "text_sha256": "b755b48bf2c265cc2828adac51c469225daf0bbd4f5607938208845ddcc39c18",
+          "canonical_text_sha256": "b755b48bf2c265cc2828adac51c469225daf0bbd4f5607938208845ddcc39c18",
+          "asset_sha256": "6289f77a1e3f9fa96c51f7a3a23adb3679fc81baab40e42b421fe1a4176fc141"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "03",
+      "revision": "2026-11-24-m13p03-m13-p02-p06-teaching-redo-v1",
+      "approved_assets": {
+        "1": "1589aae25a610fa94400f73f0b3bb956f9907dde60aa71febd06db05575b6a3f",
+        "2": "0bd35b24883d2cf007d07ae81ae48db4a7253157e9fbb465074a00327e62a98d"
+      },
+      "units": [
+        {
+          "id": "m13p03-redo-s01-c1-101c2ac9d797",
+          "slide": 1,
+          "text": "Publish a version to pin the code and configuration. Production callers use a stable alias while you route a small share to version two. Watch errors and latency and roll back the alias if the candidate fails. Validation hooks and deployment alarms can automate part of that decision. Version rollback does not undo writes or make old database schemas compatible.",
+          "text_sha256": "101c2ac9d7979bed5a3d467a86cafb8c4956f388fb4a7f474429b2b870bf598e",
+          "canonical_text_sha256": "101c2ac9d7979bed5a3d467a86cafb8c4956f388fb4a7f474429b2b870bf598e",
+          "asset_sha256": "1589aae25a610fa94400f73f0b3bb956f9907dde60aa71febd06db05575b6a3f"
+        },
+        {
+          "id": "m13p03-redo-s02-c1-bb209d0b42a6",
+          "slide": 2,
+          "text": "Use metrics to find which symptom changed: errors, throttles or duration. Then use the request I D in logs to inspect the failed invocation without logging secrets. In tracing, check initialization and downstream timings; slower database calls require a different fix from a throttle. Configure tracing and the required permissions before assuming the trace will exist.",
+          "text_sha256": "bb209d0b42a6426243d48779ee73fb4e489d1a6534b3999c457af57046cbbb66",
+          "canonical_text_sha256": "16c2759675dc14c6cda58fcc42869f9ac5544f6275ff37fb26464e766da01454",
+          "asset_sha256": "0bd35b24883d2cf007d07ae81ae48db4a7253157e9fbb465074a00327e62a98d"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "04",
+      "revision": "2026-11-24-m13p04-m13-p02-p06-teaching-redo-v1",
+      "approved_assets": {
+        "1": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403",
+        "2": "c78f9e39811c328c1445f412697a59c91f513723889fed3dcabd0c5db2c57851"
+      },
+      "units": [
+        {
+          "id": "m13p04-redo-s01-c1-0e9d80b14ad3",
+          "slide": 1,
+          "text": "V P C attachment gives the function a network path into the V P C, not a public I P. The private database path needs the correct security-group rule and separate database login.",
+          "text_sha256": "0e9d80b14ad3dafde3f41697f2d26b718bb9ce6a65f777da1b8cd852f53e943d",
+          "canonical_text_sha256": "35cfcac971568d4c44845519c3422d0db846c7c9b3424be76818524f91e9b34b",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-redo-s01-c2-40fa4a2fad36",
+          "slide": 1,
+          "text": "For public I P version four from a private subnet, follow the default route through a public nat gateway and internet gateway. For a supported A W S A P I, a V P C endpoint may instead keep that request private. Check D N S, routes and permissions independently.",
+          "text_sha256": "40fa4a2fad36c4400329bdb75ed5f0e835c8efb5a0e0ce1550b94c22f26c0cc5",
+          "canonical_text_sha256": "03499af090974a2ed32ca4eba26ec44d8f9d75eccde47ecedf7bc79de7784b0d",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-redo-s01-c3-f355ebc05aac",
+          "slide": 1,
+          "text": "If the private database works but the public A P I times out, that observation isolates the likely path. Check the subnet's default I P version four route, the nat path, and outbound rules instead of changing the working database login.",
+          "text_sha256": "f355ebc05aaccd2e6d3a5721654cb08ef0843deb2ba37dc4e3b4e93d26f65669",
+          "canonical_text_sha256": "9aee26cd7a572704a227c88fa556c65974e47ad0d475e019df3f984485e4ce9e",
+          "asset_sha256": "d221090bf0968d82017771586f974af05a7dc6ad7c3ec0201d9257d7b338a403"
+        },
+        {
+          "id": "m13p04-redo-s02-c1-c43001000f18",
+          "slide": 2,
+          "text": "When a partner allowlists a source public I P version four address, route the Lambda subnet through a public nat gateway with an Elastic I P and an internet gateway. The partner sees the nat address, not the function's private address. Test from each intended subnet and include all legitimate egress IPs in the allowlist. Account for nat costs and an Availability Zone failure.",
+          "text_sha256": "c43001000f183c839a0565aee7da9993ae9426dcf4a1681cdb2e8dd22c65d5a4",
+          "canonical_text_sha256": "336f76c35a8caa09366ed145a425996385550e390b9eeb23881da960e83ddbe7",
+          "asset_sha256": "c78f9e39811c328c1445f412697a59c91f513723889fed3dcabd0c5db2c57851"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "05",
+      "revision": "2026-11-24-m13p05-m13-p02-p06-teaching-redo-v1",
+      "approved_assets": {
+        "1": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b",
+        "2": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b",
+        "3": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab",
+        "4": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+      },
+      "units": [
+        {
+          "id": "m13p05-redo-s01-c1-5b7bf1248b61",
+          "slide": 1,
+          "text": "A synchronous caller waits within its own timeout and decides whether to retry. Here the function writes the order, but the response is lost. Retry with the same idempotency key so the handler can return the prior result instead of writing again. Inspect the invocation or front-door error, and use bounded backoff with jitter only for retryable conditions.",
+          "text_sha256": "5b7bf1248b6104cf6db406f971edefb4ff70611ba09c71f6990f269604c5035d",
+          "canonical_text_sha256": "5b7bf1248b6104cf6db406f971edefb4ff70611ba09c71f6990f269604c5035d",
+          "asset_sha256": "df3c2787d32b10404b6e42d29e4cfac89b1a25fd3ac7df70f518cedaa5c66b7b"
+        },
+        {
+          "id": "m13p05-redo-s02-c1-886b8f703cd7",
+          "slide": 2,
+          "text": "EventBridge first needs to deliver the event. Once Lambda accepts it, it is queued, not processed. Handler errors and throttling have different asynchronous retry behavior; handler errors get two extra attempts by default. Configure the failure destination or dead-letter queue as needed. Verify the actual order write and make it safe to repeat.",
+          "text_sha256": "886b8f703cd72a2cfc27e93ee98c60cbbbc8ee588908ef6ba50a1a55c5cad650",
+          "canonical_text_sha256": "886b8f703cd72a2cfc27e93ee98c60cbbbc8ee588908ef6ba50a1a55c5cad650",
+          "asset_sha256": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b"
+        },
+        {
+          "id": "m13p05-redo-s02-c2-b1ee598f4672",
+          "slide": 2,
+          "text": "Use the order journal to separate evidence: sent and accepted can share a timestamp, but the successful write is later. A processing failure after acceptance belongs to Lambda's retry policy. A target-delivery failure before acceptance belongs to EventBridge's policy. Track each signal independently.",
+          "text_sha256": "b1ee598f46727724269dcaaa8645f93df535be4bd4c7ab9b14bc0693d23a8c53",
+          "canonical_text_sha256": "b1ee598f46727724269dcaaa8645f93df535be4bd4c7ab9b14bc0693d23a8c53",
+          "asset_sha256": "a5342bf3273b94aa6b43a6529e41948565b59ad6a32900e6e755deb1f533029b"
+        },
+        {
+          "id": "m13p05-redo-s03-c1-7af9ad3b6354",
+          "slide": 3,
+          "text": "Choose a destination when you need the invocation outcome record, including request and response context. Choose a dead-letter queue when you want the failed original event. Supported destinations differ; S three is for failure records only here. Test delivery permissions and payload limits, and monitor destination-delivery failures rather than assuming the handler retry guarantees a record.",
+          "text_sha256": "7af9ad3b6354d6094aafbc9b827019b4220f96e58f8ee8b2ff20d46a639cdb51",
+          "canonical_text_sha256": "a7b757e8e58ce9cd67fa91956fe1af54e8e6d64d9e9807f9f0a5fa50a65f6b64",
+          "asset_sha256": "3dec66ba101d137cd1591e4b8690f0ea39b44dabe22d5969653947706aee37ab"
+        },
+        {
+          "id": "m13p05-redo-s04-c1-8a081861594e",
+          "slide": 4,
+          "text": "The event source mapping polls independently of Lambda's asynchronous queue. For S Q S a failed message can become visible again; a configured partial response lets successes be removed without reprocessing them. A Kinesis checkpoint behaves differently: a failure can block progress while the batch is retried under its configured limits. Match the retry and idempotency design to the source.",
+          "text_sha256": "8a081861594e5dbbd220418bb0650030579ca420d47cce45200d227a444c8eeb",
+          "canonical_text_sha256": "a851bb82bb6ddbe138d43af33d84f1b6f48f36c1b1cd4ed4d68992ff951327f7",
+          "asset_sha256": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+        },
+        {
+          "id": "m13p05-redo-s04-c2-776b3bf3725b",
+          "slide": 4,
+          "text": "For example, if one message of an S Q S batch fails, reporting its I D can avoid retrying the successful messages. Do not transfer that exact assumption to Kinesis: a stream uses checkpoints and its progress and ordering rules are different.",
+          "text_sha256": "776b3bf3725b3e4d942103a6c498f5c167525cbcd49aac9d5603ae9ca32808ba",
+          "canonical_text_sha256": "4476822a3da23febc3412cb76629da076eac942f1865f48b4d9c151fbd0ab16f",
+          "asset_sha256": "4303c227263c8e70b918dba0e0d8671ffb08d7b88efcdea4235053853e001d8f"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "06",
+      "revision": "2026-11-24-m13p06-m13-p02-p06-teaching-redo-v1",
+      "approved_assets": {
+        "1": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830",
+        "2": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b",
+        "3": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+      },
+      "units": [
+        {
+          "id": "m13p06-redo-s01-c1-09b27b039002",
+          "slide": 1,
+          "text": "Filter for the input photo prefix and keep thumbnail outputs separate so the function does not trigger itself. Use deterministic output keys and make metadata writes idempotent. If the thumbnail write succeeds but the metadata write fails, a retry should reconcile the two instead of generating contradictory copies. Verify the expected object and record.",
+          "text_sha256": "09b27b0390023d08fbc8fb9937d6c169d444035a77d516399fe9f81b784735bc",
+          "canonical_text_sha256": "09b27b0390023d08fbc8fb9937d6c169d444035a77d516399fe9f81b784735bc",
+          "asset_sha256": "66910b44017c5e7f8fc303073a5ad761c4dd2bbcd4d8359090af361ffa435830"
+        },
+        {
+          "id": "m13p06-redo-s02-c1-4e276301a2d7",
+          "slide": 2,
+          "text": "EventBridge Scheduler needs an execution role authorized for the intended Lambda target. Set the timezone and flexible window deliberately. Scheduler retries and its dead-letter queue help when target delivery fails. Successful delivery does not prove the scheduled job finished; check Lambda evidence and the business result. Make repeated attempts safe.",
+          "text_sha256": "4e276301a2d731ddd632acd5c558c3cb56538ffba02f58a68e542102bcc7e901",
+          "canonical_text_sha256": "4e276301a2d731ddd632acd5c558c3cb56538ffba02f58a68e542102bcc7e901",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-redo-s02-c2-32077279b0f2",
+          "slide": 2,
+          "text": "For a nightly report, check both that the invocation was delivered and that a report for the intended business date appeared. That last check still matters when a delayed retry or flexible window shifts the actual start.",
+          "text_sha256": "32077279b0f282a442dce08dea7a2e2ea87dbbdda4ad8dc9b355933032bd39d8",
+          "canonical_text_sha256": "32077279b0f282a442dce08dea7a2e2ea87dbbdda4ad8dc9b355933032bd39d8",
+          "asset_sha256": "319cfc48d584a4b70afb1a770679ad59dd4d430914f51413c4f5f790f66b159b"
+        },
+        {
+          "id": "m13p06-redo-s03-c1-76bf2ae6f2de",
+          "slide": 3,
+          "text": "Direct S N S fan-out gives each subscription an independent delivery path with lower latency. Add S Q S for a consumer that needs its own backlog, retention and pacing. The event source mapping can then batch work, but buffering adds latency and recovery responsibilities. Verify the input envelope and make the consumer idempotent either way.",
+          "text_sha256": "76bf2ae6f2deff8f9aef87336ec0390c2d5687fe8eff48d42c1aef9d7fb0c901",
+          "canonical_text_sha256": "d9164143a9967dd8d0c96af5de45e9fc883725292018d64a430c8819f8d19270",
+          "asset_sha256": "2ce48812804bfe614268624c7a64965ec4eba9cdf78d7fd60c72552abe2ceff4"
+        }
+      ]
+    }
+  ]
+}

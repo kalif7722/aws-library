@@ -1,0 +1,66 @@
+name: SAP M13 P02–06 teaching redo Andrew narration review
+on:
+  push:
+    branches: [review/sap-m13-p02-p06-teaching-redo]
+    paths: [.github/workflows/review-sap-m13-p02-p06-teaching-redo.yml, scripts/review_sap_m13_p02_p06_teaching_redo.py, content/video-narration/review-sap-m13-p02-p06-teaching-redo.json, content/video-narration/review-sap-m13-p02-p06-teaching-redo.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m13-p02-p06-teaching-redo-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-m13-p02-p06-teaching-redo'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        part: [m13p02, m13p03, m13p04, m13p05, m13p06]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m13_p02_p06_teaching_redo.py
+            content/video-narration/review-sap-m13-p02-p06-teaching-redo.json
+            content/video-narration/review-sap-m13-p02-p06-teaching-redo.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_m13_p02_p06_teaching_redo.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify FFmpeg and ffprobe
+        timeout-minutes: 10
+        shell: bash
+        run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            timeout 90s sudo -n apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 update -qq
+            timeout 360s sudo -n apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 install -y ffmpeg
+          fi
+          ffmpeg -version | sed -n '1p'
+          ffprobe -version | sed -n '1p'
+      - name: Install pinned edge-tts
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          for attempt in 1 2; do
+            if timeout 75s python -m pip install --disable-pip-version-check --timeout 15 --retries 1 'edge-tts==7.3.1'; then
+              break
+            fi
+            if [ "$attempt" -eq 2 ]; then exit 1; fi
+            sleep 3
+          done
+          python -c 'from importlib.metadata import version; v = version("edge-tts"); assert v == "7.3.1", v; print("edge-tts", v)'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_m13_p02_p06_teaching_redo.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m13-p02-p06-teaching-redo-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
