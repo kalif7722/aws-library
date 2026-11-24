@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "06",
+      "revision": "2026-11-24-m09p06-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b",
+        "2": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c",
+        "3": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+      },
+      "units": [
+        {
+          "id": "m09p06-redo-s01-c1-b1dc72ad7ea1",
+          "slide": 1,
+          "text": "Learn to route an S three event to the right workflow without coupling it to the uploader. Enable EventBridge delivery on the bucket so the event reaches the event bus.",
+          "text_sha256": "b1dc72ad7ea10d78818acad1efb40be6113fe6a0a302758a260f9d19a392d739",
+          "canonical_text_sha256": "bfe8c692cc4282f24fcf8a50a2dc2ac50815db3a146d738cc5b74b5f79516a7e",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-redo-s01-c2-beea565ac720",
+          "slide": 1,
+          "text": "The rule filters for an S three source and the event type that matters. Match the bucket name and object key as well when only a particular workload should start.",
+          "text_sha256": "beea565ac720f436e6905df48c3af48dd7c3f65c308631fa72cbab394eeacbe9",
+          "canonical_text_sha256": "00747bbbe41a0abfeb940776078a18b4b4af0ab538fc1ecb79aa77b1043c9ba3",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-redo-s01-c3-c2ecf724dea6",
+          "slide": 1,
+          "text": "Here the rule selects my-bucket and data slash file dot C S V. A different key does not match that exact filter, even though its event still reaches the bus.",
+          "text_sha256": "c2ecf724dea6e6fb29106b981cd68a65bf867adb3225bd0ed3e1239e593485ee",
+          "canonical_text_sha256": "a3abe55bf3ce62342e07340d011e72b9a6b2994f3e2a68cb46a7c8ef1c48e64d",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-redo-s01-c4-b1bc08e401c0",
+          "slide": 1,
+          "text": "Choose Step Functions for a workflow, S Q S for queued work, or Lambda for a function. Permissions and retry behavior still matter, and the consumer should handle repeated delivery safely.",
+          "text_sha256": "b1bc08e401c0558c5548b178e623d1ab2d9df5d6a9fd874ab60bff4182958278",
+          "canonical_text_sha256": "be4c3483224604e470ffea7389d67da9358c213adc6aa797308f9ed4962685b0",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-redo-s02-c1-06a1bc3fa25f",
+          "slide": 2,
+          "text": "Now size the request path. Images, logs and reports illustrate distinct prefixes. S three documents at least thirty-five hundred write-type requests or fifty-five hundred get and head requests per second per partitioned prefix. Parallel activity across prefixes can increase aggregate throughput.",
+          "text_sha256": "06a1bc3fa25f8123143104073d4150149745646d7e25e355176caa3cf8bcea88",
+          "canonical_text_sha256": "f7982c4fab5735a4013608ce518b527f6a6b7523d9a0127d0d5006d0582f650e",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-redo-s02-c2-b820402504ba",
+          "slide": 2,
+          "text": "Add load gradually. S three scales to a new request pattern over time, so retry a temporary five-oh-three Slow Down response with backoff rather than treating it as a missing object.",
+          "text_sha256": "b820402504ba8f15975ecbbdc93404cfee88d970052a5f5f70b48cff4b29f911",
+          "canonical_text_sha256": "da5b583b15c3e39dc6a330dbfa64b2488d63af3f7083adf12cd0ee34d6f67797",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-redo-s02-c3-f939b4aa95e4",
+          "slide": 2,
+          "text": "The bucket rate is not the application rate. Check client concurrency, network capacity and, for K M S-backed encryption, applicable K M S request quotas before assuming S three is the bottleneck.",
+          "text_sha256": "f939b4aa95e404a50b1a4a46621a539c7ef6658efb4f43bbc31e171d5e3de3fa",
+          "canonical_text_sha256": "ddacfea4c16254e0c94f165a6bc99dc4fb08bec83100a512066171ea2bdda95d",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-redo-s03-c1-29a68b9a2713",
+          "slide": 3,
+          "text": "For a large object, initiate a multipart upload first. S three gives you an upload I D that ties the subsequent part requests to one transfer.",
+          "text_sha256": "29a68b9a2713fdcfccfecc762fd79e400af921e39cf76b2e624db80b3780623a",
+          "canonical_text_sha256": "7b47808e86d7c18c355ec420f75276c2814224be3942d526a91f14593324bd97",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-redo-s03-c2-add60e9ae0a0",
+          "slide": 3,
+          "text": "Upload numbered parts in parallel and retain the returned E tags. They identify the uploaded parts to include in the completion request.",
+          "text_sha256": "add60e9ae0a0759306f5c72965512657419086bc83f670be962c94f130e2cff3",
+          "canonical_text_sha256": "6b60ef925bf8289941f72b98c0c927c5cb8b469a69a27cead50a986a91103273",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-redo-s03-c3-c4c815067315",
+          "slide": 3,
+          "text": "When part two fails, retry part two under that upload I D. There is no need to send successful parts again.",
+          "text_sha256": "c4c815067315b8096a801b7965dc167d3e9d96afa7fff4c3d0557528d3b5d4b7",
+          "canonical_text_sha256": "3efe429215925df724d6ded54d5ac5863c86df7a532f1ecaf6ad693f01d2107b",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-redo-s03-c4-3fa16c913c09",
+          "slide": 3,
+          "text": "Submit the ordered list of part numbers and E tags to complete the upload. Only after completion does the assembled object become available.",
+          "text_sha256": "3fa16c913c09b427e3d6f8a2a0051b332d96cef778ff17cccdf2087ec94334b4",
+          "canonical_text_sha256": "12195ff0c37a893c9188ea9f2802f8d45803874662558bc68c3ee261c2cf623b",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-redo-s03-c5-b8b5e1e92c0e",
+          "slide": 3,
+          "text": "If this transfer is abandoned instead, abort it to release the stored parts. An unfinished upload is not a complete object.",
+          "text_sha256": "b8b5e1e92c0ea3b4a81cd48e8d41becec69504d0c6d84bca2dc51099299d98b9",
+          "canonical_text_sha256": "b8b5e1e92c0ea3b4a81cd48e8d41becec69504d0c6d84bca2dc51099299d98b9",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "07",
+      "revision": "2026-11-24-m09p07-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b",
+        "2": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1",
+        "3": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+      },
+      "units": [
+        {
+          "id": "m09p07-redo-s01-c1-94cdd18a7d22",
+          "slide": 1,
+          "text": "Learn to stop paying for incomplete transfers without expiring finished objects. Stored parts remain billable under the upload I D even before a completed key appears.",
+          "text_sha256": "94cdd18a7d22053ed0d09b29eb6fdc9d77ea7b0612b8a5bd552ed8d7ef3e5c7a",
+          "canonical_text_sha256": "a1a2269999893ce4341fd52a462080e26d6edff33aebde61d127d17e08f00bb4",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-redo-s01-c2-f14a5b80edba",
+          "slide": 1,
+          "text": "Find the upload I D, then list its parts. Resume an active transfer or abort an abandoned one to remove the stored parts.",
+          "text_sha256": "f14a5b80edba4588b1c465b848747b4834a9e024cae890dbb6cbb843a831774b",
+          "canonical_text_sha256": "948ae8f0ea6935ad77c0dbae602954934b49f0d70f5d4b28275bea9f878f63c1",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-redo-s01-c3-0db44140e0bd",
+          "slide": 1,
+          "text": "Set an S three Lifecycle rule to abort incomplete uploads after a chosen number of days. Expiring or deleting a key is not the same action.",
+          "text_sha256": "0db44140e0bdeb8c26db64cc3d7028b47c0dc3d7c7658938a7b4d7ee129ec37b",
+          "canonical_text_sha256": "737292b6084b8f23692cebc94956ba26406810791997a13b42d3519b3630c447",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-redo-s02-c1-afec4ef3a142",
+          "slide": 2,
+          "text": "Fetch only the part you need. Requesting the first interval can read a header without downloading the whole object.",
+          "text_sha256": "afec4ef3a142edb40463c83c4f55693f405730e9404ea48131d3a547905fd01c",
+          "canonical_text_sha256": "afec4ef3a142edb40463c83c4f55693f405730e9404ea48131d3a547905fd01c",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-redo-s02-c2-7fec08bb41f1",
+          "slide": 2,
+          "text": "Use a separate get for each required interval. When the request for bytes two thousand through two thousand nine hundred ninety-nine fails, retry that range rather than restarting the whole download.",
+          "text_sha256": "7fec08bb41f161c2fc4c631d52caada40b5555dccdedec300d706d8302a5a6ad",
+          "canonical_text_sha256": "2bc11d2500c5494dd6d071b7470fbe65a797ea57b58a77b9c726ff135b47a507",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-redo-s02-c3-c85c0690c1a6",
+          "slide": 2,
+          "text": "On the client, put the returned intervals back into order. If the object may change between requests, pin a version or use a matching condition so the pieces come from the same object state.",
+          "text_sha256": "c85c0690c1a6d4471376822016c2d6fb19cd7fecadf95a21a7c7459fd13f0eb9",
+          "canonical_text_sha256": "c85c0690c1a6d4471376822016c2d6fb19cd7fecadf95a21a7c7459fd13f0eb9",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-redo-s03-c1-3a018aedc1c0",
+          "slide": 3,
+          "text": "A distant client can use the accelerate endpoint. Traffic enters at an A W S edge location, crosses the A W S network, and still goes to the bucket in its home Region. This speeds the path; it does not create another regional copy.",
+          "text_sha256": "3a018aedc1c0ff06aec9cdb834ed9ef4fa7c4276f80dd0f978212b1c3ec8c96e",
+          "canonical_text_sha256": "ced069d0307714b920054709f8744f3f1f65ee0ccc06425615c302ad574c7478",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        },
+        {
+          "id": "m09p07-redo-s03-c2-23cfdc65853b",
+          "slide": 3,
+          "text": "You can combine acceleration with multipart upload. The edge endpoint changes the network route; multipart changes how the bytes are split, sent and retried.",
+          "text_sha256": "23cfdc65853b3f24f95ae2bf60c9d62ebe4a95f182fedc4f941aa996501e08bc",
+          "canonical_text_sha256": "23cfdc65853b3f24f95ae2bf60c9d62ebe4a95f182fedc4f941aa996501e08bc",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        },
+        {
+          "id": "m09p07-redo-s03-c3-803cab46b431",
+          "slide": 3,
+          "text": "Benchmark representative uploads from actual client locations. Compare throughput or latency and weigh the result against acceleration charges.",
+          "text_sha256": "803cab46b43112b98c91aca7b434cfbb6d51f480fc607046c92ac651c7c60491",
+          "canonical_text_sha256": "803cab46b43112b98c91aca7b434cfbb6d51f480fc607046c92ac651c7c60491",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "08",
+      "revision": "2026-11-24-m09p08-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c",
+        "2": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80",
+        "3": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+      },
+      "units": [
+        {
+          "id": "m09p08-redo-s01-c1-e8238cfdefbf",
+          "slide": 1,
+          "text": "Learn when to filter one object versus query a data set. S three Select applies S Q L to one supported file: C S V, Jason or Parquet.",
+          "text_sha256": "e8238cfdefbfb973576db3a774240b473dc9385598643fd24d9813fb02036e1e",
+          "canonical_text_sha256": "98b879c77a616a2f468e45e7d8f28b72d2c5f3f437d42beb5a5e9942523b5ddf",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-redo-s01-c2-b97c3841c50c",
+          "slide": 1,
+          "text": "The client receives matching rows and selected columns. That can cut transfer and processing, but the query still covers one object.",
+          "text_sha256": "b97c3841c50c9959be295e00ca357d3df2bdbc618f54fb66843aceb87882752f",
+          "canonical_text_sha256": "b97c3841c50c9959be295e00ca357d3df2bdbc618f54fb66843aceb87882752f",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-redo-s01-c3-d782944c3edd",
+          "slide": 1,
+          "text": "S three Select is no longer available to new customers. Existing customers can continue using it. Do not assume it is an option on a new account.",
+          "text_sha256": "d782944c3edd6e83f7b566ac85150bf3de154b7f9f061ed383ba3ea904892964",
+          "canonical_text_sha256": "1e1df2de6efffc36eb8e5259174500588ac1a423e10743325ea62e98af1a6885",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-redo-s01-c4-51f0a8d1d202",
+          "slide": 1,
+          "text": "For a new data-set query, evaluate Athena or another suitable engine. Check scope and availability before choosing.",
+          "text_sha256": "51f0a8d1d20275ad25fa164ef2efaa65a02f58c23d3673b2b15c801afa6f3c06",
+          "canonical_text_sha256": "51f0a8d1d20275ad25fa164ef2efaa65a02f58c23d3673b2b15c801afa6f3c06",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-redo-s02-c1-ac55bb297f03",
+          "slide": 2,
+          "text": "Choose a bucket or a prefix or tag filter for Storage Class Analysis. Separate workloads with different access patterns.",
+          "text_sha256": "ac55bb297f036c888f299a78445a7e32ff1076e338423bdfd6384f70c9f46bda",
+          "canonical_text_sha256": "ac55bb297f036c888f299a78445a7e32ff1076e338423bdfd6384f70c9f46bda",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-redo-s02-c2-bc69b2d76d09",
+          "slide": 2,
+          "text": "First data can appear within twenty-four to forty-eight hours. Give analysis thirty days or longer to observe access patterns before relying on its recommendation.",
+          "text_sha256": "bc69b2d76d09bae704acce9745e0bde2df23063bab06573821871fc8536eebda",
+          "canonical_text_sha256": "bc69b2d76d09bae704acce9745e0bde2df23063bab06573821871fc8536eebda",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-redo-s02-c3-e0f084141c1a",
+          "slide": 2,
+          "text": "Review whether Standard to Standard Infrequent Access actually fits the observed usage. Then configure a Lifecycle rule separately if the transition is warranted. The analysis does not move the objects.",
+          "text_sha256": "e0f084141c1a8c81037aa5f37632766e1f43344e90c973927e5ef5067c474c7f",
+          "canonical_text_sha256": "e0f084141c1a8c81037aa5f37632766e1f43344e90c973927e5ef5067c474c7f",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-redo-s03-c1-5cdb05bfa5be",
+          "slide": 3,
+          "text": "Storage Lens aggregates storage signals across the scopes shown, from organization and accounts down to buckets and, when enabled, prefixes. Use the level that helps you identify where the problem is concentrated.",
+          "text_sha256": "5cdb05bfa5bef10e84085d71c69c15813f29c5c75f7fa05225545810b99431dc",
+          "canonical_text_sha256": "5cdb05bfa5bef10e84085d71c69c15813f29c5c75f7fa05225545810b99431dc",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-redo-s03-c2-2567174a3eee",
+          "slide": 3,
+          "text": "The dashboard helps you see growth, cost and protection patterns. A high reading tells you where to investigate; it does not change a bucket policy or clean up objects.",
+          "text_sha256": "2567174a3eeee0c18b7d78875949a2487d7208a01b253db7eb2d68b8b3fc80c1",
+          "canonical_text_sha256": "2567174a3eeee0c18b7d78875949a2487d7208a01b253db7eb2d68b8b3fc80c1",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-redo-s03-c3-f2fa24d5dc4b",
+          "slide": 3,
+          "text": "The default account dashboard is preconfigured. Create a custom dashboard when you need a narrower scope, such as selected Regions or buckets, instead of assuming one view fits every investigation.",
+          "text_sha256": "f2fa24d5dc4b2a9f2f8623d281a80f698ddd82e4f7da613a7a1bb240245e15ae",
+          "canonical_text_sha256": "f2fa24d5dc4b2a9f2f8623d281a80f698ddd82e4f7da613a7a1bb240245e15ae",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-redo-s03-c4-5c0a7913ffa9",
+          "slide": 3,
+          "text": "The dashboard is not the only evidence source. A daily C S V or Parquet export to an authorized S three destination allows further analysis over time.",
+          "text_sha256": "5c0a7913ffa926dd516899b6515ad516888fb6ab29c49ce007d452f02211b9db",
+          "canonical_text_sha256": "7c3e75d0be3b59b038573b7eb0320361cb2c992c23b00324c88af5bc48028149",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "09",
+      "revision": "2026-11-24-m09p09-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2",
+        "2": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb",
+        "3": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95",
+        "4": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+      },
+      "units": [
+        {
+          "id": "m09p09-redo-s01-c1-7d27a0cc45dd",
+          "slide": 1,
+          "text": "Learn to find what is driving an S three cost increase before changing retention. Compare the storage-byte trend with the object-count trend. If the curves diverge, the mix may explain more than the total.",
+          "text_sha256": "7d27a0cc45dd0e47fac3ef28e00021ec380e8fe9ededcec9859e9fe1f2881379",
+          "canonical_text_sha256": "8a4d46dccab8562b348def5af9e274947f7fa996cf6fbd6fd4ce4f59d27e5416",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-redo-s01-c2-d0f0f515a450",
+          "slide": 1,
+          "text": "Growth in noncurrent-version bytes points toward retained versions. A current-object listing can miss those bytes, so identify the affected bucket or prefix before changing version retention.",
+          "text_sha256": "d0f0f515a450d53a2d3397198f5ef0ace800c8dc188f2f2e5668f5a688f891fa",
+          "canonical_text_sha256": "d0f0f515a450d53a2d3397198f5ef0ace800c8dc188f2f2e5668f5a688f891fa",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-redo-s01-c3-0ed47852ad34",
+          "slide": 1,
+          "text": "Growth in incomplete multipart bytes points toward a different cause: stored parts that have never become complete objects. Review cleanup for abandoned uploads rather than expiring current objects.",
+          "text_sha256": "0ed47852ad34a75411aad5526e8bcf668078a5c89fa9186ce08a4d364fe23dcd",
+          "canonical_text_sha256": "0ed47852ad34a75411aad5526e8bcf668078a5c89fa9186ce08a4d364fe23dcd",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-redo-s01-c4-ea81f654c45e",
+          "slide": 1,
+          "text": "Once you know which data is driving the increase, choose the matching retention, cleanup or transition action. Keep the recovery window and access requirements intact.",
+          "text_sha256": "ea81f654c45ecb7723d13f07883130eca6a64bfc87879a1979bede02c8908d48",
+          "canonical_text_sha256": "ea81f654c45ecb7723d13f07883130eca6a64bfc87879a1979bede02c8908d48",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-redo-s02-c1-7761196b25cd",
+          "slide": 2,
+          "text": "Protection metrics can point you to buckets to investigate for versioning, encryption, M F A Delete or replication. Verify the setting and the relevant object state before relying on it for a restore.",
+          "text_sha256": "7761196b25cdd6bba9dc322a21b332a9c6f71f4fdcff686ab0893a71108b51e4",
+          "canonical_text_sha256": "c70b159c41fe467826eb9f1c64ef38ea9265352e97dc428962613de333d563a0",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-redo-s02-c2-628ef76483d1",
+          "slide": 2,
+          "text": "Bucket owner enforced is an Object Ownership setting. Use the dashboard to identify where it is configured, then confirm the bucket's actual access policies for the workload.",
+          "text_sha256": "628ef76483d1ceca9062b207d0edf20d05cebd56df041ff80e6d21672470db1a",
+          "canonical_text_sha256": "628ef76483d1ceca9062b207d0edf20d05cebd56df041ff80e6d21672470db1a",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-redo-s02-c3-3cdaf17b628a",
+          "slide": 2,
+          "text": "The count of buckets with event notifications tells you where configuration exists. It does not prove a downstream consumer received or processed each event. Validate that behavior separately.",
+          "text_sha256": "3cdaf17b628a02274cd2872698de41b26468aeab1246fefd9cf46b21a8ad0ac2",
+          "canonical_text_sha256": "3cdaf17b628a02274cd2872698de41b26468aeab1246fefd9cf46b21a8ad0ac2",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-redo-s03-c1-4b27130a5292",
+          "slide": 3,
+          "text": "Activity metrics answer what the clients did: reads, writes, listings and transferred bytes. Use them to see whether the workload changed, but do not infer request success from volume alone.",
+          "text_sha256": "4b27130a52928db7bd59ec32449d28e212db5c64d5e1d92f21a52c2199ee766b",
+          "canonical_text_sha256": "4b27130a52928db7bd59ec32449d28e212db5c64d5e1d92f21a52c2199ee766b",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-redo-s03-c2-12435d9f547f",
+          "slide": 3,
+          "text": "Transfer Acceleration is enabled in this example. That only tells you the setting is on. Measure actual transfer behavior before declaring the performance issue solved.",
+          "text_sha256": "12435d9f547fdf8270622ac260421da6a3fe94bbef8471ebeefe6840886be285",
+          "canonical_text_sha256": "12435d9f547fdf8270622ac260421da6a3fe94bbef8471ebeefe6840886be285",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-redo-s03-c3-08f8082e365f",
+          "slide": 3,
+          "text": "Status codes answer a different question. An unexpected four-oh-three is a reason to inspect authorization. An unexpected four-oh-four calls for checking the key and application behavior. Request errors are not, by themselves, a retention decision.",
+          "text_sha256": "08f8082e365f056da925dffe4668fd4153d79110fec532bd230f26f7e1ea5d00",
+          "canonical_text_sha256": "08f8082e365f056da925dffe4668fd4153d79110fec532bd230f26f7e1ea5d00",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-redo-s04-c1-89aa9175c530",
+          "slide": 4,
+          "text": "Use the free tier when daily bucket-level metrics and fourteen days of dashboard query history are enough. For example, that can answer whether a bucket grew during the past week.",
+          "text_sha256": "89aa9175c530fda0769709b76cabbccebf4e6957837ffdbd1780592d74bd828c",
+          "canonical_text_sha256": "89aa9175c530fda0769709b76cabbccebf4e6957837ffdbd1780592d74bd828c",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09p09-redo-s04-c2-7d9506aad930",
+          "slide": 4,
+          "text": "Choose advanced metrics when you need more detailed activity or status metrics, prefix aggregation, or up to fifteen months of console queries. Weigh the added charge against the question it answers.",
+          "text_sha256": "7d9506aad93068ff199057c666fb4f9328f687cc58d83b6320646a45b58a2435",
+          "canonical_text_sha256": "7d9506aad93068ff199057c666fb4f9328f687cc58d83b6320646a45b58a2435",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09p09-redo-s04-c3-bd537e2304ad",
+          "slide": 4,
+          "text": "CloudWatch publishing is an advanced option, but it does not publish prefix-level Storage Lens metrics. Do not choose it expecting those particular metrics there.",
+          "text_sha256": "bd537e2304ad8fa9a40c98dfbd61e87f3d3006a284f3465714fc7b80303ffb19",
+          "canonical_text_sha256": "bd537e2304ad8fa9a40c98dfbd61e87f3d3006a284f3465714fc7b80303ffb19",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "10",
+      "revision": "2026-11-24-m09p10-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8",
+        "2": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2",
+        "3": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+      },
+      "units": [
+        {
+          "id": "m09p10-redo-s01-c1-ab8ba2b53f53",
+          "slide": 1,
+          "text": "Learn to make S three objects searchable without turning object storage into a database. The application uploads the object bytes to S three. The separate index will hold the fields the application needs to query.",
+          "text_sha256": "ab8ba2b53f538f0840685d944e49019739528efc8e2efc18f324e87bcad5e967",
+          "canonical_text_sha256": "65cb17cfe11f0da64d4fe7754a14cd107a9bca0cbd182388a65e498e698195ec",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-redo-s01-c2-7408e8b31804",
+          "slide": 1,
+          "text": "The object event invokes an idempotent Lambda function, which writes metadata to DynamoDB. That update is asynchronous, not a transaction with the upload; a freshly uploaded object might not be searchable immediately.",
+          "text_sha256": "7408e8b31804d57b70261bdb442ff0d8cacc42de2941ec635fcce41d0a4557db",
+          "canonical_text_sha256": "7408e8b31804d57b70261bdb442ff0d8cacc42de2941ec635fcce41d0a4557db",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-redo-s01-c3-c692d7d00fa4",
+          "slide": 1,
+          "text": "Query the index for keys that match the search. Once the application chooses a result, it fetches that object from S three.",
+          "text_sha256": "c692d7d00fa4a19f209180649570868a6679fbee0120ca1716bd0302e71796b7",
+          "canonical_text_sha256": "7f388f8729a509b5aae8b120c12dc2f777508176e1ede99a3dee24ad1a1b7f70",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-redo-s01-c4-c500cdb46cc7",
+          "slide": 1,
+          "text": "Design the index around queries such as tenant and date. Handle duplicates, out-of-order events and failed updates. Reconcile stale or missing rows, and enforce tenant access on the query and the final object read.",
+          "text_sha256": "c500cdb46cc71a69bae85d78f4ec3bb8ab2b5cf84704c88206819a5581f93646",
+          "canonical_text_sha256": "c500cdb46cc71a69bae85d78f4ec3bb8ab2b5cf84704c88206819a5581f93646",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-redo-s02-c1-fe4c795acdec",
+          "slide": 2,
+          "text": "Static files go from the private S three origin through CloudFront. This is the delivery path for files such as images and style sheets. S three does not run server code.",
+          "text_sha256": "fe4c795acdecccd04b44fded9ffa23e3f51f6d0ab7af3fed3798c677ff4ea42d",
+          "canonical_text_sha256": "76af0853f648c63b08eb87c28f52e7d0bccff5895e376233e118b595ec32eabf",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-redo-s02-c2-620635062e7f",
+          "slide": 2,
+          "text": "For a dynamic request, send the client to an application or A P I. The application runs the logic and uses a database for transactional state. S three is still useful for object bytes, not the transaction.",
+          "text_sha256": "620635062e7f99d5e274dbb247495dae7f0dc3c7e4bf2b4223e527244068911f",
+          "canonical_text_sha256": "8a6539a3d63a159bc45585c6684f98dcbfb77cdee29d00a98cb989414f1c0ece",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-redo-s02-c3-9bfe4e6711ce",
+          "slide": 2,
+          "text": "For a direct upload, the application first authorizes the action and issues a presigned request. Then the client sends the object bytes straight to S three. Limit the key, method and expiry to the intended workflow.",
+          "text_sha256": "9bfe4e6711ce666e30f1d4a1c423da3a02dce3a95d61ec6c4539322053dfc853",
+          "canonical_text_sha256": "3afa53fd2d3de2a57690d8910491bfd5fe1824eeee45cbe4a6fa85080f7ef7e5",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-redo-s03-c1-19860993ae0b",
+          "slide": 3,
+          "text": "An accidental overwrite calls for a retained prior version. In this example version three is current, but you can still restore version two if it was retained and your permissions allow it. Test the actual read.",
+          "text_sha256": "19860993ae0b255e529db6edb7c996a48c67ded1027e1a8e88b981ba9652be89",
+          "canonical_text_sha256": "19860993ae0b255e529db6edb7c996a48c67ded1027e1a8e88b981ba9652be89",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        },
+        {
+          "id": "m09p10-redo-s03-c2-5159935e9b9c",
+          "slide": 3,
+          "text": "For deletion risk, protect eligible versions with Object Lock retention or a legal hold, and use an independent access or backup boundary where needed. Test recovery from that boundary, not just the presence of a setting.",
+          "text_sha256": "5159935e9b9c1592be2ba4ca2fe3b60492df52bc74de4ebfc4f8025907fac285",
+          "canonical_text_sha256": "5159935e9b9c1592be2ba4ca2fe3b60492df52bc74de4ebfc4f8025907fac285",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        },
+        {
+          "id": "m09p10-redo-s03-c3-5fac79edcd46",
+          "slide": 3,
+          "text": "A regional disruption calls for a prepared copy in another Region. With cross-Region replication, plan for lag, key access, permissions and application dependencies. Test the full restore before depending on that copy.",
+          "text_sha256": "5fac79edcd463c2cc5086b45590cd98541be02f612caee5a1dc37d4714cbe9cc",
+          "canonical_text_sha256": "5fac79edcd463c2cc5086b45590cd98541be02f612caee5a1dc37d4714cbe9cc",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        }
+      ]
+    }
+  ]
+}
