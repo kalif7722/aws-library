@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-10%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "98",
+      "revision": "m09p98-sap-m09p01-coordination-calibration",
+      "approved_assets": {
+        "1": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "2": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+      },
+      "units": [
+        {
+          "id": "s3-coordination-sample-01",
+          "slide": 1,
+          "text": "Let's follow one order through the diagram. The shop writes order one thousand and one to S three. The write succeeds. Now a second worker reads the order. It gets the new version, and a list of the bucket shows the change too. That's strong consistency. The worker doesn't have to wait for the completed update to become visible.",
+          "text_sha256": "67b6cb2a9ef2899ebeb0e67eba57a497e523b2771f265aea93f855ac24603342",
+          "canonical_text_sha256": "ae53afa337c7fa1604f32b77f8fe0b50ce95747db62ae6eb0eaa807a495e73e8",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "s3-coordination-sample-02",
+          "slide": 2,
+          "text": "Now imagine both workers read that order before either of them changes it. One corrects the address. The other marks it as shipped. If both send a full replacement, the later write can erase the earlier change. To prevent that, use a conditional write: accept the update only if the object still matches the E tag the worker read. If it doesn't match, read the latest version and resolve the conflict. That's the distinction: consistency makes a completed change visible. It doesn't coordinate the workers.",
+          "text_sha256": "ec437b976e3c748875e7e2b48c9e5707c2bab1ea2261ef3b37690b1f1ec031c0",
+          "canonical_text_sha256": "750b173fac2f1cd57aeff60d105b201d02b2384c4a4c3094190a5cc033a2ab34",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        }
+      ]
+    }
+  ]
+}
