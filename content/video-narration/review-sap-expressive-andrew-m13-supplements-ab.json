@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "13",
+      "part": "91",
+      "revision": "2026-11-24-m13p91-andrew-expressive",
+      "approved_assets": {
+        "1": "58b8b7588a5cccabb62d148c41380528fe4f7c559f0fd6f8d518c16a3556612b",
+        "2": "edc22c484682e928a79ad92b4fbe59f4cc557b0cca1a52c73bcfcdb4d12400fa"
+      },
+      "units": [
+        {
+          "id": "m13p91-andrew-exp-s01-c1-4399ce5a97e0",
+          "slide": 1,
+          "text": "Let's prove the two access boundaries with three test outcomes. The caller can use the field in the first case, and the resolver may read the requested data. The caller gets the expected result because both checks pass.",
+          "text_sha256": "4399ce5a97e0dbed484f4d0583a318e1c0ae392ace14f60037f8073d81e8ac45",
+          "canonical_text_sha256": "4399ce5a97e0dbed484f4d0583a318e1c0ae392ace14f60037f8073d81e8ac45",
+          "asset_sha256": "58b8b7588a5cccabb62d148c41380528fe4f7c559f0fd6f8d518c16a3556612b"
+        },
+        {
+          "id": "m13p91-andrew-exp-s01-c2-ab20e648bef0",
+          "slide": 1,
+          "text": "In the second case, AppSync denies the caller or the requested field. The resolver does not get as far as Dynamo D B for that field. Check the authorization mode and field rule before broadening any downstream permissions.",
+          "text_sha256": "ab20e648bef0c84ce1c0713188410d93a3497be064c09b748805d7f0391ced35",
+          "canonical_text_sha256": "0953e10fd331faaedec5159c6a690c3dda587c2dc1c41860b9e4abf44fee442a",
+          "asset_sha256": "58b8b7588a5cccabb62d148c41380528fe4f7c559f0fd6f8d518c16a3556612b"
+        },
+        {
+          "id": "m13p91-andrew-exp-s01-c3-1b2ce4b3199f",
+          "slide": 1,
+          "text": "Now the caller is allowed, but the resolver lacks permission to read Dynamo D B. That produces a downstream error. Verify which check failed and grant only the necessary resolver action if the data access should be allowed.",
+          "text_sha256": "1b2ce4b3199f9cad1cdb242c2b3451bf7c032003a2a6e357484f3d545720b7c4",
+          "canonical_text_sha256": "7987179cc722720ae59bf475eaf8ef154d08210bfe02807739aa8186da9b398a",
+          "asset_sha256": "58b8b7588a5cccabb62d148c41380528fe4f7c559f0fd6f8d518c16a3556612b"
+        },
+        {
+          "id": "m13p91-andrew-exp-s02-c1-0b71fe1fa1db",
+          "slide": 2,
+          "text": "Instead of sending everybody to the new code, send a small share to the canary and keep the current version as a baseline. Pick the control that matches the change: the A P I stage or the Lambda alias.",
+          "text_sha256": "0b71fe1fa1db2546dc046c4d97f6a6c1fa4e3e7ce1727e9065f915234ec41aeb",
+          "canonical_text_sha256": "4caa3e2aa64b8cf6628c12dcdfcf6388577d5883e20bd9b06e40e41a41189ab0",
+          "asset_sha256": "edc22c484682e928a79ad92b4fbe59f4cc557b0cca1a52c73bcfcdb4d12400fa"
+        },
+        {
+          "id": "m13p91-andrew-exp-s02-c2-5522893c0245",
+          "slide": 2,
+          "text": "Did the release actually work? Compare the canary's error rate, tail latency and business-success signal against the baseline. Logs can explain a change; a healthy deployment status alone can't tell you whether customers completed the task.",
+          "text_sha256": "5522893c024580121c9bca80e4a1088be5e838313335ceb78e87b4f496acb2b3",
+          "canonical_text_sha256": "5522893c024580121c9bca80e4a1088be5e838313335ceb78e87b4f496acb2b3",
+          "asset_sha256": "edc22c484682e928a79ad92b4fbe59f4cc557b0cca1a52c73bcfcdb4d12400fa"
+        },
+        {
+          "id": "m13p91-andrew-exp-s02-c3-0a19e41538a9",
+          "slide": 2,
+          "text": "If the canary misses the agreed limits, route the traffic back. If the evidence holds for the agreed window, promote. That's a decision from observed behavior, not from the fact that the new version deployed.",
+          "text_sha256": "0a19e41538a972ed1086e59f95118aaf9a16ff63492e7e437da2a744dfc80a52",
+          "canonical_text_sha256": "0a19e41538a972ed1086e59f95118aaf9a16ff63492e7e437da2a744dfc80a52",
+          "asset_sha256": "edc22c484682e928a79ad92b4fbe59f4cc557b0cca1a52c73bcfcdb4d12400fa"
+        }
+      ]
+    },
+    {
+      "module": "13",
+      "part": "92",
+      "revision": "2026-11-24-m13p92-andrew-expressive",
+      "approved_assets": {
+        "1": "ba753e4cc665aba759f4cc2126b4e54bc211d4ec0a23646c22f6d64316587c03",
+        "2": "1d5b0fad5f545f2d0fbf660ae208854299d14d7f82d46ea08fc210a4cf70d34a"
+      },
+      "units": [
+        {
+          "id": "m13p92-andrew-exp-s01-c1-1019e5e121bb",
+          "slide": 1,
+          "text": "We'll follow the cost and latency of one request. The A P I calls Lambda, which then reads Dynamo D B. A cheap function invocation doesn't help much if an inefficient lookup creates far more work downstream. Use the observed request path as the unit of comparison.",
+          "text_sha256": "1019e5e121bba00289bf4e476a72344d3f261a69e998a2d7ffa8673cf4683c4a",
+          "canonical_text_sha256": "1bce27294e8995a9b736b615210b4d9b787cec7cf957da6a4195aad8d74803b6",
+          "asset_sha256": "ba753e4cc665aba759f4cc2126b4e54bc211d4ec0a23646c22f6d64316587c03"
+        },
+        {
+          "id": "m13p92-andrew-exp-s01-c2-ec115ac565ae",
+          "slide": 1,
+          "text": "Run through those cost drivers: how often the A P I is called, what memory and duration the function uses, and how the database key affects the amount of data read. Change one thing where practical and check its effect against the same workload.",
+          "text_sha256": "ec115ac565ae2fc6f3375ec0b8704d61cb4653a688fdb5a465aed89819914fec",
+          "canonical_text_sha256": "3eb76d5426decde98a00fde563e790f29143995fbeeef3e7ada650eac0bcfd9a",
+          "asset_sha256": "ba753e4cc665aba759f4cc2126b4e54bc211d4ec0a23646c22f6d64316587c03"
+        },
+        {
+          "id": "m13p92-andrew-exp-s01-c3-dc63af9a7eb0",
+          "slide": 1,
+          "text": "Logs and data transfer belong in the total too. Keep the diagnostic evidence you need, then compare the final end-to-end cost and tail latency. Don't trade away troubleshooting just to make one bill line smaller.",
+          "text_sha256": "dc63af9a7eb03fd8eb34f765e4d967d17c6bd1ffb1b100fc2f9218c1ec34458c",
+          "canonical_text_sha256": "dc63af9a7eb03fd8eb34f765e4d967d17c6bd1ffb1b100fc2f9218c1ec34458c",
+          "asset_sha256": "ba753e4cc665aba759f4cc2126b4e54bc211d4ec0a23646c22f6d64316587c03"
+        },
+        {
+          "id": "m13p92-andrew-exp-s02-c1-47454e52a1e0",
+          "slide": 2,
+          "text": "When A P I Gateway invokes Lambda synchronously, the caller gets a response or an error. A P I Gateway doesn't automatically retry that function invocation. The client decides whether repeating the operation is safe.",
+          "text_sha256": "47454e52a1e08d88759678a8cbfe7f92b762b73f4c0e548b2dfba686f425afaa",
+          "canonical_text_sha256": "cb5b8c7c29f253c11355e7a9d7b8f1c1f068d526e6ce4d7156c4ba55c0eb2d9b",
+          "asset_sha256": "1d5b0fad5f545f2d0fbf660ae208854299d14d7f82d46ea08fc210a4cf70d34a"
+        },
+        {
+          "id": "m13p92-andrew-exp-s02-c2-373aa1706291",
+          "slide": 2,
+          "text": "With a direct asynchronous invoke, Lambda accepts the event into its internal queue. Its async settings govern retries and failure retention. A successful acknowledgment is not proof that the work ran.",
+          "text_sha256": "373aa170629138baf0c6c0b5665af4a1619d20e362561707e33c6b51a6a0a5f7",
+          "canonical_text_sha256": "373aa170629138baf0c6c0b5665af4a1619d20e362561707e33c6b51a6a0a5f7",
+          "asset_sha256": "1d5b0fad5f545f2d0fbf660ae208854299d14d7f82d46ea08fc210a4cf70d34a"
+        },
+        {
+          "id": "m13p92-andrew-exp-s02-c3-441b1ba720bb",
+          "slide": 2,
+          "text": "With an S Q S event source mapping, Lambda polls the queue and handles a batch. A failure can make messages eligible again after the visibility timeout, and the queue's redrive policy governs its dead-letter queue. Decide who owns retries before tuning them.",
+          "text_sha256": "441b1ba720bbbe312e962ba2a24bd69a6e9f8daf0a31b06424bf77df071011d9",
+          "canonical_text_sha256": "868cb0a576df7d3bb9151a6fea965653b027d282e6797a45ca44152f703d98c5",
+          "asset_sha256": "1d5b0fad5f545f2d0fbf660ae208854299d14d7f82d46ea08fc210a4cf70d34a"
+        }
+      ]
+    }
+  ]
+}
