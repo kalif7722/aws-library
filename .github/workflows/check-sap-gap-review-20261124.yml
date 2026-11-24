@@ -1,4 +1,4 @@
-name: SAP audited slide release preflight (no deploy)
+name: SAP audited slide baseline regression comparison (no deploy)
 on:
   push:
     branches: ['review/sap-gap-preflight-20261124']
@@ -12,14 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.sha }}
+          ref: 09c4a38f7a7dc298451b23aa4df4f01f72980894
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22.13.0'
       - name: Verify checkout and install locked dependencies
         env:
-          EXPECTED_COMMIT: ${{ github.sha }}
+          EXPECTED_COMMIT: 09c4a38f7a7dc298451b23aa4df4f01f72980894
         run: |
           test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
           npm ci --no-audit --no-fund
