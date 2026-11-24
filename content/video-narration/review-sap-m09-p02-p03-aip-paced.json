@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-10%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "02",
+      "revision": "m09p02-sap-m09-p02-p03-aip-paced",
+      "approved_assets": {
+        "1": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b",
+        "2": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b",
+        "3": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b",
+        "4": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de",
+        "5": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de",
+        "6": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4",
+        "7": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+      },
+      "units": [
+        {
+          "id": "m09p02-01",
+          "slide": 1,
+          "text": "By the end of this video, you'll know how to reach an S three bucket privately, what makes an encrypted download fail, and how to recover a deleted report. Start with an application reading team reports. Give that application a named S three access point so you can scope which reports it may read.",
+          "text_sha256": "db692829ec9e500636ab1899cad8d53bbc357d3fcb8ab4b1e59ea966b5085b1e",
+          "canonical_text_sha256": "a92c0bffa84db29a710a949b095eb35363b69be4e08db4a1c67997feb38ffd03",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-02",
+          "slide": 2,
+          "text": "Now give the application a private route to S three. For this V P C and a bucket in the same Region, a gateway endpoint uses the V P C route table. If clients in a connected on-premises network also need private access, consider the S three interface endpoint. It uses private I P addresses and has a separate cost.",
+          "text_sha256": "01cfeadfc24ea0880c7cb899620aa581dff146ac0f37fa065db9c66de17bc357",
+          "canonical_text_sha256": "68b64ce4cfc9eac0f111e8b2a4b318499699a0ffed21f9a4a1351b66dae8ed5c",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-03",
+          "slide": 3,
+          "text": "A private route does not grant permission. The endpoint policy can restrict traffic through it; the access point and the underlying bucket still need to permit the request.",
+          "text_sha256": "93e6726ef50ffbe14a34c26276716acffeec8968e3639758f8bf34c9625e4b2f",
+          "canonical_text_sha256": "93e6726ef50ffbe14a34c26276716acffeec8968e3639758f8bf34c9625e4b2f",
+          "asset_sha256": "fa2fb6631e8dfcdf9cf8298bf410798fd7e02940574231aaee90f66632ce389b"
+        },
+        {
+          "id": "m09p02-04",
+          "slide": 4,
+          "text": "Now the application downloads an encrypted report. H T T P S protects the bytes on the way to the client. Encryption at rest is a different control: S three encrypts new uploads by default with S three managed keys unless you choose another supported option.",
+          "text_sha256": "b0c7c686f0d8f507b7f56a3c42611885d066782cf2ba298054f9a2b2b5d0a610",
+          "canonical_text_sha256": "6e824120039d7f2cb40e5f25fdc9ce28ee375327955e93f0f06ea7a563f9e427",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-05",
+          "slide": 5,
+          "text": "With SSE-K M S, assume the report reader already has S three Get Object. The read can still fail if that reader lacks permission to decrypt with the K M S key. Check the key policy and any I A M permissions it relies on. Requiring H T T P S won't fix a missing key permission.",
+          "text_sha256": "e695ddb9ff2876bcc7111ab0b6204734902be9b5b3df1655358cea6bb3899bd6",
+          "canonical_text_sha256": "dc0af3fa47e977986eaba66918051327c224715df200d736a22fd99a1798c4bb",
+          "asset_sha256": "b76fa4ebe908a457039fc517de375ff8998286494d4dabb6867b3a9a8e8717de"
+        },
+        {
+          "id": "m09p02-06",
+          "slide": 6,
+          "text": "Now someone uploads report dot C S V, overwrites it, then deletes it without giving a version ID. Versioning keeps the original and the overwrite. The delete adds a marker, so an ordinary read says the report isn't there.",
+          "text_sha256": "0659cff1c651f5aeb7ceea5aa4aca7f86e64471671b7806b95f99b5f211dc7fe",
+          "canonical_text_sha256": "479ab94865c55e0cd911d2d2b12ff63ebd6b21b7ae09b6475025d119207f3f87",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        },
+        {
+          "id": "m09p02-07",
+          "slide": 7,
+          "text": "Remove the current marker if you want the latest saved report back. To investigate the older copy, read that version by ID. A delete aimed at a specific version can remove those bytes permanently. Suspending versioning doesn't erase old versions. Set a lifecycle rule for the recovery period you need, rather than keeping every overwrite indefinitely.",
+          "text_sha256": "74ab4712be06673890208dcc0f4e63bc95b1d8eeb9424dd79e8525d1d45f7d10",
+          "canonical_text_sha256": "74ab4712be06673890208dcc0f4e63bc95b1d8eeb9424dd79e8525d1d45f7d10",
+          "asset_sha256": "5ad47ef903437df96949a1402e0336cbfa9fcb4d72f5c2aa4561f27568f078b4"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "03",
+      "revision": "m09p03-sap-m09-p02-p03-aip-paced",
+      "approved_assets": {
+        "1": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53",
+        "2": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53",
+        "3": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53",
+        "4": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e",
+        "5": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e",
+        "6": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796",
+        "7": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+      },
+      "units": [
+        {
+          "id": "m09p03-01",
+          "slide": 1,
+          "text": "In this video, you'll choose a retention control for one object version, deliver a private file through CloudFront, and decide when a cheaper storage class is worth it. Start with a report that must remain available for an audit. Object Lock protects versions in a versioned bucket, not every future version under the same key automatically.",
+          "text_sha256": "36d9c9ac0bbd44a5e11eb2611f57f16e6e9bb6ed5a8b2525862d4e5508997970",
+          "canonical_text_sha256": "36d9c9ac0bbd44a5e11eb2611f57f16e6e9bb6ed5a8b2525862d4e5508997970",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-02",
+          "slide": 2,
+          "text": "Governance mode leaves an exception for an authorized caller with explicit bypass permission and request. Compliance mode does not let the retention period be shortened or that protected version deleted before expiry, even by the root user.",
+          "text_sha256": "419ad9001aca7c6ecfe32ad63ab1a7e6ef94d6182295cdf2282324cb7596d280",
+          "canonical_text_sha256": "419ad9001aca7c6ecfe32ad63ab1a7e6ef94d6182295cdf2282324cb7596d280",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-03",
+          "slide": 3,
+          "text": "A legal hold is independent of the retention date. It stays until an authorized caller removes it. Choose the protection based on whether your obligation has a fixed end date or an unresolved hold.",
+          "text_sha256": "10b2abf78fca4379909a831d3918897192565efda53366bab1550f36c89d1705",
+          "canonical_text_sha256": "10b2abf78fca4379909a831d3918897192565efda53366bab1550f36c89d1705",
+          "asset_sha256": "e1476bfb6197005033465cb2918b58c4eef024c336fcfcd11d9982fefdae8b53"
+        },
+        {
+          "id": "m09p03-04",
+          "slide": 4,
+          "text": "For delivery, picture a viewer opening a website image. They ask CloudFront over H T T P S. If the edge has a usable cached copy, it can answer; otherwise CloudFront requests the image from S three.",
+          "text_sha256": "4ae26790064ea09cea17a260a976dc836a4484a16e46abe71ad045c7c0b3668b",
+          "canonical_text_sha256": "4a10de815d409531380f1ba5bf345c9416a8a3a9c4defdd66b7557af3de87ff9",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-05",
+          "slide": 5,
+          "text": "Use Origin Access Control with the regular S three bucket origin. The bucket policy allows the intended distribution rather than making the bucket public. An S three website endpoint is a custom origin and can't use O A C. Keep business logic on a separate compute backend; S three stores the static files. If a direct bucket request is denied while the distribution still serves the image, that's the private-origin behavior you wanted.",
+          "text_sha256": "7762dd36ba5dd1acc23ea73d244d7afd123f1ab9fbd889b21571f37728cba188",
+          "canonical_text_sha256": "6aa22667bb902a06a85e1c2750bdb15d1666dd9b03ac4170cb6baaec1c5067e3",
+          "asset_sha256": "fbd9545d625ce048173ca4301793d32009cfe8418ac1d43e827c81bfe993f27e"
+        },
+        {
+          "id": "m09p03-06",
+          "slide": 6,
+          "text": "For a popular site image, start with S three Standard: frequent reads, multiple Availability Zones, and no minimum storage duration. For a long-lived original that people rarely open but can't recreate, compare Standard Infrequent Access. It stays multi-zone.",
+          "text_sha256": "cfa2c8b06dc95eab179da0d37f3d8bf3e493a148cce1116862b4e14b8c340c77",
+          "canonical_text_sha256": "28147bd0c2eb09eb2db59ac22dda21844096e6550105d3f7d56f879181c0d365",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        },
+        {
+          "id": "m09p03-07",
+          "slide": 7,
+          "text": "Both infrequent-access classes add retrieval charges and bill for at least thirty days and one hundred twenty-eight kilobytes per object. One Zone Infrequent Access loses its protection if that zone is lost. Keep the only original multi-zone; consider One Zone for a thumbnail you can regenerate.",
+          "text_sha256": "61c63d9cce53d6dcb6bd3bb205c4065ca89f7ca619d213dcb9fb7374c26a3ce0",
+          "canonical_text_sha256": "8429518a91568ff8829e6afb7e3c070fdbc24bcc088ef39cfdc081ed34a7a8d6",
+          "asset_sha256": "d35c7ca12252eafabbc3d5d8438395209881d5c9141b5572356db9c64df45796"
+        }
+      ]
+    }
+  ]
+}
