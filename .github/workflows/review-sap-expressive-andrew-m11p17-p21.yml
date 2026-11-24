@@ -1,0 +1,56 @@
+name: SAP M11 P17–21 expressive Andrew review
+on:
+  push:
+    branches: [review/sap-expressive-andrew-m11p17-p21]
+    paths: [.github/workflows/review-sap-expressive-andrew-m11p17-p21.yml, scripts/review_sap_expressive_andrew_m11p17_p21.py, content/video-narration/review-sap-expressive-andrew-m11p17-p21.json, content/video-narration/review-sap-expressive-andrew-m11p17-p21.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-expressive-andrew-m11p17-p21-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-expressive-andrew-m11p17-p21'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        part: [m11p17, m11p18, m11p19, m11p21]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_expressive_andrew_m11p17_p21.py
+            content/video-narration/review-sap-expressive-andrew-m11p17-p21.json
+            content/video-narration/review-sap-expressive-andrew-m11p17-p21.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_expressive_andrew_m11p17_p21.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned edge-tts
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          for attempt in 1 2; do
+            if timeout 75s python -m pip install --disable-pip-version-check --timeout 15 --retries 1 'edge-tts==7.3.1'; then
+              break
+            fi
+            if [ "$attempt" -eq 2 ]; then exit 1; fi
+            sleep 3
+          done
+          python -c 'from importlib.metadata import version; v = version("edge-tts"); assert v == "7.3.1", v; print("edge-tts", v)'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_expressive_andrew_m11p17_p21.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-expressive-andrew-m11p17-p21-${{ matrix.part }}-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
