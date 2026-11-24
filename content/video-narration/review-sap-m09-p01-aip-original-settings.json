@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "m09p01-sap-m09-p01-aip-original-settings",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "3": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "4": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "5": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "6": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "7": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217",
+        "8": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217",
+        "9": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-original-01-1",
+          "slide": 1,
+          "text": "Imagine you are building an online shop. The site needs to load product photos, keep backups, and store order records. This slide starts with the storage decision that makes those examples work. Amazon S three is object storage. For our shop, the bucket gives us a container in one A W S Region. Put a photo in that bucket, and the application retrieves it by its key. The example key, images slash logo dot P N G, looks like a file path.",
+          "text_sha256": "c8d32af2d798af4bc39b0c51e9bbda3d0846e6df0d210b7fcb869db403ddef25",
+          "canonical_text_sha256": "f854aff657620ca09ecf8137778063c7df5c83ceb90eaaa0b71aff4b70d5f061",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-original-01-2",
+          "slide": 2,
+          "text": "But S three looks up the complete name; the slash can organize names without turning the bucket into a conventional file system. The object also has data bytes, metadata such as the content type, and a storage class. That class matters because an image served all day and an archive opened once a year have different retrieval and cost needs. Notice what comes first, though: all of those are object requests.",
+          "text_sha256": "9d584c8271838f9044729c0c00971e0e1f5eb994c4e54b87e91820cb2f3c5c9c",
+          "canonical_text_sha256": "b9e8a5f112f0bb4bc38680dd834c3f866b9a13016cdccc28bf41a5c2440085b7",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-original-01-3",
+          "slide": 3,
+          "text": "If your app needs mounted files and locking, or a disk for in-place writes, choose the appropriate file or block interface before looking at cheaper S three classes.",
+          "text_sha256": "69efe10b7ce83ebb703d9954f7d34dee519acffdf73d751f8973b3c7515e359c",
+          "canonical_text_sha256": "fe7c45535fa71b84fc6568b669ae1171947ead31137ec43c16d3662b64712f60",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-original-02-1",
+          "slide": 4,
+          "text": "Now the shop saves order one thousand and one. It sends a put for the key shown on the slide, and the write succeeds. What can another worker see at that point? A subsequent get reads the new order, and list reflects the completed change. That's strong consistency. It also applies after successful overwrites and deletes.",
+          "text_sha256": "db9a77e2d7c5395940909c125f72d96ddc3440a61048567703627881be40f51d",
+          "canonical_text_sha256": "bae5f9ee2e62c734bc8594e8b103f196054f4a2bedf314917dd857969b163402",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-original-02-2",
+          "slide": 5,
+          "text": "Now change the scenario: two workers both read that same order, each edits a field, and each writes a full replacement. Both reads can be current when they happen. But the last replacement can overwrite the first worker's change. Strong consistency didn't coordinate the writers.",
+          "text_sha256": "b650fda3522ec20d33f319ddc2416de912d4bccc342558d9830d41d5133c1f21",
+          "canonical_text_sha256": "b650fda3522ec20d33f319ddc2416de912d4bccc342558d9830d41d5133c1f21",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-original-02-3",
+          "slide": 6,
+          "text": "If each update should apply only to the version the worker read, send a conditional write with the expected E tag and handle the conflict if it no longer matches. Versioning can preserve earlier copies for recovery; it doesn't merge two edits. And if the order and inventory are separate objects, a successful write to one doesn't make both writes a single transaction.",
+          "text_sha256": "c1b63f7c3f400f6e17ef1d5844f4b08042a94c727676554e5bd382a0c7339ca6",
+          "canonical_text_sha256": "0fd3f021bc0f086a433c435d6e520648ab7bba5c1f5804eba35972f297deeb9c",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-original-03-1",
+          "slide": 7,
+          "text": "Now give a reporting application access to a saved order. The application runs as a role, so start with the actual caller, not the person who deployed it. Its identity policy can allow the action the app needs on the intended object. A bucket or access point policy sets resource-side rules. Across accounts, check both sides instead of assuming that one allow is enough.",
+          "text_sha256": "1d2c771c32af53e40c7c5e5a9d93141ecbebd40b235580f4e30f69c961def899",
+          "canonical_text_sha256": "1d2c771c32af53e40c7c5e5a9d93141ecbebd40b235580f4e30f69c961def899",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-original-03-2",
+          "slide": 8,
+          "text": "The evaluation box calls out an important exam rule: an applicable explicit deny wins. Now look at the object ownership choice. Bucket owner enforced turns off access control lists and makes the bucket owner own uploaded objects. That removes the legacy problem of a different account owning the upload. It doesn't give the reporting role permission to read it.",
+          "text_sha256": "d402d4567b4439d570070aa84034e836c81442e78c68fa8b9be3ab1971183669",
+          "canonical_text_sha256": "d402d4567b4439d570070aa84034e836c81442e78c68fa8b9be3ab1971183669",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-original-03-3",
+          "slide": 9,
+          "text": "So if the app gets Access Denied, identify the principal, action, exact object, and effective policies before changing anything. Then fix the missing permission or conflicting rule; don't open the bucket to make the error disappear.",
+          "text_sha256": "307c1fd197949d1bdba0adf1bf32c20c0c0ce92c865101abf067317e3eae17ed",
+          "canonical_text_sha256": "307c1fd197949d1bdba0adf1bf32c20c0c0ce92c865101abf067317e3eae17ed",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    }
+  ]
+}
