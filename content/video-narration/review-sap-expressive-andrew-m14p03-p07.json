@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "14",
+      "part": "03",
+      "revision": "2026-11-24-m14p03-andrew-expressive",
+      "approved_assets": {
+        "1": "16f0f7b36900a2a9b89c5561908acd031fa3089803ad2b9d1c98aa0f2f47e522",
+        "2": "f10f2a81e7f413601bf9bddddc48ebe42b850738430534f6dc0cd5de9e2240cd"
+      },
+      "units": [
+        {
+          "id": "m14p03-andrew-exp-s01-c1-0c4d9548ab2f",
+          "slide": 1,
+          "text": "We'll follow a task failure and decide whether to retry or recover. For a transient error, a matching Retry policy can wait and try again with backoff. Cap the attempts, and make the operation safe to repeat so a retry doesn't apply the same side effect twice.",
+          "text_sha256": "0c4d9548ab2f0ae5bb895cf94280ed1a191bf7cd9271c6830e8602bdee2a286c",
+          "canonical_text_sha256": "0c4d9548ab2f0ae5bb895cf94280ed1a191bf7cd9271c6830e8602bdee2a286c",
+          "asset_sha256": "16f0f7b36900a2a9b89c5561908acd031fa3089803ad2b9d1c98aa0f2f47e522"
+        },
+        {
+          "id": "m14p03-andrew-exp-s01-c2-4f6e4a8fbd75",
+          "slide": 1,
+          "text": "When retries are exhausted, a matching Catch routes the error into the recovery path. A recovered branch can end successfully. Without a matching handler, the error can fail the execution. Succeed and Fail end the workflow; they're not another retry.",
+          "text_sha256": "4f6e4a8fbd7565357fef0aae63c26d661f237cc4b9b775ab7a49c6adf4327750",
+          "canonical_text_sha256": "4f6e4a8fbd7565357fef0aae63c26d661f237cc4b9b775ab7a49c6adf4327750",
+          "asset_sha256": "16f0f7b36900a2a9b89c5561908acd031fa3089803ad2b9d1c98aa0f2f47e522"
+        },
+        {
+          "id": "m14p03-andrew-exp-s02-c1-5336be9bf023",
+          "slide": 2,
+          "text": "Imagine an order needs explicit approval. The Standard workflow sends a message with a task token and waits. A successful send is not approval. The state stays pending until the callback or a configured timeout.",
+          "text_sha256": "5336be9bf0238a8e2faf18d7eec17806edd424fffea4a81b060d80bd2b016b96",
+          "canonical_text_sha256": "5336be9bf0238a8e2faf18d7eec17806edd424fffea4a81b060d80bd2b016b96",
+          "asset_sha256": "f10f2a81e7f413601bf9bddddc48ebe42b850738430534f6dc0cd5de9e2240cd"
+        },
+        {
+          "id": "m14p03-andrew-exp-s02-c2-d153100d0af9",
+          "slide": 2,
+          "text": "The approval application presents the decision, then an authorized worker returns the matching token with success or failure. Protect that token and keep the callback principal in the same A W S account. Use a timeout so an abandoned approval doesn't wait indefinitely. Express doesn't support this callback pattern.",
+          "text_sha256": "d153100d0af93275baaaa6e72a15742431715e7f9337942f8873b000a874b9a8",
+          "canonical_text_sha256": "f35dd825da8a781493ebed25ca9799ba9a9b91d86959162a1862b588fbeb3919",
+          "asset_sha256": "f10f2a81e7f413601bf9bddddc48ebe42b850738430534f6dc0cd5de9e2240cd"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "04",
+      "revision": "2026-11-24-m14p04-andrew-expressive",
+      "approved_assets": {
+        "1": "444827c22cb4c7f73d3d561cd03de82790e2a447ad882d25ea1b5cdc6df00c28",
+        "2": "da70499f414558e665072796c660feb8ceb8e3b7dcb2048eb8c8b68dcd062ba6",
+        "3": "8d0dce45bfe64e046e3fb7ddbc3f362a59f2dac79da22fa07fb3b9f31637eff7",
+        "4": "b69177b0ca8951faaf5b54f6ce24fed2f9735ab90573ad6831a34b09f56ba3b4"
+      },
+      "units": [
+        {
+          "id": "m14p04-andrew-exp-s01-c1-b0e742efc558",
+          "slide": 1,
+          "text": "We'll follow an order message from producer to worker. The producer puts it on S Q S and can continue. The consumer processes it at its own rate. The queue absorbs the difference when orders temporarily arrive faster than workers can handle them.",
+          "text_sha256": "b0e742efc55862ad04e15366bb9152bef88333f247a4d2b4f47cce232fdd3af7",
+          "canonical_text_sha256": "0c7008976934a3e6861814f4fbf8a3268ef775b3d492224b9d5e7cb39e0f021b",
+          "asset_sha256": "444827c22cb4c7f73d3d561cd03de82790e2a447ad882d25ea1b5cdc6df00c28"
+        },
+        {
+          "id": "m14p04-andrew-exp-s01-c2-e02c2979994e",
+          "slide": 1,
+          "text": "Choose Standard if best-effort order and possible duplicates fit your workload. fye foe preserves order within each message group and suppresses eligible duplicate sends. Consumers should still be safe to repeat.",
+          "text_sha256": "e02c2979994ea8eaf993e9894e5ef5f174f57932bfcbc99ee2ed0cc0881d5d96",
+          "canonical_text_sha256": "dec452da5374052ba1abb31fc4364ba0df8e4ed8dc3290b6eaa67105a23fbb99",
+          "asset_sha256": "444827c22cb4c7f73d3d561cd03de82790e2a447ad882d25ea1b5cdc6df00c28"
+        },
+        {
+          "id": "m14p04-andrew-exp-s01-c3-4afa08af3261",
+          "slide": 1,
+          "text": "Receiving hides a message temporarily; it doesn't remove it. Delete after successful processing. A repeatedly failing message can move to the configured dead-letter queue so it can be investigated separately.",
+          "text_sha256": "4afa08af3261028a83ef11efeacf2c4445ecfafd127b4ac501e6afbc5aacea14",
+          "canonical_text_sha256": "4afa08af3261028a83ef11efeacf2c4445ecfafd127b4ac501e6afbc5aacea14",
+          "asset_sha256": "444827c22cb4c7f73d3d561cd03de82790e2a447ad882d25ea1b5cdc6df00c28"
+        },
+        {
+          "id": "m14p04-andrew-exp-s02-c1-adef00d6ef73",
+          "slide": 2,
+          "text": "The web tier enqueues a write request. The queue can acknowledge that it received the message before the worker has written to Dynamo D B. If the interface reports a completed write immediately, it's promising more than this architecture has done.",
+          "text_sha256": "adef00d6ef73676708259ae5fc5c8266b0fa6ebe573d7d0914cbbca3a6b0b4a5",
+          "canonical_text_sha256": "5441987435d07db962f4d06cba894077f9ecc7e6b119313dec0250084bc5b86d",
+          "asset_sha256": "da70499f414558e665072796c660feb8ceb8e3b7dcb2048eb8c8b68dcd062ba6"
+        },
+        {
+          "id": "m14p04-andrew-exp-s02-c2-10ed137ba8b7",
+          "slide": 2,
+          "text": "When the arrival rate jumps, backlog grows. Workers can scale out to drain it, provided the destination can accept more writes. Watch both backlog and message age to see whether it's recovering.",
+          "text_sha256": "10ed137ba8b796af56d189ad33d5013f38e5961a699d9ea003d64fbf4a2205e9",
+          "canonical_text_sha256": "10ed137ba8b796af56d189ad33d5013f38e5961a699d9ea003d64fbf4a2205e9",
+          "asset_sha256": "da70499f414558e665072796c660feb8ceb8e3b7dcb2048eb8c8b68dcd062ba6"
+        },
+        {
+          "id": "m14p04-andrew-exp-s02-c3-28a80516045d",
+          "slide": 2,
+          "text": "Make writes safe to repeat using a stable business key. Use the dead-letter queue to separate repeated failures and preserve evidence, not to make those operations succeed automatically.",
+          "text_sha256": "28a80516045df0bbae256a01b03e4b01f867e95db5850e60c6b0d26025815538",
+          "canonical_text_sha256": "28a80516045df0bbae256a01b03e4b01f867e95db5850e60c6b0d26025815538",
+          "asset_sha256": "da70499f414558e665072796c660feb8ceb8e3b7dcb2048eb8c8b68dcd062ba6"
+        },
+        {
+          "id": "m14p04-andrew-exp-s03-c1-24f000f28458",
+          "slide": 3,
+          "text": "Both messages represent the same order. The first worker's conditional write succeeds. When the duplicate reaches that same business key, the condition prevents another successful write. That changes duplicate delivery into one durable effect.",
+          "text_sha256": "24f000f2845867387e8ae11ab6ec8b5102f76abb8ad7f9c557381e001cf4392a",
+          "canonical_text_sha256": "24f000f2845867387e8ae11ab6ec8b5102f76abb8ad7f9c557381e001cf4392a",
+          "asset_sha256": "8d0dce45bfe64e046e3fb7ddbc3f362a59f2dac79da22fa07fb3b9f31637eff7"
+        },
+        {
+          "id": "m14p04-andrew-exp-s03-c2-dbeb874f8937",
+          "slide": 3,
+          "text": "Finish or recognize the durable result before deleting the message. If the worker crashes before deletion, delivery can repeat. That's why idempotency belongs in the consumer even when the workflow usually looks orderly.",
+          "text_sha256": "dbeb874f8937e4442f96c525d811cb43bf267be98e52d8daecbcc11762d60012",
+          "canonical_text_sha256": "dbeb874f8937e4442f96c525d811cb43bf267be98e52d8daecbcc11762d60012",
+          "asset_sha256": "8d0dce45bfe64e046e3fb7ddbc3f362a59f2dac79da22fa07fb3b9f31637eff7"
+        },
+        {
+          "id": "m14p04-andrew-exp-s04-c1-b9d5009ec423",
+          "slide": 4,
+          "text": "Group A proceeds in order from A one to A three. Group B has its own sequence and can progress independently. Choose the group I D for the entity that needs ordering rather than putting unrelated work in one lane.",
+          "text_sha256": "b9d5009ec423707274dbbdc98a45285b038427d2d6585eaddb803a876e7bc614",
+          "canonical_text_sha256": "b234e9777ba2f13d26aa26f6aa357d5fd82c81b6ca52fa55fd19615ec9f532f3",
+          "asset_sha256": "b69177b0ca8951faaf5b54f6ce24fed2f9735ab90573ad6831a34b09f56ba3b4"
+        },
+        {
+          "id": "m14p04-andrew-exp-s04-c2-2159567b86fd",
+          "slide": 4,
+          "text": "The producer uses a deduplication I D or content-based deduplication to suppress retried sends within the five-minute deduplication window. It doesn't replace an idempotent consumer, especially if processing may be attempted again.",
+          "text_sha256": "2159567b86fd2d4e0e7fd90f2e46e11f385f054bb4912f46e3e5eb25eec942dc",
+          "canonical_text_sha256": "bb1ecf93b47352d3b9c34df4a3b15dd20677b72867427b5ce4edeea38282c945",
+          "asset_sha256": "b69177b0ca8951faaf5b54f6ce24fed2f9735ab90573ad6831a34b09f56ba3b4"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "05",
+      "revision": "2026-11-24-m14p05-andrew-expressive",
+      "approved_assets": {
+        "1": "59437420fe9b96880940b959f06b446bc845297df3a3b06dbd9f65652d407786",
+        "2": "57125495628c6e61d958611fac05fcb8fa15bc202b368e0bb2a33b56ffea2315",
+        "3": "6c77493cc933de73ce499ec5d398b4582e1d36e8793aa4f61e60b719de1b73fb",
+        "4": "8ddfa53a41962520b1e6ec672677dcb2747ab1b34d20d713cdf5851ea91b0dd5"
+      },
+      "units": [
+        {
+          "id": "m14p05-andrew-exp-s01-c1-edcbd38a3a5c",
+          "slide": 1,
+          "text": "Let's follow a message from pickup to removal. ReceiveMessage can wait up to twenty seconds with long polling. That cuts empty receives; it doesn't promise that a worker will complete the job.",
+          "text_sha256": "edcbd38a3a5cf9be1397070c623c98a4140893c2d66e1b86ffc853174dfa130d",
+          "canonical_text_sha256": "edcbd38a3a5cf9be1397070c623c98a4140893c2d66e1b86ffc853174dfa130d",
+          "asset_sha256": "59437420fe9b96880940b959f06b446bc845297df3a3b06dbd9f65652d407786"
+        },
+        {
+          "id": "m14p05-andrew-exp-s01-c2-fe2607a33eb9",
+          "slide": 1,
+          "text": "After receipt, S Q S hides the message for the visibility timeout while the worker processes it. Match that window to normal processing time. If it expires without deletion, the message can become visible again.",
+          "text_sha256": "fe2607a33eb939b6eebb43bd5866c838baf5fc870b5747098b00edd19428ceee",
+          "canonical_text_sha256": "2a81641e7cef4aec92ecd4a7c47037f416d0e41cd02b0651a9cb5cf0551c250b",
+          "asset_sha256": "59437420fe9b96880940b959f06b446bc845297df3a3b06dbd9f65652d407786"
+        },
+        {
+          "id": "m14p05-andrew-exp-s01-c3-95c5c755acd4",
+          "slide": 1,
+          "text": "When processing succeeds, delete using the receipt handle returned for this delivery. That's when S Q S can remove the message instead of offering it again.",
+          "text_sha256": "95c5c755acd404b70a9207d0b700a89b143b219638d042d4983c1094240f2371",
+          "canonical_text_sha256": "4e59ef5504bd9eb4beb3da44b92a63b168ddb54d613806a90343797b23cf7a0c",
+          "asset_sha256": "59437420fe9b96880940b959f06b446bc845297df3a3b06dbd9f65652d407786"
+        },
+        {
+          "id": "m14p05-andrew-exp-s02-c1-dba23bf75b8b",
+          "slide": 2,
+          "text": "Retention governs how long the service keeps a message, from one minute to fourteen days. Expiry removes it even if no one finishes the work. That's different from hiding a received message while a worker runs.",
+          "text_sha256": "dba23bf75b8bc5452ef55aba4f5a569f7a08f672b81310ccd8d94521c4c38d29",
+          "canonical_text_sha256": "dba23bf75b8bc5452ef55aba4f5a569f7a08f672b81310ccd8d94521c4c38d29",
+          "asset_sha256": "57125495628c6e61d958611fac05fcb8fa15bc202b368e0bb2a33b56ffea2315"
+        },
+        {
+          "id": "m14p05-andrew-exp-s02-c2-b3df6db4c0a2",
+          "slide": 2,
+          "text": "Delivery delay hides a new message before its first visibility, for up to fifteen minutes. Visibility timeout starts after a consumer receives it. Pick the timer that matches the stage you need to control.",
+          "text_sha256": "b3df6db4c0a22170969751fdf0691283878c9487a779064505ef96c3b6ac671f",
+          "canonical_text_sha256": "b3df6db4c0a22170969751fdf0691283878c9487a779064505ef96c3b6ac671f",
+          "asset_sha256": "57125495628c6e61d958611fac05fcb8fa15bc202b368e0bb2a33b56ffea2315"
+        },
+        {
+          "id": "m14p05-andrew-exp-s02-c3-a70e2f0bc3ad",
+          "slide": 2,
+          "text": "The native message limit is one mebibyte. For a larger object, store the payload in S three and send its pointer in S Q S. Now the worker needs access to both, and the object must stay available while retries can still occur.",
+          "text_sha256": "a70e2f0bc3adf66d19b0d65cbc5addac95d842512d1edca77f8c95f849fb2cd3",
+          "canonical_text_sha256": "d564fd4df3f58adae06e2c022703ebd9443c4bf321fa127a902cc45326845b3f",
+          "asset_sha256": "57125495628c6e61d958611fac05fcb8fa15bc202b368e0bb2a33b56ffea2315"
+        },
+        {
+          "id": "m14p05-andrew-exp-s03-c1-effd6aab0eba",
+          "slide": 3,
+          "text": "A consumer repeatedly fails the same message. Once the redrive policy's receive threshold is exhausted, S Q S can move it out of the source queue. That isolates the failure instead of blocking normal work behind it.",
+          "text_sha256": "effd6aab0eba732d7a1fa83e73cb0ae9729e462c2513a4944ac2d35385726ee0",
+          "canonical_text_sha256": "a3569bac0aa1ce973b1557753877cd0e56ce7b792ee747bd53bedfe389383877",
+          "asset_sha256": "6c77493cc933de73ce499ec5d398b4582e1d36e8793aa4f61e60b719de1b73fb"
+        },
+        {
+          "id": "m14p05-andrew-exp-s03-c2-8d7df77177b3",
+          "slide": 3,
+          "text": "Inspect the failed message and fix the cause before redriving it. Then verify the consumer handles it successfully. Redrive is a deliberate reprocessing action, not an automatic repair.",
+          "text_sha256": "8d7df77177b31b24c119b701d34f117c160004a27e60548b5bce0f678125fdc7",
+          "canonical_text_sha256": "8d7df77177b31b24c119b701d34f117c160004a27e60548b5bce0f678125fdc7",
+          "asset_sha256": "6c77493cc933de73ce499ec5d398b4582e1d36e8793aa4f61e60b719de1b73fb"
+        },
+        {
+          "id": "m14p05-andrew-exp-s04-c1-9d198019f7a7",
+          "slide": 4,
+          "text": "The event source mapping polls the queue and sends a batch to the function. With the default whole-batch failure behavior, already processed records can also return when visibility expires. That can repeat side effects unless handling is idempotent.",
+          "text_sha256": "9d198019f7a7694f85fd67ad21c2ebfe9da23366a660cbe8ed00952babc4728d",
+          "canonical_text_sha256": "9d198019f7a7694f85fd67ad21c2ebfe9da23366a660cbe8ed00952babc4728d",
+          "asset_sha256": "8ddfa53a41962520b1e6ec672677dcb2747ab1b34d20d713cdf5851ea91b0dd5"
+        },
+        {
+          "id": "m14p05-andrew-exp-s04-c2-03ac8c373294",
+          "slide": 4,
+          "text": "Enable partial batch responses and report the failed message IDs so successful records need not retry. For fye foe, stop after the first failure and report it with the unprocessed records to preserve ordering.",
+          "text_sha256": "03ac8c373294a4e09425a2af93d5cf1e860c8321a9149fb3d3b2a27ab491555d",
+          "canonical_text_sha256": "53e63d5d2d58a6af9a29a073d8ca5a526a09bc511368216311d28bf24ecede33",
+          "asset_sha256": "8ddfa53a41962520b1e6ec672677dcb2747ab1b34d20d713cdf5851ea91b0dd5"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "06",
+      "revision": "2026-11-24-m14p06-andrew-expressive",
+      "approved_assets": {
+        "1": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b",
+        "2": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+      },
+      "units": [
+        {
+          "id": "m14p06-andrew-exp-s01-c1-39a65a3b5170",
+          "slide": 1,
+          "text": "Let's tell whether a busy queue needs more workers or whether they're already overloading the database. If messages arrive faster than the workers can finish them, backlog grows and the oldest message waits longer.",
+          "text_sha256": "39a65a3b5170466b18f7f0bb465e7dec35e04e6c03737134ad26d7cb6cc9baa7",
+          "canonical_text_sha256": "39a65a3b5170466b18f7f0bb465e7dec35e04e6c03737134ad26d7cb6cc9baa7",
+          "asset_sha256": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b"
+        },
+        {
+          "id": "m14p06-andrew-exp-s01-c2-cfecc2b450a2",
+          "slide": 1,
+          "text": "Watch visible messages and oldest message age together. Tune concurrency or batch size if workers need capacity, but obey the database's safe write rate. If it is already throttling, simply adding workers can make the backlog worse.",
+          "text_sha256": "cfecc2b450a2d4e23a0d7be43686c58013b8ad2cbfb3403936f0d64d330f5b60",
+          "canonical_text_sha256": "cfecc2b450a2d4e23a0d7be43686c58013b8ad2cbfb3403936f0d64d330f5b60",
+          "asset_sha256": "2865ffb10299a68ebbe2019e63d9490889f9c0d9b6ffb06da687b18de5c9398b"
+        },
+        {
+          "id": "m14p06-andrew-exp-s02-c1-e41af2bf00cc",
+          "slide": 2,
+          "text": "The requester sends an operation and correlation I D to the request queue. A worker processes it and puts the result in a separate response queue with the same I D. The requester matches that response to the original operation.",
+          "text_sha256": "e41af2bf00cc094fe336c71b5f68d768743ac869ad19cbc6666758e2b51f3833",
+          "canonical_text_sha256": "ec2b108cff64f6f702633aaf38c44d6cf6809a63d90af8c72528e01c3745b63d",
+          "asset_sha256": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+        },
+        {
+          "id": "m14p06-andrew-exp-s02-c2-9abb6f2e1f88",
+          "slide": 2,
+          "text": "If the requester times out, work may still finish. Handle late and duplicate replies without applying the action twice. Set queue permissions and retention for both sides; two queues don't turn this into a synchronous call.",
+          "text_sha256": "9abb6f2e1f884aec18ad32192cd697fd152d5e41b7221a49953076b5d5c50a54",
+          "canonical_text_sha256": "9abb6f2e1f884aec18ad32192cd697fd152d5e41b7221a49953076b5d5c50a54",
+          "asset_sha256": "0e490960c400ed93f4877d86f5fd633f2a90b8c077ba125cf78f06dae8411e65"
+        }
+      ]
+    },
+    {
+      "module": "14",
+      "part": "07",
+      "revision": "2026-11-24-m14p07-andrew-expressive",
+      "approved_assets": {
+        "1": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966",
+        "2": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+      },
+      "units": [
+        {
+          "id": "m14p07-andrew-exp-s01-c1-cc62cc7a00b7",
+          "slide": 1,
+          "text": "We'll decide when an existing application should keep a broker. Amazon M Q manages an Active M Q or Rabbit M Q broker, so clients can keep the compatible messaging protocol. Confirm compatibility for the chosen engine before assuming the application can move unchanged.",
+          "text_sha256": "cc62cc7a00b7b96299e91f7b879548ceb63c7b0dcb4c2f742173226c491c9c00",
+          "canonical_text_sha256": "630438b355a456eaa43e24f00f5322032d0dfd043e67651fbb8218e862dba2d3",
+          "asset_sha256": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966"
+        },
+        {
+          "id": "m14p07-andrew-exp-s01-c2-7a73b83172fd",
+          "slide": 1,
+          "text": "Validate the network and security boundaries and test how clients reconnect during broker failover. A managed broker reduces infrastructure work; it doesn't eliminate client recovery. S Q S has a different A P I and isn't a protocol-compatible replacement.",
+          "text_sha256": "7a73b83172fdf02459aec3ba7d1a68392898be74bd444fe03850541fa9cede56",
+          "canonical_text_sha256": "4dd07b20942b0f4145c0d7b65517cae35563f6e70bc0b2756ac000aeac70d8a8",
+          "asset_sha256": "2aa257fe032f64127bd5a4f914e8863722b6e2be241ff937c3a40c2c566ca966"
+        },
+        {
+          "id": "m14p07-andrew-exp-s02-c1-3a45af674fdb",
+          "slide": 2,
+          "text": "Keep a managed broker when the application needs its existing protocol or behavior, such as routing or messaging transactions. Those are application requirements, not just a preference for a managed service.",
+          "text_sha256": "3a45af674fdbfdba96393ee0ddedf1cc2a281c0ff0b1064964e60173b8073908",
+          "canonical_text_sha256": "3a45af674fdbfdba96393ee0ddedf1cc2a281c0ff0b1064964e60173b8073908",
+          "asset_sha256": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+        },
+        {
+          "id": "m14p07-andrew-exp-s02-c2-a0eb52383f61",
+          "slide": 2,
+          "text": "Choose S Q S if the application can adopt its A P I and the workload only needs its queue semantics. That is a redesign, not an endpoint swap. Test behavior and failover before cutting over.",
+          "text_sha256": "a0eb52383f611497074dd66ba53473ae7277a5f64a971fef284201c7ee1bbe5f",
+          "canonical_text_sha256": "62773766c1ab3793c900a930eb13c801ed94d43ed3b98b7951a8071644d029e7",
+          "asset_sha256": "8bca82e4d0688a6a080b84b2cf4ec68fb671d82b6fcb2ef0cd50f7b5452bdaac"
+        }
+      ]
+    }
+  ]
+}
