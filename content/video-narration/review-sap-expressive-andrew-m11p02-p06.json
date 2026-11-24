@@ -1,0 +1,404 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "02",
+      "revision": "2026-11-24-m11p02-andrew-expressive",
+      "approved_assets": {
+        "1": "8f4b7ce988f04d340b4d2d4926370f36f1c3b77f28336be75a05c78785165435",
+        "2": "a2262490146845534e727b9333c662755d769024c28e2dce7d79abdd9c8ae8c1",
+        "3": "a95963602bd3a91c7d33bc7dc3478d9a5a0288c8712328dca66fac8fc5243abb",
+        "4": "e7b525f79059d29141fda29276a95ef2fe35f49cb1617381a061602ed09b0da1"
+      },
+      "units": [
+        {
+          "id": "m11p02-andrew-exp-s01-c1-b4750e128567",
+          "slide": 1,
+          "text": "An update damaged the production data. Can the replica take us back to before it ran? Start with automated backups and transaction logs. Pick a point inside retention, and R D S uses that history to reconstruct the database there.",
+          "text_sha256": "b4750e128567396399590f7a5b714bc4d6bd244c0cfaaeb8e02cad0c4a2f2604",
+          "canonical_text_sha256": "c2f56bca96075e61fc1c0633cdf9b20b4e272ccd08a621f6599efee94e000c3a",
+          "asset_sha256": "8f4b7ce988f04d340b4d2d4926370f36f1c3b77f28336be75a05c78785165435"
+        },
+        {
+          "id": "m11p02-andrew-exp-s01-c2-f4e4decf3a9a",
+          "slide": 1,
+          "text": "A manual snapshot is different. It captures one chosen point and stays until deleted. Use it to keep a specific recovery point, not as a continuous history of changes.",
+          "text_sha256": "f4e4decf3a9ad4cd15d814ec5ad95e77ce53071a92af66f7ed97281ffd55a182",
+          "canonical_text_sha256": "f4e4decf3a9ad4cd15d814ec5ad95e77ce53071a92af66f7ed97281ffd55a182",
+          "asset_sha256": "8f4b7ce988f04d340b4d2d4926370f36f1c3b77f28336be75a05c78785165435"
+        },
+        {
+          "id": "m11p02-andrew-exp-s01-c3-9da7de9c33b2",
+          "slide": 1,
+          "text": "The restore creates a new database resource. Check the data, endpoint and permissions with the actual app before switching. A database you can list is not yet a working recovery.",
+          "text_sha256": "9da7de9c33b260deb63516eb727f9bdd2ccea70ed1e760f585b93909377babdf",
+          "canonical_text_sha256": "9da7de9c33b260deb63516eb727f9bdd2ccea70ed1e760f585b93909377babdf",
+          "asset_sha256": "8f4b7ce988f04d340b4d2d4926370f36f1c3b77f28336be75a05c78785165435"
+        },
+        {
+          "id": "m11p02-andrew-exp-s01-c4-0eb0fad51b14",
+          "slide": 1,
+          "text": "If the retention or recovery plan needs a copy elsewhere, check whether the deployment supports that copy and whether the destination can use its encryption key.",
+          "text_sha256": "0eb0fad51b140629a210812d3c45e5b5ff54e609ad05c0b5281a7242a5c4b6ee",
+          "canonical_text_sha256": "0eb0fad51b140629a210812d3c45e5b5ff54e609ad05c0b5281a7242a5c4b6ee",
+          "asset_sha256": "8f4b7ce988f04d340b4d2d4926370f36f1c3b77f28336be75a05c78785165435"
+        },
+        {
+          "id": "m11p02-andrew-exp-s02-c1-0a83c7ec0d3e",
+          "slide": 2,
+          "text": "The classic Multi-AZ DB instance protects the writer. It synchronously replicates to a standby in another zone. When R D S fails over, the app reconnects to the DB endpoint. You don't route reporting queries to that standby.",
+          "text_sha256": "0a83c7ec0d3ebf106b03b207b49561508f25ee1068ed604295b815ab0818c910",
+          "canonical_text_sha256": "3ee4e0eb57613245b8b7a181c76701b9ccfefa947299fa56b4ab6e47662f2297",
+          "asset_sha256": "a2262490146845534e727b9333c662755d769024c28e2dce7d79abdd9c8ae8c1"
+        },
+        {
+          "id": "m11p02-andrew-exp-s02-c2-3d68cca7c2c0",
+          "slide": 2,
+          "text": "If reporting is the problem, use eligible read replicas and route reads to their endpoints. Replication is asynchronous, so those reads can lag. Moving reports away from the writer is a different goal from protecting it.",
+          "text_sha256": "3d68cca7c2c0c6a9495b9daf8ef366b2d0837d024e01a1f9cb157a259b739f47",
+          "canonical_text_sha256": "3d68cca7c2c0c6a9495b9daf8ef366b2d0837d024e01a1f9cb157a259b739f47",
+          "asset_sha256": "a2262490146845534e727b9333c662755d769024c28e2dce7d79abdd9c8ae8c1"
+        },
+        {
+          "id": "m11p02-andrew-exp-s03-c1-ea08f77d4840",
+          "slide": 3,
+          "text": "Both reads and writes go to the primary in a classic Multi-AZ DB instance. The standby is there to take over, not to serve read traffic while the primary is healthy.",
+          "text_sha256": "ea08f77d48404d497a9927e96aa0902b819ec43f97e299868540a7d23740fd98",
+          "canonical_text_sha256": "ea08f77d48404d497a9927e96aa0902b819ec43f97e299868540a7d23740fd98",
+          "asset_sha256": "a95963602bd3a91c7d33bc7dc3478d9a5a0288c8712328dca66fac8fc5243abb"
+        },
+        {
+          "id": "m11p02-andrew-exp-s03-c2-e4e2350b04b1",
+          "slide": 3,
+          "text": "The Multi-AZ DB cluster has one writer and two readable instances in three zones. Send writes to the writer endpoint and eligible reads to the reader endpoint. The readers can also be failover targets.",
+          "text_sha256": "e4e2350b04b14b847fe40d6fab2f29fe8c420adc5600c40f172b60977ac54e49",
+          "canonical_text_sha256": "e4e2350b04b14b847fe40d6fab2f29fe8c420adc5600c40f172b60977ac54e49",
+          "asset_sha256": "a95963602bd3a91c7d33bc7dc3478d9a5a0288c8712328dca66fac8fc5243abb"
+        },
+        {
+          "id": "m11p02-andrew-exp-s03-c3-2fa1589d8ae1",
+          "slide": 3,
+          "text": "Here a commit needs acknowledgment from at least one reader. That doesn't mean every reader has already applied the change. Choose based on the actual read and availability requirements.",
+          "text_sha256": "2fa1589d8ae174d1fb6004d1b90be968c7b8e1b39636bb9a5ed77e4378f63ebe",
+          "canonical_text_sha256": "2fa1589d8ae174d1fb6004d1b90be968c7b8e1b39636bb9a5ed77e4378f63ebe",
+          "asset_sha256": "a95963602bd3a91c7d33bc7dc3478d9a5a0288c8712328dca66fac8fc5243abb"
+        },
+        {
+          "id": "m11p02-andrew-exp-s04-c1-8841b1ebff06",
+          "slide": 4,
+          "text": "Say the readers have weights eighty and twenty. Route Fifty-Three uses them when choosing answers to eligible D N S lookups. It isn't in the path of each S Q L query.",
+          "text_sha256": "8841b1ebff06c6bf48a8597e6819795e21d02c1033c0db1afe9816b6dc87916f",
+          "canonical_text_sha256": "6bfc487f0abb568f850dd62486129be4f20359e952fe3f246f68f7be65d3079c",
+          "asset_sha256": "e7b525f79059d29141fda29276a95ef2fe35f49cb1617381a061602ed09b0da1"
+        },
+        {
+          "id": "m11p02-andrew-exp-s04-c2-53eeb2d0b55e",
+          "slide": 4,
+          "text": "The app may keep connections open or reuse an answer until its time to live expires. Those existing connections keep serving queries; changing a weight doesn't move them to the other reader.",
+          "text_sha256": "53eeb2d0b55ecc1a6986f7f458ee5834b628d9e7d9aec8286de38667b0461d06",
+          "canonical_text_sha256": "53eeb2d0b55ecc1a6986f7f458ee5834b628d9e7d9aec8286de38667b0461d06",
+          "asset_sha256": "e7b525f79059d29141fda29276a95ef2fe35f49cb1617381a061602ed09b0da1"
+        },
+        {
+          "id": "m11p02-andrew-exp-s04-c3-543bc837e16c",
+          "slide": 4,
+          "text": "Check real connections, query load and lag per reader. Expect the observed query mix to differ from the D N S weights. Keep writes on the primary.",
+          "text_sha256": "543bc837e16cba5d80c6fdd1a57241128157169c8fe762811afbc3cbc920366a",
+          "canonical_text_sha256": "cee6a325f91d6a974edb5ff88c3e52547daf229d4df79675c6607ddfc9aa6c18",
+          "asset_sha256": "e7b525f79059d29141fda29276a95ef2fe35f49cb1617381a061602ed09b0da1"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "03",
+      "revision": "2026-11-24-m11p03-andrew-expressive",
+      "approved_assets": {
+        "1": "93d3a1d2c2f78500a3cbe46d976ec36f01b530241f55bbe0d6bba35e99313500",
+        "2": "86448805355a5bc6379378e87b322eeac5b3dc0d1a108289ce01395c22eb889f"
+      },
+      "units": [
+        {
+          "id": "m11p03-andrew-exp-s01-c1-8a36b00328e1",
+          "slide": 1,
+          "text": "Which log tells you who queried a table? CloudTrail records R D S service A P I activity. Database engine logging or audit features record supported S Q L activity when configured. Do not substitute one for the other.",
+          "text_sha256": "8a36b00328e164fe70e3b00fcde3a420b887f60be52f1078b3ca5dcd395010bb",
+          "canonical_text_sha256": "5ca0e604104ae21e9f5bc8b44c4e9df0ce7b40ddb99bc6d9754666bde9edb0c8",
+          "asset_sha256": "93d3a1d2c2f78500a3cbe46d976ec36f01b530241f55bbe0d6bba35e99313500"
+        },
+        {
+          "id": "m11p03-andrew-exp-s01-c2-ba5f872a25d1",
+          "slide": 1,
+          "text": "Protect the live connection with T L S and verify the server certificate. Encrypting the database volume does not secure traffic between the client and the database.",
+          "text_sha256": "ba5f872a25d1cea61753bd7f9aa1a07915c2d6b4b918f3fe9733b63e62dd896f",
+          "canonical_text_sha256": "17322363bb86991be0eb1fb3abb64e5d5c7b3a7e01d75b5108930edeb8f1dff2",
+          "asset_sha256": "93d3a1d2c2f78500a3cbe46d976ec36f01b530241f55bbe0d6bba35e99313500"
+        },
+        {
+          "id": "m11p03-andrew-exp-s01-c3-1c895636b76d",
+          "slide": 1,
+          "text": "K M S-backed storage encryption protects data at rest, including the encrypted instance's storage and snapshots. It's separate from both T L S and recording who ran a query.",
+          "text_sha256": "1c895636b76df211b55d2dbd5966b536ef54615fd93276219eaea928ff4f48a5",
+          "canonical_text_sha256": "8d59175026a62076e6de3e0f977c4a24dfa28473938e0e093aec47d5ac0bc24f",
+          "asset_sha256": "93d3a1d2c2f78500a3cbe46d976ec36f01b530241f55bbe0d6bba35e99313500"
+        },
+        {
+          "id": "m11p03-andrew-exp-s01-c4-3b3dcdc42724",
+          "slide": 1,
+          "text": "For the unencrypted R D S DB instance snapshot shown, where supported, make an encrypted copy and restore a new encrypted instance. Don't generalize this copy-to-encrypt step to Aurora cluster snapshots.",
+          "text_sha256": "3b3dcdc4272422df70d5d6b23217f395b6feb4c3f46c978961b254b08ab49ba6",
+          "canonical_text_sha256": "23b2d8e03619d43383b28d7fda286a15202e789b0bae5d49a745eeea9e2d7f38",
+          "asset_sha256": "93d3a1d2c2f78500a3cbe46d976ec36f01b530241f55bbe0d6bba35e99313500"
+        },
+        {
+          "id": "m11p03-andrew-exp-s02-c1-47a5ec515ba7",
+          "slide": 2,
+          "text": "Prepare two sides: the I A M principal needs permission to connect, and the engine needs a matching database user. Database grants still have to authorize its S Q L operations.",
+          "text_sha256": "47a5ec515ba7bacddd4f281b38399d0b59ebf17a0a74c15c771ddede0dc4312f",
+          "canonical_text_sha256": "cd84cf6b0782f5fbfde2b5b50ff09fbd2894f6aa8ad6103a0bb877c49773c049",
+          "asset_sha256": "86448805355a5bc6379378e87b322eeac5b3dc0d1a108289ce01395c22eb889f"
+        },
+        {
+          "id": "m11p03-andrew-exp-s02-c2-23bd752922a7",
+          "slide": 2,
+          "text": "Generate an authentication token for the actual endpoint, port and user. The app then uses that token to establish a T L S connection to a supported engine.",
+          "text_sha256": "23bd752922a7ea6951ce6db1df03b34ed21461d61347e1adf3e3f73b65f1bb82",
+          "canonical_text_sha256": "a018f57e9971e4f5fa83b1035646a4c7d446bf66181f21eb48f48653bc6678fe",
+          "asset_sha256": "86448805355a5bc6379378e87b322eeac5b3dc0d1a108289ce01395c22eb889f"
+        },
+        {
+          "id": "m11p03-andrew-exp-s02-c3-23e7910e0459",
+          "slide": 2,
+          "text": "The token is valid for login for fifteen minutes. If the app needs a new connection afterward, get a fresh token. Expiry doesn't terminate an already established session.",
+          "text_sha256": "23e7910e0459ae8337c19fbafa1ce89ecb372720500d6d3026aa604115c8dfe1",
+          "canonical_text_sha256": "23e7910e0459ae8337c19fbafa1ce89ecb372720500d6d3026aa604115c8dfe1",
+          "asset_sha256": "86448805355a5bc6379378e87b322eeac5b3dc0d1a108289ce01395c22eb889f"
+        },
+        {
+          "id": "m11p03-andrew-exp-s02-c4-2f512233ee7a",
+          "slide": 2,
+          "text": "Now suppose the connection succeeds but SELECT fails. Inspect the database user's S Q L grants. I A M login gave the app a session, not permission to read the table.",
+          "text_sha256": "2f512233ee7aa5ac10f1dd362040c4237dcab55f8c81ded57c6d5e30452c6359",
+          "canonical_text_sha256": "6943621dbb5dffa0dd731c157264f3a91287ecd018614b0d14bea6dfa7cd5583",
+          "asset_sha256": "86448805355a5bc6379378e87b322eeac5b3dc0d1a108289ce01395c22eb889f"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "04",
+      "revision": "2026-11-24-m11p04-andrew-expressive",
+      "approved_assets": {
+        "1": "53ec422bb9e3fd5415f297ae662b8be90749810753b949821713a7ea98fa33e7",
+        "2": "55d3d536d8d744154c5d58835a505c42eb04487e202fbde936f4d64b6b4778ff"
+      },
+      "units": [
+        {
+          "id": "m11p04-andrew-exp-s01-c1-eb049d452a60",
+          "slide": 1,
+          "text": "Where is the recovered Oracle database going? For a managed R D S target, restore from a supported R D S backup into a new R D S instance. Then test the application.",
+          "text_sha256": "eb049d452a600e36e625f631aac0328bf989391c6a0a2413d0f2a2e5a117cc2b",
+          "canonical_text_sha256": "e391524cbf210b0bfddbef1d37733612d28bcb09f295dbef079ae9a469d55f0c",
+          "asset_sha256": "53ec422bb9e3fd5415f297ae662b8be90749810753b949821713a7ea98fa33e7"
+        },
+        {
+          "id": "m11p04-andrew-exp-s01-c2-70287a31b14a",
+          "slide": 1,
+          "text": "For a self-managed target, an R D S snapshot is not a portable backup file. For the supported workflow shown, take the appropriate R man backup, transfer the backup files, and restore with Oracle on the destination host.",
+          "text_sha256": "70287a31b14a590119cacb96255395ae67ee8f82532006267b46db9fba40a78a",
+          "canonical_text_sha256": "826d2d1ae4ba60a311738e6326b9ea9a1a84894626eedd208f06dd25c966bc62",
+          "asset_sha256": "53ec422bb9e3fd5415f297ae662b8be90749810753b949821713a7ea98fa33e7"
+        },
+        {
+          "id": "m11p04-andrew-exp-s01-c3-18e112f0a69a",
+          "slide": 1,
+          "text": "Check Oracle version, encryption and backup compatibility before the transfer. Standard R D S for Oracle has no host login, no SYS or SYSTEM user access, and no Oracle rack support. A self-managed host has different responsibilities.",
+          "text_sha256": "18e112f0a69aedc94d783967537b818957a9ad0ee2aeec3e2a77712cbcd9ed3d",
+          "canonical_text_sha256": "5ef7d6eca577082c858869aeae91d4b8200a8bd39d6831333cba4853876b4d67",
+          "asset_sha256": "53ec422bb9e3fd5415f297ae662b8be90749810753b949821713a7ea98fa33e7"
+        },
+        {
+          "id": "m11p04-andrew-exp-s02-c1-5a6e238b4626",
+          "slide": 2,
+          "text": "Start with a consistent baseline from the source. Import it to the compatible target. The target now has the starting data, not the changes that arrived after the baseline.",
+          "text_sha256": "5a6e238b462626f7b1557efad556eeb2d63033f89ad312e408bf6d56b33ab46b",
+          "canonical_text_sha256": "5a6e238b462626f7b1557efad556eeb2d63033f89ad312e408bf6d56b33ab46b",
+          "asset_sha256": "55d3d536d8d744154c5d58835a505c42eb04487e202fbde936f4d64b6b4778ff"
+        },
+        {
+          "id": "m11p04-andrew-exp-s02-c2-1d765805e838",
+          "slide": 2,
+          "text": "Apply source changes with supported binlog or G T I D replication. Check lag and errors rather than switching as soon as the first data copy finishes.",
+          "text_sha256": "1d765805e838ead26a2bec1cbf79f0d7d6346ea71a65db97342be581e561539a",
+          "canonical_text_sha256": "64c445c7618d4050ef9e3cae04297cd6d723df2c9256ee742a0634b0ff0953db",
+          "asset_sha256": "55d3d536d8d744154c5d58835a505c42eb04487e202fbde936f4d64b6b4778ff"
+        },
+        {
+          "id": "m11p04-andrew-exp-s02-c3-ff19d1157f6b",
+          "slide": 2,
+          "text": "At cutover, pause source writes and let replication catch up. Verify data and that no new changes are waiting. Then move the app to the target endpoint.",
+          "text_sha256": "ff19d1157f6b4bd14b19f1e8a0435f7ac1ea00f05b49acf2311535ed4d69ab07",
+          "canonical_text_sha256": "ff19d1157f6b4bd14b19f1e8a0435f7ac1ea00f05b49acf2311535ed4d69ab07",
+          "asset_sha256": "55d3d536d8d744154c5d58835a505c42eb04487e202fbde936f4d64b6b4778ff"
+        },
+        {
+          "id": "m11p04-andrew-exp-s02-c4-8e72953b5d5d",
+          "slide": 2,
+          "text": "Before the target accepts writes, rollback can mean returning to the source. After it accepts writes, switching back alone can drop those changes. Reconcile them before returning traffic.",
+          "text_sha256": "8e72953b5d5dc6eebfbff65efa759c8054c108397c7edffabdfc46041a661be5",
+          "canonical_text_sha256": "8e72953b5d5dc6eebfbff65efa759c8054c108397c7edffabdfc46041a661be5",
+          "asset_sha256": "55d3d536d8d744154c5d58835a505c42eb04487e202fbde936f4d64b6b4778ff"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "05",
+      "revision": "2026-11-24-m11p05-andrew-expressive",
+      "approved_assets": {
+        "1": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c",
+        "2": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46",
+        "3": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+      },
+      "units": [
+        {
+          "id": "m11p05-andrew-exp-s01-c1-81f692587f66",
+          "slide": 1,
+          "text": "A burst of Lambda invocations needs database connections. The app uses a private proxy endpoint. An additional endpoint can provide access from another supported VPC in the same Region without moving the database there.",
+          "text_sha256": "81f692587f6682c36f9bcbb0eac081401529fd707a4fab3fa90b6701365fd010",
+          "canonical_text_sha256": "81f692587f6682c36f9bcbb0eac081401529fd707a4fab3fa90b6701365fd010",
+          "asset_sha256": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c"
+        },
+        {
+          "id": "m11p05-andrew-exp-s01-c2-9cde1a60c36f",
+          "slide": 1,
+          "text": "Many short-lived client connections can borrow and reuse fewer database connections. That helps the database avoid repeated setup, but it doesn't make an expensive query cheap.",
+          "text_sha256": "9cde1a60c36f6e24b21d239fe62e78a2463508d509061927c7a35d1fd71a2557",
+          "canonical_text_sha256": "9cde1a60c36f6e24b21d239fe62e78a2463508d509061927c7a35d1fd71a2557",
+          "asset_sha256": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c"
+        },
+        {
+          "id": "m11p05-andrew-exp-s01-c3-73c4f4e7a744",
+          "slide": 1,
+          "text": "Check the client-to-proxy and proxy-to-database authentication separately. They can use different configured methods. If session state pins a connection, the proxy cannot reuse it as freely.",
+          "text_sha256": "73c4f4e7a7448d785e73f9f463341b0580a06478522c73f8e32fcf9214cd24e6",
+          "canonical_text_sha256": "73c4f4e7a7448d785e73f9f463341b0580a06478522c73f8e32fcf9214cd24e6",
+          "asset_sha256": "b7ea1e62b2883b163e1f2baa2efaf87f47d2c0379b7c03f13353e13af0dc851c"
+        },
+        {
+          "id": "m11p05-andrew-exp-s02-c1-2133eb8c7ed2",
+          "slide": 2,
+          "text": "Write traffic goes to the default read-write proxy endpoint and reaches the writer. The read-only endpoint routes separate client connections to eligible readers in the target Aurora cluster.",
+          "text_sha256": "2133eb8c7ed271869eccc59f753e77ca4109b5f139883db7a3af99185e95715b",
+          "canonical_text_sha256": "2133eb8c7ed271869eccc59f753e77ca4109b5f139883db7a3af99185e95715b",
+          "asset_sha256": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46"
+        },
+        {
+          "id": "m11p05-andrew-exp-s02-c2-7d252e5e1fcb",
+          "slide": 2,
+          "text": "If the cluster has no eligible reader, the endpoint name cannot create one. Check support, reader health and lag. This is not attaching the proxy directly to an ordinary R D S read replica.",
+          "text_sha256": "7d252e5e1fcb74ac800c33d772ab78d20044b6a631494da3546bc6296f8d1c63",
+          "canonical_text_sha256": "47bff7a8b4f649ec381623816489351ecbb55d7bb96d2429f8bbb98a4e859c8f",
+          "asset_sha256": "c5d7b59e3986213022490a9e24c08d26d60d0c5b265a66865bfc43a86a943a46"
+        },
+        {
+          "id": "m11p05-andrew-exp-s03-c1-7537105001b4",
+          "slide": 3,
+          "text": "The writer is in Region A. The remote replica receives changes asynchronously, so it can be missing recent writes. Check the gap before deciding whether it's an acceptable recovery point.",
+          "text_sha256": "7537105001b4d5dc22dc0c875f3979c013e6f290e394623a3d837d82823e340f",
+          "canonical_text_sha256": "7537105001b4d5dc22dc0c875f3979c013e6f290e394623a3d837d82823e340f",
+          "asset_sha256": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+        },
+        {
+          "id": "m11p05-andrew-exp-s03-c2-311c53af319d",
+          "slide": 3,
+          "text": "Fence the old writer so it cannot accept new writes. Promote the replica, then update the app endpoint and verify the app reconnects and can read and write in Region B. Plan for loss if the old writer cannot be reached.",
+          "text_sha256": "311c53af319d86f8aa54a34f3d1d1e0fdb8e320c99eaa99fa3324a06cc3231fa",
+          "canonical_text_sha256": "311c53af319d86f8aa54a34f3d1d1e0fdb8e320c99eaa99fa3324a06cc3231fa",
+          "asset_sha256": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+        },
+        {
+          "id": "m11p05-andrew-exp-s03-c3-8db66fe1c71f",
+          "slide": 3,
+          "text": "A classic same-Region Multi-AZ DB instance uses a different path: R D S manages standby failover, and the app reconnects to the same endpoint. That does not replace a cross-Region cutover plan.",
+          "text_sha256": "8db66fe1c71ffa04b86b05a3e6bc9965bff8fafcbc00e7ad62d530780e2ac108",
+          "canonical_text_sha256": "74efa1312234edbf0bae4cdc4f95b585e06fcd00b38b85c92c321c0260e8ff39",
+          "asset_sha256": "116a4c4b2341afe31dd54e242179ec4b209c5a959d779ee8428c07d776e511b4"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "06",
+      "revision": "2026-11-24-m11p06-andrew-expressive",
+      "approved_assets": {
+        "1": "6be88e4b24f3dec6ef9ceeca0cc96c1ca5bfa0a62dd6f079074510fe471d6317",
+        "2": "c7a968bad04a8e652efbe0fd4a0a99184d4c3363b84b12754df58e4913fecd5f",
+        "3": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+      },
+      "units": [
+        {
+          "id": "m11p06-andrew-exp-s01-c1-75231a86c40e",
+          "slide": 1,
+          "text": "Aurora is relational, with MySQL-compatible or PostgreSQL-compatible editions. Check the engine features and version the application actually needs instead of assuming drop-in equivalence.",
+          "text_sha256": "75231a86c40e38847ef3fd1d0ba649b93c643c53da75fc7256e98777051f1d2e",
+          "canonical_text_sha256": "75231a86c40e38847ef3fd1d0ba649b93c643c53da75fc7256e98777051f1d2e",
+          "asset_sha256": "6be88e4b24f3dec6ef9ceeca0cc96c1ca5bfa0a62dd6f079074510fe471d6317"
+        },
+        {
+          "id": "m11p06-andrew-exp-s01-c2-7a09e0ff54f2",
+          "slide": 1,
+          "text": "The writer runs database writes. Add optional readers when the app needs read compute. They connect to the same distributed cluster storage rather than each keeping its own full volume.",
+          "text_sha256": "7a09e0ff54f2f36ce7484075418d70f5f892c11a4115052ef7e095e8293e364a",
+          "canonical_text_sha256": "7a09e0ff54f2f36ce7484075418d70f5f892c11a4115052ef7e095e8293e364a",
+          "asset_sha256": "6be88e4b24f3dec6ef9ceeca0cc96c1ca5bfa0a62dd6f079074510fe471d6317"
+        },
+        {
+          "id": "m11p06-andrew-exp-s02-c1-4914a51c4b6a",
+          "slide": 2,
+          "text": "The writer and optional readers are compute instances. Their work goes to the same Aurora volume, whose storage spans three Availability Zones. Adding read compute and growing stored data are separate changes.",
+          "text_sha256": "4914a51c4b6a933d59c422c35cdfc806a6b5c87803c41c8d24de4c4d50d18d97",
+          "canonical_text_sha256": "4914a51c4b6a933d59c422c35cdfc806a6b5c87803c41c8d24de4c4d50d18d97",
+          "asset_sha256": "c7a968bad04a8e652efbe0fd4a0a99184d4c3363b84b12754df58e4913fecd5f"
+        },
+        {
+          "id": "m11p06-andrew-exp-s02-c2-f85dab311b17",
+          "slide": 2,
+          "text": "If your reads saturate compute, evaluate another reader. If data grows, the volume grows independently. Check the engine and version for its actual capacity limit instead of assuming every cluster has the same limit.",
+          "text_sha256": "f85dab311b179f22ea49ee132e2c562ce9ba9f0566b5ff2c3c048d3ef06a2c0d",
+          "canonical_text_sha256": "f85dab311b179f22ea49ee132e2c562ce9ba9f0566b5ff2c3c048d3ef06a2c0d",
+          "asset_sha256": "c7a968bad04a8e652efbe0fd4a0a99184d4c3363b84b12754df58e4913fecd5f"
+        },
+        {
+          "id": "m11p06-andrew-exp-s03-c1-75e00b256a0e",
+          "slide": 3,
+          "text": "Aurora keeps six storage copies across three zones. The write quorum here is four, and the read quorum shown is three. These are storage-layer decisions, not six database servers answering queries.",
+          "text_sha256": "75e00b256a0e84d3d7b7698915941b6a70434a535eb511496122043b02557928",
+          "canonical_text_sha256": "75e00b256a0e84d3d7b7698915941b6a70434a535eb511496122043b02557928",
+          "asset_sha256": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+        },
+        {
+          "id": "m11p06-andrew-exp-s03-c2-0b9427da8776",
+          "slide": 3,
+          "text": "S Q L readers are database instances on top of the shared storage. You can have replicated storage with no separate S Q L reader. Add a reader for read traffic or as a potential promotion target.",
+          "text_sha256": "0b9427da877631733404f3731b91510be46ec6cda386adec8a937572083030e2",
+          "canonical_text_sha256": "650d18620b8bbd6f615fb86a6d711dc92f6a7b154ec4f4f3450c1c1e061219a9",
+          "asset_sha256": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+        },
+        {
+          "id": "m11p06-andrew-exp-s03-c3-24413e85c710",
+          "slide": 3,
+          "text": "How long will failover take? Don't infer it from the number of copies. Reader availability, configuration and client reconnection all matter. Test the app's behavior during a failover.",
+          "text_sha256": "24413e85c710cfa38c03d0927747a9236dc6de46d684ec4a486a363743c72da0",
+          "canonical_text_sha256": "24413e85c710cfa38c03d0927747a9236dc6de46d684ec4a486a363743c72da0",
+          "asset_sha256": "07749c7779a1708bf6d00744b8e7ebe1a18345f0776b2fb6ddd3326d6f09d572"
+        }
+      ]
+    }
+  ]
+}
