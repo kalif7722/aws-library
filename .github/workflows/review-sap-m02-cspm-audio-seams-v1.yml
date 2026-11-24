@@ -1,0 +1,47 @@
+name: SAP M02 CSPM audio seams Andrew speech-only review
+on:
+  push:
+    branches: [review/sap-m02-cspm-audio-seams-v1]
+    paths: [.github/workflows/review-sap-m02-cspm-audio-seams-v1.yml, scripts/review_sap_m02_cspm_audio_seams_v1.py, content/video-narration/review-sap-m02-cspm-audio-seams-v1.json, content/video-narration/review-sap-m02-cspm-audio-seams-v1.sha256]
+permissions:
+  contents: read
+concurrency:
+  group: sap-m02-cspm-audio-seams-v1-review-only
+  cancel-in-progress: false
+jobs:
+  voice:
+    if: github.repository == 'kalif7722/aws-library' && github.event_name == 'push' && github.ref == 'refs/heads/review/sap-m02-cspm-audio-seams-v1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        part: [m02p03, m02p05]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts/review_sap_m02_cspm_audio_seams_v1.py
+            content/video-narration/review-sap-m02-cspm-audio-seams-v1.json
+            content/video-narration/review-sap-m02-cspm-audio-seams-v1.sha256
+          sparse-checkout-cone-mode: false
+      - name: Verify exact inputs before any third-party work
+        run: python3 scripts/review_sap_m02_cspm_audio_seams_v1.py validate
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned edge-tts
+        timeout-minutes: 4
+        run: python -m pip install --disable-pip-version-check --timeout 15 --retries 2 'edge-tts==7.3.1'
+      - name: Narrate exact review cues
+        env:
+          REVIEW_PART: ${{ matrix.part }}
+        run: python scripts/review_sap_m02_cspm_audio_seams_v1.py synthesize "$REVIEW_PART"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sap-m02-cspm-audio-seams-v1-${{ matrix.part }}-andrew-review
+          path: voice-review/${{ matrix.part }}/
+          retention-days: 3
+          if-no-files-found: error
