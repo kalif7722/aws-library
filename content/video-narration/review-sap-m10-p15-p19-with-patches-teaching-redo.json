@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "10",
+      "part": "15",
+      "revision": "2026-11-23-m10p15-m10-p15-p19-with-patches-teaching-redo-v1",
+      "approved_assets": {
+        "35": "22f7a098635aab4a91c6e607b53244e9564fb5e6da67745df392a9b51d53279c",
+        "36": "17d882e1b9ef3affed551302bd86ed922dbb4147c5e826f63ee3d21850c8ed74"
+      },
+      "units": [
+        {
+          "id": "m10p15-redo-s35-c1-0c1db91bafdd",
+          "slide": 35,
+          "text": "You’ll learn to capture recoverable application state and choose how to initialize the restored E B S volume. A database snapshot is useful only if the restored application can use it. Start at the active writes, then use the database's supported procedure to pause or quiesce and flush pending writes. This lets you capture the intended committed state instead of assuming a volume snapshot knows what the database was doing.",
+          "text_sha256": "0c1db91bafdd10e40f731dee28f749cd51a5e6b2419c51942960eee32a2e3630",
+          "canonical_text_sha256": "8d0d0c08bddf2f66c5b588315b8562b2e189be90d377b6b6d64bcf7c6ba4b964",
+          "asset_sha256": "22f7a098635aab4a91c6e607b53244e9564fb5e6da67745df392a9b51d53279c"
+        },
+        {
+          "id": "m10p15-redo-s35-c2-21a841870665",
+          "slide": 35,
+          "text": "When the database spans related E B S volumes, coordinate their snapshots while writes are quiesced. The volumes can stay attached in the workflow shown. Resume writes after initiating capture when the application procedure permits. Restore the set in a test environment and verify that the expected committed records are actually present.",
+          "text_sha256": "21a8418706653eb4257e48fbb14c4af4b1e0b4a90af128d1166b7cf7a6a6ac47",
+          "canonical_text_sha256": "ec8e3e25f0fa5195a7e77eacd16e9150325c999a8cf19b053f59a99df3b6c47e",
+          "asset_sha256": "22f7a098635aab4a91c6e607b53244e9564fb5e6da67745df392a9b51d53279c"
+        },
+        {
+          "id": "m10p15-redo-s36-c1-10340b3fb0eb",
+          "slide": 36,
+          "text": "All three choices start with the same E B S snapshot. With on-demand initialization, a first read of an unloaded block can take longer. The next read of that block uses the data already loaded. That may be acceptable if immediate, predictable performance is not part of the recovery deadline.",
+          "text_sha256": "10340b3fb0eb4238a57ba0b985c3e5ab85af822af487b0bf8b17423eee12ae2b",
+          "canonical_text_sha256": "486db4b85967c9212cab8159629fab51fe66393a7afe27ca3af005abc25e7928",
+          "asset_sha256": "17d882e1b9ef3affed551302bd86ed922dbb4147c5e826f63ee3d21850c8ed74"
+        },
+        {
+          "id": "m10p15-redo-s36-c2-c17bb7b72343",
+          "slide": 36,
+          "text": "If the workload needs all blocks ready at creation, enable Fast Snapshot Restore for the snapshot in the target Availability Zone before creating the volume. Verify that the feature is enabled there and that volume creation credits are sufficient.",
+          "text_sha256": "c17bb7b72343e3720f08cc77d022e42b04c12f8e8918dfe772a13a612c2c2e27",
+          "canonical_text_sha256": "c17bb7b72343e3720f08cc77d022e42b04c12f8e8918dfe772a13a612c2c2e27",
+          "asset_sha256": "17d882e1b9ef3affed551302bd86ed922dbb4147c5e826f63ee3d21850c8ed74"
+        },
+        {
+          "id": "m10p15-redo-s36-c3-cc8138af49fa",
+          "slide": 36,
+          "text": "A provisioned initialization rate from one hundred to three hundred mebibytes per second instead loads blocks in the background at a predictable rate. It is not instant. If you specify that rate on a request using a Fast Snapshot Restore enabled snapshot, the rate wins. Choose between immediate readiness and a predictable wait, then measure performance.",
+          "text_sha256": "cc8138af49fabb63ac821f3cf7609a9c1c55f1cbfec179eaf59c9c8a16804cba",
+          "canonical_text_sha256": "cc8138af49fabb63ac821f3cf7609a9c1c55f1cbfec179eaf59c9c8a16804cba",
+          "asset_sha256": "17d882e1b9ef3affed551302bd86ed922dbb4147c5e826f63ee3d21850c8ed74"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "16",
+      "revision": "2026-11-23-m10p16-m10-p15-p19-with-patches-teaching-redo-v1",
+      "approved_assets": {
+        "37": "52f4e06c4f1a84e6f51a33c21638900eef9a1d7673f432eed9590a2265c6a930",
+        "38": "167a9cfe7b025f5b577c66295a36b025ba9153116795882e1c7d86e1853c2558"
+      },
+      "units": [
+        {
+          "id": "m10p16-redo-s37-c1-d675b05db75b",
+          "slide": 37,
+          "text": "You’ll learn to give each application its own EFS view and preserve a recovery copy. Use EFS access points when two applications share one file system but need different views. App A mounts access point A, which presents its own application directory as the root and enforces its configured POSIX user and group. App B uses a separate root and identity.",
+          "text_sha256": "d675b05db75b643398aba1c87bbebac0246cdadfc4784eafa394686b5c66d179",
+          "canonical_text_sha256": "d675b05db75b643398aba1c87bbebac0246cdadfc4784eafa394686b5c66d179",
+          "asset_sha256": "52f4e06c4f1a84e6f51a33c21638900eef9a1d7673f432eed9590a2265c6a930"
+        },
+        {
+          "id": "m10p16-redo-s37-c2-50100bb5b871",
+          "slide": 37,
+          "text": "Follow both arrows into the same EFS file system. These are separate entry points, not separate stores. The enforced identity is still checked against the relevant file and directory modes. In a test, confirm each application can write in its assigned view with its own role.",
+          "text_sha256": "50100bb5b8713c6ba9ba248a21fc3afc644e64b27b558ea1dbb4689c8477207c",
+          "canonical_text_sha256": "50100bb5b8713c6ba9ba248a21fc3afc644e64b27b558ea1dbb4689c8477207c",
+          "asset_sha256": "52f4e06c4f1a84e6f51a33c21638900eef9a1d7673f432eed9590a2265c6a930"
+        },
+        {
+          "id": "m10p16-redo-s37-c3-dd601aadca60",
+          "slide": 37,
+          "text": "An access point does not prevent another allowed mount path. Combine the access points with I A M authorization and an effective policy restricting each application to its assigned access point. Try a mount with the wrong role or access point as a negative check.",
+          "text_sha256": "dd601aadca60c16b2dff11125dc07efde71f595176f75a8063bf8edcc6b8adc1",
+          "canonical_text_sha256": "c4fef8f0b1472cffe52074628d583a4a8d92c73d299327c486e3d9283388be6b",
+          "asset_sha256": "52f4e06c4f1a84e6f51a33c21638900eef9a1d7673f432eed9590a2265c6a930"
+        },
+        {
+          "id": "m10p16-redo-s38-c1-3cf21dfd9149",
+          "slide": 38,
+          "text": "Trace the default path first. When no custom EFS file-system policy is set, the default policy allows anonymous clients that can reach a mount target. That is not open internet access. The path and security groups must permit the connection, and POSIX still determines file access.",
+          "text_sha256": "3cf21dfd9149d2ae69491ef4747e09dd3e0dff7449d57b2f595286f98bc86ca2",
+          "canonical_text_sha256": "3cf21dfd9149d2ae69491ef4747e09dd3e0dff7449d57b2f595286f98bc86ca2",
+          "asset_sha256": "167a9cfe7b025f5b577c66295a36b025ba9153116795882e1c7d86e1853c2558"
+        },
+        {
+          "id": "m10p16-redo-s38-c2-76c23287ba86",
+          "slide": 38,
+          "text": "For I A M authorization, mount using the EFS helper with TLS and I A M. The applicable identity and file-system policies govern ClientMount, ClientWrite, and ClientRootAccess. A client that can mount is not necessarily allowed to write, and passing I A M does not override file ownership or mode.",
+          "text_sha256": "76c23287ba8660b14a10cb512250fdf6cdff1d55c29d1b7646c6d8bd79aefa4e",
+          "canonical_text_sha256": "a364913390ffc9bc5210412d6bfbbab95cf18d35770477d008c35346eaed953d",
+          "asset_sha256": "167a9cfe7b025f5b577c66295a36b025ba9153116795882e1c7d86e1853c2558"
+        },
+        {
+          "id": "m10p16-redo-s38-c3-df4d62deaa7b",
+          "slide": 38,
+          "text": "Classify the symptom before changing a policy. A timeout suggests that you should inspect the mount target and network first. If the mount succeeds but the app cannot write to its directory, check client-write authorization and the effective POSIX identity instead of opening the port more broadly.",
+          "text_sha256": "df4d62deaa7ba107f0b956f604ded46f73243f7c8897d4a56a9a83a3301f0a3b",
+          "canonical_text_sha256": "df4d62deaa7ba107f0b956f604ded46f73243f7c8897d4a56a9a83a3301f0a3b",
+          "asset_sha256": "167a9cfe7b025f5b577c66295a36b025ba9153116795882e1c7d86e1853c2558"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "17",
+      "revision": "2026-11-23-m10p17-m10-p15-p19-with-patches-teaching-redo-v1",
+      "approved_assets": {
+        "39": "597b803b89f1bccc7044e34b0b71a72bbe08e0aac5d1c526966ade52f0f510bb",
+        "40": "986afb6bac34b6c49348362d0aef1ef9963a0b8ed1162d40415ff12a182653ff"
+      },
+      "units": [
+        {
+          "id": "m10p17-redo-s39-c1-d99a0a02da46",
+          "slide": 39,
+          "text": "You’ll learn to diagnose EFS burst pressure and choose a throughput model that matches demand. Choose EFS Bursting for a workload that normally fits its baseline but occasionally needs more. Follow the Standard-class data into the baseline gauge. When metered activity is below baseline, spare throughput earns credits; above baseline, a short peak can draw down that balance within the burst limits.",
+          "text_sha256": "d99a0a02da468213b5e90a99b1798108ab485df5eb9c8a43dd9898c672b3c961",
+          "canonical_text_sha256": "d99a0a02da468213b5e90a99b1798108ab485df5eb9c8a43dd9898c672b3c961",
+          "asset_sha256": "597b803b89f1bccc7044e34b0b71a72bbe08e0aac5d1c526966ade52f0f510bb"
+        },
+        {
+          "id": "m10p17-redo-s39-c2-65bcc68b93fe",
+          "slide": 39,
+          "text": "If the burst keeps running and credits are exhausted, throughput returns to baseline subject to applicable limits. Compare the credit balance over time to the job's slow periods. A consistently exhausted balance means this is not just an occasional spike.",
+          "text_sha256": "65bcc68b93fe7d82b01c3d0cb3afbe7dd6babb57ea23d0677829d9db7c0355db",
+          "canonical_text_sha256": "65bcc68b93fe7d82b01c3d0cb3afbe7dd6babb57ea23d0677829d9db7c0355db",
+          "asset_sha256": "597b803b89f1bccc7044e34b0b71a72bbe08e0aac5d1c526966ade52f0f510bb"
+        },
+        {
+          "id": "m10p17-redo-s39-c3-7e9fe63cefc3",
+          "slide": 39,
+          "text": "Reads and writes are metered differently. Use the metered demand and balance rather than assuming an equal-sized read and write reduce credits by the same amount. If sustained demand exceeds baseline, evaluate Elastic or Provisioned throughput rather than counting on credits to refill during the peak.",
+          "text_sha256": "7e9fe63cefc35fedb3a6e95243c2b089e0d2ba4111e5a4f00a9370f93fe05167",
+          "canonical_text_sha256": "7e9fe63cefc35fedb3a6e95243c2b089e0d2ba4111e5a4f00a9370f93fe05167",
+          "asset_sha256": "597b803b89f1bccc7044e34b0b71a72bbe08e0aac5d1c526966ade52f0f510bb"
+        },
+        {
+          "id": "m10p17-redo-s40-c1-eae5da77174c",
+          "slide": 40,
+          "text": "An EFS replica is a recovery copy, not automatic application failover. The initial sync depends on dataset size and file count. Later writes copy asynchronously. A replica created successfully yesterday does not prove the most recent committed write is on it right now.",
+          "text_sha256": "eae5da77174cdbd97e3f123d5497ac205d8f48e7cce0917e7cffba7e795dbc43",
+          "canonical_text_sha256": "eae5da77174cdbd97e3f123d5497ac205d8f48e7cce0917e7cffba7e795dbc43",
+          "asset_sha256": "986afb6bac34b6c49348362d0aef1ef9963a0b8ed1162d40415ff12a182653ff"
+        },
+        {
+          "id": "m10p17-redo-s40-c2-85c62b8778db",
+          "slide": 40,
+          "text": "Use Time Since Last Sync as evidence of lag and verify the latest usable records. A W S documents a fifteen-minute recovery-point objective for most file systems after initial sync, with exceptions. Recovery point describes potential data loss. Recovery time is how long it takes to get the workload serving again.",
+          "text_sha256": "85c62b8778dba702116569807f7ab9146fc6ab9bdaad463b06861bd5580af528",
+          "canonical_text_sha256": "06122ae814589a04211529c1bb234b9c816bcb0523ba4e8a47238e359a668576",
+          "asset_sha256": "986afb6bac34b6c49348362d0aef1ef9963a0b8ed1162d40415ff12a182653ff"
+        },
+        {
+          "id": "m10p17-redo-s40-c3-224c9db7e80e",
+          "slide": 40,
+          "text": "In the drill, make the destination writable through the intended failover procedure, validate mount targets, DNS, I A M and relevant key access, then remount and test an application read and write. Measure elapsed time through that successful workload test, not merely until the replica is visible.",
+          "text_sha256": "224c9db7e80ec882abf916ad622b980ed83cc21d749619bef215826429fed6ed",
+          "canonical_text_sha256": "2e4cf876d396bb165c41ec354d9a904da74649bfb92355c54b35bf75ba99f6fa",
+          "asset_sha256": "986afb6bac34b6c49348362d0aef1ef9963a0b8ed1162d40415ff12a182653ff"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "18",
+      "revision": "2026-11-23-m10p18-m10-p15-p19-with-patches-teaching-redo-v1",
+      "approved_assets": {
+        "41": "050674a4fb9eb2f51ef36beed24d6a1a3b9c2e9f6e4485e6390fc486415d19ba",
+        "42": "dd142883dfb84ef27729892b8ba04f5573bde0931feb83ea219adbf706c9b9ce",
+        "43": "b9aab5b05bec87367e5102493ee51a484bb48e55c3d906a551f9df2858c7011c",
+        "44": "ebb09d3f4dc112d8319dcfc9b036a78a0150ed5361e5136107b724fefc3a171f"
+      },
+      "units": [
+        {
+          "id": "m10p18-redo-s41-c1-607d2799ad13",
+          "slide": 41,
+          "text": "You’ll learn to connect Windows file activity to cloud processing and recover the right archived version. A local file close does not mean cloud processing can begin. Here an NFS or SMB client writes to the File Gateway cache, and the gateway uploads the object to S three asynchronously. A processor waiting for that input needs a reliable signal that the upload really completed.",
+          "text_sha256": "607d2799ad139fb227e43fd7a5dac5f953569916197ecd269a2e5caee88a9c5d",
+          "canonical_text_sha256": "f45f7fc43467cce64fb57720eb4870b680f1da24327dd460b8bf40d749097193",
+          "asset_sha256": "050674a4fb9eb2f51ef36beed24d6a1a3b9c2e9f6e4485e6390fc486415d19ba"
+        },
+        {
+          "id": "m10p18-redo-s41-c2-2a86365f28ef",
+          "slide": 41,
+          "text": "Use the completed S three object event or the appropriate gateway upload notification. Lambda can transform that input and write results to a separate output location. Athena or Redshift Spectrum can then query a supported dataset in S three. Keep the event on the intended input to avoid processing its own outputs.",
+          "text_sha256": "2a86365f28ef69d01f6f54935b4418e6bacf533a4f49aec0116c5b1d02a31071",
+          "canonical_text_sha256": "48e59114af2f65f7f4f2d4d66b82d07fdbca13d11d6609b098a976b1701b69c6",
+          "asset_sha256": "050674a4fb9eb2f51ef36beed24d6a1a3b9c2e9f6e4485e6390fc486415d19ba"
+        },
+        {
+          "id": "m10p18-redo-s41-c3-0c63a5e1921b",
+          "slide": 41,
+          "text": "If disaster recovery calls for a copy elsewhere, add bucket replication separately with the necessary versioning and permissions. It does not make the original client write synchronous and does not coordinate multiple gateways editing the same objects.",
+          "text_sha256": "0c63a5e1921b5a56bd895304282beec0ddb5fd3aec1c9b1b3591d7ee5f80b2d8",
+          "canonical_text_sha256": "0c63a5e1921b5a56bd895304282beec0ddb5fd3aec1c9b1b3591d7ee5f80b2d8",
+          "asset_sha256": "050674a4fb9eb2f51ef36beed24d6a1a3b9c2e9f6e4485e6390fc486415d19ba"
+        },
+        {
+          "id": "m10p18-redo-s42-c1-9031ceb913e7",
+          "slide": 42,
+          "text": "Designate one writer for this object set. Site A writes through its gateway; Sites B and C read from the same S three bucket through read-only shares. Sharing a bucket does not create distributed file locking, so do not assume the three sites can safely edit the same file.",
+          "text_sha256": "9031ceb913e760e1c493c4ba589964bcfd933c0c65142dfa2abc7df3c05e4e71",
+          "canonical_text_sha256": "18be356d5af2aa6cb3daf2f71c1d200f926b2627ab2592efa6a759bd32645b5f",
+          "asset_sha256": "dd142883dfb84ef27729892b8ba04f5573bde0931feb83ea219adbf706c9b9ce"
+        },
+        {
+          "id": "m10p18-redo-s42-c2-d52ef3231d1b",
+          "slide": 42,
+          "text": "When an object changes outside a reader's gateway, update its inventory with Refresh Cache where appropriate. That refresh is not a bulk download. Verify that a reader sees the expected file and its actual contents, rather than assuming that a successful refresh proves recovery.",
+          "text_sha256": "d52ef3231d1b4e3fc6730e045204ca584d95327737d3e5ef4f7e547f0c9886b7",
+          "canonical_text_sha256": "d52ef3231d1b4e3fc6730e045204ca584d95327737d3e5ef4f7e547f0c9886b7",
+          "asset_sha256": "dd142883dfb84ef27729892b8ba04f5573bde0931feb83ea219adbf706c9b9ce"
+        },
+        {
+          "id": "m10p18-redo-s43-c1-19e54a717075",
+          "slide": 43,
+          "text": "Keep earlier backup versions so recovery does not depend on the latest write. Lifecycle can tier eligible versions to lower-cost storage, with different retrieval delays and charges. Object Lock protects eligible versions, but a later backup can still create a new version. In this example, version two remains the copy we want to recover.",
+          "text_sha256": "19e54a71707590bd6c7a71b506e296f65217b1cdc27071e7e1442d4876bd733f",
+          "canonical_text_sha256": "19e54a71707590bd6c7a71b506e296f65217b1cdc27071e7e1442d4876bd733f",
+          "asset_sha256": "b9aab5b05bec87367e5102493ee51a484bb48e55c3d906a551f9df2858c7011c"
+        },
+        {
+          "id": "m10p18-redo-s43-c2-207caca6a9b1",
+          "slide": 43,
+          "text": "If version two is in Glacier Flexible Retrieval or Deep Archive, restore that exact version and wait until it is readable. That does not make it current. If version three or a delete marker is current, copy version two as a new current version, or to a recovery key under the share, in a storage class the client can read. Then refresh the gateway cache and verify the expected contents from the client.",
+          "text_sha256": "207caca6a9b15e7b9cfc2bcd8f2b2cf17dc3a95e8aebc9544843ae1db2e41720",
+          "canonical_text_sha256": "207caca6a9b15e7b9cfc2bcd8f2b2cf17dc3a95e8aebc9544843ae1db2e41720",
+          "asset_sha256": "b9aab5b05bec87367e5102493ee51a484bb48e55c3d906a551f9df2858c7011c"
+        },
+        {
+          "id": "m10p18-redo-s44-c1-c7c22d7fc05f",
+          "slide": 44,
+          "text": "Match the recovery path to the interface. For this Volume Gateway example, use the cloud snapshot to create an E B S volume for the E C two workload. Attach it as appropriate and verify the expected application data, rather than treating a snapshot listing as proof of recovery.",
+          "text_sha256": "c7c22d7fc05fc6f2b9ce0e3d70494a4f14197f3d7e88dc81d23d76bca2c8ee38",
+          "canonical_text_sha256": "fd8216418f53a1b9c0e7f460ef5f537f0afc33e3e03e4231c12789a32e5928d8",
+          "asset_sha256": "ebb09d3f4dc112d8319dcfc9b036a78a0150ed5361e5136107b724fefc3a171f"
+        },
+        {
+          "id": "m10p18-redo-s44-c2-d659243b7be6",
+          "slide": 44,
+          "text": "Tape Gateway instead requires retrieving the archived virtual tape, then using the compatible backup software to restore the files from it. In either workflow, locally buffered data that never uploaded can be lost if the gateway fails. Verify the newest usable cloud recovery point in a rehearsal.",
+          "text_sha256": "d659243b7be641c01bf78cfb1408422699af2e80e20e02a372580f0e99f2c2e5",
+          "canonical_text_sha256": "d659243b7be641c01bf78cfb1408422699af2e80e20e02a372580f0e99f2c2e5",
+          "asset_sha256": "ebb09d3f4dc112d8319dcfc9b036a78a0150ed5361e5136107b724fefc3a171f"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "19",
+      "revision": "2026-11-23-m10p19-m10-p15-p19-with-patches-teaching-redo-v1",
+      "approved_assets": {
+        "45": "3d6455f6ea9a2bd5916540f387cff73b01986771446ba44f4a2b94d3e4854bd5"
+      },
+      "units": [
+        {
+          "id": "m10p19-redo-s45-c1-a71a7cf3b24e",
+          "slide": 45,
+          "text": "You’ll learn when Lustre Intelligent-Tiering fits and which trade-offs determine the deployment choice. Choose Lustre Intelligent-Tiering when a long-running parallel workload has a large dataset but only part stays hot. Storage grows with the data, while you provision throughput separately. The optional SSD read cache is a performance decision for the frequently read working set, not the durable copy.",
+          "text_sha256": "a71a7cf3b24ed9e146cd5b3a39feb3cd2a082f05ea47b59cb26fb1d5f2923eeb",
+          "canonical_text_sha256": "a71a7cf3b24ed9e146cd5b3a39feb3cd2a082f05ea47b59cb26fb1d5f2923eeb",
+          "asset_sha256": "3d6455f6ea9a2bd5916540f387cff73b01986771446ba44f4a2b94d3e4854bd5"
+        },
+        {
+          "id": "m10p19-redo-s45-c2-1a753c87720a",
+          "slide": 45,
+          "text": "Follow colder data through Frequent Access, Infrequent Access and Archive Instant Access. This is tiering within Lustre, not a Glacier restore workflow. It also does not support an S three data repository association, so use a supported alternative if your application depends on that link.",
+          "text_sha256": "1a753c87720a879134a30c4448baaf70037d65edd76fa285261ba255594c7c24",
+          "canonical_text_sha256": "1ab68145355d35633e0d6403c946888619709eb72589413a311b98d6ffc29513",
+          "asset_sha256": "3d6455f6ea9a2bd5916540f387cff73b01986771446ba44f4a2b94d3e4854bd5"
+        },
+        {
+          "id": "m10p19-redo-s45-c3-bc9b69f44a3c",
+          "slide": 45,
+          "text": "A W S replicates the data across Availability Zones for durability. That does not guarantee uninterrupted client access or replace an independent recovery plan. Measure the application path separately.",
+          "text_sha256": "bc9b69f44a3c39893174cfa5bb2ade83022502d72b13d7e7ef2b5d14cc169fc1",
+          "canonical_text_sha256": "90ec0e373acc8f68130c1f76824aa5b6f52f2e6370c065db58282d496a961434",
+          "asset_sha256": "3d6455f6ea9a2bd5916540f387cff73b01986771446ba44f4a2b94d3e4854bd5"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "12",
+      "revision": "2026-11-23-m10p12-single-cue-patch-v1",
+      "approved_assets": {
+        "29": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+      },
+      "units": [
+        {
+          "id": "m10p12-patch-s29-c2-23738490a765",
+          "slide": 29,
+          "text": "In this example the cloud disk grows from one hundred to two hundred gibibytes. Once the volume is optimizing or completed, extend the partition if needed, then grow the existing file system with the matching tool. Do not format it.",
+          "text_sha256": "23738490a76501990682e56907bf02ecf27de786395c251a2be1586f7aa672a0",
+          "canonical_text_sha256": "23738490a76501990682e56907bf02ecf27de786395c251a2be1586f7aa672a0",
+          "asset_sha256": "47f14ff6d0c6757751738f3715856be2af0e01900cc91a39b9a3c62006a4d2a6"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "13",
+      "revision": "2026-11-23-m10p13-single-cue-patch-v1",
+      "approved_assets": {
+        "32": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+      },
+      "units": [
+        {
+          "id": "m10p13-patch-s32-c1-1ce311097093",
+          "slide": 32,
+          "text": "Use a custom Data Lifecycle Manager policy when supported E B S volumes or E C two instances need scheduled recovery points. Select the resources by tags, choose a schedule, and define how long to keep the snapshots or E B S-backed A M I s this policy creates. Configure cross-Region copying when needed.",
+          "text_sha256": "1ce3110970934e7c222d3b87f29042d31893cb2b7fb22cca8d066792202ab69a",
+          "canonical_text_sha256": "a765a2ec3f00c0d6130860a550ba6e5660ad3c15b9e9bc52e8b4e780d403eb1d",
+          "asset_sha256": "79209b07021bc5a055adcd63cea6e47b4ac63a3a6940c19625f83bf609d938b2"
+        }
+      ]
+    }
+  ]
+}
