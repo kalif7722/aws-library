@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-JennyNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "06",
+      "revision": "2026-11-24-m09p06-jenny-explainer-first",
+      "approved_assets": {
+        "1": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b",
+        "2": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c",
+        "3": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+      },
+      "units": [
+        {
+          "id": "m09p06-jenny-s01-c1-c92aba972801",
+          "slide": 1,
+          "text": "Suppose a CSV arriving in S three should start a workflow. Instead of making the uploader call the workflow itself, enable EventBridge delivery so the bucket sends an event to the bus.",
+          "text_sha256": "c92aba9728014dbf29b7df333fd1dd4eb3bc2d829dcd1c19e4ee5a5b408b777b",
+          "canonical_text_sha256": "da1ab28d35d94885439c7078058671585380993309c708fe05b9d6075f48d811",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-jenny-s01-c2-beea565ac720",
+          "slide": 1,
+          "text": "The rule filters for an S three source and the event type that matters. Match the bucket name and object key as well when only a particular workload should start.",
+          "text_sha256": "beea565ac720f436e6905df48c3af48dd7c3f65c308631fa72cbab394eeacbe9",
+          "canonical_text_sha256": "00747bbbe41a0abfeb940776078a18b4b4af0ab538fc1ecb79aa77b1043c9ba3",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-jenny-s01-c3-ba169934df9f",
+          "slide": 1,
+          "text": "This rule looks for my-bucket and the exact key data slash file dot CSV. Another object can still produce an event, but it will not start this workflow because that field differs.",
+          "text_sha256": "ba169934df9fdcc950e644dce5a92a5690b372ee82ecaac3f2bce00456f54200",
+          "canonical_text_sha256": "ba169934df9fdcc950e644dce5a92a5690b372ee82ecaac3f2bce00456f54200",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-jenny-s01-c4-b1bc08e401c0",
+          "slide": 1,
+          "text": "Choose Step Functions for a workflow, S Q S for queued work, or Lambda for a function. Permissions and retry behavior still matter, and the consumer should handle repeated delivery safely.",
+          "text_sha256": "b1bc08e401c0558c5548b178e623d1ab2d9df5d6a9fd874ab60bff4182958278",
+          "canonical_text_sha256": "be4c3483224604e470ffea7389d67da9358c213adc6aa797308f9ed4962685b0",
+          "asset_sha256": "8ba94a674d400e16b6810258fa83bae4375e00b24f7cbc47c66ac2475dbe547b"
+        },
+        {
+          "id": "m09p06-jenny-s02-c1-c19adf424369",
+          "slide": 2,
+          "text": "Now size the request path. Images, logs and reports illustrate distinct prefixes. S three documents at least thirty-five hundred write-type requests or fifty-five hundred get and HEAD requests per second per partitioned prefix. Parallel activity across prefixes can increase aggregate throughput.",
+          "text_sha256": "c19adf424369ecfcaa2a34d08cec57424dacc7bb3ca65ba0d170bc29388b0d9c",
+          "canonical_text_sha256": "f7982c4fab5735a4013608ce518b527f6a6b7523d9a0127d0d5006d0582f650e",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-jenny-s02-c2-25a7c94b7352",
+          "slide": 2,
+          "text": "A burst can produce a temporary five-oh-three Slow Down while S three adapts to the new request rate. Retry with backoff. That response does not tell you the object is missing.",
+          "text_sha256": "25a7c94b7352e8e2febb8b3c12beeaf3819dd93ea098f06d01ae935be8f29e93",
+          "canonical_text_sha256": "bf23d2677f57a6da6b82481befae2e0bc312ea451fbe22bd5dcd688e907bc270",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-jenny-s02-c3-f939b4aa95e4",
+          "slide": 2,
+          "text": "The bucket rate is not the application rate. Check client concurrency, network capacity and, for K M S-backed encryption, applicable K M S request quotas before assuming S three is the bottleneck.",
+          "text_sha256": "f939b4aa95e404a50b1a4a46621a539c7ef6658efb4f43bbc31e171d5e3de3fa",
+          "canonical_text_sha256": "ddacfea4c16254e0c94f165a6bc99dc4fb08bec83100a512066171ea2bdda95d",
+          "asset_sha256": "37ca4d9c86dbd60bdf8a4ce35067098edf819dc0743a526f5298df31ede5878c"
+        },
+        {
+          "id": "m09p06-jenny-s03-c1-29a68b9a2713",
+          "slide": 3,
+          "text": "For a large object, initiate a multipart upload first. S three gives you an upload I D that ties the subsequent part requests to one transfer.",
+          "text_sha256": "29a68b9a2713fdcfccfecc762fd79e400af921e39cf76b2e624db80b3780623a",
+          "canonical_text_sha256": "7b47808e86d7c18c355ec420f75276c2814224be3942d526a91f14593324bd97",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-jenny-s03-c2-ad6cd92bbff2",
+          "slide": 3,
+          "text": "Send numbered parts independently. Keep the returned E tag for each part, because the completion request uses the part numbers and their matching ETags to assemble the object.",
+          "text_sha256": "ad6cd92bbff28e5574aff6d40c5bf7b69bf5b64422bd0938421adebe52a96f0d",
+          "canonical_text_sha256": "6836f87b34daf9676b9f9029793deac1163711d943487ab1ffcbc98aec6a3401",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-jenny-s03-c3-c4c815067315",
+          "slide": 3,
+          "text": "When part two fails, retry part two under that upload I D. There is no need to send successful parts again.",
+          "text_sha256": "c4c815067315b8096a801b7965dc167d3e9d96afa7fff4c3d0557528d3b5d4b7",
+          "canonical_text_sha256": "3efe429215925df724d6ded54d5ac5863c86df7a532f1ecaf6ad693f01d2107b",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-jenny-s03-c4-1924c4696c97",
+          "slide": 3,
+          "text": "Send the ordered part numbers and ETags to complete the upload. Successful part uploads alone do not publish a readable object. The assembled object becomes available once completion succeeds.",
+          "text_sha256": "1924c4696c97198cb6a03900e1e17a1739a424acb2b4b0e941dbd51370c044c0",
+          "canonical_text_sha256": "1924c4696c97198cb6a03900e1e17a1739a424acb2b4b0e941dbd51370c044c0",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        },
+        {
+          "id": "m09p06-jenny-s03-c5-b8b5e1e92c0e",
+          "slide": 3,
+          "text": "If this transfer is abandoned instead, abort it to release the stored parts. An unfinished upload is not a complete object.",
+          "text_sha256": "b8b5e1e92c0ea3b4a81cd48e8d41becec69504d0c6d84bca2dc51099299d98b9",
+          "canonical_text_sha256": "b8b5e1e92c0ea3b4a81cd48e8d41becec69504d0c6d84bca2dc51099299d98b9",
+          "asset_sha256": "6b604e8368ae0d1f390f6eeb692f63d6a692c46722aa78c72214c59a189f6de3"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "07",
+      "revision": "2026-11-24-m09p07-jenny-explainer-first",
+      "approved_assets": {
+        "1": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b",
+        "2": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1",
+        "3": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+      },
+      "units": [
+        {
+          "id": "m09p07-jenny-s01-c1-eca20df2078e",
+          "slide": 1,
+          "text": "A file transfer stopped halfway through. Its uploaded parts are still stored under an upload I D, so they can cost money even though the normal object listing has no completed file to show.",
+          "text_sha256": "eca20df2078eda9ac57029901f42117aba5573bebc5b0ba4322c734142ca16fc",
+          "canonical_text_sha256": "d91c78ec25c412f43172d2638931cbdfc0943c2b536fa29235a761fe194868c6",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-jenny-s01-c2-f14a5b80edba",
+          "slide": 1,
+          "text": "Find the upload I D, then list its parts. Resume an active transfer or abort an abandoned one to remove the stored parts.",
+          "text_sha256": "f14a5b80edba4588b1c465b848747b4834a9e024cae890dbb6cbb843a831774b",
+          "canonical_text_sha256": "948ae8f0ea6935ad77c0dbae602954934b49f0d70f5d4b28275bea9f878f63c1",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-jenny-s01-c3-d8a6a8eeaa64",
+          "slide": 1,
+          "text": "To clear abandoned transfers automatically, configure Lifecycle to abort incomplete multipart uploads after the chosen age. Expiring a completed object acts on a key, not on these stored upload parts.",
+          "text_sha256": "d8a6a8eeaa64dc2f34bcae775cc007ce46a41b702d5bf1fb8d25004de50c0c27",
+          "canonical_text_sha256": "d8a6a8eeaa64dc2f34bcae775cc007ce46a41b702d5bf1fb8d25004de50c0c27",
+          "asset_sha256": "fd7adcd12cb3cfffbab87e2e7044f1a3cca13d84b66826fef906b5337e6d237b"
+        },
+        {
+          "id": "m09p07-jenny-s02-c1-afec4ef3a142",
+          "slide": 2,
+          "text": "Fetch only the part you need. Requesting the first interval can read a header without downloading the whole object.",
+          "text_sha256": "afec4ef3a142edb40463c83c4f55693f405730e9404ea48131d3a547905fd01c",
+          "canonical_text_sha256": "afec4ef3a142edb40463c83c4f55693f405730e9404ea48131d3a547905fd01c",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-jenny-s02-c2-7fec08bb41f1",
+          "slide": 2,
+          "text": "Use a separate get for each required interval. When the request for bytes two thousand through two thousand nine hundred ninety-nine fails, retry that range rather than restarting the whole download.",
+          "text_sha256": "7fec08bb41f161c2fc4c631d52caada40b5555dccdedec300d706d8302a5a6ad",
+          "canonical_text_sha256": "2bc11d2500c5494dd6d071b7470fbe65a797ea57b58a77b9c726ff135b47a507",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-jenny-s02-c3-321c5df229ba",
+          "slide": 2,
+          "text": "The client reassembles the ranges in order. If the file can change during the download, pin a version or use an appropriate condition. Otherwise, individually successful range reads could return pieces from different object states.",
+          "text_sha256": "321c5df229ba69a59d2e59f47bea00b34ad740485216a2fbe7e81ad7be9208bc",
+          "canonical_text_sha256": "321c5df229ba69a59d2e59f47bea00b34ad740485216a2fbe7e81ad7be9208bc",
+          "asset_sha256": "6daedc0f2812e3744dcc84b3160c40cf6ccc19c8382edc718fbae46e8bc72cc1"
+        },
+        {
+          "id": "m09p07-jenny-s03-c1-1e9b317d44f1",
+          "slide": 3,
+          "text": "A distant uploader enters through an A W S edge location on the accelerate endpoint. The data travels over the A W S network to the original bucket. The route changes; the location of the stored object does not.",
+          "text_sha256": "1e9b317d44f18b19a617a0c3ce28bf5020ce183211d83feeb693a0ff8e40550b",
+          "canonical_text_sha256": "4eb345a92439eb495a2c31e0e02432fe882b4d68ba4a9a7305877bb8b66361ba",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        },
+        {
+          "id": "m09p07-jenny-s03-c2-23cfdc65853b",
+          "slide": 3,
+          "text": "You can combine acceleration with multipart upload. The edge endpoint changes the network route; multipart changes how the bytes are split, sent and retried.",
+          "text_sha256": "23cfdc65853b3f24f95ae2bf60c9d62ebe4a95f182fedc4f941aa996501e08bc",
+          "canonical_text_sha256": "23cfdc65853b3f24f95ae2bf60c9d62ebe4a95f182fedc4f941aa996501e08bc",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        },
+        {
+          "id": "m09p07-jenny-s03-c3-803cab46b431",
+          "slide": 3,
+          "text": "Benchmark representative uploads from actual client locations. Compare throughput or latency and weigh the result against acceleration charges.",
+          "text_sha256": "803cab46b43112b98c91aca7b434cfbb6d51f480fc607046c92ac651c7c60491",
+          "canonical_text_sha256": "803cab46b43112b98c91aca7b434cfbb6d51f480fc607046c92ac651c7c60491",
+          "asset_sha256": "01c2a85037c3620457b24ef837d3d711ee60df9030823a0a695b7139b3e6af69"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "08",
+      "revision": "2026-11-24-m09p08-jenny-explainer-first",
+      "approved_assets": {
+        "1": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c",
+        "2": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80",
+        "3": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+      },
+      "units": [
+        {
+          "id": "m09p08-jenny-s01-c1-5d5e7609ce95",
+          "slide": 1,
+          "text": "Suppose one CSV contains far more rows than the client needs. S three Select shows the historical approach: send the SQL filter with the request to extract a subset from that one object.",
+          "text_sha256": "5d5e7609ce95e49a5092231c615fbc70abda7ca52402b4941cb9436a124dbdb6",
+          "canonical_text_sha256": "6905c084fc57b50134822ef4ce3156aa2ac3ffd0d671b40b25fc82b2dbff110e",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-jenny-s01-c2-b97c3841c50c",
+          "slide": 1,
+          "text": "The client receives matching rows and selected columns. That can cut transfer and processing, but the query still covers one object.",
+          "text_sha256": "b97c3841c50c9959be295e00ca357d3df2bdbc618f54fb66843aceb87882752f",
+          "canonical_text_sha256": "b97c3841c50c9959be295e00ca357d3df2bdbc618f54fb66843aceb87882752f",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-jenny-s01-c3-f87117b02e06",
+          "slide": 1,
+          "text": "Do not build around this option in a new account. S three Select is no longer available to new customers; existing customers can continue using it.",
+          "text_sha256": "f87117b02e0602341e969d9dd809adc0eedbf3815d8a6ff32f82059b5a9423fc",
+          "canonical_text_sha256": "027e31b8d91b69352e544e1a8c8cbe6c5a52225fb5b140dbdf26693972d087cc",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-jenny-s01-c4-51f0a8d1d202",
+          "slide": 1,
+          "text": "For a new data-set query, evaluate Athena or another suitable engine. Check scope and availability before choosing.",
+          "text_sha256": "51f0a8d1d20275ad25fa164ef2efaa65a02f58c23d3673b2b15c801afa6f3c06",
+          "canonical_text_sha256": "51f0a8d1d20275ad25fa164ef2efaa65a02f58c23d3673b2b15c801afa6f3c06",
+          "asset_sha256": "ea05934cfdba43016d8da24725d470d4fa442e68813f83c389163f94d7c2827c"
+        },
+        {
+          "id": "m09p08-jenny-s02-c1-ac55bb297f03",
+          "slide": 2,
+          "text": "Choose a bucket or a prefix or tag filter for Storage Class Analysis. Separate workloads with different access patterns.",
+          "text_sha256": "ac55bb297f036c888f299a78445a7e32ff1076e338423bdfd6384f70c9f46bda",
+          "canonical_text_sha256": "ac55bb297f036c888f299a78445a7e32ff1076e338423bdfd6384f70c9f46bda",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-jenny-s02-c2-bc69b2d76d09",
+          "slide": 2,
+          "text": "First data can appear within twenty-four to forty-eight hours. Give analysis thirty days or longer to observe access patterns before relying on its recommendation.",
+          "text_sha256": "bc69b2d76d09bae704acce9745e0bde2df23063bab06573821871fc8536eebda",
+          "canonical_text_sha256": "bc69b2d76d09bae704acce9745e0bde2df23063bab06573821871fc8536eebda",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-jenny-s02-c3-75171bd93b54",
+          "slide": 2,
+          "text": "If the observed access suggests that Standard Infrequent Access would be cheaper, decide whether the retrieval and billing tradeoffs fit. Then configure a separate Lifecycle rule. Running the analysis never moves the objects by itself.",
+          "text_sha256": "75171bd93b5435750aff37393ba64bf6d4b4c253c880cc37b4eeaac43edab561",
+          "canonical_text_sha256": "75171bd93b5435750aff37393ba64bf6d4b4c253c880cc37b4eeaac43edab561",
+          "asset_sha256": "9ab00bf01c070080c7da8e5163821be1d714edba2373559406e6e826ca585c80"
+        },
+        {
+          "id": "m09p08-jenny-s03-c1-5cdb05bfa5be",
+          "slide": 3,
+          "text": "Storage Lens aggregates storage signals across the scopes shown, from organization and accounts down to buckets and, when enabled, prefixes. Use the level that helps you identify where the problem is concentrated.",
+          "text_sha256": "5cdb05bfa5bef10e84085d71c69c15813f29c5c75f7fa05225545810b99431dc",
+          "canonical_text_sha256": "5cdb05bfa5bef10e84085d71c69c15813f29c5c75f7fa05225545810b99431dc",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-jenny-s03-c2-edac3a10eace",
+          "slide": 3,
+          "text": "The dashboard can show you a bucket where growth looks unusual, but it does not identify a safe cleanup policy on its own. Use the signal to decide where to investigate.",
+          "text_sha256": "edac3a10eace79e35114ce65196e32ca0895a0ed87cf2b7a2c41cf0b4e5b5c1c",
+          "canonical_text_sha256": "edac3a10eace79e35114ce65196e32ca0895a0ed87cf2b7a2c41cf0b4e5b5c1c",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-jenny-s03-c3-f2fa24d5dc4b",
+          "slide": 3,
+          "text": "The default account dashboard is preconfigured. Create a custom dashboard when you need a narrower scope, such as selected Regions or buckets, instead of assuming one view fits every investigation.",
+          "text_sha256": "f2fa24d5dc4b2a9f2f8623d281a80f698ddd82e4f7da613a7a1bb240245e15ae",
+          "canonical_text_sha256": "f2fa24d5dc4b2a9f2f8623d281a80f698ddd82e4f7da613a7a1bb240245e15ae",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        },
+        {
+          "id": "m09p08-jenny-s03-c4-fecd83866a7c",
+          "slide": 3,
+          "text": "The dashboard is not the only evidence source. A daily CSV or Parquet export to an authorized S three destination allows further analysis over time.",
+          "text_sha256": "fecd83866a7ca8d8a441991be7f16ef8d17f65b82565103ada84a183e8a5624b",
+          "canonical_text_sha256": "7c3e75d0be3b59b038573b7eb0320361cb2c992c23b00324c88af5bc48028149",
+          "asset_sha256": "5201c1e86771eb4ebed654ea9cf8f400e30d326069938f39252cc898c2169eab"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "09",
+      "revision": "2026-11-24-m09p09-jenny-explainer-first",
+      "approved_assets": {
+        "1": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2",
+        "2": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb",
+        "3": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95",
+        "4": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+      },
+      "units": [
+        {
+          "id": "m09p09-jenny-s01-c1-7d27a0cc45dd",
+          "slide": 1,
+          "text": "Learn to find what is driving an S three cost increase before changing retention. Compare the storage-byte trend with the object-count trend. If the curves diverge, the mix may explain more than the total.",
+          "text_sha256": "7d27a0cc45dd0e47fac3ef28e00021ec380e8fe9ededcec9859e9fe1f2881379",
+          "canonical_text_sha256": "8a4d46dccab8562b348def5af9e274947f7fa996cf6fbd6fd4ce4f59d27e5416",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-jenny-s01-c2-9a2959d2302d",
+          "slide": 1,
+          "text": "The noncurrent-version line is growing. That suggests retained versions are taking space a current-object listing does not show. Locate the affected data and check what must be recoverable before shortening retention.",
+          "text_sha256": "9a2959d2302dd1df7786a726c3afa5c379f964725cf5a6df5ccfcdef42c42b6a",
+          "canonical_text_sha256": "9a2959d2302dd1df7786a726c3afa5c379f964725cf5a6df5ccfcdef42c42b6a",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-jenny-s01-c3-6731a4773ee2",
+          "slide": 1,
+          "text": "The incomplete-multipart line points to a different cause. These are uploaded pieces waiting for a completion that may never come. Confirm the uploads were abandoned and review part cleanup rather than expiring current files.",
+          "text_sha256": "6731a4773ee20e22873ef1f498c10368140b7f7f5fee444f672052030255c8e1",
+          "canonical_text_sha256": "6731a4773ee20e22873ef1f498c10368140b7f7f5fee444f672052030255c8e1",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-jenny-s01-c4-ea81f654c45e",
+          "slide": 1,
+          "text": "Once you know which data is driving the increase, choose the matching retention, cleanup or transition action. Keep the recovery window and access requirements intact.",
+          "text_sha256": "ea81f654c45ecb7723d13f07883130eca6a64bfc87879a1979bede02c8908d48",
+          "canonical_text_sha256": "ea81f654c45ecb7723d13f07883130eca6a64bfc87879a1979bede02c8908d48",
+          "asset_sha256": "27ddb10fa58f17e568ab3f57c3f19fef9b800f7632504dca035d72f46bf1f4c2"
+        },
+        {
+          "id": "m09p09-jenny-s02-c1-c70b159c41fe",
+          "slide": 2,
+          "text": "Protection metrics can point you to buckets to investigate for versioning, encryption, MFA Delete or replication. Verify the setting and the relevant object state before relying on it for a restore.",
+          "text_sha256": "c70b159c41fe467826eb9f1c64ef38ea9265352e97dc428962613de333d563a0",
+          "canonical_text_sha256": "c70b159c41fe467826eb9f1c64ef38ea9265352e97dc428962613de333d563a0",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-jenny-s02-c2-628ef76483d1",
+          "slide": 2,
+          "text": "Bucket owner enforced is an Object Ownership setting. Use the dashboard to identify where it is configured, then confirm the bucket's actual access policies for the workload.",
+          "text_sha256": "628ef76483d1ceca9062b207d0edf20d05cebd56df041ff80e6d21672470db1a",
+          "canonical_text_sha256": "628ef76483d1ceca9062b207d0edf20d05cebd56df041ff80e6d21672470db1a",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-jenny-s02-c3-e42db245385e",
+          "slide": 2,
+          "text": "A count of buckets with notifications means the configuration exists. It does not tell you the consumer received a particular event. Test delivery and inspect the consumer's result separately.",
+          "text_sha256": "e42db245385e58a3ea4fbfeac3ba8cf264ad55c74c659059b33cfc3a5845cea0",
+          "canonical_text_sha256": "e42db245385e58a3ea4fbfeac3ba8cf264ad55c74c659059b33cfc3a5845cea0",
+          "asset_sha256": "850a9d983a19efa7449ca946b06b790cd025838a4593a43b090d7bb2fb0673eb"
+        },
+        {
+          "id": "m09p09-jenny-s03-c1-4b27130a5292",
+          "slide": 3,
+          "text": "Activity metrics answer what the clients did: reads, writes, listings and transferred bytes. Use them to see whether the workload changed, but do not infer request success from volume alone.",
+          "text_sha256": "4b27130a52928db7bd59ec32449d28e212db5c64d5e1d92f21a52c2199ee766b",
+          "canonical_text_sha256": "4b27130a52928db7bd59ec32449d28e212db5c64d5e1d92f21a52c2199ee766b",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-jenny-s03-c2-3b200faed14d",
+          "slide": 3,
+          "text": "The dashboard says Transfer Acceleration is enabled. That proves the setting, not that the client is faster. Measure the transfer itself before deciding that the bottleneck is fixed.",
+          "text_sha256": "3b200faed14d80802353c9e7e88672b7cb7b2e9cd8741587cc0297ee4ca598dd",
+          "canonical_text_sha256": "3b200faed14d80802353c9e7e88672b7cb7b2e9cd8741587cc0297ee4ca598dd",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-jenny-s03-c3-08f8082e365f",
+          "slide": 3,
+          "text": "Status codes answer a different question. An unexpected four-oh-three is a reason to inspect authorization. An unexpected four-oh-four calls for checking the key and application behavior. Request errors are not, by themselves, a retention decision.",
+          "text_sha256": "08f8082e365f056da925dffe4668fd4153d79110fec532bd230f26f7e1ea5d00",
+          "canonical_text_sha256": "08f8082e365f056da925dffe4668fd4153d79110fec532bd230f26f7e1ea5d00",
+          "asset_sha256": "f8b1bfca13444e01f9d765625dcb2216d50f6ba112d1f400803050b5dafe6a95"
+        },
+        {
+          "id": "m09p09-jenny-s04-c1-89aa9175c530",
+          "slide": 4,
+          "text": "Use the free tier when daily bucket-level metrics and fourteen days of dashboard query history are enough. For example, that can answer whether a bucket grew during the past week.",
+          "text_sha256": "89aa9175c530fda0769709b76cabbccebf4e6957837ffdbd1780592d74bd828c",
+          "canonical_text_sha256": "89aa9175c530fda0769709b76cabbccebf4e6957837ffdbd1780592d74bd828c",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09p09-jenny-s04-c2-7779e54f61c5",
+          "slide": 4,
+          "text": "If weekly bucket totals cannot answer the question, pick the needed advanced capability. For example, isolate which prefix drives growth or query a longer period. Upgrading is useful if that extra detail changes what you do.",
+          "text_sha256": "7779e54f61c5b4ca9821be03320543a99ca55eaa9c7dfe35814e1a92d223bbdc",
+          "canonical_text_sha256": "7779e54f61c5b4ca9821be03320543a99ca55eaa9c7dfe35814e1a92d223bbdc",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        },
+        {
+          "id": "m09p09-jenny-s04-c3-bd537e2304ad",
+          "slide": 4,
+          "text": "CloudWatch publishing is an advanced option, but it does not publish prefix-level Storage Lens metrics. Do not choose it expecting those particular metrics there.",
+          "text_sha256": "bd537e2304ad8fa9a40c98dfbd61e87f3d3006a284f3465714fc7b80303ffb19",
+          "canonical_text_sha256": "bd537e2304ad8fa9a40c98dfbd61e87f3d3006a284f3465714fc7b80303ffb19",
+          "asset_sha256": "f9b38676f01ca1f61ff55a1181629a43956205d0b6b58b7d58b25cf110fccafd"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "10",
+      "revision": "2026-11-24-m09p10-jenny-explainer-first",
+      "approved_assets": {
+        "1": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8",
+        "2": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2",
+        "3": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+      },
+      "units": [
+        {
+          "id": "m09p10-jenny-s01-c1-ab8ba2b53f53",
+          "slide": 1,
+          "text": "Learn to make S three objects searchable without turning object storage into a database. The application uploads the object bytes to S three. The separate index will hold the fields the application needs to query.",
+          "text_sha256": "ab8ba2b53f538f0840685d944e49019739528efc8e2efc18f324e87bcad5e967",
+          "canonical_text_sha256": "65cb17cfe11f0da64d4fe7754a14cd107a9bca0cbd182388a65e498e698195ec",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-jenny-s01-c2-6ad040f9a7e2",
+          "slide": 1,
+          "text": "The upload creates the object first. The event then invokes Lambda to write a record into DynamoDB. Those are separate operations, so a read of the index just after upload can miss an object that already exists in S three.",
+          "text_sha256": "6ad040f9a7e2627b7b64e83245d6af8e7d5b32434b37a357cde8077bc96eb27d",
+          "canonical_text_sha256": "5c1db496f51f9ca49091f564fba636799de901fb6f13153bdf98d32016b8ee4a",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-jenny-s01-c3-c692d7d00fa4",
+          "slide": 1,
+          "text": "Query the index for keys that match the search. Once the application chooses a result, it fetches that object from S three.",
+          "text_sha256": "c692d7d00fa4a19f209180649570868a6679fbee0120ca1716bd0302e71796b7",
+          "canonical_text_sha256": "7f388f8729a509b5aae8b120c12dc2f777508176e1ede99a3dee24ad1a1b7f70",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-jenny-s01-c4-b53c9b47fe2c",
+          "slide": 1,
+          "text": "Key the index for the questions your app asks, such as tenant and date. An event can repeat or arrive out of order, so make the index update safe to repeat and reconcile missing or stale entries.",
+          "text_sha256": "b53c9b47fe2ce774878a22ec73b16234957a4d34bbe62da70f1413db6e3846ca",
+          "canonical_text_sha256": "b53c9b47fe2ce774878a22ec73b16234957a4d34bbe62da70f1413db6e3846ca",
+          "asset_sha256": "7a852ffb0f6ff0406b9fa6e3cc2db49ebcc5b986cc28be3af429425e682199f8"
+        },
+        {
+          "id": "m09p10-jenny-s02-c1-fe4c795acdec",
+          "slide": 2,
+          "text": "Static files go from the private S three origin through CloudFront. This is the delivery path for files such as images and style sheets. S three does not run server code.",
+          "text_sha256": "fe4c795acdecccd04b44fded9ffa23e3f51f6d0ab7af3fed3798c677ff4ea42d",
+          "canonical_text_sha256": "76af0853f648c63b08eb87c28f52e7d0bccff5895e376233e118b595ec32eabf",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-jenny-s02-c2-eec6875fbf76",
+          "slide": 2,
+          "text": "For a dynamic request, send the client to an application or API. The application runs the logic and uses a database for transactional state. S three is still useful for object bytes, not the transaction.",
+          "text_sha256": "eec6875fbf76b06dc2c44ce3db7e99a37d9462578bf4fe48e3a2df36d49a1bcb",
+          "canonical_text_sha256": "8a6539a3d63a159bc45585c6684f98dcbfb77cdee29d00a98cb989414f1c0ece",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-jenny-s02-c3-4fa433124906",
+          "slide": 2,
+          "text": "For an upload, the app first checks who may send the file and issues a presigned request. The client then sends the bytes straight to S three. The application authorizes the operation without having to relay the whole file.",
+          "text_sha256": "4fa43312490610fc7801828a13b0b3e21e69eed3b1ad0945edfdce3055f87b95",
+          "canonical_text_sha256": "cb74ce656f0bd54765f051d56855a8e9b36556a6d14e14b397867aa1964bc889",
+          "asset_sha256": "66838ce0d2e98d898368c7e0647aff49d26877d4176b284f7aa8d370798584f2"
+        },
+        {
+          "id": "m09p10-jenny-s03-c1-19860993ae0b",
+          "slide": 3,
+          "text": "An accidental overwrite calls for a retained prior version. In this example version three is current, but you can still restore version two if it was retained and your permissions allow it. Test the actual read.",
+          "text_sha256": "19860993ae0b255e529db6edb7c996a48c67ded1027e1a8e88b981ba9652be89",
+          "canonical_text_sha256": "19860993ae0b255e529db6edb7c996a48c67ded1027e1a8e88b981ba9652be89",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        },
+        {
+          "id": "m09p10-jenny-s03-c2-5159935e9b9c",
+          "slide": 3,
+          "text": "For deletion risk, protect eligible versions with Object Lock retention or a legal hold, and use an independent access or backup boundary where needed. Test recovery from that boundary, not just the presence of a setting.",
+          "text_sha256": "5159935e9b9c1592be2ba4ca2fe3b60492df52bc74de4ebfc4f8025907fac285",
+          "canonical_text_sha256": "5159935e9b9c1592be2ba4ca2fe3b60492df52bc74de4ebfc4f8025907fac285",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        },
+        {
+          "id": "m09p10-jenny-s03-c3-ca820e4851c2",
+          "slide": 3,
+          "text": "A regional disruption needs a prepared copy in another Region. Replication can lag, and keys and permissions may differ at the destination. Prove the app can read that copy before counting it as recovery.",
+          "text_sha256": "ca820e4851c2c0b36a6cf7c260a5af896a910aa981729052059f4e000cdbe0bc",
+          "canonical_text_sha256": "ca820e4851c2c0b36a6cf7c260a5af896a910aa981729052059f4e000cdbe0bc",
+          "asset_sha256": "f568108edd2878f7cc74763c98089909d5b38a24046f2c96d3bd38c6c012a1e9"
+        }
+      ]
+    }
+  ]
+}
