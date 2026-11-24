@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "11",
+      "part": "07",
+      "revision": "2026-11-24-m11p07-andrew-expressive",
+      "approved_assets": {
+        "1": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc",
+        "2": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe",
+        "3": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+      },
+      "units": [
+        {
+          "id": "m11p07-andrew-exp-s01-c1-f94e54c578fc",
+          "slide": 1,
+          "text": "Your app has writes, reports, and one diagnostic connection. Which endpoint should each use? Send writes to the cluster endpoint. It follows the active writer when another instance is promoted.",
+          "text_sha256": "f94e54c578fc4fd7ac38fcfcd6f7dd34ff28a56a9d7df2e9b04986a24418fa97",
+          "canonical_text_sha256": "f94e54c578fc4fd7ac38fcfcd6f7dd34ff28a56a9d7df2e9b04986a24418fa97",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-andrew-exp-s01-c2-53bc1bc05d73",
+          "slide": 1,
+          "text": "Send general read connections to the built-in reader endpoint. It chooses among available readers for new connections, not for each statement on a connection the app already opened.",
+          "text_sha256": "53bc1bc05d73bb7beac9c811dec256bddc73d06ba42f23ba4b87664289082f48",
+          "canonical_text_sha256": "53bc1bc05d73bb7beac9c811dec256bddc73d06ba42f23ba4b87664289082f48",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-andrew-exp-s01-c3-7f7cb4d10801",
+          "slide": 1,
+          "text": "When a particular workload needs a chosen set of instances, use a custom endpoint. This changes where new connections can land without making a separate database.",
+          "text_sha256": "7f7cb4d108016776271e04fafbc0b8fa06cfd73bb26583edcce5b8eeb2946c32",
+          "canonical_text_sha256": "7f7cb4d108016776271e04fafbc0b8fa06cfd73bb26583edcce5b8eeb2946c32",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-andrew-exp-s01-c4-d7f547ce06bd",
+          "slide": 1,
+          "text": "For diagnostics on one instance, use that instance's endpoint. It stays tied to the named instance, not to whichever machine is currently the writer.",
+          "text_sha256": "d7f547ce06bd55c3a1a7ca91b9d01a1ba8e5202a7a6aa721309199e5f1b73dbe",
+          "canonical_text_sha256": "d7f547ce06bd55c3a1a7ca91b9d01a1ba8e5202a7a6aa721309199e5f1b73dbe",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-andrew-exp-s01-c5-59cb579123e4",
+          "slide": 1,
+          "text": "What if there are no healthy readers? The built-in reader endpoint can connect to the writer. Do not rely on its name to block writes; use the appropriate database grants.",
+          "text_sha256": "59cb579123e4ac3a46e2f27080f2459ce0f61b6f4a269a9e60f194984604dc77",
+          "canonical_text_sha256": "59cb579123e4ac3a46e2f27080f2459ce0f61b6f4a269a9e60f194984604dc77",
+          "asset_sha256": "f67a0aa965d1a82cb5873736f5eaf2d66f6a5735c85f3b0d536e3384b904ffcc"
+        },
+        {
+          "id": "m11p07-andrew-exp-s02-c1-f8d56bb35d67",
+          "slide": 2,
+          "text": "General reads go through the built-in reader endpoint. Analytics uses the custom endpoint you set up. The two endpoints still lead into the same cluster.",
+          "text_sha256": "f8d56bb35d6776176762a60e02d0b1e1448c0b8876de6977821f1c3722b5601b",
+          "canonical_text_sha256": "f8d56bb35d6776176762a60e02d0b1e1448c0b8876de6977821f1c3722b5601b",
+          "asset_sha256": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe"
+        },
+        {
+          "id": "m11p07-andrew-exp-s02-c2-9fc973186f4d",
+          "slide": 2,
+          "text": "Analytics is limited to readers B and C. Can the built-in endpoint still use those two? Yes. Adding them to a custom endpoint does not remove them from the general reader pool.",
+          "text_sha256": "9fc973186f4d4c9387b31c2cb0c2015c5543b34870bacbd91d080f63634edf5f",
+          "canonical_text_sha256": "9fc973186f4d4c9387b31c2cb0c2015c5543b34870bacbd91d080f63634edf5f",
+          "asset_sha256": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe"
+        },
+        {
+          "id": "m11p07-andrew-exp-s02-c3-491a9af5abcc",
+          "slide": 2,
+          "text": "If the workloads must not share readers, use separate custom endpoints with non-overlapping memberships and direct each app to its assigned endpoint. That separates their routing, not the underlying cluster storage.",
+          "text_sha256": "491a9af5abcccd1cecbeb4cc521fbcb760d7fd61abb382866e0c24ce56ed180f",
+          "canonical_text_sha256": "491a9af5abcccd1cecbeb4cc521fbcb760d7fd61abb382866e0c24ce56ed180f",
+          "asset_sha256": "e48b4c415e854c08db5014b687b70db6bbcfe3a2d85b5d065d548a4c6a9665fe"
+        },
+        {
+          "id": "m11p07-andrew-exp-s03-c1-ffd3b68aab36",
+          "slide": 3,
+          "text": "A reporting peak pushes up load on the existing readers. A target-tracking policy uses those metrics to add or remove readers within the configured bounds. At least one reader is needed for the reader metric.",
+          "text_sha256": "ffd3b68aab367d341bf5b6d3fccee65aedaaad29eb2a568f4641c76448fd8c4e",
+          "canonical_text_sha256": "ffd3b68aab367d341bf5b6d3fccee65aedaaad29eb2a568f4641c76448fd8c4e",
+          "asset_sha256": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+        },
+        {
+          "id": "m11p07-andrew-exp-s03-c2-fe6424dedab1",
+          "slide": 3,
+          "text": "A new reader takes time to create. Once it is ready, the reader endpoint can send it new connections. Existing long-lived connections don't automatically move.",
+          "text_sha256": "fe6424dedab155d6485bb7f1d18c95356e2c3da985d2f2d769d561a091c654c8",
+          "canonical_text_sha256": "fe6424dedab155d6485bb7f1d18c95356e2c3da985d2f2d769d561a091c654c8",
+          "asset_sha256": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+        },
+        {
+          "id": "m11p07-andrew-exp-s03-c3-a7d1f8e30f10",
+          "slide": 3,
+          "text": "If the primary is struggling with writes, adding readers doesn't raise the writer's own capacity. Confirm which side of the workload is under pressure before changing the reader policy.",
+          "text_sha256": "a7d1f8e30f101095bf19fbe05951e99feabf7bdd20bdf47b210e40279cef8331",
+          "canonical_text_sha256": "a7d1f8e30f101095bf19fbe05951e99feabf7bdd20bdf47b210e40279cef8331",
+          "asset_sha256": "aa311d71fd5209be53583fc6cb55137011faf8c9166c8da76807fb19bad5f217"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "08",
+      "revision": "2026-11-24-m11p08-andrew-expressive",
+      "approved_assets": {
+        "1": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28",
+        "2": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+      },
+      "units": [
+        {
+          "id": "m11p08-andrew-exp-s01-c1-7e50d37f58d3",
+          "slide": 1,
+          "text": "An expensive statement is not the same as an engine error. On Aurora MySQL, use the slow query log for supported slow statements, the error log for engine problems, and general or supported audit logging for other activity when needed.",
+          "text_sha256": "7e50d37f58d3c2be2a0bf21ed8b95913d51bbe896f71cbc2100c2b8027648561",
+          "canonical_text_sha256": "7e50d37f58d3c2be2a0bf21ed8b95913d51bbe896f71cbc2100c2b8027648561",
+          "asset_sha256": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28"
+        },
+        {
+          "id": "m11p08-andrew-exp-s01-c2-ccc5f48b79a2",
+          "slide": 1,
+          "text": "Aurora PostgreSQL uses its own engine settings and log format. Choose those settings for the activity you need, rather than copying MySQL's logging parameters.",
+          "text_sha256": "ccc5f48b79a286103658d6514ed7dd3bca6fc3dfa258258879f51cb1009ae231",
+          "canonical_text_sha256": "ccc5f48b79a286103658d6514ed7dd3bca6fc3dfa258258879f51cb1009ae231",
+          "asset_sha256": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28"
+        },
+        {
+          "id": "m11p08-andrew-exp-s01-c3-1f984aa4ecc9",
+          "slide": 1,
+          "text": "Export the supported logs you select to CloudWatch Logs. Set retention and access for the sensitivity of what they can contain, then check that the expected records actually arrive.",
+          "text_sha256": "1f984aa4ecc9b15142b88377697fd8db21f3f55dd5fde20ddf7d7f95b152d4ac",
+          "canonical_text_sha256": "1f984aa4ecc9b15142b88377697fd8db21f3f55dd5fde20ddf7d7f95b152d4ac",
+          "asset_sha256": "e4c6561da5f645c740fb84aa5869d453b7967a64fa8f87bdaf807e6e35ba7d28"
+        },
+        {
+          "id": "m11p08-andrew-exp-s02-c1-87aa4cbdc0e0",
+          "slide": 2,
+          "text": "The database got slower. Before you buy a bigger instance, look at database load, the dominant waits, and the S Q L contributing to them. Cross-check what you see against CloudWatch metrics, O S evidence or logs.",
+          "text_sha256": "87aa4cbdc0e0a94f4026b9cdae2b406cb2050e74f85dcf92b9c5e96f7e7ee2b2",
+          "canonical_text_sha256": "c820e600466dab8326d312206d828e04ce39fbacea86bcf742282b28c160b9ca",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        },
+        {
+          "id": "m11p08-andrew-exp-s02-c2-cbe93ab7c0b8",
+          "slide": 2,
+          "text": "High C P U and C P U waits point toward C P U pressure. Examine expensive S Q L first; scale compute if the measured load still calls for it after tuning.",
+          "text_sha256": "cbe93ab7c0b841036aa86c790eadd0ab7e61c5c2e568bbe3d8f9c03001912d41",
+          "canonical_text_sha256": "986dd1f369ec853898bd26ae700ab959575b48df7f2c38969aa771347e04dd67",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        },
+        {
+          "id": "m11p08-andrew-exp-s02-c3-4d83122faaba",
+          "slide": 2,
+          "text": "If sessions are waiting on locks, find the blocking transaction. A bigger instance does not make one transaction release a lock sooner.",
+          "text_sha256": "4d83122faaba0c9c622bb7df5a1dcd4b4fe41e67bd53b9c8fdcfd347cc86b7ae",
+          "canonical_text_sha256": "4d83122faaba0c9c622bb7df5a1dcd4b4fe41e67bd53b9c8fdcfd347cc86b7ae",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        },
+        {
+          "id": "m11p08-andrew-exp-s02-c4-9e6d13acf19f",
+          "slide": 2,
+          "text": "For storage waits, inspect the actual I O pattern and latency. A large scan and a random read bottleneck can call for different fixes.",
+          "text_sha256": "9e6d13acf19fc76a7958885f4296b42795e204e304932e4e3c807d781e5297b8",
+          "canonical_text_sha256": "0c392e07aa518902192bdb1f09838955ced46c103e2480e691a4dc06099561e1",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        },
+        {
+          "id": "m11p08-andrew-exp-s02-c5-a15b7efaf022",
+          "slide": 2,
+          "text": "If the app runs out of connections, check pool size, limits and leaks. The problem may be how connections are held rather than how fast the engine can run.",
+          "text_sha256": "a15b7efaf022e699309010c7db6c31377feb1034c8060c7cb0fc4ff62d9e395f",
+          "canonical_text_sha256": "a15b7efaf022e699309010c7db6c31377feb1034c8060c7cb0fc4ff62d9e395f",
+          "asset_sha256": "6dc18f97e431cc62082610bc80999651ceabea8751ac3bebee71670a857ea069"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "09",
+      "revision": "2026-11-24-m11p09-andrew-expressive",
+      "approved_assets": {
+        "1": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d",
+        "2": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+      },
+      "units": [
+        {
+          "id": "m11p09-andrew-exp-s01-c1-807a523cd3b3",
+          "slide": 1,
+          "text": "Aurora Serverless v2 adjusts capacity for the database compute instances. The writer and optional reader still use distributed storage. Scaling compute down does not erase the data.",
+          "text_sha256": "807a523cd3b31fd0263f743df7df78bf8a1d540e466265fb025c85f4e4f380a7",
+          "canonical_text_sha256": "807a523cd3b31fd0263f743df7df78bf8a1d540e466265fb025c85f4e4f380a7",
+          "asset_sha256": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d"
+        },
+        {
+          "id": "m11p09-andrew-exp-s01-c2-c9fa1ac3055e",
+          "slide": 1,
+          "text": "Watch the demand rise and capacity follow. It scales within the minimum and maximum you configure. If demand exceeds the ceiling, the setting can still leave the workload constrained.",
+          "text_sha256": "c9fa1ac3055eb64d0796f8e90dca8ae6bd7e46e9ba8272ca4072f5f08e3e1a96",
+          "canonical_text_sha256": "c9fa1ac3055eb64d0796f8e90dca8ae6bd7e46e9ba8272ca4072f5f08e3e1a96",
+          "asset_sha256": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d"
+        },
+        {
+          "id": "m11p09-andrew-exp-s01-c3-98ee364c982f",
+          "slide": 1,
+          "text": "Can the minimum be zero? Only on supported versions and configurations, after the idle period. The next connection may wait for resume, and storage and other charges can remain.",
+          "text_sha256": "98ee364c982f5ba195883b369f1be3132b1dd5a65edc55df4473b1d96c79fa91",
+          "canonical_text_sha256": "98ee364c982f5ba195883b369f1be3132b1dd5a65edc55df4473b1d96c79fa91",
+          "asset_sha256": "5a9cf589de65ffa1f979bb456c5fa804e51eb9a59436d7ebd9470cef24cb319d"
+        },
+        {
+          "id": "m11p09-andrew-exp-s02-c1-191b176735bd",
+          "slide": 2,
+          "text": "The app wants to run S Q L without keeping a database socket open. It sends an H T T P S Data A P I request with I A M authorization. The service uses the specified Secrets Manager credential, with applicable key permissions.",
+          "text_sha256": "191b176735bd7c776ed2751d6634f1bd62bc162ddf8928df4c0cdf3eee18834a",
+          "canonical_text_sha256": "b56fc7910d99fe5ebcca77e575f52c0756bc1766053bd2bec56ec9944787235c",
+          "asset_sha256": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+        },
+        {
+          "id": "m11p09-andrew-exp-s02-c2-d3eae53b441b",
+          "slide": 2,
+          "text": "The service executes against the writer, even for SELECT. Use the database user's S Q L permissions for the operation. I A M permission to call the A P I doesn't grant access to every table.",
+          "text_sha256": "d3eae53b441bbdfe04d162e0ab9418a4d87384972d8f1406e5d04fe0f7bfcb18",
+          "canonical_text_sha256": "c1a3b2395f733607a1f289fdac6cb1773c41ad1343478d5c9e9d2e830aeedb65",
+          "asset_sha256": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+        },
+        {
+          "id": "m11p09-andrew-exp-s02-c3-440182d0b771",
+          "slide": 2,
+          "text": "Confirm the engine, version and Region support the A P I. The documented result-set limit is one mebibyte, and transactions have their own constraints. Keep requests within what this interface supports.",
+          "text_sha256": "440182d0b7714bf24fbf87c5892af7788876cbb79ab0d3538c1ef2ab37b21e4a",
+          "canonical_text_sha256": "610c3ec7e22c310230a50e1c50d5f9e6afc61fa293d82798eccdc1f0b3d11d88",
+          "asset_sha256": "ea0a7819534f90e0cf89b182aa162d721b879fe3cb4ab124cbd0a47368542fbb"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "10",
+      "revision": "2026-11-24-m11p10-andrew-expressive",
+      "approved_assets": {
+        "1": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571",
+        "2": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469",
+        "3": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+      },
+      "units": [
+        {
+          "id": "m11p10-andrew-exp-s01-c1-3df8643a63b2",
+          "slide": 1,
+          "text": "A user wants local reads in a second Region. Keep a writer in the primary Region and place a read cluster closer to those users. Aurora replicates the data asynchronously, so the nearby copy can lag the writer.",
+          "text_sha256": "3df8643a63b25cef0680f72af44537218731bb74f9d9e1603c3c69e6ef19e3a7",
+          "canonical_text_sha256": "3df8643a63b25cef0680f72af44537218731bb74f9d9e1603c3c69e6ef19e3a7",
+          "asset_sha256": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571"
+        },
+        {
+          "id": "m11p10-andrew-exp-s01-c2-fc9eb0be7647",
+          "slide": 1,
+          "text": "Supported configurations can have up to ten secondary Regions. Count those Regions against the documented primary reader limit when sizing the deployment.",
+          "text_sha256": "fc9eb0be7647463cff419dc08a0a41a567013aec9ea843aff224100a32ec28f3",
+          "canonical_text_sha256": "fc9eb0be7647463cff419dc08a0a41a567013aec9ea843aff224100a32ec28f3",
+          "asset_sha256": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571"
+        },
+        {
+          "id": "m11p10-andrew-exp-s01-c3-fd0938dd073d",
+          "slide": 1,
+          "text": "A planned switchover reassigns the primary under controlled conditions. In an unplanned outage, promoting another Region can lose recent writes. Monitor replication and verify the application reconnects to the intended writer.",
+          "text_sha256": "fd0938dd073d9e0ba49fd23c9aa2852a8aa1337b6a8bcfa3cd46f594e2ca41b1",
+          "canonical_text_sha256": "fd0938dd073d9e0ba49fd23c9aa2852a8aa1337b6a8bcfa3cd46f594e2ca41b1",
+          "asset_sha256": "98b638c3a2783e1f5ed000989169933df6c3e4d71a658bed7b4e8d989cc2b571"
+        },
+        {
+          "id": "m11p10-andrew-exp-s02-c1-42a67509098d",
+          "slide": 2,
+          "text": "The app connects in the secondary Region, but the update still has to commit at the writer in the primary. Write forwarding sends supported statements there. It adds a network trip and doesn't create a second independent writer.",
+          "text_sha256": "42a67509098d903187d8ed63b00037f890b77f701da2438f5f7c20bde13b2c08",
+          "canonical_text_sha256": "42a67509098d903187d8ed63b00037f890b77f701da2438f5f7c20bde13b2c08",
+          "asset_sha256": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469"
+        },
+        {
+          "id": "m11p10-andrew-exp-s02-c2-eb3a3e926f41",
+          "slide": 2,
+          "text": "After commit, changes propagate back asynchronously. When the app reads in the secondary, its configured consistency mode governs when it can see the new result.",
+          "text_sha256": "eb3a3e926f41d6def47d2d2cbd6d900931d681896d59014d68b8c3fae349187b",
+          "canonical_text_sha256": "eb3a3e926f41d6def47d2d2cbd6d900931d681896d59014d68b8c3fae349187b",
+          "asset_sha256": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469"
+        },
+        {
+          "id": "m11p10-andrew-exp-s02-c3-86e3096e2bf5",
+          "slide": 2,
+          "text": "Check the engine and version and the statements the app sends. Not every S Q L operation can be forwarded. If it needs an unsupported statement, use the appropriate writer connection.",
+          "text_sha256": "86e3096e2bf5bf6f32b68042a523e0acea04bdc3038e9bb82c04e1cc479f01e8",
+          "canonical_text_sha256": "56beef85e9181988541304de60d0d9a024bb1cdad3dcc94f0fd784a21c290c55",
+          "asset_sha256": "e978bd47fdebdba112c9aacaeceae7d9e7220e75bab2c2cabb0c76bb817ff469"
+        },
+        {
+          "id": "m11p10-andrew-exp-s03-c1-b772b7b0ed8d",
+          "slide": 3,
+          "text": "Start with the source engine and version. If a supported snapshot restore fits, use the recovery point to build a new Aurora database. It won't contain writes that happened after that point.",
+          "text_sha256": "b772b7b0ed8db32ad1de647f8b7a2fa773dda458df360999dae0873c2f6f68d0",
+          "canonical_text_sha256": "b772b7b0ed8db32ad1de647f8b7a2fa773dda458df360999dae0873c2f6f68d0",
+          "asset_sha256": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+        },
+        {
+          "id": "m11p10-andrew-exp-s03-c2-92c40cc9f77f",
+          "slide": 3,
+          "text": "Where the Aurora replica path is supported, seed it and let it catch up before promoting. Pick the path based on actual compatibility and how long the app can tolerate a cutover.",
+          "text_sha256": "92c40cc9f77fcd74e890c37c3a9a60eecd9e0ce40c37920c5839b171dae0c3aa",
+          "canonical_text_sha256": "92c40cc9f77fcd74e890c37c3a9a60eecd9e0ce40c37920c5839b171dae0c3aa",
+          "asset_sha256": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+        },
+        {
+          "id": "m11p10-andrew-exp-s03-c3-15c036bb737f",
+          "slide": 3,
+          "text": "Verify data, application behavior, performance and access controls before switching endpoints. Then watch the app use the new target. Preserve the source for an intentional rollback plan rather than promising zero downtime.",
+          "text_sha256": "15c036bb737f4c92d7c8cdb67e5d627dbe7197891a7a345c7f27940f5b4b2432",
+          "canonical_text_sha256": "15c036bb737f4c92d7c8cdb67e5d627dbe7197891a7a345c7f27940f5b4b2432",
+          "asset_sha256": "8a88687b29e3bafff345ff66194c41cc780f9b7ae826e05d2da39314ecfc533b"
+        }
+      ]
+    },
+    {
+      "module": "11",
+      "part": "11",
+      "revision": "2026-11-24-m11p11-andrew-expressive",
+      "approved_assets": {
+        "1": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0",
+        "2": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9",
+        "3": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+      },
+      "units": [
+        {
+          "id": "m11p11-andrew-exp-s01-c1-9d438674d764",
+          "slide": 1,
+          "text": "Dynamo D B is a managed key-value and document database. Think of an app loading one player's games. The key must be present, but two game records can have different non-key attributes.",
+          "text_sha256": "9d438674d7647a2029af97680771ab75c14a06be669f5936e9e1e403822a822f",
+          "canonical_text_sha256": "84421a433ec62692c1429fd0f437b7e7dafb940c2fd21fe73c90750056b608f2",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-andrew-exp-s01-c2-0cda50fff2fa",
+          "slide": 1,
+          "text": "Put related games under the player's partition key. An optional sort key lets the app order or select games within that group. Design that key around how the app will read the data.",
+          "text_sha256": "0cda50fff2fabe4456094ab3f623c6bf54b1fd81bb645b350987419029d69c0b",
+          "canonical_text_sha256": "0cda50fff2fabe4456094ab3f623c6bf54b1fd81bb645b350987419029d69c0b",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-andrew-exp-s01-c3-bb0e1c823f22",
+          "slide": 1,
+          "text": "The item limit is four hundred kilobytes, including attribute names and values. Capacity mode does not make one heavily accessed key scale without limits.",
+          "text_sha256": "bb0e1c823f226135e869221e8ec857b53513f5889798b36ab0cb31ad9e6a0aea",
+          "canonical_text_sha256": "bb0e1c823f226135e869221e8ec857b53513f5889798b36ab0cb31ad9e6a0aea",
+          "asset_sha256": "eb81643fe362c90bc1588d9d9bdc14350cc599e526ff36c9d5b58f8a789623e0"
+        },
+        {
+          "id": "m11p11-andrew-exp-s02-c1-c89871d7258c",
+          "slide": 2,
+          "text": "The table defines its key when you create it. Both activity records include the user key and the record sort key. That's what lets Dynamo D B identify each item.",
+          "text_sha256": "c89871d7258c4d37c02e818c1e911b4345d3d2c7911eda0af26663049aba6654",
+          "canonical_text_sha256": "ddb06a2d7ba091be067ae1d5e8a44245204d3f989355bc8123dfea27ecb7db0d",
+          "asset_sha256": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9"
+        },
+        {
+          "id": "m11p11-andrew-exp-s02-c2-d0e8b8e2b504",
+          "slide": 2,
+          "text": "One activity records a login device. Another records a purchase total. The key schema stays fixed even when those non-key attributes change.",
+          "text_sha256": "d0e8b8e2b5049a691d819b8739c8d31e0e5a8dbc919d2acaee50d1c4ad1494ab",
+          "canonical_text_sha256": "d0e8b8e2b5049a691d819b8739c8d31e0e5a8dbc919d2acaee50d1c4ad1494ab",
+          "asset_sha256": "4de62244a6f50e2259dc0ad76f5dd95d839436d46f3075b63248cbaf7c5524a9"
+        },
+        {
+          "id": "m11p11-andrew-exp-s03-c1-23a7c9d01f91",
+          "slide": 3,
+          "text": "Query this player's partition key to get both games. Add the sort-key condition to narrow which games are returned. The app doesn't have to scan records belonging to every player.",
+          "text_sha256": "23a7c9d01f91d415490ec4019d71528a7c8850349201fa59ee69f9a1a1d15eff",
+          "canonical_text_sha256": "23a7c9d01f91d415490ec4019d71528a7c8850349201fa59ee69f9a1a1d15eff",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        },
+        {
+          "id": "m11p11-andrew-exp-s03-c2-b7ec9ce10170",
+          "slide": 3,
+          "text": "With only a partition key, it must identify one item. With a composite key, it is the combination of partition key and sort key that must be unique.",
+          "text_sha256": "b7ec9ce10170426d7eee0c9bc8766a098ceceb10c3305a21c71f31f1d10f7f13",
+          "canonical_text_sha256": "b7ec9ce10170426d7eee0c9bc8766a098ceceb10c3305a21c71f31f1d10f7f13",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        },
+        {
+          "id": "m11p11-andrew-exp-s03-c3-dbf96cc191db",
+          "slide": 3,
+          "text": "If most traffic hits the same partition-key value, that value can become a bottleneck. Choose partition keys that spread the actual access pattern where the application allows it.",
+          "text_sha256": "dbf96cc191db300f0f97ed02ac80d8b63e07b93c497cb3920070538b48c5d535",
+          "canonical_text_sha256": "dbf96cc191db300f0f97ed02ac80d8b63e07b93c497cb3920070538b48c5d535",
+          "asset_sha256": "ff86d30e050e67422a1232a051eb778bb6bc575ccc60100fdb408d9cdefc92bb"
+        }
+      ]
+    }
+  ]
+}
