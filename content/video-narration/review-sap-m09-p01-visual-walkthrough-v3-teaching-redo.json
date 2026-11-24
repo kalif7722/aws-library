@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "01",
+      "revision": "2026-11-24-m09p01-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d",
+        "2": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1",
+        "3": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+      },
+      "units": [
+        {
+          "id": "m09p01-redo-s01-c1-81ec6a295a36",
+          "slide": 1,
+          "text": "Learn what S three stores, when a completed write is visible, and what can block access. Start with the bucket. It belongs to one A W S Region, and an object read identifies the bucket and the full key.",
+          "text_sha256": "81ec6a295a363a286cf1baed81b182751b16d5fe1add29698ceec9586e7b158b",
+          "canonical_text_sha256": "58d35f9642c07b31e5d67fc96bfdd2b10bd201832b087cd94540580e3a70d0c9",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-redo-s01-c2-5594730d8b1d",
+          "slide": 1,
+          "text": "The key here is images slash logo dot P N G. The slash groups keys by prefix; it is not a disk directory. S three stores the image bytes and metadata such as its content type, with a storage class chosen for the object.",
+          "text_sha256": "5594730d8b1d1f4c5b38e72a5a3dd07828cf52b129c1925ab6a750de3579fc98",
+          "canonical_text_sha256": "79ce0a5444ed0cb2c86981c7ad927f168cad6343daeb87337b9cb1dee6d8b0d2",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-redo-s01-c3-2794f57400e5",
+          "slide": 1,
+          "text": "Frequently served logos, backups, and data-lake files all use object reads and writes. For Pozix file operations or in-place block updates, choose another storage model before comparing classes.",
+          "text_sha256": "2794f57400e53aa676279f66ff68ca942aaea97be1b1bc61126420d1e1b78cbd",
+          "canonical_text_sha256": "a8c9ee4ca96646a7e1eb747a1e0ed232434f5d39cceccc162f29e2ccbe786f73",
+          "asset_sha256": "a2e99a928411e7dd4038964b36e71d5718ab2cc72d5e751d19213346cbd3bd2d"
+        },
+        {
+          "id": "m09p01-redo-s02-c1-949fc206cf40",
+          "slide": 2,
+          "text": "Follow orders slash one thousand one dot Jason into the bucket. First, wait for the put to succeed.",
+          "text_sha256": "949fc206cf40c334ab54fecd76e9341dcc57391b91c43226b0ec57dbef16ba27",
+          "canonical_text_sha256": "4d144caef2f6aaaece4844e070b1c17fe45e34ccfac883989d757482629fa7a0",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-redo-s02-c2-969faf93ae96",
+          "slide": 2,
+          "text": "A later get can read the object and a later LIST reflects the change. That is strong consistency. There is no visibility delay to wait out.",
+          "text_sha256": "969faf93ae96bc1215a843aaf90207144a7dd88bb808ef92ff88f0b73ea03762",
+          "canonical_text_sha256": "d578d94b133049d39e961bc942d52d68bbb2fcb3ae76236990373a8333ce1679",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-redo-s02-c3-761188fd725b",
+          "slide": 2,
+          "text": "Now two workers read the same object's E tag. If one updates it first, a stale If-Match condition on the second worker's write can reject that overwrite. Versioning can preserve earlier data, but it does not stop the two workers from racing.",
+          "text_sha256": "761188fd725b62264e29bd66d50bb6168b5d350b0c6891b3b1a6eb0fd44f33b4",
+          "canonical_text_sha256": "7655bd7c9d0523acfd1740d1e1c77fbbc53c20e62c503e26bc0e034b1085b543",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-redo-s02-c4-4369c897ccdf",
+          "slide": 2,
+          "text": "An order object and a payment object do not commit as one operation in S three. If both must succeed together, use a database transaction or a workflow that can recover from partial completion.",
+          "text_sha256": "4369c897ccdf195544ad639e3c83ea180af06464faaed3462ccf93647759ac85",
+          "canonical_text_sha256": "7f52fe431f233e2cf23050d49d11000125c74a18d98092eee982c5df2c40a894",
+          "asset_sha256": "196e077eecdfa4417c845a5806e0720a644d58a41f736efd35d0dfc214da01e1"
+        },
+        {
+          "id": "m09p01-redo-s03-c1-7a18b5045f6b",
+          "slide": 3,
+          "text": "Start an Access Denied investigation with the actual request. If the application role calls GetObject for the logo, identify that exact role, action and object A R N. Its I A M identity policy can allow the read.",
+          "text_sha256": "7a18b5045f6b2bbfbbefd5b68b57a03c19c603e4b37d0180bdf8600121860256",
+          "canonical_text_sha256": "6867135e8537510693644d61955782bdcfebcf660a62aaf3113cc268734281b1",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-redo-s03-c2-5fbadddebc73",
+          "slide": 3,
+          "text": "Next check the bucket or access point policy and other applicable constraints. An explicit deny still wins when the role has an allow. Otherwise, verify the effective allow for this caller, operation and key.",
+          "text_sha256": "5fbadddebc7360c0a0351b62c70fa2dac270bce1e409fe9c1267b46efb73c4d9",
+          "canonical_text_sha256": "5fbadddebc7360c0a0351b62c70fa2dac270bce1e409fe9c1267b46efb73c4d9",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        },
+        {
+          "id": "m09p01-redo-s03-c3-01dd19bd78c0",
+          "slide": 3,
+          "text": "Finally, check ownership. With Bucket owner enforced, the bucket owner owns the objects and A C Ls are disabled. Adding an ACL will not resolve this denial. ",
+          "text_sha256": "01dd19bd78c0418205524c53d2c5d5fb9e2d24310336ae414cc2114ae6b45bec",
+          "canonical_text_sha256": "998b6222a524c4f5acb590435f14c5792dd0266b010d03790a22249f202d13d1",
+          "asset_sha256": "edc87466b4a10e8e0678dab3661cccd2a3a30d1c465ad68ec4223ca9e24a7217"
+        }
+      ]
+    }
+  ]
+}
