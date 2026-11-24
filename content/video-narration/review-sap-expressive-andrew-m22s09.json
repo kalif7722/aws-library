@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "voices": [
+    "en-US-AndrewNeural"
+  ],
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "22",
+      "part": "09",
+      "revision": "2026-11-24-m22p09-andrew-expressive",
+      "approved_assets": {
+        "1": "270bca038af6ea8a832fb8166590d002be19ffcb65fd668d358144122b0e00a1",
+        "2": "5fb4cf8e21d400f88eb3d70bd2c087fce882d9f400d96f0e6dd5f5006d22df43",
+        "3": "ac8e4665857adf33fc5515d946bf0e15a3795d8bcb9cf709ceb0a4d74228e8c1",
+        "4": "b3998641d4f6037883e2c7e97f2f2911ccfff4dc80f60aa2a5da74821eb7650c"
+      },
+      "units": [
+        {
+          "id": "m22p09-andrew-exp-s01-c1-13541f423ed8",
+          "slide": 1,
+          "text": "We'll trace where rising workload demand can become a reliability problem. The example forecasts one thousand one hundred fifty concurrent executions against an applied quota of one thousand. The application can hit that limit even if its per-request code is healthy.",
+          "text_sha256": "13541f423ed8e2e1e7b2304499eaa9cc5087a77326d46fd128355f110cc21ab9",
+          "canonical_text_sha256": "13541f423ed8e2e1e7b2304499eaa9cc5087a77326d46fd128355f110cc21ab9",
+          "asset_sha256": "270bca038af6ea8a832fb8166590d002be19ffcb65fd668d358144122b0e00a1"
+        },
+        {
+          "id": "m22p09-andrew-exp-s01-c2-0740abc01db6",
+          "slide": 1,
+          "text": "Check the applied quota in the intended account and Region. Request headroom ahead of the launch and verify it was applied. Plan throttling and other demand controls in case the requested increase is not available on time.",
+          "text_sha256": "0740abc01db6d2a064c6d6c0e1e8866fa9508d5ffbfcef5dd9b42047d8e322a7",
+          "canonical_text_sha256": "0740abc01db6d2a064c6d6c0e1e8866fa9508d5ffbfcef5dd9b42047d8e322a7",
+          "asset_sha256": "270bca038af6ea8a832fb8166590d002be19ffcb65fd668d358144122b0e00a1"
+        },
+        {
+          "id": "m22p09-andrew-exp-s02-c1-974324d86b9d",
+          "slide": 2,
+          "text": "The client looks up a service name, gets task addresses and connects directly to a selected task. Cloud Map supplies discovery records; it doesn't proxy the request or replace the load balancer.",
+          "text_sha256": "974324d86b9d3a7a775334f44ab8ea2c501789d778e541c35e2b8c4e0d96c8ae",
+          "canonical_text_sha256": "974324d86b9d3a7a775334f44ab8ea2c501789d778e541c35e2b8c4e0d96c8ae",
+          "asset_sha256": "5fb4cf8e21d400f88eb3d70bd2c087fce882d9f400d96f0e6dd5f5006d22df43"
+        },
+        {
+          "id": "m22p09-andrew-exp-s02-c2-2d17a8a1e0ec",
+          "slide": 2,
+          "text": "Healthy records are preferred. In E C S service discovery, if every record is unhealthy, Route 53 can return up to eight unhealthy records. Cached answers can also linger. Don't treat this D N S response as proof the task is healthy or assume it follows load balancer state.",
+          "text_sha256": "2d17a8a1e0ec5ea979c4307fde229dff84a5e7aa83912faf390b1a6226b36d26",
+          "canonical_text_sha256": "4091619838dae6859f28d9cfd5d4f89b1b7eddd004efb36b8e4641de3e049878",
+          "asset_sha256": "5fb4cf8e21d400f88eb3d70bd2c087fce882d9f400d96f0e6dd5f5006d22df43"
+        },
+        {
+          "id": "m22p09-andrew-exp-s03-c1-235aa62e1823",
+          "slide": 3,
+          "text": "A client can time out even though a write already succeeded. Retrying with the same application idempotency key lets the service recognize the prior result instead of applying the business effect again.",
+          "text_sha256": "235aa62e18234ed6615df5655de599e802c32769f647881ca0cf75ddc6b1fa57",
+          "canonical_text_sha256": "235aa62e18234ed6615df5655de599e802c32769f647881ca0cf75ddc6b1fa57",
+          "asset_sha256": "ac8e4665857adf33fc5515d946bf0e15a3795d8bcb9cf709ceb0a4d74228e8c1"
+        },
+        {
+          "id": "m22p09-andrew-exp-s03-c2-811ae65490f3",
+          "slide": 3,
+          "text": "Use backoff to give a transient problem time to recover, and jitter so clients don't retry at the same instant. Bound the attempts. These practices improve recovery behavior; they do not turn delivery into exactly once.",
+          "text_sha256": "811ae65490f3282bbb2493cf9040cb4a331e952fc1be775474bba20c6d08c267",
+          "canonical_text_sha256": "811ae65490f3282bbb2493cf9040cb4a331e952fc1be775474bba20c6d08c267",
+          "asset_sha256": "ac8e4665857adf33fc5515d946bf0e15a3795d8bcb9cf709ceb0a4d74228e8c1"
+        },
+        {
+          "id": "m22p09-andrew-exp-s04-c1-f4acea6f7259",
+          "slide": 4,
+          "text": "A slow recommendations dependency can use up its own capacity and still leave the payment path available. Use separate pools or limits where that independence matters. It doesn't make the slow dependency healthy.",
+          "text_sha256": "f4acea6f7259b7ddfa05a742d004cdf880ba53e78208e965f63567fc65bb24d2",
+          "canonical_text_sha256": "f4acea6f7259b7ddfa05a742d004cdf880ba53e78208e965f63567fc65bb24d2",
+          "asset_sha256": "b3998641d4f6037883e2c7e97f2f2911ccfff4dc80f60aa2a5da74821eb7650c"
+        },
+        {
+          "id": "m22p09-andrew-exp-s04-c2-10315a5631cd",
+          "slide": 4,
+          "text": "A circuit breaker can stop repeated calls to a failing dependency and return an appropriate fallback. After a wait, let limited probes check recovery before reopening normal traffic. Adding more retries during the failure can increase load instead of helping.",
+          "text_sha256": "10315a5631cdd6930af981ae4b96e856130be3e3f04b0faa952a09577db8a20b",
+          "canonical_text_sha256": "10315a5631cdd6930af981ae4b96e856130be3e3f04b0faa952a09577db8a20b",
+          "asset_sha256": "b3998641d4f6037883e2c7e97f2f2911ccfff4dc80f60aa2a5da74821eb7650c"
+        }
+      ]
+    }
+  ]
+}
