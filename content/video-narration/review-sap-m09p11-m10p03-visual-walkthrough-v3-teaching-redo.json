@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "voice": "en-US-AndrewNeural",
+  "rate": "-3%",
+  "parts": [
+    {
+      "module": "09",
+      "part": "11",
+      "revision": "2026-11-24-m09p11-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "6776d22ed6ace6943e381db67f263606ad64b95c5dc50c4ddec156f618f21777",
+        "2": "896ac848505c7ea9a31bf66d61be34d7a92cf10070f9d41bcabe51c33be07bbe"
+      },
+      "units": [
+        {
+          "id": "m09p11-redo-s01-c1-958d6cfc1127",
+          "slide": 1,
+          "text": "Learn to choose a storage design by how the application works and how it must recover. If it reads and replaces whole objects by key, S three fits. Shared file operations, block updates, database transactions and analytical queries ask for different capabilities.",
+          "text_sha256": "958d6cfc11274158c2db9d6c1fb4d93ab487a1bbfb6a7bf330eee8d84c550b8e",
+          "canonical_text_sha256": "d72d7b0db389389190a7f74a65b9a4b1261a0ede8114dc73624e224ea6ae036f",
+          "asset_sha256": "6776d22ed6ace6943e381db67f263606ad64b95c5dc50c4ddec156f618f21777"
+        },
+        {
+          "id": "m09p11-redo-s01-c2-44d5a1bcd884",
+          "slide": 1,
+          "text": "Now check how quickly the data must be read or restored, how long it stays, and where copies may live. A cheap archive can fail the recovery deadline. Include retrieval and replication costs as well as storage.",
+          "text_sha256": "44d5a1bcd88485fd18f66e01c035ad1fbef876d494243d0bd2f99c2c562f0acd",
+          "canonical_text_sha256": "44d5a1bcd88485fd18f66e01c035ad1fbef876d494243d0bd2f99c2c562f0acd",
+          "asset_sha256": "6776d22ed6ace6943e381db67f263606ad64b95c5dc50c4ddec156f618f21777"
+        },
+        {
+          "id": "m09p11-redo-s01-c3-6ab0f819c945",
+          "slide": 1,
+          "text": "Test the actual request. Check identity and encryption, then the network and delivery path. If events or indexes are part of the design, verify that they update and use operational metrics to confirm the result.",
+          "text_sha256": "6ab0f819c9454f07b30a55a75cdc5514e9b1e5be1c3fe033346464ae291493b7",
+          "canonical_text_sha256": "6ab0f819c9454f07b30a55a75cdc5514e9b1e5be1c3fe033346464ae291493b7",
+          "asset_sha256": "6776d22ed6ace6943e381db67f263606ad64b95c5dc50c4ddec156f618f21777"
+        },
+        {
+          "id": "m09p11-redo-s02-c1-cfffa9e91262",
+          "slide": 2,
+          "text": "The first origin is a web fleet serving its own files. The fleet still needs patching and scaling. Instance store is temporary; E B S persists independently when configured to do so, but the volume belongs to one Availability Zone.",
+          "text_sha256": "cfffa9e91262399686ef94df708de6702e2ca1b72a34fef829f9829350b13ef0",
+          "canonical_text_sha256": "8ec16ed7124793b1fe3bbe436c95d6229744bff7237d3c819279c1b8be1fca18",
+          "asset_sha256": "896ac848505c7ea9a31bf66d61be34d7a92cf10070f9d41bcabe51c33be07bbe"
+        },
+        {
+          "id": "m09p11-redo-s02-c2-ee45088c3466",
+          "slide": 2,
+          "text": "Use EFS when the web fleet needs a shared Linux file namespace. That solves shared file access, but both the compute and file layers remain dependencies to secure, size and recover.",
+          "text_sha256": "ee45088c34662fa88cc88b529655505fb5f883e06687c658e5cebce73360d868",
+          "canonical_text_sha256": "ee45088c34662fa88cc88b529655505fb5f883e06687c658e5cebce73360d868",
+          "asset_sha256": "896ac848505c7ea9a31bf66d61be34d7a92cf10070f9d41bcabe51c33be07bbe"
+        },
+        {
+          "id": "m09p11-redo-s02-c3-c7d6adbb243a",
+          "slide": 2,
+          "text": "For suitable static files, use a private S three origin behind CloudFront instead of maintaining a web fleet just to deliver them. Keep dynamic application code on its own compute path.",
+          "text_sha256": "c7d6adbb243a0053813d999c1198be983bc5f15580d058749a9b090f14ad8802",
+          "canonical_text_sha256": "76f15a8f0308410537bb764ed91b627d0d2800edb166dd16463055be4926dfba",
+          "asset_sha256": "896ac848505c7ea9a31bf66d61be34d7a92cf10070f9d41bcabe51c33be07bbe"
+        }
+      ]
+    },
+    {
+      "module": "09",
+      "part": "12",
+      "revision": "2026-11-24-m09p12-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "b5018a2021842e3a76b91a787137b1c1215d633341e083cbc424288ae600342b",
+        "2": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18",
+        "3": "8e7c93ad58316117adf9dab74ffbeef18a5b5c253346c1ba150c5c79e9606b0f",
+        "4": "f0fb79afa233ee0df806a60fbb013e95237456d6b720f46a91e365448acc914c"
+      },
+      "units": [
+        {
+          "id": "m09p12-redo-s01-c1-5da0502987fe",
+          "slide": 1,
+          "text": "Learn why a global S three endpoint alone cannot deliver regional recovery. The client calls one Multi-Region Access Point instead of selecting a Regional endpoint.",
+          "text_sha256": "5da0502987fe975ec8eda2897601483cd44271a1a44549ab6409b3a30d988cee",
+          "canonical_text_sha256": "315860f5332cfb71d28a9a44b9fe024ab20ceb47f02b138f67252f4cbc520a59",
+          "asset_sha256": "b5018a2021842e3a76b91a787137b1c1215d633341e083cbc424288ae600342b"
+        },
+        {
+          "id": "m09p12-redo-s01-c2-ed7fed35a0b0",
+          "slide": 1,
+          "text": "Replicate data separately. If the object exists only in Region A, a route to Region B cannot create it.",
+          "text_sha256": "ed7fed35a0b076c0bc55f17497a011e331322d9045ff3040795e751809103ab1",
+          "canonical_text_sha256": "ed7fed35a0b076c0bc55f17497a011e331322d9045ff3040795e751809103ab1",
+          "asset_sha256": "b5018a2021842e3a76b91a787137b1c1215d633341e083cbc424288ae600342b"
+        },
+        {
+          "id": "m09p12-redo-s01-c3-392a6f3a8e81",
+          "slide": 1,
+          "text": "Check the access point and bucket policies, object ownership, and key permissions when encryption requires them. A working global endpoint does not prove the routed request is authorized.",
+          "text_sha256": "392a6f3a8e81847c823fe6b6846a720c4b031fff7ba93f8a276d41e605b6e540",
+          "canonical_text_sha256": "392a6f3a8e81847c823fe6b6846a720c4b031fff7ba93f8a276d41e605b6e540",
+          "asset_sha256": "b5018a2021842e3a76b91a787137b1c1215d633341e083cbc424288ae600342b"
+        },
+        {
+          "id": "m09p12-redo-s01-c4-82590a3aac93",
+          "slide": 1,
+          "text": "Before shifting traffic with failover controls, verify that the destination has the data and permits the read. Test that request end to end.",
+          "text_sha256": "82590a3aac93c1123616c1f8050a083e0b4109a54ce4f393cd6455e6d53c6db4",
+          "canonical_text_sha256": "82590a3aac93c1123616c1f8050a083e0b4109a54ce4f393cd6455e6d53c6db4",
+          "asset_sha256": "b5018a2021842e3a76b91a787137b1c1215d633341e083cbc424288ae600342b"
+        },
+        {
+          "id": "m09p12-redo-s02-c1-5dbdcc42e45a",
+          "slide": 2,
+          "text": "This historical path fetches a stored object and uses Lambda to transform the response before it goes back to the caller. It does not have to rewrite the original object.",
+          "text_sha256": "5dbdcc42e45a8490cebbad1219d46e940cacc1a4a74df9a630bf10909d05af64",
+          "canonical_text_sha256": "5dbdcc42e45a8490cebbad1219d46e940cacc1a4a74df9a630bf10909d05af64",
+          "asset_sha256": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18"
+        },
+        {
+          "id": "m09p12-redo-s02-c2-014888e56a76",
+          "slide": 2,
+          "text": "Since November seventh, twenty twenty-five, S three Object Lambda is limited to existing users and select A W S partners. For a new design, consider transformation in the application, an A P I, or a suitable CloudFront solution.",
+          "text_sha256": "014888e56a760dfbb0da9c0cf295e2372b7ecf1decd3de24540ee1a03658d854",
+          "canonical_text_sha256": "ef529d46d68d0c96780bf4383f6a69294fff975975e0a5cfb98a95382da9a220",
+          "asset_sha256": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18"
+        },
+        {
+          "id": "m09p12-redo-s02-c3-644965c3751e",
+          "slide": 2,
+          "text": "Glacier vault-service Vault Lock is a retention control for the older vault A P I. It is not the control you apply to an ordinary S three bucket object.",
+          "text_sha256": "644965c3751ef938b44e6dc4a59ce97d87a61a665714e14ff841fd23a5210330",
+          "canonical_text_sha256": "09fa13a96d8a1c4e7d9276a0acd5fbdaa5a5f1f702fa2a2e8124b4e62bdeb604",
+          "asset_sha256": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18"
+        },
+        {
+          "id": "m09p12-redo-s02-c4-e91bfbe526eb",
+          "slide": 2,
+          "text": "For protected versions in an S three bucket, use S three Object Lock retention or legal hold according to the requirement.",
+          "text_sha256": "e91bfbe526eb1e7047ac310a0d96e5f0805bc853a93bfd6aa141bb54f644c15a",
+          "canonical_text_sha256": "32f04cde105b76732871b9283c382c8f41abf489417d9bbe4b200e12355c99cd",
+          "asset_sha256": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18"
+        },
+        {
+          "id": "m09p12-redo-s02-c5-42b5482f4568",
+          "slide": 2,
+          "text": "A Glacier storage class controls storage and retrieval characteristics. Choosing it does not, by itself, prevent an authorized deletion.",
+          "text_sha256": "42b5482f456816be10b12bdac2bcac820042617f6179ad52656497aa8b740e46",
+          "canonical_text_sha256": "42b5482f456816be10b12bdac2bcac820042617f6179ad52656497aa8b740e46",
+          "asset_sha256": "1e7480d8c1c5a2e7c010a0384721b63e3f1129359ac0b7aa2329d4a43171ce18"
+        },
+        {
+          "id": "m09p12-redo-s03-c1-dd35700fcd82",
+          "slide": 3,
+          "text": "The application signs one operation against a bucket and key and specifies an expiry and any required signed headers. Use a presigned get for a read or a presigned put for the intended upload.",
+          "text_sha256": "dd35700fcd8295d43ef45737aff0dca61d94f16bdb1c9374b15176d9674e68ba",
+          "canonical_text_sha256": "9e3218516344da97d64e92cf25b1b1d2b5da7eb85b8967c6982c46e249b8c4ae",
+          "asset_sha256": "8e7c93ad58316117adf9dab74ffbeef18a5b5c253346c1ba150c5c79e9606b0f"
+        },
+        {
+          "id": "m09p12-redo-s03-c2-c770d5f8694d",
+          "slide": 3,
+          "text": "The client sends it directly to S three over H T T P S without A W S credentials. Treat the link as sensitive: the holder can use it while valid.",
+          "text_sha256": "c770d5f8694d0948555ed0ebb3e5f572bc56b68d7cec3e71d4e3b38cc7695865",
+          "canonical_text_sha256": "4c6de31a1de5b78c2666765f049b0663ea41e48ba0da241e464ba257cd57b387",
+          "asset_sha256": "8e7c93ad58316117adf9dab74ffbeef18a5b5c253346c1ba150c5c79e9606b0f"
+        },
+        {
+          "id": "m09p12-redo-s03-c3-e4b59e723289",
+          "slide": 3,
+          "text": "The usable lifetime cannot outlast the signing credentials. A link signed by a temporary role session can stop working before the expiry time printed in the link.",
+          "text_sha256": "e4b59e7232891c63569ca077825799ce1985e2dc78d2e48a5195df9de21ac836",
+          "canonical_text_sha256": "e4b59e7232891c63569ca077825799ce1985e2dc78d2e48a5195df9de21ac836",
+          "asset_sha256": "8e7c93ad58316117adf9dab74ffbeef18a5b5c253346c1ba150c5c79e9606b0f"
+        },
+        {
+          "id": "m09p12-redo-s03-c4-91519b2733ef",
+          "slide": 3,
+          "text": "For uploads, verify the resulting object and its size or checksum as appropriate. An expiring link does not validate the file.",
+          "text_sha256": "91519b2733efbab2b26baa1ef0ae397977b84566f836e700416b21471515823b",
+          "canonical_text_sha256": "91519b2733efbab2b26baa1ef0ae397977b84566f836e700416b21471515823b",
+          "asset_sha256": "8e7c93ad58316117adf9dab74ffbeef18a5b5c253346c1ba150c5c79e9606b0f"
+        },
+        {
+          "id": "m09p12-redo-s04-c1-b9f670285fd7",
+          "slide": 4,
+          "text": "Use server access logs when you need supported request details delivered to a logging bucket. Delivery is not real-time tracing; verify the logs arrive before relying on them for an investigation.",
+          "text_sha256": "b9f670285fd71f5c17b1c4ea3ea51324afeaf0adbc44519dc18f8d6271a5901c",
+          "canonical_text_sha256": "b9f670285fd71f5c17b1c4ea3ea51324afeaf0adbc44519dc18f8d6271a5901c",
+          "asset_sha256": "f0fb79afa233ee0df806a60fbb013e95237456d6b720f46a91e365448acc914c"
+        },
+        {
+          "id": "m09p12-redo-s04-c2-0f85a9157608",
+          "slide": 4,
+          "text": "To audit who called an object A P I, enable CloudTrail S three data events for the needed resources and operations. Management-event history alone does not capture all object reads and writes.",
+          "text_sha256": "0f85a91576081ce8b78054e1a53c10c9624ae595b233ccd088a96923fe662da3",
+          "canonical_text_sha256": "fdc8e644a7e7fe485519e6110cfca99ea43c441472331649487ab4a27ffa197d",
+          "asset_sha256": "f0fb79afa233ee0df806a60fbb013e95237456d6b720f46a91e365448acc914c"
+        },
+        {
+          "id": "m09p12-redo-s04-c3-f9ba0a7656a6",
+          "slide": 4,
+          "text": "Use request metrics or Storage Lens when the question is what trend changed. Their scope and cadence differ. Neither substitutes for an individual object A P I audit record.",
+          "text_sha256": "f9ba0a7656a61435314cf6aab53974c645091f72d01c9dfe70678bd83984d808",
+          "canonical_text_sha256": "20e29b9001a00d102a4d7f4bd22733baf6da14dd811c3f09099d90c9bb2bc90b",
+          "asset_sha256": "f0fb79afa233ee0df806a60fbb013e95237456d6b720f46a91e365448acc914c"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "01",
+      "revision": "2026-11-24-m10p01-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "afc44ca1749f6e9311b56f20cc0323c4c13c43fa6205b5d45dc80791219526dc",
+        "2": "5444db3a5f3c30d631ab4459ae05acc73c51bd92ae74d6b21a2e4610588740fe",
+        "3": "c10d2ad1fa930e521d79e046752b72b3d78bc07a2793c4237b4a8a7f87e1d479"
+      },
+      "units": [
+        {
+          "id": "m10p01-redo-s01-c1-adcd673fdc70",
+          "slide": 1,
+          "text": "Learn why an E B S volume attaches in one Availability Zone and how to recover it into another. In Zone A, the instance reads and writes a volume that also lives in Zone A.",
+          "text_sha256": "adcd673fdc70b913cb0b7d759a70728b641054afb8cab289e6a8e380ac6c8a81",
+          "canonical_text_sha256": "b1c593f0fcb39c7f99141c974e1a8fa44e576f6e76c3b2a1b7967536bea20646",
+          "asset_sha256": "afc44ca1749f6e9311b56f20cc0323c4c13c43fa6205b5d45dc80791219526dc"
+        },
+        {
+          "id": "m10p01-redo-s01-c2-2007411bf511",
+          "slide": 1,
+          "text": "Use an E B S snapshot as the point-in-time recovery copy. Do not try to attach the source volume across zones.",
+          "text_sha256": "2007411bf511b72e296e4b6c8064fe35714d638e71f11459abb42abc21ed7d21",
+          "canonical_text_sha256": "db7cc7d2b0b685c8a7ab2580000603cf97642e8b9d1a65ab589f6c2752b95757",
+          "asset_sha256": "afc44ca1749f6e9311b56f20cc0323c4c13c43fa6205b5d45dc80791219526dc"
+        },
+        {
+          "id": "m10p01-redo-s01-c3-87106fc79d2d",
+          "slide": 1,
+          "text": "In Zone B, make a new volume from the snapshot, then attach it to an instance in that same zone. The restored volume is a new resource.",
+          "text_sha256": "87106fc79d2d14c338e17681f16a6cc655180f9f1c266e343ae1ab55e7bf608d",
+          "canonical_text_sha256": "87106fc79d2d14c338e17681f16a6cc655180f9f1c266e343ae1ab55e7bf608d",
+          "asset_sha256": "afc44ca1749f6e9311b56f20cc0323c4c13c43fa6205b5d45dc80791219526dc"
+        },
+        {
+          "id": "m10p01-redo-s01-c4-a7a8a0744099",
+          "slide": 1,
+          "text": "When the instance is terminated, keeping the attached volume depends on its Delete on Termination setting. False retains the volume. Check the mapping rather than assuming every volume will survive.",
+          "text_sha256": "a7a8a0744099391093316ec6407848326274f71ce9d4846a0744f71256b429cb",
+          "canonical_text_sha256": "a7a8a0744099391093316ec6407848326274f71ce9d4846a0744f71256b429cb",
+          "asset_sha256": "afc44ca1749f6e9311b56f20cc0323c4c13c43fa6205b5d45dc80791219526dc"
+        },
+        {
+          "id": "m10p01-redo-s02-c1-2aa356c0ea77",
+          "slide": 2,
+          "text": "Start with the workload's access pattern. Small random operations, such as a transactional workload or a boot disk, favor S S D because latency and operations per second matter.",
+          "text_sha256": "2aa356c0ea7713d89eeaa3eb0449aa1f35b19978150bcf744a819fffb6e33abe",
+          "canonical_text_sha256": "8c36fd8821d7f7d2bb4d32527b7f1bd7a9f7b5176bbc61c90af64aede1c03995",
+          "asset_sha256": "5444db3a5f3c30d631ab4459ae05acc73c51bd92ae74d6b21a2e4610588740fe"
+        },
+        {
+          "id": "m10p01-redo-s02-c2-e1bc6de11c61",
+          "slide": 2,
+          "text": "Large sequential streams, like log processing, can favor H D D because sustained throughput matters more than random I O. This is a data-volume choice, not a boot-volume choice.",
+          "text_sha256": "e1bc6de11c61e066694522ad17b385ec63ada45f37cc7891e9d7b53f0abf88e3",
+          "canonical_text_sha256": "0c80aafaed6643d278b5c06d255ecbc685652bd5d191a7406ccee2b4c25be01d",
+          "asset_sha256": "5444db3a5f3c30d631ab4459ae05acc73c51bd92ae74d6b21a2e4610588740fe"
+        },
+        {
+          "id": "m10p01-redo-s02-c3-d357c703c605",
+          "slide": 2,
+          "text": "Choose G P three or G P two for general-purpose S S D needs, and consider provisioned I ops S S D for more demanding workloads. Also compare the instance's E B S limits with what the volume can deliver.",
+          "text_sha256": "d357c703c605005ccb8b0a690766a56d7466d5e9b2b4b6954a2525d8d3ba29d6",
+          "canonical_text_sha256": "b7bff2478739a1590a1927b1e520f3aa3b8b95c42031962aa37e4aec2cc4a3fd",
+          "asset_sha256": "5444db3a5f3c30d631ab4459ae05acc73c51bd92ae74d6b21a2e4610588740fe"
+        },
+        {
+          "id": "m10p01-redo-s02-c4-dde8da213b9f",
+          "slide": 2,
+          "text": "For frequently accessed sequential data, consider S T one. For colder sequential data, consider S C one. Neither H D D type supports use as a boot volume.",
+          "text_sha256": "dde8da213b9f559e6f1343dba6327310be298e0d7542a55a3ddc881b0a0f7234",
+          "canonical_text_sha256": "08c58f728ea4ab8247d7d2d8e2dd89cac61967350e21b6059f56b6358033adf8",
+          "asset_sha256": "5444db3a5f3c30d631ab4459ae05acc73c51bd92ae74d6b21a2e4610588740fe"
+        },
+        {
+          "id": "m10p01-redo-s03-c1-141897010796",
+          "slide": 3,
+          "text": "With G P two, volume size drives baseline I ops: three per gibibyte, with a one-hundred I ops floor and a sixteen-thousand I ops cap. Eligible smaller volumes can burst using credits; that burst is not their sustained baseline.",
+          "text_sha256": "141897010796d2c56e829f09099a51b0a2e07b76b1ee5a9f1b2c999505a69507",
+          "canonical_text_sha256": "cecf3e6ece816b5b535b62b4c0105491e022b34c867b73c325f076c0df89c85b",
+          "asset_sha256": "c10d2ad1fa930e521d79e046752b72b3d78bc07a2793c4237b4a8a7f87e1d479"
+        },
+        {
+          "id": "m10p01-redo-s03-c2-bcc95aea5da5",
+          "slide": 3,
+          "text": "With G P three, start at three thousand baseline I ops and provision performance separately from capacity within supported limits. If the application needs more I ops or throughput but not more storage, you do not have to enlarge the volume just to raise performance.",
+          "text_sha256": "bcc95aea5da540de63fb118c55136eac0e9a908686caff64d72b30a7fc1f2979",
+          "canonical_text_sha256": "b4f1cacfda7069f1cd2f014638ec53637d1b80f631c924049bc390ea1d37bb5f",
+          "asset_sha256": "c10d2ad1fa930e521d79e046752b72b3d78bc07a2793c4237b4a8a7f87e1d479"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "02",
+      "revision": "2026-11-24-m10p02-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145",
+        "2": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f",
+        "3": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+      },
+      "units": [
+        {
+          "id": "m10p02-redo-s01-c1-2c29cf204436",
+          "slide": 1,
+          "text": "Learn to find the narrowest point before paying for faster storage. Demand outpaces delivered capacity, so the queue and latency can grow.",
+          "text_sha256": "2c29cf204436118a2478d3032070713e047749e7839aaff0caac7a96405f225e",
+          "canonical_text_sha256": "2c29cf204436118a2478d3032070713e047749e7839aaff0caac7a96405f225e",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-redo-s01-c2-3608b6331eb5",
+          "slide": 1,
+          "text": "If the instance E B S link is saturated, more volume performance will not clear the backlog.",
+          "text_sha256": "3608b6331eb5dd2131acf09ca7f4da5f7fbf9f63cb16fb7c9f5a04c267248690",
+          "canonical_text_sha256": "a98733ffada17e6a96ced4feb9c9bfe282b06bd909d58265f3b38b7957e54b90",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-redo-s01-c3-236cb396d277",
+          "slide": 1,
+          "text": "Compare request size and queue depth with the volume’s I ops and throughput limits. Improve the saturated stage.",
+          "text_sha256": "236cb396d27746f5481279bc0df341426e1ab957cb18a29bf39d7c8dfde0d8d0",
+          "canonical_text_sha256": "80299b79423bc470c3d409dc3a34a248a480db677917b9cb7747b2d38bed58d2",
+          "asset_sha256": "d237224ebe671bcf923e1addcb84f6c057c783bf703c7353b7a947c5d890c145"
+        },
+        {
+          "id": "m10p02-redo-s02-c1-286ab5199af2",
+          "slide": 2,
+          "text": "At the first point in time, the volume contains A, B and C. The first snapshot captures the blocks written on the volume.",
+          "text_sha256": "286ab5199af2c2e71f50745e1200e689bb591cebb342a028b14ba5e30e219d7f",
+          "canonical_text_sha256": "286ab5199af2c2e71f50745e1200e689bb591cebb342a028b14ba5e30e219d7f",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-redo-s02-c2-6f7194aa5034",
+          "slide": 2,
+          "text": "At the second point, B has changed and D is new. The next snapshot saves only changed blocks.",
+          "text_sha256": "6f7194aa5034fe1d54683a775b815a4a8d560abcbe8f7f346c56acb4854b88d9",
+          "canonical_text_sha256": "6f7194aa5034fe1d54683a775b815a4a8d560abcbe8f7f346c56acb4854b88d9",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-redo-s02-c3-d73d41866776",
+          "slide": 2,
+          "text": "Restore the second snapshot to recover A, changed B, C and D. The restored volume is complete.",
+          "text_sha256": "d73d41866776394c611d3085420af3ab54f838dae95e246f9a3876b87c889719",
+          "canonical_text_sha256": "d73d41866776394c611d3085420af3ab54f838dae95e246f9a3876b87c889719",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-redo-s02-c4-2cca13f786ba",
+          "slide": 2,
+          "text": "Flush or quiesce the application as needed before capture. Coordinating related volumes matters when the restore must reflect one application-consistent point.",
+          "text_sha256": "2cca13f786bac0330134d324cd47830fcea517f8200c849377100d8def61cc4e",
+          "canonical_text_sha256": "2cca13f786bac0330134d324cd47830fcea517f8200c849377100d8def61cc4e",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-redo-s02-c5-010185713d68",
+          "slide": 2,
+          "text": "Deleting the earlier snapshot does not remove blocks that remaining snapshots still need. E B S manages those dependencies.",
+          "text_sha256": "010185713d68d76e4a3fb083eedcb76216d6b8f4fcdb0b0c3ba78fdc0736e7a2",
+          "canonical_text_sha256": "385cfe6213f2fa7e344d54f1b16036909c8debf60e5b80c0573a6ffd048a942c",
+          "asset_sha256": "ef18ae46438b564721e131297e1b6388b41251852498c057b9c6a37ab27faa3f"
+        },
+        {
+          "id": "m10p02-redo-s03-c1-613ac68707a6",
+          "slide": 3,
+          "text": "Start with the E B S snapshot in the target Region. You create a volume from it rather than attaching the snapshot.",
+          "text_sha256": "613ac68707a66b519b24b2c43cd958cec349e7d7cd154dad20018b3d2d079c05",
+          "canonical_text_sha256": "695a7095a30bef4747b978c813a38e04c410c668f91515d6a20a1287b0ceed61",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-redo-s03-c2-3a2952850444",
+          "slide": 3,
+          "text": "Create the volume in Zone B, where the recovery instance will run.",
+          "text_sha256": "3a2952850444827fbc7454ef2bb18cbc7494f33f54a299621831a4800f4e63ef",
+          "canonical_text_sha256": "3a2952850444827fbc7454ef2bb18cbc7494f33f54a299621831a4800f4e63ef",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-redo-s03-c3-db543203f6da",
+          "slide": 3,
+          "text": "Attach the volume to the E C two instance. Both must be in Zone B.",
+          "text_sha256": "db543203f6dab426418b9349de4e626012af000d6d360507d012d471e41bc192",
+          "canonical_text_sha256": "cf0bd546d1e06257529e35a26d7db786a82b71e40621fa35862f31b01748374a",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-redo-s03-c4-a1383c6201cf",
+          "slide": 3,
+          "text": "Check the data and confirm the application works. A successful attachment alone is not a recovery test.",
+          "text_sha256": "a1383c6201cfe35d6c7b0dac71f4b891afd48d1bec52c8c6314f41ad460c8c6a",
+          "canonical_text_sha256": "a1383c6201cfe35d6c7b0dac71f4b891afd48d1bec52c8c6314f41ad460c8c6a",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        },
+        {
+          "id": "m10p02-redo-s03-c5-bba7e5836e89",
+          "slide": 3,
+          "text": "First reads can incur initialization latency. If it matters, compare eligible Fast Snapshot Restore with a provisioned initialization rate before the recovery.",
+          "text_sha256": "bba7e5836e89d307caace032d9455f0350a4cc6b567d8e47f4049a793a8f23b2",
+          "canonical_text_sha256": "bba7e5836e89d307caace032d9455f0350a4cc6b567d8e47f4049a793a8f23b2",
+          "asset_sha256": "3e046d496c34771f4bb2c03a9b5fc162ddc9fb9c46dafe622a81a28ff6123f21"
+        }
+      ]
+    },
+    {
+      "module": "10",
+      "part": "03",
+      "revision": "2026-11-24-m10p03-visual-walkthrough-v3",
+      "approved_assets": {
+        "1": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8",
+        "2": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+      },
+      "units": [
+        {
+          "id": "m10p03-redo-s01-c1-62febacfe701",
+          "slide": 1,
+          "text": "Learn to choose who owns your E B S backup policy. Start a Data Lifecycle Manager policy by selecting the tagged volumes or supported instances it should protect.",
+          "text_sha256": "62febacfe7013068e5062eac9d66926393be95e4d6d6ec87af9cfa0773724dc6",
+          "canonical_text_sha256": "8f6f357e9942dc73feccb3a8063c6d0bac712a47249ffc59f83ebcbe42e8a4e9",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s01-c2-8c6177f60e86",
+          "slide": 1,
+          "text": "Schedule how often the policy runs, such as once a day.",
+          "text_sha256": "8c6177f60e8623e1c62ff475b80396f559f39353fc3c007093a0f94f50a04b04",
+          "canonical_text_sha256": "8c6177f60e8623e1c62ff475b80396f559f39353fc3c007093a0f94f50a04b04",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s01-c3-d06f6181613e",
+          "slide": 1,
+          "text": "Choose E B S snapshots or E B S-backed A M Is as appropriate. Data Lifecycle Manager manages the recovery points it creates.",
+          "text_sha256": "d06f6181613e5e20c6fbb50050d69dc0dcbd6fefd469d1e182d74af3e3224e88",
+          "canonical_text_sha256": "e2b6c8dc4424b6f993ffb616dbc0bca69db3dadafa1d8b302a27632205702614",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s01-c4-5fb71af47a66",
+          "slide": 1,
+          "text": "Set when recovery points expire, based on your recovery window.",
+          "text_sha256": "5fb71af47a6665d92b727756427e5c60909744aca1aa35a70060b0bc046d9d58",
+          "canonical_text_sha256": "5fb71af47a6665d92b727756427e5c60909744aca1aa35a70060b0bc046d9d58",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s01-c5-d4a010259e3a",
+          "slide": 1,
+          "text": "Configure a cross-Region copy if supported and needed, then test a restore.",
+          "text_sha256": "d4a010259e3a0ca03ad5f9c138b2c7ee9b60fef53864c737d7458f9f8434e2ce",
+          "canonical_text_sha256": "d4a010259e3a0ca03ad5f9c138b2c7ee9b60fef53864c737d7458f9f8434e2ce",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s01-c6-20b1d8ba6799",
+          "slide": 1,
+          "text": "For the illustrated volumes, make daily snapshots, retain fourteen days and copy to another Region if required. Choose A W S Backup instead when the requirement is centralized policy across supported services.",
+          "text_sha256": "20b1d8ba6799777eea3e26edd0e3c1f9959b2e647720fb2a270b39c2218bad74",
+          "canonical_text_sha256": "3f5b2afdce89a3da407277650c2d5dbb7564a421a6de16da65fa6fa75e456709",
+          "asset_sha256": "5b7ef79716d49e593e7bbc2ce91bb993d4401ca7a39e7f095341449ee19b2ac8"
+        },
+        {
+          "id": "m10p03-redo-s02-c1-9293fe510a99",
+          "slide": 2,
+          "text": "Encryption by default affects new volumes and snapshot copies, not existing unencrypted volumes. For an existing volume, prepare an encrypted replacement from a snapshot and test it before cutover.",
+          "text_sha256": "9293fe510a9997008b3fb300559538e09897938c8fb701e311a34cd1685654b6",
+          "canonical_text_sha256": "9293fe510a9997008b3fb300559538e09897938c8fb701e311a34cd1685654b6",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-redo-s02-c2-7af29668437f",
+          "slide": 2,
+          "text": "The restore role must be allowed to use the customer-managed K M S key for this snapshot.",
+          "text_sha256": "7af29668437f816b4c1a68126c8e27ba160a60c4733f1503473d39d529c82617",
+          "canonical_text_sha256": "2c5294667861fd795b44b25528b84a97672749fbbbfc9b4ae67167c4bcb21930",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-redo-s02-c3-033f87ac77d2",
+          "slide": 2,
+          "text": "If the key check fails, you cannot restore this encrypted volume.",
+          "text_sha256": "033f87ac77d2af78903567c9f8e63b5e1169d3cc2450e8f751382f876d379575",
+          "canonical_text_sha256": "033f87ac77d2af78903567c9f8e63b5e1169d3cc2450e8f751382f876d379575",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-redo-s02-c4-1c1c81949c72",
+          "slide": 2,
+          "text": "After the key check passes, restore a new encrypted volume and attach it to the recovery instance in the correct zone.",
+          "text_sha256": "1c1c81949c7254c22c1a272391ff7e7fd3504beea6cdaf76f3f2bd1e42220dd9",
+          "canonical_text_sha256": "1c1c81949c7254c22c1a272391ff7e7fd3504beea6cdaf76f3f2bd1e42220dd9",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        },
+        {
+          "id": "m10p03-redo-s02-c5-bc7dad4e7a94",
+          "slide": 2,
+          "text": "Then verify the mount, the data and the application. Key access is the first gate, not the evidence that recovery succeeded.",
+          "text_sha256": "bc7dad4e7a9435bde9f710515c2ab654ea65ada6af911c2875680fd8e30caf1e",
+          "canonical_text_sha256": "bc7dad4e7a9435bde9f710515c2ab654ea65ada6af911c2875680fd8e30caf1e",
+          "asset_sha256": "5f7df13fe58e8ab0e71db9a0357506ac5cfe612b64d874915f7074257c16691e"
+        }
+      ]
+    }
+  ]
+}
