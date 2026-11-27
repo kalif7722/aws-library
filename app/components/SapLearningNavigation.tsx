@@ -6,11 +6,10 @@ import {publishedModuleLessons} from './SapPublishedLessons';
 import './SapLearningNavigation.css';
 
 const base='/courses/aws-solutions-architect-professional';
-const videoModules=new Set(['00','01','02','03','04','05','06','07','08','09','10','15']);
 const moduleHref=(id:string)=>`${base}/visual/module-${id}`;
 
 /** Navigation only: keeps the existing viewer, media player and progress writes intact. */
-export default function SapLearningNavigation({moduleId}:{moduleId:string}){
+export default function SapLearningNavigation({moduleId,hasVideos}:{moduleId:string;hasVideos:boolean}){
  const inputId=useId();
  const [query,setQuery]=useState('');
  const [completed,setCompleted]=useState<string[]|null>(null);
@@ -30,7 +29,7 @@ export default function SapLearningNavigation({moduleId}:{moduleId:string}){
  return <section className="sap-learning-nav" aria-label="Module learning navigation">
   <div className="sap-learning-nav-top">
    <Link href={base}>← Course overview</Link>
-   <nav aria-label="Module content"><a href="#visual-lessons">Slides</a>{videoModules.has(moduleId)&&<a href="#video-lectures">Videos</a>}</nav>
+   <nav aria-label="Module content"><a href="#visual-lessons">Slides</a>{hasVideos&&<a href="#video-lectures">Videos</a>}</nav>
    {completed!==null&&lessons.length>0&&<span className="sap-learning-progress">{done} of {lessons.length} slides studied</span>}
   </div>
   <div className="sap-learning-neighbors" aria-label="Adjacent learning modules">

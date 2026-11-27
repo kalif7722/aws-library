@@ -6,7 +6,11 @@ import test from "node:test";
 
 const getSource=path=>readFileSync(new URL("../"+path,import.meta.url),"utf8");
 const asModule=source=>"data:text/javascript;base64,"+Buffer.from(stripTypeScriptTypes(source)).toString("base64");
-const catalog=asModule(getSource("app/lib/sap-exact-video-releases.ts"));
+// These fixtures exercise the earlier immutable-release path, independent of the
+// higher-priority direct and newly deployed records (tested separately).
+const catalog=asModule(getSource("app/lib/sap-exact-video-releases.ts")
+  .replace('import published from "./sap-verified-video-registry.json";', "const published={};")
+  .replace('return scopedDirectSapPart(moduleId,part)?DIRECT_SAP_PINS[moduleId+"/"+part]:undefined;', 'return undefined;'));
 const loadRoute=name=>import(asModule(getSource(`app/api/${name}/route.ts`).replace('"../../lib/sap-exact-video-releases"',JSON.stringify(catalog))));
 const [{GET:video},{GET:captions}]=await Promise.all([loadRoute("sap-video"),loadRoute("course-video-captions")]);
 const origin="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
@@ -79,10 +83,11 @@ test("M02 Part 06 keeps its prior single legacy route; M02 P01 and M10 P01 retai
   const calls=[];
   t.mock.method(globalThis,"fetch",async raw=>{calls.push(raw);return new Response(null,{status:404});});
   for(const [module,part] of [["02","06"],["02","01"],["10","01"]])await video(request("sap-video",{module,part}));
-  assert.equal(calls.length,5);
+  assert.equal(calls.length,6);
   assert.match(calls[0],/\/module-02\/part-06\/sap-module-02-part-06-manifest\.json/);
   assert.match(calls[1],/\/module-02\/releases\/2026-11-20-approved-animation-v1\/part-01\//);
-  assert.match(calls[3],/\/module-10\/releases\/2026-11-19-approved-direct-v1\/part-01\//);
+  assert.match(calls[3],/\/module-10\/releases\/2026-11-27-sap-m10-aip-native-v1\/part-01\//);
+  assert.match(calls[4],/\/module-10\/releases\/2026-11-19-approved-direct-v1\/part-01\//);
 });
 
 test("exact SAP tracks pass the proxy, with redirects disallowed and VTT returned",async t=>{

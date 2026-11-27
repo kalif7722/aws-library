@@ -1,3 +1,4 @@
+import published from "./sap-verified-video-registry.json";
 export const COURSE_MEDIA_ORIGIN="https://pub-a5e11688cacf4195a0d3c6afe384eb56.r2.dev";
 export const SAP_MEDIA_ROOT=COURSE_MEDIA_ORIGIN+"/aws-course-videos/previews/sap";
 
@@ -109,9 +110,60 @@ export function isExactSapCaptionSource(source:URL):boolean{
     return scopedDirectSapPart(moduleId,part)&&source.href===
      `${sapDirectPrefix(moduleId,part)}.vtt${directSapCacheTag(pin.vttSha)}`;
   });
-  return exactDirect||Object.entries(EXACT_RELEASES).some(([key,value])=>{
+  const fresh=Object.entries(PINNED_RELEASES).some(([key,value])=>{
+    const [moduleId,part]=key.split("/");
+    return source.href===`${sapVideoReleasePrefix(moduleId,part,value.revision)}.vtt${pinnedSapCacheTag(value.revision,value.pin.vttSha)}`;
+  });
+  const awaited=Object.entries(DEFERRED_RELEASES).some(([key,entry])=>{
+    const [moduleId,part]=key.split("/");
+    return source.href===`${sapVideoReleasePrefix(moduleId,part,entry.revision)}.vtt${deferredSapCaptionTag(entry)}`;
+  });
+  return exactDirect||fresh||awaited||Object.entries(EXACT_RELEASES).some(([key,value])=>{
     const [moduleId,part]=key.split("/");
     const prefix=sapVideoReleasePrefix(moduleId,part,value.release);
     return source.href===`${prefix}.vtt?v=${encodeURIComponent(value.revision)}`;
   });
+}
+
+type PinnedRelease={revision:string;pin:DirectSapPin};
+const PINNED_RELEASES:Readonly<Record<string,PinnedRelease>>=published;
+const LEGACY_VIDEO_MODULES=["00","01","02","03","04","05","06","07","08","09","10","15"];
+export function pinnedSapVideoRelease(moduleId:string,part:string):PinnedRelease|undefined{
+  if(!/^\d{2}$/.test(moduleId)||!/^\d{2}$/.test(part))return undefined;
+  return PINNED_RELEASES[moduleId+"/"+part];
+}
+export function pinnedSapCacheTag(revision:string,sha:string){
+  return `?v=${encodeURIComponent(revision)}&sha=${sha}`;
+}
+// This dedicated revision is reserved for the native rebuilds, not the 720p review copies.
+export const M10_NATIVE_REVISION="2026-11-27-sap-m10-aip-native-v1";
+export type DeferredSapRelease={
+ revision:string; start:number; end:number;
+ known?:Pick<DirectSapPin,"manifestSha"|"manifestBytes"|"mediaSha"|"mediaBytes"|"vttSha"|"transcriptSha">;
+ vttBytes?:number; transcriptBytes?:number;
+};
+const M10_BOUNDS=[[1,3],[4,6],[7,8],[9,9],[10,10],[11,13],[14,16],[17,20],[21,23],
+ [24,25],[26,28],[29,30],[31,32],[33,34],[35,36],[37,38],[39,40],[41,44],[45,45]];
+const DEFERRED_RELEASES:Readonly<Record<string,DeferredSapRelease>>={
+ ...Object.fromEntries(M10_BOUNDS.map(([start,end],index)=>[
+   `10/${String(index+1).padStart(2,"0")}`,{revision:M10_NATIVE_REVISION,start,end}
+ ])),
+  "15/06":{"revision":"2026-11-27-sap-m15-p06-arrow-fix-v2","start":17,"end":19,"known":{"manifestSha":"4add65d67b783041d86a9a5d5d54a535af9096b38142bccc228cc8e7db14b9fe","manifestBytes":791,"mediaSha":"35d37e3d106e2fc68ed2baea4ec84964ad939e40cf5653ba18ab6215500af359","mediaBytes":13223988,"vttSha":"4472be7a4a0c68448019ddc6c41a8e6445b96462382a771f0b2148984616c534","transcriptSha":"460a7a5c2efb5122070acfafd93d9de913d37d154619a19607d507a5fea3fcc8"},"vttBytes":4846,"transcriptBytes":3214},
+  "21/10":{"revision":"2026-11-27-sap-m21-p10-rollout-fix-v2","start":25,"end":27,"known":{"manifestSha":"5cc264a8ed069c336a1ad83aee459abafeca1513b189c1c4b522bbf8d2fa129d","manifestBytes":805,"mediaSha":"189ecb30f2f536745509d001ea06abed8ed752d2fdcda3d4bf5b12aca0114a97","mediaBytes":11646418,"vttSha":"dbaaf681d12dbe43d179c2f5e5b3722c9669fb33905cfd281ced3abfa4abaf67","transcriptSha":"7fa1b5801518481fd6ac7ed3a8e3dd30a048538e892565a376eb2342612f2558"},"vttBytes":4725,"transcriptBytes":3268},
+};
+export function deferredSapVideoRelease(moduleId:string,part:string):DeferredSapRelease|undefined{
+ return DEFERRED_RELEASES[moduleId+"/"+part];
+}
+export function deferredSapCaptionTag(entry:DeferredSapRelease){
+ return entry.known?pinnedSapCacheTag(entry.revision,entry.known.vttSha):`?v=${encodeURIComponent(entry.revision)}`;
+}
+export function sapVideoProjection(moduleId:string){
+  const modules=new Set(LEGACY_VIDEO_MODULES);
+  const revisions:Record<string,string>={};
+  for(const [slot,entry] of Object.entries({...DEFERRED_RELEASES,...PINNED_RELEASES})){
+    const [module,part]=slot.split("/");
+    modules.add(module);
+    if(module===moduleId)revisions[part]=entry.revision;
+  }
+  return {hasVideos:modules.has(moduleId),only:!LEGACY_VIDEO_MODULES.includes(moduleId),parts:Object.keys(revisions).sort(),modules:[...modules].sort(),revisions};
 }

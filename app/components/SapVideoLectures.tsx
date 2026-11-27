@@ -5,7 +5,7 @@ import {discoveryPartIds,discoveredLectures,readyRequestedPart} from "./sap-vide
 import CourseVideoControls,{COURSE_VIDEO_SPEEDS,COURSE_VIDEO_SPEED_KEY,COURSE_VIDEO_AUTO_NEXT_KEY,formatVideoTime} from "./CourseVideoControls";
 
 type Chapter={slide:number;title:string;startSeconds:number;durationSeconds:number};
-type Ready={status:"ready";title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;posterUrl?:string;durationSeconds:number;chapters:Chapter[]};
+type Ready={status:"ready";revision?:string;title:string;videoUrl:string;captionsUrl:string;transcriptUrl:string;posterUrl?:string;durationSeconds:number;chapters:Chapter[]};
 type Result=Ready|{status:"processing"};
 type Lecture={id:string;title:string;start:number;end:number};
 const LECTURES:Record<string,Lecture[]>={
@@ -25,7 +25,7 @@ const LECTURES:Record<string,Lecture[]>={
 const MODULE_PATH="/courses/aws-solutions-architect-professional/visual/module-";
 const AUTO_NEXT_KEY=COURSE_VIDEO_AUTO_NEXT_KEY;
 
-export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string;slideAssets?:Readonly<Record<number,string>>}){
+export default function SapVideoLectures({moduleId,slideAssets,releaseParts,releaseRevisions,videoModules,releaseOnly}:{moduleId:string;slideAssets?:Readonly<Record<number,string>>;releaseParts:readonly string[];releaseRevisions:Readonly<Record<string,string>>;videoModules:readonly string[];releaseOnly:boolean}){
   const [activeId,setActive]=useState("01");
   const [discovery,setDiscovery]=useState<{moduleId:string;results:Record<string,Result>}>({moduleId,results:{}});
   const results=discovery.moduleId===moduleId?discovery.results:{};
@@ -53,13 +53,16 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
   const result=results[active];
   const readyCount=entries.filter(lecture=>results[lecture.id]?.status==="ready").length;
   const ready=result?.status==="ready"?result:null;
-  const storageKey=`sap-video-${moduleId}-${active}-position`;
-  const completedKey=`sap-video-${moduleId}-${active}-complete`;
-  const source=(n:number)=>(moduleId==="10"||moduleId==="02")?slideAssets?.[n]:`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
+  const projected=Boolean(ready?.revision&&ready.revision===releaseRevisions[active]);
+  const revisionSuffix=projected?`-${ready?.revision}`:"";
+  const storageKey=`sap-video-${moduleId}-${active}${revisionSuffix}-position`;
+  const completedKey=`sap-video-${moduleId}-${active}${revisionSuffix}-complete`;
+  // A release can cover remapped slides. Until exact chapter art is known, use timed chapter labels rather than a guessed image.
+  const source=(n:number)=>projected?undefined:(moduleId==="10"||moduleId==="02")?slideAssets?.[n]:`/course-visuals/sap-c03/module-${moduleId}/slide-${String(n).padStart(2,"0")}${moduleId==="07"&&n===27?"-v3":(moduleId==="09"&&n>=34&&n<=37)||(moduleId==="07"&&(n===24||(n>=25&&n<=26)||(n>=28&&n<=30)||(n>=31&&n<=32)))||(moduleId==="06"&&n>=31&&n<=41)||(moduleId==="05"&&n>=23&&n<=25)||(moduleId==="04"&&(n===8||n===9||n===11||n===41||n===42))?"-v2":""}.webp${moduleId==="00"?"?v=sap-m00-cover-v2":""}`;
   const currentIndex=entries.findIndex(x=>x.id===active);
   const previous=entries[currentIndex-1];
   const following=entries[currentIndex+1];
-  const moduleIds=Object.keys(LECTURES).sort();
+  const moduleIds=videoModules;
   const modulePosition=moduleIds.indexOf(moduleId);
   const previousModule=modulePosition>0?moduleIds[modulePosition-1]:undefined;
   const nextModule=modulePosition>=0?moduleIds[modulePosition+1]:undefined;
@@ -80,7 +83,7 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
     const controller=new AbortController();
     const known=LECTURES[moduleId]??[];
     const requestedPart=new URLSearchParams(window.location.search).get("part");
-    const parts=discoveryPartIds(moduleId,known,requestedPart);
+    const parts=discoveryPartIds(moduleId,known,requestedPart,releaseParts,releaseOnly);
     const knownRequest=known.find(item=>item.id===requestedPart);
     // Remediation links may select a familiar lecture immediately, or a
     // discovered lecture once ready. Neither path auto-plays.
@@ -106,7 +109,7 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
         if(controller.signal.aborted)return;
         // The M10 approved release objects are immutable. Poll only its
         // missing parts on this page; other modules keep their prior polling.
-        if(moduleId==="10")for(const [id,value] of found)if(value.status==="ready")alreadyReady[id]=value;
+        for(const [id,value] of found)if(value.status==="ready"&&((moduleId==="10"&&!releaseRevisions[id])||Boolean(value.revision&&value.revision===releaseRevisions[id])))alreadyReady[id]=value;
         const nextResults:Record<string,Result>={...alreadyReady,...Object.fromEntries(found)};
         setDiscovery({moduleId,results:nextResults});
         const fromLink=readyRequestedPart(pendingRequestedPart.current,discoveredLectures(known,nextResults),nextResults);
@@ -118,7 +121,7 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
     // Existing page sessions pick up verified R2 uploads without needing a refresh.
     const poll=setInterval(()=>void refresh(),30000);
     return()=>{controller.abort();clearInterval(poll);};
-  },[moduleId]);
+  },[moduleId,releaseParts,releaseOnly,releaseRevisions]);
 
   useEffect(()=>{
     try{
@@ -232,7 +235,13 @@ export default function SapVideoLectures({moduleId,slideAssets}:{moduleId:string
     if(fullscreen)revealHud(4000);
   };
 
-  if(!entries.length)return null;
+  if(!entries.length){
+    if(!releaseOnly)return null;
+    return <section id="video-lectures" aria-label="Professional architecture video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
+      <h2>Video lectures</h2>
+      <p role="status">{checking?"Checking the narrated lectures…":"No verified video is available right now. The source lessons are still available below."}</p>
+    </section>;
+  }
   return <section id="video-lectures" aria-label="Professional architecture video lectures" style={{margin:"26px auto 32px",scrollMarginTop:24}}>
     <style>{`
       .sap-video-shell{background:#fff;border:1px solid #d4e1f0;border-radius:20px;overflow:hidden;color:#162947;box-shadow:0 12px 32px #152d4612}

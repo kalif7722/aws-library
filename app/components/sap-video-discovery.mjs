@@ -1,7 +1,8 @@
 const M10_RELEASE_CANDIDATES=["03","04","05","06","07","08","09","10","11"];
 export const isPartId=id=>typeof id==="string"&&/^(?:0[1-9]|[1-9][0-9])$/.test(id);
 
-export function discoveryPartIds(moduleId,known,requestedPart){
+export function discoveryPartIds(moduleId,known,requestedPart,releasedPartIds=[],releaseOnly=false){
+  if(releaseOnly)return [...new Set(releasedPartIds.filter(isPartId))].sort((a,b)=>Number(a)-Number(b));
   const ids=known.map(item=>item.id);
   if(moduleId==="10"){
     // These are candidate IDs, not playlist entries. Only the API can
@@ -12,6 +13,7 @@ export function discoveryPartIds(moduleId,known,requestedPart){
     const last=Math.max(0,...ids.map(Number));
     for(let n=last+1;n<=Math.min(last+6,99);n++)ids.push(String(n).padStart(2,"0"));
   }
+  ids.push(...releasedPartIds.filter(isPartId));
   return [...new Set(ids)].sort((a,b)=>Number(a)-Number(b));
 }
 

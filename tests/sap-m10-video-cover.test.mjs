@@ -18,7 +18,7 @@ const sourceExpr=source.match(/const source=([^\r\n]+);/)?.[1];
 const posterExpr=source.match(/\bposter=\{([^{}]+)\}/)?.[1];
 assert.ok(mapExpr&&sourceExpr&&posterExpr);
 const moduleProps=new Function('id','publishedModuleLessons','return ('+stripTypeScriptTypes(mapExpr+':undefined')+')');
-const chapterSource=(id,assets)=>new Function('moduleId','slideAssets','return '+stripTypeScriptTypes(sourceExpr))(id,assets);
+const chapterSource=(id,assets,projected=false)=>new Function('moduleId','slideAssets','projected','return '+stripTypeScriptTypes(sourceExpr))(id,assets,projected);
 const poster=new Function('moduleId','ready','selected','source','return '+posterExpr);
 const prefix='/course-visuals/sap-c03/module-10/';
 
@@ -26,7 +26,7 @@ test('SAP module 10 released first chapters resolve to exact gallery assets',()=
  const assets=moduleProps('10',publishedModuleLessons), url=chapterSource('10',assets);
  for(const [part,n,file] of [
   ['01',1,'slide-01-aip-v3.webp'],['02',4,'slide-04-aip-v3.webp'],
-  ['03',7,'slide-07-v2.webp'],['04',9,'slide-09-v2.webp'],['05',10,'slide-10-v2.webp'],
+  ['03',7,'sap-10-007-reviewed-5b7ef79716d4.webp'],['04',9,'slide-09-v2.webp'],['05',10,'slide-10-v2.webp'],
   ['06',11,'slide-11-aip-v4.webp'],['07',14,'slide-14-v2.webp'],['08',17,'slide-17-v2.webp'],
   ['09',21,'slide-21-v2.webp'],['10',24,'slide-24-v2.webp'],['11',26,'slide-26-v2.webp'],['12',29,'slide-29-v2.webp'],
  ]){
@@ -35,7 +35,7 @@ test('SAP module 10 released first chapters resolve to exact gallery assets',()=
  }
  assert.equal(url(16.5),undefined);
  assert.equal(poster('10',{chapters:[{slide:999}]},{start:1},url),undefined);
- assert.match(page,/<SapVideoLectures moduleId=\{id\} slideAssets=\{slideAssets\}\/>/);
+ assert.match(page,/<SapVideoLectures moduleId=\{id\} slideAssets=\{slideAssets\} releaseParts=\{release.parts\}/);
  assert.match(source,/slideUrl=source\(ch\.slide\)/);
 });
 
